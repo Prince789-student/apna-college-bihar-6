@@ -10,7 +10,7 @@ import {
   Clock, Plus, Flame, Target, BookOpen,
   Calendar, BarChart3, Settings, Trash2, Trophy,
   Users, Hash, ArrowRight, ClipboardList, CalendarDays,
-  CheckCircle2, Circle, Save, Shield, Zap, Award, Timer
+  CheckCircle2, Circle, Save, Shield, Zap, Award
 } from 'lucide-react';
 
 // ─── Helper ──────────────────────────────────────────────
@@ -39,7 +39,6 @@ const ALL_BADGES = [
 
 // ─── Tabs ─────────────────────────────────────────────────
 const TABS = [
-  { id: 'timer',         label: 'Focus Timer',   icon: <Clock size={15}/> },
   { id: 'overview',      label: 'Overview',      icon: <BarChart3 size={15}/> },
   { id: 'todo',          label: 'Aaj ka Plan',   icon: <ClipboardList size={15}/> },
   { id: 'group',         label: 'Study Network', icon: <Users size={15}/> },
@@ -84,100 +83,11 @@ export default function StudyDashboard() {
   const [schedule, setSchedule] = useState({});
   const [scheduleSaved, setScheduleSaved] = useState(false);
 
-  // ── Focus Timer (Pomodoro 25m) ───────────────
-  const [timerActive, setTimerActive] = useState(false);
-  const [timerTime, setTimerTime] = useState(1500); 
-  const [isBreak, setIsBreak] = useState(false);
-  const [timerSubject, setTimerSubject] = useState('OTHERS');
-  const [customMinutes, setCustomMinutes] = useState(25);
-  const [timerMode, setTimerMode] = useState('COUNTDOWN'); // 'COUNTDOWN' or 'STOPWATCH'
-  const timerRef = useRef(null);
-
   // ── Edit Task ─────────────────────────────────────────
   const [editingTask, setEditingTask] = useState(null);
   const [editValue, setEditValue] = useState('');
 
   useEffect(() => { if (user) fetchAll(); }, [user]);
-
-  // Timer Effect
-  useEffect(() => {
-    if (timerActive) {
-      timerRef.current = setInterval(() => {
-        setTimerTime(t => {
-          if (timerMode === 'COUNTDOWN') {
-            if (t <= 1) {
-              clearInterval(timerRef.current);
-              setTimerActive(false);
-              completePomodoro();
-              return 0;
-            }
-            return t - 1;
-          } else {
-            return t + 1; // Stopwatch increments
-          }
-        });
-      }, 1000);
-    } else {
-      clearInterval(timerRef.current);
-    }
-    return () => clearInterval(timerRef.current);
-  }, [timerActive, timerMode]);
-
-  const completePomodoro = () => {
-    const fullBlock = customMinutes * 60;
-    saveTimerSession(fullBlock); 
-    setTimerTime(customMinutes * 60);
-    alert('Focus session complete!');
-  };
-
-  const fmtTimer = (s) => {
-    const h = Math.floor(s / 3600);
-    const m = Math.floor((s % 3600) / 60);
-    const sec = s % 60;
-    return `${h > 0 ? h.toString().padStart(2, '0') + ':' : ''}${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
-  };
-
-  const saveTimerSession = async (manualTime = null) => {
-    const timeToSave = manualTime || (timerMode === 'STOPWATCH' ? timerTime : (customMinutes * 60 - timerTime));
-    if (timeToSave < 1) { setTimerActive(false); setTimerTime(timerMode==='STOPWATCH'?0:customMinutes*60); return; }
-    
-    try {
-      // 1. Save Session
-      await addDoc(collection(db, 'StudySessions'), {
-        userId: user.uid,
-        userName: user.name || 'Scholar',
-        subject: timerSubject,
-        duration: timeToSave,
-        date: todayStr,
-        createdAt: new Date().toISOString()
-      });
-
-      // 2. Update Streak & Total Time
-      const userRef = doc(db, 'users', user.uid);
-      const today = new Date().toISOString().split('T')[0];
-      const lastDate = userData?.lastStudyDate || '';
-      
-      let newStreak = userData?.streak || 0;
-      if (lastDate !== today) {
-        // If yesterday was last study, increment. Otherwise reset to 1.
-        const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-        const yStr = yesterday.toISOString().split('T')[0];
-        if (lastDate === yStr) newStreak += 1;
-        else if (newStreak === 0) newStreak = 1;
-      }
-
-      await updateDoc(userRef, {
-        streak: newStreak,
-        lastStudyDate: today,
-        totalStudyTime: (userData?.totalStudyTime || 0) + timeToSave
-      });
-
-      setTimerActive(false); 
-      setTimerTime(timerMode === 'STOPWATCH' ? 0 : customMinutes * 60);
-      fetchAll();
-      // Optional: success feedback can be added here
-    } catch (e) { console.error('save error:', e); }
-  };
 
   const fetchAll = async () => {
     setLoading(true);
@@ -190,28 +100,23 @@ export default function StudyDashboard() {
         setGoals({ daily: d.dailyGoal || 0, weekly: d.weeklyGoal || 0, monthly: d.monthlyGoal || 0 });
         setSchedule(d.timetable || {});
       } else {
-        // Safety guard: If user doc doesn't exist, initialize with default values
         setUserData({});
         setGoals({ daily: 0, weekly: 0, monthly: 0 });
         setSchedule({});
       }
 
-      // 2. Subjects
       const subSnap = await getDocs(query(collection(db, 'Subjects'), where('userId', '==', user.uid)));
       setSubjects(subSnap.docs.map(d => ({ id: d.id, ...d.data() })));
 
-      // 3. Sessions
       const sessSnap = await getDocs(query(collection(db, 'StudySessions'), where('userId', '==', user.uid)));
       setSessionCount(sessSnap.size);
       const thirtyDaysAgo = new Date(); thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
       const cutoff = thirtyDaysAgo.toISOString().split('T')[0];
       setSessions(sessSnap.docs.map(d => ({ ...d.data() })).filter(s => s.date >= cutoff));
 
-      // 4. Groups
       const grpSnap = await getDocs(query(collection(db, 'Groups'), where('members', 'array-contains', user.uid)));
       setGroups(grpSnap.docs.map(d => ({ id: d.id, ...d.data() })));
 
-      // 5. Today's tasks
       const today = new Date().toISOString().split('T')[0];
       const taskSnap = await getDocs(query(collection(db, 'Tasks'), where('userId', '==', user.uid), where('date', '==', today)));
       setTasks(taskSnap.docs.map(d => ({ id: d.id, ...d.data() })));
@@ -220,7 +125,6 @@ export default function StudyDashboard() {
     finally { setLoading(false); }
   };
 
-  // ── Computed Stats ────────────────────────────────────
   const todayStr = new Date().toISOString().split('T')[0];
   const last7 = Array.from({length:7},(_,i)=>{ const d=new Date(); d.setDate(d.getDate()-i); return d.toISOString().split('T')[0]; });
   const todaySec   = sessions.filter(s=>s.date===todayStr).reduce((a,s)=>a+s.duration,0);
@@ -234,40 +138,21 @@ export default function StudyDashboard() {
   const maxH = Math.max(1,...heatmap.map(d=>d.sec));
   const getProgress = (sec,g) => (!g||g<=0)?0:Math.min(100,(sec/(g*3600))*100).toFixed(0);
 
-  // ── Handlers ──────────────────────────────────────────
   const saveGoals = async () => { await updateDoc(doc(db,'users',user.uid),{dailyGoal:Number(goals.daily),weeklyGoal:Number(goals.weekly),monthlyGoal:Number(goals.monthly)}); setShowGoalModal(false); fetchAll(); };
   const addSubject = async () => { const t=newSubject.trim(); if(!t||subjects.length>=10) return; try{ await addDoc(collection(db,'Subjects'),{userId:user.uid,subjectName:t.toUpperCase(),createdAt:new Date().toISOString()}); setNewSubject(''); setShowSubjectModal(false); fetchAll(); }catch(e){console.error(e);alert('Subject save nahi hua.');} };
-  const delSubject = async (id) => {
-    try {
-      await deleteDoc(doc(db, 'Subjects', id));
-      fetchAll();
-    } catch(err) { console.error('Delete subject error:', err); }
-  };
+  const delSubject = async (id) => { try { await deleteDoc(doc(db, 'Subjects', id)); fetchAll(); } catch(err) { console.error('Delete subject error:', err); } };
   const genCode = () => Math.random().toString(36).substring(2,8).toUpperCase();
   const createGroup = async () => { if(!newGroupName.trim()) return; setGroupLoading(true); try{ await addDoc(collection(db,'Groups'),{groupName:newGroupName.trim(),groupCode:genCode(),createdBy:user.uid,members:[user.uid],memberCount:1,maxMembers:50,createdAt:new Date().toISOString()}); setNewGroupName(''); setShowCreateGroup(false); fetchAll(); }catch(e){console.error(e);}finally{setGroupLoading(false);} };
   const joinGroup  = async () => { if(!joinCode.trim()) return; setGroupLoading(true); try{ const snp=await getDocs(query(collection(db,'Groups'),where('groupCode','==',joinCode.toUpperCase()))); if(snp.empty){alert('Invalid code!');return;} const gDoc=snp.docs[0]; const gd=gDoc.data(); if(gd.members.includes(user.uid)){alert('Already member!');return;} await updateDoc(doc(db,'Groups',gDoc.id),{members:[...gd.members,user.uid],memberCount:gd.memberCount+1}); setJoinCode(''); setShowJoinGroup(false); fetchAll(); }catch(e){console.error(e);}finally{setGroupLoading(false);} };
+  
   const addTask = async () => {
     const t = newTask.trim();
     const s = taskSub.trim().toUpperCase();
     if (!t || !s) return;
-
-    // Auto-create subject if needed
     const exists = subjects.find(sub => sub.subjectName === s);
-    if (!exists) {
-       await addDoc(collection(db, 'Subjects'), { userId: user.uid, subjectName: s, createdAt: new Date().toISOString() });
-    }
-
-    await addDoc(collection(db,'Tasks'), {
-      userId: user.uid,
-      text: t,
-      subject: s,
-      done: false,
-      date: todayStr,
-      createdAt: new Date().toISOString()
-    });
-    setNewTask('');
-    setTaskSub('');
-    fetchAll();
+    if (!exists) { await addDoc(collection(db, 'Subjects'), { userId: user.uid, subjectName: s, createdAt: new Date().toISOString() }); }
+    await addDoc(collection(db,'Tasks'), { userId: user.uid, text: t, subject: s, done: false, date: todayStr, createdAt: new Date().toISOString() });
+    setNewTask(''); setTaskSub(''); fetchAll();
   };
   const toggleTask = async (task) => { await updateDoc(doc(db,'Tasks',task.id),{done:!task.done}); setTasks(tasks.map(t=>t.id===task.id?{...t,done:!t.done}:t)); };
   const delTask = async (id) => { await deleteDoc(doc(db,'Tasks',id)); setTasks(tasks.filter(t=>t.id!==id)); };
@@ -281,7 +166,6 @@ export default function StudyDashboard() {
 
   const saveSchedule = async () => { await updateDoc(doc(db,'users',user.uid),{timetable:schedule}); setScheduleSaved(true); setTimeout(()=>setScheduleSaved(false),3000); };
 
-  // ── Achievements computed ─────────────────────────────
   const earnedIds = [...(userData?.badges||[])];
   if(sessionCount>=5 && !earnedIds.includes('sessions_5')) earnedIds.push('sessions_5');
   if(sessionCount>=20 && !earnedIds.includes('sessions_20')) earnedIds.push('sessions_20');
@@ -295,7 +179,7 @@ export default function StudyDashboard() {
   return (
     <div className="max-w-5xl mx-auto space-y-6 pb-20">
 
-      {/* ── Always-visible Header: Streak + Start Button ── */}
+      {/* ── Header: Streak ── */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 flex items-center justify-between bg-[#0d121f] p-5 rounded-[2rem] border border-slate-800/50">
           <div className="flex items-center gap-4">
@@ -314,10 +198,6 @@ export default function StudyDashboard() {
           </div>
           <button onClick={()=>setShowGoalModal(true)} className="p-2.5 bg-slate-800/50 rounded-xl text-slate-400 hover:text-white transition-colors" title="Goals"><Settings size={18}/></button>
         </div>
-        <button onClick={()=>setTab('timer')} className="flex-1 sm:max-w-[220px] bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black uppercase text-sm tracking-widest shadow-lg shadow-blue-900/30 flex items-center justify-center gap-3 active:scale-[0.98] transition-all p-5 group">
-          <Clock size={20} className="group-hover:rotate-12 transition-transform"/>
-          <span>▶ Start Study</span>
-        </button>
       </div>
 
       {/* ── Tab Navigation ─────────────────────────────── */}
@@ -332,110 +212,9 @@ export default function StudyDashboard() {
         })}
       </div>
 
-      {/* ══════════════════════════════════════════════════ */}
-      {/* TAB: FOCUS TIMER                                   */}
-      {/* ══════════════════════════════════════════════════ */}
-      {tab === 'timer' && (
-        <div className="space-y-6 animate-in fade-in duration-300">
-          <div className="bg-[#0d121f] p-10 md:p-16 rounded-[4rem] border border-slate-800/80 shadow-2xl relative overflow-hidden flex flex-col items-center">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-transparent pointer-events-none"></div>
-              
-              <div className="flex flex-col items-center gap-4 mb-8">
-                <div className="flex gap-2 p-1.5 bg-slate-900/80 rounded-2xl border border-slate-800/50">
-                   {['COUNTDOWN','STOPWATCH'].map(m => (
-                     <button key={m} onClick={() => !timerActive && {
-                       COUNTDOWN: () => { setTimerMode('COUNTDOWN'); setTimerTime(customMinutes*60); },
-                       STOPWATCH: () => { setTimerMode('STOPWATCH'); setTimerTime(0); }
-                     }[m]()} 
-                     className={`px-4 py-1.5 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${timerMode===m?'bg-blue-600 text-white shadow-lg shadow-blue-900/20':'text-slate-500 hover:text-white'}`}>
-                       {m}
-                     </button>
-                   ))}
-                </div>
-                <div className="flex items-center gap-3 px-6 py-2 bg-slate-900/50 rounded-full border border-slate-800/50">
-                  <Target size={14} className="text-orange-400" />
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Current Goal: <span className="text-white">{timerSubject}</span></p>
-                </div>
-              </div>
-
-              <h1 className="text-8xl md:text-[8rem] font-[1000] text-white tracking-tighter tabular-nums leading-none">
-                {fmtTimer(timerTime)}
-              </h1>
-
-              <div className="mt-12 flex gap-4 w-full max-w-sm">
-                {!timerActive ? (
-                  <div className="flex flex-col items-center gap-6 w-full max-w-sm">
-                    {/* Hide Set Blocks if Stopwatch or show it for Countdown */}
-                    {timerMode === 'COUNTDOWN' && (
-                      <div className="flex items-center gap-4 bg-slate-900/80 p-4 rounded-3xl border border-slate-800/50 w-full animate-in slide-in-from-bottom-2">
-                         <div className="p-3 bg-blue-600/10 text-blue-500 rounded-2xl"><Timer size={20}/></div>
-                         <div className="flex-1">
-                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Set Blocks (Minutes)</p>
-                            <div className="flex items-baseline gap-2">
-                              <input type="number" min="1" max="600" value={customMinutes} 
-                                onChange={e => { 
-                                  const v = Math.min(600, Math.max(1, parseInt(e.target.value) || 1));
-                                  setCustomMinutes(v); setTimerTime(v * 60);
-                                }}
-                                className="w-20 bg-transparent text-white text-3xl font-black outline-none border-b-2 border-slate-800 focus:border-blue-500 transition-all"/>
-                              <span className="text-[10px] font-bold text-slate-600 uppercase">Mins</span>
-                            </div>
-                         </div>
-                      </div>
-                    )}
-                    <div className="flex gap-3 w-full">
-                      <button onClick={() => setTimerActive(true)} 
-                        className="flex-1 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-3xl font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">
-                        {timerTime > 0 && ((timerMode==='COUNTDOWN' && timerTime !== (customMinutes*60)) || (timerMode==='STOPWATCH')) ? 'Resume' : 'Start Hub'} <ArrowRight size={18}/>
-                      </button>
-                      {(timerMode==='STOPWATCH' && timerTime > 0) || (timerMode==='COUNTDOWN' && timerTime < customMinutes*60) ? (
-                        <button onClick={() => saveTimerSession()} className="px-8 py-5 bg-slate-800 text-white rounded-3xl font-black text-[10px] uppercase tracking-widest hover:bg-red-600 transition-all">Done</button>
-                      ) : null}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center gap-4 w-full max-w-sm">
-                    <div className="flex gap-4 w-full">
-                      <button onClick={() => setTimerActive(false)} 
-                        className="flex-1 py-5 bg-orange-600 hover:bg-orange-500 text-white rounded-3xl font-[1000] text-xs uppercase tracking-widest transition-all shadow-xl">
-                        Pause
-                      </button>
-                      <button onClick={() => saveTimerSession()} 
-                        className="flex-1 py-5 bg-red-600 hover:bg-red-500 text-white rounded-[2rem] font-[1000] text-xs uppercase tracking-widest transition-all shadow-xl">
-                        Stop & Save
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-10 flex flex-wrap justify-center gap-2">
-                {subjects.map(s => (
-                  <button key={s.id} onClick={() => !timerActive && setTimerSubject(s.subjectName)}
-                    className={`px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all ${timerSubject === s.subjectName ? 'bg-white text-black shadow-xl scale-105' : 'bg-slate-900 text-slate-500 hover:text-white'}`}>
-                    {s.subjectName}
-                  </button>
-                ))}
-                <button onClick={() => !timerActive && setTimerSubject('OTHERS')}
-                    className={`px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all ${timerSubject === 'OTHERS' ? 'bg-white text-black shadow-xl scale-105' : 'bg-slate-900 text-slate-500 hover:text-white'}`}>
-                    OTHERS
-                </button>
-                <button onClick={() => !timerActive && setShowSubjectModal(true)}
-                    className="px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white flex items-center gap-2">
-                    <Plus size={14}/> Customize
-                </button>
-              </div>
-          </div>
-        </div>
-      )}
-
-      {/* ══════════════════════════════════════════════════ */}
-      {/* TAB: OVERVIEW                                      */}
-      {/* ══════════════════════════════════════════════════ */}
+      {/* TAB: OVERVIEW */}
       {tab === 'overview' && (
         <div className="space-y-6 animate-in fade-in duration-200">
-          
-          {/* Progress Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
               {label:'Aaj (Today)',  sec:todaySec,   goal:goals.daily,   color:'bg-blue-500',   ic:<Target size={11} className="text-blue-400"/>},
@@ -456,7 +235,6 @@ export default function StudyDashboard() {
             ))}
           </div>
 
-          {/* Quick Stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
               {label:'Aaj ke Sessions', value:sessions.filter(s=>s.date===todayStr).length},
@@ -471,7 +249,6 @@ export default function StudyDashboard() {
             ))}
           </div>
 
-          {/* 7-Day Heatmap */}
           <div className="bg-[#0d121f] p-6 rounded-[2rem] border border-slate-800/50">
             <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-4 flex items-center gap-2"><Calendar size={11}/> Pichle 7 Din</p>
             <div className="flex items-end justify-between gap-2 h-24">
@@ -485,7 +262,6 @@ export default function StudyDashboard() {
             </div>
           </div>
 
-          {/* Subjects */}
           <div className="bg-[#0d121f] p-6 rounded-[2rem] border border-slate-800/50 space-y-4">
             <div className="flex items-center justify-between">
               <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-2"><BookOpen size={11}/>Your Subjects ({subjects.length}/10)</p>
@@ -520,9 +296,7 @@ export default function StudyDashboard() {
         </div>
       )}
 
-      {/* ══════════════════════════════════════════════════ */}
-      {/* TAB: STUDY NETWORK (Groups)                         */}
-      {/* ══════════════════════════════════════════════════ */}
+      {/* TAB: STUDY NETWORK */}
       {tab === 'group' && (
             <div className="space-y-6 animate-in fade-in duration-300">
                <div className="bg-[#02040a] p-8 rounded-[3rem] border border-slate-800/50 relative overflow-hidden">
@@ -538,7 +312,6 @@ export default function StudyDashboard() {
                     </div>
                   </div>
                </div>
-
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {groups.map(g => {
                     const hubName = g.groupName || g.name || 'Hub';
@@ -564,15 +337,12 @@ export default function StudyDashboard() {
             </div>
           )}
 
-      {/* ══════════════════════════════════════════════════ */}
-      {/* TAB: AAJ KA PLAN (To-Do)                          */}
-      {/* ══════════════════════════════════════════════════ */}
+      {/* TAB: AAJ KA PLAN */}
       {tab === 'todo' && (
         <div className="space-y-5 animate-in fade-in duration-200">
           <div className="bg-[#0d121f] p-6 rounded-[2rem] border border-slate-800/50">
             <p className="text-lg font-black text-white mb-1">📋 Aaj ka Study Plan</p>
             <p className="text-[10px] text-slate-500 mb-6">{new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'})}</p>
-
             {tasks.length>0 && (
               <div className="mb-5 bg-[#161c2c] p-4 rounded-2xl border border-slate-700/50 space-y-2">
                 <div className="flex justify-between text-[9px] font-black uppercase text-slate-500">
@@ -582,7 +352,6 @@ export default function StudyDashboard() {
                 {tasks.every(t=>t.done)&&<p className="text-center text-emerald-400 text-xs font-black">🎉 Sab complete!</p>}
               </div>
             )}
-
             <div className="flex flex-col md:flex-row gap-3 mb-6 bg-slate-900/40 p-5 rounded-3xl border border-slate-800/30">
               <input value={newTask} onChange={e=>setNewTask(e.target.value)} onKeyDown={e=>e.key==='Enter'&&addTask()} placeholder="Kya padhna hai? (e.g. Exercise 1)" className="flex-[2] bg-[#161c2c] border border-slate-700/50 rounded-2xl px-5 py-3.5 text-white text-sm outline-none focus:border-blue-500 transition-all placeholder:text-slate-600 font-bold"/>
               <div className="flex-1 flex gap-2">
@@ -593,7 +362,6 @@ export default function StudyDashboard() {
                 <button onClick={addTask} disabled={tasks.length>=12||!newTask.trim()||!taskSub.trim()} className="px-6 py-3.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white font-[1000] rounded-2xl transition-all shadow-xl active:scale-95"><Plus size={18}/></button>
               </div>
             </div>
-
             <div className="space-y-2">
               {tasks.length===0?(
                 <p className="text-center text-[10px] text-slate-600 py-8">Koi task nahi — Upar add karo!</p>
@@ -616,12 +384,6 @@ export default function StudyDashboard() {
                           onClick={() => { setEditingTask(task); setEditValue(task.text); }}>{task.text}</p>
                       </div>
                     )}
-                    {!task.done && (
-                      <button onClick={() => { setTimerSubject(task.subject || 'OTHERS'); setTab('timer'); if(timerMode==='COUNTDOWN') setTimerTime(customMinutes*60); else setTimerTime(0); }} 
-                        className="px-3 py-1.5 bg-blue-600/10 hover:bg-blue-600 text-blue-500 hover:text-white rounded-xl text-[8px] font-black uppercase tracking-widest transition-all border border-blue-500/10 flex items-center gap-2 group">
-                        <Zap size={10} className="fill-blue-500 group-hover:fill-white" /> Start Hub
-                      </button>
-                    )}
                     <button onClick={()=>delTask(task.id)} className="opacity-0 group-hover:opacity-100 text-slate-600 hover:text-red-500 transition-all"><Trash2 size={14}/></button>
                   </div>
                 ))
@@ -631,9 +393,7 @@ export default function StudyDashboard() {
         </div>
       )}
 
-      {/* ══════════════════════════════════════════════════ */}
-      {/* TAB: ACHIEVEMENTS                                  */}
-      {/* ══════════════════════════════════════════════════ */}
+      {/* TAB: ACHIEVEMENTS */}
       {tab === 'achievements' && (
         <div className="space-y-6 animate-in fade-in duration-200">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -650,7 +410,6 @@ export default function StudyDashboard() {
               </div>
             ))}
           </div>
-
           {earned.length>0&&(
             <div className="space-y-3">
               <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">✅ Earned ({earned.length})</p>
@@ -665,7 +424,6 @@ export default function StudyDashboard() {
               </div>
             </div>
           )}
-
           {locked.length>0&&(
             <div className="space-y-3">
               <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2"><Shield size={11}/> Locked ({locked.length})</p>
@@ -680,17 +438,10 @@ export default function StudyDashboard() {
               </div>
             </div>
           )}
-
-          {earned.length===0&&(
-            <div className="text-center py-16 bg-[#0d121f] rounded-3xl border border-dashed border-slate-700">
-              <Trophy size={40} className="mx-auto text-slate-700 mb-4"/>
-              <p className="text-slate-500 font-bold">Padhai karo aur badges unlock karo!</p>
-            </div>
-          )}
         </div>
       )}
 
-      {/* ══ MODALS ══════════════════════════════════════════ */}
+      {/* MODALS */}
       {showGoalModal&&(
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
           <div className="bg-[#0d121f] border border-slate-800 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
@@ -739,8 +490,6 @@ export default function StudyDashboard() {
           </div>
         </div>
       )}
-
-      {/* Required imports for Clock */}
     </div>
   );
 }
