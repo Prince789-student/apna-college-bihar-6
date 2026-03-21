@@ -1,0 +1,24 @@
+{
+  "name": "Apna College Bihar Portal",
+  "short_name": "ACB Portal",
+  "description": "Study tracker, notes, calculators for Bihar students",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#02040a",
+  "theme_color": "#0d121f",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "lang": "hi-IN"
+}

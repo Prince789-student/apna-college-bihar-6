@@ -1,0 +1,14 @@
+{
+  "name": "edu-platform-fullstack",
+  "version": "1.0.0",
+  "description": "Full stack application ready for Render deployment",
+  "scripts": {
+    "start": "node server/server.js",
+    "install-app": "npm install --prefix server && npm install --prefix client",
+    "build": "npm install --prefix client && npm run build --prefix client",
+    "heroku-postbuild": "npm run build"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
