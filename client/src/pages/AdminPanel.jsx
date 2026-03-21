@@ -237,6 +237,7 @@ export default function AdminPanel() {
                <thead>
                  <tr className="bg-slate-900/40 text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 border-b border-slate-800/50">
                    <th className="py-5 px-8">Identity</th>
+                   <th className="py-5 px-8 text-center">Contact</th>
                    <th className="py-5 px-8 text-center">Status</th>
                    <th className="py-5 px-8">Rank</th>
                    <th className="py-5 px-8 text-right">Operations</th>
@@ -254,6 +255,13 @@ export default function AdminPanel() {
                               <p className="text-[13px] font-black text-white uppercase tracking-tight">{u.name}</p>
                               <p className="text-[10px] font-bold text-slate-600 truncate max-w-[150px]">{u.email}</p>
                            </div>
+                        </div>
+                     </td>
+                     <td className="py-6 px-8 text-center">
+                        <div className="inline-block px-3 py-1.5 bg-slate-900/50 border border-slate-800/80 rounded-xl">
+                          <span className="text-[11px] font-bold text-slate-400 tracking-widest">
+                            {u.phone || 'NOT LINKED'}
+                          </span>
                         </div>
                      </td>
                      <td className="py-6 px-8 text-center">
