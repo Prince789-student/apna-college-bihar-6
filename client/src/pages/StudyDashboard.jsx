@@ -61,6 +61,7 @@ export default function StudyDashboard() {
   const [tasks, setTasks] = useState([]);
   const [sessionCount, setSessionCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [globalRanking, setGlobalRanking] = useState([]);
 
   // ── Goals ─────────────────────────────────────────────
   const [goals, setGoals] = useState({ daily: 0, weekly: 0, monthly: 0 });
@@ -231,6 +232,18 @@ export default function StudyDashboard() {
       const today = new Date().toISOString().split('T')[0];
       const taskSnap = await getDocs(query(collection(db, 'Tasks'), where('userId', '==', user.uid), where('date', '==', today)));
       setTasks(taskSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+
+      // 6. Global Ranking (Real-time sort by streak)
+      const qUsers = query(collection(db, 'users'), orderBy('streak', 'desc'), limit(5));
+      const uSnapRanking = await getDocs(qUsers);
+      setGlobalRanking(uSnapRanking.docs.map((d, i) => ({
+         id: d.id,
+         name: d.data().name || 'Scholar',
+         time: 'Today Active',
+         rank: i + 1,
+         active: d.data().isStudying || false,
+         streak: d.data().streak || 0
+      })));
 
     } catch(e) { console.error('fetchAll error:', e); }
     finally { setLoading(false); }
@@ -481,23 +494,28 @@ export default function StudyDashboard() {
                     <h3 className="text-[11px] font-[1000] text-white uppercase tracking-widest leading-none">Global Ranking</h3>
                  </div>
                  <div className="space-y-4">
-                    {[
-                       { name: (user?.name || 'You'), time: fmtTimer(todaySec), rank: 1, active: true },
-                       { name: 'Amit Kumar', time: '04:12:15', rank: 2, active: false },
-                       { name: 'Sneha Singh', time: '03:45:00', rank: 3, active: true },
-                       { name: 'Rajesh Ram', time: '02:50:30', rank: 4, active: false }
-                    ].map((p, idx) => (
-                       <div key={idx} className={`flex items-center justify-between p-4 rounded-3xl transition-all border ${p.rank === 1 ? 'bg-blue-600/10 border-blue-500/20 shadow-xl' : 'bg-slate-900/50 border-transparent hover:border-slate-800'}`}>
+                    {globalRanking.length > 0 ? globalRanking.map((p, idx) => (
+                       <div key={idx} className={`flex items-center justify-between p-4 rounded-3xl transition-all border ${p.id === user?.uid ? 'bg-blue-600/10 border-blue-500/20 shadow-xl' : 'bg-slate-900/50 border-transparent hover:border-slate-800'}`}>
                           <div className="flex items-center gap-3">
-                             <div className={`w-7 h-7 flex items-center justify-center rounded-xl text-[10px] font-black ${p.rank === 1 ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-500'}`}>{p.rank}</div>
+                             <div className={`w-7 h-7 flex items-center justify-center rounded-xl text-[10px] font-black ${p.rank === 1 ? 'bg-amber-500 text-slate-900' : 'bg-slate-800 text-slate-500'}`}>{p.rank}</div>
                              <div className="text-left">
-                                <p className={`text-[11px] font-black uppercase ${p.rank === 1 ? 'text-white' : 'text-slate-400'}`}>{p.name}</p>
-                                <p className={`text-[8px] font-black uppercase tracking-widest ${p.active ? 'text-green-500' : 'text-slate-600'}`}>{p.active ? 'Studying...' : 'Offline'}</p>
+                                <p className={`text-[11px] font-black uppercase ${p.id === user?.uid ? 'text-blue-400' : 'text-white'}`}>{p.name}</p>
+                                <div className="flex items-center gap-1.5 mt-0.5">
+                                   <span className={`w-1 h-1 rounded-full ${p.active ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-slate-700'}`}></span>
+                                   <span className={`text-[7px] font-black uppercase tracking-widest ${p.active ? 'text-emerald-500' : 'text-slate-600'}`}>{p.active ? 'Studying...' : 'Offline'}</span>
+                                </div>
                              </div>
                           </div>
-                          <span className="text-[10px] font-mono font-black text-slate-400">{p.time}</span>
+                          <div className="text-right">
+                             <span className="text-[10px] font-mono font-black text-white italic">{p.streak}d</span>
+                          </div>
                        </div>
-                    ))}
+                    )) : (
+                       <div className="flex flex-col items-center justify-center py-10 opacity-20">
+                          <Users size={32} className="mb-2" />
+                          <p className="text-[8px] font-black uppercase tracking-widest">Global Pulse Syncing...</p>
+                       </div>
+                    )}
                  </div>
                  <button className="w-full mt-8 py-4 bg-slate-900 hover:bg-slate-800 text-white border border-slate-800 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all">View Leaderboard</button>
               </div>
