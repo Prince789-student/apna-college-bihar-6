@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, Chrome, ShieldCheck } from 'lucide-react';
+import { BookOpen, Chrome, Github, ShieldCheck } from 'lucide-react';
 
 export default function Signup() {
   const navigate = useNavigate();
-  const { googleLogin } = useAuth();
+  const { googleLogin, githubLogin } = useAuth();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -13,6 +13,18 @@ export default function Signup() {
     try {
       setLoading(true);
       await googleLogin();
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGithubSignup = async () => {
+    try {
+      setLoading(true);
+      await githubLogin();
       navigate('/dashboard');
     } catch (err) {
       setError(err.message);
@@ -48,15 +60,20 @@ export default function Signup() {
             </div>
           )}
 
-          <div className="space-y-6">
-            <div className="bg-blue-600/10 border border-blue-500/20 rounded-[2rem] p-8 text-center">
+          <div className="space-y-4">
+            <div className="bg-blue-600/10 border border-blue-500/20 rounded-[2rem] p-6 text-center mb-6">
               <p className="text-blue-100 font-bold text-sm tracking-tight mb-2">Fast & Secure Onboarding</p>
-              <p className="text-slate-400 text-xs font-medium">We use Google Authentication to verify all students instantly. No passwords or OTPs required.</p>
+              <p className="text-slate-400 text-xs font-medium">Verify your identity instantly. No passwords or OTPs required.</p>
             </div>
 
-            <button onClick={handleGoogleSignup} disabled={loading} className="w-full bg-white text-slate-950 font-black py-5 rounded-[1.8rem] shadow-xl hover:bg-slate-100 transition-all flex items-center justify-center space-x-4 active:scale-95 text-xs uppercase tracking-widest mt-6 border border-slate-200">
-              <Chrome className="text-blue-600 w-6 h-6" />
+            <button onClick={handleGoogleSignup} disabled={loading} className="w-full bg-white text-slate-950 font-black py-4 rounded-[1.5rem] shadow-xl hover:bg-slate-100 transition-all flex items-center justify-center space-x-4 active:scale-95 text-xs uppercase tracking-widest border border-slate-200">
+              <Chrome className="text-blue-600 w-5 h-5" />
               <span>{loading ? "Connecting..." : "SIGN UP WITH GOOGLE"}</span>
+            </button>
+
+            <button onClick={handleGithubSignup} disabled={loading} className="w-full bg-[#1c263d] text-white font-black py-4 rounded-[1.5rem] shadow-xl hover:bg-[#25324d] transition-all flex items-center justify-center space-x-4 active:scale-95 text-xs uppercase tracking-widest border border-slate-700">
+              <Github className="text-white w-5 h-5" />
+              <span>{loading ? "Connecting..." : "SIGN UP WITH GITHUB"}</span>
             </button>
           </div>
 

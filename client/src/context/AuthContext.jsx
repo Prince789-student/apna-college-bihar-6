@@ -8,7 +8,7 @@ import {
   RecaptchaVerifier, 
   signInWithPhoneNumber 
 } from "firebase/auth";
-import { auth, db, googleProvider } from "../firebase";
+import { auth, db, googleProvider, githubProvider } from "../firebase";
 import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
@@ -46,7 +46,7 @@ export function AuthProvider({ children }) {
         const data = {
           uid: u.uid,
           name: u.displayName || 'Scholar',
-          email: u.email,
+          email: u.email || 'No Email',
           phone: u.phoneNumber || "",
           createdAt: serverTimestamp(),
           role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT,
@@ -87,6 +87,13 @@ export function AuthProvider({ children }) {
   // 3. Google Signup/Login
   async function googleLogin() {
     const res = await signInWithPopup(auth, googleProvider);
+    await syncProfile(res.user);
+    return res.user;
+  }
+
+  // 3.5. GitHub Signup/Login
+  async function githubLogin() {
+    const res = await signInWithPopup(auth, githubProvider);
     await syncProfile(res.user);
     return res.user;
   }
@@ -134,6 +141,7 @@ export function AuthProvider({ children }) {
     signup,
     logout,
     googleLogin,
+    githubLogin,
     setupRecaptcha,
     updateProfileData,
     loading
