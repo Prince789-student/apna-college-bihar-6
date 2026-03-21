@@ -334,8 +334,8 @@ export default function ScientificCalc() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto pb-20">
-      <div className="bg-[#0a0a0f] rounded-[2.5rem] border border-slate-800 shadow-2xl overflow-hidden">
+    <div className="w-full max-w-2xl mx-auto px-2 md:px-4 pb-20">
+      <div className="bg-[#0a0a0f] rounded-3xl md:rounded-[2.5rem] border border-slate-800 shadow-2xl overflow-hidden">
 
         {/* Top bar */}
         <div className="flex items-center justify-between px-5 pt-5 pb-3">
@@ -384,17 +384,17 @@ export default function ScientificCalc() {
         {/* ══ CALC ════════════════════════════════════════ */}
         {mode==='CALC'&&(
           <div className="px-3 pb-5 space-y-2">
-            <div className="flex gap-2 mb-1">
+            <div className="flex gap-1.5 mb-1">
               <button onClick={()=>setIsShift(s=>!s)}
-                className={`flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${isShift?'bg-orange-500 text-white':'bg-slate-800 text-slate-400'}`}>
+                className={`flex-1 py-2.5 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${isShift?'bg-orange-500 text-white':'bg-slate-800 text-slate-400'}`}>
                 SHIFT
               </button>
               <button onClick={()=>setIsDeg(d=>!d)}
-                className="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+                className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all">
                 {isDeg?'→ RAD':'→ DEG'}
               </button>
               <button onClick={()=>setMem(m=>({...m,M:0}))}
-                className="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">
+                className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-400 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all">
                 CLR M
               </button>
             </div>
@@ -406,7 +406,7 @@ export default function ScientificCalc() {
                   const isEq=sp==='eq';
                   return (
                     <button key={bi} onClick={()=>pressBtn(btn)}
-                      className={`relative py-3 rounded-xl font-black text-xs transition-all active:scale-95 select-none ${btnColor(btn)} ${isEq?'ring-2 ring-blue-400/30':''}`}>
+                      className={`relative py-3.5 md:py-4 rounded-xl font-black text-[10px] md:text-xs transition-all active:scale-95 select-none ${btnColor(btn)} ${isEq?'ring-2 ring-blue-400/30':''}`}>
                       {sl&&!isShift&&<span className="absolute top-0.5 left-0 right-0 text-center text-[7px] text-orange-400 leading-none">{sl}</span>}
                       <span className={isShift&&sl?'text-orange-300':''}>{dispLabel}</span>
                     </button>

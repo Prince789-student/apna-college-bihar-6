@@ -172,9 +172,9 @@ export default function AdminPanel() {
   // if (!isAdmin) return <div className="text-center py-20 text-slate-500 font-bold uppercase tracking-widest">Unauthorized Access</div>;
 
   return (
-    <div className="max-w-7xl mx-auto pb-24 space-y-8 animate-in fade-in duration-1000">
+    <div className="max-w-7xl mx-auto px-4 md:px-0 pb-24 space-y-8 animate-in fade-in duration-1000">
       
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-[#02040a] p-8 border border-slate-800/80 rounded-[3rem] shadow-2xl relative overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-[#02040a] p-6 md:p-8 border border-slate-800/80 rounded-[2rem] md:rounded-[3rem] shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-red-600/5 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="flex items-center gap-5 relative z-10">
           <div className="p-4 bg-indigo-600/20 text-indigo-400 rounded-3xl group hover:scale-110 transition-transform cursor-pointer">
@@ -224,8 +224,8 @@ export default function AdminPanel() {
 
       {/* ── USERS TAB ── */}
       {tab==='users' && (
-        <div className="bg-[#0d121f] rounded-[3.5rem] border border-slate-800/80 overflow-hidden shadow-2xl animate-in fade-in duration-500">
-           <div className="p-8 border-b border-slate-800/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-[#0d121f] rounded-[2rem] md:rounded-[3.5rem] border border-slate-800/80 overflow-hidden shadow-2xl animate-in fade-in duration-500">
+           <div className="p-4 md:p-8 border-b border-slate-800/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <h2 className="text-sm font-black uppercase text-slate-400 tracking-widest">Scholar Directory</h2>
               <div className="relative group w-full md:w-72">
                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500" size={16} />
@@ -298,9 +298,9 @@ export default function AdminPanel() {
 
       {/* ── NOTES UPLOAD ── */}
       {tab==='notes' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 px-0">
            <div className="lg:col-span-4 space-y-8">
-              <div className="bg-[#0d121f] p-8 rounded-[3.5rem] border border-slate-800/80">
+              <div className="bg-[#0d121f] p-6 md:p-8 rounded-[2rem] md:rounded-[3.5rem] border border-slate-800/80">
                 <h2 className="text-sm font-black uppercase text-slate-400 tracking-widest mb-8 text-center font-['Inter']">Global Deployment 🛰️</h2>
                 <form onSubmit={handleUpload} className="space-y-4">
                   <input value={docForm.title} onChange={e=>setDocForm({...docForm, title:e.target.value})} placeholder="Doc Title" className="w-full bg-[#1c263d] p-4 rounded-2xl text-[12px] font-bold text-white outline-none border-2 border-transparent focus:border-indigo-500" />

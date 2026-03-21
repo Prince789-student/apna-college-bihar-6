@@ -57,10 +57,10 @@ export default function Notes() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto pb-24 space-y-12 animate-in fade-in slide-in-from-bottom-5 duration-700">
+    <div className="max-w-6xl mx-auto px-4 md:px-0 pb-24 space-y-8 md:space-y-12 animate-in fade-in slide-in-from-bottom-5 duration-700">
       
       {/* Search & Filter Header */}
-      <div className="bg-[#0d121f] p-8 md:p-12 rounded-[4rem] border border-slate-800/80 shadow-2xl relative overflow-hidden">
+      <div className="bg-[#0d121f] p-6 md:p-12 rounded-[2.5rem] md:rounded-[4rem] border border-slate-800/80 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="relative z-10 space-y-8">
            <div className="flex items-center gap-4">
@@ -110,7 +110,7 @@ export default function Notes() {
           </div>
         ) : (
           filtered.map(d => (
-            <div key={d.id} className="bg-[#0d121f] rounded-[3.5rem] border border-slate-800/80 p-8 hover:border-indigo-500/30 transition-all group relative overflow-hidden flex flex-col items-center">
+            <div key={d.id} className="bg-[#0d121f] rounded-[2.5rem] md:rounded-[3.5rem] border border-slate-800/80 p-6 md:p-8 hover:border-indigo-500/30 transition-all group relative overflow-hidden flex flex-col items-center">
                <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-indigo-600/5 rounded-full blur-[50px] pointer-events-none group-hover:bg-indigo-600/10 transition-all"></div>
                
                <div className="w-16 h-16 bg-red-600/10 text-red-500 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
