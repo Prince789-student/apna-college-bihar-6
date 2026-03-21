@@ -7,34 +7,42 @@ const nodemailer = require('nodemailer');
 
 // Helper: Send OTP Email
 const sendOTPEmail = async (email, otp) => {
-    try {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS
-            }
-        });
+    return new Promise(async (resolve, reject) => {
+        try {
+            const transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASS
+                },
+                // Set explicitly short timeouts to catch server blocking quickly
+                connectionTimeout: 8000,
+                greetingTimeout: 8000,
+                socketTimeout: 8000
+            });
 
-        const mailOptions = {
-            from: `"Apna College Bihar Platform" <${process.env.EMAIL_USER}>`,
-            to: email,
-            subject: `Action Required: Your Verification Code is ${otp}`,
-            html: `
-                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                    <h2 style="color: #2563eb;">Verification OTP</h2>
-                    <p>Your 6-digit verification code is:</p>
-                    <h1 style="color: #ea580c; font-size: 40px; letter-spacing: 5px;">${otp}</h1>
-                    <p>This code is valid for 10 minutes.</p>
-                </div>
-            `
-        };
+            const mailOptions = {
+                from: `"Apna College Bihar Platform" <${process.env.EMAIL_USER}>`,
+                to: email,
+                subject: `Action Required: Your Verification Code is ${otp}`,
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                        <h2 style="color: #2563eb;">Verification OTP</h2>
+                        <p>Your 6-digit verification code is:</p>
+                        <h1 style="color: #ea580c; font-size: 40px; letter-spacing: 5px;">${otp}</h1>
+                        <p>This code is valid for 10 minutes.</p>
+                    </div>
+                `
+            };
 
-        await transporter.sendMail(mailOptions);
-        console.log(`✅ REAL EMAIL SENT TO ${email}`);
-    } catch (error) {
-        console.log(`❌ EMAIL SEND FAILED (Check .env): ${error.message}`);
-    }
+            await transporter.sendMail(mailOptions);
+            console.log(`✅ REAL EMAIL SENT TO ${email}`);
+            resolve(true);
+        } catch (error) {
+            console.log(`❌ EMAIL SEND FAILED (Check .env or SMTP block): ${error.message}`);
+            resolve(false); // resolve false instead of rejecting to handle gracefully
+        }
+    });
 };
 
 // @route   POST /api/auth/send-email-otp
