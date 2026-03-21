@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 import { 
   Timer, Book, Calculator, GraduationCap, 
   Shield, Zap, CheckCircle2, Star, 
@@ -64,7 +65,7 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#02040a] text-white font-['Inter'] selection:bg-blue-500/30 overflow-x-hidden">
+    <div className="min-h-screen bg-[#02040a] text-white font-['Inter'] selection:bg-blue-500/30 overflow-x-hidden scroll-smooth">
       
       {/* ─── NAVBAR ────────────────────────────────────────────── */}
       <nav className="fixed top-0 left-0 right-0 z-[100] bg-[#02040a]/80 backdrop-blur-xl border-b border-slate-800/50">
@@ -80,11 +81,10 @@ export default function LandingPage() {
           </div>
 
           <div className="hidden md:flex items-center gap-10">
-            {['Home', 'Features', 'Dashboard', 'Admin'].map(item => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">
-                {item}
-              </a>
-            ))}
+            <a href="/" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">Home</a>
+            <a href="#features" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">Features</a>
+            <Link to="/dashboard" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">Dashboard</Link>
+            <Link to="/dashboard/admin" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">Admin</Link>
           </div>
 
           <div className="flex items-center gap-4">
@@ -138,7 +138,9 @@ export default function LandingPage() {
            {/* Dashboard Mockup UI */}
            <div className="lg:col-span-5 relative animate-in fade-in slide-in-from-right-5 duration-1000 delay-200">
               <div className="absolute inset-0 bg-blue-600/20 blur-[100px] pointer-events-none"></div>
-              <div className="relative bg-[#0d121f] rounded-[3.5rem] p-4 md:p-6 border border-slate-800 shadow-2xl transform skew-y-2 lg:-rotate-2 hover:rotate-0 transition-transform duration-700">
+              <div 
+                onClick={() => toast('Login to use the interactive timer!', { icon: '🔒' })}
+                className="relative bg-[#0d121f] rounded-[3.5rem] p-4 md:p-6 border border-slate-800 shadow-2xl transform lg:-rotate-2 hover:rotate-0 transition-transform duration-700 cursor-pointer group/mock">
                  <div className="bg-[#02040a] rounded-[2.5rem] overflow-hidden border border-slate-800/50 shadow-inner">
                     <div className="p-6 border-b border-slate-800/50 flex items-center justify-between">
                        <div className="flex gap-1.5">
@@ -207,7 +209,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── HOW IT WORKS ────────────────────────────────────────── */}
-      <section className="py-24 md:py-32 px-6 md:px-12">
+      <section id="how-it-works" className="py-24 md:py-32 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
            <div className="bg-[#0d121f] rounded-[4rem] border border-slate-800/80 p-12 md:p-20 relative overflow-hidden">
               <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[100px] pointer-events-none"></div>
@@ -236,7 +238,7 @@ export default function LandingPage() {
       </section>
 
       {/* ─── TESTIMONIALS ───────────────────────────────────────── */}
-      <section className="py-24 md:py-32 px-6 md:px-12 bg-[#05070a]/50">
+      <section id="testimonials" className="py-24 md:py-32 px-6 md:px-12 bg-[#05070a]/50">
         <div className="max-w-7xl mx-auto space-y-20">
            <div className="text-center space-y-4">
               <h2 className="text-4xl md:text-6xl font-[1000] tracking-tighter uppercase">Scholar <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">Feedback</span></h2>

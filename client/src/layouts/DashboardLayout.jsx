@@ -74,15 +74,15 @@ export default function DashboardLayout() {
     <>
       <div className={`p-8 md:p-10 flex items-center justify-between ${!isSidebarOpen && !isMobile ? 'justify-center' : ''}`}>
         <div className={`flex items-center gap-4 transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
-           <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-500/20 shrink-0"><GraduationCap size={24} className="text-white" /></div>
+           <div className="p-3 bg-gradient-to-br from-blue-600 to-indigo-800 rounded-2xl shadow-xl shadow-blue-500/20 shrink-0"><GraduationCap size={24} className="text-white" /></div>
            <div className="min-w-[120px]">
              <span className="text-xl font-[1000] tracking-tighter uppercase text-white block leading-none">ACB PORTAL</span>
              <span className="text-[8px] text-slate-500 font-black uppercase tracking-[0.4em] mt-2 block">Premium Edu Hub</span>
            </div>
         </div>
         {!isMobile && (
-          <button onClick={()=>setSidebarOpen(!isSidebarOpen)} className="p-2.5 bg-slate-900/50 hover:bg-slate-800 border border-slate-800/80 rounded-xl transition-all ml-2">
-             <Menu size={18} className={isSidebarOpen ? 'rotate-180 transition-transform' : ''} />
+          <button onClick={()=>setSidebarOpen(!isSidebarOpen)} className="p-3 bg-slate-900/50 hover:bg-slate-800 border border-slate-800/80 rounded-2xl transition-all ml-2 group">
+             <Menu size={18} className={`group-hover:text-blue-500 transition-all ${isSidebarOpen ? 'rotate-180' : ''}`} />
           </button>
         )}
         {isMobile && (
@@ -97,12 +97,12 @@ export default function DashboardLayout() {
           const isActive = location.pathname === link.path;
           return (
             <Link key={link.name} to={link.path}
-              className={`flex items-center gap-4 p-4 rounded-[1.8rem] transition-all duration-300 group relative ${isActive ? 'bg-blue-600 text-white shadow-xl shadow-blue-500/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'}`}>
-              <div className={`${isActive ? 'scale-110' : 'group-hover:scale-125'} transition-transform shrink-0`}>{link.icon}</div>
-              <span className={`font-black text-[10px] uppercase tracking-widest transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+              className={`flex items-center gap-4 p-4 rounded-[2rem] transition-all duration-500 group relative ${isActive ? 'bg-blue-600 text-white shadow-2xl shadow-blue-500/40' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'}`}>
+              <div className={`${isActive ? 'scale-110 rotate-0' : 'group-hover:scale-125 group-hover:rotate-6'} transition-all shrink-0`}>{link.icon}</div>
+              <span className={`font-black text-[10px] uppercase tracking-widest transition-all duration-500 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                 {link.name}
               </span>
-              {isActive && (isSidebarOpen || isMobile) && <div className="absolute right-6 w-1 h-1 bg-white rounded-full animate-pulse shadow-[0_0_10px_white]" />}
+              {isActive && (isSidebarOpen || isMobile) && <div className="absolute right-6 w-1.5 h-1.5 bg-white rounded-full animate-pulse shadow-[0_0_15px_white]" />}
             </Link>
           );
         })}
@@ -111,22 +111,22 @@ export default function DashboardLayout() {
       <div className="p-6 md:p-8 border-t border-slate-800/50">
          {(isSidebarOpen || isMobile) ? (
            <div className="space-y-4">
-              <div className="flex items-center gap-3 p-4 bg-[#162035] rounded-[2rem] border border-slate-700/30">
-                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center font-[1000] text-white shadow-lg shrink-0">
+              <div className="flex items-center gap-3 p-4 bg-[#0d121f] rounded-[2.2rem] border border-slate-800/50 hover:border-blue-500/30 transition-all cursor-pointer group">
+                 <div className="w-11 h-11 rounded-[1.2rem] bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center font-[1000] text-white shadow-xl shrink-0 group-hover:scale-110 transition-transform">
                     {user?.name?.[0]?.toUpperCase()}
                  </div>
                  <div className="flex-1 min-w-0">
-                    <p className="text-[10px] font-black text-white uppercase tracking-tighter truncate">{user?.name || 'Scholar'}</p>
-                    <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">{user?.role || 'Verified'}</p>
+                    <p className="text-[10px] font-black text-white uppercase tracking-tighter truncate group-hover:text-blue-400 transition-colors">{user?.name || 'Scholar'}</p>
+                    <p className="text-[8px] font-extrabold text-slate-500 uppercase tracking-widest mt-0.5">{user?.role || 'Verified'}</p>
                  </div>
               </div>
-              <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 p-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white border border-red-500/20 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all group active:scale-95">
+              <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 p-5 bg-red-600/5 hover:bg-red-600 text-red-500 hover:text-white border border-red-500/20 rounded-[1.8rem] font-black text-[9px] uppercase tracking-widest transition-all group active:scale-95">
                 <LogOut size={16} /> <span>Terminate Hub</span>
               </button>
            </div>
          ) : (
-           <button onClick={handleLogout} className="w-full flex items-center justify-center p-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white rounded-[1.5rem] border border-red-500/20 transition-all">
-              <LogOut size={18} />
+           <button onClick={handleLogout} className="w-full flex items-center justify-center p-5 bg-red-600/5 hover:bg-red-600 text-red-500 hover:text-white rounded-[1.8rem] border border-red-500/20 transition-all shadow-lg active:scale-95">
+              <LogOut size={20} />
            </button>
          )}
       </div>
