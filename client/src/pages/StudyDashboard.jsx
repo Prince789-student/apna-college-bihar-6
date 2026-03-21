@@ -10,7 +10,7 @@ import {
   Clock, Plus, Flame, Target, BookOpen,
   Calendar, BarChart3, Settings, Trash2, Trophy,
   Users, Hash, ArrowRight, ClipboardList, CalendarDays,
-  CheckCircle2, Circle, Save, Shield, Zap, Award
+  CheckCircle2, Circle, Save, Shield, Zap, Award, Timer
 } from 'lucide-react';
 
 // ─── Helper ──────────────────────────────────────────────
@@ -39,6 +39,7 @@ const ALL_BADGES = [
 
 // ─── Tabs ─────────────────────────────────────────────────
 const TABS = [
+  { id: 'timer',         label: 'Focus Timer',   icon: <Clock size={15}/> },
   { id: 'overview',      label: 'Overview',      icon: <BarChart3 size={15}/> },
   { id: 'todo',          label: 'Aaj ka Plan',   icon: <ClipboardList size={15}/> },
   { id: 'group',         label: 'Study Network', icon: <Users size={15}/> },
@@ -49,7 +50,7 @@ const TABS = [
 export default function StudyDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [tab, setTab] = useState('overview');
+  const [tab, setTab] = useState('timer'); // Start at timer as requested
 
   // ── Shared Data ───────────────────────────────────────
   const [userData, setUserData] = useState(null);
@@ -67,6 +68,14 @@ export default function StudyDashboard() {
   // ── Subjects ──────────────────────────────────────────
   const [showSubjectModal, setShowSubjectModal] = useState(false);
   const [newSubject, setNewSubject] = useState('');
+
+  // ── Timer State ───────────────────────────────────────
+  const [timerActive, setTimerActive] = useState(false);
+  const [timerTime, setTimerTime] = useState(1500); 
+  const [timerSubject, setTimerSubject] = useState('OTHERS');
+  const [customMinutes, setCustomMinutes] = useState(25);
+  const [timerMode, setTimerMode] = useState('COUNTDOWN'); // 'COUNTDOWN' or 'STOPWATCH'
+  const timerRef = useRef(null);
 
   // ── Groups ────────────────────────────────────────────
   const [showCreateGroup, setShowCreateGroup] = useState(false);
@@ -89,10 +98,85 @@ export default function StudyDashboard() {
 
   useEffect(() => { if (user) fetchAll(); }, [user]);
 
+  // Timer Logic
+  useEffect(() => {
+    if (timerActive) {
+      timerRef.current = setInterval(() => {
+        setTimerTime(t => {
+          if (timerMode === 'COUNTDOWN') {
+            if (t <= 1) {
+              clearInterval(timerRef.current);
+              setTimerActive(false);
+              completeCountdown();
+              return 0;
+            }
+            return t - 1;
+          } else {
+            return t + 1;
+          }
+        });
+      }, 1000);
+    } else {
+      clearInterval(timerRef.current);
+    }
+    return () => clearInterval(timerRef.current);
+  }, [timerActive, timerMode]);
+
+  const completeCountdown = () => {
+    const fullBlock = customMinutes * 60;
+    saveTimerSession(fullBlock); 
+    setTimerTime(customMinutes * 60);
+    alert('Focus session complete! Your time has been added to overview.');
+  };
+
+  const fmtTimer = (s) => {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return `${h > 0 ? h.toString().padStart(2, '0') + ':' : ''}${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+  };
+
+  const saveTimerSession = async (manualTime = null) => {
+    const timeToSave = manualTime || (timerMode === 'STOPWATCH' ? timerTime : (customMinutes * 60 - timerTime));
+    if (timeToSave < 1) { setTimerActive(false); setTimerTime(timerMode==='STOPWATCH'?0:customMinutes*60); return; }
+    
+    try {
+      await addDoc(collection(db, 'StudySessions'), {
+        userId: user.uid,
+        userName: user.name || 'Scholar',
+        subject: timerSubject,
+        duration: timeToSave,
+        date: todayStr,
+        createdAt: new Date().toISOString()
+      });
+
+      const userRef = doc(db, 'users', user.uid);
+      const today = new Date().toISOString().split('T')[0];
+      const lastDate = userData?.lastStudyDate || '';
+      
+      let newStreak = userData?.streak || 0;
+      if (lastDate !== today) {
+        const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+        const yStr = yesterday.toISOString().split('T')[0];
+        if (lastDate === yStr) newStreak += 1;
+        else if (newStreak === 0) newStreak = 1;
+      }
+
+      await updateDoc(userRef, {
+        streak: newStreak,
+        lastStudyDate: today,
+        totalStudyTime: (userData?.totalStudyTime || 0) + timeToSave
+      });
+
+      setTimerActive(false); 
+      setTimerTime(timerMode === 'STOPWATCH' ? 0 : customMinutes * 60);
+      fetchAll();
+    } catch (e) { console.error('save error:', e); }
+  };
+
   const fetchAll = async () => {
     setLoading(true);
     try {
-      // 1. User doc
       const uSnap = await getDoc(doc(db, 'users', user.uid));
       if (uSnap.exists()) {
         const d = uSnap.data();
@@ -179,7 +263,7 @@ export default function StudyDashboard() {
   return (
     <div className="max-w-5xl mx-auto space-y-6 pb-20">
 
-      {/* ── Header: Streak ── */}
+      {/* ── Header: Streak & Start Study ── */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 flex items-center justify-between bg-[#0d121f] p-5 rounded-[2rem] border border-slate-800/50">
           <div className="flex items-center gap-4">
@@ -198,6 +282,10 @@ export default function StudyDashboard() {
           </div>
           <button onClick={()=>setShowGoalModal(true)} className="p-2.5 bg-slate-800/50 rounded-xl text-slate-400 hover:text-white transition-colors" title="Goals"><Settings size={18}/></button>
         </div>
+        <button onClick={()=>setTab('timer')} className="flex-1 sm:max-w-[220px] bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black uppercase text-sm tracking-widest shadow-lg shadow-blue-900/30 flex items-center justify-center gap-3 active:scale-[0.98] transition-all p-5 group">
+          <Clock size={20} className="group-hover:rotate-12 transition-transform"/>
+          <span>▶ Start Study</span>
+        </button>
       </div>
 
       {/* ── Tab Navigation ─────────────────────────────── */}
@@ -211,6 +299,100 @@ export default function StudyDashboard() {
           );
         })}
       </div>
+
+      {/* TAB: FOCUS TIMER */}
+      {tab === 'timer' && (
+        <div className="space-y-6 animate-in fade-in duration-300">
+          <div className="bg-[#0d121f] p-10 md:p-16 rounded-[4rem] border border-slate-800/80 shadow-2xl relative overflow-hidden flex flex-col items-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-transparent pointer-events-none"></div>
+              
+              <div className="flex flex-col items-center gap-4 mb-8">
+                <div className="flex gap-2 p-1.5 bg-slate-900/80 rounded-2xl border border-slate-800/50">
+                   {['COUNTDOWN','STOPWATCH'].map(m => (
+                     <button key={m} onClick={() => !timerActive && {
+                       COUNTDOWN: () => { setTimerMode('COUNTDOWN'); setTimerTime(customMinutes*60); },
+                       STOPWATCH: () => { setTimerMode('STOPWATCH'); setTimerTime(0); }
+                     }[m]()} 
+                     className={`px-4 py-1.5 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${timerMode===m?'bg-blue-600 text-white shadow-lg shadow-blue-900/20':'text-slate-500 hover:text-white'}`}>
+                       {m}
+                     </button>
+                   ))}
+                </div>
+                <div className="flex items-center gap-3 px-6 py-2 bg-slate-900/50 rounded-full border border-slate-800/50">
+                   <Target size={14} className="text-orange-400" />
+                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Current Goal: <span className="text-white">{timerSubject}</span></p>
+                </div>
+              </div>
+
+              <h1 className="text-8xl md:text-[8rem] font-[1000] text-white tracking-tighter tabular-nums leading-none">
+                {fmtTimer(timerTime)}
+              </h1>
+
+              <div className="mt-12 flex gap-4 w-full max-w-sm">
+                {!timerActive ? (
+                  <div className="flex flex-col items-center gap-6 w-full max-w-sm">
+                    {timerMode === 'COUNTDOWN' && (
+                      <div className="flex items-center gap-4 bg-slate-900/80 p-4 rounded-3xl border border-slate-800/50 w-full animate-in slide-in-from-bottom-2">
+                         <div className="p-3 bg-blue-600/10 text-blue-500 rounded-2xl"><Timer size={20}/></div>
+                         <div className="flex-1">
+                             <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Set Blocks (Minutes)</p>
+                             <div className="flex items-baseline gap-2">
+                               <input type="number" min="1" max="600" value={customMinutes} 
+                                 onChange={e => { 
+                                   const v = Math.min(600, Math.max(1, parseInt(e.target.value) || 1));
+                                   setCustomMinutes(v); setTimerTime(v * 60);
+                                 }}
+                                 className="w-20 bg-transparent text-white text-3xl font-black outline-none border-b-2 border-slate-800 focus:border-blue-500 transition-all"/>
+                               <span className="text-[10px] font-bold text-slate-600 uppercase">Mins</span>
+                             </div>
+                         </div>
+                      </div>
+                    )}
+                    <div className="flex gap-3 w-full">
+                      <button onClick={() => setTimerActive(true)} 
+                        className="flex-1 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-3xl font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">
+                        {timerTime > 0 && ((timerMode==='COUNTDOWN' && timerTime !== (customMinutes*60)) || (timerMode==='STOPWATCH')) ? 'Resume' : 'Start Hub'} <ArrowRight size={18}/>
+                      </button>
+                      {(timerMode==='STOPWATCH' && timerTime > 0) || (timerMode==='COUNTDOWN' && timerTime < customMinutes*60) ? (
+                        <button onClick={() => saveTimerSession()} className="px-8 py-5 bg-slate-800 text-white rounded-3xl font-black text-[10px] uppercase tracking-widest hover:bg-red-600 transition-all">Done</button>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center gap-4 w-full max-w-sm">
+                    <div className="flex gap-4 w-full">
+                      <button onClick={() => setTimerActive(false)} 
+                        className="flex-1 py-5 bg-orange-600 hover:bg-orange-500 text-white rounded-3xl font-[1000] text-xs uppercase tracking-widest transition-all shadow-xl">
+                        Pause
+                      </button>
+                      <button onClick={() => saveTimerSession()} 
+                        className="flex-1 py-5 bg-red-600 hover:bg-red-500 text-white rounded-[2rem] font-[1000] text-xs uppercase tracking-widest transition-all shadow-xl">
+                        Stop & Save
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-10 flex flex-wrap justify-center gap-2">
+                {subjects.map(s => (
+                  <button key={s.id} onClick={() => !timerActive && setTimerSubject(s.subjectName)}
+                    className={`px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all ${timerSubject === s.subjectName ? 'bg-white text-black shadow-xl scale-105' : 'bg-slate-900 text-slate-500 hover:text-white'}`}>
+                    {s.subjectName}
+                  </button>
+                ))}
+                <button onClick={() => !timerActive && setTimerSubject('OTHERS')}
+                    className={`px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all ${timerSubject === 'OTHERS' ? 'bg-white text-black shadow-xl scale-105' : 'bg-slate-900 text-slate-500 hover:text-white'}`}>
+                    OTHERS
+                </button>
+                <button onClick={() => !timerActive && setShowSubjectModal(true)}
+                    className="px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white flex items-center gap-2">
+                    <Plus size={14}/> Add Subject
+                </button>
+              </div>
+          </div>
+        </div>
+      )}
 
       {/* TAB: OVERVIEW */}
       {tab === 'overview' && (
@@ -384,6 +566,12 @@ export default function StudyDashboard() {
                           onClick={() => { setEditingTask(task); setEditValue(task.text); }}>{task.text}</p>
                       </div>
                     )}
+                    {!task.done && (
+                      <button onClick={() => { setTimerSubject(task.subject || 'OTHERS'); setTab('timer'); if(timerMode==='COUNTDOWN') setTimerTime(customMinutes*60); else setTimerTime(0); }} 
+                        className="px-3 py-1.5 bg-blue-600/10 hover:bg-blue-600 text-blue-500 hover:text-white rounded-xl text-[8px] font-black uppercase tracking-widest transition-all border border-blue-500/10 flex items-center gap-2 group">
+                        <Zap size={10} className="fill-blue-500 group-hover:fill-white" /> Start Hub
+                      </button>
+                    )}
                     <button onClick={()=>delTask(task.id)} className="opacity-0 group-hover:opacity-100 text-slate-600 hover:text-red-500 transition-all"><Trash2 size={14}/></button>
                   </div>
                 ))
@@ -419,20 +607,6 @@ export default function StudyDashboard() {
                     <div className="text-3xl">{b.icon}</div>
                     <p className="text-xs font-black text-white uppercase tracking-tight">{b.name}</p>
                     <p className="text-[8px] text-white/70">{b.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {locked.length>0&&(
-            <div className="space-y-3">
-              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2"><Shield size={11}/> Locked ({locked.length})</p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {locked.map(b=>(
-                  <div key={b.id} className="bg-[#0d121f] border border-slate-800/50 p-5 rounded-2xl text-center space-y-1.5 opacity-40">
-                    <div className="text-3xl grayscale">{b.icon}</div>
-                    <p className="text-xs font-black text-slate-400 uppercase tracking-tight">{b.name}</p>
-                    <p className="text-[8px] text-slate-600">{b.desc}</p>
                   </div>
                 ))}
               </div>
