@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
-import { 
-  Grid3X3, Layers, Settings, ChevronRight, 
-  Trash2, Copy, Save, Table, Cpu, Zap, 
-  RotateCcw, Info, Hash, Clock, Plus, Minus, X
-} from 'lucide-react';
-import { toast } from 'react-hot-toast';
+import { Home, Settings, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Menu } from 'lucide-react';
 
 export default function MatrixCalc() {
   const [matrixA, setMatrixA] = useState(Array(16).fill(0));
   const [matrixB, setMatrixB] = useState(Array(16).fill(0));
   const [result, setResult] = useState(null);
   const [activeMatrix, setActiveMatrix] = useState('A');
-  const [op, setOp] = useState('');
 
   const updateCell = (idx, val) => {
     const newVal = parseFloat(val) || 0;
@@ -36,144 +30,118 @@ export default function MatrixCalc() {
       }
     }
     setResult(res);
-    setOp('AxB');
-    toast.success('Matrix Multiplication Complete');
   };
 
   const add = () => {
     const res = matrixA.map((v, i) => v + matrixB[i]);
     setResult(res);
-    setOp('A+B');
-    toast.success('Matrix Addition Complete');
-  };
-
-  const subtract = () => {
-    const res = matrixA.map((v, i) => v - matrixB[i]);
-    setResult(res);
-    setOp('A-B');
-    toast.success('Matrix Subtraction Complete');
   };
 
   const clear = () => {
     setMatrixA(Array(16).fill(0));
     setMatrixB(Array(16).fill(0));
     setResult(null);
-    setOp('');
-    toast.success('Matrices Purged');
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-12 animate-in fade-in duration-700 pb-20">
-      
-      {/* ─── HEADER ──────────────────────────────────────────────── */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-10">
-         <div className="space-y-1.5">
-            <h1 className="text-3xl md:text-5xl font-[1000] tracking-tighter uppercase text-white leading-none">
-              Matrix <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-rose-500 font-black">Laboratory</span>
-            </h1>
-            <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.4em]">Linear Algebra Engine / Multi-Vector Core v2.1</p>
-         </div>
-         <div className="flex bg-[#0d121f] p-1.5 rounded-3xl border border-slate-800">
-            {['A','B'].map(m => (
-               <button key={m} onClick={()=>setActiveMatrix(m)}
-                 className={`px-8 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${activeMatrix===m ? 'bg-orange-600 text-white shadow-xl shadow-orange-950/40' : 'text-slate-500 hover:text-white'}`}>
-                  Buffer [{m}]
-               </button>
-            ))}
-         </div>
-      </div>
+    <div className="flex justify-center items-center py-6 md:py-10 min-h-screen bg-slate-950 px-2">
+      {/* Casio ClassWiz Shell */}
+      <div className="w-full max-w-[400px] bg-[#1a1a1a] p-4 md:p-5 rounded-3xl md:rounded-[4rem] shadow-[0_45px_100px_rgba(0,0,0,1)] border-[6px] md:border-[8px] border-slate-900 border-b-[15px] md:border-b-[20px] relative">
+        
+        {/* Solar Panel & Logo Area */}
+        <div className="flex justify-between items-center mb-6 px-4">
+           <div className="flex flex-col">
+             <span className="text-white font-bold text-xl tracking-widest">CASIO</span>
+             <span className="text-slate-400 text-[10px] uppercase">fx-991CW</span>
+           </div>
+           <div className="w-16 h-8 bg-[#3d2621] rounded border border-slate-800 shadow-inner flex flex-col justify-center px-1 overflow-hidden opacity-80">
+              <div className="w-full h-1 bg-white/10 my-0.5"></div>
+              <div className="w-full h-1 bg-white/10 my-0.5"></div>
+              <div className="w-full h-1 bg-white/10 my-0.5"></div>
+           </div>
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-         
-         {/* ─── INPUT PANEL ───────────────────────────────────────── */}
-         <div className="lg:col-span-12 xl:col-span-8 space-y-8">
-            <div className="bg-[#0d121f] rounded-[4rem] border border-slate-800/80 p-10 md:p-14 relative overflow-hidden shadow-2xl group">
-               <div className="absolute top-0 right-0 w-80 h-80 bg-orange-600/5 rounded-full blur-[100px] pointer-events-none group-hover:bg-orange-600/10 transition-all"></div>
-               
-               <div className="flex flex-col md:flex-row gap-14">
-                  <div className="flex-1 space-y-8 text-center md:text-left">
-                     <div>
-                        <h2 className="text-2xl font-black text-white uppercase tracking-tighter leading-none">Active Vector Configuration</h2>
-                        <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2">Buffer [{activeMatrix}] · 4×4 Normalized Grid</p>
-                     </div>
-                     
-                     <div className="grid grid-cols-4 gap-3">
-                        {(activeMatrix==='A'?matrixA:matrixB).map((v, i) => (
-                           <input key={i} type="number" 
-                             value={v} onFocus={e=>e.target.select()}
-                             onChange={e => updateCell(i, e.target.value)}
-                             className="w-full bg-[#1c263d] border-2 border-transparent focus:border-orange-500/50 rounded-2xl p-4 text-center text-sm font-black text-white outline-none transition-all shadow-xl" />
-                        ))}
-                     </div>
-                  </div>
-
-                  <div className="w-full md:w-48 flex flex-col gap-4">
-                     <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest text-center">Batch Operations</p>
-                     <button onClick={add} className="w-full py-6 bg-[#02040a] border border-slate-800 hover:border-orange-500 text-slate-500 hover:text-white rounded-3xl transition-all shadow-xl group/btn flex flex-col items-center justify-center gap-2">
-                        <Plus size={24} className="group-hover/btn:scale-110 transition-transform" />
-                        <span className="text-[10px] font-black uppercase">Merge [A+B]</span>
-                     </button>
-                     <button onClick={subtract} className="w-full py-6 bg-[#02040a] border border-slate-800 hover:border-blue-500 text-slate-500 hover:text-white rounded-3xl transition-all shadow-xl group/btn flex flex-col items-center justify-center gap-2">
-                        <Minus size={24} className="group-hover/btn:scale-110 transition-transform" />
-                        <span className="text-[10px] font-black uppercase">Delta [A-B]</span>
-                     </button>
-                  </div>
-               </div>
-
-               <div className="mt-14 pt-10 border-t border-slate-800/50 flex flex-wrap gap-6">
-                  <button onClick={multiply} className="px-12 py-6 bg-orange-600 hover:bg-orange-500 text-white rounded-3xl font-[1000] text-xs uppercase tracking-widest shadow-xl shadow-orange-950/40 active:scale-95 transition-all flex items-center gap-4">
-                     <X size={18} /> Compute Vector Product [AxB]
-                  </button>
-                  <button onClick={clear} className="px-10 py-6 border border-red-500/20 hover:border-red-500 hover:bg-red-500/10 text-red-500/50 hover:text-red-500 rounded-3xl font-black text-[10px] uppercase tracking-widest transition-all">Emergency Purge</button>
-               </div>
+        {/* High-Res Screen Area */}
+        <div className="bg-[#c2d3c9] rounded-lg p-4 border-[10px] border-[#222] shadow-[inset_0_5px_15px_rgba(0,0,0,0.5)] mb-8 min-h-[160px] flex flex-col justify-between">
+          <div className="flex justify-between items-center text-[#222]/50 text-[10px] font-bold border-b border-[#222]/20 pb-1">
+            <span>{activeMatrix === 'A' ? 'MatA 4×4' : 'MatB 4×4'}</span>
+            <div className="flex space-x-2">
+              <span>MATRIX</span>
+              <span>DEG</span>
             </div>
-         </div>
-
-         {/* ─── RESULT PANEL ──────────────────────────────────────── */}
-         <div className="lg:col-span-12 xl:col-span-4 space-y-8">
-            <div className="bg-[#0d121f] rounded-[4.5rem] border border-slate-800/80 p-10 md:p-14 space-y-10 shadow-2xl relative overflow-hidden group min-h-full flex flex-col">
-               <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-600/5 rounded-full blur-2xl"></div>
-               
-               <div className="flex items-center justify-between">
-                  <h3 className="text-xl font-black text-white uppercase tracking-tighter">Computation Output</h3>
-                  <div className="p-3 bg-slate-900 border border-slate-800 rounded-xl text-slate-600 transition-colors group-hover:text-emerald-500"><Cpu size={18}/></div>
-               </div>
-
-               <div className="flex-grow flex flex-col items-center justify-center">
-                  {result ? (
-                     <div className="space-y-8 w-full animate-in zoom-in-95 duration-500">
-                        <div className="flex items-center justify-center gap-3">
-                           <span className="px-4 py-1.5 bg-emerald-600/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-widest rounded-full">{op} Protocol</span>
-                        </div>
-                        <div className="grid grid-cols-4 gap-3 p-8 bg-black/40 rounded-[3rem] border border-slate-800 shadow-inner">
-                           {result.map((v, i) => (
-                              <div key={i} className="text-center">
-                                 <p className="text-xs font-mono font-black text-white mb-0.5">{typeof v==='number'?v.toFixed(1):v}</p>
-                                 <p className="text-[7px] text-slate-700 font-bold uppercase">{Math.floor(i/4)},{i%4}</p>
-                              </div>
-                           ))}
-                        </div>
-                        <button onClick={() => { navigator.clipboard.writeText(result.join(',')); toast.success('Vector Data Copied'); }} className="w-full py-4 text-slate-600 hover:text-white transition-colors text-[9px] font-black uppercase tracking-widest flex items-center justify-center gap-3">
-                           <Save size={14} /> Commit Output to Memory
-                        </button>
-                     </div>
-                  ) : (
-                     <div className="text-center space-y-6 opacity-40 group-hover:opacity-60 transition-opacity py-20">
-                        <div className="w-24 h-24 bg-slate-900 border border-slate-800 rounded-[3rem] flex items-center justify-center mx-auto text-slate-800"><Layers size={48} /></div>
-                        <p className="text-[10px] font-black text-slate-700 uppercase tracking-[0.3em] leading-loose">Awaiting Vector Signal <br /> from Core Buffer</p>
-                     </div>
-                  )}
-               </div>
-
-               <div className="pt-8 border-t border-slate-800/50">
-                  <div className="flex items-center justify-between text-[8px] font-black text-slate-600 uppercase tracking-widest px-4">
-                     <span>Precision: IEEE 754</span>
-                     <span>Status: Idle</span>
+          </div>
+          
+          <div className="flex-grow flex items-center justify-center">
+            {result ? (
+              <div className="grid grid-cols-4 gap-1 w-full">
+                {result.map((v, i) => (
+                  <div key={i} className="text-[#111] font-mono text-center text-xs bg-black/5 p-1 rounded">
+                    {v.toFixed(1)}
                   </div>
-               </div>
-            </div>
-         </div>
+                ))}
+              </div>
+            ) : (
+                <div className="text-center">
+                   <p className="text-[#333] font-bold text-sm mb-2">{activeMatrix} Matrix Inputs</p>
+                   <p className="text-[#333]/60 text-[10px]">Fill cells below</p>
+                </div>
+            )}
+          </div>
 
+          <div className="text-right text-[#111] text-[10px] font-bold tracking-tighter border-t border-[#222]/20 pt-1 uppercase">
+            CLASSWIZ
+          </div>
+        </div>
+
+        {/* Matrix Selection Tabs */}
+        <div className="flex justify-center space-x-4 mb-4">
+           <button onClick={() => { setActiveMatrix('A'); setResult(null); }} className={`px-4 py-1 rounded-full text-xs font-bold transition ${activeMatrix === 'A' ? 'bg-amber-500 text-black' : 'bg-slate-800 text-slate-400'}`}>Matrix A</button>
+           <button onClick={() => { setActiveMatrix('B'); setResult(null); }} className={`px-4 py-1 rounded-full text-xs font-bold transition ${activeMatrix === 'B' ? 'bg-amber-500 text-black' : 'bg-slate-800 text-slate-400'}`}>Matrix B</button>
+        </div>
+
+        {/* Matrix Input Grid (Internal to Calculator) */}
+        <div className="bg-slate-800 p-3 rounded-2xl mb-8 border border-slate-700">
+           <div className="grid grid-cols-4 gap-1.5">
+              {(activeMatrix === 'A' ? matrixA : matrixB).map((v, i) => (
+                <input 
+                  key={i}
+                  type="number"
+                  value={v === 0 ? '' : v}
+                  onChange={(e) => updateCell(i, e.target.value)}
+                  className="w-full bg-slate-900 border border-slate-700 rounded-md p-1.5 text-center text-white text-xs font-bold focus:border-amber-500 outline-none"
+                  placeholder="0"
+                />
+              ))}
+           </div>
+        </div>
+
+        {/* Navigation Section */}
+        <div className="grid grid-cols-3 gap-2 mb-8 px-4">
+           <div className="flex flex-col space-y-4">
+              <button className="w-full py-2 bg-[#d4af37] text-black text-[10px] font-black rounded-full shadow-lg h-10 active:scale-95 transition">SHIFT</button>
+              <button onClick={clear} className="w-full py-2 bg-slate-800 text-red-500 text-[10px] font-black rounded-full shadow-lg h-10 active:scale-95 transition">OFF</button>
+           </div>
+           
+           <div className="flex flex-col items-center">
+              <div className="w-20 h-20 bg-slate-800 rounded-full border-4 border-slate-700 relative shadow-2xl flex items-center justify-center">
+                 <button className="absolute top-1 text-slate-500 hover:text-white"><ChevronUp size={16} /></button>
+                 <button className="absolute bottom-1 text-slate-500 hover:text-white"><ChevronDown size={16} /></button>
+                 <button className="absolute left-1 text-slate-500 hover:text-white"><ChevronLeft size={16} /></button>
+                 <button className="absolute right-1 text-slate-500 hover:text-white"><ChevronRight size={16} /></button>
+                 <button className="w-8 h-8 bg-slate-900 rounded-full text-slate-400 text-xs font-bold border border-slate-700 shadow-inner">OK</button>
+              </div>
+           </div>
+
+           <div className="flex flex-col space-y-4 items-end">
+              <button onClick={multiply} className="w-full py-2 bg-indigo-600 text-white text-[10px] font-black rounded-full shadow-lg h-10 active:scale-95 transition">AxB</button>
+              <button onClick={add} className="w-full py-2 bg-indigo-600 text-white text-[10px] font-black rounded-full shadow-lg h-10 active:scale-95 transition">A+B</button>
+           </div>
+        </div>
+
+        {/* Bottom Logo */}
+        <div className="text-center py-4">
+            <span className="text-slate-700 text-[10px] font-bold tracking-widest uppercase">Premium Education Bihar</span>
+        </div>
       </div>
     </div>
   );

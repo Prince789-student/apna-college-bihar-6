@@ -28,7 +28,7 @@ export function AuthProvider({ children }) {
   const syncProfile = async (u) => {
     try {
       if (!u) { setUser(null); return; }
-      const docRef = doc(db, "Users", u.uid);
+      const docRef = doc(db, "users", u.uid);
       const userDoc = await getDoc(docRef);
       
       // FOUNDER AUTO-PROMOTION LOGIC
@@ -75,7 +75,7 @@ export function AuthProvider({ children }) {
       groupsCreatedToday: 0,
       lastGroupCreateDate: null
     };
-    await setDoc(doc(db, "Users", res.user.uid), data);
+    await setDoc(doc(db, "users", res.user.uid), data);
     return res.user;
   }
 
@@ -104,7 +104,7 @@ export function AuthProvider({ children }) {
   // 5. Profile Update
   async function updateProfileData(data) {
     if (!user) return;
-    await updateDoc(doc(db, "Users", user.uid), data);
+    await updateDoc(doc(db, "users", user.uid), data);
     setUser(prev => ({ ...prev, ...data }));
   }
 
