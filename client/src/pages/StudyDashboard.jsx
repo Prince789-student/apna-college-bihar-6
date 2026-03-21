@@ -861,43 +861,88 @@ export default function StudyDashboard() {
       {/* ── FOCUS MODE OVERLAY ─────────────────────────── */}
       {focusMode && (
         <div className="fixed inset-0 z-[1000] bg-black flex flex-col items-center justify-center animate-in zoom-in-95 duration-500 overflow-hidden">
-           <div className="absolute top-10 left-10 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-600/20 flex items-center justify-center border border-blue-500/20">
-                 <Power className="text-blue-500" size={18} />
-              </div>
-              <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.5em] italic">Distraction-Free Focus</p>
-           </div>
+            {/* Timer Hub & Controls */}
+            <div className="relative z-10 flex flex-col items-center gap-12 text-center w-full max-w-4xl px-4">
+               {/* 1. Subject & Mode Selection */}
+               <div className="flex flex-wrap items-center justify-center gap-4">
+                  <div className="relative">
+                     <select 
+                       value={timerSubject} 
+                       onChange={(e) => setTimerSubject(e.target.value)}
+                       disabled={timerActive}
+                       className="bg-slate-900/80 backdrop-blur-md border border-slate-700/50 text-white font-black text-[10px] uppercase tracking-widest px-6 py-3 rounded-2xl outline-none focus:border-blue-500 appearance-none cursor-pointer"
+                     >
+                        {subjects.map(s => <option key={s.id} value={s.subjectName}>{s.subjectName}</option>)}
+                        <option value="OTHERS">OTHERS</option>
+                     </select>
+                  </div>
+                  
+                  <div className="flex bg-slate-900/80 p-1.5 rounded-2xl border border-slate-700/50">
+                     <button 
+                       onClick={() => !timerActive && setTimerMode('STOPWATCH')}
+                       className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${timerMode==='STOPWATCH' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-white'}`}>
+                        Stopwatch
+                     </button>
+                     <button 
+                       onClick={() => !timerActive && setTimerMode('COUNTDOWN')}
+                       className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${timerMode==='COUNTDOWN' ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' : 'text-slate-500 hover:text-white'}`}>
+                        Countdown
+                     </button>
+                  </div>
+               </div>
 
-           <div className="text-center space-y-6">
-              <div className="inline-block bg-slate-900 text-slate-400 px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-widest border border-slate-800">
-                 Subject: {timerSubject}
-              </div>
-              <h2 className="text-8xl md:text-[12rem] font-[1000] text-white tracking-tighter tabular-nums leading-none font-mono drop-shadow-[0_20px_50px_rgba(59,130,246,0.5)]">
-                 {fmtTimer(timerTime)}
-              </h2>
-              <p className="text-slate-600 text-[10px] font-black uppercase tracking-[0.5em]">Steady & Consistent</p>
-           </div>
+               {/* 2. The Big Timer Display */}
+               <div className="space-y-4">
+                  <h2 className={`text-9xl md:text-[14rem] font-[1000] text-white tracking-tighter tabular-nums leading-none font-mono drop-shadow-[0_20px_60px_rgba(59,130,246,0.4)] ${timerActive ? 'animate-pulse' : ''}`}>
+                     {fmtTimer(timerTime)}
+                  </h2>
+                  <div className="flex items-center justify-center gap-4">
+                     <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.6em]">Currently Focused</p>
+                  </div>
+               </div>
 
-           <div className="absolute bottom-20 flex flex-col items-center gap-6">
-              <div className="w-48 h-1.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800 relative">
-                 <div className="absolute top-0 left-0 h-full bg-red-600 transition-all duration-100" style={{ width: `${holdTime}%` }}></div>
-              </div>
-              <button 
-                onMouseDown={() => {
-                   holdRef.current = setInterval(() => {
-                      setHoldTime(h => {
-                         if (h >= 100) { setFocusMode(false); clearInterval(holdRef.current); return 0; }
-                         return h + 5;
-                      });
-                   }, 50);
-                }}
-                onMouseUp={() => { clearInterval(holdRef.current); setHoldTime(0); }}
-                onMouseLeave={() => { clearInterval(holdRef.current); setHoldTime(0); }}
-                className="px-10 py-4 bg-slate-900 hover:bg-red-900/20 text-slate-500 hover:text-red-500 border border-slate-800 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all"
-              >
-                 Hold to Exit
-              </button>
-           </div>
+               {/* 3. Main Controls */}
+               <div className="flex items-center gap-10">
+                  <button 
+                    onClick={() => setTimerActive(!timerActive)}
+                    className={`w-32 h-32 rounded-full flex items-center justify-center border-4 shadow-2xl transition-all active:scale-95 group relative overflow-hidden ${timerActive ? 'bg-slate-900 border-slate-700' : 'bg-blue-600 border-blue-500'}`}
+                  >
+                     {timerActive ? <Pause size={48} fill="white" /> : <Play size={48} fill="white" className="ml-2" />}
+                  </button>
+
+                  {((timerMode==='STOPWATCH' && timerTime > 0) || (timerMode==='COUNTDOWN' && timerTime < customMinutes*60)) && !timerActive && (
+                     <button 
+                       onClick={() => saveTimerSession()}
+                       className="w-20 h-20 rounded-full bg-slate-900 border-4 border-slate-800 flex items-center justify-center text-red-500 hover:bg-red-500/10 transition-all shadow-xl active:scale-90"
+                     >
+                        <Square size={24} fill="currentColor" />
+                     </button>
+                  )}
+               </div>
+
+               {/* Hold to Exit Instruction */}
+               <div className="mt-10 flex flex-col items-center gap-6">
+                  <div className="w-48 h-1.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800 relative">
+                     <div className="absolute top-0 left-0 h-full bg-red-600 transition-all duration-100" style={{ width: `${holdTime}%` }}></div>
+                  </div>
+                  <button 
+                    onMouseDown={() => {
+                       holdRef.current = setInterval(() => {
+                          setHoldTime(h => {
+                             if (h >= 100) { setFocusMode(false); clearInterval(holdRef.current); return 0; }
+                             return h + 5;
+                          });
+                       }, 50);
+                    }}
+                    onMouseUp={() => { clearInterval(holdRef.current); setHoldTime(0); }}
+                    onMouseLeave={() => { clearInterval(holdRef.current); setHoldTime(0); }}
+                    className="px-10 py-4 bg-slate-900 hover:bg-red-600/10 text-slate-500 hover:text-red-500 border border-slate-800 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all"
+                  >
+                     Hold to Exit
+                  </button>
+               </div>
+            </div>
         </div>
       )}
     </div>
