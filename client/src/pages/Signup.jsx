@@ -1,60 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { BookOpen, Mail, Phone, Lock, User, ShieldCheck } from 'lucide-react';
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import { BookOpen, Chrome, ShieldCheck } from 'lucide-react';
 
 export default function Signup() {
   const navigate = useNavigate();
-  const { signup } = useAuth();
-  
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', password: '', otp: '' });
+  const { googleLogin } = useAuth();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState('DETAILS'); // DETAILS or OTP
-  const [otpHash, setOtpHash] = useState(null);
 
-  const API_URL = '/api/auth';
-
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const handleRequestOTP = async (e) => {
-    e.preventDefault();
-    if (formData.phone.length < 10) return setError("Enter a valid 10-digit mobile number");
-    
-    setError('');
-    setLoading(true);
+  const handleGoogleSignup = async () => {
     try {
-      // 1. Send OTP to email via our Node.js Backend
-      const response = await axios.post(`${API_URL}/send-email-otp`, { email: formData.email });
-      setOtpHash(response.data.hash);
-      setStep('OTP');
-      // SHOWING OTP ON SCREEN JUST FOR PRINCE BHAI'S TESTING
-      // Removed because user requires strictly Real Email transmission.
-    } catch (err) {
-      setError(err.response?.data?.message || err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerifyAndSignup = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      // 2. Verify OTP with our Node.js Backend
-      await axios.post(`${API_URL}/verify-email-otp`, { 
-        otp: formData.otp, 
-        hash: otpHash 
-      });
-
-      // 3. If OTP is valid, create account in Firebase!
-      await signup(formData.email, formData.password, formData.name, formData.phone);
+      setLoading(true);
+      await googleLogin();
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || err.message);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -76,7 +37,7 @@ export default function Signup() {
             </div>
             <h1 className="text-3xl md:text-4xl font-[1000] text-white tracking-tighter uppercase text-center leading-[1]">
               APNA COLLEGE<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500 text-[14px] font-black tracking-[0.3em]">STUDENT ADMISSION portal</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500 text-[14px] font-black tracking-[0.3em]">STUDENT ADMISSION</span>
             </h1>
           </div>
 
@@ -87,50 +48,19 @@ export default function Signup() {
             </div>
           )}
 
-          <form onSubmit={step === 'DETAILS' ? handleRequestOTP : handleVerifyAndSignup} className="space-y-4">
-            
-            {step === 'DETAILS' ? (
-              <>
-                <div className="relative group">
-                  <User className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500" size={18} />
-                  <input type="text" name="name" placeholder="YOUR FULL NAME" value={formData.name} onChange={handleChange} className="w-full bg-[#1c263d] border-2 border-transparent focus:border-blue-500/50 rounded-[1.5rem] p-5 pl-16 text-white text-xs font-bold outline-none transition-all placeholder:text-slate-600" required />
-                </div>
+          <div className="space-y-6">
+            <div className="bg-blue-600/10 border border-blue-500/20 rounded-[2rem] p-8 text-center">
+              <p className="text-blue-100 font-bold text-sm tracking-tight mb-2">Fast & Secure Onboarding</p>
+              <p className="text-slate-400 text-xs font-medium">We use Google Authentication to verify all students instantly. No passwords or OTPs required.</p>
+            </div>
 
-                <div className="relative group">
-                  <Phone className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500" size={18} />
-                  <input type="tel" name="phone" placeholder="MOBILE NUMBER (10 DIGITS)" value={formData.phone} onChange={handleChange} className="w-full bg-[#1c263d] border-2 border-transparent focus:border-blue-500/50 rounded-[1.5rem] p-5 pl-16 text-white text-xs font-bold outline-none transition-all placeholder:text-slate-600" required />
-                </div>
-
-                <div className="relative group">
-                  <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500" size={18} />
-                  <input type="email" name="email" placeholder="EMAIL ADDRESS" value={formData.email} onChange={handleChange} className="w-full bg-[#1c263d] border-2 border-transparent focus:border-blue-500/50 rounded-[1.5rem] p-5 pl-16 text-white text-xs font-bold outline-none transition-all placeholder:text-slate-600" required />
-                </div>
-
-                <div className="relative group">
-                  <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500" size={18} />
-                  <input type="password" name="password" placeholder="SECURE PASSWORD" value={formData.password} onChange={handleChange} className="w-full bg-[#1c263d] border-2 border-transparent focus:border-blue-500/50 rounded-[1.5rem] p-5 pl-16 text-white text-xs font-bold outline-none transition-all placeholder:text-slate-600" required />
-                </div>
-              </>
-            ) : (
-                <div className="relative group animate-in fade-in zoom-in duration-300">
-                  <ShieldCheck className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-orange-500" size={18} />
-                  <input type="text" name="otp" placeholder={`Enter 6-digit OTP sent to ${formData.email}`} value={formData.otp} onChange={handleChange} className="w-full bg-[#1c263d] border-2 border-transparent focus:border-orange-500/50 rounded-[1.5rem] p-5 pl-16 text-white text-xs font-bold outline-none transition-all placeholder:text-slate-600" maxLength={6} required />
-                  <p className="text-[10px] text-center text-slate-500 mt-4">Check your spam folder if you don't see it.</p>
-                </div>
-            )}
-
-            <button type="submit" disabled={loading} className="w-full text-white bg-blue-600 hover:bg-blue-500 font-[1000] py-5 rounded-[1.8rem] shadow-xl transition-all active:scale-95 text-xs uppercase tracking-widest mt-6">
-              {loading ? 'Processing...' : (step === 'DETAILS' ? 'Verify Email with OTP' : 'Complete Admission')}
+            <button onClick={handleGoogleSignup} disabled={loading} className="w-full bg-white text-slate-950 font-black py-5 rounded-[1.8rem] shadow-xl hover:bg-slate-100 transition-all flex items-center justify-center space-x-4 active:scale-95 text-xs uppercase tracking-widest mt-6 border border-slate-200">
+              <Chrome className="text-blue-600 w-6 h-6" />
+              <span>{loading ? "Connecting..." : "SIGN UP WITH GOOGLE"}</span>
             </button>
-            
-            {step === 'OTP' && (
-              <button type="button" onClick={() => setStep('DETAILS')} className="w-full text-slate-500 hover:text-white font-[1000] py-3 rounded-[1.8rem] transition-all text-[10px] uppercase tracking-widest">
-                Edit Details
-              </button>
-            )}
-          </form>
+          </div>
 
-          <div className="mt-8 text-center text-slate-600 text-[10px] font-bold">
+          <div className="mt-10 text-center text-slate-600 text-[10px] font-bold">
             Already registered? <Link to="/login" className="text-orange-500 hover:underline">Log in now</Link>
           </div>
         </div>
