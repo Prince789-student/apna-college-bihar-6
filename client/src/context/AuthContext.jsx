@@ -46,7 +46,7 @@ export function AuthProvider({ children }) {
         const data = {
           uid: u.uid,
           name: u.displayName || 'Scholar',
-          email: u.email || 'No Email',
+          email: u.email,
           phone: u.phoneNumber || "",
           createdAt: serverTimestamp(),
           role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT,

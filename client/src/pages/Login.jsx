@@ -82,18 +82,16 @@ export default function Login() {
           </form>
 
           {/* Fixed Social Area */}
-          <div className="flex items-center my-6 px-4 opacity-30">
+          <div className="flex items-center my-10 px-4 opacity-30">
             <div className="flex-grow border-t border-slate-700"></div>
             <span className="mx-6 text-slate-500 text-[8px] font-black uppercase tracking-[0.5em]">Other Access</span>
             <div className="flex-grow border-t border-slate-700"></div>
           </div>
 
-          <div className="space-y-3">
-            <button onClick={handleGoogleLogin} className="w-full bg-white text-slate-950 font-black py-4 rounded-[1.5rem] shadow-xl hover:bg-slate-100 transition-all flex items-center justify-center space-x-4 active:scale-95 text-xs border border-slate-200">
-              <Chrome className="text-blue-600 w-5 h-5" />
-              <span>LOGIN WITH GOOGLE</span>
-            </button>
-          </div>
+          <button onClick={handleGoogleLogin} className="w-full bg-white text-slate-950 font-black py-5 rounded-[1.8rem] shadow-xl hover:bg-slate-100 transition-all flex items-center justify-center space-x-4 active:scale-95 text-xs border border-slate-200">
+            <Chrome className="text-blue-600 w-6 h-6" />
+            <span>LOGIN WITH GOOGLE</span>
+          </button>
 
           <div className="mt-8 text-center text-slate-600 text-[10px] font-bold">
             Don't have an account? <Link to="/signup" className="text-blue-500 hover:underline">Admission Open / Sign Up</Link>
