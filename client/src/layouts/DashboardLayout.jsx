@@ -167,7 +167,26 @@ export default function DashboardLayout() {
 
         {/* Scrollable Area */}
         <div className="flex-1 overflow-y-auto custom-scrollbar relative z-10 p-5 md:p-14 lg:p-20">
-           <Outlet />
+           <div className="min-h-[80vh]">
+             <Outlet />
+           </div>
+
+           {/* ── Dashboard Footer (SEO & Legal) ── */}
+           <footer className="mt-20 py-10 border-t border-slate-800/30 flex flex-col md:flex-row items-center justify-between gap-6 opacity-60 hover:opacity-100 transition-opacity">
+              <div className="flex flex-col items-center md:items-start gap-1">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Apna College Bihar</p>
+                <p className="text-[8px] font-bold uppercase tracking-widest text-slate-500">© 2026 Official Student Portal</p>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-6">
+                <Link to="/about" className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-400 transition-colors">About Us</Link>
+                <Link to="/contact" className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-emerald-400 transition-colors">Contact Us</Link>
+                <Link to="/privacy" className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-orange-400 transition-colors">Privacy Policy</Link>
+              </div>
+              <div className="flex items-center gap-2">
+                 <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                 <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-600">All Systems Operational</span>
+              </div>
+           </footer>
         </div>
 
         {/* Global Blur Orbs */}

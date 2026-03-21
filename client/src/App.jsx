@@ -15,6 +15,9 @@ import GroupDetail from './pages/GroupDetail';
 import AdminPanel from './pages/AdminPanel';
 import Timetable from './pages/Timetable';
 import BeuCgpa from './pages/BeuCgpa';
+import PrivacyPolicy from './pages/legal/PrivacyPolicy';
+import AboutUs from './pages/legal/AboutUs';
+import ContactUs from './pages/legal/ContactUs';
 
 // Role-Based Admin Guard (Restricted to Founder Identity)
 const AdminRoute = () => {
@@ -51,6 +54,11 @@ function App() {
             </Route>
           </Route>
         </Route>
+
+        {/* Public Legal Pages (AdSense Compliance) */}
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact" element={<ContactUs />} />
 
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
