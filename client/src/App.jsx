@@ -15,6 +15,7 @@ import GroupDetail from './pages/GroupDetail';
 import AdminPanel from './pages/AdminPanel';
 import Timetable from './pages/Timetable';
 import BeuCgpa from './pages/BeuCgpa';
+import LandingPage from './pages/LandingPage';
 
 // Role-Based Admin Guard (Restricted to Founder Identity)
 const AdminRoute = () => {
@@ -29,7 +30,7 @@ function App() {
     <AuthProvider>
       <Toaster position="top-right" reverseOrder={false} />
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         
