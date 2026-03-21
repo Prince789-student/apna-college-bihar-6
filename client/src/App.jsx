@@ -10,6 +10,7 @@ import DashboardLayout from './layouts/DashboardLayout';
 import Dashboard from './pages/Dashboard';
 import Notes from './pages/Notes';
 import ScientificCalc from './pages/ScientificCalc';
+import GroupDetails from './pages/GroupDetails';
 import StudyDashboard from './pages/StudyDashboard';
 import GroupDetail from './pages/GroupDetail';
 import AdminPanel from './pages/AdminPanel';
@@ -40,8 +41,8 @@ function App() {
             <Route path="notes" element={<Notes />} />
             <Route path="calculator" element={<ScientificCalc />} />
             <Route path="study" element={<StudyDashboard />} />
+            <Route path="study/group/:groupId" element={<GroupDetails />} />
             <Route path="timer" element={<StudyDashboard />} />
-            <Route path="study/group/:groupId" element={<GroupDetail />} />
             <Route path="timetable" element={<Timetable />} />
             <Route path="cgpa" element={<BeuCgpa />} />
             

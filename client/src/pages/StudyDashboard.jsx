@@ -10,7 +10,8 @@ import {
   Clock, Plus, Flame, Target, BookOpen,
   Calendar, BarChart3, Settings, Trash2, Trophy,
   Users, Hash, ArrowRight, ClipboardList, CalendarDays,
-  CheckCircle2, Circle, Save, Shield, Zap, Award, Timer
+  CheckCircle2, Circle, Save, Shield, Zap, Award, Timer,
+  Pause, Play, Square
 } from 'lucide-react';
 
 // ─── Helper ──────────────────────────────────────────────
@@ -97,6 +98,11 @@ export default function StudyDashboard() {
   const [editingTask, setEditingTask] = useState(null);
   const [editValue, setEditValue] = useState('');
 
+  // ── Focus Mode (Full Screen) ───────────
+  const [focusMode, setFocusMode] = useState(false);
+  const [holdTime, setHoldTime] = useState(0);
+  const holdRef = useRef(null);
+
   useEffect(() => { if (user) fetchAll(); }, [user]);
 
   // Timer Effect
@@ -120,6 +126,12 @@ export default function StudyDashboard() {
     } else {
       clearInterval(timerRef.current);
     }
+    
+    // Global User Status Tracker (Live Pulse)
+    if (user) {
+       updateDoc(doc(db, 'users', user.uid), { isStudying: timerActive }).catch(() => {});
+    }
+
     return () => clearInterval(timerRef.current);
   }, [timerActive, timerMode]);
 
@@ -139,6 +151,10 @@ export default function StudyDashboard() {
 
   const saveTimerSession = async (manualTime = null) => {
     const timeToSave = manualTime || (timerMode === 'STOPWATCH' ? timerTime : (customMinutes * 60 - timerTime));
+    
+    // Set status to resting when timer stops/saves
+    try { await updateDoc(doc(db, 'users', user.uid), { isStudying: false }); } catch(err){}
+
     if (timeToSave < 1) { setTimerActive(false); setTimerTime(timerMode==='STOPWATCH'?0:customMinutes*60); return; }
     
     try {
@@ -300,132 +316,216 @@ export default function StudyDashboard() {
         <div className="flex-1 flex items-center justify-between bg-[#0d121f] p-5 rounded-[2rem] border border-slate-800/50">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-orange-500/10 rounded-2xl flex items-center justify-center border border-orange-500/20 shrink-0">
-              <Flame size={24} className="text-orange-500" fill="currentColor"/>
+               <Flame size={24} className="text-orange-500" fill="currentColor"/>
             </div>
             <div>
-              <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Daily Streak</p>
-              <p className="text-2xl font-black text-white leading-none">{userData?.streak||0} <span className="text-xs font-bold text-slate-400">days</span></p>
-              <p className="text-[9px] mt-0.5 text-slate-600">
-                {todaySec >= 7200
+               <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Daily Streak</p>
+               <p className="text-2xl font-black text-white leading-none">{userData?.streak||0} <span className="text-xs font-bold text-slate-400">days</span></p>
+               <p className="text-[9px] mt-0.5 text-slate-600">
+                  {todaySec >= 7200
                   ? '✅ 2 hr complete — streak safe!'
                   : `⚠️ ${Math.floor((7200 - todaySec) / 60)} min aur padho streak ke liye`}
-              </p>
+               </p>
             </div>
           </div>
           <button onClick={()=>setShowGoalModal(true)} className="p-2.5 bg-slate-800/50 rounded-xl text-slate-400 hover:text-white transition-colors" title="Goals"><Settings size={18}/></button>
         </div>
         <button onClick={()=>setTab('timer')} className="flex-1 sm:max-w-[220px] bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black uppercase text-sm tracking-widest shadow-lg shadow-blue-900/30 flex items-center justify-center gap-3 active:scale-[0.98] transition-all p-5 group">
-          <Clock size={20} className="group-hover:rotate-12 transition-transform"/>
-          <span>▶ Start Study</span>
+           <Clock size={20} className="group-hover:rotate-12 transition-transform"/>
+           <span>▶ Start Study</span>
         </button>
       </div>
 
       {/* ── Tab Navigation ─────────────────────────────── */}
-      <div className="flex gap-1 bg-[#0d121f] p-1.5 rounded-2xl border border-slate-800/50 overflow-x-auto">
+      <div className="flex gap-1.5 bg-[#0d121f]/80 backdrop-blur-md p-1.5 rounded-[1.8rem] border border-slate-800/50 overflow-x-auto sticky top-4 z-[50] shadow-2xl">
         {TABS.map(t => {
           if (t.id === 'admin' && user?.email !== 'prince86944@gmail.com' && user?.role !== 'SUPER_ADMIN') return null;
           return (
-            <button key={t.id} onClick={()=> t.id === 'admin' ? navigate('/dashboard/admin') : setTab(t.id)} className={`flex-1 min-w-fit flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all whitespace-nowrap ${tab===t.id?'bg-blue-600 text-white shadow-lg':'text-slate-500 hover:text-white hover:bg-slate-800/50'}`}>
+            <button key={t.id} onClick={()=> t.id === 'admin' ? navigate('/dashboard/admin') : setTab(t.id)} className={`flex-1 min-w-fit flex items-center justify-center gap-2 px-6 py-3 rounded-[1.2rem] text-[10px] font-black uppercase tracking-wider transition-all whitespace-nowrap ${tab===t.id?'bg-blue-600 text-white shadow-xl shadow-blue-500/20':'text-slate-500 hover:text-white hover:bg-slate-800/30'}`}>
               {t.icon} {t.label}
             </button>
           );
         })}
       </div>
 
-      {/* ══════════════════════════════════════════════════ */}
-      {/* TAB: FOCUS TIMER                                   */}
-      {/* ══════════════════════════════════════════════════ */}
       {tab === 'timer' && (
-        <div className="space-y-6 animate-in fade-in duration-300">
-          <div className="bg-[#0d121f] p-10 md:p-16 rounded-[4rem] border border-slate-800/80 shadow-2xl relative overflow-hidden flex flex-col items-center">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-transparent pointer-events-none"></div>
-              
-              <div className="flex flex-col items-center gap-4 mb-8">
-                <div className="flex gap-2 p-1.5 bg-slate-900/80 rounded-2xl border border-slate-800/50">
-                   {['COUNTDOWN','STOPWATCH'].map(m => (
-                     <button key={m} onClick={() => !timerActive && {
-                       COUNTDOWN: () => { setTimerMode('COUNTDOWN'); setTimerTime(customMinutes*60); },
-                       STOPWATCH: () => { setTimerMode('STOPWATCH'); setTimerTime(0); }
-                     }[m]()} 
-                     className={`px-4 py-1.5 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${timerMode===m?'bg-blue-600 text-white shadow-lg shadow-blue-900/20':'text-slate-500 hover:text-white'}`}>
-                       {m}
-                     </button>
-                   ))}
-                </div>
-                <div className="flex items-center gap-3 px-6 py-2 bg-slate-900/50 rounded-full border border-slate-800/50">
-                  <Target size={14} className="text-orange-400" />
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Current Goal: <span className="text-white">{timerSubject}</span></p>
-                </div>
-              </div>
-
-              <h1 className="text-8xl md:text-[8rem] font-[1000] text-white tracking-tighter tabular-nums leading-none">
-                {fmtTimer(timerTime)}
-              </h1>
-
-              <div className="mt-12 flex gap-4 w-full max-w-sm">
-                {!timerActive ? (
-                  <div className="flex flex-col items-center gap-6 w-full max-w-sm">
-                    {/* Hide Set Blocks if Stopwatch or show it for Countdown */}
-                    {timerMode === 'COUNTDOWN' && (
-                      <div className="flex items-center gap-4 bg-slate-900/80 p-4 rounded-3xl border border-slate-800/50 w-full animate-in slide-in-from-bottom-2">
-                         <div className="p-3 bg-blue-600/10 text-blue-500 rounded-2xl"><Timer size={20}/></div>
-                         <div className="flex-1">
-                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Set Blocks (Minutes)</p>
-                            <div className="flex items-baseline gap-2">
-                              <input type="number" min="1" max="600" value={customMinutes} 
-                                onChange={e => { 
-                                  const v = Math.min(600, Math.max(1, parseInt(e.target.value) || 1));
-                                  setCustomMinutes(v); setTimerTime(v * 60);
-                                }}
-                                className="w-20 bg-transparent text-white text-3xl font-black outline-none border-b-2 border-slate-800 focus:border-blue-500 transition-all"/>
-                              <span className="text-[10px] font-bold text-slate-600 uppercase">Mins</span>
-                            </div>
-                         </div>
-                      </div>
-                    )}
-                    <div className="flex gap-3 w-full">
-                      <button onClick={() => setTimerActive(true)} 
-                        className="flex-1 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-3xl font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">
-                        {timerTime > 0 && ((timerMode==='COUNTDOWN' && timerTime !== (customMinutes*60)) || (timerMode==='STOPWATCH')) ? 'Resume' : 'Start Hub'} <ArrowRight size={18}/>
-                      </button>
-                      {(timerMode==='STOPWATCH' && timerTime > 0) || (timerMode==='COUNTDOWN' && timerTime < customMinutes*60) ? (
-                        <button onClick={() => saveTimerSession()} className="px-8 py-5 bg-slate-800 text-white rounded-3xl font-black text-[10px] uppercase tracking-widest hover:bg-red-600 transition-all">Done</button>
-                      ) : null}
+        <div className="flex flex-col lg:flex-row gap-6 animate-in fade-in slide-in-from-bottom-5 duration-500 items-start">
+           
+           {/* ── LEFT SB: Profile & Streak ── */}
+           <div className="w-full lg:w-1/4 space-y-6">
+              <div className="bg-[#0d121f] border border-slate-800/80 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden group">
+                 <div className="absolute top-0 right-0 w-32 h-32 bg-orange-500/5 rounded-full blur-3xl group-hover:bg-orange-500/10 transition-all"></div>
+                 <div className="relative z-10 text-center flex flex-col items-center">
+                    <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-800 border-4 border-slate-800 flex items-center justify-center text-4xl font-[1000] text-white shadow-2xl mb-6 ring-4 ring-blue-500/10">
+                       {user?.name?.[0]?.toUpperCase() || 'P'}
                     </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center gap-4 w-full max-w-sm">
-                    <div className="flex gap-4 w-full">
-                      <button onClick={() => setTimerActive(false)} 
-                        className="flex-1 py-5 bg-orange-600 hover:bg-orange-500 text-white rounded-3xl font-[1000] text-xs uppercase tracking-widest transition-all shadow-xl">
-                        Pause
-                      </button>
-                      <button onClick={() => saveTimerSession()} 
-                        className="flex-1 py-5 bg-red-600 hover:bg-red-500 text-white rounded-[2rem] font-[1000] text-xs uppercase tracking-widest transition-all shadow-xl">
-                        Stop & Save
-                      </button>
+                    <h3 className="text-xl font-[1000] text-white uppercase tracking-tighter leading-none mb-4">{user?.name || 'Scholar'}'s Path</h3>
+                    <div className="inline-flex items-center gap-3 bg-orange-500/10 border border-orange-500/20 px-5 py-2.5 rounded-2xl shadow-lg">
+                       <Flame size={18} className="text-orange-500" fill="currentColor" />
+                       <span className="text-[10px] font-black text-orange-400 uppercase tracking-widest">{userData?.streak || 0} DAY STREAK</span>
                     </div>
-                  </div>
-                )}
+                    <div className="w-full mt-10 space-y-3">
+                       <div className="bg-slate-900/60 p-4 rounded-2xl border border-slate-800/50 flex justify-between items-center">
+                          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Today Total</span>
+                          <span className="text-lg font-black text-blue-400 font-mono">{fmtTimer(todaySec)}</span>
+                       </div>
+                       <div className="bg-slate-900/60 p-4 rounded-2xl border border-slate-800/50 flex justify-between items-center">
+                          <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">World Rank</span>
+                          <span className="text-lg font-black text-amber-500 font-mono">#42</span>
+                       </div>
+                    </div>
+                 </div>
               </div>
 
-              <div className="mt-10 flex flex-wrap justify-center gap-2">
-                {subjects.map(s => (
-                  <button key={s.id} onClick={() => !timerActive && setTimerSubject(s.subjectName)}
-                    className={`px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all ${timerSubject === s.subjectName ? 'bg-white text-black shadow-xl scale-105' : 'bg-slate-900 text-slate-500 hover:text-white'}`}>
-                    {s.subjectName}
-                  </button>
-                ))}
-                <button onClick={() => !timerActive && setTimerSubject('OTHERS')}
-                    className={`px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all ${timerSubject === 'OTHERS' ? 'bg-white text-black shadow-xl scale-105' : 'bg-slate-900 text-slate-500 hover:text-white'}`}>
-                    OTHERS
-                </button>
-                <button onClick={() => !timerActive && setShowSubjectModal(true)}
-                    className="px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white flex items-center gap-2">
-                    <Plus size={14}/> Customize
-                </button>
+              {/* Weekly Progress Summary */}
+              <div className="bg-[#0d121f] border border-slate-800/80 rounded-[2.5rem] p-6 shadow-2xl">
+                 <div className="flex items-center gap-3 mb-6">
+                    <BarChart3 className="text-blue-500" size={18} />
+                    <h4 className="text-[10px] font-black text-white uppercase tracking-widest leading-none">Weekly Tempo</h4>
+                 </div>
+                 <div className="flex items-end justify-between h-20 gap-1.5 px-2">
+                    {heatmap.map(d => (
+                       <div key={d.dStr} className="flex-1 flex flex-col items-center gap-2">
+                          <div className={`w-full rounded-md transition-all ${d.isToday ? 'bg-blue-600 shadow-lg shadow-blue-500/50' : d.sec > 0 ? 'bg-blue-900/60' : 'bg-slate-800/40'}`} style={{ height: `${Math.max(10, (d.sec / (maxH || 1)) * 100)}%` }}></div>
+                          <span className={`text-[8px] font-black ${d.isToday ? 'text-blue-400' : 'text-slate-600 uppercase'}`}>{d.day}</span>
+                       </div>
+                    ))}
+                 </div>
               </div>
-          </div>
+           </div>
+
+           {/* ── CENTER: The Big Hub Timer ── */}
+           <div className="flex-1 w-full space-y-6">
+              <div className="bg-[#0d121f] border-[8px] border-slate-900 rounded-[4rem] p-10 md:p-16 h-[560px] shadow-[0_60px_100px_rgba(0,0,0,0.6)] relative flex flex-col items-center justify-center overflow-hidden">
+                 <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none animate-pulse"></div>
+                 <div className="absolute bottom-[-10%] left-[-10%] w-[300px] h-[300px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+                 <div className="relative z-10 w-full flex flex-col items-center">
+                    <div className="mb-6 group">
+                       <span className="bg-blue-600/10 text-blue-400 px-6 py-2 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest border border-blue-500/20 shadow-lg group-hover:scale-105 transition-transform duration-300">
+                          🎯 Hub Mode: {timerSubject}
+                       </span>
+                    </div>
+
+                    <div className="text-[90px] md:text-[110px] lg:text-[130px] font-[1000] tracking-[-0.05em] text-white leading-none font-mono drop-shadow-[0_20px_40px_rgba(30,58,138,0.5)] mb-10 flex select-none">
+                       {fmtTimer(timerTime).split(':').map((part, i) => (
+                         <span key={i} className="flex items-center">
+                           {part}{i < 2 && <span className="text-slate-800/80 mx-1 mb-2">:</span>}
+                         </span>
+                       ))}
+                    </div>
+
+                    <div className="flex items-center justify-center gap-8 mb-12">
+                       <button onClick={() => setTimerActive(!timerActive)} 
+                         className={`w-24 h-24 rounded-full flex items-center justify-center border-4 shadow-2xl transition-all active:scale-90 relative overflow-hidden group ${timerActive ? 'bg-orange-600 border-orange-500/50 shadow-orange-900/40' : 'bg-blue-600 border-blue-500/50 shadow-blue-900/40'}`}>
+                          <div className={`absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+                          {timerActive ? <Pause size={42} fill="white" className="relative z-10" /> : <Play size={42} fill="white" className="ml-2 relative z-10" />}
+                       </button>
+
+                       {((timerMode==='STOPWATCH' && timerTime > 0) || (timerMode==='COUNTDOWN' && timerTime < customMinutes*60)) && !timerActive && (
+                        <div className="flex gap-4">
+                           <button onClick={() => saveTimerSession()} 
+                             className="w-16 h-16 rounded-full bg-slate-900 border-4 border-slate-800 flex items-center justify-center text-slate-500 hover:text-red-400 hover:border-red-900/50 transition-all shadow-xl active:scale-95 group">
+                              <Square size={20} fill="currentColor" />
+                           </button>
+                           {timerActive && (
+                              <button onClick={() => setFocusMode(true)} className="px-6 py-2 bg-blue-600/10 text-blue-400 border border-blue-500/20 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all">
+                                 Focus Mode
+                              </button>
+                           )}
+                        </div>
+                       )}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 w-full max-w-sm">
+                       <div className="bg-slate-900/60 p-5 rounded-3xl border border-slate-800/50 flex items-center gap-4 group">
+                          <Zap className="text-blue-500 group-hover:animate-bounce" size={24} />
+                          <div>
+                             <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest italic">Hub Focus</p>
+                             <p className="text-sm font-black text-white">96% Supernova</p>
+                          </div>
+                       </div>
+                       <div className="bg-slate-900/60 p-5 rounded-3xl border border-slate-800/50 flex items-center gap-4 group">
+                          <Trophy className="text-amber-500 group-hover:animate-bounce" size={24} />
+                          <div>
+                             <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest italic">Session XP</p>
+                             <p className="text-sm font-black text-white">+{Math.floor(timerTime/60) * 10} pts</p>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+              </div>
+
+              {/* Study Marathon Heatmap */}
+              <div className="bg-[#0d121f] border border-slate-800/80 rounded-[2.5rem] p-8 shadow-2xl">
+                 <div className="flex justify-between items-center mb-6">
+                    <div className="flex items-center gap-3">
+                       <CalendarDays className="text-emerald-500" size={20} />
+                       <h3 className="text-[11px] font-[1000] text-white uppercase tracking-widest">Study Marathon Heatmap</h3>
+                    </div>
+                    <span className="text-[9px] text-slate-600 font-bold uppercase tracking-widest italic">Study Frequency</span>
+                 </div>
+                 <div className="flex flex-wrap gap-1.5 opacity-90 justify-center sm:justify-start">
+                    {Array(84).fill(0).map((_, i) => (
+                       <div key={i} className={`w-4 h-4 rounded-sm transition-all hover:scale-125 cursor-pointer ${i % 7 === 0 ? 'bg-blue-500' : (i % 3 === 0 ? 'bg-blue-700' : (i%5===0 ? 'bg-slate-800' : 'bg-slate-900'))}`}></div>
+                    ))}
+                 </div>
+              </div>
+           </div>
+
+           {/* ── RIGHT SB: Ranking & Switcher ── */}
+           <div className="w-full lg:w-1/4 space-y-6">
+              <div className="bg-[#0d121f] border border-slate-800/80 rounded-[2.5rem] p-8 shadow-2xl">
+                 <div className="flex items-center gap-3 mb-8">
+                    <Hash size={20} className="text-amber-500" />
+                    <h3 className="text-[11px] font-[1000] text-white uppercase tracking-widest leading-none">Global Ranking</h3>
+                 </div>
+                 <div className="space-y-4">
+                    {[
+                       { name: (user?.name || 'You'), time: fmtTimer(todaySec), rank: 1, active: true },
+                       { name: 'Amit Kumar', time: '04:12:15', rank: 2, active: false },
+                       { name: 'Sneha Singh', time: '03:45:00', rank: 3, active: true },
+                       { name: 'Rajesh Ram', time: '02:50:30', rank: 4, active: false }
+                    ].map((p, idx) => (
+                       <div key={idx} className={`flex items-center justify-between p-4 rounded-3xl transition-all border ${p.rank === 1 ? 'bg-blue-600/10 border-blue-500/20 shadow-xl' : 'bg-slate-900/50 border-transparent hover:border-slate-800'}`}>
+                          <div className="flex items-center gap-3">
+                             <div className={`w-7 h-7 flex items-center justify-center rounded-xl text-[10px] font-black ${p.rank === 1 ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-500'}`}>{p.rank}</div>
+                             <div className="text-left">
+                                <p className={`text-[11px] font-black uppercase ${p.rank === 1 ? 'text-white' : 'text-slate-400'}`}>{p.name}</p>
+                                <p className={`text-[8px] font-black uppercase tracking-widest ${p.active ? 'text-green-500' : 'text-slate-600'}`}>{p.active ? 'Studying...' : 'Offline'}</p>
+                             </div>
+                          </div>
+                          <span className="text-[10px] font-mono font-black text-slate-400">{p.time}</span>
+                       </div>
+                    ))}
+                 </div>
+                 <button className="w-full mt-8 py-4 bg-slate-900 hover:bg-slate-800 text-white border border-slate-800 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all">View Leaderboard</button>
+              </div>
+
+              {/* Subject Switcher Hub */}
+              <div className="bg-[#0d121f] border border-slate-800/80 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
+                 <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl"></div>
+                 <div className="relative z-10">
+                    <div className="flex items-center gap-3 mb-6">
+                       <Zap className="text-indigo-400" size={18} />
+                       <h3 className="text-[11px] font-[1000] text-white uppercase tracking-widest">Active Hubs</h3>
+                    </div>
+                    <div className="space-y-2">
+                       {subjects.map(s => (
+                          <button key={s.id} onClick={() => !timerActive && setTimerSubject(s.subjectName)}
+                            className={`w-full text-left p-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border ${timerSubject === s.subjectName ? 'bg-indigo-600 border-indigo-500 text-white shadow-xl shadow-indigo-900/20' : 'bg-slate-900/40 border-slate-800 text-slate-500 hover:text-white hover:border-indigo-500/50'}`}>
+                             {s.subjectName}
+                          </button>
+                       ))}
+                       <button onClick={() => !timerActive && setTimerSubject('OTHERS')}
+                          className={`w-full text-left p-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border ${timerSubject === 'OTHERS' ? 'bg-indigo-600 border-indigo-500 text-white shadow-xl shadow-indigo-900/20' : 'bg-slate-900/40 border-slate-800 text-slate-500 hover:text-white'}`}>
+                          OTHERS
+                       </button>
+                       <button onClick={() => !timerActive && setShowSubjectModal(true)} className="w-full py-4 bg-blue-600/10 border border-blue-500/20 text-blue-400 rounded-2xl text-[9px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all">Add New Hub</button>
+                    </div>
+                 </div>
+              </div>
+           </div>
         </div>
       )}
 
@@ -740,7 +840,48 @@ export default function StudyDashboard() {
         </div>
       )}
 
-      {/* Required imports for Clock */}
+      {/* ── FOCUS MODE OVERLAY ─────────────────────────── */}
+      {focusMode && (
+        <div className="fixed inset-0 z-[1000] bg-black flex flex-col items-center justify-center animate-in zoom-in-95 duration-500 overflow-hidden">
+           <div className="absolute top-10 left-10 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-600/20 flex items-center justify-center border border-blue-500/20">
+                 <Power className="text-blue-500" size={18} />
+              </div>
+              <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.5em] italic">Distraction-Free Focus</p>
+           </div>
+
+           <div className="text-center space-y-6">
+              <div className="inline-block bg-slate-900 text-slate-400 px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-widest border border-slate-800">
+                 Subject: {timerSubject}
+              </div>
+              <h2 className="text-8xl md:text-[12rem] font-[1000] text-white tracking-tighter tabular-nums leading-none font-mono drop-shadow-[0_20px_50px_rgba(59,130,246,0.5)]">
+                 {fmtTimer(timerTime)}
+              </h2>
+              <p className="text-slate-600 text-[10px] font-black uppercase tracking-[0.5em]">Steady & Consistent</p>
+           </div>
+
+           <div className="absolute bottom-20 flex flex-col items-center gap-6">
+              <div className="w-48 h-1.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800 relative">
+                 <div className="absolute top-0 left-0 h-full bg-red-600 transition-all duration-100" style={{ width: `${holdTime}%` }}></div>
+              </div>
+              <button 
+                onMouseDown={() => {
+                   holdRef.current = setInterval(() => {
+                      setHoldTime(h => {
+                         if (h >= 100) { setFocusMode(false); clearInterval(holdRef.current); return 0; }
+                         return h + 5;
+                      });
+                   }, 50);
+                }}
+                onMouseUp={() => { clearInterval(holdRef.current); setHoldTime(0); }}
+                onMouseLeave={() => { clearInterval(holdRef.current); setHoldTime(0); }}
+                className="px-10 py-4 bg-slate-900 hover:bg-red-900/20 text-slate-500 hover:text-red-500 border border-slate-800 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all"
+              >
+                 Hold to Exit
+              </button>
+           </div>
+        </div>
+      )}
     </div>
   );
 }
