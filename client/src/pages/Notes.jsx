@@ -135,10 +135,17 @@ export default function Notes() {
                </div>
 
                 <div className="mt-auto w-full flex items-center gap-2 pt-6 border-t border-slate-800/50">
-                   <a href={d.fileUrl} target="_blank" rel="noreferrer" 
+                   <button 
+                     onClick={() => {
+                       if (!d.fileUrl || d.fileUrl.includes('localhost')) {
+                         alert('Bhai, ye file link abhi active nahi hai (Localhost link detected). Admin se sampark karein.');
+                         return;
+                       }
+                       window.open(d.fileUrl, '_blank');
+                     }}
                      className="flex-1 flex items-center justify-center gap-2 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all">
                      <Eye size={12} /> View
-                   </a>
+                   </button>
                    <a href={d.fileUrl} download 
                      className="p-4 bg-indigo-600/10 hover:bg-indigo-600 text-indigo-400 hover:text-white rounded-2xl transition-all border border-indigo-500/20">
                      <Download size={14} />

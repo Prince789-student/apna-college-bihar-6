@@ -22,11 +22,39 @@ export default function DashboardLayout() {
   const { user, logout, ROLES } = useAuth();
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [phone, setPhone] = useState('');
+  const [isPhoneModalOpen, setPhoneModalOpen] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Auto-close mobile menu on navigation
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
+
+  // Mandatory Phone Check
+  useEffect(() => {
+    if (user && !user.phone) {
+      setPhoneModalOpen(true);
+    } else {
+      setPhoneModalOpen(false);
+    }
+  }, [user]);
+
+  const { updateProfileData } = useAuth();
+
+  const handlePhoneSubmit = async (e) => {
+    e.preventDefault();
+    if (phone.length < 10) return;
+    setIsUpdating(true);
+    try {
+      await updateProfileData({ phone });
+      setPhoneModalOpen(false);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
 
   const isAdmin = user?.email === 'prince86944@gmail.com' || user?.role === ROLES.SUPER_ADMIN; 
   const navLinks = [
@@ -145,6 +173,52 @@ export default function DashboardLayout() {
         {/* Global Blur Orbs */}
         <div className="fixed top-[-20%] right-[-10%] w-[1000px] h-[1000px] bg-blue-600/5 rounded-full blur-[200px] pointer-events-none -z-10"></div>
         <div className="fixed bottom-[-10%] left-[-10%] w-[800px] h-[800px] bg-indigo-600/5 rounded-full blur-[150px] pointer-events-none -z-10"></div>
+
+        {/* ── Verification Modal (MANDATORY) ── */}
+        {isPhoneModalOpen && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-[#02040a]/80 backdrop-blur-xl">
+             <div className="w-full max-w-md bg-[#0d121f] border border-slate-800/80 rounded-[3rem] p-10 md:p-14 shadow-2xl animate-in zoom-in-95 duration-300 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <div className="relative z-10 space-y-8 text-center">
+                   <div className="inline-flex p-5 bg-blue-600/20 text-blue-400 rounded-3xl mb-2">
+                      <Shield size={32} />
+                   </div>
+                   <div className="space-y-3">
+                      <h2 className="text-2xl font-[1000] text-white uppercase tracking-tighter">Security Update</h2>
+                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">Please link your active mobile number to access your academic records.</p>
+                   </div>
+
+                   <form onSubmit={handlePhoneSubmit} className="space-y-6">
+                      <div className="space-y-2 text-left">
+                        <p className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] ml-2">Phone Number</p>
+                        <div className="flex gap-2">
+                          <div className="bg-[#1c263d] px-4 py-4 rounded-2xl flex items-center justify-center text-xs font-black text-slate-400">+91</div>
+                          <input 
+                            type="tel" 
+                            required 
+                            maxLength={10}
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                            placeholder="9XXXXXXXXX" 
+                            className="flex-1 bg-[#1c263d] border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-4 text-white text-sm font-black outline-none transition-all placeholder:text-slate-700" 
+                          />
+                        </div>
+                      </div>
+
+                      <button 
+                        type="submit" 
+                        disabled={isUpdating || phone.length < 10}
+                        className="w-full py-5 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95"
+                      >
+                        {isUpdating ? 'Authenticating...' : 'Secure Access'}
+                      </button>
+                      <p className="text-[8px] text-slate-700 font-bold uppercase tracking-widest">Verification will be synced with your Casio ID</p>
+                   </form>
+                </div>
+             </div>
+          </div>
+        )}
 
       </main>
     </div>
