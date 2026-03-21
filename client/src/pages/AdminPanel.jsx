@@ -4,15 +4,17 @@ import {
   Trash2, Ban, UserCheck, UploadCloud, 
   Search, RefreshCw, BarChart3, 
   ChevronRight, AlertCircle, Loader2,
-  FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye
+  FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye,
+  LayoutDashboard, ShieldAlert, Database, Globe, Layers, Zap,
+  Activity, TrendingUp, Target, LogOut
 } from 'lucide-react';
-import { db, storage } from '../firebase';
+import { db } from '../firebase';
 import { 
-  collection, getDocs, doc, updateDoc, deleteDoc, 
-  addDoc, serverTimestamp, query, orderBy, onSnapshot, limit
+  collection, doc, updateDoc, deleteDoc, 
+  addDoc, query, orderBy, onSnapshot
 } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-hot-toast';
 
 export default function AdminPanel() {
   const { user, ROLES, loading: authLoading } = useAuth();
@@ -22,21 +24,11 @@ export default function AdminPanel() {
   const [docs, setDocs] = useState([]);
   const [anns, setAnns] = useState([]);
   const [newAnn, setNewAnn] = useState({ title: '', content: '', type: 'INFO' });
-  const [msg, setMsg] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  // ── UPLOAD STATE ──
-  const [uploading, setUploading] = useState(false);
-  const [docForm, setDocForm] = useState({ title: '', subject: '', category: 'NOTES', file: null });
 
   // Access Control
   const isSuper = user?.role === ROLES.SUPER_ADMIN;
-  const isAdmin = user?.email === 'prince86944@gmail.com' || user?.role === ROLES.SUPER_ADMIN; 
-
-  const flash = (text, type = 'ok') => {
-    setMsg({ text, type });
-    setTimeout(() => setMsg(null), 4000);
-  };
+  const isAdmin = user?.email === 'prince86944@gmail.com' || user?.role === ROLES.SUPER_ADMIN || user?.role === 'admin'; 
 
   useEffect(() => {
     if (!isAdmin || authLoading) return;
@@ -59,389 +51,347 @@ export default function AdminPanel() {
     });
 
     setLoading(false);
-    return () => { if(unsubUsers) unsubUsers(); if(unsubGroups) unsubGroups(); if(unsubDocs) unsubDocs(); if(unsubAnns) unsubAnns(); };
+    return () => { unsubUsers(); unsubGroups(); unsubDocs(); unsubAnns(); };
   }, [isAdmin, authLoading]);
 
-  // ── USER ACTIONS ──
+  // Actions
   const toggleBan = async (uid, banned) => {
     await updateDoc(doc(db, 'users', uid), { banned: !banned });
-    flash(banned ? 'User unbanned' : 'User banned');
+    toast.success(banned ? 'Security clearance restored' : 'Node restricted');
   };
 
   const changeRole = async (uid, role) => {
-    if (!isSuper) { flash('Only Super Admin can change roles', 'err'); return; }
+    if (!isSuper) { toast.error('Insufficient clearance'); return; }
     await updateDoc(doc(db, 'users', uid), { role });
-    flash(`Role updated to ${role}`);
+    toast.success(`Role vector updated to ${role}`);
   };
 
   const deleteUser = async (uid) => {
-    if (!isSuper) { flash('Only Super Admin can delete users', 'err'); return; }
-    if (!window.confirm('Delete this user permanently?')) return;
+    if (!isSuper) { toast.error('Permanent erasure requires High Council clearance'); return; }
+    if (!window.confirm('Erase this identity from the database?')) return;
     await deleteDoc(doc(db, 'users', uid));
-    flash('User deleted');
-  };
-
-  // ── GROUP ACTIONS ──
-  const deleteGroup = async (gid) => {
-    if (!window.confirm('Delete this group?')) return;
-    await deleteDoc(doc(db, 'groups', gid));
-    flash('Group removed');
+    toast.success('Identity Nullified');
   };
 
   const approveDoc = async (id) => {
     await updateDoc(doc(db, 'documents', id), { verified: true });
-    flash('Document Approved');
+    toast.success('Asset Verified');
   };
 
   const deleteDocItem = async (id) => {
-    if(!window.confirm('Permanent delete?')) return;
+    if(!window.confirm('Decommission asset?')) return;
     await deleteDoc(doc(db, 'documents', id));
-    flash('Document Deleted');
+    toast.success('Asset Expunged');
   };
 
   const postAnn = async (e) => {
     e.preventDefault();
-    if(!newAnn.content) return;
+    if(!newAnn.title || !newAnn.content) return;
     await addDoc(collection(db, 'announcements'), {
       ...newAnn,
-      createdAt: serverTimestamp(),
-      createdBy: user.name
+      author: user.displayName || 'System Command',
+      createdAt: new Date().toISOString()
     });
     setNewAnn({ title: '', content: '', type: 'INFO' });
-    flash('Broadcast Live!');
+    toast.success('Announcement Transmitted');
   };
 
-  const deleteAnn = async (id) => {
-    await deleteDoc(doc(db, 'announcements', id));
-    flash('Broadcast Removed');
-  };
-
-  const handleUpload = async (e) => {
-    e.preventDefault();
-    const { title, subject, category, file, externalUrl } = docForm;
-    
-    if (!title) { flash('Title required', 'err'); return; }
-    
-    setUploading(true);
-    try {
-      let finalUrl = externalUrl;
-
-      // Handle File Upload if present
-      if (file) {
-        const timeout = setTimeout(() => {
-          setUploading(false);
-          flash('File Upload Timed Out! Use "Direct Link" as a bypass.', 'err');
-        }, 12000);
-
-        const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
-        const storageRef = ref(storage, `notes/${fileName}`);
-        const snapshot = await uploadBytes(storageRef, file);
-        clearTimeout(timeout);
-        finalUrl = await getDownloadURL(snapshot.ref);
-      }
-
-      if (!finalUrl) { flash('File or Direct Link required', 'err'); setUploading(false); return; }
-
-      await addDoc(collection(db, 'documents'), {
-        title,
-        subject: subject || 'GENERAL',
-        category,
-        fileUrl: finalUrl,
-        verified: true,
-        createdAt: serverTimestamp()
-      });
-      
-      flash('Success! Document ready in Library! ✅');
-      setDocForm({ title: '', subject: '', category: 'NOTES', file: null, externalUrl: '' });
-    } catch (err) { 
-       console.error("DEPLOY ERROR:", err);
-       flash('Deployment failed: ' + err.message, 'err'); 
-    } finally {
-       setUploading(false);
-    }
-  };
-
-
-  if (authLoading) return (
-    <div className="flex flex-col items-center justify-center py-40 gap-4">
-      <Loader2 className="w-12 h-12 text-indigo-500 animate-spin" />
-      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Checking Authority...</p>
-    </div>
+  if (!isAdmin && !authLoading) return (
+     <div className="min-h-screen flex items-center justify-center p-10 bg-[#02040a]">
+        <div className="max-w-md w-full p-10 bg-[#0d121f] border border-red-500/20 rounded-[3rem] text-center space-y-6">
+           <div className="w-20 h-20 bg-red-600/10 text-red-500 rounded-3xl flex items-center justify-center mx-auto border border-red-500/20 animate-pulse"><ShieldAlert size={40} /></div>
+           <div>
+              <h2 className="text-3xl font-[1000] text-white uppercase tracking-tighter">Access Denied</h2>
+              <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.3em] mt-3">Level 5 Security Protocol Active</p>
+           </div>
+           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight leading-loose">This node is restricted to Super Admin identities. Your attempt has been logged in the system audit.</p>
+           <button onClick={() => window.location.href='/dashboard'} className="w-full py-4 text-[10px] font-black uppercase tracking-widest text-slate-600 hover:text-white transition-colors">Return to Safe Sector</button>
+        </div>
+     </div>
   );
 
-  // if (!isAdmin) return <div className="text-center py-20 text-slate-500 font-bold uppercase tracking-widest">Unauthorized Access</div>;
-
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-0 pb-24 space-y-8 animate-in fade-in duration-1000">
+    <div className="max-w-7xl mx-auto space-y-12 animate-in fade-in duration-700 pb-20">
       
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-[#02040a] p-6 md:p-8 border border-slate-800/80 rounded-[2rem] md:rounded-[3rem] shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-red-600/5 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="flex items-center gap-5 relative z-10">
-          <div className="p-4 bg-indigo-600/20 text-indigo-400 rounded-3xl group hover:scale-110 transition-transform cursor-pointer">
-             <Shield size={32} />
-          </div>
-          <div>
-            <h1 className="text-4xl font-[1000] text-white tracking-tighter uppercase leading-[0.8]">{isSuper?'SUPER OPS':'ADMIN OPS'}</h1>
-            <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.4em] mt-3">Governance & Oversight Hub</p>
-          </div>
-        </div>
-        <div className="flex flex-wrap bg-slate-900/50 p-1.5 rounded-2xl border border-slate-800/50">
-           {['overview', 'users', 'groups', 'notes', 'broadcasts'].map(t => (
-             <button key={t} onClick={()=>setTab(t)}
-               className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${tab===t?'bg-indigo-600 text-white shadow-xl shadow-indigo-900/20':'text-slate-500 hover:text-slate-300'}`}>
-               {t}
-             </button>
-           ))}
-        </div>
+      {/* ─── COMMAND HEADER ────────────────────────────────────── */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-10">
+         <div className="space-y-1.5 text-center md:text-left">
+            <h1 className="text-3xl md:text-5xl font-[1000] tracking-tighter uppercase text-white leading-none">
+              Operations <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-rose-500 font-black">Control</span>
+            </h1>
+            <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.4em]">Integrated Hub Management / System v7.1</p>
+         </div>
+         <div className="flex flex-wrap justify-center bg-[#0d121f] p-1.5 rounded-3xl border border-slate-800">
+            {[
+              { id: 'overview', l: 'Overview', i: <LayoutDashboard size={14}/> },
+              { id: 'users', l: 'Identities', i: <Users size={14}/> },
+              { id: 'assets', l: 'Assets', i: <Database size={14}/> },
+              { id: 'comms', l: 'Comms', i: <Bell size={14}/> }
+            ].map(t => (
+               <button key={t.id} onClick={()=>setTab(t.id)}
+                 className={`px-6 py-4 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2 ${tab===t.id ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-950/40' : 'text-slate-500 hover:text-white'}`}>
+                  {t.i} {t.l}
+               </button>
+            ))}
+         </div>
       </div>
 
-      {msg && (
-        <div className={`p-4 rounded-2xl border flex items-center gap-3 animate-in zoom-in duration-300 ${msg.type==='ok'?'bg-emerald-600/20 text-emerald-400 border-emerald-500/30':'bg-red-600/20 text-red-400 border-red-500/30'}`}>
-          <AlertCircle size={18}/> <span className="text-[13px] font-bold uppercase tracking-tight">{msg.text}</span>
-        </div>
-      )}
-
-      {/* ── OVERVIEW TAB ── */}
-      {tab==='overview' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { label: 'Total Scholars', val: users.length, icon: Users, col: 'blue' },
-            { label: 'Study Hubs', val: groups.length, icon: BookOpen, col: 'indigo' },
-            { label: 'Knowledge Base', val: docs.length, icon: FileText, col: 'orange' },
-            { label: 'Active Admins', val: users.filter(x=>x.role==='ADMIN').length, icon: Shield, col: 'red' },
-          ].map(s => (
-            <div key={s.label} className="bg-[#0d121f] p-8 rounded-[3.5rem] border border-slate-800/80">
-               <div className="flex justify-between items-start mb-6">
-                 <div className="p-3 bg-slate-900 text-slate-500 rounded-2xl"><s.icon size={20}/></div>
-                 <BarChart3 size={14} className="text-slate-800" />
-               </div>
-               <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">{s.label}</p>
-               <p className="text-3xl font-black text-white">{s.val}</p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* ── USERS TAB ── */}
-      {tab==='users' && (
-        <div className="bg-[#0d121f] rounded-[2rem] md:rounded-[3.5rem] border border-slate-800/80 overflow-hidden shadow-2xl animate-in fade-in duration-500">
-           <div className="p-4 md:p-8 border-b border-slate-800/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <h2 className="text-sm font-black uppercase text-slate-400 tracking-widest">Scholar Directory</h2>
-              <div className="relative group w-full md:w-72">
-                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500" size={16} />
-                 <input placeholder="Search UID/Email/Name..." className="w-full bg-[#1c263d] border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-2.5 pl-12 text-white text-[12px] font-bold outline-none" />
-              </div>
-           </div>
-           <div className="overflow-x-auto">
-             <table className="w-full text-left">
-               <thead>
-                 <tr className="bg-slate-900/40 text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 border-b border-slate-800/50">
-                   <th className="py-5 px-8">Identity</th>
-                   <th className="py-5 px-8 text-center">Contact</th>
-                   <th className="py-5 px-8 text-center">Status</th>
-                   <th className="py-5 px-8">Rank</th>
-                   <th className="py-5 px-8 text-right">Operations</th>
-                 </tr>
-               </thead>
-               <tbody className="divide-y divide-slate-800/30">
-                 {users.map(u => (
-                   <tr key={u.id} className="hover:bg-slate-800/20 transition-all group">
-                     <td className="py-6 px-8">
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-black text-white text-[11px] group-hover:scale-110 transition-transform">
-                              {u.name?.charAt(0).toUpperCase() || 'S'}
-                            </div>
+      {/* ─── TAB CONTENT ─────────────────────────────────────── */}
+      <div className="animate-in slide-in-from-bottom-5 duration-500">
+         
+         {tab === 'overview' && (
+            <div className="space-y-10">
+               {/* Analytics Grid */}
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[
+                    { l: 'System Nodes', v: users.length, i: <Users size={24}/>, c: 'text-blue-400' },
+                    { l: 'Knowledge Assets', v: docs.length, i: <Database size={24}/>, c: 'text-indigo-400' },
+                    { l: 'Active Sectors', v: groups.length, i: <Globe size={24}/>, c: 'text-emerald-400' },
+                    { l: 'Protocol Transmissions', v: anns.length, i: <Activity size={24}/>, c: 'text-amber-400' }
+                  ].map(s => (
+                     <div key={s.l} className="bg-[#0d121f] p-10 rounded-[3rem] border border-slate-800 relative overflow-hidden group hover:border-indigo-500/30 transition-all shadow-2xl">
+                        <div className="relative z-10 space-y-4">
+                           <div className={`p-4 bg-slate-900 rounded-2xl inline-block ${s.c} group-hover:scale-110 transition-transform`}>{s.i}</div>
                            <div>
-                              <p className="text-[13px] font-black text-white uppercase tracking-tight">{u.name}</p>
-                              <p className="text-[10px] font-bold text-slate-600 truncate max-w-[150px]">{u.email}</p>
+                              <p className="text-[10px] text-slate-500 font-extrabold uppercase tracking-widest">{s.l}</p>
+                              <h4 className="text-5xl font-[1000] text-white tracking-tighter mt-1 leading-none">{s.v}</h4>
                            </div>
                         </div>
-                     </td>
-                     <td className="py-6 px-8 text-center">
-                        <div className="inline-block px-3 py-1.5 bg-slate-900/50 border border-slate-800/80 rounded-xl">
-                          <span className="text-[11px] font-bold text-slate-400 tracking-widest">
-                            {u.phone || 'NOT LINKED'}
-                          </span>
-                        </div>
-                     </td>
-                     <td className="py-6 px-8 text-center">
-                        <span className={`text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-tighter ${u.banned?'bg-red-500/10 text-red-400 border border-red-500/20':'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}`}>
-                          {u.banned ? 'TERMINATED' : 'VERIFIED'}
-                        </span>
-                     </td>
-                     <td className="py-6 px-8">
-                        <div className="flex items-center gap-2">
-                           <Shield size={12} className={u.role===ROLES.SUPER_ADMIN?'text-amber-500':u.role===ROLES.ADMIN?'text-blue-500':'text-slate-600'} />
-                           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{u.role}</span>
-                        </div>
-                     </td>
-                     <td className="py-6 px-8 text-right space-x-2">
-                        <button onClick={()=>toggleBan(u.id, u.banned)} className={`p-2 rounded-xl transition-all ${u.banned?'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-white':'bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white'}`}>
-                           {u.banned ? <UserCheck size={16}/> : <Ban size={16}/>}
-                        </button>
-                        {isSuper && (
-                          <button onClick={()=>changeRole(u.id, u.role==='STUDENT'?'ADMIN':'STUDENT')} className="p-2 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-white rounded-xl">
-                            {u.role==='STUDENT'?<UserPlus size={16}/>:<UserMinus size={16}/>}
-                          </button>
-                        )}
-                        {u.role!==ROLES.SUPER_ADMIN && (
-                          <button onClick={()=>deleteUser(u.id)} className="p-2 bg-slate-800 text-slate-500 hover:text-red-500 rounded-xl"><Trash2 size={16}/></button>
-                        )}
-                     </td>
-                   </tr>
-                 ))}
-               </tbody>
-             </table>
-           </div>
-        </div>
-      )}
-
-      {/* ── NOTES UPLOAD ── */}
-      {tab==='notes' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 px-0">
-           <div className="lg:col-span-4 space-y-8">
-              <div className="bg-[#0d121f] p-6 md:p-8 rounded-[2rem] md:rounded-[3.5rem] border border-slate-800/80">
-                <h2 className="text-sm font-black uppercase text-slate-400 tracking-widest mb-8 text-center font-['Inter']">Global Deployment 🛰️</h2>
-                <form onSubmit={handleUpload} className="space-y-4">
-                  <input value={docForm.title} onChange={e=>setDocForm({...docForm, title:e.target.value})} placeholder="Doc Title" className="w-full bg-[#1c263d] p-4 rounded-2xl text-[12px] font-bold text-white outline-none border-2 border-transparent focus:border-indigo-500" />
-                  <input value={docForm.subject} onChange={e=>setDocForm({...docForm, subject:e.target.value})} placeholder="Subject" className="w-full bg-[#1c263d] p-4 rounded-2xl text-[12px] font-bold text-white outline-none border-2 border-transparent focus:border-indigo-500" />
-                  
-                  <div className="p-4 bg-slate-900/50 rounded-2xl border border-slate-700/20">
-                     <p className="text-[9px] font-black text-slate-500 uppercase mb-3">Option 1: Direct Link (No Billing Needed)</p>
-                     <input value={docForm.externalUrl || ''} onChange={e=>setDocForm({...docForm, externalUrl:e.target.value, file:null})} placeholder="Paste Drive/URL Link here..." className="w-full bg-[#02040a] p-3 rounded-xl text-[11px] font-bold text-blue-400 outline-none border border-slate-800" />
-                  </div>
-
-                  <div className="text-center font-black text-slate-700 text-[10px]">— OR —</div>
-
-                  <div className="p-4 bg-slate-900/50 rounded-2xl border border-slate-700/20">
-                    <p className="text-[9px] font-black text-slate-500 uppercase mb-3">Option 2: Internal Cloud Sync (Needs Billing)</p>
-                    <input type="file" accept=".pdf" onChange={e=>setDocForm({...docForm, file:e.target.files[0], externalUrl:''})} className="hidden" id="admin-up" />
-                    <label htmlFor="admin-up" className="flex items-center justify-center p-6 bg-[#02040a] border-2 border-dashed border-slate-800 hover:border-indigo-500 rounded-[2rem] cursor-pointer transition-all">
-                       <div className="text-center">
-                          <UploadCloud size={24} className="mx-auto text-slate-600 mb-2" />
-                          <p className="text-[10px] font-black text-slate-500 truncate">{docForm.file?.name || 'SYNC FILE'}</p>
-                       </div>
-                    </label>
-                  </div>
-
-                  <select onChange={e=>setDocForm({...docForm, category:e.target.value})} className="w-full bg-[#1c263d] p-4 rounded-2xl text-[12px] font-bold text-white outline-none">
-                    <option value="NOTES">Notes</option>
-                    <option value="PYQ">PYQ</option>
-                  </select>
-
-                  <button disabled={uploading} className="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-3xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-indigo-950/20 group">
-                     {uploading ? <Loader2 size={18} className="animate-spin" /> : <><RefreshCw size={18} className="group-hover:rotate-180 transition-transform duration-700"/> Push to Library</>}
-                  </button>
-                </form>
-              </div>
-           </div>
-
-           <div className="lg:col-span-8 space-y-8">
-              {/* Approval Queue */}
-              <div className="bg-[#162035]/80 p-8 rounded-[3.5rem] border border-slate-700/30">
-                <div className="flex items-center gap-3 mb-8">
-                  <AlertCircle size={20} className="text-amber-500" />
-                  <h2 className="text-sm font-black uppercase text-white tracking-widest">Pending Approvals ({docs.filter(d=>!d.verified).length})</h2>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {docs.filter(d => !d.verified).map(d => (
-                      <div key={d.id} className="bg-[#02040a] p-5 rounded-[2.2rem] border border-slate-800/50 group">
-                          <p className="text-[11px] font-black text-white uppercase truncate mb-1">{d.title}</p>
-                          <p className="text-[8px] text-slate-500 font-bold uppercase mb-4">{d.subject} · {d.category}</p>
-                          <div className="flex gap-2">
-                            <a href={d.fileUrl} target="_blank" rel="noreferrer" className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-[8px] font-black uppercase text-center">Preview</a>
-                            <button onClick={()=>approveDoc(d.id)} className="px-3 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl"><UserCheck size={12}/></button>
-                            <button onClick={()=>deleteDocItem(d.id)} className="px-3 py-2.5 bg-red-600/10 text-red-400 hover:bg-red-600 rounded-xl"><Trash2 size={12}/></button>
-                          </div>
-                      </div>
-                    ))}
-                </div>
-              </div>
-
-              {/* Repo Explorer */}
-              <div className="bg-[#0d121f] p-8 rounded-[3.5rem] border border-slate-800/80">
-                <h2 className="text-sm font-black uppercase text-slate-400 tracking-widest mb-8">Active Repository ({docs.filter(d=>d.verified).length})</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {docs.filter(d=>d.verified).map(d => (
-                    <div key={d.id} className="bg-slate-900/40 p-5 rounded-3xl border border-slate-800/50 hover:border-indigo-500/20 transition-all flex justify-between items-center group">
-                        <div className="min-w-0 pr-2">
-                          <p className="text-[12px] font-black text-white uppercase truncate">{d.title}</p>
-                          <p className="text-[8px] font-bold text-slate-600 uppercase tracking-widest mt-1">{d.subject} · {d.category}</p>
-                        </div>
-                        <button onClick={()=>deleteDocItem(d.id)} className="p-2.5 bg-red-600/10 text-red-500 rounded-xl opacity-0 group-hover:opacity-100 transition-all"><Trash2 size={14}/></button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-           </div>
-        </div>
-      )}
-      {tab==='broadcasts' && (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-           <div className="lg:col-span-4 bg-[#0d121f] p-10 rounded-[3.5rem] border border-slate-800/80">
-              <div className="flex items-center gap-3 mb-8">
-                <Bell size={24} className="text-orange-500" />
-                <h2 className="text-xl font-[1000] text-white uppercase tracking-tighter">New Broadcast</h2>
-              </div>
-              <form onSubmit={postAnn} className="space-y-4">
-                <input value={newAnn.title} onChange={e=>setNewAnn({...newAnn, title: e.target.value})} placeholder="Announcement Title" className="w-full bg-slate-900 p-4 rounded-2xl text-[12px] font-bold text-white outline-none border-2 border-transparent focus:border-orange-500" />
-                <textarea value={newAnn.content} onChange={e=>setNewAnn({...newAnn, content: e.target.value})} placeholder="Broadcast Content..." className="w-full h-40 bg-slate-900 p-4 rounded-2xl text-[12px] font-bold text-white outline-none border-2 border-transparent focus:border-orange-500 resize-none" />
-                <select value={newAnn.type} onChange={e=>setNewAnn({...newAnn, type: e.target.value})} className="w-full bg-slate-900 p-4 rounded-2xl text-[12px] font-bold text-white outline-none">
-                   <option value="INFO">GENERAL INFO</option>
-                   <option value="ALERT">URGENT ALERT</option>
-                   <option value="UPDATE">SCHEDULE UPDATE</option>
-                </select>
-                <button type="submit" className="w-full py-5 bg-orange-600 hover:bg-orange-500 text-white rounded-3xl font-black text-xs uppercase tracking-widest shadow-xl shadow-orange-950/20">Go Live!</button>
-              </form>
-           </div>
-           <div className="lg:col-span-8 bg-[#0d121f] p-10 rounded-[4rem] border border-slate-800/80">
-              <h2 className="text-sm font-black uppercase text-slate-400 tracking-widest mb-8">Live History</h2>
-              <div className="space-y-4">
-                {anns.map(a => (
-                  <div key={a.id} className="p-6 bg-slate-900/40 rounded-[2rem] border border-slate-800/50 flex justify-between items-center group">
-                     <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-1">
-                           <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest ${a.type==='ALERT'?'bg-red-600/10 text-red-500':'bg-blue-600/10 text-blue-500'}`}>{a.type}</span>
-                           <h3 className="text-sm font-black text-white uppercase tracking-tight">{a.title}</h3>
-                        </div>
-                        <p className="text-[10px] text-slate-500 leading-relaxed font-bold truncate max-w-[400px]">{a.content}</p>
+                        <div className="absolute bottom-[-10%] right-[-10%] w-24 h-24 bg-indigo-600/5 rounded-full blur-[40px]"></div>
                      </div>
-                     <button onClick={()=>deleteAnn(a.id)} className="p-3 bg-red-600/10 text-red-500 rounded-xl opacity-0 group-hover:opacity-100 transition-all"><Trash2 size={16}/></button>
+                  ))}
+               </div>
+
+               {/* Live Monitor Section */}
+               <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                  <div className="lg:col-span-8 bg-[#0d121f] rounded-[4rem] border border-slate-800 p-12 md:p-14 space-y-10 shadow-2xl overflow-hidden relative">
+                     <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/5 rounded-full blur-[100px] pointer-events-none"></div>
+                     <div className="flex items-center justify-between relative z-10">
+                        <h3 className="text-2xl font-black text-white uppercase tracking-tighter">Asset Validation Queue</h3>
+                        <div className="flex items-center gap-2 px-6 py-2 bg-emerald-600/10 text-emerald-400 rounded-full border border-emerald-500/20 text-[9px] font-black uppercase tracking-widest"><TrendingUp size={12}/> Monitoring</div>
+                     </div>
+                     <div className="space-y-6 relative z-10">
+                       {docs.filter(d=>!d.verified).slice(0,5).map(d => (
+                         <div key={d.id} className="flex flex-col md:flex-row md:items-center justify-between p-8 bg-black/40 rounded-3xl border border-slate-800 group hover:border-indigo-500/40 transition-all gap-6">
+                            <div className="flex items-center gap-6">
+                               <div className="w-14 h-14 bg-indigo-600/10 text-indigo-400 rounded-2xl flex items-center justify-center shrink-0"><BookOpen size={24}/></div>
+                               <div>
+                                  <p className="text-lg font-black text-white uppercase tracking-tight group-hover:text-indigo-400 transition-colors">{d.title}</p>
+                                  <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1">{d.subject} · SEM {d.semester}</p>
+                               </div>
+                            </div>
+                            <div className="flex items-center gap-3">
+                               <button onClick={()=>approveDoc(d.id)} className="px-8 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-lg shadow-emerald-950/40 transition-all">Verify Asset</button>
+                               <button onClick={()=>deleteDocItem(d.id)} className="p-3 text-slate-600 hover:text-red-500 transition-colors"><Trash2 size={16}/></button>
+                            </div>
+                         </div>
+                       ))}
+                       {!docs.some(d=>!d.verified) && <p className="text-center py-20 text-[10px] font-black text-slate-700 uppercase tracking-widest">Queue Status: Minimal / All Assets Synchronized</p>}
+                     </div>
                   </div>
-                ))}
-              </div>
-           </div>
-        </div>
-      )}
+                  <div className="lg:col-span-4 bg-[#0d121f] rounded-[4.5rem] border border-slate-800 p-12 md:p-14 space-y-10 shadow-2xl relative overflow-hidden flex flex-col">
+                     <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/5 rounded-full blur-2xl"></div>
+                     <h3 className="text-xl font-black text-white uppercase tracking-tighter">Identity Log</h3>
+                     <div className="space-y-6 overflow-y-auto custom-scrollbar flex-grow">
+                        {users.slice(0,10).map(u => (
+                          <div key={u.id} className="flex items-center gap-4 group">
+                             <div className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 font-black group-hover:bg-indigo-600/10 group-hover:text-indigo-400 transition-all uppercase">{u.displayName?.slice(0,2) || 'NM'}</div>
+                             <div className="flex-1 min-w-0">
+                                <p className="text-[11px] font-black text-white truncate">{u.displayName || 'Unnamed node'}</p>
+                                <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest truncate">{u.email}</p>
+                             </div>
+                             <div className={`w-2 h-2 rounded-full ${u.banned ? 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]' : 'bg-emerald-500'}`} />
+                          </div>
+                        ))}
+                     </div>
+                  </div>
+               </div>
+            </div>
+         )}
 
-      {/* ── GROUPS TAB ── */}
-      {tab==='groups' && (
-        <div className="bg-[#0d121f] rounded-[3.5rem] border border-slate-800/80 p-8 shadow-2xl animate-in fade-in duration-500">
-           <h2 className="text-sm font-black uppercase text-slate-400 tracking-widest mb-8">Network Hub Monitoring</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {groups.map(g => (
-                <div key={g.id} className="p-6 bg-[#162035] rounded-[2.5rem] border border-slate-700/30">
-                   <div className="flex justify-between items-start mb-6">
-                      <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-xl font-black text-white">{g.name[0]}</div>
-                      <button onClick={()=>deleteGroup(g.id)} className="p-2 text-slate-600 hover:text-red-500"><Trash2 size={20}/></button>
-                   </div>
-                   <p className="text-lg font-[1000] text-white uppercase tracking-tighter truncate">{g.name}</p>
-                   <div className="mt-6 p-4 bg-slate-900/50 rounded-2xl border border-slate-800/50 flex justify-between items-center">
-                      <div>
-                         <p className="text-[9px] font-black text-slate-500 uppercase">Load Density</p>
-                         <p className="text-sm font-black text-white">{g.memberCount}/150</p>
-                      </div>
-                      <div className="text-right">
-                         <p className="text-[9px] font-black text-slate-500 uppercase">Code</p>
-                         <p className="text-sm font-black text-white">{g.code}</p>
-                      </div>
-                   </div>
-                </div>
-              ))}
-           </div>
-        </div>
-      )}
+         {tab === 'users' && (
+            <div className="bg-[#0d121f] rounded-[4rem] border border-slate-800 overflow-hidden shadow-2xl relative">
+               <div className="p-10 border-b border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+                  <h3 className="text-2xl font-black text-white uppercase tracking-tighter">Identity Management</h3>
+                  <div className="relative">
+                     <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-600" size={18} />
+                     <input placeholder="Filter UIDs, Emails..." className="bg-[#1c263d] border border-slate-800 rounded-2xl p-4 pl-14 text-white text-[10px] font-black uppercase outline-none focus:border-indigo-500/50 w-full md:w-80 transition-all" />
+                  </div>
+               </div>
+               
+               <div className="overflow-x-auto relative z-10">
+                  <table className="w-full text-left border-collapse min-w-[1000px]">
+                     <thead>
+                        <tr className="bg-[#02040a]/50 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-slate-800">
+                           <th className="p-10">Identity Node</th>
+                           <th className="p-10 text-center">Auth Origin</th>
+                           <th className="p-10 text-center">Protocol Level</th>
+                           <th className="p-10 text-center">Status</th>
+                           <th className="p-10 text-right">Operational Logic</th>
+                        </tr>
+                     </thead>
+                     <tbody className="divide-y divide-slate-800/30">
+                        {users.map(u => (
+                          <tr key={u.id} className="group hover:bg-[#1c263d]/20 transition-all">
+                             <td className="p-10">
+                                <div className="flex items-center gap-6">
+                                   <div className="w-14 h-14 bg-slate-900 border border-slate-800 rounded-2xl flex items-center justify-center shadow-inner group-hover:border-indigo-500/30 transition-all">
+                                      {u.photoURL ? <img src={u.photoURL} alt="" className="w-full h-full rounded-2xl object-cover" /> : <Users size={24} className="text-slate-700" />}
+                                   </div>
+                                   <div>
+                                      <p className="text-sm font-black text-white uppercase tracking-tight">{u.displayName || 'System User'}</p>
+                                      <p className="text-[10px] font-mono text-slate-600 mt-1 uppercase truncate">{u.email}</p>
+                                   </div>
+                                </div>
+                             </td>
+                             <td className="p-10 text-center">
+                                <span className={`px-4 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest shadow-inner ${u.provider === 'google.com' ? 'bg-white/5 text-white border border-white/10' : 'bg-blue-600/5 text-blue-500 border border-blue-500/10'}`}>
+                                   {u.provider || 'Native'}
+                                </span>
+                             </td>
+                             <td className="p-10 text-center">
+                                {isSuper ? (
+                                  <select value={u.role || 'user'} onChange={e=>changeRole(u.id, e.target.value)} className="bg-slate-900 border border-slate-800 rounded-xl px-4 py-2 text-[10px] font-black uppercase tracking-widest text-slate-400 focus:text-indigo-400 outline-none transition-all">
+                                     <option value="user">User</option>
+                                     <option value="admin">Admin</option>
+                                     <option value="super-admin">Super</option>
+                                  </select>
+                                ) : (
+                                  <span className="text-[10px] font-black uppercase text-indigo-400 tracking-widest">{u.role || 'USER'}</span>
+                                )}
+                             </td>
+                             <td className="p-10 text-center">
+                                <div className={`inline-flex items-center gap-2 px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-widest ${u.banned ? 'bg-red-600/10 text-red-500 border border-red-500/20 shadow-xl shadow-red-950/20' : 'bg-emerald-600/10 text-emerald-500 border border-emerald-500/20'}`}>
+                                   <div className={`w-1.5 h-1.5 rounded-full ${u.banned?'bg-red-500 animate-pulse':'bg-emerald-500'}`} />
+                                   {u.banned ? 'Node Restricted' : 'Active Channel'}
+                                </div>
+                             </td>
+                             <td className="p-10 text-right">
+                                <div className="flex items-center justify-end gap-3">
+                                   <button onClick={()=>toggleBan(u.id, u.banned)} className={`p-4 rounded-xl transition-all border ${u.banned ? 'bg-emerald-600/10 text-emerald-500 border-emerald-500/20 hover:bg-emerald-600 hover:text-white' : 'bg-red-600/10 text-red-500 border-red-500/20 hover:bg-red-600 hover:text-white'}`}>
+                                      {u.banned ? <UserCheck size={18}/> : <Ban size={18}/>}
+                                   </button>
+                                   <button onClick={()=>deleteUser(u.id)} className="p-4 bg-slate-900 text-slate-700 hover:text-red-500 hover:bg-red-600/10 border border-slate-800 rounded-xl transition-all"><Trash2 size={18}/></button>
+                                </div>
+                             </td>
+                          </tr>
+                        ))}
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         )}
 
+         {tab === 'assets' && (
+            <div className="grid grid-cols-1 gap-10">
+               <div className="bg-[#0d121f] rounded-[4rem] border border-slate-800 overflow-hidden shadow-2xl">
+                  <div className="p-10 md:p-14 border-b border-slate-800/80 flex items-center justify-between">
+                     <h3 className="text-2xl font-black text-white uppercase tracking-tighter">Asset Hub Control</h3>
+                     <span className="text-[10px] text-slate-500 font-extrabold uppercase tracking-widest">{docs.length} Recorded Modules</span>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                       <thead>
+                          <tr className="bg-[#02040a]/50 text-[10px] font-black text-slate-600 uppercase tracking-widest">
+                             <th className="p-10">Asset Identity</th>
+                             <th className="p-10 text-center">Vector SEM</th>
+                             <th className="p-10 text-center">Classification</th>
+                             <th className="p-10 text-center">Verification Status</th>
+                             <th className="p-10 text-right">Operations</th>
+                          </tr>
+                       </thead>
+                       <tbody className="divide-y divide-slate-800/30">
+                          {docs.map(d => (
+                             <tr key={d.id} className="group hover:bg-[#1c263d]/30 transition-all">
+                                <td className="p-10">
+                                   <div className="flex items-center gap-6">
+                                      <div className="p-4 bg-indigo-600/10 text-indigo-400 rounded-2xl border border-indigo-500/10 group-hover:scale-110 transition-all"><Database size={24}/></div>
+                                      <div>
+                                         <p className="text-sm font-black text-white uppercase tracking-tight leading-none">{d.title}</p>
+                                         <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mt-2">{d.subject}</p>
+                                      </div>
+                                   </div>
+                                </td>
+                                <td className="p-10 text-center"><span className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs font-black text-white">SM-{d.semester}</span></td>
+                                <td className="p-10 text-center"><span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{d.category}</span></td>
+                                <td className="p-10 text-center">
+                                   <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest ${d.verified ? 'bg-emerald-600/10 text-emerald-500 border border-emerald-500/20 shadow-xl shadow-emerald-950/20' : 'bg-amber-600/10 text-amber-500 border border-amber-500/20 animate-pulse'}`}>
+                                      {d.verified ? 'Verified Node' : 'Unverified Asset'}
+                                   </div>
+                                </td>
+                                <td className="p-10 text-right">
+                                   <div className="flex items-center justify-end gap-3">
+                                      {!d.verified && <button onClick={()=>approveDoc(d.id)} className="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-xl shadow-indigo-950/30 transition-all">Verify</button>}
+                                      <button onClick={()=>deleteDocItem(d.id)} className="p-4 text-slate-700 hover:text-red-500 hover:bg-red-600/10 border border-slate-800 rounded-xl transition-all"><Trash2 size={16}/></button>
+                                   </div>
+                                </td>
+                             </tr>
+                          ))}
+                       </tbody>
+                    </table>
+                  </div>
+               </div>
+            </div>
+         )}
+
+         {tab === 'comms' && (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+               <div className="lg:col-span-12 xl:col-span-5 space-y-8">
+                  <div className="bg-[#0d121f] rounded-[4rem] border border-slate-800 p-12 md:p-14 space-y-10 shadow-2xl relative overflow-hidden group">
+                     <div className="absolute top-0 right-0 w-40 h-40 bg-indigo-600/5 rounded-full blur-[80px]"></div>
+                     <div className="relative z-10 space-y-8">
+                        <div>
+                           <h3 className="text-2xl font-black text-white uppercase tracking-tighter shrink-0">Broadcaster Module</h3>
+                           <p className="text-[10px] text-slate-500 font-extrabold uppercase tracking-[0.4em] mt-2">Protocol Translation / v2.2</p>
+                        </div>
+                        <form onSubmit={postAnn} className="space-y-6">
+                           <div className="space-y-2">
+                              <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest ml-2">Header</p>
+                              <input required value={newAnn.title} onChange={e=>setNewAnn({...newAnn, title: e.target.value})} placeholder="TRANSMISSION HEADER..." className="w-full bg-[#1c263d] border-2 border-transparent focus:border-indigo-500/50 rounded-2xl p-6 text-white text-xs font-black uppercase tracking-tighter outline-none shadow-xl transition-all" />
+                           </div>
+                           <div className="space-y-2">
+                              <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest ml-2">Payload Content</p>
+                              <textarea required value={newAnn.content} onChange={e=>setNewAnn({...newAnn, content: e.target.value})} placeholder="ENTER SYSTEM MESSAGE..." rows={4} className="w-full bg-[#1c263d] border-2 border-transparent focus:border-indigo-500/50 rounded-[2.5rem] p-8 text-white text-xs font-black outline-none shadow-xl transition-all resize-none" />
+                           </div>
+                           <div className="grid grid-cols-3 gap-3 p-1.5 bg-[#1c263d] rounded-2xl border border-slate-800">
+                             {['INFO','URGENT','UPDATE'].map(t => (
+                               <button type="button" key={t} onClick={()=>setNewAnn({...newAnn, type: t})} className={`py-3 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${newAnn.type===t ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}>{t}</button>
+                             ))}
+                           </div>
+                           <button type="submit" className="w-full py-6 bg-indigo-600 hover:bg-indigo-500 text-white rounded-3xl font-[1000] text-xs uppercase tracking-widest shadow-xl shadow-indigo-950/40 active:scale-95 transition-all flex items-center justify-center gap-4"><Zap size={18}/> Broadcast To All Nodes</button>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+               <div className="lg:col-span-12 xl:col-span-7 bg-[#0d121f] rounded-[4rem] border border-slate-800 p-12 md:p-14 space-y-10 shadow-2xl relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-60 h-60 bg-indigo-600/5 rounded-full blur-[100px] pointer-events-none"></div>
+                  <h3 className="text-xl font-black text-white uppercase tracking-tighter relative z-10">Transmission Log</h3>
+                  <div className="space-y-6 relative z-10">
+                     {anns.map(a => (
+                        <div key={a.id} className="p-8 bg-black/40 border border-slate-800 rounded-[2.5rem] group hover:border-indigo-500/30 transition-all flex items-start gap-8">
+                           <div className={`p-4 rounded-2xl shrink-0 ${a.type==='URGENT'?'bg-red-600/10 text-red-500':'bg-indigo-600/10 text-indigo-400'}`}><Bell size={24}/></div>
+                           <div className="flex-1 space-y-4">
+                              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                 <div>
+                                    <h4 className="text-xl font-black text-white uppercase tracking-tight group-hover:text-indigo-400 transition-colors leading-none">{a.title}</h4>
+                                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-3">Author: {a.author}</p>
+                                 </div>
+                                 <span className="text-[9px] font-black text-slate-700 uppercase tracking-widest bg-slate-900 px-4 py-2 rounded-xl h-fit shrink-0">{new Date(a.createdAt).toLocaleDateString()}</span>
+                              </div>
+                              <p className="text-[10px] text-slate-400 font-bold uppercase leading-relaxed tracking-tight">{a.content}</p>
+                              <div className="pt-4 flex justify-end">
+                                 <button onClick={async() => { if(window.confirm('Delete transmission?')) await deleteDoc(doc(db, 'announcements', a.id)); toast.success('Transmitter Deactivated'); }} className="p-3 text-slate-700 hover:text-red-500 transition-colors"><Trash2 size={16}/></button>
+                              </div>
+                           </div>
+                        </div>
+                     ))}
+                     {anns.length === 0 && <p className="text-center py-20 text-[10px] font-black text-slate-700 uppercase tracking-widest">No Active Transmissions Logged</p>}
+                  </div>
+               </div>
+            </div>
+         )}
+
+      </div>
     </div>
   );
 }

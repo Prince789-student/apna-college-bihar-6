@@ -7,28 +7,43 @@ import { Toaster } from 'react-hot-toast';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import DashboardLayout from './layouts/DashboardLayout';
-import Dashboard from './pages/Dashboard';
 import Notes from './pages/Notes';
 import ScientificCalc from './pages/ScientificCalc';
 import StudyDashboard from './pages/StudyDashboard';
-import GroupDetail from './pages/GroupDetail';
 import AdminPanel from './pages/AdminPanel';
 import Timetable from './pages/Timetable';
 import BeuCgpa from './pages/BeuCgpa';
 import LandingPage from './pages/LandingPage';
+import Achievements from './pages/Achievements';
+import Group from './pages/Group';
+import TodoList from './pages/TodoList';
 
-// Role-Based Admin Guard (Restricted to Founder Identity)
+// Role-Based Admin Guard
 const AdminRoute = () => {
   const { user, loading, ROLES } = useAuth();
-  if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center"><div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div></div>;
-  const isAuthorized = user?.email === 'prince86944@gmail.com' || user?.role === ROLES.SUPER_ADMIN;
+  if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white font-black uppercase text-[10px] tracking-widest"><div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mr-4"></div> Initializing Identity Hub...</div>;
+  const isAuthorized = user?.email === 'prince86944@gmail.com' || user?.role === ROLES.SUPER_ADMIN || user?.role === 'admin';
   return isAuthorized ? <Outlet /> : <Navigate to="/dashboard" replace />;
 };
 
 function App() {
   return (
     <AuthProvider>
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster position="top-right" reverseOrder={false} 
+        toastOptions={{
+          style: {
+            background: '#0d121f',
+            color: '#fff',
+            border: '1px solid rgba(255,255,255,0.1)',
+            fontSize: '11px',
+            fontWeight: '900',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+            borderRadius: '1.5rem',
+            padding: '1rem 1.5rem',
+          }
+        }}
+      />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Login />} />
@@ -38,13 +53,14 @@ function App() {
         <Route path="/dashboard" element={<ProtectedRoute />}>
           <Route element={<DashboardLayout />}>
             <Route index element={<StudyDashboard />} />
+            <Route path="study" element={<StudyDashboard />} />
             <Route path="notes" element={<Notes />} />
             <Route path="calculator" element={<ScientificCalc />} />
-            <Route path="study" element={<StudyDashboard />} />
-            <Route path="timer" element={<StudyDashboard />} />
-            <Route path="study/group/:groupId" element={<GroupDetail />} />
-            <Route path="timetable" element={<Timetable />} />
             <Route path="cgpa" element={<BeuCgpa />} />
+            <Route path="achievements" element={<Achievements />} />
+            <Route path="groups" element={<Group />} />
+            <Route path="plan" element={<TodoList />} />
+            <Route path="timetable" element={<Timetable />} />
             
             {/* Dedicated Admin Sub-Route */}
             <Route element={<AdminRoute />}>
