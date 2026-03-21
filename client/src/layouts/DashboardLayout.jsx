@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, Book, Calculator, Timer, 
   User, LogOut, Medal, X, Bell, Shield, 
-  ChevronLeft, Menu, Users, GraduationCap
+  ChevronLeft, Menu, Users, GraduationCap, Send, Youtube
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
@@ -182,7 +182,13 @@ export default function DashboardLayout() {
                 <Link to="/contact" className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-emerald-400 transition-colors">Contact Us</Link>
                 <Link to="/privacy" className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-orange-400 transition-colors">Privacy Policy</Link>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-4">
+                 <a href="https://t.me/apnacollegebihar" target="_blank" rel="noopener noreferrer" className="p-2 bg-blue-600/10 text-blue-500 hover:bg-blue-600 hover:text-white rounded-lg transition-all border border-blue-500/10">
+                   <Send size={14} />
+                 </a>
+                 <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="p-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white rounded-lg transition-all border border-red-500/10">
+                   <Youtube size={14} />
+                 </a>
                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
                  <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-600">All Systems Operational</span>
               </div>

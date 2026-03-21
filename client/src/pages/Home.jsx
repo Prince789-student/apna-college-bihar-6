@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { 
   BookOpen, Calculator, Timer, Users, 
   ArrowRight, CheckCircle, GraduationCap, 
-  Globe, Shield, Zap, Flame
+  Globe, Shield, Zap, Flame, Send, Youtube
 } from 'lucide-react';
 
 export default function Home() {
@@ -132,7 +132,12 @@ export default function Home() {
                </div>
                <p className="text-slate-500 font-bold text-xs uppercase tracking-widest leading-loose max-w-sm">Bihar's first open-source academic portal dedicated to Bihar Engineering University students.</p>
                <div className="flex gap-4">
-                  <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center text-slate-500 hover:text-white border border-slate-800 transition-all cursor-pointer"><Flame size={20}/></div>
+                  <a href="https://t.me/apnacollegebihar" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-[#0088cc]/10 rounded-xl flex items-center justify-center text-[#0088cc] hover:bg-[#0088cc] hover:text-white border border-[#0088cc]/20 transition-all cursor-pointer">
+                    <Send size={18} />
+                  </a>
+                  <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-red-600/10 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-600 hover:text-white border border-red-500/20 transition-all cursor-pointer">
+                    <Youtube size={18} />
+                  </a>
                </div>
             </div>
             <div className="space-y-6">

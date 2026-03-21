@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Globe, Instagram, Github } from 'lucide-react';
+import { Mail, Phone, MapPin, Globe, Instagram, Github, Send, Youtube } from 'lucide-react';
 
 export default function ContactUs() {
   return (
@@ -40,20 +40,20 @@ export default function ContactUs() {
 
         <div className="bg-[#0d121f] p-8 rounded-[3rem] border border-slate-800 shadow-2xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-blue-600/5 rounded-full blur-[80px] pointer-events-none transition-all group-hover:bg-blue-600/10"></div>
-          <h2 className="text-2xl font-black text-white uppercase mb-6 flex items-center gap-3"><Instagram size={20} className="text-blue-400"/> Social Presence</h2>
+          <h2 className="text-2xl font-black text-white uppercase mb-6 flex items-center gap-3"><Send size={20} className="text-blue-400"/> Social Presence</h2>
           <div className="space-y-6">
-            <a href="https://instagram.com" className="flex items-center gap-4 hover:bg-slate-800 p-2 rounded-xl transition-all">
-              <Instagram className="text-slate-500" size={24}/>
+            <a href="https://t.me/apnacollegebihar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 hover:bg-slate-800 p-2 rounded-xl transition-all">
+              <Send className="text-slate-500" size={24}/>
               <div className="flex flex-col">
-                <span className="text-[9px] font-black uppercase text-slate-500 tracking-widest">Instagram</span>
-                <span className="text-lg font-bold text-white uppercase">@apnacollegebihar</span>
+                <span className="text-[9px] font-black uppercase text-slate-500 tracking-widest">Telegram Channel</span>
+                <span className="text-lg font-bold text-white uppercase">/apnacollegebihar</span>
               </div>
             </a>
-            <a href="https://github.com" className="flex items-center gap-4 hover:bg-slate-800 p-2 rounded-xl transition-all">
-              <Github className="text-slate-500" size={24}/>
+            <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 hover:bg-slate-800 p-2 rounded-xl transition-all">
+              <Youtube className="text-slate-500" size={24}/>
               <div className="flex flex-col">
-                <span className="text-[9px] font-black uppercase text-slate-500 tracking-widest">Github</span>
-                <span className="text-lg font-bold text-white uppercase">/apnacollegebihar</span>
+                <span className="text-[9px] font-black uppercase text-slate-500 tracking-widest">YouTube Channel</span>
+                <span className="text-lg font-bold text-white uppercase">Apne-H8P</span>
               </div>
             </a>
           </div>
