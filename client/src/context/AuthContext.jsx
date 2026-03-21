@@ -8,7 +8,7 @@ import {
   RecaptchaVerifier, 
   signInWithPhoneNumber 
 } from "firebase/auth";
-import { auth, db, googleProvider, githubProvider } from "../firebase";
+import { auth, db, googleProvider } from "../firebase";
 import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 
 const AuthContext = createContext();
@@ -91,13 +91,6 @@ export function AuthProvider({ children }) {
     return res.user;
   }
 
-  // 3.5. GitHub Signup/Login
-  async function githubLogin() {
-    const res = await signInWithPopup(auth, githubProvider);
-    await syncProfile(res.user);
-    return res.user;
-  }
-
   // 4. Phone OTP Setup
   function setupRecaptcha(number) {
     if (!window.recaptchaVerifier) {
@@ -141,7 +134,6 @@ export function AuthProvider({ children }) {
     signup,
     logout,
     googleLogin,
-    githubLogin,
     setupRecaptcha,
     updateProfileData,
     loading
