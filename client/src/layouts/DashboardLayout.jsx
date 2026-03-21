@@ -5,7 +5,7 @@ import {
   User, LogOut, Medal, X, Bell, Shield, 
   ChevronLeft, Menu, Users, GraduationCap,
   ClipboardList, Trophy, Globe, Zap, Settings,
-  Target, GraduationCap as GraduateIcon
+  Target, GraduationCap as GraduateIcon, Grid
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
@@ -51,12 +51,14 @@ export default function DashboardLayout() {
   const isAdmin = user?.email === 'prince86944@gmail.com' || user?.role === ROLES.SUPER_ADMIN || user?.role === 'admin'; 
   
   const navLinks = [
+    { name: 'Dashboard Hub', path: '/dashboard', icon: <LayoutDashboard size={20} /> },
     { name: 'Study Protocol', path: '/dashboard/study', icon: <Timer size={22} className="text-blue-500" /> },
     { name: 'Knowledge Hub', path: '/dashboard/notes', icon: <Book size={20} /> },
-    { name: 'Engine Hub', path: '/dashboard/calculator', icon: <Calculator size={20} /> },
-    { name: 'BEU Analytics', path: '/dashboard/cgpa', icon: <GraduateIcon size={20} /> },
-    { name: 'Task Vector', path: '/dashboard/plan', icon: <ClipboardList size={20} className="text-emerald-500" /> },
-    { name: 'Study Network', path: '/dashboard/groups', icon: <Users size={20} className="text-indigo-400" /> },
+    { name: 'Engine (Sci-Calc)', path: '/dashboard/calculator', icon: <Calculator size={20} /> },
+    { name: 'Engine (Matrix)', path: '/dashboard/matrix', icon: <Grid size={20} className="text-emerald-400" /> },
+    { name: 'BEU Analytics', path: '/dashboard/sgpa', icon: <GraduateIcon size={20} /> },
+    { name: 'Task Vector', path: '/dashboard/plan', icon: <ClipboardList size={20} className="text-indigo-400" /> },
+    { name: 'Study Network', path: '/dashboard/groups', icon: <Users size={20} className="text-blue-400" /> },
     { name: 'Milestone Archive', path: '/dashboard/achievements', icon: <Trophy size={20} className="text-amber-500" /> },
     ...(isAdmin ? [{ name: 'System Admin', path: '/dashboard/admin', icon: <Shield size={20} className="text-red-500 animate-pulse" /> }] : []),
   ];
@@ -192,7 +194,10 @@ export default function DashboardLayout() {
                    placeholder="+91 MOBILE SIGNAL..."
                    className="w-full bg-[#1c263d] border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-6 text-white text-center text-xl font-black tracking-[0.2em] outline-none shadow-xl transition-all"
                  />
-                 <button type="submit" disabled={isUpdating || phone.length < 10} className="w-full py-6 bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white rounded-3xl font-[1000] text-xs uppercase tracking-widest shadow-xl shadow-blue-900/40 active:scale-95 transition-all">Synchronize Node</button>
+                 <div className="flex flex-col gap-3">
+                    <button type="submit" disabled={isUpdating || phone.length < 10} className="w-full py-6 bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white rounded-3xl font-[1000] text-xs uppercase tracking-widest shadow-xl shadow-blue-900/40 active:scale-95 transition-all">Synchronize Node</button>
+                    <button type="button" onClick={() => setPhoneModalOpen(false)} className="w-full py-3 text-[9px] font-black text-slate-600 hover:text-white uppercase tracking-widest transition-all">Bypass Identity Protocol</button>
+                  </div>
               </form>
            </div>
         </div>

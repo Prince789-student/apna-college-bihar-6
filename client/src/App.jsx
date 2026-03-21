@@ -9,7 +9,8 @@ import Signup from './pages/Signup';
 import DashboardLayout from './layouts/DashboardLayout';
 import Notes from './pages/Notes';
 import ScientificCalc from './pages/ScientificCalc';
-import StudyDashboard from './pages/StudyDashboard';
+import MatrixCalc from './pages/MatrixCalc';
+import StudyTracking from './pages/StudyTracking';
 import AdminPanel from './pages/AdminPanel';
 import Timetable from './pages/Timetable';
 import BeuCgpa from './pages/BeuCgpa';
@@ -17,6 +18,7 @@ import LandingPage from './pages/LandingPage';
 import Achievements from './pages/Achievements';
 import Group from './pages/Group';
 import TodoList from './pages/TodoList';
+import HomeOverview from './pages/HomeOverview';
 
 // Role-Based Admin Guard
 const AdminRoute = () => {
@@ -52,11 +54,12 @@ function App() {
         {/* All Dashboard Routes */}
         <Route path="/dashboard" element={<ProtectedRoute />}>
           <Route element={<DashboardLayout />}>
-            <Route index element={<StudyDashboard />} />
-            <Route path="study" element={<StudyDashboard />} />
+            <Route index element={<HomeOverview />} />
+            <Route path="study" element={<StudyTracking />} />
             <Route path="notes" element={<Notes />} />
             <Route path="calculator" element={<ScientificCalc />} />
-            <Route path="cgpa" element={<BeuCgpa />} />
+            <Route path="matrix" element={<MatrixCalc />} />
+            <Route path="sgpa" element={<BeuCgpa />} />
             <Route path="achievements" element={<Achievements />} />
             <Route path="groups" element={<Group />} />
             <Route path="plan" element={<TodoList />} />

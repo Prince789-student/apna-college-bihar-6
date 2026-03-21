@@ -14,40 +14,46 @@ export default function LandingPage() {
 
   const features = [
     { 
-      title: 'Study Planner', 
-      desc: 'Smarter schedule with AI-driven study blocks tailored for your subjects.', 
+      title: 'Study Protocol', 
+      desc: 'Smarter schedule with high-end focus timer and AI-driven study blocks.', 
       icon: <Timer className="w-8 h-8 text-blue-500" />,
-      color: 'bg-blue-500/10 border-blue-500/20'
+      color: 'bg-blue-500/10 border-blue-500/20',
+      path: '/dashboard/study'
     },
     { 
-      title: 'Goal Tracking', 
-      desc: 'Set daily, weekly, and monthly targets. Watch your progress grow in real-time.', 
+      title: 'Task Vector', 
+      desc: 'Set daily targets and visualize your progress vectors in real-time.', 
       icon: <Zap className="w-8 h-8 text-amber-500" />,
-      color: 'bg-amber-500/10 border-amber-500/20'
+      color: 'bg-amber-500/10 border-amber-500/20',
+      path: '/dashboard/plan'
     },
     { 
-      title: 'Progress Analytics', 
-      desc: 'Stunning charts and heatmaps to visualize your consistency and study streaks.', 
+      title: 'Global Analytics', 
+      desc: 'Premium heatmaps and Bihar-wide leaderboards for elite consistency.', 
       icon: <BarChart3 className="w-8 h-8 text-indigo-500" />,
-      color: 'bg-indigo-500/10 border-indigo-500/20'
+      color: 'bg-indigo-500/10 border-indigo-500/20',
+      path: '/dashboard/study'
     },
     { 
-      title: 'Knowledge Hub', 
-      desc: 'Access curated notes, PYQs, and verified academic content in one place.', 
+      title: 'Knowledge Vault', 
+      desc: 'Access curated notes, verified PYQs, and engineering content in one hub.', 
       icon: <Book className="w-8 h-8 text-emerald-500" />,
-      color: 'bg-emerald-500/10 border-emerald-500/20'
+      color: 'bg-emerald-500/10 border-emerald-500/20',
+      path: '/dashboard/notes'
     },
     { 
-      title: 'Calculators+', 
-      desc: 'Scientific & Matrix calculators built-in. BEU CGPA tracking included.', 
+      title: 'Engine Hub', 
+      desc: 'Scientific lab, 4x4 Matrix solvers, and BEU CGPA tracking included.', 
       icon: <Calculator className="w-8 h-8 text-purple-500" />,
-      color: 'bg-purple-500/10 border-purple-500/20'
+      color: 'bg-purple-500/10 border-purple-500/20',
+      path: '/dashboard/calculator'
     },
     { 
-      title: 'Smart Groups', 
-      desc: 'Create or join study networks. Compete with peers and stay motivated.', 
+      title: 'Study Network', 
+      desc: 'Sync with peers, join college hubs, and compete for the top rank.', 
       icon: <Users className="w-8 h-8 text-pink-500" />,
-      color: 'bg-pink-500/10 border-pink-500/20'
+      color: 'bg-pink-500/10 border-pink-500/20',
+      path: '/dashboard/groups'
     }
   ];
 
@@ -81,10 +87,10 @@ export default function LandingPage() {
           </div>
 
           <div className="hidden md:flex items-center gap-10">
-            <a href="/" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">Home</a>
+            <Link to="/" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">Home</Link>
             <a href="#features" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">Features</a>
             <Link to="/dashboard" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">Dashboard</Link>
-            <Link to="/dashboard/admin" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">Admin</Link>
+            <Link to="/dashboard/admin" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">Admin Hub</Link>
           </div>
 
           <div className="flex items-center gap-4">
@@ -104,30 +110,30 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
            <div className="lg:col-span-7 space-y-10 text-center lg:text-left animate-in fade-in slide-in-from-left-5 duration-1000">
               <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-600/10 border border-blue-500/20 rounded-full text-blue-400 font-black text-[9px] uppercase tracking-widest">
-                 <Zap size={14} className="fill-blue-400" /> Version 2.0 Is Live
+                 <Zap size={14} className="fill-blue-400 animate-pulse" /> Final Version 2.0 Identity
               </div>
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-[1000] tracking-tighter uppercase leading-[0.9]">
                  Level Up Your <br />
-                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500">Scholar Journey</span>
+                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-500 to-purple-500">Scholar Engine</span>
               </h1>
               <p className="text-slate-400 text-sm md:text-lg font-bold max-w-2xl mx-auto lg:mx-0 leading-relaxed uppercase tracking-tight">
-                From Bihar Engineering College to 10 LPA Package.
-                The ultimate dashboard for study tracking, goal setting, and verified academic notes.
+                From Bihar Engineering College to Elite Placement Hub.
+                The ultimate premium dashboard for study tracking, goal setting, and verified academic notes.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                  <button onClick={() => navigate('/signup')} className="w-full sm:w-auto px-10 py-5 bg-white text-slate-950 rounded-[2rem] font-[1000] text-xs uppercase tracking-widest shadow-2xl hover:bg-slate-100 transition-all flex items-center justify-center gap-4 group">
-                    Start Free Hub <ArrowUpRight className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" size={18} />
+                    Initialize Hub <ArrowUpRight className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" size={18} />
                  </button>
-                 <button onClick={() => navigate('/login')} className="w-full sm:w-auto px-10 py-5 bg-[#0d121f] text-white border border-slate-800 rounded-[2rem] font-[1000] text-xs uppercase tracking-widest hover:border-slate-600 transition-all flex items-center justify-center gap-4">
-                    Watch Demo <PlayCircle size={18} className="text-blue-500" />
+                 <button onClick={() => navigate('/dashboard')} className="w-full sm:w-auto px-10 py-5 bg-[#0d121f] text-white border border-slate-800 rounded-[2rem] font-[1000] text-xs uppercase tracking-widest hover:border-slate-600 transition-all flex items-center justify-center gap-4">
+                    Access Console <PlayCircle size={18} className="text-blue-500" />
                  </button>
               </div>
               <div className="flex items-center justify-center lg:justify-start gap-8 pt-4">
                  <div className="flex -space-x-3">
                     {[1,2,3,4].map(i => (
-                      <div key={i} className="w-10 h-10 rounded-full border-2 border-[#02040a] bg-slate-800 flex items-center justify-center text-[10px] font-black text-white overflow-hidden">
-                         <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i * 123}`} alt="User" />
-                      </div>
+                       <div key={i} className="w-10 h-10 rounded-full border-2 border-[#02040a] bg-slate-800 flex items-center justify-center text-[10px] font-black text-white overflow-hidden">
+                          <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i * 123}`} alt="User" />
+                       </div>
                     ))}
                     <div className="w-10 h-10 rounded-full border-2 border-[#02040a] bg-blue-600 flex items-center justify-center text-[10px] font-black text-white">+5K</div>
                  </div>
@@ -139,16 +145,16 @@ export default function LandingPage() {
            <div className="lg:col-span-5 relative animate-in fade-in slide-in-from-right-5 duration-1000 delay-200">
               <div className="absolute inset-0 bg-blue-600/20 blur-[100px] pointer-events-none"></div>
               <div 
-                onClick={() => toast('Login to use the interactive timer!', { icon: '🔒' })}
+                onClick={() => navigate('/dashboard')}
                 className="relative bg-[#0d121f] rounded-[3.5rem] p-4 md:p-6 border border-slate-800 shadow-2xl transform lg:-rotate-2 hover:rotate-0 transition-transform duration-700 cursor-pointer group/mock">
                  <div className="bg-[#02040a] rounded-[2.5rem] overflow-hidden border border-slate-800/50 shadow-inner">
                     <div className="p-6 border-b border-slate-800/50 flex items-center justify-between">
                        <div className="flex gap-1.5">
-                          <div className="w-2 h-2 rounded-full bg-red-500/50" />
-                          <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
-                          <div className="w-2 h-2 rounded-full bg-emerald-500/50" />
+                          <div className="w-2 h-2 rounded-full bg-red-400" />
+                          <div className="w-2 h-2 rounded-full bg-yellow-400" />
+                          <div className="w-2 h-2 rounded-full bg-emerald-400" />
                        </div>
-                       <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Scholar Dashboard v2</p>
+                       <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Scholar Intelligence v2</p>
                     </div>
                     <div className="p-8 space-y-8">
                        <div className="grid grid-cols-2 gap-4">
@@ -184,15 +190,15 @@ export default function LandingPage() {
       <section id="features" className="py-24 md:py-32 px-6 md:px-12 bg-[#05070a]/50">
         <div className="max-w-7xl mx-auto space-y-20">
            <div className="text-center space-y-4 max-w-3xl mx-auto">
-              <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em]">Engineered for Excellence</p>
+              <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em]">Engineered for Results</p>
               <h2 className="text-4xl md:text-6xl font-[1000] tracking-tighter uppercase leading-[0.9]">
-                 Everything you need <br /> to <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Master Exams</span>
+                 Master Your <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Exam Protocol</span>
               </h2>
            </div>
 
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {features.map((f, i) => (
-                <div key={i} className="group p-10 bg-[#0d121f] border border-slate-800/80 rounded-[3rem] hover:border-blue-500/30 transition-all relative overflow-hidden">
+                <div key={i} onClick={() => navigate(f.path)} className="group p-10 bg-[#0d121f] border border-slate-800/80 rounded-[3rem] hover:border-blue-500/40 transition-all relative overflow-hidden cursor-pointer shadow-xl">
                    <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-3xl pointer-events-none group-hover:bg-blue-600/10 transition-all"></div>
                    <div className={`w-16 h-16 ${f.color} rounded-3xl flex items-center justify-center mb-10 transition-transform group-hover:scale-110 group-hover:rotate-6`}>
                       {f.icon}
@@ -200,7 +206,7 @@ export default function LandingPage() {
                    <h3 className="text-2xl font-black text-white uppercase mb-4 tracking-tight leading-none">{f.title}</h3>
                    <p className="text-slate-500 text-sm font-bold leading-relaxed">{f.desc}</p>
                    <div className="mt-8 opacity-0 group-hover:opacity-100 transition-all translate-y-2 group-hover:translate-y-0">
-                      <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest flex items-center gap-2">Explore Feature <ArrowRight size={12}/></span>
+                      <span className="text-[9px] font-black text-blue-400 uppercase tracking-widest flex items-center gap-2">Initialize Module <ArrowRight size={12}/></span>
                    </div>
                 </div>
               ))}
@@ -211,26 +217,26 @@ export default function LandingPage() {
       {/* ─── HOW IT WORKS ────────────────────────────────────────── */}
       <section id="how-it-works" className="py-24 md:py-32 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
-           <div className="bg-[#0d121f] rounded-[4rem] border border-slate-800/80 p-12 md:p-20 relative overflow-hidden">
+           <div className="bg-[#0d121f] rounded-[4rem] border border-slate-800/80 p-12 md:p-20 relative overflow-hidden shadow-2xl">
               <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[100px] pointer-events-none"></div>
               
               <div className="text-center mb-20">
-                 <h2 className="text-4xl md:text-6xl font-[1000] tracking-tighter uppercase mb-4">How it <span className="text-blue-500">Works</span></h2>
-                 <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest text-center">Your Roadmap to Academic Success</p>
+                 <h2 className="text-4xl md:text-6xl font-[1000] tracking-tighter uppercase mb-4">Execution <span className="text-blue-500">Pipeline</span></h2>
+                 <p className="text-[10px] text-slate-500 font-black uppercase tracking-widest text-center">Your Roadmap to Academic Dominance</p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
                  {steps.map((s, i) => (
-                   <div key={i} className="relative group">
-                      {i < 3 && <div className="hidden lg:block absolute top-10 left-full w-full h-[2px] bg-slate-800/50 z-0" />}
-                      <div className="relative z-10 space-y-6 text-center lg:text-left">
-                         <div className="w-20 h-20 bg-slate-900 border border-slate-800 rounded-[2rem] flex items-center justify-center mx-auto lg:mx-0 group-hover:border-blue-500/50 transition-all shadow-xl">
-                            <span className="text-3xl font-[1000] text-blue-500">{s.id}</span>
-                         </div>
-                         <h4 className="text-2xl font-black text-white uppercase tracking-tight">{s.title}</h4>
-                         <p className="text-slate-500 text-xs font-bold leading-relaxed">{s.desc}</p>
-                      </div>
-                   </div>
+                    <div key={i} className="relative group">
+                       {i < 3 && <div className="hidden lg:block absolute top-10 left-full w-full h-[2px] bg-slate-800/30 z-0" />}
+                       <div className="relative z-10 space-y-6 text-center lg:text-left">
+                          <div className="w-20 h-20 bg-slate-900 border border-slate-800 rounded-[2rem] flex items-center justify-center mx-auto lg:mx-0 group-hover:border-blue-500/50 transition-all shadow-xl">
+                             <span className="text-3xl font-[1000] text-blue-500">{s.id}</span>
+                          </div>
+                          <h4 className="text-2xl font-black text-white uppercase tracking-tight">{s.title}</h4>
+                          <p className="text-slate-500 text-xs font-bold leading-relaxed">{s.desc}</p>
+                       </div>
+                    </div>
                  ))}
               </div>
            </div>
@@ -241,18 +247,18 @@ export default function LandingPage() {
       <section id="testimonials" className="py-24 md:py-32 px-6 md:px-12 bg-[#05070a]/50">
         <div className="max-w-7xl mx-auto space-y-20">
            <div className="text-center space-y-4">
-              <h2 className="text-4xl md:text-6xl font-[1000] tracking-tighter uppercase">Scholar <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">Feedback</span></h2>
+              <h2 className="text-4xl md:text-6xl font-[1000] tracking-tighter uppercase">Scholar <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">Recognition</span></h2>
            </div>
            
            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {testimonials.map((t, i) => (
-                <div key={i} className="bg-[#0d121f] p-10 rounded-[3rem] border border-slate-800/80 relative space-y-6">
+                <div key={i} className="bg-[#0d121f] p-10 rounded-[3rem] border border-slate-800/80 relative space-y-6 hover:border-slate-700 transition-all">
                    <div className="flex gap-1">
                       {[1,2,3,4,5].map(s => <Star key={s} size={14} fill="#fbbf24" className="text-amber-400" />)}
                    </div>
                    <p className="text-slate-300 text-sm font-semibold italic leading-relaxed">"{t.text}"</p>
                    <div className="flex items-center gap-4 pt-6 border-t border-slate-800/50">
-                      <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center font-black text-white shadow-xl">{t.name[0]}</div>
+                      <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center font-black text-white shadow-xl uppercase">{t.name[0]}</div>
                       <div>
                          <p className="text-sm font-black text-white uppercase tracking-tight">{t.name}</p>
                          <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{t.role}</p>
@@ -275,7 +281,7 @@ export default function LandingPage() {
               Join thousands of scholars from Bihar already using the portal to dominate their curriculum.
            </p>
            <button onClick={() => navigate('/signup')} className="px-12 py-6 bg-blue-600 hover:bg-blue-500 text-white rounded-[2.5rem] font-[1000] text-sm uppercase tracking-[0.2em] shadow-2xl shadow-blue-900/40 active:scale-95 transition-all inline-flex items-center gap-4">
-              Enter Hub Access <ChevronRight size={18}/>
+              Establish Connection <ChevronRight size={18}/>
            </button>
         </div>
       </section>
@@ -285,39 +291,43 @@ export default function LandingPage() {
          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-center md:text-left">
             <div className="space-y-6">
               <div className="flex items-center justify-center md:justify-start gap-4">
-                 <div className="p-2 bg-blue-600 rounded-xl"><GraduationCap size={20} className="text-white" /></div>
+                 <div className="p-2.5 bg-blue-600 rounded-xl"><GraduationCap size={20} className="text-white" /></div>
                  <span className="text-lg font-black uppercase tracking-tighter">Apna College Bihar</span>
               </div>
               <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest leading-loose">
-                Leading Bihar Scholars to Excellence. Empowering education with smart technology.
+                Leading Bihar Engineering Scholars to Excellence. Empowering education with smart technology hubs.
               </p>
               <div className="flex items-center justify-center md:justify-start gap-4">
                  {[Facebook, Twitter, Instagram, Mail].map((Icon, i) => (
-                   <a key={i} href="#" className="p-3 bg-slate-900 hover:bg-blue-600 text-slate-500 hover:text-white rounded-xl transition-all"><Icon size={16}/></a>
+                   <a key={i} href="#" className="p-3 bg-[#0d121f] hover:bg-blue-600 text-slate-500 hover:text-white border border-slate-800 rounded-xl transition-all"><Icon size={16}/></a>
                  ))}
               </div>
             </div>
 
             {[
-              { title: 'Platform', links: ['Dashboard', 'Notes', 'Calculators', 'Study Tracking'] },
-              { title: 'Company', links: ['About Hub', 'Join Team', 'Mentors', 'Sponsorship'] },
-              { title: 'Support', links: ['Help Center', 'API Status', 'Security', 'Contact Us'] }
+              { title: 'Platform', links: [{n:'Study Protocol', p:'/dashboard/study'}, {n:'Knowledge Hub', p:'/dashboard/notes'}, {n:'Engine Hub', p:'/dashboard/calculator'}, {n:'BEU Analytics', p:'/dashboard/cgpa'}] },
+              { title: 'Identity', links: [{n:'Dashboard', p:'/dashboard'}, {n:'Login Hub', p:'/login'}, {n:'Signup Hub', p:'/signup'}, {n:'Admin Ops', p:'/dashboard/admin'}] },
+              { title: 'Support', links: [{n:'Security', p:'/'}, {n:'API Status', p:'/'}, {n:'Network Status', p:'/'}, {n:'Help Center', p:'/'}] }
             ].map(col => (
                <div key={col.title} className="space-y-6">
                   <h4 className="text-[11px] font-black uppercase tracking-widest text-white">{col.title}</h4>
                   <ul className="space-y-4">
                      {col.links.map(link => (
-                       <li key={link}><a href="#" className="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-all">{link}</a></li>
+                        <li key={link.n}>
+                           <Link to={link.p} className="text-[9px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-all">
+                              {link.n}
+                           </Link>
+                        </li>
                      ))}
                   </ul>
                </div>
             ))}
          </div>
          <div className="max-w-7xl mx-auto pt-20 mt-20 border-t border-slate-800/30 flex flex-col md:flex-row items-center justify-between gap-6">
-            <p className="text-[9px] font-black text-slate-700 uppercase tracking-widest">© 2026 APNA COLLEGE BIHAR · All Rights Reserved</p>
+            <p className="text-[9px] font-black text-slate-700 uppercase tracking-widest">© 2026 APNA COLLEGE BIHAR · ALL RIGHTS RESERVED Hub v2.1</p>
             <div className="flex items-center gap-8">
-               <a href="#" className="text-[9px] font-black text-slate-700 uppercase tracking-widest hover:text-white">Privacy Policy</a>
-               <a href="#" className="text-[9px] font-black text-slate-700 uppercase tracking-widest hover:text-white">Terms of Entry</a>
+               <Link to="/" className="text-[9px] font-black text-slate-700 uppercase tracking-widest hover:text-white">Privacy Protocol</Link>
+               <Link to="/" className="text-[9px] font-black text-slate-700 uppercase tracking-widest hover:text-white">Terms of Entry</Link>
             </div>
          </div>
       </footer>

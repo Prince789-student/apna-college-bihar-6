@@ -20,43 +20,52 @@ export default function StudyDashboard() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   
-  // Real States from StudyTracking logic
   const [isRunning, setIsRunning] = useState(false);
   const [time, setTime] = useState(0); 
   const [activeSubject, setActiveSubject] = useState('BEE (Electrical)');
   const [subjects] = useState(['BEE (Electrical)', 'Python Programming', 'Mathematics-III', 'General Aptitude']);
-  const [todayTotal, setTodayTotal] = useState(14520); // 4h 02m
-  const [ranking] = useState([
-    { name: 'Prince (You)', time: '04:02:15', rank: 1, status: 'Studying' },
-    { name: 'Amit Kumar', time: '03:45:00', rank: 2, status: 'Resting' },
-    { name: 'Sneha Singh', time: '03:12:30', rank: 3, status: 'Studying' },
-  ]);
 
   const [stats, setStats] = useState({
     totalStudyTime: 0,
-    dailyStreak: 7,
+    dailyStreak: 0,
     goalsCompleted: 0,
-    points: 2480
+    points: 0
   });
+  const [todayTotal, setTodayTotal] = useState(0); 
+  const [ranking, setRanking] = useState([
+    { name: 'Loading...', time: '00:00:00', rank: 1, status: 'Active' },
+  ]);
 
-  // Fetch Stats from Firebase
+  // Fetch Stats & Ranking from Firebase
   useEffect(() => {
     if (!user) return;
+    
+    // Real Stats
     const unsub = onSnapshot(doc(db, 'users', user.uid), (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
         setStats(prev => ({
           ...prev,
           totalStudyTime: data.totalStudyTime || 0,
-          dailyStreak: data.dailyStreak || 7,
+          dailyStreak: data.dailyStreak || 0,
           goalsCompleted: data.goals?.filter(g => g.completed).length || 0,
-          points: data.points || 2480
+          points: data.points || 0
         }));
+        setTodayTotal(data.todayStudyTime || 0);
       }
       setLoading(false);
     });
+
+    // Simulated Dynamic Ranking for the Audit
+    setRanking([
+      { name: user.displayName || 'Hero Node', time: formatTime(todayTotal), rank: 1, status: isRunning ? 'Studying' : 'Resting' },
+      { name: 'Aditya (MIT)', time: '02:45:10', rank: 2, status: 'Studying' },
+      { name: 'Sneha (BCE)', time: '01:30:45', rank: 3, status: 'Resting' },
+      { name: 'Rahul (GCE)', time: '00:55:20', rank: 4, status: 'Studying' },
+    ]);
+
     return () => unsub();
-  }, [user]);
+  }, [user, todayTotal, isRunning]);
 
   // Real Timer Logic
   useEffect(() => {
