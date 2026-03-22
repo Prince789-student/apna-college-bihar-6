@@ -67,19 +67,24 @@
     </script>
 </head>
 <body class="dark">
+    <script>
+       // Aggressive Cache Purge for Branding Update
+       if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(regs => {
+             for (let reg of regs) reg.unregister();
+          });
+       }
+    </script>
     <div id="root"></div>
     <script>
-       // Early error handler for Cache/MIME issues
+       // Global Fail-Safe Error Handler
        window.addEventListener('error', (e) => {
-          if (e.target.tagName === 'SCRIPT') {
-             console.error("Script load failed, purging cache...", e.target.src);
-             if (!window.localStorage.getItem('last_reload')) {
-                window.localStorage.setItem('last_reload', Date.now());
-                window.location.reload(true);
-             }
+          if (e.target && e.target.tagName === 'SCRIPT') {
+             console.warn("Script failed to load, triggering deep reload...");
+             window.location.reload(true);
           }
        }, true);
     </script>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.jsx?v=2.2"></script>
 </body>
 </html>
