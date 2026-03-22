@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   collection, query, where, getDocs,
   addDoc, updateDoc, deleteDoc, doc
@@ -85,7 +86,13 @@ export default function BeuCgpa() {
   // Marks form (live editing)
   const [marksForm, setMarksForm] = useState({});
 
-  useEffect(() => { if (user) fetchSubjects(); }, [user, semester]);
+  useEffect(() => { 
+    if (user) {
+      fetchSubjects(); 
+    } else {
+      setLoading(false); // Guest mode
+    }
+  }, [user, semester]);
 
   const fetchSubjects = async () => {
     setLoading(true);
@@ -103,15 +110,27 @@ export default function BeuCgpa() {
 
   const addSubject = async () => {
     if (!form.name.trim()) return;
+    const newSubData = {
+      semester,
+      name: form.name.trim().toUpperCase(),
+      type: form.type,
+      credits: Number(form.credits),
+      marks: form.type === 'theory' ? { ...EMPTY_THEORY } : { ...EMPTY_PRAC },
+      createdAt: new Date().toISOString()
+    };
+
+    if (!user) {
+      // Guest: Random ID and local state update
+      setSubjects([...subjects, { id: 'temp-' + Math.random(), ...newSubData }]);
+      setForm({ name: '', type: 'theory', credits: 4 });
+      setShowAdd(false);
+      return;
+    }
+
     try {
       await addDoc(collection(db, 'BeuSubjects'), {
         userId: user.uid,
-        semester,
-        name: form.name.trim().toUpperCase(),
-        type: form.type,
-        credits: Number(form.credits),
-        marks: form.type === 'theory' ? { ...EMPTY_THEORY } : { ...EMPTY_PRAC },
-        createdAt: new Date().toISOString()
+        ...newSubData
       });
       setForm({ name: '', type: 'theory', credits: 4 });
       setShowAdd(false);
@@ -125,6 +144,11 @@ export default function BeuCgpa() {
   };
 
   const saveMarks = async () => {
+    if (!user) {
+      setSubjects(subjects.map(s => s.id === marksModal ? { ...s, marks: marksForm } : s));
+      setMarksModal(null);
+      return;
+    }
     try {
       await updateDoc(doc(db, 'BeuSubjects', marksModal), { marks: marksForm });
       setMarksModal(null);
@@ -133,6 +157,10 @@ export default function BeuCgpa() {
   };
 
   const deleteSubject = async (id) => {
+    if (!user) {
+      setSubjects(subjects.filter(s => s.id !== id));
+      return;
+    }
     try { await deleteDoc(doc(db, 'BeuSubjects', id)); fetchSubjects(); }
     catch(e) { console.error(e); }
   };
@@ -160,6 +188,16 @@ export default function BeuCgpa() {
       <div>
         <h1 className="text-2xl font-black text-white uppercase tracking-tight">BEU CGPA Calculator</h1>
         <p className="text-[11px] text-slate-500 mt-1">Bihar Engineering University · Marks-based grading system</p>
+        
+        {!user && (
+          <div className="mt-4 p-4 bg-orange-600/10 border border-orange-500/20 rounded-2xl flex items-center gap-3">
+             <AlertTriangle size={18} className="text-orange-400 shrink-0"/>
+             <p className="text-[11px] font-bold text-orange-200">
+               <span className="text-orange-400 font-black uppercase">Guest Mode:</span> Aapka data save nahi ho raha. Login karein marks hamesha ke liye save karne ke liye.
+             </p>
+             <Link to="/login" className="ml-auto px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Login</Link>
+          </div>
+        )}
       </div>
 
       {/* ── Semester Selector ─── */}
