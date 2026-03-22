@@ -1,7 +1,7 @@
 {
   "name": "Apna College Bihar",
   "short_name": "ACB",
-  "description": "Study tracker, notes, calculators for Bihar students",
+  "description": "Bihar's Digital Study Engine - Notes & PYQ.",
   "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#02040a",
@@ -27,25 +27,37 @@
       "purpose": "maskable"
     }
   ],
-  "categories": ["education", "productivity"],
+  "categories": ["education"],
   "lang": "hi-IN",
   "dir": "ltr",
   "id": "apna.college.bihar",
   "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Study Protocol",
+      "url": "/dashboard/study",
+      "description": "Focus Timer and Tracking"
+    },
+    {
+      "name": "Notes & PYQ",
+      "url": "/dashboard/notes",
+      "description": "Download Study Material"
+    }
+  ],
   "screenshots": [
     {
       "src": "/logo.jpg",
       "type": "image/jpeg",
-      "sizes": "512x512",
+      "sizes": "1024x1024",
       "form_factor": "wide",
-      "label": "Apna College Bihar"
+      "label": "Desktop View"
     },
     {
       "src": "/logo.jpg",
       "type": "image/jpeg",
-      "sizes": "512x512",
+      "sizes": "1024x1024",
       "form_factor": "narrow",
-      "label": "Apna College Bihar"
+      "label": "Mobile View"
     }
   ]
 }

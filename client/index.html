@@ -68,6 +68,18 @@
 </head>
 <body class="dark">
     <div id="root"></div>
+    <script>
+       // Early error handler for Cache/MIME issues
+       window.addEventListener('error', (e) => {
+          if (e.target.tagName === 'SCRIPT') {
+             console.error("Script load failed, purging cache...", e.target.src);
+             if (!window.localStorage.getItem('last_reload')) {
+                window.localStorage.setItem('last_reload', Date.now());
+                window.location.reload(true);
+             }
+          }
+       }, true);
+    </script>
     <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>
