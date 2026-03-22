@@ -78,7 +78,7 @@ export default function DashboardLayout() {
            <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
            <div className="min-w-[120px]">
              <span className="text-xl font-[1000] tracking-tighter uppercase text-white block leading-none">APNA COLLEGE BIHAR</span>
-             <span className="text-[7px] text-slate-500 font-black uppercase tracking-[0.4em] mt-2 block">Student Official</span>
+             <span className="text-[7px] text-slate-500 font-black uppercase tracking-[0.4em] mt-2 block">Official Website</span>
            </div>
         </div>
         {!isMobile && (

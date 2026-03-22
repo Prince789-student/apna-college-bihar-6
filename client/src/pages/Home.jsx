@@ -9,14 +9,14 @@ import {
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#02040a] text-white font-['Inter'] selection:bg-blue-500/30 overflow-x-hidden">
-      
+
       {/* ── Navbar ── */}
       <nav className="fixed top-0 left-0 w-full z-[100] bg-[#02040a]/80 backdrop-blur-xl border-b border-slate-800/50 px-6 md:px-16 py-5 flex items-center justify-between">
         <div className="flex items-center gap-3 group">
            <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
            <div className="hidden sm:block">
              <span className="text-xl font-[1000] tracking-tighter uppercase text-white block leading-none">APNA COLLEGE BIHAR</span>
-             <span className="text-[7px] text-blue-500 font-bold uppercase tracking-[0.5em] mt-1 block">Official Student Portal</span>
+             <span className="text-[7px] text-blue-500 font-bold uppercase tracking-[0.5em] mt-1 block">OFFICIAL WEBSITE</span>
            </div>
         </div>
         <div className="hidden md:flex items-center gap-10">
