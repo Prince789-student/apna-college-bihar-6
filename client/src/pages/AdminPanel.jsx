@@ -21,7 +21,9 @@ export default function AdminPanel() {
   const [groups, setGroups] = useState([]);
   const [docs, setDocs] = useState([]);
   const [anns, setAnns] = useState([]);
+  const [ads, setAds] = useState([]);
   const [newAnn, setNewAnn] = useState({ title: '', content: '', type: 'INFO' });
+  const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER' });
   const [msg, setMsg] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -58,8 +60,18 @@ export default function AdminPanel() {
       setAnns(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     });
 
+    const unsubAds = onSnapshot(collection(db, 'ads'), (snap) => {
+      setAds(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    });
+
     setLoading(false);
-    return () => { if(unsubUsers) unsubUsers(); if(unsubGroups) unsubGroups(); if(unsubDocs) unsubDocs(); if(unsubAnns) unsubAnns(); };
+    return () => { 
+      if(unsubUsers) unsubUsers(); 
+      if(unsubGroups) unsubGroups(); 
+      if(unsubDocs) unsubDocs(); 
+      if(unsubAnns) unsubAnns(); 
+      if(unsubAds) unsubAds();
+    };
   }, [isAdmin, authLoading]);
 
   // ── USER ACTIONS ──
@@ -161,6 +173,48 @@ export default function AdminPanel() {
     }
   };
 
+  const handleAdUpload = async (e) => {
+    e.preventDefault();
+    if (!adForm.title || !adForm.link) { flash('Title & Link required', 'err'); return; }
+    
+    setUploading(true);
+    try {
+      let imageUrl = "";
+      if (adForm.file) {
+        const storageRef = ref(storage, `ads/${Date.now()}_${adForm.file.name.replace(/\s+/g, '_')}`);
+        const snapshot = await uploadBytes(storageRef, adForm.file);
+        imageUrl = await getDownloadURL(snapshot.ref);
+      }
+
+      await addDoc(collection(db, 'ads'), {
+        title: adForm.title,
+        link: adForm.link,
+        imageUrl,
+        type: adForm.type,
+        active: true,
+        createdAt: serverTimestamp()
+      });
+      
+      flash('Ad Deployment Successful! 🚀');
+      setAdForm({ title: '', link: '', file: null, type: 'BANNER' });
+    } catch (err) {
+      flash('Ad Upload failed: ' + err.message, 'err');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const deleteAd = async (id) => {
+    if(!window.confirm('Remove this Ad?')) return;
+    await deleteDoc(doc(db, 'ads', id));
+    flash('Ad Removed');
+  };
+
+  const toggleAd = async (id, active) => {
+    await updateDoc(doc(db, 'ads', id), { active: !active });
+    flash(active ? 'Ad Disabled' : 'Ad Activated');
+  };
+
 
   if (authLoading) return (
     <div className="flex flex-col items-center justify-center py-40 gap-4">
@@ -185,8 +239,8 @@ export default function AdminPanel() {
             <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.4em] mt-3">Governance & Oversight Hub</p>
           </div>
         </div>
-        <div className="flex flex-wrap bg-slate-900/50 p-1.5 rounded-2xl border border-slate-800/50">
-           {['overview', 'users', 'groups', 'notes', 'broadcasts'].map(t => (
+        <div className="flex flex-wrap bg-slate-900/50 p-1.5 rounded-2xl border border-slate-800/50 overflow-x-auto">
+           {['overview', 'users', 'groups', 'notes', 'broadcasts', 'ads'].map(t => (
              <button key={t} onClick={()=>setTab(t)}
                className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${tab===t?'bg-indigo-600 text-white shadow-xl shadow-indigo-900/20':'text-slate-500 hover:text-slate-300'}`}>
                {t}
@@ -416,30 +470,70 @@ export default function AdminPanel() {
 
       {/* ── GROUPS TAB ── */}
       {tab==='groups' && (
-        <div className="bg-[#0d121f] rounded-[3.5rem] border border-slate-800/80 p-8 shadow-2xl animate-in fade-in duration-500">
-           <h2 className="text-sm font-black uppercase text-slate-400 tracking-widest mb-8">Network Hub Monitoring</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {groups.map(g => (
-                <div key={g.id} className="p-6 bg-[#162035] rounded-[2.5rem] border border-slate-700/30">
-                   <div className="flex justify-between items-start mb-6">
-                      <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-xl font-black text-white">{g.name[0]}</div>
-                      <button onClick={()=>deleteGroup(g.id)} className="p-2 text-slate-600 hover:text-red-500"><Trash2 size={20}/></button>
-                   </div>
-                   <p className="text-lg font-[1000] text-white uppercase tracking-tighter truncate">{g.name}</p>
-                   <div className="mt-6 p-4 bg-slate-900/50 rounded-2xl border border-slate-800/50 flex justify-between items-center">
-                      <div>
-                         <p className="text-[9px] font-black text-slate-500 uppercase">Load Density</p>
-                         <p className="text-sm font-black text-white">{g.memberCount}/150</p>
-                      </div>
-                      <div className="text-right">
-                         <p className="text-[9px] font-black text-slate-500 uppercase">Code</p>
-                         <p className="text-sm font-black text-white">{g.code}</p>
-                      </div>
-                   </div>
+        </div>
+      )}
+
+      {/* ── ADS MANAGEMENT TAB ── */}
+      {tab==='ads' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+           <div className="lg:col-span-4 bg-[#0d121f] p-10 rounded-[3.5rem] border border-slate-800/80">
+              <div className="flex items-center gap-3 mb-8">
+                <BarChart3 size={24} className="text-emerald-500" />
+                <h2 className="text-xl font-[1000] text-white uppercase tracking-tighter">New Campaign</h2>
+              </div>
+              <form onSubmit={handleAdUpload} className="space-y-4">
+                <input value={adForm.title} onChange={e=>setAdForm({...adForm, title: e.target.value})} placeholder="Campaign Name" className="w-full bg-slate-900 p-4 rounded-2xl text-[12px] font-bold text-white outline-none border-2 border-transparent focus:border-emerald-500" />
+                <input value={adForm.link} onChange={e=>setAdForm({...adForm, link: e.target.value})} placeholder="Target URL (https://...)" className="w-full bg-slate-900 p-4 rounded-2xl text-[12px] font-bold text-blue-400 outline-none border-2 border-transparent focus:border-emerald-500" />
+                
+                <div className="p-4 bg-slate-900/50 rounded-2xl border border-slate-700/20 text-center">
+                  <input type="file" accept="image/*" onChange={e=>setAdForm({...adForm, file:e.target.files[0]})} className="hidden" id="ad-img-up" />
+                  <label htmlFor="ad-img-up" className="cursor-pointer">
+                    <div className="py-8 bg-slate-950/50 border-2 border-dashed border-slate-800 rounded-3xl hover:border-emerald-500 transition-all">
+                       <UploadCloud size={30} className="mx-auto text-slate-700 mb-2" />
+                       <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{adForm.file?.name || 'Upload Banner'}</p>
+                    </div>
+                  </label>
                 </div>
-              ))}
+
+                <select value={adForm.type} onChange={e=>setAdForm({...adForm, type: e.target.value})} className="w-full bg-slate-900 p-4 rounded-2xl text-[12px] font-bold text-white outline-none">
+                   <option value="BANNER">DASHBOARD BANNER (TOP)</option>
+                   <option value="SIDEBAR">SIDEBAR AD (SQUARE)</option>
+                   <option value="INLINE">NOTES INLINE AD</option>
+                </select>
+
+                <button type="submit" disabled={uploading} className="w-full py-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-3xl font-black text-xs uppercase tracking-widest shadow-xl shadow-emerald-950/20 flex items-center justify-center gap-3">
+                  {uploading ? <Loader2 className="animate-spin" size={18}/> : 'Launch Campaign'}
+                </button>
+              </form>
+           </div>
+
+           <div className="lg:col-span-8 bg-[#0d121f] p-10 rounded-[4rem] border border-slate-800/80">
+              <h2 className="text-sm font-black uppercase text-slate-400 tracking-widest mb-8">Live Campaigns ({ads.length})</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {ads.map(ad => (
+                  <div key={ad.id} className="p-6 bg-slate-900/40 rounded-[2.5rem] border border-slate-800/50 flex flex-col group relative overflow-hidden">
+                     {ad.imageUrl && (
+                       <img src={ad.imageUrl} alt="Ad" className="w-full h-32 object-cover rounded-2xl mb-4 border border-slate-800" />
+                     )}
+                     <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <p className="text-[9px] font-black text-emerald-500 uppercase tracking-widest mb-1">{ad.type}</p>
+                          <h3 className="text-sm font-black text-white uppercase tracking-tight truncate max-w-[200px]">{ad.title}</h3>
+                        </div>
+                        <div className="flex gap-2">
+                           <button onClick={()=>toggleAd(ad.id, ad.active)} className={`p-2 rounded-xl transition-all ${ad.active?'bg-emerald-500/10 text-emerald-500':'bg-red-500/10 text-red-500'}`}>
+                             {ad.active ? <Eye size={16}/> : <Ban size={16}/>}
+                           </button>
+                           <button onClick={()=>deleteAd(ad.id)} className="p-2 bg-slate-800 text-slate-500 hover:text-red-500 rounded-xl"><Trash2 size={16}/></button>
+                        </div>
+                     </div>
+                     <p className="text-[10px] text-slate-600 truncate font-bold">{ad.link}</p>
+                  </div>
+                ))}
+              </div>
            </div>
         </div>
+      )}
       )}
 
     </div>
