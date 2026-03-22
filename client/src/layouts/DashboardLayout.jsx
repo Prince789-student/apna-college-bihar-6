@@ -8,6 +8,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
 import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
+import PremiumAds from '../components/PremiumAds';
 
 const ANN_STYLE = {
   info:    { bar: 'bg-blue-600',    bg: 'bg-blue-950/80 border-blue-500/30',    text: 'text-blue-300'    },
@@ -106,6 +107,13 @@ export default function DashboardLayout() {
             </Link>
           );
         })}
+
+        {/* Sidebar Mini Ad */}
+        {(isSidebarOpen || isMobile) && (
+          <div className="pt-6 px-2">
+             <PremiumAds type="SIDEBAR" />
+          </div>
+        )}
       </nav>
 
       <div className="p-6 md:p-8 border-t border-slate-800/50">

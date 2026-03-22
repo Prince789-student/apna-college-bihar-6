@@ -470,6 +470,29 @@ export default function AdminPanel() {
 
       {/* ── GROUPS TAB ── */}
       {tab==='groups' && (
+        <div className="bg-[#0d121f] rounded-[3.5rem] border border-slate-800/80 p-8 shadow-2xl animate-in fade-in duration-500">
+           <h2 className="text-sm font-black uppercase text-slate-400 tracking-widest mb-8">Network Hub Monitoring</h2>
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {groups.map(g => (
+                <div key={g.id} className="p-6 bg-[#162035] rounded-[2.5rem] border border-slate-700/30">
+                   <div className="flex justify-between items-start mb-6">
+                      <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-xl font-black text-white">{g.name[0]}</div>
+                      <button onClick={()=>deleteGroup(g.id)} className="p-2 text-slate-600 hover:text-red-500"><Trash2 size={20}/></button>
+                   </div>
+                   <p className="text-lg font-[1000] text-white uppercase tracking-tighter truncate">{g.name}</p>
+                   <div className="mt-6 p-4 bg-slate-900/50 rounded-2xl border border-slate-800/50 flex justify-between items-center">
+                      <div>
+                         <p className="text-[9px] font-black text-slate-500 uppercase">Load Density</p>
+                         <p className="text-sm font-black text-white">{g.memberCount}/150</p>
+                      </div>
+                      <div className="text-right">
+                         <p className="text-[9px] font-black text-slate-500 uppercase">Code</p>
+                         <p className="text-sm font-black text-white">{g.code}</p>
+                      </div>
+                   </div>
+                </div>
+              ))}
+           </div>
         </div>
       )}
 
@@ -534,8 +557,6 @@ export default function AdminPanel() {
            </div>
         </div>
       )}
-      )}
-
     </div>
   );
 }

@@ -13,6 +13,7 @@ import {
   onSnapshot, limit, orderBy 
 } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
+import PremiumAds from '../components/PremiumAds';
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -67,6 +68,9 @@ export default function Dashboard() {
             </Link>
           </div>
       </div>
+
+      {/* Global Promotion Slot (AdSense Ready) */}
+      <PremiumAds type="BANNER" />
 
       <div className="w-full bg-blue-600/5 border border-blue-500/20 rounded-[4rem] p-12 flex flex-col md:flex-row items-center justify-between gap-10">
           <div className="text-center md:text-left">
