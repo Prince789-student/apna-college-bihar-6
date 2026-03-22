@@ -12,6 +12,7 @@ import {
   Users, Hash, ArrowRight, ClipboardList, CalendarDays,
   CheckCircle2, Circle, Save, Shield, Zap, Award, Timer
 } from 'lucide-react';
+import PremiumAds from '../components/PremiumAds';
 
 // ─── Helper ──────────────────────────────────────────────
 function formatDuration(sec) {
@@ -299,6 +300,8 @@ export default function StudyDashboard() {
           );
         })}
       </div>
+
+      <PremiumAds type="BANNER" />
 
       {/* TAB: FOCUS TIMER */}
       {tab === 'timer' && (
