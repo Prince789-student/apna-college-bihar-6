@@ -21,9 +21,21 @@ export default function Dashboard() {
   const [totalTime, setTotalTime] = useState(0);
   const [activeGroups, setActiveGroups] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstall, setShowInstall] = useState(false);
 
   useEffect(() => {
     if (!user) return;
+
+    const checkPWA = () => {
+      if (window.deferredPrompt) {
+        setDeferredPrompt(window.deferredPrompt);
+        setShowInstall(true);
+      }
+    };
+
+    checkPWA();
+    window.addEventListener('pwa-ready', checkPWA);
     
     // Fetch stats
     const qSessions = query(collection(db, 'StudySessions'), where('userId', '==', user.uid), limit(50));
@@ -44,9 +56,30 @@ export default function Dashboard() {
 
   const fmt = (s) => `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`;
 
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setShowInstall(false);
+      setDeferredPrompt(null);
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto pb-24 space-y-12 lg:space-y-16 animate-in fade-in duration-1000">
       
+      {/* Install App Banner (PWA Only) */}
+      {showInstall && (
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 md:p-6 rounded-[2.5rem] flex items-center justify-between shadow-2xl relative overflow-hidden group">
+           <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+           <p className="text-white font-black text-xs md:text-sm uppercase tracking-widest pl-4">Get the best experience in app mode!</p>
+           <button onClick={handleInstallClick} className="px-8 py-3 bg-white text-blue-600 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
+             Install App
+           </button>
+        </div>
+      )}
+
       {/* Greetings Hub */}
       <div className="bg-[#0d121f] p-10 md:p-14 rounded-[4rem] border border-slate-800/80 shadow-2xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-8">
          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none"></div>
