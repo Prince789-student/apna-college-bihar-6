@@ -1,7 +1,10 @@
 User-agent: *
 Allow: /
-Disallow: /dashboard/admin/
-Disallow: /admin-panel/
+Allow: /dashboard
+Allow: /dashboard/study
+Allow: /dashboard/notes
+Allow: /dashboard/calculator
+Allow: /dashboard/cgpa
 
-# HINT FOR GOOGLE ROBOTS
+# Sitemaps
 Sitemap: https://apnacollegebihar.online/sitemap.xml
