@@ -42,14 +42,13 @@ export default function Home() {
              <span className="text-[10px] font-black uppercase tracking-widest">v2.0 Performance Hub is Live</span>
            </div>
            
-           <h1 className="text-6xl md:text-8xl font-[1000] tracking-tighter uppercase leading-[0.9] text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-500">
-             Bihar's Digital <br/> <span className="text-blue-500">Study Engine.</span>
-           </h1>
-           
-           <p className="text-slate-500 text-lg md:text-xl font-medium tracking-tight max-w-2xl mx-auto leading-relaxed">
-             The ultimate all-in-one portal for BEU Students. 100% Free Notes, SGPA Calculators, 
-             Focus Timers, and a thriving Community. Built by students, for students.
-           </p>
+           <h1 className="text-4xl md:text-7xl font-[1000] text-white tracking-tighter uppercase leading-[0.8] mb-6">
+                   Bihar's Digital <br/>
+                   <span className="text-blue-500">Study Engine</span>
+                </h1>
+                <p className="text-slate-500 text-xs md:text-sm font-black uppercase tracking-[0.4em] mb-12 max-w-xl mx-auto md:mx-0">
+                   Apna College Bihar - Engineering Notes · CGPA · Networking
+                </p>
 
            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <Link to="/signup" className="w-full sm:w-auto px-10 py-5 bg-white text-black rounded-[2rem] font-[1000] text-sm uppercase tracking-widest hover:bg-slate-200 transition-all flex items-center justify-center gap-3 active:scale-95 shadow-2xl">

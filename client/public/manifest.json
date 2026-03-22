@@ -1,6 +1,6 @@
 {
-  "name": "Apna College Bihar Portal",
-  "short_name": "ACB Portal",
+  "name": "Apna College Bihar",
+  "short_name": "ACB",
   "description": "Study tracker, notes, calculators for Bihar students",
   "start_url": "/dashboard",
   "display": "standalone",
@@ -9,26 +9,20 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/logo192.png",
-      "type": "image/png",
+      "src": "/logo.jpg",
+      "type": "image/jpeg",
       "sizes": "192x192",
       "purpose": "any"
     },
     {
-      "src": "/logo192.png",
-      "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/logo512.png",
-      "type": "image/png",
+      "src": "/logo.jpg",
+      "type": "image/jpeg",
       "sizes": "512x512",
       "purpose": "any"
     },
     {
-      "src": "/logo512.png",
-      "type": "image/png",
+      "src": "/logo.jpg",
+      "type": "image/jpeg",
       "sizes": "512x512",
       "purpose": "maskable"
     }
@@ -36,22 +30,22 @@
   "categories": ["education", "productivity"],
   "lang": "hi-IN",
   "dir": "ltr",
-  "id": "apna.college.bihar.portal",
+  "id": "apna.college.bihar",
   "prefer_related_applications": false,
   "screenshots": [
     {
-      "src": "/logo512.png",
-      "type": "image/png",
+      "src": "/logo.jpg",
+      "type": "image/jpeg",
       "sizes": "512x512",
       "form_factor": "wide",
-      "label": "ACB Portal Dashboard"
+      "label": "Apna College Bihar"
     },
     {
-      "src": "/logo512.png",
-      "type": "image/png",
+      "src": "/logo.jpg",
+      "type": "image/jpeg",
       "sizes": "512x512",
       "form_factor": "narrow",
-      "label": "ACB Portal Mobile"
+      "label": "Apna College Bihar"
     }
   ]
 }
