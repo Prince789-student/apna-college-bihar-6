@@ -23,7 +23,7 @@ export default function AdminPanel() {
   const [anns, setAnns] = useState([]);
   const [ads, setAds] = useState([]);
   const [newAnn, setNewAnn] = useState({ title: '', content: '', type: 'INFO' });
-  const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER' });
+  const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '' });
   const [msg, setMsg] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -175,40 +175,41 @@ export default function AdminPanel() {
 
   const handleAdUpload = async (e) => {
     e.preventDefault();
-    if (!adForm.title || !adForm.link) { flash('Campaign Name & Link are required!', 'err'); return; }
+    if (!adForm.title || !adForm.link) { flash('Campaign Name & Target Link are required!', 'err'); return; }
     
     setUploading(true);
     let timeoutId;
 
     try {
-      let imageUrl = "";
+      let imageUrl = adForm.externalUrl;
       
       if (adForm.file) {
         // Safety Timeout for Storage Upload
         timeoutId = setTimeout(() => {
           setUploading(false);
-          flash('Upload taking too long! ⏳ Check internet or refresh page.', 'err');
-        }, 15000);
+          flash('Storage Upload taking too long! ⏳ Try using "Direct Image Link" instead.', 'err');
+        }, 30000);
 
         const storageRef = ref(storage, `ads/${Date.now()}_${adForm.file.name.replace(/\s+/g, '_')}`);
         const snapshot = await uploadBytes(storageRef, adForm.file);
         
-        // Success
         if (timeoutId) clearTimeout(timeoutId);
         imageUrl = await getDownloadURL(snapshot.ref);
       }
 
+      if (!imageUrl && !adForm.file) { flash('Bhai, ya toh Image daalo ya Link!', 'err'); setUploading(false); return; }
+
       await addDoc(collection(db, 'ads'), {
         title: adForm.title.toUpperCase(),
         link: adForm.link,
-        imageUrl,
+        imageUrl: imageUrl || "",
         type: adForm.type,
         active: true,
         createdAt: serverTimestamp()
       });
       
-      flash('Campaign Protocol Dispatched! 🚀✨');
-      setAdForm({ title: '', link: '', file: null, type: 'BANNER' });
+      flash('Campaign Deployment Victory! 🚀✨');
+      setAdForm({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '' });
     } catch (err) {
       if (timeoutId) clearTimeout(timeoutId);
       console.error("AD DEPLOY ERROR:", err);
@@ -520,18 +521,25 @@ export default function AdminPanel() {
                 <h2 className="text-xl font-[1000] text-white uppercase tracking-tighter">New Campaign</h2>
               </div>
               <form onSubmit={handleAdUpload} className="space-y-4">
-                <input value={adForm.title} onChange={e=>setAdForm({...adForm, title: e.target.value})} placeholder="Campaign Name" className="w-full bg-slate-900 p-4 rounded-2xl text-[12px] font-bold text-white outline-none border-2 border-transparent focus:border-emerald-500" />
-                <input value={adForm.link} onChange={e=>setAdForm({...adForm, link: e.target.value})} placeholder="Target URL (https://...)" className="w-full bg-slate-900 p-4 rounded-2xl text-[12px] font-bold text-blue-400 outline-none border-2 border-transparent focus:border-emerald-500" />
+                <input value={adForm.title} onChange={e=>setAdForm({...adForm, title: e.target.value})} placeholder="Campaign Name (e.g. JOIN TELEGRAM)" className="w-full bg-slate-900 p-4 rounded-2xl text-[12px] font-bold text-white outline-none border-2 border-transparent focus:border-emerald-500" />
+                <input value={adForm.link} onChange={e=>setAdForm({...adForm, link: e.target.value})} placeholder="Target Action URL" className="w-full bg-slate-900 p-4 rounded-2xl text-[12px] font-bold text-blue-400 outline-none border-2 border-transparent focus:border-emerald-500" />
                 
                 <div className="p-4 bg-slate-900/50 rounded-2xl border border-slate-700/20 text-center">
                   <input type="file" accept="image/*" onChange={e=>setAdForm({...adForm, file:e.target.files[0]})} className="hidden" id="ad-img-up" />
                   <label htmlFor="ad-img-up" className="cursor-pointer">
                     <div className="py-8 bg-slate-950/50 border-2 border-dashed border-slate-800 rounded-3xl hover:border-emerald-500 transition-all">
                        <UploadCloud size={30} className="mx-auto text-slate-700 mb-2" />
-                       <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{adForm.file?.name || 'Upload Banner'}</p>
+                       <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{adForm.file?.name || 'Upload Banner (Option 1)'}</p>
                     </div>
                   </label>
                 </div>
+
+                <div className="relative py-2 flex items-center justify-center">
+                   <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-800"></div></div>
+                   <span className="relative bg-[#0d121f] px-4 text-[8px] font-black text-slate-700 uppercase">OR</span>
+                </div>
+
+                <input value={adForm.externalUrl} onChange={e=>setAdForm({...adForm, externalUrl: e.target.value})} placeholder="Direct Image URL (Option 2)" className="w-full bg-slate-900 p-4 rounded-2xl text-[11px] font-bold text-emerald-500 outline-none border-2 border-transparent focus:border-emerald-500 placeholder:text-slate-700 shadow-inner" />
 
                 <select value={adForm.type} onChange={e=>setAdForm({...adForm, type: e.target.value})} className="w-full bg-slate-900 p-4 rounded-2xl text-[12px] font-bold text-white outline-none">
                    <option value="BANNER">DASHBOARD BANNER (TOP)</option>
