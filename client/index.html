@@ -52,6 +52,13 @@
     <style>
       body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; }
     </style>
+    <script>
+       if ('serviceWorker' in navigator) {
+          window.addEventListener('load', () => {
+             navigator.serviceWorker.register('/sw.js').catch(err => console.error("SW error:", err));
+          });
+       }
+    </script>
 </head>
 <body class="dark">
     <div id="root"></div>
