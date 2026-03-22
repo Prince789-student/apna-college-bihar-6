@@ -4,10 +4,13 @@ import {
   Filter, FileDigit, CalendarDays, BookMarked,
   ArrowRight, ShieldCheck, Bookmark
 } from 'lucide-react';
-import { db } from '../firebase';
+import { db, storage } from '../firebase';
 import { collection, query, orderBy, onSnapshot, where, addDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useAuth } from '../context/AuthContext';
 
 export default function Notes() {
+  const { user } = useAuth();
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -41,9 +44,31 @@ export default function Notes() {
 
   const handleUpload = async (e) => {
     e.preventDefault();
+    if (!uploadData.title) { alert('Bhai, title toh likho!'); return; }
+    
+    setUploading(true);
     try {
-      const finalUrl = uploadData.externalUrl || 'https://firebasestorage.googleapis.com/v0/b/placeholder...';
-      
+      let finalUrl = uploadData.externalUrl;
+
+      // Handle File Upload if present
+      if (uploadData.file) {
+        if (uploadData.file.size > 5 * 1024 * 1024) {
+          alert('Bhai, file 5MB se badi hai. Drive link use karein!');
+          setUploading(false);
+          return;
+        }
+        const fileName = `${Date.now()}_${uploadData.file.name.replace(/\s+/g, '_')}`;
+        const storageRef = ref(storage, `notes/${fileName}`);
+        const snapshot = await uploadBytes(storageRef, uploadData.file);
+        finalUrl = await getDownloadURL(snapshot.ref);
+      }
+
+      if (!finalUrl) { 
+        alert('Bhai, ya toh file chun lo ya Drive link daalo!'); 
+        setUploading(false); 
+        return; 
+      }
+
       await addDoc(collection(db, 'documents'), {
         title: uploadData.title,
         subject: uploadData.subject.toUpperCase(),
@@ -51,13 +76,19 @@ export default function Notes() {
         semester: uploadData.semester,
         fileUrl: finalUrl,
         createdAt: new Date().toISOString(),
-        verified: false
+        verified: false,
+        uploadedBy: user?.email || 'Guest'
       });
+
       setShowUpload(false);
       setUploadData({ title: '', subject: '', category: 'NOTES', semester: '1', file: null, externalUrl: '' });
-      alert('Success! Admin verify hone ke baad dikhega.');
-    } catch(err) { console.error(err); }
-    finally { setUploading(false); }
+      alert('Success! Admin verify hone ke baad library mein dikhega.');
+    } catch(err) { 
+      console.error(err); 
+      alert('Upload fail ho gaya: ' + err.message);
+    } finally { 
+      setUploading(false); 
+    }
   };
 
   return (

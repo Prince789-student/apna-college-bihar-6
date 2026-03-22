@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Globe, Instagram, Github, Send, Youtube } from 'lucide-react';
+import { Mail, Phone, MapPin, Globe, Instagram, Github, Send, Youtube, ArrowRight } from 'lucide-react';
 
 export default function ContactUs() {
   return (
@@ -60,8 +60,18 @@ export default function ContactUs() {
         </div>
       </div>
 
-      <div className="text-center p-8 bg-blue-600/5 border border-dashed border-blue-500/20 rounded-3xl">
-        <p className="text-slate-500 font-black uppercase tracking-[0.2em] text-sm italic">Response time is usually within 24-48 hours.</p>
+      <div className="bg-[#0d121f] p-10 rounded-[4rem] border border-blue-500/30 text-center space-y-8 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+        <div className="relative z-10 space-y-4">
+           <h2 className="text-3xl font-[1000] text-white uppercase tracking-tighter">Submit Enquiry</h2>
+           <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest leading-relaxed">Have a specific question? Fill out our formal enquiry form and we'll get back to you.</p>
+           <div className="pt-6">
+              <a href="https://forms.gle/xAcLLgAGy4mXaQ4Y6" target="_blank" rel="noopener noreferrer" 
+                 className="inline-flex items-center gap-4 px-12 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest transition-all shadow-2xl shadow-blue-900/40 active:scale-95">
+                <Globe size={18} /> Open Google Form <ArrowRight size={18} />
+              </a>
+           </div>
+        </div>
       </div>
     </div>
   );

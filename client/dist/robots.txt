@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard/admin/
+Disallow: /admin-panel/
+
+# HINT FOR GOOGLE ROBOTS
+Sitemap: https://apnacollegebihar.online/sitemap.xml

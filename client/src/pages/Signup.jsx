@@ -37,7 +37,7 @@ export default function Signup() {
             </div>
             <h1 className="text-3xl md:text-4xl font-[1000] text-white tracking-tighter uppercase text-center leading-[1]">
               APNA COLLEGE<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500 text-[14px] font-black tracking-[0.3em]">STUDENT ADMISSION</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500 text-[18px] font-black tracking-[0.2em]">BIHAR PORTAL</span>
             </h1>
           </div>
 
