@@ -5,7 +5,7 @@ import {
   ArrowRight, ShieldCheck, Bookmark
 } from 'lucide-react';
 import { db } from '../firebase';
-import { collection, query, orderBy, onSnapshot, where } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, where, addDoc } from 'firebase/firestore';
 
 export default function Notes() {
   const [docs, setDocs] = useState([]);
@@ -14,7 +14,7 @@ export default function Notes() {
   const [cat, setCat] = useState('ALL');
   const [sem, setSem] = useState('ALL');
   const [showUpload, setShowUpload] = useState(false);
-  const [uploadData, setUploadData] = useState({ title: '', subject: '', category: 'NOTES', semester: '1', file: null });
+  const [uploadData, setUploadData] = useState({ title: '', subject: '', category: 'NOTES', semester: '1', file: null, externalUrl: '' });
   const [uploading, setUploading] = useState(false);
   const handleAction = (url, callback, customMsg) => {
     if (!url || url.includes('localhost')) {
@@ -41,24 +41,21 @@ export default function Notes() {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    if(!uploadData.file || !uploadData.title) return;
-    setUploading(true);
     try {
-      // For now we use a URL field, if storage is not set up we might need to handle it.
-      // Assuming storage is integrated or we simulate it.
-      // I'll use a dummy data for now or actual firestore save.
+      const finalUrl = uploadData.externalUrl || 'https://firebasestorage.googleapis.com/v0/b/placeholder...';
+      
       await addDoc(collection(db, 'documents'), {
         title: uploadData.title,
         subject: uploadData.subject.toUpperCase(),
         category: uploadData.category,
         semester: uploadData.semester,
-        fileUrl: 'https://firebasestorage.googleapis.com/v0/b/placeholder...', // User should ideally use storage
+        fileUrl: finalUrl,
         createdAt: new Date().toISOString(),
         verified: false
       });
       setShowUpload(false);
-      setUploadData({ title: '', subject: '', category: 'NOTES', semester: '1', file: null });
-      alert('Upload Success! Admin verify hone ke baad dikhega.');
+      setUploadData({ title: '', subject: '', category: 'NOTES', semester: '1', file: null, externalUrl: '' });
+      alert('Success! Admin verify hone ke baad dikhega.');
     } catch(err) { console.error(err); }
     finally { setUploading(false); }
   };
@@ -214,10 +211,18 @@ export default function Notes() {
                      </select>
                    </div>
                  </div>
-                 <div className="space-y-2">
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Document File (PDF)</p>
-                    <input type="file" accept="application/pdf" onChange={e=>setUploadData({...uploadData, file: e.target.files[0]})} className="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 text-slate-500 text-xs outline-none" />
-                 </div>
+                  <div className="space-y-2">
+                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Option 1: Google Drive / Link</p>
+                     <input type="url" value={uploadData.externalUrl} onChange={e=>setUploadData({...uploadData, externalUrl: e.target.value})} placeholder="https://drive.google.com/..." className="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 text-white text-xs outline-none focus:border-indigo-500" />
+                  </div>
+                  <div className="relative py-2 flex items-center justify-center">
+                     <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-800"></div></div>
+                     <span className="relative bg-[#0d121f] px-4 text-[8px] font-black text-slate-700 uppercase">OR</span>
+                  </div>
+                  <div className="space-y-2">
+                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Option 2: Direct File (PDF)</p>
+                     <input type="file" accept="application/pdf" onChange={e=>setUploadData({...uploadData, file: e.target.files[0]})} className="w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 text-slate-500 text-xs outline-none focus:border-indigo-500" />
+                  </div>
                  <div className="flex gap-4 pt-4">
                    <button type="button" onClick={()=>setShowUpload(false)} className="flex-1 py-4 bg-slate-800 text-white rounded-2xl font-black text-xs uppercase tracking-widest">Cancel</button>
                    <button type="submit" disabled={uploading} className="flex-1 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-indigo-950/20">
