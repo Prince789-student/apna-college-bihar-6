@@ -37,17 +37,21 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         
-        {/* All Dashboard Routes */}
+        {/* Public Utility Routes (No Login Filter) */}
+        <Route path="/dashboard" element={<DashboardLayout />}>
+           <Route path="calculator" element={<ScientificCalc />} />
+           <Route path="cgpa" element={<BeuCgpa />} />
+        </Route>
+
+        {/* Protected Dashboard Routes */}
         <Route path="/dashboard" element={<ProtectedRoute />}>
           <Route element={<DashboardLayout />}>
             <Route index element={<StudyDashboard />} />
             <Route path="notes" element={<Notes />} />
-            <Route path="calculator" element={<ScientificCalc />} />
             <Route path="study" element={<StudyDashboard />} />
             <Route path="timer" element={<StudyDashboard />} />
             <Route path="study/group/:groupId" element={<GroupDetail />} />
             <Route path="timetable" element={<Timetable />} />
-            <Route path="cgpa" element={<BeuCgpa />} />
             
             {/* Dedicated Admin Sub-Route */}
             <Route element={<AdminRoute />}>

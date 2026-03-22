@@ -109,25 +109,38 @@ export default function DashboardLayout() {
       </nav>
 
       <div className="p-6 md:p-8 border-t border-slate-800/50">
-         {(isSidebarOpen || isMobile) ? (
-           <div className="space-y-4">
-              <div className="flex items-center gap-3 p-4 bg-[#162035] rounded-[2rem] border border-slate-700/30">
-                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center font-[1000] text-white shadow-lg shrink-0">
-                    {user?.name?.[0]?.toUpperCase()}
-                 </div>
-                 <div className="flex-1 min-w-0">
-                    <p className="text-[10px] font-black text-white uppercase tracking-tighter truncate">{user?.name || 'Scholar'}</p>
-                    <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">{user?.role || 'Verified'}</p>
-                 </div>
-              </div>
-              <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 p-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white border border-red-500/20 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all group active:scale-95">
-                <LogOut size={16} /> <span>Terminate Hub</span>
-              </button>
-           </div>
+         {user ? (
+           (isSidebarOpen || isMobile) ? (
+             <div className="space-y-4">
+                <div className="flex items-center gap-3 p-4 bg-[#162035] rounded-[2rem] border border-slate-700/30">
+                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center font-[1000] text-white shadow-lg shrink-0">
+                      {user?.name?.[0]?.toUpperCase()}
+                   </div>
+                   <div className="flex-1 min-w-0">
+                      <p className="text-[10px] font-black text-white uppercase tracking-tighter truncate">{user?.name || 'Scholar'}</p>
+                      <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">{user?.role || 'Verified'}</p>
+                   </div>
+                </div>
+                <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 p-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white border border-red-500/20 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all group active:scale-95">
+                  <LogOut size={16} /> <span>Terminate Hub</span>
+                </button>
+             </div>
+           ) : (
+             <button onClick={handleLogout} className="w-full flex items-center justify-center p-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white rounded-[1.5rem] border border-red-500/20 transition-all">
+                <LogOut size={18} />
+             </button>
+           )
          ) : (
-           <button onClick={handleLogout} className="w-full flex items-center justify-center p-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white rounded-[1.5rem] border border-red-500/20 transition-all">
-              <LogOut size={18} />
-           </button>
+           <div className="space-y-3">
+             <Link to="/login" className={`w-full flex items-center justify-center gap-3 p-4 bg-blue-600 hover:bg-blue-500 text-white rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all shadow-lg shadow-blue-900/20 ${!isSidebarOpen && !isMobile ? 'px-0' : ''}`}>
+               <User size={16} /> {(isSidebarOpen || isMobile) && <span>Student Login</span>}
+             </Link>
+             {(isSidebarOpen || isMobile) && (
+               <Link to="/signup" className="w-full flex items-center justify-center gap-3 p-4 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all">
+                 Join Community
+               </Link>
+             )}
+           </div>
          )}
       </div>
     </>

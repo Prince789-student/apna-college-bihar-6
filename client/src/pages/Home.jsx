@@ -90,20 +90,20 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
            {[
-             { title: "Smart Notes Hub", ic: <BookOpen className="text-blue-500"/>, d: "Access handwritten & verified notes for all BEU semesters in one tap." },
-             { title: "Bihar Grade Engine", ic: <Calculator className="text-emerald-500"/>, d: "Accurate BEU SGPA/CGPA calculators with Hostinger-level speed." },
-             { title: "Deep Focus Protocol", ic: <Timer className="text-orange-500"/>, d: "Integrated Pomodoro & Stopwatch to track your daily study grind." },
-             { title: "Scholars Network", ic: <Users className="text-purple-500"/>, d: "Join peer groups and discuss previous year question papers." },
-             { title: "Secure Authentication", ic: <Shield className="text-indigo-500"/>, d: "Military grade Google auth to keep your data protected." },
-             { title: "Mobile Optimized", ic: <Globe className="text-pink-500"/>, d: "Seamless experience across smartphones, tablets and laptops." }
+             { title: "Smart Notes Hub", ic: <BookOpen className="text-blue-500"/>, d: "Access handwritten & verified notes for all BEU semesters in one tap.", link: "/dashboard/notes" },
+             { title: "Bihar Grade Engine", ic: <Calculator className="text-emerald-500"/>, d: "Accurate BEU SGPA/CGPA calculators with Hostinger-level speed.", link: "/dashboard/cgpa" },
+             { title: "Deep Focus Protocol", ic: <Timer className="text-orange-500"/>, d: "Integrated Pomodoro & Stopwatch to track your daily study grind.", link: "/dashboard/study" },
+             { title: "Scholars Network", ic: <Users className="text-purple-500"/>, d: "Join peer groups and discuss previous year question papers.", link: "/dashboard/study" },
+             { title: "Secure Authentication", ic: <Shield className="text-indigo-500"/>, d: "Military grade Google auth to keep your data protected.", link: "/login" },
+             { title: "Scientific Edge", ic: <Globe className="text-pink-500"/>, d: "Professional grade calculators for complex engineering problems.", link: "/dashboard/calculator" }
            ].map((f, i) => (
-             <div key={i} className="group p-8 bg-[#0d121f] border border-slate-800/80 rounded-[3rem] hover:border-blue-500/50 hover:bg-[#162035] transition-all duration-500 hover:-translate-y-2">
+             <Link key={i} to={f.link} className="group p-8 bg-[#0d121f] border border-slate-800/80 rounded-[3rem] hover:border-blue-500/50 hover:bg-[#162035] transition-all duration-500 hover:-translate-y-2 text-left">
                 <div className="w-14 h-14 bg-slate-900 rounded-2xl flex items-center justify-center mb-8 border border-slate-800 shadow-inner group-hover:scale-110 transition-transform">
                   {f.ic}
                 </div>
                 <h3 className="text-xl font-black text-white uppercase mb-4 tracking-tighter">{f.title}</h3>
                 <p className="text-slate-500 font-medium leading-relaxed text-sm">{f.d}</p>
-             </div>
+             </Link>
            ))}
         </div>
       </section>
