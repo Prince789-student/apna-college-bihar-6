@@ -13,6 +13,7 @@ import {
   CheckCircle2, Circle, Save, Shield, Zap, Award, Timer
 } from 'lucide-react';
 import PremiumAds from '../components/PremiumAds';
+import { enableAppBlocker, startFocusSession, stopFocusSession, getInstalledApps } from '../services/AppBlocker';
 
 // ─── Helper ──────────────────────────────────────────────
 function formatDuration(sec) {
@@ -94,8 +95,12 @@ export default function StudyDashboard() {
   const [scheduleSaved, setScheduleSaved] = useState(false);
 
   // ── Edit Task ─────────────────────────────────────────
-  const [editingTask, setEditingTask] = useState(null);
   const [editValue, setEditValue] = useState('');
+
+  // ── Hardcore Focus ────────────────────────────────────
+  const [installedApps, setInstalledApps] = useState([]);
+  const [allowedApps, setAllowedApps] = useState([]); // List of package names
+  const [showAppPicker, setShowAppPicker] = useState(false);
 
   useEffect(() => { if (user) fetchAll(); }, [user]);
 
@@ -122,6 +127,18 @@ export default function StudyDashboard() {
     }
     return () => clearInterval(timerRef.current);
   }, [timerActive, timerMode]);
+
+  const loadApps = async () => {
+    const apps = await getInstalledApps();
+    setInstalledApps(apps);
+    setShowAppPicker(true);
+  };
+
+  const toggleAppSelection = (pkg) => {
+    if (allowedApps.includes(pkg)) setAllowedApps(allowedApps.filter(a => a !== pkg));
+    else if (allowedApps.length < 5) setAllowedApps([...allowedApps, pkg]);
+    else alert('Sirf 5 apps allow kar sakte hain!');
+  };
 
   const completeCountdown = () => {
     const fullBlock = customMinutes * 60;
@@ -168,6 +185,9 @@ export default function StudyDashboard() {
         lastStudyDate: today,
         totalStudyTime: (userData?.totalStudyTime || 0) + timeToSave
       });
+
+      // Disable blocker when session is saved/finished
+      await enableAppBlocker(false);
 
       setTimerActive(false); 
       setTimerTime(timerMode === 'STOPWATCH' ? 0 : customMinutes * 60);
@@ -352,7 +372,14 @@ export default function StudyDashboard() {
                       </div>
                     )}
                     <div className="flex gap-3 w-full">
-                      <button onClick={() => setTimerActive(true)} 
+                      <button onClick={() => { 
+                          setTimerActive(true); 
+                          if(timerMode === 'COUNTDOWN'){
+                             startFocusSession(customMinutes, allowedApps);
+                          } else {
+                             enableAppBlocker(true);
+                          }
+                        }} 
                         className="flex-1 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-3xl font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">
                         {timerTime > 0 && ((timerMode==='COUNTDOWN' && timerTime !== (customMinutes*60)) || (timerMode==='STOPWATCH')) ? 'Resume' : 'Start Hub'} <ArrowRight size={18}/>
                       </button>
@@ -364,7 +391,7 @@ export default function StudyDashboard() {
                 ) : (
                   <div className="flex flex-col items-center gap-4 w-full max-w-sm">
                     <div className="flex gap-4 w-full">
-                      <button onClick={() => setTimerActive(false)} 
+                      <button onClick={() => { setTimerActive(false); enableAppBlocker(false); }} 
                         className="flex-1 py-5 bg-orange-600 hover:bg-orange-500 text-white rounded-3xl font-[1000] text-xs uppercase tracking-widest transition-all shadow-xl">
                         Pause
                       </button>
@@ -664,6 +691,31 @@ export default function StudyDashboard() {
             <p className="text-[10px] text-slate-500 mb-8">6-character group code dalo</p>
             <input maxLength={6} placeholder="ABC123" className="w-full bg-[#161c2c] border border-slate-700/50 rounded-2xl p-4 text-white font-black uppercase text-center tracking-[0.5em] text-xl mb-6 outline-none focus:border-blue-500" value={joinCode} onChange={e=>setJoinCode(e.target.value.toUpperCase())} onKeyDown={e=>e.key==='Enter'&&joinGroup()} autoFocus/>
             <div className="flex gap-3"><button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-800" onClick={()=>{setShowJoinGroup(false);setJoinCode('');}}>Cancel</button><button disabled={groupLoading||joinCode.length<4} className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 p-4 rounded-xl font-black text-[10px] uppercase text-white" onClick={joinGroup}>{groupLoading?'Joining...':'Join Group'}</button></div>
+          </div>
+        </div>
+      )}
+
+      {showAppPicker && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-[200] flex items-center justify-center p-4">
+          <div className="bg-[#0d121f] border border-slate-800 p-8 rounded-[3rem] w-full max-w-md max-h-[80vh] overflow-hidden flex flex-col">
+            <h2 className="text-xl font-black uppercase mb-1">Select Allowed Apps</h2>
+            <p className="text-[10px] text-slate-500 mb-6 uppercase tracking-widest">Studying ke waqt inke bina kaam nahi chalega (Max 5)</p>
+            
+            <div className="flex-1 overflow-y-auto pr-2 space-y-2 mb-6 scrollbar-hide">
+              {installedApps.length > 0 ? (
+                installedApps.map(app => (
+                  <div key={app.packageName} onClick={() => toggleAppSelection(app.packageName)}
+                    className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${allowedApps.includes(app.packageName)?'bg-blue-600/20 border-blue-500':'bg-slate-900/50 border-slate-800/50 opacity-70'}`}>
+                    <span className="text-sm font-bold text-white">{app.name}</span>
+                    <div className={`w-5 h-5 rounded-full border-2 ${allowedApps.includes(app.packageName)?'bg-blue-600 border-blue-600':'border-slate-800'}`}></div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-center text-slate-600 text-[10px] py-10 uppercase">No apps found. Try building as APK first.</p>
+              )}
+            </div>
+            
+            <button onClick={() => setShowAppPicker(false)} className="w-full py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl">Ho Gaya!</button>
           </div>
         </div>
       )}
