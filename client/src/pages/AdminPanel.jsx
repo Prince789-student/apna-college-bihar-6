@@ -23,7 +23,7 @@ export default function AdminPanel() {
   const [anns, setAnns] = useState([]);
   const [ads, setAds] = useState([]);
   const [newAnn, setNewAnn] = useState({ title: '', content: '', type: 'INFO' });
-  const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '' });
+  const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '', useAdSense: false });
   const [msg, setMsg] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -204,12 +204,13 @@ export default function AdminPanel() {
         link: adForm.link,
         imageUrl: imageUrl || "",
         type: adForm.type,
+        useAdSense: adForm.useAdSense,
         active: true,
         createdAt: serverTimestamp()
       });
       
       flash('Campaign Deployment Victory! 🚀✨');
-      setAdForm({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '' });
+      setAdForm({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '', useAdSense: false });
     } catch (err) {
       if (timeoutId) clearTimeout(timeoutId);
       console.error("AD DEPLOY ERROR:", err);
@@ -541,6 +542,14 @@ export default function AdminPanel() {
 
                 <input value={adForm.externalUrl} onChange={e=>setAdForm({...adForm, externalUrl: e.target.value})} placeholder="Direct Image URL (Option 2)" className="w-full bg-slate-900 p-4 rounded-2xl text-[11px] font-bold text-emerald-500 outline-none border-2 border-transparent focus:border-emerald-500 placeholder:text-slate-700 shadow-inner" />
 
+                <div className="flex items-center gap-4 bg-slate-900/40 p-5 rounded-3xl border border-slate-800/50">
+                   <div className="flex-1">
+                      <p className="text-[10px] font-[1000] text-amber-500 uppercase tracking-widest">Google AdSense</p>
+                      <p className="text-[8px] font-bold text-slate-500 uppercase">Override with Google Ads</p>
+                   </div>
+                   <input type="checkbox" checked={adForm.useAdSense} onChange={e=>setAdForm({...adForm, useAdSense: e.target.checked})} className="w-6 h-6 rounded-lg bg-slate-800 accent-amber-500 border-none outline-none" />
+                </div>
+
                 <select value={adForm.type} onChange={e=>setAdForm({...adForm, type: e.target.value})} className="w-full bg-slate-900 p-4 rounded-2xl text-[12px] font-bold text-white outline-none">
                    <option value="BANNER">DASHBOARD BANNER (TOP)</option>
                    <option value="SIDEBAR">SIDEBAR AD (SQUARE)</option>
@@ -567,6 +576,7 @@ export default function AdminPanel() {
                           <h3 className="text-sm font-black text-white uppercase tracking-tight truncate max-w-[200px]">{ad.title}</h3>
                         </div>
                         <div className="flex gap-2">
+                           {ad.useAdSense && <span className="bg-amber-600/10 text-amber-500 text-[8px] font-black px-2 py-1 rounded-full border border-amber-500/20 uppercase">Google Mode</span>}
                            <button onClick={()=>toggleAd(ad.id, ad.active)} className={`p-2 rounded-xl transition-all ${ad.active?'bg-emerald-500/10 text-emerald-500':'bg-red-500/10 text-red-500'}`}>
                              {ad.active ? <Eye size={16}/> : <Ban size={16}/>}
                            </button>

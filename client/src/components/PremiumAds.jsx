@@ -50,9 +50,34 @@ export default function PremiumAds({ type = 'BANNER' }) {
     return unsub;
   }, [type]);
 
+  const current = ad || FALLBACK_ADS[type];
+
+  // Force Render AdSense Slot if configured
+  useEffect(() => {
+     if (current?.useAdSense) {
+        try {
+           (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (e) {
+           console.error("AdSense Error:", e);
+        }
+     }
+  }, [current?.useAdSense]);
+
   if (loading) return null;
 
-  const current = ad || FALLBACK_ADS[type];
+  if (current?.useAdSense) {
+     return (
+        <div className={`w-full overflow-hidden flex justify-center py-4`}>
+           {/* AdSense Standard Placeholder */}
+           <ins className="adsbygoogle"
+                style={{ display: 'block' }}
+                data-ad-client="ca-pub-818059891079"
+                data-ad-slot={type === 'BANNER' ? '1234567890' : '0987654321'} // User will set real slot ID
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+        </div>
+     );
+  }
 
   // Render logic based on type
   if (type === 'SIDEBAR') {
