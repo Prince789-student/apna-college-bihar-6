@@ -175,19 +175,31 @@ export default function AdminPanel() {
 
   const handleAdUpload = async (e) => {
     e.preventDefault();
-    if (!adForm.title || !adForm.link) { flash('Title & Link required', 'err'); return; }
+    if (!adForm.title || !adForm.link) { flash('Campaign Name & Link are required!', 'err'); return; }
     
     setUploading(true);
+    let timeoutId;
+
     try {
       let imageUrl = "";
+      
       if (adForm.file) {
+        // Safety Timeout for Storage Upload
+        timeoutId = setTimeout(() => {
+          setUploading(false);
+          flash('Upload taking too long! ⏳ Check internet or refresh page.', 'err');
+        }, 15000);
+
         const storageRef = ref(storage, `ads/${Date.now()}_${adForm.file.name.replace(/\s+/g, '_')}`);
         const snapshot = await uploadBytes(storageRef, adForm.file);
+        
+        // Success
+        if (timeoutId) clearTimeout(timeoutId);
         imageUrl = await getDownloadURL(snapshot.ref);
       }
 
       await addDoc(collection(db, 'ads'), {
-        title: adForm.title,
+        title: adForm.title.toUpperCase(),
         link: adForm.link,
         imageUrl,
         type: adForm.type,
@@ -195,11 +207,14 @@ export default function AdminPanel() {
         createdAt: serverTimestamp()
       });
       
-      flash('Ad Deployment Successful! 🚀');
+      flash('Campaign Protocol Dispatched! 🚀✨');
       setAdForm({ title: '', link: '', file: null, type: 'BANNER' });
     } catch (err) {
-      flash('Ad Upload failed: ' + err.message, 'err');
+      if (timeoutId) clearTimeout(timeoutId);
+      console.error("AD DEPLOY ERROR:", err);
+      flash('Deployment Failure: ' + (err.code || err.message), 'err');
     } finally {
+      if (timeoutId) clearTimeout(timeoutId);
       setUploading(false);
     }
   };
