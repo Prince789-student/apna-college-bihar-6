@@ -32,8 +32,8 @@ export default function Signup() {
         <div className="relative">
           {/* Brand & Greeting */}
           <div className="flex flex-col items-center mb-10">
-            <div className="p-4 bg-gradient-to-br from-blue-600 to-indigo-800 rounded-[1.8rem] shadow-2xl mb-5">
-              <BookOpen className="text-white w-10 h-10" />
+            <div className="mb-5">
+              <img src="/logo.jpg" alt="Logo" className="w-16 h-16 rounded-2xl mx-auto shadow-2xl" />
             </div>
             <h1 className="text-3xl md:text-4xl font-[1000] text-white tracking-tighter uppercase text-center leading-[1]">
               APNA COLLEGE<br />

@@ -74,10 +74,10 @@ export default function DashboardLayout() {
     <>
       <div className={`p-8 md:p-10 flex items-center justify-between ${!isSidebarOpen && !isMobile ? 'justify-center' : ''}`}>
         <div className={`flex items-center gap-4 transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
-           <div className="p-3 bg-blue-600 rounded-2xl shadow-lg shadow-blue-500/20 shrink-0"><GraduationCap size={24} className="text-white" /></div>
+           <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
            <div className="min-w-[120px]">
-             <span className="text-xl font-[1000] tracking-tighter uppercase text-white block leading-none">ACB PORTAL</span>
-             <span className="text-[8px] text-slate-500 font-black uppercase tracking-[0.4em] mt-2 block">Premium Edu Hub</span>
+             <span className="text-xl font-[1000] tracking-tighter uppercase text-white block leading-none">APNA COLLEGE BIHAR</span>
+             <span className="text-[7px] text-slate-500 font-black uppercase tracking-[0.4em] mt-2 block">Student Official</span>
            </div>
         </div>
         {!isMobile && (
@@ -170,8 +170,8 @@ export default function DashboardLayout() {
         {/* Mobile Navbar Header */}
         <div className="md:hidden flex items-center justify-between p-4 bg-[#0d121f] border-b border-slate-800/80 sticky top-0 z-30">
           <div className="flex items-center gap-3">
-             <div className="p-2 bg-blue-600 rounded-lg shadow-lg shadow-blue-500/20"><GraduationCap size={18} className="text-white" /></div>
-             <span className="text-sm font-[1000] tracking-tighter uppercase text-white leading-none">ACB PORTAL</span>
+             <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
+             <span className="text-xs font-[1000] tracking-tighter uppercase text-white leading-none">APNA COLLEGE BIHAR</span>
           </div>
           <button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-900/50 border border-slate-800 rounded-xl">
              <Menu size={20} />

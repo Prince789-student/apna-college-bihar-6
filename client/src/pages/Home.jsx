@@ -12,9 +12,12 @@ export default function Home() {
       
       {/* ── Navbar ── */}
       <nav className="fixed top-0 left-0 w-full z-[100] bg-[#02040a]/80 backdrop-blur-xl border-b border-slate-800/50 px-6 md:px-16 py-5 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-           <div className="p-2 bg-blue-600 rounded-xl shadow-lg shadow-blue-500/20"><GraduationCap size={22} className="text-white" /></div>
-           <span className="text-xl font-[1000] tracking-tighter uppercase text-white leading-none">ACB PORTAL</span>
+        <div className="flex items-center gap-3 group">
+           <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
+           <div className="hidden sm:block">
+             <span className="text-xl font-[1000] tracking-tighter uppercase text-white block leading-none">APNA COLLEGE BIHAR</span>
+             <span className="text-[7px] text-blue-500 font-bold uppercase tracking-[0.5em] mt-1 block">Official Student Portal</span>
+           </div>
         </div>
         <div className="hidden md:flex items-center gap-10">
            <a href="#features" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-colors">Features</a>
@@ -126,9 +129,12 @@ export default function Home() {
       <footer className="py-20 border-t border-slate-800/50 px-6 md:px-16 bg-[#02040a]">
          <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="col-span-1 md:col-span-2 space-y-6">
-               <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-600 rounded-xl shadow-lg shadow-blue-500/20"><GraduationCap size={22} className="text-white" /></div>
-                  <span className="text-xl font-[1000] tracking-tighter uppercase text-white leading-none">ACB PORTAL</span>
+               <div className="flex items-center gap-3 group">
+                  <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
+                  <div>
+                    <span className="text-xl font-[1000] tracking-tighter uppercase text-white block leading-none">APNA COLLEGE BIHAR</span>
+                    <span className="text-[7px] text-blue-500 font-bold uppercase tracking-[0.5em] mt-1 block">Bihar's Study Hub</span>
+                  </div>
                </div>
                <p className="text-slate-500 font-bold text-xs uppercase tracking-widest leading-loose max-w-sm">Bihar's first open-source academic portal dedicated to Bihar Engineering University students.</p>
                <div className="flex gap-4">
