@@ -2,6 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <script>
+       // Ultimate Cache-Blocker: Purge SW and LocalStorage early
+       if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(regs => {
+             for (let reg of regs) { if (reg.active) reg.unregister(); }
+          });
+       }
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0d121f" />
     <meta name="google-site-verification" content="RYqt3qpPlTqKuw2uXw9hLSZNDCLA3iGIzzv_JLOQEVs" />
@@ -67,20 +78,12 @@
     </script>
 </head>
 <body class="dark">
-    <script>
-       // Aggressive Cache Purge for Branding Update
-       if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.getRegistrations().then(regs => {
-             for (let reg of regs) reg.unregister();
-          });
-       }
-    </script>
     <div id="root"></div>
     <script>
        // Global Fail-Safe Error Handler
        window.addEventListener('error', (e) => {
           if (e.target && e.target.tagName === 'SCRIPT') {
-             console.warn("Script failed to load, triggering deep reload...");
+             console.warn("Script loading failure - Deep Reloading...");
              window.location.reload(true);
           }
        }, true);
