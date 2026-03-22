@@ -48,12 +48,7 @@ export default function Signup() {
             </div>
           )}
 
-          <div className="space-y-6">
-            <div className="bg-blue-600/10 border border-blue-500/20 rounded-[2rem] p-8 text-center">
-              <p className="text-blue-100 font-bold text-sm tracking-tight mb-2">Fast & Secure Onboarding</p>
-              <p className="text-slate-400 text-xs font-medium">We use Google Authentication to verify all students instantly. No passwords or OTPs required.</p>
-            </div>
-
+          <div className="space-y-6 pt-6">
             <button onClick={handleGoogleSignup} disabled={loading} className="w-full bg-white text-slate-950 font-black py-5 rounded-[1.8rem] shadow-xl hover:bg-slate-100 transition-all flex items-center justify-center space-x-4 active:scale-95 text-xs uppercase tracking-widest mt-6 border border-slate-200">
               <Chrome className="text-blue-600 w-6 h-6" />
               <span>{loading ? "Connecting..." : "SIGN UP WITH GOOGLE"}</span>
