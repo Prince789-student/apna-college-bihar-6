@@ -1,12 +1,5 @@
 {
   "appId": "com.apnacollegebihar.online",
   "appName": "Apna College Bihar",
-  "webDir": "dist",
-  "android": {
-    "allowMixedContent": true
-  },
-  "server": {
-    "androidScheme": "https",
-    "hostname": "apna-college-bihar.web.app"
-  }
+  "webDir": "dist"
 }
