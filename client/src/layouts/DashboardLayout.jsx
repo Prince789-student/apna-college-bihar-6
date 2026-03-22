@@ -196,7 +196,7 @@ export default function DashboardLayout() {
            <footer className="mt-20 py-10 border-t border-slate-800/30 flex flex-col md:flex-row items-center justify-between gap-6 opacity-60 hover:opacity-100 transition-opacity">
               <div className="flex flex-col items-center md:items-start gap-1">
                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Apna College Bihar</p>
-                <p className="text-[8px] font-bold uppercase tracking-widest text-slate-500">© 2026 Official Student Portal</p>
+                <p className="text-[8px] font-bold uppercase tracking-widest text-slate-500">© 2026 Official Website</p>
               </div>
               <div className="flex flex-wrap items-center justify-center gap-6">
                 <Link to="/about" className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-400 transition-colors">About Us</Link>

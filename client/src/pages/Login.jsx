@@ -55,7 +55,7 @@ export default function Login() {
             </div>
             <h1 className="text-3xl md:text-4xl font-[1000] text-white tracking-tighter uppercase text-center leading-[1]">
               APNA COLLEGE<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-200 to-amber-500">BIHAR PORTAL</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-200 to-amber-500">BIHAR</span>
             </h1>
           </div>
 
