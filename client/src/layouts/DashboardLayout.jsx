@@ -215,16 +215,13 @@ export default function DashboardLayout() {
                   <Link to="/contact" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-emerald-400 transition-colors">Contact Us</Link>
                   <Link to="/privacy" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-orange-400 transition-colors">Privacy Policy</Link>
                 </div>
-                <div className="flex items-center gap-4">
-                   <a href="https://t.me/apnacollegebihar" target="_blank" rel="noopener noreferrer" className="p-2 bg-blue-600/10 text-blue-500 hover:bg-blue-600 hover:text-slate-900 rounded-lg transition-all border border-blue-500/10">
-                     <Send size={14} />
-                   </a>
-                   <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="p-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-slate-900 rounded-lg transition-all border border-red-500/10">
-                     <Youtube size={14} />
-                   </a>
-                   <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                   <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-600">All Systems Operational</span>
-                </div>
+                 <div className="flex items-center gap-4">
+                    <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="p-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-slate-900 rounded-lg transition-all border border-red-500/10">
+                      <Youtube size={14} />
+                    </a>
+                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                    <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-600">All Systems Operational</span>
+                 </div>
               </footer>
             )}
         </div>

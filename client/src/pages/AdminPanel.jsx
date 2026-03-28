@@ -522,7 +522,7 @@ export default function AdminPanel() {
                 <h2 className="text-xl font-[1000] text-slate-900 uppercase tracking-tighter">New Campaign</h2>
               </div>
               <form onSubmit={handleAdUpload} className="space-y-4">
-                <input value={adForm.title} onChange={e=>setAdForm({...adForm, title: e.target.value})} placeholder="Campaign Name (e.g. JOIN TELEGRAM)" className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none border-2 border-transparent focus:border-emerald-500" />
+                <input value={adForm.title} onChange={e=>setAdForm({...adForm, title: e.target.value})} placeholder="Campaign Name (e.g. JOIN COMMUNITY)" className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none border-2 border-transparent focus:border-emerald-500" />
                 <input value={adForm.link} onChange={e=>setAdForm({...adForm, link: e.target.value})} placeholder="Target Action URL" className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-blue-400 outline-none border-2 border-transparent focus:border-emerald-500" />
                 
                 <div className="p-4 bg-slate-100/50 rounded-2xl border border-slate-300/20 text-center">

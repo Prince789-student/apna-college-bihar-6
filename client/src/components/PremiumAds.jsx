@@ -5,11 +5,11 @@ import { ExternalLink, Info, Bell, Youtube, Send } from 'lucide-react';
 
 const FALLBACK_ADS = {
   BANNER: {
-    title: "Join Our Official Telegram",
-    desc: "Get instant updates for notes, PYQs, and college schedules directly on your phone.",
-    link: "https://t.me/apnacollegebihar",
+    title: "Access Study Resources",
+    desc: "Get all your engineering notes, PYQs, and college schedules in one place.",
+    link: "/dashboard/notes",
     type: "BANNER",
-    icon: <Send className="text-blue-400" size={32} />,
+    icon: <BookOpen className="text-blue-400" size={32} />,
     col: "from-blue-600/20 to-indigo-900/40",
     border: "border-blue-500/30"
   },
