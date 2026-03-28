@@ -35,6 +35,7 @@ export function AuthProvider({ children }) {
       
       // FOUNDER AUTO-PROMOTION LOGIC
       const isFounder = u.email === 'prince86944@gmail.com';
+      const needsPhone = !user?.phone || user?.phone?.trim() === "";
       
       if (userDoc.exists()) {
         const userData = userDoc.data();
@@ -86,15 +87,18 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  // 3. Google Signup/Login (with Mobile Redirect support)
+  // 3. Google Signup/Login (Mobile Stable)
   async function googleLogin() {
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    if (isMobile) {
+    try {
+      // Revert to PopUp as primary for stability; only if popup fails or is specifically rejected should we fallback.
+      const res = await signInWithPopup(auth, googleProvider);
+      await syncProfile(res.user);
+      return res.user;
+    } catch (err) {
+      console.warn("Popup blocked or failed, attempting redirect...", err);
+      // Fallback for browsers that strictly block popups (WebViews etc)
       return signInWithRedirect(auth, googleProvider);
     }
-    const res = await signInWithPopup(auth, googleProvider);
-    await syncProfile(res.user);
-    return res.user;
   }
 
   // 4. Phone OTP Setup

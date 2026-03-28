@@ -291,7 +291,7 @@ export default function StudyDashboard() {
     await addDoc(collection(db, 'Tasks'), { userId: user.uid, text: t, subject: s, done: false, date: todayStr, createdAt: new Date().toISOString() });
     setNewTask(''); setTaskSub(''); fetchAll();
   };
-  const toggleTask = async (task) => { await updateDoc(doc(db, 'Tasks', task.id), { done: !task.done }); setTasks(tasks.map(t => t.id === task.id ? { ...t, done: !t.done } : t)); };
+  const toggleTask = async (task) => { await updateDoc(doc(db, 'Tasks', task.id), { done: !task.done }); setTasks(tasks.map(t => t.id === task.id ? { ...t, done: !task.done } : t)); };
   const delTask = async (id) => { await deleteDoc(doc(db, 'Tasks', id)); setTasks(tasks.filter(t => t.id !== id)); };
 
   const updateTask = async () => {
@@ -314,410 +314,65 @@ export default function StudyDashboard() {
   if (loading) return <div className="flex justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 pb-20">
+    <div className="max-w-5xl mx-auto space-y-10 pb-20 pt-10 px-4 md:px-0">
 
-      {/* ── Header: Streak & Start Study ── */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 flex items-center justify-between bg-white p-5 rounded-[2rem] border border-slate-200/50">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-orange-500/10 rounded-2xl flex items-center justify-center border border-orange-500/20 shrink-0">
-              <Flame size={24} className="text-orange-500" fill="currentColor" />
-            </div>
-            <div>
-              <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Daily Streak</p>
-              <p className="text-2xl font-black text-slate-900 leading-none">{userData?.streak || 0} <span className="text-xs font-bold text-slate-500">days</span></p>
-              <p className="text-[9px] mt-0.5 text-slate-600">
-                {todaySec >= 7200
-                  ? '✅ 2 hr complete — streak safe!'
-                  : `⚠️ ${Math.floor((7200 - todaySec) / 60)} min aur padho streak ke liye`}
+      {/* ── Main High Impact YouTube Portal ── */}
+      <div className="relative group overflow-hidden bg-gradient-to-br from-red-600 to-amber-900 md:p-20 p-10 rounded-[4rem] shadow-[0_40px_100px_rgba(220,38,38,0.2)] animate-in fade-in zoom-in-95 duration-1000">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full blur-[120px] -mr-40 -mt-40"></div>
+        
+        <div className="relative z-10 flex flex-col items-center text-center space-y-12">
+           <div className="w-40 h-40 bg-white shadow-2xl rounded-[3.5rem] flex items-center justify-center p-10 group-hover:scale-110 transition-transform duration-700">
+              <Youtube size={80} className="text-red-600 fill-red-600" />
+           </div>
+
+           <div className="space-y-6">
+              <div className="inline-flex items-center gap-3 px-6 py-2.5 bg-white/20 backdrop-blur-md rounded-full border border-white/30 text-white">
+                <span className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_15px_#10b981]"></span>
+                <span className="text-[12px] font-black uppercase tracking-[0.5em]">Live Academic Feed</span>
+              </div>
+              
+              <h1 className="text-5xl md:text-8xl font-[1000] text-white tracking-tighter uppercase leading-[0.8] drop-shadow-2xl">
+                APNE <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-white">STUDY HUB</span>
+              </h1>
+              
+              <p className="text-white/60 text-xs md:text-base font-bold uppercase tracking-[0.4em] max-w-2xl mx-auto">
+                Transforming Bihar Engineering Education on YouTube · Free Notes & Session Updates
               </p>
-            </div>
-          </div>
-          <button onClick={() => setShowGoalModal(true)} className="p-2.5 bg-slate-800/50 rounded-xl text-slate-500 hover:text-slate-900 transition-colors" title="Goals"><Settings size={18} /></button>
-        </div>
-        <button onClick={() => setTab('timer')} className="flex-1 sm:max-w-[220px] bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black uppercase text-sm tracking-widest shadow-lg shadow-blue-900/30 flex items-center justify-center gap-3 active:scale-[0.98] transition-all p-5 group">
-          <Clock size={20} className="group-hover:rotate-12 transition-transform" />
-          <span>▶ Start Study</span>
-        </button>
-      </div>
+           </div>
 
-      {/* ── Tab Navigation ─────────────────────────────── */}
-      <div className="flex gap-2 bg-white/60 backdrop-blur-md p-2 rounded-[2rem] border border-slate-200 shadow-sm overflow-x-auto no-scrollbar">
-        {TABS.map(t => {
-          if (t.id === 'admin' && user?.email !== 'prince86944@gmail.com' && user?.role !== 'SUPER_ADMIN') return null;
-          const isActive = tab === t.id;
-          return (
-            <button 
-              key={t.id} 
-              onClick={() => t.id === 'admin' ? navigate('/dashboard/admin') : setTab(t.id)} 
-              className={`flex-1 min-w-fit flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border-2 ${isActive ? 'bg-slate-900 text-white border-slate-900 shadow-xl' : 'bg-white text-slate-600 border-transparent hover:border-slate-200 hover:text-slate-900 shadow-sm'}`}
-            >
-              {t.icon} {t.label}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* ── YouTube Broadcast ── */}
-      <div className="relative group overflow-hidden bg-gradient-to-br from-red-600 to-rose-700 p-10 rounded-[4rem] shadow-2xl shadow-red-900/20 active:scale-[0.99] transition-all border border-red-500/30">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-[100px] -mr-32 -mt-32"></div>
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
-          <div className="flex items-center gap-8 flex-col md:flex-row text-center md:text-left">
-            <div className="w-24 h-24 bg-white/20 backdrop-blur-2xl border border-white/30 rounded-[3rem] flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-500">
-              <Youtube size={48} className="text-white fill-white" />
-            </div>
-            <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full">
-                <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-                <span className="text-[10px] font-[1000] uppercase tracking-[0.4em] text-white">Official Broadcast</span>
-              </div>
-              <h2 className="text-4xl md:text-5xl font-[1000] text-white tracking-tighter uppercase leading-[0.8] mb-1">Appne H8P</h2>
-              <p className="text-[11px] text-white/80 font-bold uppercase tracking-[0.3em] max-w-lg leading-relaxed italic">"Transforming Bihar Engineering Education on YouTube"</p>
-            </div>
-          </div>
-          <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" 
-            className="px-12 py-6 bg-white text-red-600 rounded-[2.2rem] font-[1000] text-[12px] uppercase tracking-widest shadow-2xl hover:bg-slate-100 transition-all flex items-center gap-4 active:scale-95 group/btn">
-            Subscribed Now <ArrowRight size={18} className="group-hover/btn:translate-x-2 transition-transform" />
-          </a>
+           <div className="flex flex-col sm:flex-row gap-6 w-full max-w-lg">
+             <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" 
+                className="flex-1 px-12 py-7 bg-white text-red-600 rounded-[2.5rem] font-[1000] text-sm uppercase tracking-widest shadow-2xl hover:bg-slate-50 transition-all flex items-center justify-center gap-4 active:scale-95 group/btn">
+                Watch Broadcast <Youtube size={24} className="fill-red-600" />
+             </a>
+             <button onClick={() => navigate('/dashboard/notes')}
+                className="flex-1 px-12 py-7 bg-black/40 backdrop-blur-xl border border-white/20 text-white rounded-[2.5rem] font-[1000] text-sm uppercase tracking-widest hover:bg-white/20 transition-all active:scale-95">
+                Notes Section
+             </button>
+           </div>
         </div>
       </div>
 
-      <PremiumAds type="BANNER" />
-
-      {/* TAB: FOCUS TIMER */}
-      {tab === 'timer' && (
-        <div className="space-y-6 animate-in fade-in duration-300">
-          <div className="bg-white p-10 md:p-16 rounded-[4rem] border border-slate-200/80 shadow-2xl relative overflow-hidden flex flex-col items-center">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-transparent pointer-events-none"></div>
-
-            <div className="flex flex-col items-center gap-4 mb-8">
-              <div className="flex gap-2 p-1.5 bg-slate-100/80 rounded-2xl border border-slate-200/50">
-                {['COUNTDOWN', 'STOPWATCH'].map(m => (
-                  <button key={m} onClick={() => !timerActive && {
-                    COUNTDOWN: () => { setTimerMode('COUNTDOWN'); setTimerTime(customMinutes * 60); },
-                    STOPWATCH: () => { setTimerMode('STOPWATCH'); setTimerTime(0); }
-                  }[m]()}
-                    className={`px-4 py-1.5 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all ${timerMode === m ? 'bg-blue-600 text-slate-900 shadow-lg shadow-blue-900/20' : 'text-slate-500 hover:text-slate-900'}`}>
-                    {m}
-                  </button>
-                ))}
-              </div>
-              <div className="flex items-center gap-3 px-6 py-2 bg-slate-100/50 rounded-full border border-slate-200/50">
-                <Target size={14} className="text-orange-400" />
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Current Goal: <span className="text-slate-900">{timerSubject}</span></p>
-              </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-10">
+         <div className="bg-white p-10 rounded-[3.5rem] border border-slate-200/80 shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/5 rounded-full blur-3xl"></div>
+            <div className="relative z-10 space-y-6">
+               <div className="p-5 bg-red-600/10 text-red-600 rounded-3xl w-fit"><Youtube size={32} /></div>
+               <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">Daily Lecture Feed</h3>
+               <p className="text-[11px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">Catch up with the latest recorded sessions from Appne H8P Hub.</p>
+               <a href="https://youtube.com/@appne-h8p" target="_blank" className="inline-flex items-center gap-2 text-red-600 font-black text-[10px] uppercase tracking-widest group-hover:gap-4 transition-all">Explore Playlist <ArrowRight size={14} /></a>
             </div>
-
-            {!isBlockerEnabled && window.Capacitor && (
-              <div className="max-w-sm mx-auto bg-orange-500/10 border border-orange-500/20 p-6 rounded-[2.5rem] mb-10 flex flex-col items-center text-center gap-5 animate-in slide-in-from-top-4 duration-500">
-                <div className="w-14 h-14 bg-orange-600/20 text-orange-500 rounded-3xl flex items-center justify-center animate-bounce shadow-2xl"><Shield size={24} /></div>
-                <div className="space-y-1">
-                  <h3 className="text-xs font-[1000] text-slate-900 uppercase tracking-[0.3em]">Iron Focus Locked</h3>
-                  <p className="text-[9px] text-orange-200/50 font-bold uppercase leading-relaxed tracking-wider">Accessibility permission is needed to block distracting apps.</p>
-                </div>
-                <button onClick={openSettings} className="group px-10 py-4 bg-orange-600 hover:bg-orange-500 text-white rounded-[1.8rem] font-black text-[10px] uppercase tracking-[0.2em] shadow-2xl active:scale-95 transition-all flex items-center gap-2">
-                  ACTIVATE NOW <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
-            )}
-
-            <h1 className="text-8xl md:text-[8rem] font-[1000] text-slate-900 tracking-tighter tabular-nums leading-none">
-              {fmtTimer(timerTime)}
-            </h1>
-
-            <div className="mt-12 flex gap-4 w-full max-w-sm">
-              {!timerActive ? (
-                <div className="flex flex-col items-center gap-6 w-full max-w-sm">
-                  {timerMode === 'COUNTDOWN' && (
-                    <div className="flex items-center gap-4 bg-slate-100/80 p-4 rounded-3xl border border-slate-200/50 w-full animate-in slide-in-from-bottom-2">
-                      <div className="p-3 bg-blue-600/10 text-blue-500 rounded-2xl"><Timer size={20} /></div>
-                      <div className="flex-1">
-                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Set Blocks (Minutes)</p>
-                        <div className="flex items-baseline gap-2">
-                          <input type="number" min="1" max="600" value={customMinutes}
-                            onChange={e => {
-                              const v = Math.min(600, Math.max(1, parseInt(e.target.value) || 1));
-                              setCustomMinutes(v); setTimerTime(v * 60);
-                            }}
-                            className="w-20 bg-transparent text-slate-900 text-3xl font-black outline-none border-b-2 border-slate-300 focus:border-blue-500 transition-all" />
-                          <span className="text-[10px] font-bold text-slate-600 uppercase">Mins</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  <div className="flex gap-3 w-full">
-                    <button onClick={() => {
-                      setTimerActive(true);
-                      if (timerMode === 'COUNTDOWN') {
-                        startFocusSession(customMinutes, allowedApps);
-                      } else {
-                        startFocusSession(600, allowedApps); // Stopwatch mode: Block for 10 hours
-                      }
-                    }}
-                      className="flex-1 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-3xl font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">
-                      {timerTime > 0 && ((timerMode === 'COUNTDOWN' && timerTime !== (customMinutes * 60)) || (timerMode === 'STOPWATCH')) ? 'Resume' : 'Start Hub'} <ArrowRight size={18} />
-                    </button>
-                    {(timerMode === 'STOPWATCH' && timerTime > 0) || (timerMode === 'COUNTDOWN' && timerTime < customMinutes * 60) ? (
-                      <button onClick={() => saveTimerSession()} className="px-8 py-5 bg-slate-800 text-white rounded-3xl font-black text-[10px] uppercase tracking-widest hover:bg-red-600 transition-all">Done</button>
-                    ) : null}
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center gap-4 w-full max-w-sm">
-                  <div className="flex gap-4 w-full">
-                    <button onClick={() => { setTimerActive(false); stopFocusSession(); }}
-                      className="flex-1 py-5 bg-orange-600 hover:bg-orange-500 text-white rounded-3xl font-[1000] text-xs uppercase tracking-widest transition-all shadow-xl">
-                      Pause
-                    </button>
-                    <button onClick={() => saveTimerSession()}
-                      className="flex-1 py-5 bg-red-600 hover:bg-red-500 text-white rounded-[2rem] font-[1000] text-xs uppercase tracking-widest transition-all shadow-xl">
-                      Stop & Save
-                    </button>
-                  </div>
-                </div>
-              )}
+         </div>
+         <div className="bg-white p-10 rounded-[3.5rem] border border-slate-200/80 shadow-2xl relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-3xl"></div>
+            <div className="relative z-10 space-y-6">
+               <div className="p-5 bg-blue-600/10 text-blue-600 rounded-3xl w-fit"><BookOpen size={32} /></div>
+               <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">Official Notes Bank</h3>
+               <p className="text-[11px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">Integrated library for all your BEU semester requirements.</p>
+               <button onClick={()=>navigate('/dashboard/notes')} className="inline-flex items-center gap-2 text-blue-600 font-black text-[10px] uppercase tracking-widest group-hover:gap-4 transition-all">Enter Library <ArrowRight size={14} /></button>
             </div>
-
-            <div className="mt-10 flex flex-wrap justify-center gap-2">
-              {subjects.map(s => (
-                <button key={s.id} onClick={() => !timerActive && setTimerSubject(s.subjectName)}
-                  className={`px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all ${timerSubject === s.subjectName ? 'bg-white text-black shadow-xl scale-105' : 'bg-slate-100 text-slate-500 hover:text-slate-900'}`}>
-                  {s.subjectName}
-                </button>
-              ))}
-              <button onClick={() => !timerActive && setTimerSubject('OTHERS')}
-                className={`px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all ${timerSubject === 'OTHERS' ? 'bg-white text-black shadow-xl scale-105' : 'bg-slate-100 text-slate-500 hover:text-slate-900'}`}>
-                OTHERS
-              </button>
-              <button onClick={() => !timerActive && setShowSubjectModal(true)}
-                className="px-5 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all bg-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-slate-900 flex items-center gap-2">
-                <Plus size={14} /> Add Subject
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* TAB: OVERVIEW */}
-      {tab === 'overview' && (
-        <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              { label: 'Aaj (Today)', sec: todaySec, goal: goals.daily, color: 'bg-blue-500', ic: <Target size={11} className="text-blue-400" /> },
-              { label: 'Is Hafte', sec: weeklySec, goal: goals.weekly, color: 'bg-emerald-500', ic: <Calendar size={11} className="text-emerald-400" /> },
-              { label: 'Is Mahine', sec: monthlySec, goal: goals.monthly, color: 'bg-indigo-500', ic: <BarChart3 size={11} className="text-indigo-400" /> },
-            ].map(({ label, sec, goal, color, ic }) => (
-              <div key={label} className="bg-white p-5 rounded-2xl border border-slate-200/50 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-slate-500">{ic}{label}</span>
-                  {goal > 0 && <span className="text-[9px] font-bold text-slate-500">{getProgress(sec, goal)}%</span>}
-                </div>
-                <p className="text-xl font-black text-slate-900 leading-none">{formatDuration(sec)}</p>
-                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                  <div className={`h-full ${color} rounded-full transition-all duration-1000`} style={{ width: `${getProgress(sec, goal)}%` }}></div>
-                </div>
-                <p className="text-[9px] text-slate-600">{goal > 0 ? `Goal: ${goal} hr` : <span className="text-slate-500 cursor-pointer hover:text-blue-400" onClick={() => setShowGoalModal(true)}>Set goal ⚙️</span>}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {[
-              { label: 'Aaj ke Sessions', value: sessions.filter(s => s.date === todayStr).length },
-              { label: 'Aaj ka Time', value: formatDuration(todaySec) },
-              { label: 'Is Hafte', value: formatDuration(weeklySec) },
-              { label: 'Best Day Ever', value: bestDaySec > 0 ? formatDuration(bestDaySec) : '—' },
-            ].map(({ label, value }) => (
-              <div key={label} className="bg-white p-4 rounded-2xl border border-slate-200/50 text-center">
-                <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mb-1">{label}</p>
-                <p className="text-base font-black text-slate-900 leading-tight">{value}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="bg-white p-6 rounded-[2rem] border border-slate-200/50">
-            <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-4 flex items-center gap-2"><Calendar size={11} /> Pichle 7 Din</p>
-            <div className="flex items-end justify-between gap-2 h-24">
-              {heatmap.map(d => (
-                <div key={d.dStr} className="flex flex-col items-center gap-1 flex-1">
-                  <span className="text-[8px] font-bold text-slate-600">{d.sec > 0 ? formatDuration(d.sec).split(' ').slice(0, 2).join('') : '—'}</span>
-                  <div className={`w-full rounded-t-lg transition-all duration-700 ${d.isToday ? 'bg-blue-500' : d.sec > 0 ? 'bg-emerald-600' : 'bg-slate-800'}`} style={{ height: `${Math.max(8, (d.sec / maxH) * 100)}%` }}></div>
-                  <span className={`text-[9px] font-black ${d.isToday ? 'text-blue-400' : 'text-slate-500'}`}>{d.day}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-white p-6 rounded-[2rem] border border-slate-200/50 space-y-4">
-            <div className="flex items-center justify-between">
-              <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 flex items-center gap-2"><BookOpen size={11} />Your Subjects ({subjects.length}/10)</p>
-              <button onClick={() => setShowSubjectModal(true)} disabled={subjects.length >= 10} className="flex items-center gap-1 text-[9px] font-black text-blue-400 hover:text-slate-900 bg-blue-600/10 hover:bg-blue-600 border border-blue-500/20 px-2.5 py-1.5 rounded-xl transition-all disabled:opacity-40"><Plus size={11} /> New</button>
-            </div>
-            {subjects.length === 0 ? (
-              <div className="text-center py-8">
-                <p className="text-[10px] text-slate-600 mb-3">Add your subjects to start tracking!</p>
-                <button onClick={() => setShowSubjectModal(true)} className="text-[10px] font-black text-blue-500 hover:underline">Click here to add</button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {subjects.map(sub => {
-                  const tSec = subjectToday[sub.subjectName] || 0;
-                  const totSec = sessions.filter(s => s.subject === sub.subjectName).reduce((a, s) => a + s.duration, 0);
-                  return (
-                    <div key={sub.id} className="flex items-center justify-between p-3 bg-slate-100/60 rounded-2xl border border-slate-200/50">
-                      <div className="flex items-center gap-3">
-                        <div className="w-1.5 h-1.5 bg-blue-500 rounded-full shrink-0"></div>
-                        <div>
-                          <p className="text-xs font-black text-slate-900 uppercase">{sub.subjectName}</p>
-                          <p className="text-[8px] text-slate-500">{formatDuration(tSec)} aaj · {formatDuration(totSec)} total</p>
-                        </div>
-                      </div>
-                      <button onClick={() => delSubject(sub.id)} className="p-2 text-slate-700 hover:text-red-500"><Trash2 size={13} /></button>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* TAB: STUDY NETWORK */}
-      {tab === 'group' && (
-        <div className="space-y-6 animate-in fade-in duration-300">
-          <div className="bg-[#f8fafc] p-8 rounded-[3rem] border border-slate-200/50 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-blue-600/10 rounded-full blur-[80px] pointer-events-none"></div>
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-              <div>
-                <h2 className="text-2xl font-[1000] text-slate-900 tracking-tighter uppercase">Study Network</h2>
-                <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] mt-1">Connect with other scholars</p>
-              </div>
-              <div className="flex gap-3">
-                <button onClick={() => setShowJoinGroup(true)} className="px-6 py-3 bg-slate-100 hover:bg-slate-100 text-slate-900 border border-slate-200 rounded-2xl font-black text-[10px] uppercase tracking-widest">Join By Code</button>
-                <button onClick={() => setShowCreateGroup(true)} className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center gap-2"><Plus size={14} /> Create</button>
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {groups.map(g => {
-              const hubName = g.groupName || g.name || 'Hub';
-              return (
-                <div key={g.id} className="bg-white p-6 rounded-[2.5rem] border border-slate-200/80 hover:border-blue-500/30 transition-all group">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="w-12 h-12 bg-blue-600/10 rounded-2xl flex items-center justify-center text-blue-400 font-black text-xl">{hubName[0]}</div>
-                    <div className="text-[9px] font-black text-slate-500 bg-slate-100 px-3 py-1 rounded-full uppercase italic">Code: {g.groupCode || g.code}</div>
-                  </div>
-                  <h3 className="text-lg font-black text-slate-900 uppercase group-hover:text-blue-400 transition-colors">{hubName}</h3>
-                  <p className="text-[10px] text-slate-600 font-bold uppercase mt-1">{g.memberCount} Mems · Hub Active</p>
-                  <button onClick={() => navigate(`/dashboard/study/group/${g.id}`)} className="mt-6 w-full py-3 bg-slate-100 hover:bg-slate-100 text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest">Open Hub</button>
-                </div>
-              );
-            })}
-            {groups.length === 0 && (
-              <div className="col-span-full text-center py-20 bg-slate-100/20 rounded-[3rem] border border-dashed border-slate-200">
-                <Users size={32} className="mx-auto text-slate-800 mb-4" />
-                <p className="text-slate-600 font-bold uppercase tracking-widest text-[11px]">No active groups found</p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* TAB: AAJ KA PLAN */}
-      {tab === 'todo' && (
-        <div className="space-y-5 animate-in fade-in duration-200">
-          <div className="bg-white p-6 rounded-[2rem] border border-slate-200/50">
-            <p className="text-lg font-black text-slate-900 mb-1">📋 Aaj ka Study Plan</p>
-            <p className="text-[10px] text-slate-500 mb-6">{new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
-            {tasks.length > 0 && (
-              <div className="mb-5 bg-[#161c2c] p-4 rounded-2xl border border-slate-300/50 space-y-2">
-                <div className="flex justify-between text-[9px] font-black uppercase text-slate-500">
-                  <span>Progress</span><span className="text-slate-900">{tasks.filter(t => t.done).length}/{tasks.length}</span>
-                </div>
-                <div className="w-full h-1.5 bg-slate-800 rounded-full"><div className="h-full bg-blue-500 rounded-full transition-all" style={{ width: `${(tasks.filter(t => t.done).length / tasks.length) * 100}%` }}></div></div>
-                {tasks.every(t => t.done) && <p className="text-center text-emerald-400 text-xs font-black">🎉 Sab complete!</p>}
-              </div>
-            )}
-            <div className="flex flex-col md:flex-row gap-3 mb-6 bg-slate-100/40 p-5 rounded-3xl border border-slate-200/30">
-              <input value={newTask} onChange={e => setNewTask(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Kya padhna hai? (e.g. Exercise 1)" className="flex-[2] bg-slate-50 border border-slate-200 rounded-2xl px-5 py-3.5 text-slate-900 text-sm outline-none focus:border-blue-500 transition-all placeholder:text-slate-500 font-bold" />
-              <div className="flex-1 flex gap-2">
-                <input list="subjects-list" value={taskSub} onChange={e => setTaskSub(e.target.value)} placeholder="Subject" className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-5 py-3.5 text-slate-900 text-xs outline-none focus:border-blue-500 transition-all font-black uppercase tracking-widest placeholder:text-slate-500" />
-                <datalist id="subjects-list">
-                  {subjects.map(s => <option key={s.id} value={s.subjectName} />)}
-                </datalist>
-                <button onClick={addTask} disabled={tasks.length >= 12 || !newTask.trim() || !taskSub.trim()} className="px-6 py-3.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-40 text-white font-[1000] rounded-2xl transition-all shadow-xl active:scale-95"><Plus size={18} /></button>
-              </div>
-            </div>
-            <div className="space-y-2">
-              {tasks.length === 0 ? (
-                <p className="text-center text-[10px] text-slate-600 py-8">Koi task nahi — Upar add karo!</p>
-              ) : (
-                tasks.map(task => (
-                  <div key={task.id} className={`flex items-center gap-3 p-4 rounded-2xl border transition-all group ${task.done ? 'bg-emerald-900/10 border-emerald-500/20' : 'bg-slate-100/60 border-slate-200/50'}`}>
-                    <button onClick={() => toggleTask(task)} className="shrink-0">{task.done ? <CheckCircle2 size={20} className="text-emerald-500" /> : <Circle size={20} className="text-slate-600 hover:text-blue-500 transition-colors" />}</button>
-                    {editingTask?.id === task.id ? (
-                      <div className="flex-1 flex gap-2">
-                        <input value={editValue} onChange={e => setEditValue(e.target.value)} className="flex-1 bg-slate-800 text-white text-sm rounded-lg p-1 outline-none" />
-                        <button onClick={updateTask} className="text-blue-500"><Save size={16} /></button>
-                      </div>
-                    ) : (
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          {task.subject && <span className="text-[7px] font-black bg-blue-600/10 text-blue-400 px-1.5 py-0.5 rounded-full uppercase tracking-tighter border border-blue-500/10">{task.subject}</span>}
-                          <span className="text-[7px] text-slate-600 font-black uppercase tracking-widest">{task.date}</span>
-                        </div>
-                        <p className={`text-sm font-bold tracking-tight ${task.done ? 'line-through text-slate-600' : 'text-slate-900'}`}
-                          onClick={() => { setEditingTask(task); setEditValue(task.text); }}>{task.text}</p>
-                      </div>
-                    )}
-                    {!task.done && (
-                      <button onClick={() => { setTimerSubject(task.subject || 'OTHERS'); setTab('timer'); if (timerMode === 'COUNTDOWN') setTimerTime(customMinutes * 60); else setTimerTime(0); }}
-                        className="px-3 py-1.5 bg-blue-600/10 hover:bg-blue-600 text-blue-500 hover:text-slate-900 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all border border-blue-500/10 flex items-center gap-2 group">
-                        <Zap size={10} className="fill-blue-500 group-hover:fill-white" /> Start Hub
-                      </button>
-                    )}
-                    <button onClick={() => delTask(task.id)} className="opacity-0 group-hover:opacity-100 text-slate-600 hover:text-red-500 transition-all"><Trash2 size={14} /></button>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* TAB: ACHIEVEMENTS */}
-      {tab === 'achievements' && (
-        <div className="space-y-6 animate-in fade-in duration-200">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {[
-              { ic: <Flame size={18} className="text-orange-500" />, label: 'Current Streak', val: `${userData?.streak || 0} days` },
-              { ic: <Clock size={18} className="text-blue-500" />, label: 'Total Study', val: formatDuration(userData?.totalStudyTime || 0) },
-              { ic: <Zap size={18} className="text-yellow-500" />, label: 'Sessions', val: sessionCount },
-              { ic: <Award size={18} className="text-purple-500" />, label: 'Badges', val: `${earned.length}/${ALL_BADGES.length}` },
-            ].map(({ ic, label, val }) => (
-              <div key={label} className="bg-white p-4 rounded-2xl border border-slate-200/50 text-center space-y-2">
-                <div className="flex justify-center">{ic}</div>
-                <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest">{label}</p>
-                <p className="text-lg font-black text-slate-900">{val}</p>
-              </div>
-            ))}
-          </div>
-          {earned.length > 0 && (
-            <div className="space-y-3">
-              <p className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">✅ Earned ({earned.length})</p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {earned.map(b => (
-                  <div key={b.id} className={`bg-gradient-to-br ${b.color} p-5 rounded-2xl text-center space-y-1.5 shadow-lg`}>
-                    <div className="text-3xl">{b.icon}</div>
-                    <p className="text-xs font-black text-slate-900 uppercase tracking-tight">{b.name}</p>
-                    <p className="text-[8px] text-slate-900/70">{b.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
+         </div>
+      </div>
 
       {/* MODALS */}
       {showGoalModal && (
@@ -735,66 +390,6 @@ export default function StudyDashboard() {
           </div>
         </div>
       )}
-
-      {showSubjectModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
-            <p className="text-xl font-black uppercase mb-1">New Subject</p>
-            <p className="text-[10px] text-slate-500 mb-8">{subjects.length}/10 used</p>
-            <input maxLength={20} placeholder="Jaise: MATHS, PHYSICS, HINDI" className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-slate-900 font-black uppercase mb-6 outline-none focus:border-blue-500 transition-all placeholder:text-slate-400" value={newSubject} onChange={e => setNewSubject(e.target.value)} onKeyDown={e => e.key === 'Enter' && addSubject()} autoFocus />
-            <div className="flex gap-3"><button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100 transition-all" onClick={() => { setShowSubjectModal(false); setNewSubject(''); }}>Cancel</button><button disabled={subjects.length >= 10 || !newSubject.trim()} className={`flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-50 transition-all ${subjects.length >= 10 || !newSubject.trim() ? 'bg-slate-300 opacity-50 text-slate-500' : 'bg-blue-600 hover:bg-blue-500'}`} onClick={addSubject}>Add Subject</button></div>
-          </div>
-        </div>
-      )}
-
-      {showCreateGroup && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
-            <p className="text-xl font-black uppercase mb-1">New Study Group</p>
-            <p className="text-[10px] text-slate-500 mb-8">Group code se dosto ko join karao</p>
-            <input maxLength={30} placeholder="Group ka naam..." className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-slate-900 font-black mb-6 outline-none focus:border-blue-500 placeholder:text-slate-400" value={newGroupName} onChange={e => setNewGroupName(e.target.value)} onKeyDown={e => e.key === 'Enter' && createGroup()} autoFocus />
-            <div className="flex gap-3"><button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100" onClick={() => { setShowCreateGroup(false); setNewGroupName(''); }}>Cancel</button><button disabled={groupLoading || !newGroupName.trim()} className="flex-1 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 p-4 rounded-xl font-black text-[10px] uppercase text-white" onClick={createGroup}>{groupLoading ? 'Creating...' : 'Create Group'}</button></div>
-          </div>
-        </div>
-      )}
-
-      {showJoinGroup && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
-            <p className="text-xl font-black uppercase mb-1">Join Group</p>
-            <p className="text-[10px] text-slate-500 mb-8">6-character group code dalo</p>
-            <input maxLength={6} placeholder="ABC123" className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-slate-900 font-black uppercase text-center tracking-[0.5em] text-xl mb-6 outline-none focus:border-blue-500 placeholder:text-slate-300" value={joinCode} onChange={e => setJoinCode(e.target.value.toUpperCase())} onKeyDown={e => e.key === 'Enter' && joinGroup()} autoFocus />
-            <div className="flex gap-3"><button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100" onClick={() => { setShowJoinGroup(false); setJoinCode(''); }}>Cancel</button><button disabled={groupLoading || joinCode.length < 4} className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 p-4 rounded-xl font-black text-[10px] uppercase text-white" onClick={joinGroup}>{groupLoading ? 'Joining...' : 'Join Group'}</button></div>
-          </div>
-        </div>
-      )}
-
-      {showAppPicker && (
-        <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-[200] flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 p-8 rounded-[3rem] w-full max-w-md max-h-[80vh] overflow-hidden flex flex-col">
-            <h2 className="text-xl font-black uppercase mb-1">Select Allowed Apps</h2>
-            <p className="text-[10px] text-slate-500 mb-6 uppercase tracking-widest">Studying ke waqt inke bina kaam nahi chalega (Max 5)</p>
-
-            <div className="flex-1 overflow-y-auto pr-2 space-y-2 mb-6 scrollbar-hide">
-              {installedApps.length > 0 ? (
-                installedApps.map(app => (
-                  <div key={app.packageName} onClick={() => toggleAppSelection(app.packageName)}
-                    className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${allowedApps.includes(app.packageName) ? 'bg-blue-600/20 border-blue-500' : 'bg-slate-100/50 border-slate-200/50 opacity-70'}`}>
-                    <span className="text-sm font-bold text-slate-900">{app.name}</span>
-                    <div className={`w-5 h-5 rounded-full border-2 ${allowedApps.includes(app.packageName) ? 'bg-blue-600 border-blue-600' : 'border-slate-200'}`}></div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-center text-slate-600 text-[10px] py-10 uppercase">No apps found. Try building as APK first.</p>
-              )}
-            </div>
-
-            <button onClick={() => setShowAppPicker(false)} className="w-full py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl">Ho Gaya!</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
-
-const todayStr = new Date().toISOString().split('T')[0];
