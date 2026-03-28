@@ -2,8 +2,8 @@ import React from 'react';
 
 export default function PrivacyPolicy() {
   return (
-    <div className="max-w-4xl mx-auto p-6 md:p-12 text-slate-300 space-y-8 animate-in fade-in duration-500">
-      <h1 className="text-4xl font-black text-white uppercase tracking-tighter">Privacy Policy</h1>
+    <div className="max-w-4xl mx-auto p-6 md:p-12 text-slate-700 space-y-8 animate-in fade-in duration-500">
+      <h1 className="text-4xl font-black text-slate-900 uppercase tracking-tighter">Privacy Policy</h1>
       <p className="text-sm font-bold text-slate-500 italic">Last Updated: March 22, 2026</p>
 
       <section className="space-y-4">

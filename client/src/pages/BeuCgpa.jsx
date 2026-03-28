@@ -174,7 +174,7 @@ export default function BeuCgpa() {
   const backlogs = results.filter(s => s.calc.grade === 'F' && s.calc.pct !== null);
   const passed   = graded.filter(s => s.calc.grade !== 'F');
 
-  const cgpaColor = !cgpa ? 'text-slate-400'
+  const cgpaColor = !cgpa ? 'text-slate-500'
     : Number(cgpa) >= 8 ? 'text-emerald-400'
     : Number(cgpa) >= 6 ? 'text-yellow-400'
     : 'text-red-400';
@@ -186,7 +186,7 @@ export default function BeuCgpa() {
       
       {/* ── Header ─── */}
       <div>
-        <h1 className="text-2xl font-black text-white uppercase tracking-tight">BEU CGPA Calculator</h1>
+        <h1 className="text-2xl font-black text-slate-900 uppercase tracking-tight">BEU CGPA Calculator</h1>
         <p className="text-[11px] text-slate-500 mt-1">Bihar Engineering University · Marks-based grading system</p>
         
         {!user && (
@@ -201,12 +201,12 @@ export default function BeuCgpa() {
       </div>
 
       {/* ── Semester Selector ─── */}
-      <div className="bg-[#0d121f] p-4 rounded-2xl border border-slate-800/50">
+      <div className="bg-white p-4 rounded-2xl border border-slate-200/50">
         <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-3">Semester Select Karo</p>
         <div className="flex flex-wrap gap-2">
           {SEMESTERS.map(s => (
             <button key={s} onClick={() => setSemester(s)}
-              className={`w-12 h-12 rounded-2xl font-black text-sm transition-all ${semester === s ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/30' : 'bg-slate-800/50 text-slate-400 hover:bg-slate-700'}`}>
+              className={`w-12 h-12 rounded-2xl font-black text-sm transition-all ${semester === s ? 'bg-blue-600 text-slate-900 shadow-lg shadow-blue-900/30' : 'bg-slate-800/50 text-slate-500 hover:bg-slate-200'}`}>
               {s}
             </button>
           ))}
@@ -215,15 +215,15 @@ export default function BeuCgpa() {
 
       {/* ── CGPA Summary Card ─── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="col-span-2 bg-[#0d121f] p-6 rounded-[2rem] border border-slate-800/50 flex items-center gap-5">
+        <div className="col-span-2 bg-white p-6 rounded-[2rem] border border-slate-200/50 flex items-center gap-5">
           <div className="w-20 h-20 bg-blue-500/10 rounded-2xl border border-blue-500/20 flex flex-col items-center justify-center shrink-0">
             <p className={`text-3xl font-black leading-none ${cgpaColor}`}>{cgpa || '—'}</p>
             <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">CGPA</p>
           </div>
           <div>
             <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Semester {semester} Result</p>
-            <p className="text-sm font-black text-white">{graded.length} / {subjects.length} subjects graded</p>
-            <p className="text-[10px] text-slate-400 mt-1">Total Credits: <span className="text-white font-black">{totalCredits}</span></p>
+            <p className="text-sm font-black text-slate-900">{graded.length} / {subjects.length} subjects graded</p>
+            <p className="text-[10px] text-slate-500 mt-1">Total Credits: <span className="text-slate-900 font-black">{totalCredits}</span></p>
             {backlogs.length > 0 && (
               <p className="text-[10px] text-red-400 font-black mt-1 flex items-center gap-1">
                 <AlertTriangle size={11}/> {backlogs.length} Backlog{backlogs.length > 1 ? 's' : ''}!
@@ -237,10 +237,10 @@ export default function BeuCgpa() {
           { label: 'Backlogs', val: backlogs.length, icon: <AlertTriangle size={16} className={backlogs.length > 0 ? 'text-red-400' : 'text-slate-600'}/> },
           { label: 'Total Credits Attempted', val: totalCredits, icon: <Award size={16} className="text-amber-400"/> },
         ].slice(0,2).map(({label, val, icon}) => (
-          <div key={label} className="bg-[#0d121f] p-5 rounded-2xl border border-slate-800/50 text-center space-y-2">
+          <div key={label} className="bg-white p-5 rounded-2xl border border-slate-200/50 text-center space-y-2">
             <div className="flex justify-center">{icon}</div>
             <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest">{label}</p>
-            <p className="text-2xl font-black text-white">{val}</p>
+            <p className="text-2xl font-black text-slate-900">{val}</p>
           </div>
         ))}
       </div>
@@ -257,15 +257,15 @@ export default function BeuCgpa() {
 
       {/* ── Subject Table / Cards ─── */}
       {subjects.length === 0 ? (
-        <div className="text-center py-20 bg-[#0d121f] rounded-3xl border border-dashed border-slate-700">
+        <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-300">
           <BookOpen size={36} className="mx-auto text-slate-700 mb-4"/>
           <p className="text-slate-500 font-bold">Koi subject nahi!</p>
           <p className="text-slate-600 text-xs mt-2">+ Add Subject button se shuru karo</p>
         </div>
       ) : (
-        <div className="bg-[#0d121f] rounded-[2rem] border border-slate-800/50 overflow-hidden">
+        <div className="bg-white rounded-[2rem] border border-slate-200/50 overflow-hidden">
           {/* Table Header */}
-          <div className="grid grid-cols-12 gap-2 p-4 border-b border-slate-800 text-[9px] font-black uppercase tracking-widest text-slate-500">
+          <div className="grid grid-cols-12 gap-2 p-4 border-b border-slate-200 text-[9px] font-black uppercase tracking-widest text-slate-500">
             <div className="col-span-4">Subject</div>
             <div className="col-span-1 text-center">Cr</div>
             <div className="col-span-2 text-center">Marks</div>
@@ -290,19 +290,19 @@ export default function BeuCgpa() {
                           ? <BookOpen size={13} className="text-blue-400 shrink-0"/>
                           : <FlaskConical size={13} className="text-purple-400 shrink-0"/>}
                         <div>
-                          <p className="text-xs font-black text-white leading-none">{sub.name}</p>
+                          <p className="text-xs font-black text-slate-900 leading-none">{sub.name}</p>
                           <p className="text-[8px] text-slate-500 capitalize">{sub.type} · {sub.credits} cr</p>
                         </div>
                       </div>
                     </div>
                     {/* Credits */}
-                    <div className="col-span-1 text-center text-xs font-black text-slate-400">{sub.credits}</div>
+                    <div className="col-span-1 text-center text-xs font-black text-slate-500">{sub.credits}</div>
                     {/* Marks */}
-                    <div className="col-span-2 text-center text-xs font-black text-white">
+                    <div className="col-span-2 text-center text-xs font-black text-slate-900">
                       {calc.pct !== null ? `${calc.total}/${calc.maxTotal}` : <span className="text-slate-600">—</span>}
                     </div>
                     {/* % */}
-                    <div className="col-span-1 text-center text-xs font-black text-white">
+                    <div className="col-span-1 text-center text-xs font-black text-slate-900">
                       {calc.pct !== null ? `${calc.pct.toFixed(0)}%` : <span className="text-slate-600">—</span>}
                     </div>
                     {/* Grade */}
@@ -310,12 +310,12 @@ export default function BeuCgpa() {
                       {calc.grade}
                     </div>
                     {/* GP */}
-                    <div className="col-span-1 text-center text-xs font-black text-slate-300">
+                    <div className="col-span-1 text-center text-xs font-black text-slate-700">
                       {calc.pct !== null ? calc.point : '—'}
                     </div>
                     {/* Actions */}
                     <div className="col-span-2 flex items-center justify-center gap-1">
-                      <button onClick={() => openMarks(sub)} className="px-2 py-1 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white rounded-lg text-[9px] font-black uppercase tracking-wider transition-all">
+                      <button onClick={() => openMarks(sub)} className="px-2 py-1 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-slate-900 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all">
                         Marks
                       </button>
                       <button onClick={() => deleteSubject(sub.id)} className="p-1.5 text-slate-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all">
@@ -327,26 +327,26 @@ export default function BeuCgpa() {
                   {/* Breakdown row (expanded) */}
                   {calc.pct !== null && (
                     <div className="px-4 pb-3">
-                      <button onClick={() => setExpandedId(isExpanded ? null : sub.id)} className="flex items-center gap-1 text-[8px] font-black text-slate-600 hover:text-slate-400 transition-colors ml-6">
+                      <button onClick={() => setExpandedId(isExpanded ? null : sub.id)} className="flex items-center gap-1 text-[8px] font-black text-slate-600 hover:text-slate-500 transition-colors ml-6">
                         {isExpanded ? <ChevronUp size={10}/> : <ChevronDown size={10}/>}
                         {isExpanded ? 'Hide details' : 'View marks breakdown'}
                       </button>
                       {isExpanded && (
-                        <div className="ml-6 mt-2 p-3 bg-slate-900/60 rounded-xl border border-slate-800/50 text-[9px] font-bold text-slate-400 grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <div className="ml-6 mt-2 p-3 bg-slate-100/60 rounded-xl border border-slate-200/50 text-[9px] font-bold text-slate-500 grid grid-cols-2 sm:grid-cols-4 gap-2">
                           {sub.type === 'theory' ? <>
-                            <div>Attendance: <span className="text-white">{sub.marks?.attendance || 0}/5</span></div>
-                            <div>Assignment: <span className="text-white">{sub.marks?.assignment || 0}/5</span></div>
-                            <div>Mid Sem: <span className="text-white">{sub.marks?.midSem || 0}/20</span></div>
-                            <div>End Sem: <span className="text-white">{sub.marks?.endSem || 0}/70</span></div>
-                            <div className="col-span-2 sm:col-span-4 border-t border-slate-800 pt-2 mt-1">
-                              Internal (A+A+M): <span className="text-white">{Number(sub.marks?.attendance||0)+Number(sub.marks?.assignment||0)+Number(sub.marks?.midSem||0)}/30</span>
-                              <span className="ml-4">Total: <span className="text-white font-black">{calc.total}/100</span></span>
+                            <div>Attendance: <span className="text-slate-900">{sub.marks?.attendance || 0}/5</span></div>
+                            <div>Assignment: <span className="text-slate-900">{sub.marks?.assignment || 0}/5</span></div>
+                            <div>Mid Sem: <span className="text-slate-900">{sub.marks?.midSem || 0}/20</span></div>
+                            <div>End Sem: <span className="text-slate-900">{sub.marks?.endSem || 0}/70</span></div>
+                            <div className="col-span-2 sm:col-span-4 border-t border-slate-200 pt-2 mt-1">
+                              Internal (A+A+M): <span className="text-slate-900">{Number(sub.marks?.attendance||0)+Number(sub.marks?.assignment||0)+Number(sub.marks?.midSem||0)}/30</span>
+                              <span className="ml-4">Total: <span className="text-slate-900 font-black">{calc.total}/100</span></span>
                             </div>
                           </> : <>
-                            <div>Attendance: <span className="text-white">{sub.marks?.practAtt || 0}/5</span></div>
-                            <div>Performance: <span className="text-white">{sub.marks?.performance || 0}/5</span></div>
-                            <div>Viva: <span className="text-white">{sub.marks?.viva || 0}/10</span></div>
-                            <div>Total: <span className="text-white font-black">{calc.total}/20</span></div>
+                            <div>Attendance: <span className="text-slate-900">{sub.marks?.practAtt || 0}/5</span></div>
+                            <div>Performance: <span className="text-slate-900">{sub.marks?.performance || 0}/5</span></div>
+                            <div>Viva: <span className="text-slate-900">{sub.marks?.viva || 0}/10</span></div>
+                            <div>Total: <span className="text-slate-900 font-black">{calc.total}/20</span></div>
                           </>}
                         </div>
                       )}
@@ -359,7 +359,7 @@ export default function BeuCgpa() {
 
           {/* CGPA Footer */}
           {cgpa && (
-            <div className="p-5 border-t border-slate-800 bg-slate-900/30 flex items-center justify-between">
+            <div className="p-5 border-t border-slate-200 bg-slate-100/30 flex items-center justify-between">
               <div>
                 <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">Semester {semester} CGPA</p>
                 <p className="text-[9px] text-slate-600">Σ(Credit × Grade Point) / Σ Credits = {totalPoints} / {totalCredits}</p>
@@ -399,7 +399,7 @@ export default function BeuCgpa() {
       )}
 
       {/* ── Grade Reference ─── */}
-      <div className="bg-[#0d121f] p-5 rounded-2xl border border-slate-800/50">
+      <div className="bg-white p-5 rounded-2xl border border-slate-200/50">
         <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-4 flex items-center gap-2"><BarChart3 size={11}/>BEU Grading Scale</p>
         <div className="grid grid-cols-3 sm:grid-cols-7 gap-2">
           {[
@@ -423,28 +423,28 @@ export default function BeuCgpa() {
       {/* ══ ADD SUBJECT MODAL ══════════════════════════════ */}
       {showAdd && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-[#0d121f] border border-slate-800 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl space-y-5">
+          <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl space-y-5">
             <div>
               <p className="text-xl font-black uppercase tracking-tight mb-1">Add Subject</p>
               <p className="text-[10px] text-slate-500">Semester {semester}</p>
             </div>
 
             <div>
-              <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-2">Subject Name</p>
+              <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-2">Subject Name</p>
               <input
                 maxLength={40} placeholder="e.g. DATA STRUCTURES"
-                className="w-full bg-[#161c2c] border border-slate-700/50 rounded-2xl p-4 text-white font-black uppercase outline-none focus:border-blue-500 transition-all"
+                className="w-full bg-[#161c2c] border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black uppercase outline-none focus:border-blue-500 transition-all"
                 value={form.name} onChange={e => setForm({...form, name: e.target.value})}
                 onKeyDown={e => e.key === 'Enter' && addSubject()} autoFocus
               />
             </div>
 
             <div>
-              <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-2">Type</p>
+              <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-2">Type</p>
               <div className="grid grid-cols-2 gap-3">
                 {[{val:'theory',label:'📘 Theory',sub:'Max 100 marks'},{val:'practical',label:'🧪 Practical',sub:'Max 20 marks'}].map(t => (
                   <button key={t.val} onClick={() => setForm({...form, type: t.val})}
-                    className={`p-4 rounded-2xl border text-center transition-all ${form.type === t.val ? 'bg-blue-600 border-blue-500 text-white' : 'border-slate-700 text-slate-400 hover:border-slate-500'}`}>
+                    className={`p-4 rounded-2xl border text-center transition-all ${form.type === t.val ? 'bg-blue-600 border-blue-500 text-slate-900' : 'border-slate-300 text-slate-500 hover:border-slate-500'}`}>
                     <p className="font-black text-sm">{t.label}</p>
                     <p className="text-[9px] opacity-70 mt-0.5">{t.sub}</p>
                   </button>
@@ -453,11 +453,11 @@ export default function BeuCgpa() {
             </div>
 
             <div>
-              <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-2">Credits</p>
+              <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-2">Credits</p>
               <div className="flex gap-2">
                 {[1,2,3,4,5,6].map(c => (
                   <button key={c} onClick={() => setForm({...form, credits: c})}
-                    className={`flex-1 py-3 rounded-xl font-black text-sm transition-all ${form.credits === c ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}>
+                    className={`flex-1 py-3 rounded-xl font-black text-sm transition-all ${form.credits === c ? 'bg-blue-600 text-slate-900' : 'bg-slate-800 text-slate-500 hover:bg-slate-200'}`}>
                     {c}
                   </button>
                 ))}
@@ -465,7 +465,7 @@ export default function BeuCgpa() {
             </div>
 
             <div className="flex gap-3 pt-2">
-              <button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-800 transition-all" onClick={() => setShowAdd(false)}>Cancel</button>
+              <button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100 transition-all" onClick={() => setShowAdd(false)}>Cancel</button>
               <button disabled={!form.name.trim()} className="flex-1 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 p-4 rounded-xl font-black text-[10px] uppercase text-white transition-all" onClick={addSubject}>Add</button>
             </div>
           </div>
@@ -475,7 +475,7 @@ export default function BeuCgpa() {
       {/* ══ MARKS ENTRY MODAL ════════════════════════════ */}
       {marksModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-[#0d121f] border border-slate-800 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
             {(() => {
               const sub = subjects.find(s => s.id === marksModal);
               if (!sub) return null;
@@ -497,17 +497,17 @@ export default function BeuCgpa() {
                     ].map(({key, label, max}) => (
                       <div key={key}>
                         <div className="flex justify-between mb-1">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">{label}</p>
+                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">{label}</p>
                           <p className="text-[9px] text-slate-600">Max: {max}</p>
                         </div>
                         <input type="number" min={0} max={max} placeholder={`0 – ${max}`}
                           value={marksForm[key] ?? ''} onFocus={e=>e.target.select()}
                           onChange={e => setMarksForm({...marksForm, [key]: Math.min(max, Math.max(0, Number(e.target.value)))})}
-                          className="w-full bg-[#161c2c] border border-slate-700/50 rounded-2xl p-3 text-white font-black outline-none focus:border-blue-500 transition-all"
+                          className="w-full bg-[#161c2c] border border-slate-300/50 rounded-2xl p-3 text-slate-900 font-black outline-none focus:border-blue-500 transition-all"
                         />
                       </div>
                     ))}
-                    <div className="border-t border-slate-800 pt-3">
+                    <div className="border-t border-slate-200 pt-3">
                       <div className="flex justify-between mb-1">
                         <p className="text-[9px] font-black uppercase tracking-widest text-orange-400">End Semester Exam (70 marks)</p>
                         <p className="text-[9px] text-orange-600 font-bold">Min: 25 required</p>
@@ -515,10 +515,10 @@ export default function BeuCgpa() {
                       <input type="number" min={0} max={70} placeholder="0 – 70"
                         value={marksForm.endSem ?? ''} onFocus={e=>e.target.select()}
                         onChange={e => setMarksForm({...marksForm, endSem: Math.min(70, Math.max(0, Number(e.target.value)))})}
-                        className={`w-full bg-[#161c2c] border rounded-2xl p-3 text-white font-black outline-none transition-all ${
+                        className={`w-full bg-[#161c2c] border rounded-2xl p-3 text-slate-900 font-black outline-none transition-all ${
                           marksForm.endSem !== undefined && marksForm.endSem !== '' && Number(marksForm.endSem) < 25
                             ? 'border-red-500 focus:border-red-400'
-                            : 'border-slate-700/50 focus:border-orange-500'
+                            : 'border-slate-300/50 focus:border-orange-500'
                         }`}
                       />
                       {marksForm.endSem !== undefined && marksForm.endSem !== '' && Number(marksForm.endSem) < 25 && (
@@ -538,13 +538,13 @@ export default function BeuCgpa() {
                     ].map(({key, label, max}) => (
                       <div key={key}>
                         <div className="flex justify-between mb-1">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">{label}</p>
+                          <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">{label}</p>
                           <p className="text-[9px] text-slate-600">Max: {max}</p>
                         </div>
                         <input type="number" min={0} max={max} placeholder={`0 – ${max}`}
                           value={marksForm[key] ?? ''} onFocus={e=>e.target.select()}
                           onChange={e => setMarksForm({...marksForm, [key]: Math.min(max, Math.max(0, Number(e.target.value)))})}
-                          className="w-full bg-[#161c2c] border border-slate-700/50 rounded-2xl p-3 text-white font-black outline-none focus:border-purple-500 transition-all"
+                          className="w-full bg-[#161c2c] border border-slate-300/50 rounded-2xl p-3 text-slate-900 font-black outline-none focus:border-purple-500 transition-all"
                         />
                       </div>
                     ))}
@@ -553,12 +553,12 @@ export default function BeuCgpa() {
 
                 {/* Live Preview */}
                 {liveCalc.pct !== null && (
-                  <div className="bg-slate-900/60 p-4 rounded-2xl border border-slate-700/50 space-y-1">
+                  <div className="bg-slate-100/60 p-4 rounded-2xl border border-slate-300/50 space-y-1">
                     <p className="text-[9px] font-black uppercase text-slate-500 tracking-widest mb-2">Live Preview</p>
-                    <div className="flex justify-between"><span className="text-[10px] text-slate-400">Total</span><span className="text-white font-black">{liveCalc.total}/{liveCalc.maxTotal}</span></div>
-                    <div className="flex justify-between"><span className="text-[10px] text-slate-400">Percentage</span><span className="text-white font-black">{liveCalc.pct?.toFixed(1)}%</span></div>
-                    <div className="flex justify-between"><span className="text-[10px] text-slate-400">Grade</span><span className={`font-black ${liveCalc.color}`}>{liveCalc.grade}</span></div>
-                    <div className="flex justify-between"><span className="text-[10px] text-slate-400">Grade Point</span><span className="text-white font-black">{liveCalc.point}</span></div>
+                    <div className="flex justify-between"><span className="text-[10px] text-slate-500">Total</span><span className="text-slate-900 font-black">{liveCalc.total}/{liveCalc.maxTotal}</span></div>
+                    <div className="flex justify-between"><span className="text-[10px] text-slate-500">Percentage</span><span className="text-slate-900 font-black">{liveCalc.pct?.toFixed(1)}%</span></div>
+                    <div className="flex justify-between"><span className="text-[10px] text-slate-500">Grade</span><span className={`font-black ${liveCalc.color}`}>{liveCalc.grade}</span></div>
+                    <div className="flex justify-between"><span className="text-[10px] text-slate-500">Grade Point</span><span className="text-slate-900 font-black">{liveCalc.point}</span></div>
                     <div className={`mt-2 text-center text-xs font-black py-2 rounded-lg ${liveCalc.grade === 'F' ? 'bg-red-900/30 text-red-400' : 'bg-emerald-900/30 text-emerald-400'}`}>
                       {liveCalc.grade === 'F'
                         ? liveCalc.endSemFail
@@ -570,7 +570,7 @@ export default function BeuCgpa() {
                 )}
 
                 <div className="flex gap-3">
-                  <button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-800" onClick={() => setMarksModal(null)}>Cancel</button>
+                  <button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100" onClick={() => setMarksModal(null)}>Cancel</button>
                   <button className="flex-1 bg-blue-600 hover:bg-blue-500 p-4 rounded-xl font-black text-[10px] uppercase text-white" onClick={saveMarks}>Save Marks</button>
                 </div>
               </>;

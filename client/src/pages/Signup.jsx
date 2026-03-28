@@ -22,20 +22,20 @@ export default function Signup() {
   };
 
   return (
-    <div className="min-h-screen bg-[#02040a] flex flex-col items-center justify-center p-4 font-['Inter'] relative overflow-hidden">
+    <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center p-4 font-["Inter'] relative overflow-hidden">
       
       {/* Background Orbs */}
       <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px]"></div>
       <div className="absolute bottom-[-5%] right-[-5%] w-[500px] h-[500px] bg-orange-600/10 rounded-full blur-[100px]"></div>
 
-      <div className="w-full max-w-[500px] bg-[#0d121f] border border-slate-800/80 rounded-[3rem] p-10 md:p-14 shadow-2xl relative z-10 group">
+      <div className="w-full max-w-[500px] bg-white border border-slate-200/80 rounded-[3rem] p-10 md:p-14 shadow-2xl relative z-10 group">
         <div className="relative">
           {/* Brand & Greeting */}
           <div className="flex flex-col items-center mb-10">
             <div className="mb-5">
               <img src="/logo.jpg" alt="Logo" className="w-16 h-16 rounded-2xl mx-auto shadow-2xl" />
             </div>
-            <h1 className="text-3xl md:text-4xl font-[1000] text-white tracking-tighter uppercase text-center leading-[1]">
+            <h1 className="text-3xl md:text-4xl font-[1000] text-slate-900 tracking-tighter uppercase text-center leading-[1]">
               APNA COLLEGE<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500 text-[18px] font-black tracking-[0.2em]">BIHAR</span>
             </h1>

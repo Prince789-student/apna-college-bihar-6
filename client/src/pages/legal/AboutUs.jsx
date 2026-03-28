@@ -3,13 +3,13 @@ import { Target, Users, BookOpen, Trophy } from 'lucide-react';
 
 export default function AboutUs() {
   return (
-    <div className="max-w-4xl mx-auto p-6 md:p-12 text-slate-300 space-y-12 animate-in fade-in duration-500">
+    <div className="max-w-4xl mx-auto p-6 md:p-12 text-slate-700 space-y-12 animate-in fade-in duration-500">
       <div className="text-center space-y-4">
-        <h1 className="text-5xl font-[1000] text-white tracking-widest uppercase">About Us</h1>
+        <h1 className="text-5xl font-[1000] text-slate-900 tracking-widest uppercase">About Us</h1>
         <p className="text-lg text-blue-400 font-black uppercase tracking-widest">Apna College Bihar (ACB)</p>
       </div>
 
-      <div className="bg-[#0d121f] p-8 rounded-[3rem] border border-slate-800 shadow-2xl relative overflow-hidden">
+      <div className="bg-white p-8 rounded-[3rem] border border-slate-200 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-blue-600/10 rounded-full blur-[80px] pointer-events-none"></div>
         <p className="relative z-10 leading-relaxed text-lg">
           <strong>Apna College Bihar (ACB)</strong> Bihar Engineering Students (BEU/AKU) ke liye banaya gaya ek dedicated online platform hai. Hamara main goal Bihar ke engineering students ko **FREE aur High-Quality** study resources provide karna hai.
@@ -23,9 +23,9 @@ export default function AboutUs() {
           { icon: <Users className="text-emerald-500" />, title: "Community", desc: "Ek aisi community banana jahan bacche milkar solve kar sake aur ek dusre ki madad karein." },
           { icon: <Trophy className="text-purple-500" />, title: "Excellence", desc: "Bihar ke students ko global level par competitive banana." }
         ].map((item, i) => (
-          <div key={i} className="bg-[#0d121f] p-6 rounded-3xl border border-slate-800 hover:border-blue-500 transition-all">
+          <div key={i} className="bg-white p-6 rounded-3xl border border-slate-200 hover:border-blue-500 transition-all">
              <div className="mb-4">{item.icon}</div>
-             <h3 className="text-xl font-black text-white uppercase mb-2">{item.title}</h3>
+             <h3 className="text-xl font-black text-slate-900 uppercase mb-2">{item.title}</h3>
              <p className="text-sm font-bold text-slate-500">{item.desc}</p>
           </div>
         ))}

@@ -55,7 +55,7 @@ export default function Achievements() {
       <div className="flex items-center gap-3">
         <Trophy size={24} className="text-amber-500" />
         <div>
-          <h1 className="text-2xl font-black text-white uppercase tracking-tight">Achievements</h1>
+          <h1 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Achievements</h1>
           <p className="text-[11px] text-slate-500">Aapki mehnat ke medals</p>
         </div>
       </div>
@@ -68,10 +68,10 @@ export default function Achievements() {
           { icon: <Zap size={20} className="text-yellow-500" />, label: 'Total Sessions', value: sessionCount },
           { icon: <Award size={20} className="text-purple-500" />, label: 'Badges Earned', value: `${earned.length}/${ALL_BADGES.length}` },
         ].map(({ icon, label, value }) => (
-          <div key={label} className="bg-[#0d121f] p-5 rounded-2xl border border-slate-800/50 text-center space-y-2">
+          <div key={label} className="bg-white p-5 rounded-2xl border border-slate-200/50 text-center space-y-2">
             <div className="flex justify-center">{icon}</div>
             <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">{label}</p>
-            <p className="text-xl font-black text-white">{value}</p>
+            <p className="text-xl font-black text-slate-900">{value}</p>
           </div>
         ))}
       </div>
@@ -84,8 +84,8 @@ export default function Achievements() {
             {earned.map(badge => (
               <div key={badge.id} className={`bg-gradient-to-br ${badge.color} p-5 rounded-2xl text-center space-y-2 shadow-lg`}>
                 <div className="text-4xl">{badge.icon}</div>
-                <p className="text-xs font-black text-white uppercase tracking-tight">{badge.name}</p>
-                <p className="text-[9px] text-white/70">{badge.desc}</p>
+                <p className="text-xs font-black text-slate-900 uppercase tracking-tight">{badge.name}</p>
+                <p className="text-[9px] text-slate-900/70">{badge.desc}</p>
               </div>
             ))}
           </div>
@@ -98,9 +98,9 @@ export default function Achievements() {
           <h2 className="text-sm font-black text-slate-500 uppercase tracking-widest flex items-center gap-2"><Shield size={14} /> Locked ({locked.length})</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {locked.map(badge => (
-              <div key={badge.id} className="bg-[#0d121f] border border-slate-800/50 p-5 rounded-2xl text-center space-y-2 opacity-40">
+              <div key={badge.id} className="bg-white border border-slate-200/50 p-5 rounded-2xl text-center space-y-2 opacity-40">
                 <div className="text-4xl grayscale">{badge.icon}</div>
-                <p className="text-xs font-black text-slate-400 uppercase tracking-tight">{badge.name}</p>
+                <p className="text-xs font-black text-slate-500 uppercase tracking-tight">{badge.name}</p>
                 <p className="text-[9px] text-slate-600">{badge.desc}</p>
               </div>
             ))}
@@ -109,7 +109,7 @@ export default function Achievements() {
       )}
 
       {earned.length === 0 && (
-        <div className="text-center py-12 bg-[#0d121f] rounded-3xl border border-dashed border-slate-700">
+        <div className="text-center py-12 bg-white rounded-3xl border border-dashed border-slate-300">
           <Trophy size={40} className="mx-auto text-slate-700 mb-4" />
           <p className="text-slate-500 font-bold">Koi badge nahi abhi — Padhai shuru karo!</p>
           <p className="text-slate-600 text-xs mt-2">Study session complete karo aur badges unlock karo</p>

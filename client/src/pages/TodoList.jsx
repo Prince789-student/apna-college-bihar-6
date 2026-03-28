@@ -62,17 +62,17 @@ export default function TodoList() {
       <div className="flex items-center gap-3">
         <ClipboardList size={24} className="text-blue-500" />
         <div>
-          <h1 className="text-2xl font-black text-white uppercase tracking-tight">Aaj ka Plan</h1>
+          <h1 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Aaj ka Plan</h1>
           <p className="text-[11px] text-slate-500">Today's To-Do List — {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
         </div>
       </div>
 
       {/* Progress */}
       {total > 0 && (
-        <div className="bg-[#0d121f] p-5 rounded-2xl border border-slate-800/50 space-y-2">
-          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-400">
+        <div className="bg-white p-5 rounded-2xl border border-slate-200/50 space-y-2">
+          <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-500">
             <span>Progress</span>
-            <span className="text-white">{completed}/{total} Complete</span>
+            <span className="text-slate-900">{completed}/{total} Complete</span>
           </div>
           <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
             <div className="h-full bg-blue-500 rounded-full transition-all duration-700" style={{ width: `${progress}%` }}></div>
@@ -89,7 +89,7 @@ export default function TodoList() {
           onKeyDown={e => e.key === 'Enter' && addTask()}
           placeholder="Naya task likhein... (Enter dabao)"
           maxLength={100}
-          className="flex-1 bg-[#0d121f] border border-slate-700/50 rounded-2xl px-5 py-4 text-white font-medium outline-none focus:border-blue-500 transition-all placeholder:text-slate-600"
+          className="flex-1 bg-white border border-slate-300/50 rounded-2xl px-5 py-4 text-slate-900 font-medium outline-none focus:border-blue-500 transition-all placeholder:text-slate-600"
         />
         <button
           onClick={addTask}
@@ -104,20 +104,20 @@ export default function TodoList() {
       {/* Task List */}
       <div className="space-y-3">
         {tasks.length === 0 ? (
-          <div className="text-center py-16 bg-[#0d121f] rounded-3xl border border-dashed border-slate-700">
+          <div className="text-center py-16 bg-white rounded-3xl border border-dashed border-slate-300">
             <ClipboardList size={32} className="mx-auto text-slate-700 mb-4" />
             <p className="text-slate-500 font-bold">Koi task nahi — Upar add karo!</p>
           </div>
         ) : (
           tasks.map(task => (
-            <div key={task.id} className={`flex items-center gap-4 p-5 rounded-2xl border transition-all group ${task.done ? 'bg-emerald-900/10 border-emerald-500/20' : 'bg-[#0d121f] border-slate-800/50 hover:border-slate-600'}`}>
+            <div key={task.id} className={`flex items-center gap-4 p-5 rounded-2xl border transition-all group ${task.done ? 'bg-emerald-900/10 border-emerald-500/20' : 'bg-white border-slate-200/50 hover:border-slate-600'}`}>
               <button onClick={() => toggleTask(task)} className="shrink-0">
                 {task.done
                   ? <CheckCircle2 size={24} className="text-emerald-500" />
                   : <Circle size={24} className="text-slate-600 hover:text-blue-500 transition-colors" />
                 }
               </button>
-              <p className={`flex-1 font-bold ${task.done ? 'line-through text-slate-500' : 'text-white'}`}>{task.text}</p>
+              <p className={`flex-1 font-bold ${task.done ? 'line-through text-slate-500' : 'text-slate-900'}`}>{task.text}</p>
               <button onClick={() => deleteTask(task.id)} className="opacity-0 group-hover:opacity-100 text-slate-600 hover:text-red-500 transition-all">
                 <Trash2 size={16} />
               </button>

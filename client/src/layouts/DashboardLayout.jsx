@@ -77,17 +77,17 @@ export default function DashboardLayout() {
         <div className={`flex items-center gap-4 transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
            <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
            <div className="min-w-[120px]">
-             <span className="text-xl font-[1000] tracking-tighter uppercase text-white block leading-none">APNA COLLEGE BIHAR</span>
+             <span className="text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE BIHAR</span>
              <span className="text-[7px] text-slate-500 font-black uppercase tracking-[0.4em] mt-2 block">Official Website</span>
            </div>
         </div>
         {!isMobile && (
-          <button onClick={()=>setSidebarOpen(!isSidebarOpen)} className="p-2.5 bg-slate-900/50 hover:bg-slate-800 border border-slate-800/80 rounded-xl transition-all ml-2">
+          <button onClick={()=>setSidebarOpen(!isSidebarOpen)} className="p-2.5 bg-slate-100/50 hover:bg-slate-100 border border-slate-200/80 rounded-xl transition-all ml-2">
              <Menu size={18} className={isSidebarOpen ? 'rotate-180 transition-transform' : ''} />
           </button>
         )}
         {isMobile && (
-          <button onClick={()=>setMobileMenuOpen(false)} className="p-2 text-slate-500 hover:text-white">
+          <button onClick={()=>setMobileMenuOpen(false)} className="p-2 text-slate-500 hover:text-slate-900">
             <X size={24} />
           </button>
         )}
@@ -98,7 +98,7 @@ export default function DashboardLayout() {
           const isActive = location.pathname === link.path;
           return (
             <Link key={link.name} to={link.path}
-              className={`flex items-center gap-4 p-4 rounded-[1.8rem] transition-all duration-300 group relative ${isActive ? 'bg-blue-600 text-white shadow-xl shadow-blue-500/30' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'}`}>
+              className={`flex items-center gap-4 p-4 rounded-[1.8rem] transition-all duration-300 group relative ${isActive ? 'bg-blue-600 text-slate-900 shadow-xl shadow-blue-500/30' : 'text-slate-500 hover:bg-slate-100/50 hover:text-slate-900'}`}>
               <div className={`${isActive ? 'scale-110' : 'group-hover:scale-125'} transition-transform shrink-0`}>{link.icon}</div>
               <span className={`font-black text-[10px] uppercase tracking-widest transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                 {link.name}
@@ -116,35 +116,35 @@ export default function DashboardLayout() {
         )}
       </nav>
 
-      <div className="p-6 md:p-8 border-t border-slate-800/50">
+      <div className="p-6 md:p-8 border-t border-slate-200/50">
          {user ? (
            (isSidebarOpen || isMobile) ? (
              <div className="space-y-4">
-                <div className="flex items-center gap-3 p-4 bg-[#162035] rounded-[2rem] border border-slate-700/30">
-                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center font-[1000] text-white shadow-lg shrink-0">
+                <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-[2rem] border border-slate-300/30">
+                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center font-[1000] text-slate-900 shadow-lg shrink-0">
                       {user?.name?.[0]?.toUpperCase()}
                    </div>
                    <div className="flex-1 min-w-0">
-                      <p className="text-[10px] font-black text-white uppercase tracking-tighter truncate">{user?.name || 'Scholar'}</p>
+                      <p className="text-[10px] font-black text-slate-900 uppercase tracking-tighter truncate">{user?.name || 'Scholar'}</p>
                       <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">{user?.role || 'Verified'}</p>
                    </div>
                 </div>
-                <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 p-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white border border-red-500/20 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all group active:scale-95">
+                <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 p-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-slate-900 border border-red-500/20 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all group active:scale-95">
                   <LogOut size={16} /> <span>Terminate Hub</span>
                 </button>
              </div>
            ) : (
-             <button onClick={handleLogout} className="w-full flex items-center justify-center p-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white rounded-[1.5rem] border border-red-500/20 transition-all">
+             <button onClick={handleLogout} className="w-full flex items-center justify-center p-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-slate-900 rounded-[1.5rem] border border-red-500/20 transition-all">
                 <LogOut size={18} />
              </button>
            )
          ) : (
            <div className="space-y-3">
-             <Link to="/login" className={`w-full flex items-center justify-center gap-3 p-4 bg-blue-600 hover:bg-blue-500 text-white rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all shadow-lg shadow-blue-900/20 ${!isSidebarOpen && !isMobile ? 'px-0' : ''}`}>
+             <Link to="/login" className={`w-full flex items-center justify-center gap-3 p-4 bg-blue-600 hover:bg-blue-500 text-slate-900 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all shadow-lg shadow-blue-900/20 ${!isSidebarOpen && !isMobile ? 'px-0' : ''}`}>
                <User size={16} /> {(isSidebarOpen || isMobile) && <span>Student Login</span>}
              </Link>
              {(isSidebarOpen || isMobile) && (
-               <Link to="/signup" className="w-full flex items-center justify-center gap-3 p-4 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all">
+               <Link to="/signup" className="w-full flex items-center justify-center gap-3 p-4 bg-slate-800 hover:bg-slate-200 text-slate-700 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all">
                  Join Community
                </Link>
              )}
@@ -155,10 +155,10 @@ export default function DashboardLayout() {
   );
 
   return (
-    <div className="flex h-screen bg-[#02040a] overflow-hidden text-white font-['Inter'] selection:bg-blue-500/30">
+    <div className="flex h-screen bg-[#f8fafc] overflow-hidden text-slate-900 font-["Inter'] selection:bg-blue-500/30">
       
       {/* ── Desktop Sidebar ── */}
-      <aside className={`hidden md:flex flex-col bg-[#0d121f] border-r border-slate-800/80 transition-all duration-500 shadow-2xl relative z-40 ${isSidebarOpen ? 'w-80' : 'w-24'}`}>
+      <aside className={`hidden md:flex flex-col bg-white border-r border-slate-200/80 transition-all duration-500 shadow-2xl relative z-40 ${isSidebarOpen ? 'w-80' : 'w-24'}`}>
         <SidebarContent />
       </aside>
 
@@ -166,22 +166,22 @@ export default function DashboardLayout() {
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[100] md:hidden">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
-          <aside className="absolute top-0 left-0 h-full w-[280px] bg-[#0d121f] shadow-2xl flex flex-col animate-in slide-in-from-left duration-300">
+          <aside className="absolute top-0 left-0 h-full w-[280px] bg-white shadow-2xl flex flex-col animate-in slide-in-from-left duration-300">
             <SidebarContent isMobile />
           </aside>
         </div>
       )}
 
       {/* ── Main Display ── */}
-      <main className="flex-1 flex flex-col h-full bg-[#02040a] relative overflow-hidden">
+      <main className="flex-1 flex flex-col h-full bg-[#f8fafc] relative overflow-hidden">
         
         {/* Mobile Navbar Header */}
-        <div className="md:hidden flex items-center justify-between p-4 bg-[#0d121f] border-b border-slate-800/80 sticky top-0 z-30">
+        <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200/80 sticky top-0 z-30">
           <div className="flex items-center gap-3">
              <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
-             <span className="text-xs font-[1000] tracking-tighter uppercase text-white leading-none">APNA COLLEGE BIHAR</span>
+             <span className="text-xs font-[1000] tracking-tighter uppercase text-slate-900 leading-none">APNA COLLEGE BIHAR</span>
           </div>
-          <button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-900/50 border border-slate-800 rounded-xl">
+          <button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-100/50 border border-slate-200 rounded-xl">
              <Menu size={20} />
           </button>
         </div>
@@ -193,21 +193,21 @@ export default function DashboardLayout() {
            </div>
 
            {/* ── Dashboard Footer (SEO & Legal) ── */}
-           <footer className="mt-20 py-10 border-t border-slate-800/30 flex flex-col md:flex-row items-center justify-between gap-6 opacity-60 hover:opacity-100 transition-opacity">
+           <footer className="mt-20 py-10 border-t border-slate-200/30 flex flex-col md:flex-row items-center justify-between gap-6 opacity-60 hover:opacity-100 transition-opacity">
               <div className="flex flex-col items-center md:items-start gap-1">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white">Apna College Bihar</p>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-900">Apna College Bihar</p>
                 <p className="text-[8px] font-bold uppercase tracking-widest text-slate-500">© 2026 Official Website</p>
               </div>
               <div className="flex flex-wrap items-center justify-center gap-6">
-                <Link to="/about" className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-400 transition-colors">About Us</Link>
-                <Link to="/contact" className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-emerald-400 transition-colors">Contact Us</Link>
-                <Link to="/privacy" className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-orange-400 transition-colors">Privacy Policy</Link>
+                <Link to="/about" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-blue-400 transition-colors">About Us</Link>
+                <Link to="/contact" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-emerald-400 transition-colors">Contact Us</Link>
+                <Link to="/privacy" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-orange-400 transition-colors">Privacy Policy</Link>
               </div>
               <div className="flex items-center gap-4">
-                 <a href="https://t.me/apnacollegebihar" target="_blank" rel="noopener noreferrer" className="p-2 bg-blue-600/10 text-blue-500 hover:bg-blue-600 hover:text-white rounded-lg transition-all border border-blue-500/10">
+                 <a href="https://t.me/apnacollegebihar" target="_blank" rel="noopener noreferrer" className="p-2 bg-blue-600/10 text-blue-500 hover:bg-blue-600 hover:text-slate-900 rounded-lg transition-all border border-blue-500/10">
                    <Send size={14} />
                  </a>
-                 <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="p-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white rounded-lg transition-all border border-red-500/10">
+                 <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="p-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-slate-900 rounded-lg transition-all border border-red-500/10">
                    <Youtube size={14} />
                  </a>
                  <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
@@ -222,8 +222,8 @@ export default function DashboardLayout() {
 
         {/* ── Verification Modal (MANDATORY) ── */}
         {isPhoneModalOpen && (
-          <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-[#02040a]/80 backdrop-blur-xl">
-             <div className="w-full max-w-md bg-[#0d121f] border border-slate-800/80 rounded-[3rem] p-10 md:p-14 shadow-2xl animate-in zoom-in-95 duration-300 relative overflow-hidden">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-[#f8fafc]/80 backdrop-blur-xl">
+             <div className="w-full max-w-md bg-white border border-slate-200/80 rounded-[3rem] p-10 md:p-14 shadow-2xl animate-in zoom-in-95 duration-300 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-40 h-40 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
                 
                 <div className="relative z-10 space-y-8 text-center">
@@ -231,7 +231,7 @@ export default function DashboardLayout() {
                       <Shield size={32} />
                    </div>
                    <div className="space-y-3">
-                      <h2 className="text-2xl font-[1000] text-white uppercase tracking-tighter">Security Update</h2>
+                      <h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Security Update</h2>
                       <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">Please link your active mobile number to access your academic records.</p>
                    </div>
 
@@ -239,7 +239,7 @@ export default function DashboardLayout() {
                       <div className="space-y-2 text-left">
                         <p className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] ml-2">Phone Number</p>
                         <div className="flex gap-2">
-                          <div className="bg-[#1c263d] px-4 py-4 rounded-2xl flex items-center justify-center text-xs font-black text-slate-400">+91</div>
+                          <div className="bg-slate-100 px-4 py-4 rounded-2xl flex items-center justify-center text-xs font-black text-slate-500">+91</div>
                           <input 
                             type="tel" 
                             required 
@@ -247,7 +247,7 @@ export default function DashboardLayout() {
                             value={phone}
                             onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
                             placeholder="9XXXXXXXXX" 
-                            className="flex-1 bg-[#1c263d] border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-4 text-white text-sm font-black outline-none transition-all placeholder:text-slate-700" 
+                            className="flex-1 bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-4 text-slate-900 text-sm font-black outline-none transition-all placeholder:text-slate-700" 
                           />
                         </div>
                       </div>

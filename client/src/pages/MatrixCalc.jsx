@@ -51,10 +51,10 @@ export default function MatrixCalc() {
         {/* Solar Panel & Logo Area */}
         <div className="flex justify-between items-center mb-6 px-4">
            <div className="flex flex-col">
-             <span className="text-white font-bold text-xl tracking-widest">CASIO</span>
-             <span className="text-slate-400 text-[10px] uppercase">fx-991CW</span>
+             <span className="text-slate-900 font-bold text-xl tracking-widest">CASIO</span>
+             <span className="text-slate-500 text-[10px] uppercase">fx-991CW</span>
            </div>
-           <div className="w-16 h-8 bg-[#3d2621] rounded border border-slate-800 shadow-inner flex flex-col justify-center px-1 overflow-hidden opacity-80">
+           <div className="w-16 h-8 bg-[#3d2621] rounded border border-slate-200 shadow-inner flex flex-col justify-center px-1 overflow-hidden opacity-80">
               <div className="w-full h-1 bg-white/10 my-0.5"></div>
               <div className="w-full h-1 bg-white/10 my-0.5"></div>
               <div className="w-full h-1 bg-white/10 my-0.5"></div>
@@ -95,12 +95,12 @@ export default function MatrixCalc() {
 
         {/* Matrix Selection Tabs */}
         <div className="flex justify-center space-x-4 mb-4">
-           <button onClick={() => { setActiveMatrix('A'); setResult(null); }} className={`px-4 py-1 rounded-full text-xs font-bold transition ${activeMatrix === 'A' ? 'bg-amber-500 text-black' : 'bg-slate-800 text-slate-400'}`}>Matrix A</button>
-           <button onClick={() => { setActiveMatrix('B'); setResult(null); }} className={`px-4 py-1 rounded-full text-xs font-bold transition ${activeMatrix === 'B' ? 'bg-amber-500 text-black' : 'bg-slate-800 text-slate-400'}`}>Matrix B</button>
+           <button onClick={() => { setActiveMatrix('A'); setResult(null); }} className={`px-4 py-1 rounded-full text-xs font-bold transition ${activeMatrix === 'A' ? 'bg-amber-500 text-black' : 'bg-slate-800 text-slate-500'}`}>Matrix A</button>
+           <button onClick={() => { setActiveMatrix('B'); setResult(null); }} className={`px-4 py-1 rounded-full text-xs font-bold transition ${activeMatrix === 'B' ? 'bg-amber-500 text-black' : 'bg-slate-800 text-slate-500'}`}>Matrix B</button>
         </div>
 
         {/* Matrix Input Grid (Internal to Calculator) */}
-        <div className="bg-slate-800 p-3 rounded-2xl mb-8 border border-slate-700">
+        <div className="bg-slate-800 p-3 rounded-2xl mb-8 border border-slate-300">
            <div className="grid grid-cols-4 gap-1.5">
               {(activeMatrix === 'A' ? matrixA : matrixB).map((v, i) => (
                 <input 
@@ -108,7 +108,7 @@ export default function MatrixCalc() {
                   type="number"
                   value={v === 0 ? '' : v}
                   onChange={(e) => updateCell(i, e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-md p-1.5 text-center text-white text-xs font-bold focus:border-amber-500 outline-none"
+                  className="w-full bg-slate-100 border border-slate-300 rounded-md p-1.5 text-center text-slate-900 text-xs font-bold focus:border-amber-500 outline-none"
                   placeholder="0"
                 />
               ))}
@@ -123,12 +123,12 @@ export default function MatrixCalc() {
            </div>
            
            <div className="flex flex-col items-center">
-              <div className="w-20 h-20 bg-slate-800 rounded-full border-4 border-slate-700 relative shadow-2xl flex items-center justify-center">
-                 <button className="absolute top-1 text-slate-500 hover:text-white"><ChevronUp size={16} /></button>
-                 <button className="absolute bottom-1 text-slate-500 hover:text-white"><ChevronDown size={16} /></button>
-                 <button className="absolute left-1 text-slate-500 hover:text-white"><ChevronLeft size={16} /></button>
-                 <button className="absolute right-1 text-slate-500 hover:text-white"><ChevronRight size={16} /></button>
-                 <button className="w-8 h-8 bg-slate-900 rounded-full text-slate-400 text-xs font-bold border border-slate-700 shadow-inner">OK</button>
+              <div className="w-20 h-20 bg-slate-800 rounded-full border-4 border-slate-300 relative shadow-2xl flex items-center justify-center">
+                 <button className="absolute top-1 text-slate-500 hover:text-slate-900"><ChevronUp size={16} /></button>
+                 <button className="absolute bottom-1 text-slate-500 hover:text-slate-900"><ChevronDown size={16} /></button>
+                 <button className="absolute left-1 text-slate-500 hover:text-slate-900"><ChevronLeft size={16} /></button>
+                 <button className="absolute right-1 text-slate-500 hover:text-slate-900"><ChevronRight size={16} /></button>
+                 <button className="w-8 h-8 bg-slate-100 rounded-full text-slate-500 text-xs font-bold border border-slate-300 shadow-inner">OK</button>
               </div>
            </div>
 

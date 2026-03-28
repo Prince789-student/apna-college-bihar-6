@@ -96,15 +96,15 @@ export default function StudyTimer() {
         
         {/* Timer Core */}
         <div className="lg:col-span-12 xl:col-span-8 space-y-8">
-           <div className="bg-[#0d121f] p-10 md:p-16 rounded-[4rem] border border-slate-800/80 shadow-2xl relative overflow-hidden flex flex-col items-center">
+           <div className="bg-white p-10 md:p-16 rounded-[4rem] border border-slate-200/80 shadow-2xl relative overflow-hidden flex flex-col items-center">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent pointer-events-none"></div>
               
-              <div className="flex items-center gap-3 mb-10 px-6 py-2 bg-slate-900/50 rounded-full border border-slate-800/50">
+              <div className="flex items-center gap-3 mb-10 px-6 py-2 bg-slate-100/50 rounded-full border border-slate-200/50">
                 <Target size={14} className="text-orange-400" />
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Current Objective: <span className="text-white">{selSub}</span></p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Current Objective: <span className="text-slate-900">{selSub}</span></p>
               </div>
 
-              <h1 className="text-8xl md:text-[10rem] font-[1000] text-white tracking-tighter transition-all tabular-nums leading-none">
+              <h1 className="text-8xl md:text-[10rem] font-[1000] text-slate-900 tracking-tighter transition-all tabular-nums leading-none">
                 {fmt(time)}
               </h1>
 
@@ -131,11 +131,11 @@ export default function StudyTimer() {
               <div className="mt-12 flex flex-wrap justify-center gap-2">
                 {subjects.map(s => (
                   <button key={s} onClick={() => !active && setSelSub(s)}
-                    className={`px-6 py-3 rounded-2xl text-[11px] font-bold uppercase transition-all ${selSub === s ? 'bg-white text-black shadow-xl scale-105' : 'bg-slate-900 text-slate-500 hover:text-white'}`}>
+                    className={`px-6 py-3 rounded-2xl text-[11px] font-bold uppercase transition-all ${selSub === s ? 'bg-white text-black shadow-xl scale-105' : 'bg-slate-100 text-slate-500 hover:text-slate-900'}`}>
                     {s}
                   </button>
                 ))}
-                <button onClick={()=>setSubjects([...subjects, prompt('New Subject:') || 'Extra'])} className="px-6 py-3 bg-slate-800 rounded-2xl text-[11px] font-bold text-slate-500 hover:text-white transition-all">+</button>
+                <button onClick={()=>setSubjects([...subjects, prompt('New Subject:') || 'Extra'])} className="px-6 py-3 bg-slate-800 rounded-2xl text-[11px] font-bold text-slate-500 hover:text-slate-900 transition-all">+</button>
               </div>
            </div>
 
@@ -146,15 +146,15 @@ export default function StudyTimer() {
                 { label: 'Weekly Grind', val: fmt(stats.weekly), icon: CalendarDays, col: 'indigo' },
                 { label: 'Subject Leader', val: selSub, icon: BookOpen, col: 'orange' },
               ].map(s => (
-                <div key={s.label} className="bg-[#0d121f] p-8 rounded-[3rem] border border-slate-800/80 group hover:border-blue-500/20 transition-all">
+                <div key={s.label} className="bg-white p-8 rounded-[3rem] border border-slate-200/80 group hover:border-blue-500/20 transition-all">
                   <div className="flex justify-between items-start mb-6">
-                    <div className="p-3 bg-slate-900 rounded-2xl text-slate-500 group-hover:text-blue-500 transition-colors">
+                    <div className="p-3 bg-slate-100 rounded-2xl text-slate-500 group-hover:text-blue-500 transition-colors">
                       <s.icon size={20} />
                     </div>
                     <ChevronRight size={14} className="text-slate-800" />
                   </div>
                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">{s.label}</p>
-                  <p className="text-2xl font-black text-white">{s.val}</p>
+                  <p className="text-2xl font-black text-slate-900">{s.val}</p>
                 </div>
               ))}
            </div>
@@ -162,45 +162,45 @@ export default function StudyTimer() {
 
         {/* Global Leaderboard */}
         <div className="lg:col-span-12 xl:col-span-4 space-y-6">
-           <div className="bg-[#162035] p-8 rounded-[3.5rem] border border-slate-700/30 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+           <div className="bg-slate-50 p-8 rounded-[3.5rem] border border-slate-300/30 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
                   <Trophy size={20} className="text-amber-500" />
-                  <h2 className="text-sm font-black uppercase text-white tracking-widest">Global Ranking</h2>
+                  <h2 className="text-sm font-black uppercase text-slate-900 tracking-widest">Global Ranking</h2>
                 </div>
-                <button onClick={fetchStats} className="p-2 text-slate-500 hover:text-white"><RefreshCw size={14}/></button>
+                <button onClick={fetchStats} className="p-2 text-slate-500 hover:text-slate-900"><RefreshCw size={14}/></button>
               </div>
 
               <div className="space-y-4">
                 {leaderboard.map((u, i) => (
-                  <div key={i} className="flex items-center justify-between p-4 bg-[#0d121f] rounded-3xl border border-slate-800/80 group">
+                  <div key={i} className="flex items-center justify-between p-4 bg-white rounded-3xl border border-slate-200/80 group">
                     <div className="flex items-center gap-4">
-                       <span className={`text-xs font-[1000] w-6 ${i===0?'text-amber-500':i===1?'text-slate-400':'text-slate-600'}`}>0{i+1}</span>
+                       <span className={`text-xs font-[1000] w-6 ${i===0?'text-amber-500':i===1?'text-slate-500':'text-slate-600'}`}>0{i+1}</span>
                        <div className="w-9 h-9 bg-slate-800 rounded-full flex items-center justify-center font-black text-xs text-white uppercase group-hover:bg-blue-600 transition-colors">
                          {(u.name || 'S')[0].toUpperCase()}
                        </div>
                        <div>
-                          <p className="text-[11px] font-black text-white uppercase tracking-tight">{u.name || 'Scholar'}</p>
+                          <p className="text-[11px] font-black text-slate-900 uppercase tracking-tight">{u.name || 'Scholar'}</p>
                           <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Global Scholar</p>
                        </div>
                     </div>
-                    <p className="text-xs font-black text-slate-400">{Math.floor(u.dur/60)}m</p>
+                    <p className="text-xs font-black text-slate-500">{Math.floor(u.dur/60)}m</p>
                   </div>
                 ))}
               </div>
 
-              <button className="w-full mt-8 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all">
+              <button className="w-full mt-8 py-4 bg-slate-100 hover:bg-slate-100 text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all">
                  View Full Hall of Fame
               </button>
            </div>
 
-           <div className="bg-[#0d121f] p-8 rounded-[3rem] border border-slate-800/80 flex items-center gap-6">
+           <div className="bg-white p-8 rounded-[3rem] border border-slate-200/80 flex items-center gap-6">
               <div className="w-16 h-16 bg-blue-600/10 rounded-3xl flex items-center justify-center text-blue-500 shrink-0">
                 <BarChart3 size={28} />
               </div>
               <div>
-                <p className="text-sm font-black text-white uppercase">Weekly Goal</p>
-                <div className="mt-2 w-full bg-slate-900 h-2 rounded-full overflow-hidden">
+                <p className="text-sm font-black text-slate-900 uppercase">Weekly Goal</p>
+                <div className="mt-2 w-full bg-slate-100 h-2 rounded-full overflow-hidden">
                   <div className="h-full bg-blue-600 rounded-full" style={{width: '65%'}}></div>
                 </div>
                 <p className="text-[10px] text-slate-500 font-bold uppercase mt-2">6.5h / 10h Completed</p>
