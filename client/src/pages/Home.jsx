@@ -8,7 +8,7 @@ import {
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-["Inter'] selection:bg-blue-500/30 overflow-x-hidden">
+    <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center p-4 font-['Inter'] relative overflow-hidden">
 
       {/* ── Navbar ── */}
       <nav className="fixed top-0 left-0 w-full z-[100] bg-[#f8fafc]/80 backdrop-blur-xl border-b border-slate-200/50 px-6 md:px-16 py-5 flex items-center justify-between">
@@ -147,7 +147,7 @@ export default function Home() {
       {/* ── Call to Action ── */}
       <section className="py-20 px-6 md:px-16 container mx-auto">
          <div className="bg-gradient-to-br from-blue-600 to-indigo-900 rounded-[4rem] p-10 md:p-20 relative overflow-hidden text-center space-y-8 group shadow-[0_0_100px_rgba(37,99,235,0.2)]">
-            <div className="absolute top-0 left-0 w-full h-full bg-[url("https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none"></div>
+            <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none"></div>
             <div className="relative z-10 space-y-6">
                <h2 className="text-5xl md:text-7xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Ready to Crush <br/> Your Finals?</h2>
                <p className="text-slate-900/60 font-bold uppercase tracking-widest text-xs md:text-sm max-w-xl mx-auto italic">Join thousands of students who have already upgraded their study workflow.</p>
