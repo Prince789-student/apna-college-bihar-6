@@ -1,7 +1,10 @@
 {
     "java.project.sourcePaths": [
-        "client/android/app/src/main/java",
-        "client/android/capacitor-cordova-android-plugins/src/main/java"
+        "client/android/app/src/main/java"
     ],
-    "java.import.gradle.enabled": true
+    "java.import.gradle.enabled": false,
+    "java.project.resourceFilters": [
+        "client/android"
+    ],
+    "java.project.importOnFirstTimeStartup": "disabled"
 }
