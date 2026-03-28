@@ -438,7 +438,7 @@ export default function StudyDashboard() {
                               const v = Math.min(600, Math.max(1, parseInt(e.target.value) || 1));
                               setCustomMinutes(v); setTimerTime(v * 60);
                             }}
-                            className="w-20 bg-transparent text-slate-900 text-3xl font-black outline-none border-b-2 border-slate-200 focus:border-blue-500 transition-all" />
+                            className="w-20 bg-transparent text-slate-900 text-3xl font-black outline-none border-b-2 border-slate-300 focus:border-blue-500 transition-all" />
                           <span className="text-[10px] font-bold text-slate-600 uppercase">Mins</span>
                         </div>
                       </div>
@@ -638,9 +638,9 @@ export default function StudyDashboard() {
               </div>
             )}
             <div className="flex flex-col md:flex-row gap-3 mb-6 bg-slate-100/40 p-5 rounded-3xl border border-slate-200/30">
-              <input value={newTask} onChange={e => setNewTask(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Kya padhna hai? (e.g. Exercise 1)" className="flex-[2] bg-[#161c2c] border border-slate-300/50 rounded-2xl px-5 py-3.5 text-slate-900 text-sm outline-none focus:border-blue-500 transition-all placeholder:text-slate-600 font-bold" />
+              <input value={newTask} onChange={e => setNewTask(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Kya padhna hai? (e.g. Exercise 1)" className="flex-[2] bg-slate-50 border border-slate-200 rounded-2xl px-5 py-3.5 text-slate-900 text-sm outline-none focus:border-blue-500 transition-all placeholder:text-slate-500 font-bold" />
               <div className="flex-1 flex gap-2">
-                <input list="subjects-list" value={taskSub} onChange={e => setTaskSub(e.target.value)} placeholder="Subject" className="flex-1 bg-[#161c2c] border border-slate-300/50 rounded-2xl px-5 py-3.5 text-slate-900 text-xs outline-none focus:border-blue-500 transition-all font-black uppercase tracking-widest placeholder:text-slate-600" />
+                <input list="subjects-list" value={taskSub} onChange={e => setTaskSub(e.target.value)} placeholder="Subject" className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl px-5 py-3.5 text-slate-900 text-xs outline-none focus:border-blue-500 transition-all font-black uppercase tracking-widest placeholder:text-slate-500" />
                 <datalist id="subjects-list">
                   {subjects.map(s => <option key={s.id} value={s.subjectName} />)}
                 </datalist>
@@ -727,7 +727,7 @@ export default function StudyDashboard() {
             {[{ key: 'daily', label: 'Daily Goal', hint: 'Max 24 hr', max: 24 }, { key: 'weekly', label: 'Weekly Goal', hint: 'Max 168 hr', max: 168 }, { key: 'monthly', label: 'Monthly Goal', hint: 'Max 744 hr', max: 744 }].map(({ key, label, hint, max }) => (
               <div key={key} className="mb-5">
                 <div className="flex justify-between mb-2"><p className="text-[9px] font-black uppercase tracking-widest text-slate-500">{label}</p><p className="text-[9px] text-slate-600">{hint}</p></div>
-                <div className="flex items-center gap-3"><input type="number" min={0} max={max} value={goals[key]} onChange={e => setGoals({ ...goals, [key]: Math.min(max, Math.max(0, Number(e.target.value))) })} className="flex-1 bg-[#161c2c] border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black text-center outline-none focus:border-blue-500" /><span className="text-slate-500 text-sm font-bold">hr</span></div>
+                <div className="flex items-center gap-3"><input type="number" min={0} max={max} value={goals[key]} onChange={e => setGoals({ ...goals, [key]: Math.min(max, Math.max(0, Number(e.target.value))) })} className="flex-1 bg-slate-50 border border-slate-200 rounded-2xl p-4 text-slate-900 font-black text-center outline-none focus:border-blue-500" /><span className="text-slate-500 text-sm font-bold">hr</span></div>
               </div>
             ))}
             <div className="flex gap-3 mt-2"><button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100 transition-all" onClick={() => setShowGoalModal(false)}>Cancel</button><button className="flex-1 bg-blue-600 hover:bg-blue-500 p-4 rounded-xl font-black text-[10px] uppercase text-white" onClick={saveGoals}>Save</button></div>
@@ -740,8 +740,8 @@ export default function StudyDashboard() {
           <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
             <p className="text-xl font-black uppercase mb-1">New Subject</p>
             <p className="text-[10px] text-slate-500 mb-8">{subjects.length}/10 used</p>
-            <input maxLength={20} placeholder="Jaise: MATHS, PHYSICS, HINDI" className="w-full bg-[#161c2c] border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black uppercase mb-6 outline-none focus:border-blue-500 transition-all" value={newSubject} onChange={e => setNewSubject(e.target.value)} onKeyDown={e => e.key === 'Enter' && addSubject()} autoFocus />
-            <div className="flex gap-3"><button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100" onClick={() => { setShowSubjectModal(false); setNewSubject(''); }}>Cancel</button><button disabled={subjects.length >= 10 || !newSubject.trim()} className={`flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-900 transition-all ${subjects.length >= 10 || !newSubject.trim() ? 'bg-slate-700 opacity-50' : 'bg-blue-600 hover:bg-blue-500'}`} onClick={addSubject}>Add Subject</button></div>
+            <input maxLength={20} placeholder="Jaise: MATHS, PHYSICS, HINDI" className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-slate-900 font-black uppercase mb-6 outline-none focus:border-blue-500 transition-all placeholder:text-slate-400" value={newSubject} onChange={e => setNewSubject(e.target.value)} onKeyDown={e => e.key === 'Enter' && addSubject()} autoFocus />
+            <div className="flex gap-3"><button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100 transition-all" onClick={() => { setShowSubjectModal(false); setNewSubject(''); }}>Cancel</button><button disabled={subjects.length >= 10 || !newSubject.trim()} className={`flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-50 transition-all ${subjects.length >= 10 || !newSubject.trim() ? 'bg-slate-300 opacity-50 text-slate-500' : 'bg-blue-600 hover:bg-blue-500'}`} onClick={addSubject}>Add Subject</button></div>
           </div>
         </div>
       )}
@@ -751,7 +751,7 @@ export default function StudyDashboard() {
           <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
             <p className="text-xl font-black uppercase mb-1">New Study Group</p>
             <p className="text-[10px] text-slate-500 mb-8">Group code se dosto ko join karao</p>
-            <input maxLength={30} placeholder="Group ka naam..." className="w-full bg-[#161c2c] border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black mb-6 outline-none focus:border-blue-500" value={newGroupName} onChange={e => setNewGroupName(e.target.value)} onKeyDown={e => e.key === 'Enter' && createGroup()} autoFocus />
+            <input maxLength={30} placeholder="Group ka naam..." className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-slate-900 font-black mb-6 outline-none focus:border-blue-500 placeholder:text-slate-400" value={newGroupName} onChange={e => setNewGroupName(e.target.value)} onKeyDown={e => e.key === 'Enter' && createGroup()} autoFocus />
             <div className="flex gap-3"><button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100" onClick={() => { setShowCreateGroup(false); setNewGroupName(''); }}>Cancel</button><button disabled={groupLoading || !newGroupName.trim()} className="flex-1 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 p-4 rounded-xl font-black text-[10px] uppercase text-white" onClick={createGroup}>{groupLoading ? 'Creating...' : 'Create Group'}</button></div>
           </div>
         </div>
@@ -762,7 +762,7 @@ export default function StudyDashboard() {
           <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
             <p className="text-xl font-black uppercase mb-1">Join Group</p>
             <p className="text-[10px] text-slate-500 mb-8">6-character group code dalo</p>
-            <input maxLength={6} placeholder="ABC123" className="w-full bg-[#161c2c] border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black uppercase text-center tracking-[0.5em] text-xl mb-6 outline-none focus:border-blue-500" value={joinCode} onChange={e => setJoinCode(e.target.value.toUpperCase())} onKeyDown={e => e.key === 'Enter' && joinGroup()} autoFocus />
+            <input maxLength={6} placeholder="ABC123" className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-slate-900 font-black uppercase text-center tracking-[0.5em] text-xl mb-6 outline-none focus:border-blue-500 placeholder:text-slate-300" value={joinCode} onChange={e => setJoinCode(e.target.value.toUpperCase())} onKeyDown={e => e.key === 'Enter' && joinGroup()} autoFocus />
             <div className="flex gap-3"><button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100" onClick={() => { setShowJoinGroup(false); setJoinCode(''); }}>Cancel</button><button disabled={groupLoading || joinCode.length < 4} className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 p-4 rounded-xl font-black text-[10px] uppercase text-white" onClick={joinGroup}>{groupLoading ? 'Joining...' : 'Join Group'}</button></div>
           </div>
         </div>
