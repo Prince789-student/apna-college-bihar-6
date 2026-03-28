@@ -68,11 +68,74 @@
    </script>
    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
    <style>
-      body {
-         font-family: 'Inter', sans-serif;
-         background-color: #0f172a;
-         color: white;
+      /* --- GLOBAL THEME OVERRIDES THE TAILWIND DARK CLASSES --- */
+      body, #root {
+         font-family: 'Inter', 'Roboto', sans-serif;
+         background-color: #F5F7FA !important;
+         color: #1e293b !important;
+         transition: background-color 0.3s ease;
       }
+
+      /* Base Layouts & Cards */
+      .bg-\\[\\#02040a\\] { background-color: #F5F7FA !important; }
+      .bg-\\[\\#0d121f\\], .bg-\\[\\#162035\\] {
+         background-color: #FFFFFF !important;
+         border-color: #EAF2FF !important;
+         box-shadow: 0 10px 15px -3px rgba(30, 58, 138, 0.05), 0 4px 6px -2px rgba(30, 58, 138, 0.025) !important;
+      }
+
+      /* Sections & Groupings */
+      .bg-slate-900\\/80, .bg-slate-900\\/50, .bg-slate-800\\/50 {
+         background-color: #EAF2FF !important;
+         border-color: #dbeafe !important;
+      }
+
+      /* Text Hierarchy */
+      h1, h2, h3, .text-white { color: #1E3A8A !important; }
+      .text-slate-400, .text-slate-300 { color: #475569 !important; }
+      .text-slate-500 { color: #64748b !important; }
+      .text-slate-600 { color: #94a3b8 !important; }
+
+      /* Primary Buttons (Dark Blue) */
+      .bg-blue-600 { 
+         background-color: #1E3A8A !important; 
+         box-shadow: 0 4px 14px 0 rgba(30, 58, 138, 0.39) !important;
+      }
+      .hover\\:bg-blue-500:hover { background-color: #1e40af !important; border-color: transparent !important; }
+
+      /* Accent Elements / Buttons (Green) */
+      .text-orange-400, .text-orange-500 { color: #22C55E !important; }
+      .bg-orange-600 { background-color: #22C55E !important; box-shadow: 0 4px 14px 0 rgba(34, 197, 94, 0.39) !important; }
+      .hover\\:bg-orange-500:hover { background-color: #16a34a !important; }
+      .bg-orange-500\\/10 { background-color: rgba(34, 197, 94, 0.1) !important; border-color: rgba(34, 197, 94, 0.3) !important; }
+
+      /* Typography Enhancements */
+      h1 { font-weight: 800 !important; letter-spacing: -0.02em !important; }
+      
+      /* Smooth Hover Effects & Spacing for cards */
+      .rounded-\\[2rem\\], .rounded-\\[3rem\\], .rounded-\\[4rem\\] {
+         border-radius: 1.5rem !important; 
+      }
+      .rounded-3xl { border-radius: 1.25rem !important; }
+      
+      button { 
+         border-radius: 999px !important; 
+         transition: all 0.2s ease-in-out !important; 
+      }
+      button:hover { transform: translateY(-2px); }
+
+      /* Inputs */
+      input { color: #1E3A8A !important; }
+      input::placeholder { color: #94a3b8 !important; }
+
+      /* Remove Dark Mode borders globally */
+      .border-slate-800\\/50, .border-slate-800\\/80, .border-slate-700\\/30, .border-slate-800, .border-slate-700\\/50 {
+         border-color: #e2e8f0 !important;
+      }
+      
+      /* Subtle Depth to Icons/Nav */
+      nav a.bg-blue-600 { background-color: #3B82F6 !important; color: white !important; }
+      nav a:hover { background-color: #EAF2FF !important; color: #1E3A8A !important; }
    </style>
    <script>
       if ('serviceWorker' in navigator) {
@@ -86,10 +149,10 @@
          window.dispatchEvent(new Event('pwa-ready'));
       });
    </script>
-  <script type="module" crossorigin src="/assets/index-a84e3693.js"></script>
+  <script type="module" crossorigin src="/assets/index-b0b2b796.js"></script>
 </head>
 
-<body class="dark">
+<body class="bg-[#F5F7FA]">
    <div id="root"></div>
    <script>
       // Global Fail-Safe Error Handler
