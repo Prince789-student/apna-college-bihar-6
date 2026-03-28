@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -29,11 +29,23 @@ const AdminRoute = () => {
 };
 
 function App() {
+  // Synchronously check if the URL contains ?mode=app or if it was previously saved in localStorage.
+  // This is used for checking if the web app is running inside the Android WebView.
+  const [isAppMode] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('mode') === 'app') {
+      localStorage.setItem('isAppMode', 'true');
+      return true;
+    }
+    return localStorage.getItem('isAppMode') === 'true';
+  });
+
   return (
     <AuthProvider>
       <Toaster position="top-right" reverseOrder={false} />
       <Routes>
-        <Route path="/" element={<Home />} />
+        {/* If user is coming from App (WebView), skip Home landing page and direct to Login */}
+        <Route path="/" element={isAppMode ? <Navigate to="/login" replace /> : <Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         
