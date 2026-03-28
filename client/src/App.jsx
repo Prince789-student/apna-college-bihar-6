@@ -19,6 +19,8 @@ import BeuCgpa from './pages/BeuCgpa';
 import PrivacyPolicy from './pages/legal/PrivacyPolicy';
 import AboutUs from './pages/legal/AboutUs';
 import ContactUs from './pages/legal/ContactUs';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
 
 // Role-Based Admin Guard (Restricted to Founder Identity)
 const AdminRoute = () => {
@@ -64,6 +66,8 @@ function App() {
             <Route path="timer" element={<StudyDashboard />} />
             <Route path="study/group/:groupId" element={<GroupDetail />} />
             <Route path="timetable" element={<Timetable />} />
+            <Route path="blog" element={<Blog />} />
+            <Route path="blog/:postId" element={<BlogPost />} />
             
             {/* Dedicated Admin Sub-Route */}
             <Route element={<AdminRoute />}>
