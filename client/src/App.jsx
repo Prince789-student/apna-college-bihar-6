@@ -31,15 +31,18 @@ const AdminRoute = () => {
 };
 
 function App() {
-  // Synchronously check if the URL contains ?mode=app or if it was previously saved in localStorage.
-  // This is used for checking if the web app is running inside the Android WebView.
+  // Safe App Mode Detection
   const [isAppMode] = useState(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('mode') === 'app') {
-      localStorage.setItem('isAppMode', 'true');
-      return true;
+    try {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('mode') === 'app') {
+        localStorage.setItem('isAppMode', 'true');
+        return true;
+      }
+      return localStorage.getItem('isAppMode') === 'true';
+    } catch {
+      return false; 
     }
-    return localStorage.getItem('isAppMode') === 'true';
   });
 
   return (
@@ -50,29 +53,29 @@ function App() {
         <Route path="/" element={isAppMode ? <Navigate to="/login" replace /> : <Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        
+
         {/* Unified Dashboard System */}
         <Route path="/dashboard" element={<DashboardLayout />}>
-           {/* Public Utility Routes (No Login Required) */}
-           <Route path="calculator" element={<ScientificCalc />} />
-           <Route path="cgpa" element={<BeuCgpa />} />
+          {/* Public Utility Routes (No Login Required) */}
+          <Route path="calculator" element={<ScientificCalc />} />
+          <Route path="cgpa" element={<BeuCgpa />} />
 
-           {/* Protected Core Dashboard Content */}
-           <Route element={<ProtectedRoute />}>
-             <Route index element={<StudyDashboard />} />
-             <Route path="notes" element={<Notes />} />
-             <Route path="study" element={<StudyDashboard />} />
-             <Route path="timer" element={<StudyDashboard />} />
-             <Route path="study/group/:groupId" element={<GroupDetail />} />
-             <Route path="timetable" element={<Timetable />} />
-             <Route path="blog" element={<Blog />} />
-             <Route path="blog/:postId" element={<BlogPost />} />
-             
-             {/* Founder-Only Admin Console */}
-             <Route element={<AdminRoute />}>
-                <Route path="admin" element={<AdminPanel />} />
-             </Route>
-           </Route>
+          {/* Protected Core Dashboard Content */}
+          <Route element={<ProtectedRoute />}>
+            <Route index element={<StudyDashboard />} />
+            <Route path="notes" element={<Notes />} />
+            <Route path="study" element={<StudyDashboard />} />
+            <Route path="timer" element={<StudyDashboard />} />
+            <Route path="study/group/:groupId" element={<GroupDetail />} />
+            <Route path="timetable" element={<Timetable />} />
+            <Route path="blog" element={<Blog />} />
+            <Route path="blog/:postId" element={<BlogPost />} />
+
+            {/* Founder-Only Admin Console */}
+            <Route element={<AdminRoute />}>
+              <Route path="admin" element={<AdminPanel />} />
+            </Route>
+          </Route>
         </Route>
 
         {/* Public Legal Pages (AdSense Compliance) */}

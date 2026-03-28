@@ -5,6 +5,8 @@ import {
   createUserWithEmailAndPassword, 
   signOut, 
   signInWithPopup, 
+  signInWithRedirect,
+  getRedirectResult,
   RecaptchaVerifier, 
   signInWithPhoneNumber 
 } from "firebase/auth";
@@ -84,8 +86,12 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  // 3. Google Signup/Login
+  // 3. Google Signup/Login (with Mobile Redirect support)
   async function googleLogin() {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) {
+      return signInWithRedirect(auth, googleProvider);
+    }
     const res = await signInWithPopup(auth, googleProvider);
     await syncProfile(res.user);
     return res.user;
@@ -114,6 +120,12 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
+    // 1. Handle Redirect Result if coming back from Mobile Login
+    getRedirectResult(auth).then(async (res) => {
+      if (res?.user) await syncProfile(res.user);
+    }).catch(console.error);
+
+    // 2. Main Auth Listener
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
       setLoading(true);
       try {

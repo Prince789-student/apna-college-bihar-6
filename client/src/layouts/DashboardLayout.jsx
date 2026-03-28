@@ -27,8 +27,11 @@ export default function DashboardLayout() {
   const [isPhoneModalOpen, setPhoneModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // Platform Detection
-  const isAppMode = localStorage.getItem('isAppMode') === 'true';
+  // Safe Platform Detection
+  const isAppMode = (() => {
+    try { return localStorage.getItem('isAppMode') === 'true'; }
+    catch { return false; }
+  })();
 
   // Auto-close mobile menu on navigation
   useEffect(() => {
