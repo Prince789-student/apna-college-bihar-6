@@ -196,7 +196,7 @@ export default function StudyDashboard() {
       });
 
       // Disable blocker when session is saved/finished
-      await enableAppBlocker(false);
+      await stopFocusSession();
 
       setTimerActive(false);
       setTimerTime(timerMode === 'STOPWATCH' ? 0 : customMinutes * 60);
@@ -399,7 +399,7 @@ export default function StudyDashboard() {
                       if (timerMode === 'COUNTDOWN') {
                         startFocusSession(customMinutes, allowedApps);
                       } else {
-                        enableAppBlocker(true);
+                        startFocusSession(600, allowedApps); // Stopwatch mode: Block for 10 hours
                       }
                     }}
                       className="flex-1 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-3xl font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">
@@ -413,7 +413,7 @@ export default function StudyDashboard() {
               ) : (
                 <div className="flex flex-col items-center gap-4 w-full max-w-sm">
                   <div className="flex gap-4 w-full">
-                    <button onClick={() => { setTimerActive(false); enableAppBlocker(false); }}
+                    <button onClick={() => { setTimerActive(false); stopFocusSession(); }}
                       className="flex-1 py-5 bg-orange-600 hover:bg-orange-500 text-white rounded-3xl font-[1000] text-xs uppercase tracking-widest transition-all shadow-xl">
                       Pause
                     </button>

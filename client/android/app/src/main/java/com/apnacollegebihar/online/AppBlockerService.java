@@ -30,6 +30,7 @@ public class AppBlockerService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            if (event.getPackageName() == null) return;
             String packageName = event.getPackageName().toString();
             
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
