@@ -10,7 +10,7 @@ import {
   Clock, Plus, Flame, Target, BookOpen,
   Calendar, BarChart3, Settings, Trash2, Trophy,
   Users, Hash, ArrowRight, ClipboardList, CalendarDays,
-  CheckCircle2, Circle, Save, Shield, Zap, Award, Timer, ChevronRight
+  CheckCircle2, Circle, Save, Shield, Zap, Award, Timer, ChevronRight, Youtube
 } from 'lucide-react';
 import PremiumAds from '../components/PremiumAds';
 import { startFocusSession, stopFocusSession, getInstalledApps, checkAccessibility, openSettings } from '../services/AppBlocker';
@@ -96,6 +96,7 @@ export default function StudyDashboard() {
 
   // ── Edit Task ─────────────────────────────────────────
   const [editValue, setEditValue] = useState('');
+  const [editingTask, setEditingTask] = useState(null);
 
   // ── Hardcore Focus ────────────────────────────────────
   const [installedApps, setInstalledApps] = useState([]);

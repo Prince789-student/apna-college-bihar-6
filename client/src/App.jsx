@@ -51,29 +51,28 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         
-        {/* Public Utility Routes (No Login Filter) */}
+        {/* Unified Dashboard System */}
         <Route path="/dashboard" element={<DashboardLayout />}>
+           {/* Public Utility Routes (No Login Required) */}
            <Route path="calculator" element={<ScientificCalc />} />
            <Route path="cgpa" element={<BeuCgpa />} />
-        </Route>
 
-        {/* Protected Dashboard Routes */}
-        <Route path="/dashboard" element={<ProtectedRoute />}>
-          <Route element={<DashboardLayout />}>
-            <Route index element={<StudyDashboard />} />
-            <Route path="notes" element={<Notes />} />
-            <Route path="study" element={<StudyDashboard />} />
-            <Route path="timer" element={<StudyDashboard />} />
-            <Route path="study/group/:groupId" element={<GroupDetail />} />
-            <Route path="timetable" element={<Timetable />} />
-            <Route path="blog" element={<Blog />} />
-            <Route path="blog/:postId" element={<BlogPost />} />
-            
-            {/* Dedicated Admin Sub-Route */}
-            <Route element={<AdminRoute />}>
-               <Route path="admin" element={<AdminPanel />} />
-            </Route>
-          </Route>
+           {/* Protected Core Dashboard Content */}
+           <Route element={<ProtectedRoute />}>
+             <Route index element={<StudyDashboard />} />
+             <Route path="notes" element={<Notes />} />
+             <Route path="study" element={<StudyDashboard />} />
+             <Route path="timer" element={<StudyDashboard />} />
+             <Route path="study/group/:groupId" element={<GroupDetail />} />
+             <Route path="timetable" element={<Timetable />} />
+             <Route path="blog" element={<Blog />} />
+             <Route path="blog/:postId" element={<BlogPost />} />
+             
+             {/* Founder-Only Admin Console */}
+             <Route element={<AdminRoute />}>
+                <Route path="admin" element={<AdminPanel />} />
+             </Route>
+           </Route>
         </Route>
 
         {/* Public Legal Pages (AdSense Compliance) */}
