@@ -24,6 +24,7 @@ public class AppBlockerService extends AccessibilityService {
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
         info.notificationTimeout = 100;
         this.setServiceInfo(info);
+        Toast.makeText(this, "Apna College Bihar Blocker Started!", Toast.LENGTH_LONG).show();
     }
 
     @Override

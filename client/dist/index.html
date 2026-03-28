@@ -1,56 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0d121f" />
-    <meta name="google-site-verification" content="RYqt3qpPlTqKuw2uXw9hLSZNDCLA3iGIzzv_JLOQEVs" />
-    <meta name="description" content="Apna College Bihar - The Ultimate Study Hub for Bihar Engineering Students (BEU/AKU). Download Semester Notes, Previous Year Questions, SGPA Calculator and more!" />
-    <meta name="keywords" content="BEU Notes, Bihar Engineering University, AKU Bihar Notes, B.Tech Notes PDF, Engineering Study Material Bihar, SGPA Calculator BEU, Apna College Bihar" />
-    <meta name="author" content="Apna College Bihar" />
-    
-    <!-- Open Graph / Social Media Meta -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://apnacollegebihar.online/" />
-    <meta property="og:title" content="Apna College Bihar | Official Study Portal" />
-    <meta property="og:description" content="Free Semester Notes, SGPA Calculator, Study Groups and more for BEU Bihar Engineering Students." />
-    
-    <!-- Google Analytics (GA4) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BXF7KW1XQS"></script>
-    <script>
+   <meta charset="UTF-8" />
+   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+   <meta http-equiv="Pragma" content="no-cache" />
+   <meta http-equiv="Expires" content="0" />
+   <script>
+      // Hard-Reload if stale 'Portal' title detected
+      if (document.title.includes('Portal')) { window.location.reload(true); }
+      if ('serviceWorker' in navigator) {
+         navigator.serviceWorker.getRegistrations().then(regs => {
+            for (let reg of regs) { if (reg.active) reg.unregister(); }
+         });
+      }
+   </script>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <meta name="theme-color" content="#0d121f" />
+   <meta name="google-site-verification" content="RYqt3qpPlTqKuw2uXw9hLSZNDCLA3iGIzzv_JLOQEVs" />
+   <meta name="description"
+      content="Apna College Bihar - The Official Website for Bihar Engineering Students. Download Semester Notes, Previous Year Questions, SGPA Calculator and more!" />
+   <meta name="keywords"
+      content="BEU Notes, Bihar Engineering University, AKU Bihar Notes, B.Tech Notes PDF, Engineering Study Material Bihar, SGPA Calculator BEU, Apna College Bihar Website" />
+   <meta name="author" content="Apna College Bihar" />
+
+   <!-- Open Graph / Social Media Meta -->
+   <meta property="og:type" content="website" />
+   <meta property="og:url" content="https://apnacollegebihar.online/" />
+   <meta property="og:title" content="Apna College Bihar | Official Website" />
+   <meta property="og:description"
+      content="Free Semester Notes, SGPA Calculator, Study Groups and more for BEU Bihar Engineering Students." />
+
+   <!-- Google Analytics (GA4) -->
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BXF7KW1XQS"></script>
+   <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag() { dataLayer.push(arguments); }
       gtag('js', new Date());
       gtag('config', 'G-BXF7KW1XQS');
-    </script>
+   </script>
 
-    <link rel="manifest" href="/manifest.json" />
-    <link rel="icon" type="image/jpeg" href="/logo.jpg" />
-    <title>Apna College Bihar | Official Portal</title>
-    <!-- Use Tailwind CSS via CDN for rapid styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
+   <link rel="manifest" href="/manifest.json" />
+   <link rel="icon" type="image/jpeg" href="/logo.jpg" />
+   <link rel="shortcut icon" href="/logo.jpg" />
+   <title>Apna College Bihar | Website</title>
+
+   <!-- Google AdSense Integration -->
+   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-818059891079"
+      crossorigin="anonymous"></script>
+   <meta name="adsense-account" content="ca-pub-818059891079">
+
+   <!-- Use Tailwind CSS via CDN for rapid styling -->
+   <script src="https://cdn.tailwindcss.com"></script>
+   <script>
       tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            colors: {
-              brand: '#3b82f6',
-              darkbg: '#0f172a',
-              cardbg: '#1e293b'
+         darkMode: 'class',
+         theme: {
+            extend: {
+               colors: {
+                  brand: '#3b82f6',
+                  darkbg: '#0f172a',
+                  cardbg: '#1e293b'
+               }
             }
-          }
-        }
+         }
       }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-      body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: white; }
-    </style>
-  <script type="module" crossorigin src="/assets/index-eff92928.js"></script>
+   </script>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   <style>
+      body {
+         font-family: 'Inter', sans-serif;
+         background-color: #0f172a;
+         color: white;
+      }
+   </style>
+   <script>
+      if ('serviceWorker' in navigator) {
+         window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').catch(err => console.error("SW error:", err));
+         });
+      }
+      window.addEventListener('beforeinstallprompt', (e) => {
+         e.preventDefault();
+         window.deferredPrompt = e;
+         window.dispatchEvent(new Event('pwa-ready'));
+      });
+   </script>
+  <script type="module" crossorigin src="/assets/index-d777811f.js"></script>
 </head>
+
 <body class="dark">
-    <div id="root"></div>
-    
+   <div id="root"></div>
+   <script>
+      // Global Fail-Safe Error Handler
+      window.addEventListener('error', (e) => {
+         if (e.target && e.target.tagName === 'SCRIPT') {
+            console.warn("Script loading failure - Deep Reloading...");
+            window.location.reload(true);
+         }
+      }, true);
+   </script>
+   
 </body>
+
 </html>

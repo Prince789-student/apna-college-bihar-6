@@ -10,6 +10,9 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
+import android.text.TextUtils;
+import android.provider.Settings;
+import android.content.Intent;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -81,5 +84,45 @@ public class AppBlockerPlugin extends Plugin {
         editor.putLong(KEY_COUNTDOWN_END, 0); // Reset timer
         editor.apply();
         call.resolve();
+    }
+
+    @PluginMethod
+    public void openAccessibilitySettings(PluginCall call) {
+        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        getContext().startActivity(intent);
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void checkAccessibility(PluginCall call) {
+        boolean isEnabled = false;
+        int accessibilityEnabled = 0;
+        final String service = getContext().getPackageName() + "/" + AppBlockerService.class.getCanonicalName();
+        try {
+            accessibilityEnabled = Settings.Secure.getInt(
+                getContext().getContentResolver(),
+                Settings.Secure.ACCESSIBILITY_ENABLED);
+        } catch (Settings.SettingNotFoundException e) {}
+
+        TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
+
+        if (accessibilityEnabled == 1) {
+            String settingValue = Settings.Secure.getString(
+                getContext().getContentResolver(),
+                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+            if (settingValue != null) {
+                mStringColonSplitter.setString(settingValue);
+                while (mStringColonSplitter.hasNext()) {
+                    String accessibilityService = mStringColonSplitter.next();
+                    if (accessibilityService.equalsIgnoreCase(service)) {
+                        isEnabled = true;
+                    }
+                }
+            }
+        }
+
+        JSObject ret = new JSObject();
+        ret.put("enabled", isEnabled);
+        call.resolve(ret);
     }
 }

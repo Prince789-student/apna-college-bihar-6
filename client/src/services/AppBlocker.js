@@ -38,4 +38,18 @@ export const stopFocusSession = async () => {
   }
 };
 
+export const checkAccessibility = async () => {
+  if (window.Capacitor) {
+    const { enabled } = await AppBlocker.checkAccessibility();
+    return enabled;
+  }
+  return true; // Assume true on web for testing
+};
+
+export const openSettings = async () => {
+  if (window.Capacitor) {
+    await AppBlocker.openAccessibilitySettings();
+  }
+};
+
 export default AppBlocker;
