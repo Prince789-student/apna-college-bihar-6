@@ -6,7 +6,8 @@
     "start": "node server/server.js",
     "install-app": "npm install --prefix server && npm install --prefix client",
     "build": "npm install --prefix server && npm install --prefix client && npm run build --prefix client",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "save": "git add . && git commit -m \"auto commit\" && git push"
   },
   "engines": {
     "node": "18.x"
