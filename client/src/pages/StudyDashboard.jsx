@@ -358,25 +358,30 @@ export default function StudyDashboard() {
       </div>
 
       {/* ── YouTube Broadcast ── */}
-      <div className="relative group overflow-hidden bg-gradient-to-r from-red-600 via-rose-600 to-orange-600 p-8 rounded-[3rem] shadow-2xl shadow-red-900/20 active:scale-[0.99] transition-all">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
-        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="flex items-center gap-6">
-            <div className="w-16 h-16 bg-white/20 backdrop-blur-xl border border-white/30 rounded-[2rem] flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
-              <Youtube size={32} className="text-white fill-white" />
+      <div className="relative group overflow-hidden bg-gradient-to-br from-red-600 to-rose-700 p-10 rounded-[4rem] shadow-2xl shadow-red-900/20 active:scale-[0.99] transition-all border border-red-500/30">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-[100px] -mr-32 -mt-32"></div>
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
+          <div className="flex items-center gap-8 flex-col md:flex-row text-center md:text-left">
+            <div className="w-24 h-24 bg-white/20 backdrop-blur-2xl border border-white/30 rounded-[3rem] flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform duration-500">
+              <Youtube size={48} className="text-white fill-white" />
             </div>
-            <div className="text-center md:text-left">
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/70 block mb-1">Official Broadcast 📡</span>
-              <h2 className="text-2xl md:text-3xl font-[1000] text-white tracking-tighter uppercase leading-none mb-2">Subscribe "Appne H8P"</h2>
-              <p className="text-[10px] text-white/80 font-bold uppercase tracking-widest">Get Instant Updates for Notes, PYQs, and College News!</p>
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full">
+                <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                <span className="text-[10px] font-[1000] uppercase tracking-[0.4em] text-white">Official Broadcast</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-[1000] text-white tracking-tighter uppercase leading-[0.8] mb-1">Appne H8P</h2>
+              <p className="text-[11px] text-white/80 font-bold uppercase tracking-[0.3em] max-w-lg leading-relaxed italic">"Transforming Bihar Engineering Education on YouTube"</p>
             </div>
           </div>
           <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" 
-            className="px-10 py-4 bg-white text-red-600 rounded-[1.8rem] font-black text-[10px] uppercase tracking-[0.2em] shadow-2xl hover:bg-slate-50 transition-all flex items-center gap-3 active:scale-95">
-            Watch Now <ArrowRight size={14} />
+            className="px-12 py-6 bg-white text-red-600 rounded-[2.2rem] font-[1000] text-[12px] uppercase tracking-widest shadow-2xl hover:bg-slate-100 transition-all flex items-center gap-4 active:scale-95 group/btn">
+            Subscribed Now <ArrowRight size={18} className="group-hover/btn:translate-x-2 transition-transform" />
           </a>
         </div>
       </div>
+
+      <PremiumAds type="BANNER" />
 
       {/* TAB: FOCUS TIMER */}
       {tab === 'timer' && (
