@@ -27,6 +27,9 @@ export default function DashboardLayout() {
   const [isPhoneModalOpen, setPhoneModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
+  // Platform Detection
+  const isAppMode = localStorage.getItem('isAppMode') === 'true';
+
   // Auto-close mobile menu on navigation
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -155,12 +158,14 @@ export default function DashboardLayout() {
   );
 
   return (
-    <div className="flex h-screen bg-[#f8fafc] overflow-hidden text-slate-900 font-["Inter'] selection:bg-blue-500/30">
+    <div className="flex h-screen bg-[#f8fafc] overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30">
       
       {/* ── Desktop Sidebar ── */}
-      <aside className={`hidden md:flex flex-col bg-white border-r border-slate-200/80 transition-all duration-500 shadow-2xl relative z-40 ${isSidebarOpen ? 'w-80' : 'w-24'}`}>
-        <SidebarContent />
-      </aside>
+      {!isAppMode && (
+        <aside className={`hidden md:flex flex-col bg-white border-r border-slate-200/80 transition-all duration-500 shadow-2xl relative z-40 ${isSidebarOpen ? 'w-80' : 'w-24'}`}>
+          <SidebarContent />
+        </aside>
+      )}
 
       {/* ── Mobile Drawer ── */}
       {isMobileMenuOpen && (
@@ -176,45 +181,70 @@ export default function DashboardLayout() {
       <main className="flex-1 flex flex-col h-full bg-[#f8fafc] relative overflow-hidden">
         
         {/* Mobile Navbar Header */}
-        <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200/80 sticky top-0 z-30">
-          <div className="flex items-center gap-3">
-             <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
-             <span className="text-xs font-[1000] tracking-tighter uppercase text-slate-900 leading-none">APNA COLLEGE BIHAR</span>
+        {!isAppMode && (
+          <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200/80 sticky top-0 z-30">
+            <div className="flex items-center gap-3">
+               <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
+               <span className="text-xs font-[1000] tracking-tighter uppercase text-slate-900 leading-none">APNA COLLEGE BIHAR</span>
+            </div>
+            <button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-100/50 border border-slate-200 rounded-xl">
+               <Menu size={20} />
+            </button>
           </div>
-          <button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-100/50 border border-slate-200 rounded-xl">
-             <Menu size={20} />
-          </button>
-        </div>
+        )}
 
         {/* Scrollable Area */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar relative z-10 p-5 md:p-14 lg:p-20">
+        <div className={`flex-1 overflow-y-auto custom-scrollbar relative z-10 ${isAppMode ? 'p-4 pb-24' : 'p-5 md:p-14 lg:p-20'}`}>
            <div className="min-h-[80vh]">
              <Outlet />
            </div>
 
            {/* ── Dashboard Footer (SEO & Legal) ── */}
-           <footer className="mt-20 py-10 border-t border-slate-200/30 flex flex-col md:flex-row items-center justify-between gap-6 opacity-60 hover:opacity-100 transition-opacity">
-              <div className="flex flex-col items-center md:items-start gap-1">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-900">Apna College Bihar</p>
-                <p className="text-[8px] font-bold uppercase tracking-widest text-slate-500">© 2026 Official Website</p>
-              </div>
-              <div className="flex flex-wrap items-center justify-center gap-6">
-                <Link to="/about" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-blue-400 transition-colors">About Us</Link>
-                <Link to="/contact" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-emerald-400 transition-colors">Contact Us</Link>
-                <Link to="/privacy" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-orange-400 transition-colors">Privacy Policy</Link>
-              </div>
-              <div className="flex items-center gap-4">
-                 <a href="https://t.me/apnacollegebihar" target="_blank" rel="noopener noreferrer" className="p-2 bg-blue-600/10 text-blue-500 hover:bg-blue-600 hover:text-slate-900 rounded-lg transition-all border border-blue-500/10">
-                   <Send size={14} />
-                 </a>
-                 <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="p-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-slate-900 rounded-lg transition-all border border-red-500/10">
-                   <Youtube size={14} />
-                 </a>
-                 <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                 <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-600">All Systems Operational</span>
-              </div>
-           </footer>
+            {!isAppMode && (
+              <footer className="mt-20 py-10 border-t border-slate-200/30 flex flex-col md:flex-row items-center justify-between gap-6 opacity-60 hover:opacity-100 transition-opacity">
+                <div className="flex flex-col items-center md:items-start gap-1">
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-900">Apna College Bihar</p>
+                  <p className="text-[8px] font-bold uppercase tracking-widest text-slate-500">© 2026 Official Website</p>
+                </div>
+                <div className="flex flex-wrap items-center justify-center gap-6">
+                  <Link to="/about" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-blue-400 transition-colors">About Us</Link>
+                  <Link to="/contact" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-emerald-400 transition-colors">Contact Us</Link>
+                  <Link to="/privacy" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-orange-400 transition-colors">Privacy Policy</Link>
+                </div>
+                <div className="flex items-center gap-4">
+                   <a href="https://t.me/apnacollegebihar" target="_blank" rel="noopener noreferrer" className="p-2 bg-blue-600/10 text-blue-500 hover:bg-blue-600 hover:text-slate-900 rounded-lg transition-all border border-blue-500/10">
+                     <Send size={14} />
+                   </a>
+                   <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="p-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-slate-900 rounded-lg transition-all border border-red-500/10">
+                     <Youtube size={14} />
+                   </a>
+                   <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
+                   <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-600">All Systems Operational</span>
+                </div>
+              </footer>
+            )}
         </div>
+
+        {/* ── App-Mode Bottom Navigation ── */}
+        {isAppMode && (
+          <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-slate-200/80 px-4 py-3 flex justify-around items-center z-50">
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link key={link.name} to={link.path} 
+                  className={`flex flex-col items-center gap-1 transition-all duration-300 ${isActive ? 'text-blue-600 scale-110' : 'text-slate-400'}`}>
+                  {link.icon}
+                  <span className="text-[8px] font-black uppercase tracking-tighter">{link.name.split(' ')[0]}</span>
+                  {isActive && <div className="w-1 h-1 bg-blue-600 rounded-full mt-0.5" />}
+                </Link>
+              );
+            })}
+            <button onClick={handleLogout} className="flex flex-col items-center gap-1 text-slate-400">
+               <LogOut size={20} />
+               <span className="text-[8px] font-black uppercase tracking-tighter">Exit</span>
+            </button>
+          </div>
+        )}
 
         {/* Global Blur Orbs */}
         <div className="fixed top-[-20%] right-[-10%] w-[1000px] h-[1000px] bg-blue-600/5 rounded-full blur-[200px] pointer-events-none -z-10"></div>
