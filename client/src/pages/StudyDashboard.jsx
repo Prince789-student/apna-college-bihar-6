@@ -181,16 +181,27 @@ export default function StudyDashboard() {
       const today = new Date().toISOString().split('T')[0];
       const lastDate = userData?.lastStudyDate || '';
 
+      // New Streak Logic based on strict 2-hour (7200 sec) requirement
       let newStreak = userData?.streak || 0;
-      if (lastDate !== today) {
-        const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-        const yStr = yesterday.toISOString().split('T')[0];
-        if (lastDate === yStr) newStreak += 1;
-        else if (newStreak === 0) newStreak = 1;
+      let streakDate = userData?.streakDate || userData?.lastStudyDate || ''; 
+      const newTodaySec = todaySec + timeToSave;
+      
+      const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
+      const yStr = yesterday.toISOString().split('T')[0];
+
+      if (streakDate !== today && streakDate !== yStr) {
+          newStreak = 0; // Break streak if missed yesterday
+      }
+
+      if (newTodaySec >= 7200 && streakDate !== today) {
+         if (streakDate === yStr) newStreak += 1;
+         else newStreak = 1;
+         streakDate = today;
       }
 
       await updateDoc(userRef, {
         streak: newStreak,
+        streakDate: streakDate,
         lastStudyDate: today,
         totalStudyTime: (userData?.totalStudyTime || 0) + timeToSave
       });
@@ -210,6 +221,17 @@ export default function StudyDashboard() {
       const uSnap = await getDoc(doc(db, 'users', user.uid));
       if (uSnap.exists()) {
         const d = uSnap.data();
+        
+        // Auto-break streak on UI load if they missed yesterday
+        const todayStr = new Date().toISOString().split('T')[0];
+        const yesterdayStr = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+        const sDate = d.streakDate || d.lastStudyDate || '';
+        if (d.streak > 0 && sDate !== todayStr && sDate !== yesterdayStr) {
+           d.streak = 0;
+           d.streakDate = '';
+           updateDoc(doc(db, 'users', user.uid), { streak: 0, streakDate: '' }).catch(console.error);
+        }
+
         setUserData(d);
         setGoals({ daily: d.dailyGoal || 0, weekly: d.weeklyGoal || 0, monthly: d.monthlyGoal || 0 });
         setSchedule(d.timetable || {});
