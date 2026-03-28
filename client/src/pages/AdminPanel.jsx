@@ -372,7 +372,7 @@ export default function AdminPanel() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 px-0">
            <div className="lg:col-span-4 space-y-8">
               <div className="bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[3.5rem] border border-slate-200/80">
-                <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest mb-8 text-center font-["Inter']">Global Deployment 🛰️</h2>
+                <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest mb-8 text-center font-['Inter']">Global Deployment 🛰️</h2>
                 <form onSubmit={handleUpload} className="space-y-4">
                   <input value={docForm.title} onChange={e=>setDocForm({...docForm, title:e.target.value})} placeholder="Doc Title" className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none border-2 border-transparent focus:border-indigo-500" />
                   <input value={docForm.subject} onChange={e=>setDocForm({...docForm, subject:e.target.value})} placeholder="Subject" className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none border-2 border-transparent focus:border-indigo-500" />
