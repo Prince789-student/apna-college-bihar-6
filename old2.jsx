@@ -357,64 +357,26 @@ export default function StudyDashboard() {
         })}
       </div>
 
-            {/* ── Main High Impact YouTube Portal ── */}
-      <div className="relative group overflow-hidden bg-gradient-to-br from-red-600 to-amber-900 md:p-20 p-10 rounded-[4rem] shadow-[0_40px_100px_rgba(220,38,38,0.2)] animate-in fade-in zoom-in-95 duration-1000">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full blur-[120px] -mr-40 -mt-40"></div>
-        
-        <div className="relative z-10 flex flex-col items-center text-center space-y-12">
-           <div className="w-40 h-40 bg-white shadow-2xl rounded-[3.5rem] flex items-center justify-center p-10 group-hover:scale-110 transition-transform duration-700">
-              <Youtube size={80} className="text-red-600 fill-red-600" />
-           </div>
-
-           <div className="space-y-6">
-              <div className="inline-flex items-center gap-3 px-6 py-2.5 bg-white/20 backdrop-blur-md rounded-full border border-white/30 text-white">
-                <span className="w-2.5 h-2.5 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_15px_#10b981]"></span>
-                <span className="text-[12px] font-black uppercase tracking-[0.5em]">Live Academic Feed</span>
-              </div>
-              
-              <h1 className="text-5xl md:text-8xl font-[1000] text-white tracking-tighter uppercase leading-[0.8] drop-shadow-2xl">
-                APNE <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-white">STUDY HUB</span>
-              </h1>
-              
-              <p className="text-white/60 text-xs md:text-base font-bold uppercase tracking-[0.4em] max-w-2xl mx-auto">
-                Transforming Bihar Engineering Education on YouTube · Free Notes & Session Updates
-              </p>
-           </div>
-
-           <div className="flex flex-col sm:flex-row gap-6 w-full max-w-lg">
-             <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" 
-                className="flex-1 px-12 py-7 bg-white text-red-600 rounded-[2.5rem] font-[1000] text-sm uppercase tracking-widest shadow-2xl hover:bg-slate-50 transition-all flex items-center justify-center gap-4 active:scale-95 group/btn">
-                Watch Broadcast <Youtube size={24} className="fill-red-600" />
-             </a>
-             <button onClick={() => navigate('/dashboard/notes')}
-                className="flex-1 px-12 py-7 bg-black/40 backdrop-blur-xl border border-white/20 text-white rounded-[2.5rem] font-[1000] text-sm uppercase tracking-widest hover:bg-white/20 transition-all active:scale-95">
-                Notes Section
-             </button>
-           </div>
+      {/* ΓöÇΓöÇ YouTube Broadcast ΓöÇΓöÇ */}
+      <div className="relative group overflow-hidden bg-gradient-to-r from-red-600 via-rose-600 to-orange-600 p-8 rounded-[3rem] shadow-2xl shadow-red-900/20 active:scale-[0.99] transition-all">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20"></div>
+        <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="flex items-center gap-6">
+            <div className="w-16 h-16 bg-white/20 backdrop-blur-xl border border-white/30 rounded-[2rem] flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+              <Youtube size={32} className="text-white fill-white" />
+            </div>
+            <div className="text-center md:text-left">
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/70 block mb-1">Official Broadcast ≡ƒôí</span>
+              <h2 className="text-2xl md:text-3xl font-[1000] text-white tracking-tighter uppercase leading-none mb-2">Subscribe "Appne H8P"</h2>
+              <p className="text-[10px] text-white/80 font-bold uppercase tracking-widest">Get Instant Updates for Notes, PYQs, and College News!</p>
+            </div>
+          </div>
+          <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" 
+            className="px-10 py-4 bg-white text-red-600 rounded-[1.8rem] font-black text-[10px] uppercase tracking-[0.2em] shadow-2xl hover:bg-slate-50 transition-all flex items-center gap-3 active:scale-95">
+            Watch Now <ArrowRight size={14} />
+          </a>
         </div>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-10">
-         <div className="bg-white p-10 rounded-[3.5rem] border border-slate-200/80 shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/5 rounded-full blur-3xl"></div>
-            <div className="relative z-10 space-y-6">
-               <div className="p-5 bg-red-600/10 text-red-600 rounded-3xl w-fit"><Youtube size={32} /></div>
-               <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">Daily Lecture Feed</h3>
-               <p className="text-[11px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">Catch up with the latest recorded sessions from Appne H8P Hub.</p>
-               <a href="https://youtube.com/@appne-h8p" target="_blank" className="inline-flex items-center gap-2 text-red-600 font-black text-[10px] uppercase tracking-widest group-hover:gap-4 transition-all">Explore Playlist <ArrowRight size={14} /></a>
-            </div>
-         </div>
-         <div className="bg-white p-10 rounded-[3.5rem] border border-slate-200/80 shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-3xl"></div>
-            <div className="relative z-10 space-y-6">
-               <div className="p-5 bg-blue-600/10 text-blue-600 rounded-3xl w-fit"><BookOpen size={32} /></div>
-               <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">Official Notes Bank</h3>
-               <p className="text-[11px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">Integrated library for all your BEU semester requirements.</p>
-               <button onClick={()=>navigate('/dashboard/notes')} className="inline-flex items-center gap-2 text-blue-600 font-black text-[10px] uppercase tracking-widest group-hover:gap-4 transition-all">Enter Library <ArrowRight size={14} /></button>
-            </div>
-         </div>
-      </div>
-
 
       {/* TAB: FOCUS TIMER */}
       {tab === 'timer' && (
@@ -662,7 +624,7 @@ export default function StudyDashboard() {
             <p className="text-lg font-black text-slate-900 mb-1">≡ƒôï Aaj ka Study Plan</p>
             <p className="text-[10px] text-slate-500 mb-6">{new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
             {tasks.length > 0 && (
-              <div className="mb-5 bg-slate-50 p-4 rounded-2xl border border-slate-300/50 space-y-2">
+              <div className="mb-5 bg-[#161c2c] p-4 rounded-2xl border border-slate-300/50 space-y-2">
                 <div className="flex justify-between text-[9px] font-black uppercase text-slate-500">
                   <span>Progress</span><span className="text-slate-900">{tasks.filter(t => t.done).length}/{tasks.length}</span>
                 </div>
@@ -671,9 +633,9 @@ export default function StudyDashboard() {
               </div>
             )}
             <div className="flex flex-col md:flex-row gap-3 mb-6 bg-slate-100/40 p-5 rounded-3xl border border-slate-200/30">
-              <input value={newTask} onChange={e => setNewTask(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Kya padhna hai? (e.g. Exercise 1)" className="flex-[2] bg-slate-50 border border-slate-300/50 rounded-2xl px-5 py-3.5 text-slate-900 text-sm outline-none focus:border-blue-500 transition-all placeholder:text-slate-600 font-bold" />
+              <input value={newTask} onChange={e => setNewTask(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Kya padhna hai? (e.g. Exercise 1)" className="flex-[2] bg-[#161c2c] border border-slate-300/50 rounded-2xl px-5 py-3.5 text-slate-900 text-sm outline-none focus:border-blue-500 transition-all placeholder:text-slate-600 font-bold" />
               <div className="flex-1 flex gap-2">
-                <input list="subjects-list" value={taskSub} onChange={e => setTaskSub(e.target.value)} placeholder="Subject" className="flex-1 bg-slate-50 border border-slate-300/50 rounded-2xl px-5 py-3.5 text-slate-900 text-xs outline-none focus:border-blue-500 transition-all font-black uppercase tracking-widest placeholder:text-slate-600" />
+                <input list="subjects-list" value={taskSub} onChange={e => setTaskSub(e.target.value)} placeholder="Subject" className="flex-1 bg-[#161c2c] border border-slate-300/50 rounded-2xl px-5 py-3.5 text-slate-900 text-xs outline-none focus:border-blue-500 transition-all font-black uppercase tracking-widest placeholder:text-slate-600" />
                 <datalist id="subjects-list">
                   {subjects.map(s => <option key={s.id} value={s.subjectName} />)}
                 </datalist>
@@ -760,7 +722,7 @@ export default function StudyDashboard() {
             {[{ key: 'daily', label: 'Daily Goal', hint: 'Max 24 hr', max: 24 }, { key: 'weekly', label: 'Weekly Goal', hint: 'Max 168 hr', max: 168 }, { key: 'monthly', label: 'Monthly Goal', hint: 'Max 744 hr', max: 744 }].map(({ key, label, hint, max }) => (
               <div key={key} className="mb-5">
                 <div className="flex justify-between mb-2"><p className="text-[9px] font-black uppercase tracking-widest text-slate-500">{label}</p><p className="text-[9px] text-slate-600">{hint}</p></div>
-                <div className="flex items-center gap-3"><input type="number" min={0} max={max} value={goals[key]} onChange={e => setGoals({ ...goals, [key]: Math.min(max, Math.max(0, Number(e.target.value))) })} className="flex-1 bg-slate-50 border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black text-center outline-none focus:border-blue-500" /><span className="text-slate-500 text-sm font-bold">hr</span></div>
+                <div className="flex items-center gap-3"><input type="number" min={0} max={max} value={goals[key]} onChange={e => setGoals({ ...goals, [key]: Math.min(max, Math.max(0, Number(e.target.value))) })} className="flex-1 bg-[#161c2c] border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black text-center outline-none focus:border-blue-500" /><span className="text-slate-500 text-sm font-bold">hr</span></div>
               </div>
             ))}
             <div className="flex gap-3 mt-2"><button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100 transition-all" onClick={() => setShowGoalModal(false)}>Cancel</button><button className="flex-1 bg-blue-600 hover:bg-blue-500 p-4 rounded-xl font-black text-[10px] uppercase text-white" onClick={saveGoals}>Save</button></div>
@@ -773,7 +735,7 @@ export default function StudyDashboard() {
           <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
             <p className="text-xl font-black uppercase mb-1">New Subject</p>
             <p className="text-[10px] text-slate-500 mb-8">{subjects.length}/10 used</p>
-            <input maxLength={20} placeholder="Jaise: MATHS, PHYSICS, HINDI" className="w-full bg-slate-50 border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black uppercase mb-6 outline-none focus:border-blue-500 transition-all" value={newSubject} onChange={e => setNewSubject(e.target.value)} onKeyDown={e => e.key === 'Enter' && addSubject()} autoFocus />
+            <input maxLength={20} placeholder="Jaise: MATHS, PHYSICS, HINDI" className="w-full bg-[#161c2c] border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black uppercase mb-6 outline-none focus:border-blue-500 transition-all" value={newSubject} onChange={e => setNewSubject(e.target.value)} onKeyDown={e => e.key === 'Enter' && addSubject()} autoFocus />
             <div className="flex gap-3"><button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100" onClick={() => { setShowSubjectModal(false); setNewSubject(''); }}>Cancel</button><button disabled={subjects.length >= 10 || !newSubject.trim()} className={`flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-900 transition-all ${subjects.length >= 10 || !newSubject.trim() ? 'bg-slate-700 opacity-50' : 'bg-blue-600 hover:bg-blue-500'}`} onClick={addSubject}>Add Subject</button></div>
           </div>
         </div>
@@ -784,7 +746,7 @@ export default function StudyDashboard() {
           <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
             <p className="text-xl font-black uppercase mb-1">New Study Group</p>
             <p className="text-[10px] text-slate-500 mb-8">Group code se dosto ko join karao</p>
-            <input maxLength={30} placeholder="Group ka naam..." className="w-full bg-slate-50 border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black mb-6 outline-none focus:border-blue-500" value={newGroupName} onChange={e => setNewGroupName(e.target.value)} onKeyDown={e => e.key === 'Enter' && createGroup()} autoFocus />
+            <input maxLength={30} placeholder="Group ka naam..." className="w-full bg-[#161c2c] border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black mb-6 outline-none focus:border-blue-500" value={newGroupName} onChange={e => setNewGroupName(e.target.value)} onKeyDown={e => e.key === 'Enter' && createGroup()} autoFocus />
             <div className="flex gap-3"><button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100" onClick={() => { setShowCreateGroup(false); setNewGroupName(''); }}>Cancel</button><button disabled={groupLoading || !newGroupName.trim()} className="flex-1 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 p-4 rounded-xl font-black text-[10px] uppercase text-white" onClick={createGroup}>{groupLoading ? 'Creating...' : 'Create Group'}</button></div>
           </div>
         </div>
@@ -795,7 +757,7 @@ export default function StudyDashboard() {
           <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
             <p className="text-xl font-black uppercase mb-1">Join Group</p>
             <p className="text-[10px] text-slate-500 mb-8">6-character group code dalo</p>
-            <input maxLength={6} placeholder="ABC123" className="w-full bg-slate-50 border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black uppercase text-center tracking-[0.5em] text-xl mb-6 outline-none focus:border-blue-500" value={joinCode} onChange={e => setJoinCode(e.target.value.toUpperCase())} onKeyDown={e => e.key === 'Enter' && joinGroup()} autoFocus />
+            <input maxLength={6} placeholder="ABC123" className="w-full bg-[#161c2c] border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black uppercase text-center tracking-[0.5em] text-xl mb-6 outline-none focus:border-blue-500" value={joinCode} onChange={e => setJoinCode(e.target.value.toUpperCase())} onKeyDown={e => e.key === 'Enter' && joinGroup()} autoFocus />
             <div className="flex gap-3"><button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-500 hover:bg-slate-100" onClick={() => { setShowJoinGroup(false); setJoinCode(''); }}>Cancel</button><button disabled={groupLoading || joinCode.length < 4} className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 p-4 rounded-xl font-black text-[10px] uppercase text-white" onClick={joinGroup}>{groupLoading ? 'Joining...' : 'Join Group'}</button></div>
           </div>
         </div>

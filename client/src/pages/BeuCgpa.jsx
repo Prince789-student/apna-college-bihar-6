@@ -433,7 +433,7 @@ export default function BeuCgpa() {
               <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-2">Subject Name</p>
               <input
                 maxLength={40} placeholder="e.g. DATA STRUCTURES"
-                className="w-full bg-[#161c2c] border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black uppercase outline-none focus:border-blue-500 transition-all"
+                className="w-full bg-slate-50 border border-slate-300/50 rounded-2xl p-4 text-slate-900 font-black uppercase outline-none focus:border-blue-500 transition-all"
                 value={form.name} onChange={e => setForm({...form, name: e.target.value})}
                 onKeyDown={e => e.key === 'Enter' && addSubject()} autoFocus
               />
@@ -503,7 +503,7 @@ export default function BeuCgpa() {
                         <input type="number" min={0} max={max} placeholder={`0 – ${max}`}
                           value={marksForm[key] ?? ''} onFocus={e=>e.target.select()}
                           onChange={e => setMarksForm({...marksForm, [key]: Math.min(max, Math.max(0, Number(e.target.value)))})}
-                          className="w-full bg-[#161c2c] border border-slate-300/50 rounded-2xl p-3 text-slate-900 font-black outline-none focus:border-blue-500 transition-all"
+                          className="w-full bg-slate-50 border border-slate-300/50 rounded-2xl p-3 text-slate-900 font-black outline-none focus:border-blue-500 transition-all"
                         />
                       </div>
                     ))}
@@ -515,7 +515,7 @@ export default function BeuCgpa() {
                       <input type="number" min={0} max={70} placeholder="0 – 70"
                         value={marksForm.endSem ?? ''} onFocus={e=>e.target.select()}
                         onChange={e => setMarksForm({...marksForm, endSem: Math.min(70, Math.max(0, Number(e.target.value)))})}
-                        className={`w-full bg-[#161c2c] border rounded-2xl p-3 text-slate-900 font-black outline-none transition-all ${
+                        className={`w-full bg-slate-50 border rounded-2xl p-3 text-slate-900 font-black outline-none transition-all ${
                           marksForm.endSem !== undefined && marksForm.endSem !== '' && Number(marksForm.endSem) < 25
                             ? 'border-red-500 focus:border-red-400'
                             : 'border-slate-300/50 focus:border-orange-500'
@@ -544,7 +544,7 @@ export default function BeuCgpa() {
                         <input type="number" min={0} max={max} placeholder={`0 – ${max}`}
                           value={marksForm[key] ?? ''} onFocus={e=>e.target.select()}
                           onChange={e => setMarksForm({...marksForm, [key]: Math.min(max, Math.max(0, Number(e.target.value)))})}
-                          className="w-full bg-[#161c2c] border border-slate-300/50 rounded-2xl p-3 text-slate-900 font-black outline-none focus:border-purple-500 transition-all"
+                          className="w-full bg-slate-50 border border-slate-300/50 rounded-2xl p-3 text-slate-900 font-black outline-none focus:border-purple-500 transition-all"
                         />
                       </div>
                     ))}
