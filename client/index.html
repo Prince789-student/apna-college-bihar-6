@@ -93,16 +93,8 @@
 
 <body class="bg-slate-50">
    <div id="root"></div>
-   <script>
-      // Global Fail-Safe Error Handler
-      window.addEventListener('error', (e) => {
-         if (e.target && e.target.tagName === 'SCRIPT') {
-            console.warn("Script loading failure - Deep Reloading...");
-            window.location.reload(true);
-         }
-      }, true);
-   </script>
-   <script type="module" src="/src/main.jsx?v=2"></script>
+
+   <script type="module" src="/src/main.jsx"></script>
 </body>
 
 </html>

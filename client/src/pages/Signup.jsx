@@ -42,7 +42,7 @@ export default function Signup() {
           </div>
 
           {error && (
-            <div className="bg-red-500/5 border border-red-500/20 text-red-100 p-4 rounded-2xl mb-8 text-[10px] font-bold text-center flex items-center justify-center space-x-2">
+            <div className="bg-red-500/10 border border-red-500/30 text-red-600 p-4 rounded-2xl mb-8 text-[10px] font-bold text-center flex items-center justify-center space-x-2">
               <ShieldCheck size={16} />
               <span>{error}</span>
             </div>

@@ -528,8 +528,8 @@ export default function AdminPanel() {
                 <div className="p-4 bg-slate-100/50 rounded-2xl border border-slate-300/20 text-center">
                   <input type="file" accept="image/*" onChange={e=>setAdForm({...adForm, file:e.target.files[0]})} className="hidden" id="ad-img-up" />
                   <label htmlFor="ad-img-up" className="cursor-pointer">
-                    <div className="py-8 bg-slate-950/50 border-2 border-dashed border-slate-200 rounded-3xl hover:border-emerald-500 transition-all">
-                       <UploadCloud size={30} className="mx-auto text-slate-700 mb-2" />
+                    <div className="py-8 bg-[#f8fafc] border-2 border-dashed border-slate-200 rounded-3xl hover:border-emerald-500 transition-all">
+                       <UploadCloud size={30} className="mx-auto text-slate-500 mb-2" />
                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{adForm.file?.name || 'Upload Banner (Option 1)'}</p>
                     </div>
                   </label>

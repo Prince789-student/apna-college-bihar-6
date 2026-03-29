@@ -151,7 +151,7 @@ export default function DashboardLayout() {
                <User size={16} /> {(isSidebarOpen || isMobile) && <span>Student Login</span>}
              </Link>
              {(isSidebarOpen || isMobile) && (
-               <Link to="/signup" className="w-full flex items-center justify-center gap-3 p-4 bg-slate-800 hover:bg-slate-200 text-slate-700 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all">
+               <Link to="/signup" className="w-full flex items-center justify-center gap-3 p-4 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all">
                  Join Community
                </Link>
              )}
