@@ -11,7 +11,7 @@ export default function Home() {
     <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center p-4 font-['Inter'] relative overflow-hidden">
 
       {/* ── Navbar ── */}
-      <nav className="fixed top-0 left-0 w-full z-[100] bg-[#f8fafc]/80 backdrop-blur-xl border-b border-slate-200/50 px-6 md:px-16 py-5 flex items-center justify-between">
+      <nav className="sticky top-0 left-0 w-full z-[100] bg-[#f8fafc]/80 backdrop-blur-xl border-b border-slate-200/50 px-6 md:px-16 py-5 flex items-center justify-between">
         <div className="flex items-center gap-3 group">
            <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
            <div className="hidden sm:block">

@@ -23,7 +23,7 @@ import { Youtube, ArrowRight } from 'lucide-react';
 
 // Global Announcement Bar pinned to absolute top
 const YouTubeGlobalBar = () => (
-  <div className="bg-red-600 text-white px-4 py-2 flex flex-col sm:flex-row items-center justify-between gap-4 fixed top-0 w-full z-[9999] shadow-2xl border-b border-white/10">
+  <div className="bg-red-600 text-white px-4 py-2 flex flex-col sm:flex-row items-center justify-between gap-4 w-full shadow-2xl border-b border-white/10 z-[101] relative">
     <div className="flex items-center gap-3">
        <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center">
          <Youtube size={14} className="fill-white" />
@@ -69,7 +69,7 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="flex flex-col min-h-full bg-white pt-[50px]">
+      <div className="flex flex-col min-h-full bg-white">
         <Toaster position="top-right" reverseOrder={false} />
         <YouTubeGlobalBar />
         <div className="flex-1 flex flex-col relative">
