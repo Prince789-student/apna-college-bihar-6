@@ -3,15 +3,18 @@ self.addEventListener('install', (e) => {
 });
 
 self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(keys.map((k) => caches.delete(k)));
-    }).then(() => self.clients.claim()).then(() => {
-        return self.registration.unregister();
-    })
-  );
+  self.registration.unregister()
+    .then(() => self.clients.matchAll())
+    .then((clients) => {
+      clients.forEach(client => {
+        if (client.url && 'navigate' in client) {
+          client.navigate(client.url);
+        }
+      });
+    });
 });
 
 self.addEventListener('fetch', (e) => {
-    // Pass through to network every time
+  // Do not cache anything, let the network handle it
+  return;
 });
