@@ -125,8 +125,8 @@ export default function StudyDashboard() {
         const yesterdayStr = new Date(Date.now() - 86400000).toISOString().split('T')[0];
         const sDate = d.streakDate || d.lastStudyDate || '';
         if (d.streak > 0 && sDate !== todayStr && sDate !== yesterdayStr) {
-           d.streak = 0;
-           updateDoc(doc(db, 'users', user.uid), { streak: 0 }).catch(console.error);
+          d.streak = 0;
+          updateDoc(doc(db, 'users', user.uid), { streak: 0 }).catch(console.error);
         }
         setUserData(d);
         setGoals({ daily: d.dailyGoal || 0, weekly: d.weeklyGoal || 0, monthly: d.monthlyGoal || 0 });
@@ -155,10 +155,10 @@ export default function StudyDashboard() {
 
   const saveTimerSession = async (manualTime = null) => {
     const timeToSave = manualTime || (timerMode === 'STOPWATCH' ? timerTime : (customMinutes * 60 - timerTime));
-    if (timeToSave < 1) { 
-      setTimerActive(false); 
-      setTimerTime(timerMode === 'STOPWATCH' ? 0 : customMinutes * 60); 
-      return; 
+    if (timeToSave < 1) {
+      setTimerActive(false);
+      setTimerTime(timerMode === 'STOPWATCH' ? 0 : customMinutes * 60);
+      return;
     }
 
     try {
@@ -174,13 +174,13 @@ export default function StudyDashboard() {
       const todaySec = sessions.filter(s => s.date === todayStr).reduce((a, s) => a + s.duration, 0);
       const newTodaySec = todaySec + timeToSave;
       let newStreak = userData?.streak || 0;
-      let streakDate = userData?.streakDate || ''; 
+      let streakDate = userData?.streakDate || '';
       const yesterdayStr = new Date(Date.now() - 86400000).toISOString().split('T')[0];
 
       if (newTodaySec >= 7200 && streakDate !== todayStr) {
-         if (streakDate === yesterdayStr) newStreak += 1;
-         else newStreak = 1;
-         streakDate = todayStr;
+        if (streakDate === yesterdayStr) newStreak += 1;
+        else newStreak = 1;
+        streakDate = todayStr;
       }
 
       await updateDoc(doc(db, 'users', user.uid), {
@@ -190,7 +190,7 @@ export default function StudyDashboard() {
         totalStudyTime: (userData?.totalStudyTime || 0) + timeToSave
       });
 
-      try { await stopFocusSession(); } catch(e) {}
+      try { await stopFocusSession(); } catch (e) { }
       setTimerActive(false);
       setTimerTime(timerMode === 'STOPWATCH' ? 0 : customMinutes * 60);
       fetchAll();
@@ -214,10 +214,10 @@ export default function StudyDashboard() {
   const weeklySec = sessions.filter(s => last7.includes(s.date)).reduce((a, s) => a + s.duration, 0);
   const curM = new Date().getMonth(), curY = new Date().getFullYear();
   const monthlySec = sessions.filter(s => { const d = new Date(s.date); return d.getMonth() === curM && d.getFullYear() === curY; }).reduce((a, s) => a + s.duration, 0);
-  const heatmap = Array.from({ length: 7 }, (_, i) => { 
-    const d = new Date(); d.setDate(d.getDate() - (6 - i)); 
-    const dStr = d.toISOString().split('T')[0]; 
-    return { dStr, day: d.toLocaleDateString('en-US', { weekday: 'short' }), sec: sessions.filter(s => s.date === dStr).reduce((a, s) => a + s.duration, 0), isToday: dStr === todayStr }; 
+  const heatmap = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(); d.setDate(d.getDate() - (6 - i));
+    const dStr = d.toISOString().split('T')[0];
+    return { dStr, day: d.toLocaleDateString('en-US', { weekday: 'short' }), sec: sessions.filter(s => s.date === dStr).reduce((a, s) => a + s.duration, 0), isToday: dStr === todayStr };
   });
   const maxH = Math.max(1, ...heatmap.map(d => d.sec));
   const getProgress = (sec, g) => (!g || g <= 0) ? 0 : Math.min(100, (sec / (g * 3600)) * 100).toFixed(0);
@@ -274,65 +274,12 @@ export default function StudyDashboard() {
           if (t.id === 'admin' && user?.email !== 'prince86944@gmail.com' && user?.role !== 'SUPER_ADMIN') return null;
           const isActive = tab === t.id;
           return (
-            <button key={t.id} onClick={() => t.id === 'admin' ? navigate('/dashboard/admin') : setTab(t.id)} 
+            <button key={t.id} onClick={() => t.id === 'admin' ? navigate('/dashboard/admin') : setTab(t.id)}
               className={`flex-1 min-w-fit flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border-2 ${isActive ? 'bg-slate-900 text-white border-slate-900 shadow-xl' : 'bg-white text-slate-600 border-transparent hover:border-slate-200 hover:text-slate-900 shadow-sm'}`}>
               {t.icon} {t.label}
             </button>
           );
         })}
-      </div>
-
-      {/* ── Main High Impact YouTube Portal ── */}
-      <div className="relative group overflow-hidden bg-gradient-to-br from-red-600 to-amber-900 md:p-10 p-6 rounded-[3rem] shadow-[0_40px_100px_rgba(220,38,38,0.2)] animate-in fade-in zoom-in-95 duration-1000">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white/10 rounded-full blur-[120px] -mr-40 -mt-40"></div>
-        <div className="relative z-10 flex flex-col items-center text-center space-y-8">
-           <div className="w-24 h-24 bg-white shadow-2xl rounded-[2.5rem] flex items-center justify-center p-6 transition-transform duration-700 group-hover:scale-110">
-              <Youtube size={40} className="text-red-600 fill-red-600" />
-           </div>
-           <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/20 backdrop-blur-md rounded-full border border-white/30 text-white">
-                <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse shadow-[0_0_15px_#10b981]"></span>
-                <span className="text-[10px] font-black uppercase tracking-[0.4em]">Live Academic Feed</span>
-              </div>
-              <h1 className="text-4xl md:text-6xl font-[1000] text-white tracking-tighter uppercase leading-[0.8] drop-shadow-2xl">
-                APNE <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-white">STUDY HUB</span>
-              </h1>
-              <p className="text-white/60 text-[10px] md:text-sm font-bold uppercase tracking-[0.3em] max-w-xl mx-auto">
-                Transforming Bihar Engineering Education on YouTube · Free Notes & Session Updates
-              </p>
-           </div>
-           <div className="flex flex-col sm:flex-row gap-4 w-full max-w-md">
-             <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" 
-                className="flex-1 px-8 py-4 bg-white text-red-600 rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-2xl hover:bg-slate-50 transition-all flex items-center justify-center gap-3 active:scale-95 group/btn">
-                Watch Broadcast <Youtube size={18} className="fill-red-600" />
-             </a>
-             <button onClick={() => navigate('/dashboard/notes')}
-                className="flex-1 px-8 py-4 bg-black/40 backdrop-blur-xl border border-white/20 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest hover:bg-white/20 transition-all active:scale-95">
-                Notes Section
-             </button>
-           </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-10">
-         <div className="bg-white p-8 rounded-[3rem] border border-slate-200/80 shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-red-600/5 rounded-full blur-3xl text-red-600"></div>
-            <div className="relative z-10 space-y-4">
-               <div className="p-4 bg-red-600/10 text-red-600 rounded-2xl w-fit"><Youtube size={24} /></div>
-               <h3 className="text-xl font-black text-slate-900 uppercase tracking-tighter">Daily Lectures</h3>
-               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">Latest recorded sessions for BEU semesters.</p>
-               <a href="https://youtube.com/@appne-h8p" target="_blank" className="inline-flex items-center gap-2 text-red-600 font-black text-[9px] uppercase tracking-widest group-hover:gap-4 transition-all">Explore Hub <ArrowRight size={12} /></a>
-            </div>
-         </div>
-         <div className="bg-white p-8 rounded-[3rem] border border-slate-200/80 shadow-2xl relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-3xl text-blue-600"></div>
-            <div className="relative z-10 space-y-4">
-               <div className="p-4 bg-blue-600/10 text-blue-600 rounded-2xl w-fit"><BookOpen size={24} /></div>
-               <h3 className="text-xl font-black text-slate-900 uppercase tracking-tighter">Official Notes</h3>
-               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">Notes, PYQs & BEU guide in one place.</p>
-               <button onClick={()=>navigate('/dashboard/notes')} className="inline-flex items-center gap-2 text-blue-600 font-black text-[9px] uppercase tracking-widest group-hover:gap-4 transition-all">Go to Library <ArrowRight size={12} /></button>
-            </div>
-         </div>
       </div>
 
       {/* TAB: FOCUS TIMER */}
@@ -408,6 +355,18 @@ export default function StudyDashboard() {
       {/* TAB: OVERVIEW */}
       {tab === 'overview' && (
         <div className="space-y-6 animate-in fade-in duration-200">
+          <div className="grid grid-cols-1 gap-6">
+            <div className="bg-white p-8 rounded-[3rem] border border-slate-200/80 shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/5 rounded-full blur-3xl text-blue-600"></div>
+              <div className="relative z-10 space-y-4">
+                <div className="p-4 bg-blue-600/10 text-blue-600 rounded-2xl w-fit"><BookOpen size={24} /></div>
+                <h3 className="text-xl font-black text-slate-900 uppercase tracking-tighter">Official Notes</h3>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">Access Semester Notes, PYQs & BEU guide in one professional library.</p>
+                <button onClick={() => navigate('/dashboard/notes')} className="inline-flex items-center gap-3 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-black text-[9px] uppercase tracking-widest group-hover:gap-5 transition-all shadow-lg active:scale-95">Go to Library <ArrowRight size={14} /></button>
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
               { label: 'Today', sec: todaySec, goal: goals.daily, color: 'bg-blue-500' },
@@ -457,12 +416,12 @@ export default function StudyDashboard() {
             <div className="space-y-2">
               {tasks.length === 0 ? <p className="text-center text-[10px] text-slate-400 py-10 uppercase font-black">No tasks for today. Add one!</p> : tasks.map(task => (
                 <div key={task.id} className={`flex items-center gap-3 p-4 rounded-2xl border transition-all ${task.done ? 'bg-emerald-50 border-emerald-100' : 'bg-slate-50 border-slate-100'}`}>
-                   <button onClick={() => toggleTask(task)}>{task.done ? <CheckCircle2 size={18} className="text-emerald-500" /> : <Circle size={18} className="text-slate-400" />}</button>
-                   <div className="flex-1">
-                      <p className={`text-xs font-black uppercase tracking-tighter mb-0.5 ${task.done ? 'text-emerald-400' : 'text-blue-500'}`}>{task.subject}</p>
-                      <p className={`text-sm font-bold ${task.done ? 'line-through text-slate-400' : 'text-slate-900'}`}>{task.text}</p>
-                   </div>
-                   <button onClick={() => delTask(task.id)} className="text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={14} /></button>
+                  <button onClick={() => toggleTask(task)}>{task.done ? <CheckCircle2 size={18} className="text-emerald-500" /> : <Circle size={18} className="text-slate-400" />}</button>
+                  <div className="flex-1">
+                    <p className={`text-xs font-black uppercase tracking-tighter mb-0.5 ${task.done ? 'text-emerald-400' : 'text-blue-500'}`}>{task.subject}</p>
+                    <p className={`text-sm font-bold ${task.done ? 'line-through text-slate-400' : 'text-slate-900'}`}>{task.text}</p>
+                  </div>
+                  <button onClick={() => delTask(task.id)} className="text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={14} /></button>
                 </div>
               ))}
             </div>
@@ -473,19 +432,19 @@ export default function StudyDashboard() {
       {/* TAB: ACHIEVEMENTS */}
       {tab === 'achievements' && (
         <div className="space-y-6 animate-in fade-in duration-200">
-           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {[
-                { label: 'Streak', val: `${userData?.streak || 0} Days`, color: 'text-orange-500' },
-                { label: 'Total hr', val: formatDuration(userData?.totalStudyTime || 0).split(' ')[0] + ' HR', color: 'text-blue-500' },
-                { label: 'Sessions', val: sessionCount, color: 'text-emerald-500' },
-                { label: 'Network', val: groups.length, color: 'text-purple-500' },
-              ].map(({ label, val, color }) => (
-                <div key={label} className="bg-white p-5 rounded-2xl border border-slate-200/50 text-center">
-                  <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">{label}</p>
-                  <p className={`text-xl font-black ${color}`}>{val}</p>
-                </div>
-              ))}
-           </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { label: 'Streak', val: `${userData?.streak || 0} Days`, color: 'text-orange-500' },
+              { label: 'Total hr', val: formatDuration(userData?.totalStudyTime || 0).split(' ')[0] + ' HR', color: 'text-blue-500' },
+              { label: 'Sessions', val: sessionCount, color: 'text-emerald-500' },
+              { label: 'Network', val: groups.length, color: 'text-purple-500' },
+            ].map(({ label, val, color }) => (
+              <div key={label} className="bg-white p-5 rounded-2xl border border-slate-200/50 text-center">
+                <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">{label}</p>
+                <p className={`text-xl font-black ${color}`}>{val}</p>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
@@ -498,7 +457,7 @@ export default function StudyDashboard() {
               {['daily', 'weekly', 'monthly'].map(t => (
                 <div key={t} className="space-y-1">
                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">{t} (Hours)</p>
-                  <input type="number" value={goals[t]} onChange={e => setGoals({...goals, [t]: e.target.value})} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-black text-center outline-none focus:border-blue-500" />
+                  <input type="number" value={goals[t]} onChange={e => setGoals({ ...goals, [t]: e.target.value })} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-black text-center outline-none focus:border-blue-500" />
                 </div>
               ))}
             </div>
