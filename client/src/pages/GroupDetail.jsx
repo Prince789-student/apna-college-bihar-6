@@ -20,7 +20,7 @@ export default function GroupDetail() {
 
   const fetchGroup = async () => {
     try {
-      const groupRef = doc(db, 'groups', groupId);
+      const groupRef = doc(db, 'Groups', groupId);
       const groupSnap = await getDoc(groupRef);
 
       if (!groupSnap.exists()) {
