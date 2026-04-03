@@ -79,8 +79,8 @@ export default function DashboardLayout() {
 
   const SidebarContent = ({ isMobile = false }) => (
     <>
-      <div className={`p-4 md:p-6 flex items-center justify-between ${!isSidebarOpen && !isMobile ? 'justify-center' : ''}`}>
-        <div className={`flex items-center gap-3 transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+      <div className={`p-3 md:p-4 flex items-center justify-between ${!isSidebarOpen && !isMobile ? 'justify-center' : ''}`}>
+        <div className={`flex items-center gap-2 transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
            <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
            <div className="min-w-[100px]">
              <span className="text-sm font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE BIHAR</span>
@@ -185,8 +185,8 @@ export default function DashboardLayout() {
         
         {/* Mobile Navbar Header */}
         {!isAppMode && (
-          <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200/80 sticky top-0 z-30">
-            <div className="flex items-center gap-3">
+          <div className="md:hidden flex items-center justify-between px-4 py-2 bg-white border-b border-slate-200/80 sticky top-0 z-30">
+            <div className="flex items-center gap-2">
                <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
                <span className="text-xs font-[1000] tracking-tighter uppercase text-slate-900 leading-none">APNA COLLEGE BIHAR</span>
             </div>
