@@ -67,7 +67,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto pb-24 space-y-12 lg:space-y-16 animate-in fade-in duration-1000">
+    <div className="max-w-7xl mx-auto pb-12 space-y-8 lg:space-y-10 animate-in fade-in duration-700">
       
       {/* Install App Banner (PWA Only) */}
       {showInstall && (
@@ -81,15 +81,15 @@ export default function Dashboard() {
       )}
 
       {/* Greetings Hub */}
-      <div className="bg-white p-10 md:p-14 rounded-[4rem] border border-slate-200/80 shadow-2xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-8">
-         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[120px] pointer-events-none"></div>
-         <div className="relative z-10 flex items-center gap-6">
-            <div className="w-20 h-20 rounded-[2rem] bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center font-[1000] text-3xl text-slate-900 shadow-2xl shadow-blue-500/20 group hover:scale-105 transition-transform">
+      <div className="bg-white p-6 md:p-8 rounded-[3rem] border border-slate-200/80 shadow-2xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
+         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[100px] pointer-events-none"></div>
+         <div className="relative z-10 flex items-center gap-5">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center font-[1000] text-xl text-slate-900 shadow-2xl shadow-blue-500/20 group hover:scale-105 transition-transform">
                {user?.name?.[0]?.toUpperCase()}
             </div>
             <div>
-              <h1 className="text-4xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.8]">Hi, {user?.name?.split(' ')[0]}</h1>
-              <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.4em] mt-3">Ready to dominate the session?</p>
+              <h1 className="text-2xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.8]">Hi, {user?.name?.split(' ')[0]}</h1>
+              <p className="text-[9px] text-slate-400 font-black uppercase tracking-[0.3em] mt-2">Ready to dominate the session?</p>
             </div>
          </div>
          <div className="relative z-10 flex flex-wrap gap-4">
@@ -105,16 +105,16 @@ export default function Dashboard() {
       {/* Global Promotion Slot (AdSense Ready) */}
       <PremiumAds type="BANNER" />
 
-      <div className="w-full bg-blue-600/5 border border-blue-500/20 rounded-[4rem] p-12 flex flex-col md:flex-row items-center justify-between gap-10">
+      <div className="w-full bg-blue-600/5 border border-blue-500/20 rounded-[3rem] p-8 flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="text-center md:text-left">
-             <div className="w-16 h-16 bg-blue-600 rounded-[2rem] flex items-center justify-center text-white mb-6 shadow-xl shadow-blue-500/20 mx-auto md:mx-0">
-               <Timer size={32} />
+             <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white mb-4 shadow-xl shadow-blue-500/20 mx-auto md:mx-0">
+               <Timer size={24} />
              </div>
-             <h2 className="text-3xl font-[1000] text-slate-900 uppercase tracking-tighter mb-2">Integrated Study Hub</h2>
-             <p className="text-slate-500 text-[11px] font-black uppercase tracking-[0.4em]">Timer · Hubs · Targets · Achievements</p>
+             <h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter mb-1">Integrated Study Hub</h2>
+             <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em]">Timer · Hubs · Targets · Achievements</p>
           </div>
-          <Link to="/dashboard/study" className="w-full md:w-auto px-12 py-6 bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black text-sm uppercase tracking-[0.2em] shadow-2xl shadow-blue-900/30 transition-all active:scale-[0.98] text-center">
-             Enter Study Hub Protocol
+          <Link to="/dashboard/study" className="w-full md:w-auto px-10 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-blue-900/30 transition-all active:scale-[0.98] text-center">
+             Enter Protocol
           </Link>
       </div>
 
@@ -124,22 +124,16 @@ export default function Dashboard() {
         <div className="lg:col-span-8 space-y-12">
            
            {/* Analytic Chips */}
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
-                { label: 'Total Study Time', val: fmt(totalTime), icon: Clock, col: 'blue', tag: 'Lifetime' },
-                { label: 'Network Hubs', val: activeGroups.length, icon: Globe, col: 'orange', tag: 'Active' },
+                { label: 'Study Time', val: fmt(totalTime), icon: Clock, tag: 'Lifetime' },
+                { label: 'Network Hubs', val: activeGroups.length, icon: Globe, tag: 'Active' },
               ].map(s => (
-                <div key={s.label} className="bg-white p-8 rounded-[3.5rem] border border-slate-200/80 group hover:border-blue-500/20 transition-all flex items-center gap-8 relative overflow-hidden">
-                   <div className="p-5 bg-slate-100 text-slate-500 group-hover:text-blue-500 transition-colors rounded-3xl shrink-0"><s.icon size={28}/></div>
+                <div key={s.label} className="bg-white p-6 rounded-[2.5rem] border border-slate-200/80 group hover:border-blue-500/20 transition-all flex items-center gap-6 relative overflow-hidden">
+                   <div className="p-4 bg-slate-100 text-slate-500 group-hover:text-blue-500 transition-colors rounded-2xl shrink-0"><s.icon size={22}/></div>
                    <div className="flex-1">
-                     <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[7px] font-black px-1.5 py-0.5 rounded-full border border-slate-200 text-slate-600 uppercase tracking-tighter">{s.tag}</span>
-                        <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">{s.label}</p>
-                     </div>
-                     <p className="text-3xl font-black text-slate-900">{s.val}</p>
-                   </div>
-                   <div className="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-all rotate-12 scale-150">
-                     <s.icon size={120} />
+                      <p className="text-[8px] font-black uppercase tracking-widest text-slate-400 mb-0.5">{s.label}</p>
+                      <p className="text-2xl font-black text-slate-900">{s.val}</p>
                    </div>
                 </div>
               ))}
@@ -186,13 +180,13 @@ export default function Dashboard() {
            </div>
 
            {/* Announcement Preview */}
-           <div className="bg-white p-10 rounded-[4rem] border border-slate-200/80 flex flex-col md:flex-row items-center gap-8">
-              <div className="w-20 h-20 bg-orange-600/10 rounded-[2rem] flex items-center justify-center text-orange-500 shrink-0">
-                <Bell size={32} />
+           <div className="bg-white p-6 rounded-[2.5rem] border border-slate-200/80 flex flex-col md:flex-row items-center gap-6">
+              <div className="w-16 h-16 bg-orange-600/10 rounded-2xl flex items-center justify-center text-orange-500 shrink-0">
+                <Bell size={24} />
               </div>
               <div className="flex-1 text-center md:text-left">
-                <p className="text-sm font-black text-slate-900 uppercase tracking-widest">Global Broadcasts</p>
-                <p className="text-[11px] text-slate-500 font-bold uppercase mt-2 leading-relaxed">Check the sidebar and Study Hub for the latest sessions, targets, and schedules.</p>
+                <p className="text-xs font-black text-slate-900 uppercase tracking-widest">Global Broadcasts</p>
+                <p className="text-[10px] text-slate-500 font-bold uppercase mt-1 leading-relaxed">Check the sidebar and Study Hub for the latest sessions and schedules.</p>
               </div>
            </div>
         </div>

@@ -25,23 +25,23 @@ import { Youtube, ArrowRight } from 'lucide-react';
 
 // Global Announcement Bar centered on YouTube
 const YouTubeGlobalBar = () => (
-  <div className="bg-red-600 text-white px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-4 sticky top-0 z-[110] shadow-lg border-b border-red-500/30">
+  <div className="bg-red-600 text-white px-4 py-2 flex flex-col sm:flex-row items-center justify-between gap-4 sticky top-0 z-[110] shadow-lg border-b border-red-500/30">
     <div className="flex items-center gap-3">
-       <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center animate-pulse">
-         <Youtube size={18} className="fill-white" />
+       <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center animate-pulse">
+         <Youtube size={14} className="fill-white" />
        </div>
        <div className="flex flex-col">
-         <span className="text-[10px] font-black uppercase tracking-widest leading-none">Official Broadcast Live</span>
-         <span className="text-[8px] font-bold uppercase tracking-widest text-white/70 mt-1">Free BEU Study Material & Guidance</span>
+         <span className="text-[9px] font-black uppercase tracking-widest leading-none">Official Broadcast Live</span>
+         <span className="text-[7px] font-bold uppercase tracking-widest text-white/70 mt-0.5">Free BEU Study Material & Guidance</span>
        </div>
     </div>
     <a 
       href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" 
       target="_blank" 
       rel="noopener noreferrer"
-      className="px-6 py-2 bg-white text-red-600 rounded-full font-black text-[9px] uppercase tracking-widest hover:bg-slate-100 transition-all flex items-center gap-2 shadow-xl active:scale-95"
+      className="px-5 py-1.5 bg-white text-red-600 rounded-full font-black text-[8px] uppercase tracking-widest hover:bg-slate-100 transition-all flex items-center gap-2 shadow-xl active:scale-95"
     >
-      Join Hub Now <ArrowRight size={12} />
+      Join Hub Now <ArrowRight size={10} />
     </a>
   </div>
 );

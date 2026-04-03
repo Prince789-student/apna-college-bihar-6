@@ -83,7 +83,7 @@ export default function PremiumAds({ type = 'BANNER' }) {
   if (type === 'SIDEBAR') {
     return (
       <a href={current.link} target="_blank" rel="noopener noreferrer" 
-         className={`block p-6 bg-gradient-to-br ${current.col || 'from-slate-800 to-slate-900'} border ${current.border || 'border-slate-300/50'} rounded-[2rem] group transition-all hover:scale-[1.02] relative overflow-hidden`}>
+         className={`block p-4 bg-gradient-to-br ${current.col || 'from-slate-800 to-slate-900'} border ${current.border || 'border-slate-300/50'} rounded-2xl group transition-all hover:scale-[1.02] relative overflow-hidden`}>
          <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-slate-100 rounded-lg group-hover:scale-110 transition-transform">
                {current.icon || <Bell size={18} className="text-amber-500"/>}
@@ -102,27 +102,27 @@ export default function PremiumAds({ type = 'BANNER' }) {
   if (type === 'BANNER') {
     return (
       <a href={current.link} target="_blank" rel="noopener noreferrer" 
-         className={`w-full bg-gradient-to-r ${current.col || 'from-[#0d121f] to-[#162035]'} border ${current.border || 'border-slate-200/80'} rounded-[3rem] p-10 md:p-12 flex flex-col md:flex-row items-center justify-between gap-10 group transition-all relative overflow-hidden hover:border-blue-500/20`}>
+         className={`w-full bg-gradient-to-r ${current.col || 'from-[#0d121f] to-[#162035]'} border ${current.border || 'border-slate-200/80'} rounded-[2.5rem] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 group transition-all relative overflow-hidden hover:border-blue-500/20`}>
          
          {/* Visual Backdrop */}
          <div className={`absolute -right-20 -bottom-20 w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity`}></div>
          
-         <div className="flex items-center gap-8 relative z-10 flex-col md:flex-row text-center md:text-left">
-            <div className="w-20 h-20 bg-slate-100/50 backdrop-blur-xl border border-slate-300/30 rounded-[2.5rem] flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-500">
-               {current.icon || (current.imageUrl ? <img src={current.imageUrl} className="w-full h-full object-cover rounded-[2.5rem]" /> : <Bell size={32} className="text-blue-400" />)}
+         <div className="flex items-center gap-6 relative z-10 flex-col md:flex-row text-center md:text-left">
+            <div className="w-14 h-14 bg-slate-100/50 backdrop-blur-xl border border-slate-300/30 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-500">
+               {current.icon || (current.imageUrl ? <img src={current.imageUrl} className="w-full h-full object-cover rounded-2xl" /> : <Bell size={24} className="text-blue-400" />)}
             </div>
             <div className="space-y-3">
                <div className="flex items-center justify-center md:justify-start gap-2">
                   <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></span>
                   <span className="text-[9px] font-black uppercase text-slate-500 tracking-[0.4em]">Official Announcement</span>
                </div>
-               <h2 className="text-3xl font-[1000] text-slate-900 uppercase tracking-tighter leading-none">{current.title}</h2>
-               <p className="text-[11px] text-slate-500 font-bold uppercase tracking-[0.2em] max-w-lg leading-relaxed">{current.desc || 'Stay connected for the latest exam updates, session schedules, and note bank additions.'}</p>
+               <h2 className="text-xl font-[1000] text-slate-900 uppercase tracking-tighter leading-none">{current.title}</h2>
+               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-[0.2em] max-w-lg leading-relaxed">{current.desc || 'Stay connected for the latest updates.'}</p>
             </div>
          </div>
 
-         <div className="px-10 py-5 bg-white text-slate-950 rounded-[1.8rem] font-[1000] text-[10px] uppercase tracking-widest shadow-2xl shadow-blue-900/40 relative z-10 group-hover:bg-blue-600 group-hover:text-slate-900 transition-all shrink-0">
-            Secure Access
+         <div className="px-6 py-3 bg-white text-slate-950 rounded-xl font-[1000] text-[9px] uppercase tracking-widest shadow-2xl shadow-blue-900/40 relative z-10 group-hover:bg-blue-600 group-hover:text-slate-900 transition-all shrink-0">
+            Access Now
          </div>
       </a>
     );
@@ -130,7 +130,7 @@ export default function PremiumAds({ type = 'BANNER' }) {
 
   return (
     <a href={current.link} target="_blank" rel="noopener noreferrer" 
-       className={`p-6 bg-slate-100/30 border border-slate-200/80 rounded-[2rem] flex items-center justify-between gap-4 group hover:border-slate-300 transition-all`}>
+       className={`p-4 bg-slate-100/30 border border-slate-200/80 rounded-xl flex items-center justify-between gap-4 group hover:border-slate-300 transition-all`}>
        <div className="flex items-center gap-4">
           <div className="p-3 bg-slate-800 border border-slate-300 rounded-xl group-hover:scale-110 transition-transform">
              {current.icon || <Info size={16} className="text-slate-500"/>}

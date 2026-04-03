@@ -243,17 +243,17 @@ export default function AdminPanel() {
   // if (!isAdmin) return <div className="text-center py-20 text-slate-500 font-bold uppercase tracking-widest">Unauthorized Access</div>;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-0 pb-24 space-y-8 animate-in fade-in duration-1000">
+    <div className="max-w-7xl mx-auto px-4 md:px-0 pb-12 space-y-6 animate-in fade-in duration-700">
       
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-[#f8fafc] p-6 md:p-8 border border-slate-200/80 rounded-[2rem] md:rounded-[3rem] shadow-2xl relative overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-[#f8fafc] p-5 md:p-6 border border-slate-200/80 rounded-[2rem] shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-red-600/5 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="flex items-center gap-5 relative z-10">
-          <div className="p-4 bg-indigo-600/20 text-indigo-400 rounded-3xl group hover:scale-110 transition-transform cursor-pointer">
-             <Shield size={32} />
+        <div className="flex items-center gap-4 relative z-10">
+          <div className="p-3 bg-indigo-600/20 text-indigo-400 rounded-2xl group hover:scale-110 transition-transform cursor-pointer">
+             <Shield size={24} />
           </div>
           <div>
-            <h1 className="text-4xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.8]">{isSuper?'SUPER OPS':'ADMIN OPS'}</h1>
-            <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.4em] mt-3">Governance & Oversight Hub</p>
+            <h1 className="text-2xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.8]">{isSuper?'SUPER OPS':'ADMIN OPS'}</h1>
+            <p className="text-[9px] text-slate-500 font-black uppercase tracking-[0.3em] mt-2">Governance Hub</p>
           </div>
         </div>
         <div className="flex flex-wrap bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 overflow-x-auto">
@@ -276,18 +276,18 @@ export default function AdminPanel() {
       {tab==='overview' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { label: 'Total Scholars', val: users.length, icon: Users, col: 'blue' },
-            { label: 'Study Hubs', val: groups.length, icon: BookOpen, col: 'indigo' },
-            { label: 'Knowledge Base', val: docs.length, icon: FileText, col: 'orange' },
-            { label: 'Active Admins', val: users.filter(x=>x.role==='ADMIN').length, icon: Shield, col: 'red' },
+            { label: 'Scholars', val: users.length, icon: Users },
+            { label: 'Study Hubs', val: groups.length, icon: BookOpen },
+            { label: 'Knowledge Base', val: docs.length, icon: FileText },
+            { label: 'Admins', val: users.filter(x=>x.role==='ADMIN').length, icon: Shield },
           ].map(s => (
-            <div key={s.label} className="bg-white p-8 rounded-[3.5rem] border border-slate-200/80">
-               <div className="flex justify-between items-start mb-6">
-                 <div className="p-3 bg-slate-100 text-slate-500 rounded-2xl"><s.icon size={20}/></div>
-                 <BarChart3 size={14} className="text-slate-800" />
+            <div key={s.label} className="bg-white p-6 rounded-[2.5rem] border border-slate-200/80">
+               <div className="flex justify-between items-start mb-4">
+                 <div className="p-2.5 bg-slate-100 text-slate-500 rounded-xl"><s.icon size={18}/></div>
+                 <BarChart3 size={12} className="text-slate-800" />
                </div>
-               <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">{s.label}</p>
-               <p className="text-3xl font-black text-slate-900">{s.val}</p>
+               <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">{s.label}</p>
+               <p className="text-2xl font-black text-slate-900">{s.val}</p>
             </div>
           ))}
         </div>

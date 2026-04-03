@@ -80,12 +80,12 @@ export default function DashboardLayout() {
 
   const SidebarContent = ({ isMobile = false }) => (
     <>
-      <div className={`p-8 md:p-10 flex items-center justify-between ${!isSidebarOpen && !isMobile ? 'justify-center' : ''}`}>
-        <div className={`flex items-center gap-4 transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
-           <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
-           <div className="min-w-[120px]">
-             <span className="text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE BIHAR</span>
-             <span className="text-[7px] text-slate-500 font-black uppercase tracking-[0.4em] mt-2 block">Official Website</span>
+      <div className={`p-4 md:p-6 flex items-center justify-between ${!isSidebarOpen && !isMobile ? 'justify-center' : ''}`}>
+        <div className={`flex items-center gap-3 transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+           <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
+           <div className="min-w-[100px]">
+             <span className="text-sm font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE BIHAR</span>
+             <span className="text-[6px] text-slate-500 font-black uppercase tracking-[0.3em] mt-1 block">Official Website</span>
            </div>
         </div>
         {!isMobile && (
@@ -105,12 +105,12 @@ export default function DashboardLayout() {
           const isActive = location.pathname === link.path;
           return (
             <Link key={link.name} to={link.path}
-              className={`flex items-center gap-4 p-4 rounded-[1.8rem] transition-all duration-300 group relative ${isActive ? 'bg-blue-600 text-slate-900 shadow-xl shadow-blue-500/30' : 'text-slate-500 hover:bg-slate-100/50 hover:text-slate-900'}`}>
-              <div className={`${isActive ? 'scale-110' : 'group-hover:scale-125'} transition-transform shrink-0`}>{link.icon}</div>
-              <span className={`font-black text-[10px] uppercase tracking-widest transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+              className={`flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 group relative ${isActive ? 'bg-blue-600 text-slate-900 shadow-xl shadow-blue-500/30' : 'text-slate-500 hover:bg-slate-100/50 hover:text-slate-900'}`}>
+              <div className={`${isActive ? 'scale-110' : 'group-hover:scale-110'} transition-transform shrink-0`}>{link.icon}</div>
+              <span className={`font-black text-[9px] uppercase tracking-widest transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                 {link.name}
               </span>
-              {isActive && (isSidebarOpen || isMobile) && <div className="absolute right-6 w-1 h-1 bg-white rounded-full animate-pulse shadow-[0_0_10px_white]" />}
+              {isActive && (isSidebarOpen || isMobile) && <div className="absolute right-4 w-1 h-1 bg-white rounded-full animate-pulse shadow-[0_0_10px_white]" />}
             </Link>
           );
         })}
@@ -136,8 +136,8 @@ export default function DashboardLayout() {
                       <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">{user?.role || 'Verified'}</p>
                    </div>
                 </div>
-                <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 p-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-slate-900 border border-red-500/20 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all group active:scale-95">
-                  <LogOut size={16} /> <span>Terminate Hub</span>
+                <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 p-3 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-slate-900 border border-red-500/20 rounded-xl font-black text-[8px] uppercase tracking-widest transition-all group active:scale-95">
+                  <LogOut size={14} /> <span>Terminate Hub</span>
                 </button>
              </div>
            ) : (
@@ -166,7 +166,7 @@ export default function DashboardLayout() {
       
       {/* ── Desktop Sidebar ── */}
       {!isAppMode && (
-        <aside className={`hidden md:flex flex-col bg-white border-r border-slate-200/80 transition-all duration-500 shadow-2xl relative z-40 ${isSidebarOpen ? 'w-80' : 'w-24'}`}>
+        <aside className={`hidden md:flex flex-col bg-white border-r border-slate-200/80 transition-all duration-500 shadow-2xl relative z-40 ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
           <SidebarContent />
         </aside>
       )}
@@ -198,7 +198,7 @@ export default function DashboardLayout() {
         )}
 
         {/* Scrollable Area */}
-        <div className={`flex-1 overflow-y-auto custom-scrollbar relative z-10 ${isAppMode ? 'p-4 pb-24' : 'p-5 md:p-14 lg:p-20'}`}>
+        <div className={`flex-1 overflow-y-auto custom-scrollbar relative z-10 ${isAppMode ? 'p-4 pb-24' : 'p-4 md:p-8 lg:p-10'}`}>
            <div className="min-h-[80vh]">
              <Outlet />
            </div>
