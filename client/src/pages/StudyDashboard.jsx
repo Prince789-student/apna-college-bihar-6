@@ -151,7 +151,11 @@ export default function StudyDashboard() {
           updateDoc(doc(db, 'users', user.uid), { streak: 0 }).catch(console.error);
         }
         setUserData(d);
-        setGoals({ daily: d.dailyGoal || 0, weekly: d.weeklyGoal || 0, monthly: d.monthlyGoal || 0 });
+        setGoals({ 
+          daily: d?.dailyGoal || 0, 
+          weekly: d?.weeklyGoal || 0, 
+          monthly: d?.monthlyGoal || 0 
+        });
       }
 
       const subSnap = await getDocs(query(collection(db, 'Subjects'), where('userId', '==', user.uid)));
