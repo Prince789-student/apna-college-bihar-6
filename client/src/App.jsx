@@ -72,7 +72,7 @@ function App() {
       <div className="flex flex-col h-screen overflow-hidden bg-white pt-[50px]">
         <Toaster position="top-right" reverseOrder={false} />
         <YouTubeGlobalBar />
-        <div className="flex-1 overflow-hidden relative">
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">
           <Routes>
             {/* If user is coming from App (WebView), skip Home landing page and direct to Login */}
             <Route path="/" element={isAppMode ? <Navigate to="/login" replace /> : <Home />} />
