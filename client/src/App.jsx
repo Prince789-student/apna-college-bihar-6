@@ -71,45 +71,42 @@ function App() {
 
   return (
     <AuthProvider>
-      <Toaster position="top-right" reverseOrder={false} />
-      <YouTubeGlobalBar />
-      <Routes>
-        {/* If user is coming from App (WebView), skip Home landing page and direct to Login */}
-        <Route path="/" element={isAppMode ? <Navigate to="/login" replace /> : <Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+      <div className="flex flex-col h-screen overflow-hidden bg-[#f8fafc]">
+        <Toaster position="top-right" reverseOrder={false} />
+        <YouTubeGlobalBar />
+        <div className="flex-1 overflow-hidden relative">
+          <Routes>
+            {/* If user is coming from App (WebView), skip Home landing page and direct to Login */}
+            <Route path="/" element={isAppMode ? <Navigate to="/login" replace /> : <Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
 
-        {/* Unified Dashboard System */}
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          {/* Public Utility Routes (No Login Required) */}
-          <Route path="calculator" element={<ScientificCalc />} />
-          <Route path="cgpa" element={<BeuCgpa />} />
-
-          {/* Protected Core Dashboard Content */}
-          <Route element={<ProtectedRoute />}>
-            <Route index element={<StudyDashboard />} />
-            <Route path="notes" element={<Notes />} />
-            <Route path="study" element={<StudyDashboard />} />
-            <Route path="timer" element={<StudyDashboard />} />
-            <Route path="study/group/:groupId" element={<GroupDetail />} />
-            <Route path="timetable" element={<Timetable />} />
-            <Route path="blog" element={<Blog />} />
-            <Route path="blog/:postId" element={<BlogPost />} />
-
-            {/* Founder-Only Admin Console */}
-            <Route element={<AdminRoute />}>
-              <Route path="admin" element={<AdminPanel />} />
+            {/* Unified Dashboard System */}
+            <Route path="/dashboard" element={<DashboardLayout />}>
+              <Route path="calculator" element={<ScientificCalc />} />
+              <Route path="cgpa" element={<BeuCgpa />} />
+              <Route element={<ProtectedRoute />}>
+                <Route index element={<StudyDashboard />} />
+                <Route path="notes" element={<Notes />} />
+                <Route path="study" element={<StudyDashboard />} />
+                <Route path="timer" element={<StudyDashboard />} />
+                <Route path="study/group/:groupId" element={<GroupDetail />} />
+                <Route path="timetable" element={<Timetable />} />
+                <Route path="blog" element={<Blog />} />
+                <Route path="blog/:postId" element={<BlogPost />} />
+                <Route element={<AdminRoute />}>
+                  <Route path="admin" element={<AdminPanel />} />
+                </Route>
+              </Route>
             </Route>
-          </Route>
-        </Route>
 
-        {/* Public Legal Pages (AdSense Compliance) */}
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/contact" element={<ContactUs />} />
-
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/contact" element={<ContactUs />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+        </div>
+      </div>
     </AuthProvider>
   );
 }

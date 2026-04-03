@@ -162,7 +162,7 @@ export default function DashboardLayout() {
   );
 
   return (
-    <div className="flex h-screen bg-[#f8fafc] overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30">
+    <div className="flex h-full bg-[#f8fafc] overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30">
       
       {/* ── Desktop Sidebar ── */}
       {!isAppMode && (

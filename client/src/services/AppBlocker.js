@@ -1,55 +1,68 @@
 import { registerPlugin } from '@capacitor/core';
 
-const AppBlocker = registerPlugin('AppBlocker');
+// Safe Plugin Registration with Web Fallback
+let AppBlocker = null;
+try {
+  // Only attempt to register if Capacitor is truly present (Native)
+  if (typeof window !== 'undefined' && window.Capacitor && window.Capacitor.isNativePlatform()) {
+    AppBlocker = registerPlugin('AppBlocker');
+  }
+} catch (error) {
+  console.warn("AppBlocker native plugin skip: Not a native platform.");
+}
 
 export const getInstalledApps = async () => {
   try {
-    if (window.Capacitor) {
+    if (AppBlocker && AppBlocker.getInstalledApps) {
       const result = await AppBlocker.getInstalledApps();
-      return result.apps;
+      return result.apps || [];
     }
   } catch (error) {
-    console.error("Error fetching apps:", error);
+    // Suppress promise rejections on web
+    console.debug("fetching apps skipped on web");
   }
   return [];
 };
 
 export const startFocusSession = async (minutes, allowedPackages = []) => {
   try {
-    if (window.Capacitor) {
+    if (AppBlocker && AppBlocker.startCountdown) {
       await AppBlocker.startCountdown({ minutes, allowedPackages });
       console.log(`Hardcore Focus Session started for ${minutes} mins`);
     } else {
-      console.log("Not on native device. Focus session simulated.");
+      console.log("Focus session simulated (Web)");
     }
   } catch (error) {
-    console.error("Error starting focus session:", error);
+    console.debug("Focus session start skipped on web");
   }
 };
 
 export const stopFocusSession = async () => {
   try {
-    if (window.Capacitor) {
+    if (AppBlocker && AppBlocker.stopBlocker) {
       await AppBlocker.stopBlocker();
-      console.log("Focus session manual stop called.");
     }
   } catch (error) {
-    console.error("Error stopping focus session:", error);
+    console.debug("Focus session stop skipped on web");
   }
 };
 
 export const checkAccessibility = async () => {
-  if (window.Capacitor) {
-    const { enabled } = await AppBlocker.checkAccessibility();
-    return enabled;
-  }
-  return true; // Assume true on web for testing
+  try {
+    if (AppBlocker && AppBlocker.checkAccessibility) {
+      const { enabled } = await AppBlocker.checkAccessibility();
+      return enabled;
+    }
+  } catch (e) {}
+  return true; 
 };
 
 export const openSettings = async () => {
-  if (window.Capacitor) {
-    await AppBlocker.openAccessibilitySettings();
-  }
+  try {
+    if (AppBlocker && AppBlocker.openAccessibilitySettings) {
+      await AppBlocker.openAccessibilitySettings();
+    }
+  } catch (e) {}
 };
 
-export default AppBlocker;
+export default AppBlocker || { disabled: true };

@@ -10,7 +10,7 @@ import {
   Clock, Plus, Flame, Target, BookOpen, Youtube,
   Calendar, BarChart3, Settings, Trash2, Trophy,
   Users, Hash, ArrowRight, ClipboardList, CalendarDays,
-  CheckCircle2, Circle, Save, Shield, Zap, Award, Timer, ChevronRight
+  CheckCircle2, Circle, Save, Shield, Zap, Award, Timer, ChevronRight, AlertTriangle
 } from 'lucide-react';
 import PremiumAds from '../components/PremiumAds';
 import { startFocusSession, stopFocusSession, getInstalledApps, checkAccessibility, openSettings } from '../services/AppBlocker';
@@ -246,8 +246,18 @@ export default function StudyDashboard() {
             <div>
               <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Daily Streak</p>
               <p className="text-2xl font-black text-slate-900 leading-none">{userData?.streak || 0} <span className="text-xs font-bold text-slate-500">days</span></p>
-              <p className="text-[9px] mt-0.5 text-slate-600">
-                {todaySec >= 7200 ? 'Γ£à 2 hr complete ΓÇö streak safe!' : `ΓÜá∩╕Å ${Math.floor((7200 - todaySec) / 60)} min aur padho streak ke liye`}
+              <p className="text-[9px] mt-0.5 text-slate-600 flex items-center gap-1">
+                {todaySec >= 7200 ? (
+                  <>
+                    <CheckCircle2 size={10} className="text-emerald-500" />
+                    <span>2 hr complete - streak safe!</span>
+                  </>
+                ) : (
+                  <>
+                    <AlertTriangle size={10} className="text-orange-500" />
+                    <span>{Math.floor((7200 - todaySec) / 60)} min aur padho streak ke liye</span>
+                  </>
+                )}
               </p>
             </div>
           </div>
@@ -435,7 +445,9 @@ export default function StudyDashboard() {
       {tab === 'todo' && (
         <div className="space-y-4 animate-in fade-in duration-200">
           <div className="bg-white p-6 rounded-[2rem] border border-slate-200/50">
-            <h3 className="text-lg font-black text-slate-900 mb-6 uppercase tracking-tighter">📋 Aaj ka Study Plan</h3>
+            <h3 className="text-lg font-black text-slate-900 mb-6 uppercase tracking-tighter flex items-center gap-2">
+              <ClipboardList size={20} className="text-blue-500" /> Aaj ka Study Plan
+            </h3>
             <div className="flex flex-col md:flex-row gap-3 mb-6 bg-slate-50 p-4 rounded-3xl border border-slate-200">
               <input value={newTask} onChange={e => setNewTask(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Task (e.g. Solve Unit 2)..." className="flex-[2] bg-white border border-slate-200 rounded-2xl px-5 py-3.5 text-sm outline-none focus:border-blue-500 font-bold" />
               <input list="subjects-list" value={taskSub} onChange={e => setTaskSub(e.target.value)} placeholder="Subject" className="flex-1 bg-white border border-slate-200 rounded-2xl px-5 py-3.5 text-xs outline-none focus:border-blue-500 font-black uppercase tracking-widest" />
