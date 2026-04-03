@@ -40,6 +40,8 @@ app.get('/api', (req, res) => {
 });
 
 // Catch-all route to serve React app for non-API requests (Must be last)
+app.get('/_health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
