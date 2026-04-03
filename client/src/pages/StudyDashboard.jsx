@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   doc, getDoc, collection, query, where, getDocs,
@@ -7,7 +7,7 @@ import {
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import {
-  Clock, Plus, Flame, Target, BookOpen,
+  Clock, Plus, Flame, Target, BookOpen, Youtube,
   Calendar, BarChart3, Settings, Trash2, Trophy,
   Users, Hash, ArrowRight, ClipboardList, CalendarDays,
   CheckCircle2, Circle, Save, Shield, Zap, Award, Timer, ChevronRight

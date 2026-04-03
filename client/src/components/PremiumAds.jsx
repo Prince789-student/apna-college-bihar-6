@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, query, where, onSnapshot, limit } from 'firebase/firestore';
-import { ExternalLink, Info, Bell, Youtube, Send } from 'lucide-react';
+import { ExternalLink, Info, Bell, Youtube, Send, BookOpen } from 'lucide-react';
 
 const FALLBACK_ADS = {
   BANNER: {
