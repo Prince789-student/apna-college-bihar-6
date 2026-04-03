@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
-import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock } from 'lucide-react';
+import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2 } from 'lucide-react';
+import { collection, query, where, onSnapshot, doc, updateDoc, arrayRemove } from 'firebase/firestore';
 
 export default function GroupDetail() {
   const { groupId } = useParams();
@@ -15,45 +15,71 @@ export default function GroupDetail() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (groupId) fetchGroup();
-  }, [groupId]);
+    if (!groupId || !user) return;
 
-  const fetchGroup = async () => {
-    try {
-      const groupRef = doc(db, 'Groups', groupId);
-      const groupSnap = await getDoc(groupRef);
-
-      if (!groupSnap.exists()) {
+    // Real-time Group Sync
+    const unsubGroup = onSnapshot(doc(db, 'Groups', groupId), (docSnap) => {
+      if (!docSnap.exists()) {
         setError('Study Collective not found in decentralized database');
+        setLoading(false);
         return;
       }
-
-      const grpData = groupSnap.data();
-      setGroup(grpData);
-
-      if (!grpData.members.includes(user.uid)) {
+      const data = docSnap.id ? { id: docSnap.id, ...docSnap.data() } : docSnap.data();
+      setGroup(data);
+      
+      if (!data.members.includes(user.uid)) {
         navigate('/dashboard/study');
-        return;
       }
-
-      const memberPromises = grpData.members.map(memberId => getDoc(doc(db, 'users', memberId)));
-      const memberDocs = await Promise.all(memberPromises);
-      const membersData = memberDocs.map(userDoc => {
-        if (userDoc.exists()) {
-          return { id: userDoc.id, ...userDoc.data() };
-        }
-        return { id: userDoc.id, name: 'Unknown Scholar', todayStudyTime: 0 };
-      });
-
-      membersData.sort((a, b) => (b.todayStudyTime || 0) - (a.todayStudyTime || 0));
-      setMembers(membersData);
-    } catch (err) {
-      console.error(err);
-      setError('Error loading network data');
-    } finally {
       setLoading(false);
+    });
+
+    // Real-time Members Sync (Status + Stats)
+    const unsubUsers = onSnapshot(query(collection(db, 'users'), where('uid', '!=', '0')), (uSnap) => {
+       // Note: We'll filter members client-side to keep it simple with existing structure
+       // or we could use another query if member list is HUGE, but here 10-20 is fine.
+    });
+
+    return () => unsubGroup();
+  }, [groupId, user]);
+
+  useEffect(() => {
+    if (!group) return;
+    
+    // Listen to changes in specific members of this group
+    const unsubMembers = onSnapshot(query(collection(db, 'users'), where('uid', 'in', group.members)), (snap) => {
+      const mData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      mData.sort((a, b) => (b.todayStudyTime || 0) - (a.todayStudyTime || 0));
+      setMembers(mData);
+    });
+
+    return () => unsubMembers();
+  }, [group?.members]);
+
+  const removeMember = async (targetId) => {
+    if (!group || group.adminId !== user.uid) return;
+    if (targetId === user.uid) return; // Cant remove self
+    if (!window.confirm('Remove this scholar from the operational network?')) return;
+
+    try {
+      await updateDoc(doc(db, 'Groups', groupId), {
+        members: arrayRemove(targetId),
+        memberCount: group.memberCount - 1
+      });
+    } catch (e) { console.error(e); }
+  };
+
+  const setGroupGoal = async () => {
+    if (!group || group.adminId !== user.uid) return;
+    const g = window.prompt('Set collective network goal (Total Hours):', group.dailyGoal || '10');
+    if (g) {
+      await updateDoc(doc(db, 'Groups', groupId), { dailyGoal: Number(g) });
     }
   };
+
+  const totalSec = members.reduce((a, m) => a + (m.todayStudyTime || 0), 0);
+  const totalHrs = (totalSec / 3600).toFixed(1);
+  const goalHrs = group.dailyGoal || 1;
+  const progress = Math.min(100, (Number(totalHrs) / goalHrs) * 100);
 
   const formatMins = (totalSeconds) => Math.floor((totalSeconds || 0) / 60);
 
@@ -118,14 +144,32 @@ export default function GroupDetail() {
                         <div>
                            <div className="flex items-center space-x-3">
                               <span className="font-black text-slate-900 text-lg tracking-tighter uppercase">{member.name}</span>
+                              {member.id === group.adminId && (
+                                <span className="flex items-center gap-1 bg-amber-500/10 text-amber-600 text-[8px] font-black uppercase px-2 py-0.5 rounded-full border border-amber-500/20 tracking-widest">
+                                  <Shield size={8} fill="currentColor" /> Architect
+                                </span>
+                              )}
                               {member.id === user.uid && <span className="bg-slate-800 text-slate-500 text-[8px] font-black uppercase px-2 py-0.5 rounded-full tracking-widest">YOU</span>}
+                              {member.isStudying && (
+                                <span className="flex items-center gap-1.5 px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
+                                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
+                                  <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500">Studying Now</span>
+                                </span>
+                              )}
                            </div>
                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Verified Scholar</p>
                         </div>
                      </div>
-                     <div className="text-right">
-                        <div className="text-2xl font-black text-emerald-500 drop-shadow-lg">{formatMins(member.todayStudyTime)} <span className="text-[10px] font-bold uppercase tracking-tighter text-slate-600">Min</span></div>
-                        <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest italic opacity-60">Synchronized</p>
+                     <div className="flex items-center gap-6">
+                        <div className="text-right">
+                           <div className="text-2xl font-black text-emerald-500 drop-shadow-lg">{formatMins(member.todayStudyTime)} <span className="text-[10px] font-bold uppercase tracking-tighter text-slate-600">Min</span></div>
+                           <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest italic opacity-60">Synchronized</p>
+                        </div>
+                        {group.adminId === user.uid && member.id !== user.uid && (
+                          <button onClick={() => removeMember(member.id)} className="p-3 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all lg:opacity-0 group-hover:opacity-100">
+                            <Trash2 size={16} />
+                          </button>
+                        )}
                      </div>
                   </div>
                 ))
@@ -135,6 +179,37 @@ export default function GroupDetail() {
 
         {/* Right Column: Information & Actions */}
         <div className="space-y-10">
+           
+           {/* Collective Target Card */}
+           <div className="bg-slate-900 rounded-[2.5rem] p-8 space-y-8 shadow-2xl relative overflow-hidden border border-slate-800">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl"></div>
+              <div className="flex justify-between items-start">
+                 <div>
+                    <h3 className="text-xs font-black text-blue-500 uppercase tracking-[0.3em] mb-2">Network Objective</h3>
+                    <p className="text-3xl font-black text-white tracking-tighter uppercase leading-none">Strategic Goal</p>
+                 </div>
+                 {group.adminId === user.uid && (
+                   <button onClick={setGroupGoal} className="p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all text-white/50 hover:text-white">
+                      <Shield size={14} />
+                   </button>
+                 )}
+              </div>
+
+              <div className="space-y-4">
+                 <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-slate-500 font-black uppercase tracking-widest italic">Current Progress</span>
+                    <span className="text-2xl font-black text-white tracking-tighter">{totalHrs} / {goalHrs} <span className="text-[10px] text-slate-500">HRS</span></span>
+                 </div>
+                 <div className="h-3 bg-white/5 rounded-full overflow-hidden border border-white/5 p-0.5">
+                    <div 
+                      className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(37,99,235,0.4)]"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                 </div>
+                 <p className="text-[8px] text-slate-600 font-black uppercase tracking-[0.2em] text-center">Protocol Efficiency: {progress.toFixed(0)}% Synchronized</p>
+              </div>
+           </div>
+
            <div className="space-y-6">
               <h3 className="text-sm font-black text-slate-900 uppercase tracking-[0.3em] italic flex items-center gap-2">
                  <Clock size={16} className="text-blue-500" /> Operational Specs

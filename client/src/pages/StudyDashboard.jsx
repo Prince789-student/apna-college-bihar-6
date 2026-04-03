@@ -116,6 +116,28 @@ export default function StudyDashboard() {
     return () => clearInterval(timerRef.current);
   }, [timerActive, timerMode]);
 
+  // Real-time isStudying status sync
+  useEffect(() => {
+    if (!user) return;
+    const syncStatus = async () => {
+      try {
+        await updateDoc(doc(db, 'users', user.uid), { isStudying: timerActive });
+      } catch (e) { console.error(e); }
+    };
+    syncStatus();
+    
+    // Safety Cleanup: Set isStudying to false if window is closed
+    const handleUnload = () => {
+      const uRef = doc(db, 'users', user.uid);
+      updateDoc(uRef, { isStudying: false }).catch(() => {});
+    };
+    window.addEventListener('beforeunload', handleUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleUnload);
+      updateDoc(doc(db, 'users', user.uid), { isStudying: false }).catch(() => {});
+    };
+  }, [timerActive, user]);
+
   const fetchAll = async () => {
     setLoading(true);
     try {
@@ -186,8 +208,10 @@ export default function StudyDashboard() {
       await updateDoc(doc(db, 'users', user.uid), {
         streak: newStreak,
         streakDate: streakDate,
+        streakDate: streakDate,
         lastStudyDate: todayStr,
-        totalStudyTime: (userData?.totalStudyTime || 0) + timeToSave
+        totalStudyTime: (userData?.totalStudyTime || 0) + timeToSave,
+        isStudying: false
       });
 
       try { await stopFocusSession(); } catch (e) { }
@@ -228,7 +252,7 @@ export default function StudyDashboard() {
   const addTask = async () => { if (!newTask.trim() || !taskSub.trim()) return; await addDoc(collection(db, 'Tasks'), { userId: user.uid, text: newTask.trim(), subject: taskSub.trim().toUpperCase(), done: false, date: todayStr, createdAt: new Date().toISOString() }); setNewTask(''); setTaskSub(''); fetchAll(); };
   const toggleTask = async (task) => { await updateDoc(doc(db, 'Tasks', task.id), { done: !task.done }); fetchAll(); };
   const delTask = async (id) => { await deleteDoc(doc(db, 'Tasks', id)); fetchAll(); };
-  const createGroup = async () => { if (!newGroupName.trim()) return; setGroupLoading(true); try { await addDoc(collection(db, 'Groups'), { groupName: newGroupName.trim(), groupCode: Math.random().toString(36).substring(2, 8).toUpperCase(), createdBy: user.uid, members: [user.uid], memberCount: 1, createdAt: new Date().toISOString() }); setNewGroupName(''); setShowCreateGroup(false); fetchAll(); } catch (e) { console.error(e); } finally { setGroupLoading(false); } };
+  const createGroup = async () => { if (!newGroupName.trim()) return; setGroupLoading(true); try { await addDoc(collection(db, 'Groups'), { groupName: newGroupName.trim().toUpperCase(), groupCode: Math.random().toString(36).substring(2, 8).toUpperCase(), createdBy: user.uid, adminId: user.uid, members: [user.uid], memberCount: 1, createdAt: new Date().toISOString() }); setNewGroupName(''); setShowCreateGroup(false); fetchAll(); } catch (e) { console.error(e); } finally { setGroupLoading(false); } };
   const joinGroup = async () => { if (!joinCode.trim()) return; setGroupLoading(true); try { const snp = await getDocs(query(collection(db, 'Groups'), where('groupCode', '==', joinCode.toUpperCase()))); if (snp.empty) { alert('Invalid code!'); return; } const gDoc = snp.docs[0]; const gd = gDoc.data(); if (gd.members.includes(user.uid)) { alert('Already member!'); return; } await updateDoc(doc(db, 'Groups', gDoc.id), { members: [...gd.members, user.uid], memberCount: gd.memberCount + 1 }); setJoinCode(''); setShowJoinGroup(false); fetchAll(); } catch (e) { console.error(e); } finally { setGroupLoading(false); } };
 
   if (loading) return <div className="flex justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
