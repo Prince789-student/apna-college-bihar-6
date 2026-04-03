@@ -10,7 +10,7 @@ import {
   Clock, Plus, Flame, Target, BookOpen, Youtube,
   Calendar, BarChart3, Settings, Trash2, Trophy,
   Users, Hash, ArrowRight, ClipboardList, CalendarDays,
-  CheckCircle2, Circle, Save, Shield, Zap, Award, Timer, ChevronRight, AlertTriangle
+  CheckCircle2, Circle, Save, Shield, Zap, Award, Timer, ChevronRight, AlertTriangle, Copy, Link2
 } from 'lucide-react';
 import PremiumAds from '../components/PremiumAds';
 import { startFocusSession, stopFocusSession, getInstalledApps, checkAccessibility, openSettings } from '../services/AppBlocker';
@@ -428,6 +428,64 @@ export default function StudyDashboard() {
           </div>
         </div>
       )}
+      {/* TAB: STUDY NETWORK */}
+      {tab === 'group' && (
+        <div className="space-y-8 animate-in fade-in duration-300">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter italic">Study Network</h2>
+              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Join forces with other scholars to climb the leaderboard.</p>
+            </div>
+            <div className="flex gap-3">
+              <button onClick={() => setShowJoinGroup(true)} className="px-6 py-3.5 bg-white text-slate-900 border-2 border-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm">Join via Code</button>
+              <button onClick={() => setShowCreateGroup(true)} className="px-6 py-3.5 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-500 transition-all shadow-xl shadow-blue-500/20 flex items-center gap-2"><Plus size={14} /> Create Hub</button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {groups.length === 0 ? (
+              <div className="md:col-span-2 bg-white/50 border-2 border-dashed border-slate-200 rounded-[3rem] p-20 text-center space-y-6">
+                <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto text-slate-300">
+                  <Users size={40} />
+                </div>
+                <div className="space-y-2">
+                  <p className="text-xl font-black text-slate-900 uppercase tracking-tighter">No Active Networks</p>
+                  <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Start a private study collective or join your friend's group.</p>
+                </div>
+                <button onClick={() => setShowCreateGroup(true)} className="px-10 py-4 bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">Launch First Hub</button>
+              </div>
+            ) : (
+              groups.map(group => (
+                <div key={group.id} className="bg-white border border-slate-200/80 rounded-[2.5rem] p-8 shadow-2xl relative group overflow-hidden hover:border-blue-500/30 transition-all">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700"></div>
+                  <div className="relative z-10 space-y-6">
+                    <div className="flex items-start justify-between">
+                      <div className="p-3 bg-blue-600/10 text-blue-500 rounded-2xl">
+                        <Hash size={24} />
+                      </div>
+                      <div className="flex items-center gap-2 bg-slate-50 px-4 py-2 rounded-xl border border-slate-200 shadow-inner">
+                        <span className="text-[11px] font-black tracking-widest text-slate-900 uppercase">{group.groupCode}</span>
+                        <button onClick={() => { navigator.clipboard.writeText(group.groupCode); alert('Code copied!'); }} className="p-1 hover:text-blue-500 transition-colors">
+                          <Copy size={12} />
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-black text-slate-900 uppercase tracking-tighter truncate">{group.groupName}</h4>
+                      <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1 italic flex items-center gap-2">
+                        <Users size={10} /> {group.memberCount} Scholars Participating
+                      </p>
+                    </div>
+                    <button onClick={() => navigate(`/dashboard/study/group/${group.id}`)} className="w-full py-4 bg-slate-900 hover:bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-xl shadow-slate-900/10">
+                      Enter Operational Hub <ArrowRight size={14} />
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
 
       {/* TAB: ACHIEVEMENTS */}
       {tab === 'achievements' && (
@@ -478,6 +536,64 @@ export default function StudyDashboard() {
             <div className="flex gap-3">
               <button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-400 hover:bg-slate-50" onClick={() => { setShowSubjectModal(false); setNewSubject(''); }}>Cancel</button>
               <button disabled={subjects.length >= 10 || !newSubject.trim()} className="flex-1 p-4 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 rounded-xl font-black text-[10px] uppercase text-white shadow-lg" onClick={addSubject}>Add Subject</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCreateGroup && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 p-10 rounded-[3rem] w-full max-w-sm shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl"></div>
+            <div className="relative z-10 space-y-8 text-center">
+              <div className="inline-flex p-4 bg-blue-600/10 text-blue-500 rounded-2xl mb-2">
+                <Plus size={32} />
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">Launch New Hub</h2>
+                <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Establish a private operational network for your team.</p>
+              </div>
+              <div className="space-y-4 text-left">
+                <div className="space-y-1">
+                  <p className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] ml-2">Network Architecture Name</p>
+                  <input maxLength={25} value={newGroupName} onChange={e => setNewGroupName(e.target.value)} placeholder="ALPHA TEAM X..." className="w-full bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-4 text-slate-900 text-sm font-black outline-none transition-all placeholder:text-slate-400 uppercase tracking-widest" autoFocus />
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <button className="flex-1 py-4 rounded-xl font-black text-[10px] uppercase text-slate-400 hover:bg-slate-50" onClick={() => setShowCreateGroup(false)}>Cancel</button>
+                <button disabled={groupLoading || !newGroupName.trim()} className="flex-1 py-4 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all" onClick={createGroup}>
+                  {groupLoading ? 'Initializing...' : 'Confirm Launch'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showJoinGroup && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 p-10 rounded-[3rem] w-full max-w-sm shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl"></div>
+            <div className="relative z-10 space-y-8 text-center">
+              <div className="inline-flex p-4 bg-emerald-600/10 text-emerald-500 rounded-2xl mb-2">
+                <Link2 size={32} />
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">Infiltrate Network</h2>
+                <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Access an existing study hub via secure synchronization code.</p>
+              </div>
+              <div className="space-y-4 text-left">
+                <div className="space-y-1">
+                  <p className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] ml-2">Secure Link-Code</p>
+                  <input maxLength={6} value={joinCode} onChange={e => setJoinCode(e.target.value.toUpperCase())} placeholder="XXXXXX" className="w-full bg-slate-100 border-2 border-transparent focus:border-emerald-500/50 rounded-2xl p-4 text-slate-900 text-2xl font-black text-center outline-none transition-all placeholder:text-slate-300 uppercase tracking-[0.5em]" autoFocus />
+                </div>
+              </div>
+              <div className="flex gap-3">
+                <button className="flex-1 py-4 rounded-xl font-black text-[10px] uppercase text-slate-400 hover:bg-slate-50" onClick={() => setShowJoinGroup(false)}>Cancel</button>
+                <button disabled={groupLoading || joinCode.length < 6} className="flex-1 py-4 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all" onClick={joinGroup}>
+                  {groupLoading ? 'Linking...' : 'Establish Connection'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
