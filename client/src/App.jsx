@@ -23,23 +23,23 @@ import { Youtube, ArrowRight } from 'lucide-react';
 
 // Global Announcement Bar pinned to absolute top
 const YouTubeGlobalBar = () => (
-  <div className="bg-red-600 text-white px-4 py-2 flex flex-col sm:flex-row items-center justify-between gap-4 w-full shadow-2xl border-b border-white/10 z-[101] relative">
-    <div className="flex items-center gap-3">
-       <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center">
-         <Youtube size={14} className="fill-white" />
+  <div className="bg-red-600 text-white px-4 py-1 flex flex-row items-center justify-between gap-2 w-full shadow-lg border-b border-white/10 z-[101] relative overflow-hidden">
+    <div className="flex items-center gap-2">
+       <div className="w-5 h-5 bg-white/20 rounded flex items-center justify-center shrink-0">
+         <Youtube size={12} className="fill-white" />
        </div>
        <div className="flex flex-col">
-         <span className="text-[9px] font-black uppercase tracking-widest leading-none">Official Broadcast Live</span>
-         <span className="text-[7px] font-bold uppercase tracking-widest text-white/70 mt-0.5">Free BEU Study Material & Guidance</span>
+         <span className="text-[8px] font-black uppercase tracking-widest leading-none">Official Broadcast Live</span>
+         <span className="text-[6px] font-bold uppercase tracking-widest text-white/70 mt-0.5">BEU Study Material & Guidance</span>
        </div>
     </div>
     <a 
       href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" 
       target="_blank" 
       rel="noopener noreferrer"
-      className="px-5 py-1.5 bg-white text-red-600 rounded-full font-black text-[8px] uppercase tracking-widest hover:bg-slate-100 transition-all flex items-center gap-2 shadow-sm"
+      className="px-3 py-1 bg-white text-red-600 rounded-full font-black text-[7px] uppercase tracking-widest hover:bg-slate-100 transition-all flex items-center gap-1 shadow-sm shrink-0"
     >
-      Join Hub Now <ArrowRight size={10} />
+      Join Now <ArrowRight size={8} />
     </a>
   </div>
 );
