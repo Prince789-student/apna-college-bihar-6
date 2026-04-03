@@ -8,6 +8,10 @@ const fs = require('fs');
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use((req, res, next) => {
+    res.setHeader('Content-Security-Policy', "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; font-src * data:;");
+    next();
+});
 
 // 1. Database Connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/edu-platform', {
