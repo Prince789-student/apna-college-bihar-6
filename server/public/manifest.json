@@ -1,0 +1,63 @@
+{
+  "name": "Apna College Bihar",
+  "short_name": "ACB",
+  "description": "Bihar's Digital Study Engine - Notes & PYQ.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#02040a",
+  "theme_color": "#0d121f",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/logo-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["education"],
+  "lang": "hi-IN",
+  "dir": "ltr",
+  "id": "apna.college.bihar",
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Study Protocol",
+      "url": "/dashboard/study",
+      "description": "Focus Timer and Tracking"
+    },
+    {
+      "name": "Notes & PYQ",
+      "url": "/dashboard/notes",
+      "description": "Download Study Material"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/logo.jpg",
+      "type": "image/jpeg",
+      "sizes": "1024x1024",
+      "form_factor": "wide",
+      "label": "Desktop View"
+    },
+    {
+      "src": "/logo.jpg",
+      "type": "image/jpeg",
+      "sizes": "1024x1024",
+      "form_factor": "narrow",
+      "label": "Mobile View"
+    }
+  ]
+}
