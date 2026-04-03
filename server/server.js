@@ -18,8 +18,8 @@ if (!fs.existsSync(dir)){
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Serve static frontend files
-app.use(express.static(path.join(__dirname, '../client/dist')));
+// Serve static frontend files (from project root)
+app.use(express.static(path.resolve(process.cwd(), 'client', 'dist')));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/edu-platform', {
@@ -43,7 +43,7 @@ app.get('/api', (req, res) => {
 app.get('/_health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
+    res.sendFile(path.resolve(process.cwd(), 'client', 'dist', 'index.html'));
 });
 
 // Setup Port
