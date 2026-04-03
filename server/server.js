@@ -9,6 +9,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Explicit Homepage route (Highest Priority)
+app.get('/', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+});
+
 // Make uploads folder if it doesnt exist
 const dir = './uploads';
 if (!fs.existsSync(dir)){
