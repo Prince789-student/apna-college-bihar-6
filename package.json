@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node server/server.js",
     "install-app": "npm install --prefix server && npm install --prefix client",
-    "build": "npm install --prefix server && npm install --prefix client && npm run build --prefix client",
+    "build": "npm install --prefix client && npm run build --prefix client && ls -la server/public && ls -la server/public/assets",
     "heroku-postbuild": "npm run build",
     "dev": "npm run dev --prefix client",
     "save": "git add . && git commit -m \"auto commit\" && git push"
