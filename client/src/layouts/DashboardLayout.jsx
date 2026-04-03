@@ -69,7 +69,6 @@ export default function DashboardLayout() {
     { name: 'Notes & PYQ', path: '/dashboard/notes', icon: <Book size={20} /> },
     { name: 'Scientific Calc', path: '/dashboard/calculator', icon: <Calculator size={20} /> },
     { name: 'BEU CGPA', path: '/dashboard/cgpa', icon: <GraduationCap size={20} /> },
-    { name: 'Student Blog', path: '/dashboard/blog', icon: <LayoutDashboard size={20} className="text-emerald-500" /> },
     ...(isAdmin ? [{ name: 'Admin Operations', path: '/dashboard/admin', icon: <Shield size={20} className="text-red-500" /> }] : []),
   ];
 
@@ -162,7 +161,7 @@ export default function DashboardLayout() {
   );
 
   return (
-    <div className="flex h-full bg-[#f8fafc] overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30">
+    <div className="flex h-full bg-white overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30">
       
       {/* ── Desktop Sidebar ── */}
       {!isAppMode && (
@@ -182,7 +181,7 @@ export default function DashboardLayout() {
       )}
 
       {/* ── Main Display ── */}
-      <main className="flex-1 flex flex-col h-full bg-[#f8fafc] relative overflow-hidden">
+      <main className="flex-1 flex flex-col h-full bg-white relative overflow-hidden">
         
         {/* Mobile Navbar Header */}
         {!isAppMode && (
@@ -198,14 +197,14 @@ export default function DashboardLayout() {
         )}
 
         {/* Scrollable Area */}
-        <div className={`flex-1 overflow-y-auto custom-scrollbar relative z-10 ${isAppMode ? 'p-4 pb-24' : 'p-4 md:p-8 lg:p-10'}`}>
+        <div className={`flex-1 overflow-y-auto custom-scrollbar relative z-10 ${isAppMode ? 'p-3 pb-20' : 'p-3 md:p-6 lg:p-8'}`}>
            <div className="min-h-[80vh]">
              <Outlet />
            </div>
 
            {/* ── Dashboard Footer (SEO & Legal) ── */}
             {!isAppMode && (
-              <footer className="mt-20 py-10 border-t border-slate-200/30 flex flex-col md:flex-row items-center justify-between gap-6 opacity-60 hover:opacity-100 transition-opacity">
+              <footer className="mt-10 py-10 border-t border-slate-200/30 flex flex-col md:flex-row items-center justify-between gap-6 opacity-60 hover:opacity-100 transition-opacity">
                 <div className="flex flex-col items-center md:items-start gap-1">
                   <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-900">Apna College Bihar</p>
                   <p className="text-[8px] font-bold uppercase tracking-widest text-slate-500">© 2026 Official Website</p>
