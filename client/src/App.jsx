@@ -23,23 +23,18 @@ import { Youtube, ArrowRight } from 'lucide-react';
 
 // Global Announcement Bar pinned to absolute top
 const YouTubeGlobalBar = () => (
-  <div className="bg-red-600 text-white px-4 py-1 flex flex-row items-center justify-between gap-2 w-full shadow-lg border-b border-white/10 z-[101] relative overflow-hidden">
-    <div className="flex items-center gap-2">
-       <div className="w-5 h-5 bg-white/20 rounded flex items-center justify-center shrink-0">
-         <Youtube size={12} className="fill-white" />
-       </div>
-       <div className="flex flex-col">
-         <span className="text-[8px] font-black uppercase tracking-widest leading-none">Official Broadcast Live</span>
-         <span className="text-[6px] font-bold uppercase tracking-widest text-white/70 mt-0.5">BEU Study Material & Guidance</span>
-       </div>
+  <div className="bg-red-600 text-white px-3 py-0.5 flex flex-row items-center justify-between gap-1 w-full shadow-md border-b border-white/10 z-[101] relative overflow-hidden">
+    <div className="flex items-center gap-1.5 leading-none">
+       <Youtube size={10} className="fill-white shrink-0" />
+       <span className="text-[7px] font-black uppercase tracking-tighter truncate">Official Live: BEU Study Material</span>
     </div>
     <a 
       href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" 
       target="_blank" 
       rel="noopener noreferrer"
-      className="px-3 py-1 bg-white text-red-600 rounded-full font-black text-[7px] uppercase tracking-widest hover:bg-slate-100 transition-all flex items-center gap-1 shadow-sm shrink-0"
+      className="px-2 py-0.5 bg-white text-red-600 rounded-full font-[1000] text-[6px] uppercase tracking-tighter hover:bg-slate-100 transition-all flex items-center gap-0.5 shrink-0"
     >
-      Join Now <ArrowRight size={8} />
+      Join <ArrowRight size={6} />
     </a>
   </div>
 );
