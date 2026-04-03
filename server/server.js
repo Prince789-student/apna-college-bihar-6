@@ -18,8 +18,17 @@ if (!fs.existsSync(dir)){
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Serve static frontend files (from server local public)
-app.use(express.static(path.resolve(__dirname, 'public')));
+// Serve static frontend files (from server local public with diagnostic check)
+const publicPath = path.resolve(__dirname, 'public');
+console.log(`[SYSTEM] Current __dirname: ${__dirname}`);
+console.log(`[SYSTEM] Attempting to serve static from: ${publicPath}`);
+
+if (fs.existsSync(publicPath)) {
+    console.log(`[SUCCESS] Public folder found! Files: ${fs.readdirSync(publicPath)}`);
+    app.use(express.static(publicPath));
+} else {
+    console.error(`[ERROR] Public folder NOT found at ${publicPath}`);
+}
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/edu-platform', {
