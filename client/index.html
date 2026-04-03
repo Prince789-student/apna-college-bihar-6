@@ -100,8 +100,22 @@
    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; font-src * data:;">
 </head>
 
+<script>
+  window.onerror = function(msg, url, line, col, error) {
+    var errorDiv = document.createElement('div');
+    errorDiv.style.cssText = 'position:fixed; top:0; left:0; width:100%; padding:20px; background:white; color:red; z-index:9999; font-family:monospace; border-bottom:4px solid red;';
+    errorDiv.innerHTML = '<strong>[RUNTIME ERROR]</strong> ' + msg + '<br/><small>' + url + ':' + line + ':' + col + '</small>';
+    document.body.appendChild(errorDiv);
+  };
+  window.onunhandledrejection = function(event) {
+    var errorDiv = document.createElement('div');
+    errorDiv.style.cssText = 'position:fixed; bottom:0; left:0; width:100%; padding:20px; background:black; color:yellow; z-index:9999; font-family:monospace;';
+    errorDiv.innerHTML = '<strong>[PROMISE ERROR]</strong> ' + event.reason;
+    document.body.appendChild(errorDiv);
+  };
+</script>
 <body class="bg-slate-50">
-   <div id="root">LOADING SCHOLAR APP...</div>
+   <div id="root" style="color: grey; text-align: center; margin-top: 50vh;">LOADING SCHOLAR APP (BOOTING ENGINE)...</div>
    <script type="module" src="src/main.jsx"></script>
 </body>
 
