@@ -11,7 +11,7 @@ app.use(cors());
 
 // Explicit Homepage route (Highest Priority)
 app.get('/', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+    res.sendFile(path.resolve(process.cwd(), 'public', 'index.html'));
 });
 
 // Make uploads folder if it doesnt exist
@@ -23,9 +23,9 @@ if (!fs.existsSync(dir)){
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Serve static frontend files (from server local public with diagnostic check)
-const publicPath = path.resolve(__dirname, 'public');
-console.log(`[SYSTEM] Current __dirname: ${__dirname}`);
+// Serve static frontend files (from project root public with diagnostic check)
+const publicPath = path.resolve(process.cwd(), 'public');
+console.log(`[SYSTEM] Project ROOT (cwd): ${process.cwd()}`);
 console.log(`[SYSTEM] Attempting to serve static from: ${publicPath}`);
 
 if (fs.existsSync(publicPath)) {
@@ -57,7 +57,7 @@ app.get('/api', (req, res) => {
 app.get('/_health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
 
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+    res.sendFile(path.resolve(process.cwd(), 'public', 'index.html'));
 });
 
 // Setup Port
