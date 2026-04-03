@@ -21,24 +21,6 @@ import AboutUs from './pages/legal/AboutUs';
 import ContactUs from './pages/legal/ContactUs';
 import { Youtube, ArrowRight } from 'lucide-react';
 
-// Global Announcement Bar pinned to absolute top
-const YouTubeGlobalBar = () => (
-  <div className="bg-red-600 text-white px-3 py-0.5 flex flex-row items-center justify-between gap-1 w-full shadow-md border-b border-white/10 z-[101] relative overflow-hidden">
-    <div className="flex items-center gap-1.5 leading-none">
-       <Youtube size={10} className="fill-white shrink-0" />
-       <span className="text-[7px] font-black uppercase tracking-tighter truncate">Official Live: BEU Study Material</span>
-    </div>
-    <a 
-      href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" 
-      target="_blank" 
-      rel="noopener noreferrer"
-      className="px-2 py-0.5 bg-white text-red-600 rounded-full font-[1000] text-[6px] uppercase tracking-tighter hover:bg-slate-100 transition-all flex items-center gap-0.5 shrink-0"
-    >
-      Join <ArrowRight size={6} />
-    </a>
-  </div>
-);
-
 // Role-Based Admin Guard (Restricted to Founder Identity)
 const AdminRoute = () => {
   const { user, loading, ROLES } = useAuth();
@@ -66,7 +48,6 @@ function App() {
     <AuthProvider>
       <div className="flex flex-col min-h-full bg-white">
         <Toaster position="top-right" reverseOrder={false} />
-        <YouTubeGlobalBar />
         <div className="flex-1 flex flex-col relative">
           <Routes>
             {/* If user is coming from App (WebView), skip Home landing page and direct to Login */}
