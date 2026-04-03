@@ -45,61 +45,22 @@
    <link rel="shortcut icon" href="/logo.jpg" />
    <title>Apna College Bihar | Website</title>
 
-   <!-- Google AdSense Integration -->
-   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-818059891079"
-      crossorigin="anonymous"></script>
-   <meta name="adsense-account" content="ca-pub-818059891079">
-
-   <!-- Use Tailwind CSS via CDN for rapid styling -->
-   <script src="https://cdn.tailwindcss.com"></script>
-   <script>
-      tailwind.config = {
-         darkMode: 'class',
-         theme: {
-            extend: {
-               colors: {
-                  brand: '#3b82f6',
-                  darkbg: '#0f172a',
-                  cardbg: '#1e293b'
-               }
-            }
-         }
-      }
-   </script>
-   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
    <style>
       body,
       #root {
          font-family: 'Inter', sans-serif;
-         margin: 0;
-         padding: 0;
+         margin: 0 !important;
+         padding: 0 !important;
          min-height: 100vh;
+         overflow-x: hidden;
       }
-
-      .no-scrollbar::-webkit-scrollbar {
-         display: none;
-      }
-
-      .no-scrollbar {
-         -ms-overflow-style: none;
-         scrollbar-width: none;
+      /* Prevent AdSense from injecting huge spacers */
+      .adsbygoogle {
+         display: none !important;
+         height: 0 !important;
+         width: 0 !important;
       }
    </style>
-   <script>
-      if ('serviceWorker' in navigator) {
-         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').catch(err => console.error("SW error:", err));
-         });
-      }
-      window.addEventListener('beforeinstallprompt', (e) => {
-         e.preventDefault();
-         window.deferredPrompt = e;
-         window.dispatchEvent(new Event('pwa-ready'));
-      });
-   </script>
-   <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; font-src * data:;">
-</head>
-
 </head>
 
 <body class="bg-slate-50 font-sans antialiased text-slate-900">
@@ -111,7 +72,7 @@
          <p style="margin-top: 8px; font-size: 10px; font-weight: 700; color: #475569; letter-spacing: 0.1em;">INITIALIZING STUDY HUB...</p>
       </div>
    </div>
-   <script type="module" src="src/main.jsx"></script>
+   <script type="module" src="/src/main.jsx?v=999"></script>
 </body>
 
 </html>
