@@ -3,6 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
 
 console.log("[DEBUG] Imports done. Ready to mount...");
 
@@ -17,7 +18,9 @@ if (!rootEl) {
     root.render(
       <React.StrictMode>
         <BrowserRouter>
-          <App />
+          <AuthProvider>
+            <App />
+          </AuthProvider>
         </BrowserRouter>
       </React.StrictMode>
     );

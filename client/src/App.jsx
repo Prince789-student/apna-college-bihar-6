@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import { Toaster } from 'react-hot-toast';
 
@@ -59,41 +59,39 @@ function App() {
   }, [isAppMode, user, loading, navigate]);
 
   return (
-    <AuthProvider>
-      <div className="flex flex-col min-h-full bg-white">
-        <Toaster position="top-right" reverseOrder={false} />
-        <div className="flex-1 flex flex-col relative">
-          <Routes>
-            {/* If user is coming from App (WebView), skip Home landing page and direct to Login */}
-            <Route path="/" element={isAppMode ? <Navigate to="/dashboard/study" /> : <Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
+    <div className="flex flex-col min-h-full bg-white">
+      <Toaster position="top-right" reverseOrder={false} />
+      <div className="flex-1 flex flex-col relative">
+        <Routes>
+          {/* If user is coming from App (WebView), skip Home landing page and direct to Login */}
+          <Route path="/" element={isAppMode ? <Navigate to="/dashboard/study" /> : <Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
-            {/* Unified Dashboard System */}
-            <Route path="/dashboard" element={<DashboardLayout />}>
-              <Route path="calculator" element={<ScientificCalc />} />
-              <Route path="cgpa" element={<BeuCgpa />} />
-              <Route element={<ProtectedRoute />}>
-                <Route index element={<StudyDashboard />} />
-                <Route path="notes" element={<Notes />} />
-                <Route path="study" element={<StudyDashboard />} />
-                <Route path="timer" element={<StudyDashboard />} />
-                <Route path="study/group/:groupId" element={<GroupDetail />} />
-                <Route path="timetable" element={<Timetable />} />
-                <Route element={<AdminRoute />}>
-                  <Route path="admin" element={<AdminPanel />} />
-                </Route>
+          {/* Unified Dashboard System */}
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route path="calculator" element={<ScientificCalc />} />
+            <Route path="cgpa" element={<BeuCgpa />} />
+            <Route element={<ProtectedRoute />}>
+              <Route index element={<StudyDashboard />} />
+              <Route path="notes" element={<Notes />} />
+              <Route path="study" element={<StudyDashboard />} />
+              <Route path="timer" element={<StudyDashboard />} />
+              <Route path="study/group/:groupId" element={<GroupDetail />} />
+              <Route path="timetable" element={<Timetable />} />
+              <Route element={<AdminRoute />}>
+                <Route path="admin" element={<AdminPanel />} />
               </Route>
             </Route>
+          </Route>
 
-            <Route path="/privacy" element={<PrivacyPolicy />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/contact" element={<ContactUs />} />
-            <Route path="*" element={<Navigate to="/login" replace />} />
-          </Routes>
-        </div>
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
       </div>
-    </AuthProvider>
+    </div>
   );
 }
 
