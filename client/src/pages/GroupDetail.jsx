@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2 } from 'lucide-react';
-import { collection, query, where, onSnapshot, doc, updateDoc, arrayRemove } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, updateDoc, arrayRemove, deleteDoc } from 'firebase/firestore';
 
 export default function GroupDetail() {
   const { groupId } = useParams();
@@ -55,10 +55,12 @@ export default function GroupDetail() {
     return () => unsubMembers();
   }, [group?.members]);
 
+  const isAdmin = (group?.adminId || group?.members?.[0]) === user?.uid;
+
   const removeMember = async (targetId) => {
-    if (!group || group.adminId !== user.uid) return;
-    if (targetId === user.uid) return; // Cant remove self
-    if (!window.confirm('Remove this scholar from the operational network?')) return;
+    if (!isAdmin) return;
+    if (targetId === user.uid) return; 
+    if (!window.confirm('Strike this student from the operational network?')) return;
 
     try {
       await updateDoc(doc(db, 'Groups', groupId), {
@@ -68,8 +70,18 @@ export default function GroupDetail() {
     } catch (e) { console.error(e); }
   };
 
+  const deleteGroup = async () => {
+    if (!isAdmin) return;
+    if (!window.confirm('CRITICAL: This will permanently decommission this Hub and disconnect all scholars. Proceed?')) return;
+    
+    try {
+      await deleteDoc(doc(db, 'Groups', groupId));
+      navigate('/dashboard/study');
+    } catch (e) { console.error(e); }
+  };
+
   const setGroupGoal = async () => {
-    if (!group || group.adminId !== user.uid) return;
+    if (!isAdmin) return;
     const g = window.prompt('Set collective network goal (Total Hours):', group.dailyGoal || '10');
     if (g) {
       await updateDoc(doc(db, 'Groups', groupId), { dailyGoal: Number(g) });
@@ -112,11 +124,16 @@ export default function GroupDetail() {
            </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center p-6 bg-white border border-slate-300/50 rounded-3xl shadow-2xl relative group overflow-hidden min-w-[180px]">
+        <div className="flex flex-col items-center justify-center p-6 bg-white border border-slate-300/50 rounded-3xl shadow-2xl relative group overflow-hidden min-w-[200px]">
            <div className="absolute top-0 right-0 w-12 h-12 bg-blue-500/10 rounded-full blur-xl animate-pulse"></div>
            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1 italic">Synchronization</p>
            <span className="text-3xl font-black text-slate-900">{group.memberCount} / {group.maxMembers}</span>
            <p className="text-[8px] text-slate-600 font-black uppercase tracking-widest mt-1">Scholars Active</p>
+           {isAdmin && (
+             <button onClick={deleteGroup} className="mt-4 flex items-center gap-2 hover:text-red-500 transition-colors">
+               <Trash2 size={12} /> <span className="text-[7px] font-black uppercase tracking-[0.2em]">Decommission</span>
+             </button>
+           )}
         </div>
       </div>
 
@@ -144,7 +161,7 @@ export default function GroupDetail() {
                         <div>
                            <div className="flex items-center space-x-3">
                               <span className="font-black text-slate-900 text-lg tracking-tighter uppercase">{member.name}</span>
-                              {member.id === group.adminId && (
+                              {(member.id === group.adminId || member.id === group.members?.[0]) && (
                                 <span className="flex items-center gap-1 bg-amber-500/10 text-amber-600 text-[8px] font-black uppercase px-2 py-0.5 rounded-full border border-amber-500/20 tracking-widest">
                                   <Shield size={8} fill="currentColor" /> Architect
                                 </span>
@@ -162,10 +179,14 @@ export default function GroupDetail() {
                      </div>
                      <div className="flex items-center gap-6">
                         <div className="text-right">
-                           <div className="text-2xl font-black text-emerald-500 drop-shadow-lg">{formatMins(member.todayStudyTime)} <span className="text-[10px] font-bold uppercase tracking-tighter text-slate-600">Min</span></div>
-                           <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest italic opacity-60">Synchronized</p>
+                           <div className="text-2xl font-black text-emerald-500 drop-shadow-lg">
+                              {(member.todayStudyTime / 3600).toFixed(1)} <span className="text-[8px] text-slate-500">HRS</span>
+                           </div>
+                           <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest italic opacity-60">
+                             Today: {formatMins(member.todayStudyTime)} MIN
+                           </p>
                         </div>
-                        {group.adminId === user.uid && member.id !== user.uid && (
+                        {isAdmin && member.id !== user.uid && (
                           <button onClick={() => removeMember(member.id)} className="p-3 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all lg:opacity-0 group-hover:opacity-100">
                             <Trash2 size={16} />
                           </button>
@@ -188,7 +209,7 @@ export default function GroupDetail() {
                     <h3 className="text-xs font-black text-blue-500 uppercase tracking-[0.3em] mb-2">Network Objective</h3>
                     <p className="text-3xl font-black text-white tracking-tighter uppercase leading-none">Strategic Goal</p>
                  </div>
-                 {group.adminId === user.uid && (
+                 {isAdmin && (
                    <button onClick={setGroupGoal} className="p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-all text-white/50 hover:text-white">
                       <Shield size={14} />
                    </button>
