@@ -33,10 +33,13 @@ export default function DashboardLayout() {
     catch { return false; }
   })();
 
-  // Auto-close mobile menu on navigation
+  // Neural Persistence Layer: Save deep state for session restoration
   useEffect(() => {
     setMobileMenuOpen(false);
-  }, [location.pathname]);
+    if (isAppMode && !location.pathname.includes('/login')) {
+      localStorage.setItem('lastPath', location.pathname);
+    }
+  }, [location.pathname, isAppMode]);
 
   // Mandatory Phone Check
   useEffect(() => {

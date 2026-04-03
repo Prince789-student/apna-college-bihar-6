@@ -17,7 +17,8 @@ export default function Login() {
     try {
       setLoading(true);
       await googleLogin();
-      navigate('/dashboard');
+      const lastPath = localStorage.getItem('lastPath');
+      navigate(lastPath || '/dashboard');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -31,7 +32,8 @@ export default function Login() {
     setLoading(true);
     try {
       await login(formData.email, formData.password);
-      navigate('/dashboard');
+      const lastPath = localStorage.getItem('lastPath');
+      navigate(lastPath || '/dashboard');
     } catch (err) {
       setError(err.message);
     } finally {

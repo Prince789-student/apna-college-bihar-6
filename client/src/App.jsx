@@ -44,6 +44,20 @@ function App() {
     }
   });
 
+  const navigate = useNavigate();
+  const { user, loading } = useAuth();
+
+  // Session Restoration Logic (Neural Persistence)
+  useEffect(() => {
+    if (isAppMode && !loading && user) {
+      const lastPath = localStorage.getItem('lastPath');
+      // If we are at root or login, but have a saved path - restore it!
+      if ((window.location.pathname === '/' || window.location.pathname === '/login') && lastPath && lastPath !== '/') {
+        navigate(lastPath);
+      }
+    }
+  }, [isAppMode, user, loading, navigate]);
+
   return (
     <AuthProvider>
       <div className="flex flex-col min-h-full bg-white">
@@ -51,7 +65,7 @@ function App() {
         <div className="flex-1 flex flex-col relative">
           <Routes>
             {/* If user is coming from App (WebView), skip Home landing page and direct to Login */}
-            <Route path="/" element={isAppMode ? <Navigate to="/login" replace /> : <Home />} />
+            <Route path="/" element={isAppMode ? <Navigate to="/dashboard/study" /> : <Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
 
