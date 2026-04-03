@@ -69,7 +69,7 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="flex flex-col h-screen overflow-hidden bg-white pt-[50px]">
+      <div className="flex flex-col h-full overflow-hidden bg-white pt-[50px]">
         <Toaster position="top-right" reverseOrder={false} />
         <YouTubeGlobalBar />
         <div className="flex-1 flex flex-col min-h-0 overflow-hidden relative">

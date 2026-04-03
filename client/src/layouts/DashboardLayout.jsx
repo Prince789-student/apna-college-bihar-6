@@ -197,7 +197,7 @@ export default function DashboardLayout() {
         )}
 
         {/* Scrollable Area */}
-        <div className={`flex-1 overflow-y-auto min-h-0 custom-scrollbar relative z-10 ${isAppMode ? 'p-3 pb-20' : 'p-3 md:p-6 lg:p-8'}`}>
+        <div className={`flex-1 overflow-y-auto min-h-0 custom-scrollbar relative z-10 pb-32 ${isAppMode ? 'p-3' : 'p-3 md:p-6 lg:p-8'}`}>
            <div className="min-h-[80vh]">
              <Outlet />
            </div>
