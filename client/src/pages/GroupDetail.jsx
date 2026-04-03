@@ -76,16 +76,16 @@ export default function GroupDetail() {
     }
   };
 
+  if (loading) return <div className="flex items-center justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
+  if (error) return <div className="text-red-500 font-black p-20 text-center uppercase tracking-widest">{error}</div>;
+  if (!group || !user) return null;
+
   const totalSec = members.reduce((a, m) => a + (m.todayStudyTime || 0), 0);
   const totalHrs = (totalSec / 3600).toFixed(1);
-  const goalHrs = group.dailyGoal || 1;
+  const goalHrs = group?.dailyGoal || 1;
   const progress = Math.min(100, (Number(totalHrs) / goalHrs) * 100);
 
   const formatMins = (totalSeconds) => Math.floor((totalSeconds || 0) / 60);
-
-  if (loading) return <div className="flex items-center justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
-  if (error) return <div className="text-red-500 font-black p-20 text-center uppercase tracking-widest">{error}</div>;
-  if (!group) return null;
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
@@ -198,7 +198,7 @@ export default function GroupDetail() {
               <div className="space-y-4">
                  <div className="flex justify-between items-end">
                     <span className="text-[10px] text-slate-500 font-black uppercase tracking-widest italic">Current Progress</span>
-                    <span className="text-2xl font-black text-white tracking-tighter">{totalHrs} / {goalHrs} <span className="text-[10px] text-slate-500">HRS</span></span>
+                    <span className="text-2xl font-black text-white tracking-tighter">{totalHrs} / {group?.dailyGoal || 1} <span className="text-[10px] text-slate-500">HRS</span></span>
                  </div>
                  <div className="h-3 bg-white/5 rounded-full overflow-hidden border border-white/5 p-0.5">
                     <div 
