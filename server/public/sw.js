@@ -1,28 +1,20 @@
-const CACHE_NAME = 'acb-cache-v2.1';
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/logo.jpg',
-  '/manifest.json'
-];
-
-self.addEventListener('install', event => {
+self.addEventListener('install', (e) => {
   self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
-  );
 });
 
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    self.clients.claim()
-  );
+self.addEventListener('activate', (e) => {
+  self.registration.unregister()
+    .then(() => self.clients.matchAll())
+    .then((clients) => {
+      clients.forEach(client => {
+        if (client.url && 'navigate' in client) {
+          client.navigate(client.url);
+        }
+      });
+    });
 });
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
-  );
+self.addEventListener('fetch', (e) => {
+  // Do not cache anything, let the network handle it
+  return;
 });
