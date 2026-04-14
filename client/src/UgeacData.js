@@ -1,15 +1,14 @@
-
 import { cutoffs2024, cutoffs2025 } from './real_cutoffs';
 
 export const colleges = [
   // Tier 1: Top Tier
-  { id: 101, name: "M.I.T. Muzaffarpur", short: "MIT Muzaffarpur", tier: 1, location: "Muzaffarpur", estd: 1954, website: "https://www.mitmuzaffarpur.org", placement: { avg: "6.5 LPA", highest: "22 LPA" }, labs: "Advanced R&D Labs", wifi: "Fully WiFi Enabled" },
-  { id: 102, name: "B.C.E. Bhagalpur", short: "BCE Bhagalpur", tier: 1, location: "Bhagalpur", estd: 1960, website: "https://bcebhagalpur.ac.in", placement: { avg: "6.0 LPA", highest: "18 LPA" }, labs: "Standard Labs", wifi: "Yes" },
+  { id: 101, name: "M.I.T. Muzaffarpur", short: "MIT Muzaffarpur", tier: 1, location: "Muzaffarpur", estd: 1954, website: "https://www.mitmuzaffarpur.org", placement: { avg: "6.5 LPA", highest: "22 LPA" }, labs: "Advanced R&D Labs", wifi: "Fully WiFi Enabled", fees: "₹10,500 / year", hostel: "Yes", library: "Fully Digital", pros: "Top Rated Govt Engineering College", cons: "Old Infrastructure (Renovating)" },
+  { id: 102, name: "B.C.E. Bhagalpur", short: "BCE Bhagalpur", tier: 1, location: "Bhagalpur", estd: 1960, website: "https://bcebhagalpur.ac.in", placement: { avg: "6.0 LPA", highest: "18 LPA" }, labs: "Standard Labs", wifi: "Yes", fees: "₹10,500 / year", hostel: "Yes", library: "Digital", pros: "High Reputation in Bihar", cons: "Connectivity from Main City" },
   
   // Tier 2: Strong Colleges
-  { id: 103, name: "G.C.E. Gaya", short: "GCE Gaya", tier: 2, location: "Gaya", estd: 2008, website: "https://gcegaya.ac.in", placement: { avg: "5.5 LPA", highest: "12 LPA" }, labs: "Modern Equipment", wifi: "Yes" },
-  { id: 104, name: "D.C.E. Darbhanga", short: "DCE Darbhanga", tier: 2, location: "Darbhanga", estd: 2008, website: "https://dcedarbhanga.ac.in", placement: { avg: "5.0 LPA", highest: "10 LPA" }, labs: "Standard", wifi: "Yes" },
-  { id: 105, name: "Nalanda College of Engineering, Chandi", short: "NCE Chandi", tier: 2, location: "Nalanda", estd: 2008, website: "https://ncechandi.ac.in", placement: { avg: "5.0 LPA", highest: "9 LPA" }, labs: "New Infra", wifi: "Yes" },
+  { id: 103, name: "G.C.E. Gaya", short: "GCE Gaya", tier: 2, location: "Gaya", estd: 2008, website: "https://gcegaya.ac.in", placement: { avg: "5.5 LPA", highest: "12 LPA" }, labs: "Modern Equipment", wifi: "Yes", fees: "₹10,500 / year", hostel: "Yes", library: "Standard", pros: "Modern Campus & Labs", cons: "Slow Placement Growth" },
+  { id: 104, name: "D.C.E. Darbhanga", short: "DCE Darbhanga", tier: 2, location: "Darbhanga", estd: 2008, website: "https://dcedarbhanga.ac.in", placement: { avg: "5.2 LPA", highest: "10 LPA" }, labs: "Standard Engineering Labs", wifi: "Yes", fees: "₹10,500 / year", hostel: "Yes", library: "Fully Digital", pros: "Low Tuition Fees (Govt Funded)", cons: "Developing Placement Cell" },
+  { id: 105, name: "Nalanda College of Engineering, Chandi", short: "NCE Chandi", tier: 2, location: "Nalanda", estd: 2008, website: "https://ncechandi.ac.in", placement: { avg: "5.0 LPA", highest: "9 LPA" }, labs: "New Infra", wifi: "Yes", fees: "₹10,500 / year", hostel: "Yes", library: "Standard", pros: "Near Patna (Good Connectivity)", cons: "Limited Campus Area" },
   { id: 114, name: "Purnea College of Engineering", short: "PCE Purnea", tier: 2, location: "Purnea", estd: 2017, website: "https://pcepurnea.ac.in", placement: { avg: "4.5 LPA", highest: "8 LPA" }, labs: "Modern", wifi: "Yes" },
   
   // Tier 3: Decent / Safe

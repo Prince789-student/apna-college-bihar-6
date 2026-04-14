@@ -244,36 +244,74 @@ function UgeacPredictor() {
         </div>
       )}
 
-      {/* College Details Modal */}
+      {/* COLLEGE CARD MODAL (MATCHING SCREENSHOT) */}
       {selectedCollege && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/70 backdrop-blur-xl animate-in zoom-in duration-300">
-           <div className="w-full max-w-2xl bg-white rounded-[5rem] p-12 md:p-20 shadow-2xl relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[100px] pointer-events-none"></div>
-              <div className="relative z-10 space-y-12">
-                 <div className="flex flex-col items-center text-center space-y-8">
-                    <div className="w-24 h-24 bg-blue-600 text-white rounded-[2.5rem] flex items-center justify-center shadow-2xl"><Building2 size={48}/></div>
-                    <div className="space-y-3">
-                       <h2 className="text-4xl md:text-5xl font-[1000] text-slate-900 uppercase tracking-tighter">{selectedCollege.name}</h2>
-                       <p className="text-xs font-black text-slate-400 uppercase tracking-[0.6em] mt-4">{selectedCollege.location} • Established {selectedCollege.estd}</p>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+           <div className="w-full max-w-lg bg-white rounded-3xl overflow-hidden shadow-2xl relative animate-in zoom-in duration-300">
+              
+              {/* Header with Title and Close */}
+              <div className="p-6 border-b border-slate-100 flex items-center justify-between">
+                 <h2 className="text-xl font-bold text-slate-800 tracking-tight">{selectedCollege.name}</h2>
+                 <button onClick={() => setSelectedCollege(null)} className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400">
+                    <AlertTriangle size={20} className="rotate-45" /> {/* Close Icon fallback */}
+                 </button>
+              </div>
+
+              {/* Sub-header Meta */}
+              <div className="px-6 py-4 flex items-center gap-6 text-[10px] font-bold text-slate-500 bg-slate-50/50 border-b border-slate-100">
+                 <span className="flex items-center gap-1.5"><MapPin size={12} className="text-red-400"/> {selectedCollege.location}</span>
+                 <span className="flex items-center gap-1.5"><Building2 size={12} className="text-blue-400"/> Estd: {selectedCollege.estd}</span>
+                 <span className="flex items-center gap-1.5"><ShieldCheck size={12} className="text-amber-400"/> Tier: {selectedCollege.tier}</span>
+              </div>
+
+              <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto">
+                 {/* Main Action Buttons */}
+                 <div className="space-y-3">
+                    <a href={selectedCollege.website} target="_blank" rel="noreferrer" className="w-full py-4 bg-[#2563eb] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors">
+                       <Wifi size={16} /> Visit Official Website
+                    </a>
+                    <button className="w-full py-4 bg-white border border-slate-200 text-slate-700 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors">
+                       <MapPin size={16} className="text-red-500" /> Get Directions
+                    </button>
+                 </div>
+
+                 {/* Stats Grid */}
+                 <div className="grid grid-cols-2 gap-3">
+                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Average Fees</p>
+                       <p className="text-sm font-black text-slate-800">{selectedCollege.fees || "₹10,500 / year"}</p>
+                    </div>
+                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
+                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Highest Package</p>
+                       <p className="text-sm font-black text-slate-800">{selectedCollege.placement?.highest || "10 LPA"}</p>
+                    </div>
+                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 col-span-2">
+                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Avg. Placement</p>
+                       <p className="text-sm font-black text-slate-800">{selectedCollege.placement?.avg || "5.2 LPA"}</p>
                     </div>
                  </div>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="p-10 bg-slate-50 border-2 border-slate-100 rounded-[3rem] space-y-4">
-                       <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200 pb-2">Infrastructure</h4>
-                       <p className="text-sm font-black text-slate-700 flex items-center gap-4"><Building2 size={20} className="text-blue-600"/> {selectedCollege.labs}</p>
-                       <p className="text-sm font-black text-slate-700 flex items-center gap-4"><Wifi size={20} className="text-emerald-500"/> {selectedCollege.wifi}</p>
-                       <p className="text-sm font-black text-slate-700 flex items-center gap-4"><BookOpen size={20} className="text-orange-500"/> Digital Hub</p>
-                    </div>
-                    <div className="p-10 bg-slate-50 border-2 border-slate-100 rounded-[3rem] space-y-4">
-                       <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200 pb-2">Placement Hub</h4>
-                       <p className="text-3xl font-[1000] text-slate-900">₹{selectedCollege.placement?.avg}</p>
-                       <p className="text-xs font-black text-slate-400 uppercase">Average Salary</p>
-                       <p className="text-md font-black text-emerald-600 mt-2 italic px-3 py-1 bg-emerald-50 inline-block rounded-full">{selectedCollege.placement?.highest} Highest</p>
+
+                 {/* Infrastructure Pills */}
+                 <div className="space-y-3">
+                    <h4 className="text-[11px] font-black text-slate-700 flex items-center gap-2"><Building2 size={14}/> Infrastructure & Facilities</h4>
+                    <div className="grid grid-cols-2 gap-2">
+                       <div className="px-4 py-2 bg-white border border-slate-100 rounded-lg text-[9px] font-bold text-slate-500 text-center">{selectedCollege.labs || "Standard Engineering Labs"}</div>
+                       <div className="px-4 py-2 bg-white border border-slate-100 rounded-lg text-[9px] font-bold text-slate-500 text-center">Available</div>
+                       <div className="px-4 py-2 bg-white border border-slate-100 rounded-lg text-[9px] font-bold text-slate-500 text-center">Hostel Facility: {selectedCollege.hostel || "Yes"}</div>
+                       <div className="px-4 py-2 bg-white border border-slate-100 rounded-lg text-[9px] font-bold text-slate-500 text-center">Library: {selectedCollege.library || "Fully Digital"}</div>
                     </div>
                  </div>
-                 <div className="grid grid-cols-1 gap-5 pt-6">
-                    <a href={selectedCollege.website} target="_blank" rel="noreferrer" className="w-full py-8 bg-black hover:bg-blue-600 text-white rounded-[3.5rem] font-[1000] text-xs uppercase tracking-[0.4em] flex items-center justify-center gap-4 shadow-2xl transition-all active:scale-95">Official College Portal <ExternalLink size={20}/></a>
-                    <button onClick={() => setSelectedCollege(null)} className="w-full py-4 text-slate-400 hover:text-slate-900 font-black text-[11px] uppercase tracking-[0.2em] transition-all underline underline-offset-8 decoration-slate-200">Go Back to Predictor</button>
+
+                 {/* Pros & Cons Section */}
+                 <div className="space-y-4 pt-4">
+                    <div className="p-4 bg-emerald-50/50 rounded-xl border border-emerald-100">
+                       <p className="text-[10px] font-black text-emerald-700 flex items-center gap-2 mb-1"><CheckCircle2 size={14}/> Pros</p>
+                       <p className="text-[11px] font-bold text-slate-600">{selectedCollege.pros || "Low Tuition Fees (Govt Funded)"}</p>
+                    </div>
+                    <div className="p-4 bg-amber-50/50 rounded-xl border border-amber-100">
+                       <p className="text-[10px] font-black text-amber-700 flex items-center gap-2 mb-1"><AlertTriangle size={14}/> Cons</p>
+                       <p className="text-[11px] font-bold text-slate-600">{selectedCollege.cons || "Developing Placement Cell"}</p>
+                    </div>
                  </div>
               </div>
            </div>
