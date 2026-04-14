@@ -1,12 +1,17 @@
 import React, { useState, useMemo } from 'react';
 import { colleges, data2024, data2025, allUgeacBranches } from '../UgeacData';
-import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus } from 'lucide-react';
+import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus, Layers, Search, Zap, Filter, LayoutGrid } from 'lucide-react';
 
 function UgeacPredictor() {
   const [rank, setRank] = useState('');
   const [ugeacInput, setUgeacInput] = useState('');
   const [category, setCategory] = useState('UR');
   const [gender, setGender] = useState('Male');
+  
+  // Counseling Modes: 'explore', 'finder', 'wizard'
+  const [mode, setMode] = useState('explore'); 
+  const [preferenceBasis, setPreferenceBasis] = useState('branch'); // 'college' or 'branch'
+
   // Advanced Priority Choice Filling State
   const [targetColleges, setTargetColleges] = useState([]);
   const [selectedCollegeToAdd, setSelectedCollegeToAdd] = useState('All');
@@ -223,10 +228,20 @@ function UgeacPredictor() {
     const seen = new Map();
 
     data2025.forEach(cut25 => {
-      // General filtering ONLY applies if choices are empty
-      if (choices.length === 0) {
+      // MODE-BASED FILTERING
+      if (mode === 'wizard') {
+          // In Wizard mode, only care about what's in 'choices'? No, actually, 
+          // we might still want to see the full list below for comparison.
+          // But 'choices' defines the 'mockAllotment'.
+      } else if (mode === 'finder') {
+          // Filter by selected dropdowns
+          if (selectedCollegeToAdd !== 'All' && cut25.collegeId !== parseInt(selectedCollegeToAdd)) return;
+          if (selectedBranchToAdd && cut25.branch !== selectedBranchToAdd) return;
+      } else {
+          // Explore mode: Show everything or respect targetColleges if any
           if (targetColleges.length > 0 && !targetColleges.includes(cut25.collegeId)) return;
       }
+
       if (!eligibleCategories.includes(cut25.category)) return;
 
       const collegeInfo = colleges.find(c => c.id === cut25.collegeId);
@@ -340,38 +355,142 @@ function UgeacPredictor() {
              </div>
           </div>
 
-          {/* PRIORITY CHOICE FILLING UI MODULE */}
-          <div className="grid grid-cols-1 gap-8 pt-4">
-             {/* Step 1: Target Colleges */}
-             <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-10 space-y-4">
-                <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
-                  <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span> 
-                  Select Colleges
-                </h3>
-                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Select colleges to view their available branches.</p>
-                
-                <div className="flex flex-col md:flex-row gap-4">
-                   <select value={selectedCollegeToAdd} onChange={e => setSelectedCollegeToAdd(e.target.value)} className="flex-1 bg-white border-2 border-slate-200 focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none cursor-pointer shadow-sm">
-                      <option value="All">-- Select College Details --</option>
-                      {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                   </select>
-                   <button onClick={addTargetCollege} className="md:w-auto w-full px-8 py-4 bg-indigo-600 hover:bg-slate-900 text-white rounded-2xl font-[1000] text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
-                     + Add College
-                   </button>
-                </div>
+          {/* MODE SWITCHER TABS */}
+          <div className="flex flex-wrap justify-center gap-4 bg-slate-50 p-2 rounded-[2.5rem] border border-slate-200">
+             <button 
+                onClick={() => setMode('explore')}
+                className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'explore' ? 'bg-blue-600 text-white shadow-xl shadow-blue-200' : 'text-slate-500 hover:bg-white hover:text-blue-600'}`}
+             >
+                <LayoutGrid size={16}/> 1. Explore All
+             </button>
+             <button 
+                onClick={() => setMode('finder')}
+                className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'finder' ? 'bg-blue-600 text-white shadow-xl shadow-blue-200' : 'text-slate-500 hover:bg-white hover:text-blue-600'}`}
+             >
+                <Search size={16}/> 2. Specific Finder
+             </button>
+             <button 
+                onClick={() => setMode('wizard')}
+                className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'wizard' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-200' : 'text-slate-500 hover:bg-white hover:text-indigo-600'}`}
+             >
+                <Zap size={16}/> 3. Priority Wizard
+             </button>
+          </div>
 
-                {targetColleges.length > 0 && (
-                  <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-200 mt-4">
-                     {targetColleges.map(id => {
-                        const c = colleges.find(co => co.id === id);
-                        return <div key={id} className="flex items-center gap-2 bg-indigo-100 text-indigo-900 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-200 shadow-sm animate-in zoom-in duration-300">
-                          {c?.short || c?.name}
-                          <button onClick={() => removeTargetCollege(id)} className="text-indigo-500 hover:text-white hover:bg-red-500 bg-white rounded-full w-4 h-4 flex items-center justify-center transition-colors"><Trash2 size={10}/></button>
-                        </div>
-                     })}
+          <div className="pt-2">
+             {/* MODE 1: EXPLORE ALL (General Entry Only) */}
+             {mode === 'explore' && (
+               <div className="text-center py-10 space-y-4 animate-in fade-in zoom-in duration-500">
+                  <div className="w-20 h-20 bg-blue-50 text-blue-600 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6">
+                     <LayoutGrid size={32} />
                   </div>
-                )}
-             </div>
+                  <h3 className="text-2xl font-[1000] text-slate-800 uppercase tracking-tighter">Full Potential View</h3>
+                  <p className="max-w-md mx-auto text-xs font-bold text-slate-400 uppercase tracking-widest leading-loose">Enter your details above and hit calculate. We will analyze all 38 colleges to find your best matches.</p>
+               </div>
+             )}
+
+             {/* MODE 2: SPECIFIC FINDER */}
+             {mode === 'finder' && (
+               <div className="bg-slate-50 border border-slate-200 rounded-[3rem] p-10 space-y-8 animate-in slide-in-from-top-4 duration-500">
+                  <div className="flex flex-col md:flex-row items-center gap-6">
+                     <div className="flex-1 space-y-3">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Filter by College</label>
+                        <select 
+                           value={selectedCollegeToAdd === 'All' ? 'All' : selectedCollegeToAdd} 
+                           onChange={e => setSelectedCollegeToAdd(e.target.value)}
+                           className="w-full bg-white border-2 border-slate-100 focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none shadow-sm"
+                        >
+                           <option value="All">All Bihar Colleges</option>
+                           {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                        </select>
+                     </div>
+                     <div className="flex-1 space-y-3">
+                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Filter by Branch</label>
+                        <select 
+                           onChange={e => setSelectedBranchToAdd(e.target.value)}
+                           className="w-full bg-white border-2 border-slate-100 focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none shadow-sm"
+                        >
+                           <option value="">All Engineering Branches</option>
+                           {allUgeacBranches.map(b => <option key={b} value={b}>{branchMapping[b] || b}</option>)}
+                        </select>
+                     </div>
+                  </div>
+               </div>
+             )}
+
+             {/* MODE 3: PRIORITY WIZARD */}
+             {mode === 'wizard' && (
+               <div className="space-y-8 animate-in slide-in-from-bottom-5 duration-500">
+                  {/* Sub-Preference Toggles */}
+                  <div className="flex items-center justify-center gap-6 p-6 bg-indigo-50/50 rounded-[2.5rem] border border-indigo-100">
+                     <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Counseling Priority:</span>
+                     <div className="flex bg-white p-1 rounded-2xl border border-indigo-100 shadow-sm">
+                        <button 
+                           onClick={() => setPreferenceBasis('college')}
+                           className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'college' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600'}`}
+                        >
+                           I Prefer College
+                        </button>
+                        <button 
+                           onClick={() => setPreferenceBasis('branch')}
+                           className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'branch' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600'}`}
+                        >
+                           I Prefer Branch
+                        </button>
+                     </div>
+                  </div>
+
+                  {/* Step 1: Target Colleges */}
+                  <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-10 space-y-4 shadow-sm">
+                    <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
+                      <span className="bg-indigo-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs shadow-lg">1</span> 
+                      {preferenceBasis === 'college' ? 'Choose Targeted Institutions' : 'Select Target Colleges'}
+                    </h3>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Select your dream colleges first.</p>
+                    
+                    <div className="flex flex-col md:flex-row gap-4">
+                       <select value={selectedCollegeToAdd} onChange={e => setSelectedCollegeToAdd(e.target.value)} className="flex-1 bg-white border-2 border-slate-200 focus:border-indigo-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none cursor-pointer shadow-sm">
+                          <option value="All">-- Select College Details --</option>
+                          {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                       </select>
+                       <button onClick={addTargetCollege} className="md:w-auto w-full px-8 py-4 bg-indigo-600 hover:bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
+                         + Add to Selection
+                       </button>
+                       {preferenceBasis === 'college' && selectedCollegeToAdd !== 'All' && (
+                          <button 
+                             onClick={() => {
+                                const cid = parseInt(selectedCollegeToAdd);
+                                const cInfo = colleges.find(c => c.id === cid);
+                                const collegeBranches = data2025.filter(d => d.collegeId === cid);
+                                const uniqueBranches = Array.from(new Set(collegeBranches.map(d => d.branch)));
+                                const newChoices = [...choices];
+                                uniqueBranches.forEach(b => {
+                                   if (!newChoices.find(c => c.collegeId === cid && c.branch === b)) {
+                                      newChoices.push({ collegeId: cid, branch: b, collegeName: cInfo.name });
+                                   }
+                                });
+                                setChoices(newChoices);
+                                if (!targetColleges.includes(cid)) setTargetColleges([...targetColleges, cid]);
+                             }}
+                             className="md:w-auto w-full px-8 py-4 bg-emerald-600 hover:bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all"
+                          >
+                             + Add All Branches of this College
+                          </button>
+                       )}
+                    </div>
+
+                    {targetColleges.length > 0 && (
+                      <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-200 mt-4">
+                         {targetColleges.map(id => {
+                            const c = colleges.find(co => co.id === id);
+                            return <div key={id} className="flex items-center gap-2 bg-indigo-100 text-indigo-900 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-200 shadow-sm animate-in zoom-in duration-300">
+                              {c?.short || c?.name}
+                              <button onClick={() => removeTargetCollege(id)} className="text-indigo-500 hover:text-white hover:bg-red-500 bg-white rounded-full w-4 h-4 flex items-center justify-center transition-colors"><Trash2 size={10}/></button>
+                            </div>
+                         })}
+                      </div>
+                    )}
+                  </div>
 
              {/* Step 2: Powerful Multi-Branch Addition */}
              {targetColleges.length > 0 && (
@@ -468,7 +587,9 @@ function UgeacPredictor() {
                </div>
              )}
           </div>
-
+          )}
+        </div>
+          
           <button onClick={calculateResults} className="w-full py-8 mt-8 bg-blue-600 hover:bg-black text-white rounded-[2.5rem] font-[1000] text-xl md:text-2xl uppercase tracking-[0.3em] shadow-2xl shadow-blue-900/40 active:scale-95 transition-all">Analyze Predictor Results</button>
        </div>
 
