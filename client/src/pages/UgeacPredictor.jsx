@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { colleges, data2024, data2025, allUgeacBranches } from '../UgeacData';
-import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2 } from 'lucide-react';
+import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus } from 'lucide-react';
 
 function UgeacPredictor() {
   const [rank, setRank] = useState('');
@@ -11,6 +11,7 @@ function UgeacPredictor() {
   const [targetColleges, setTargetColleges] = useState([]);
   const [selectedCollegeToAdd, setSelectedCollegeToAdd] = useState('All');
   const [choices, setChoices] = useState([]); // Array to hold choice filling preferences
+  const [selectedBranchToAdd, setSelectedBranchToAdd] = useState('');
   
   const [hasPredicted, setHasPredicted] = useState(false);
   const [results, setResults] = useState({
@@ -164,6 +165,36 @@ function UgeacPredictor() {
      newArr[index] = newArr[index + shift];
      newArr[index + shift] = temp;
      setChoices(newArr);
+  };
+
+  const availableBranchesForTarget = useMemo(() => {
+     if (targetColleges.length === 0) return [];
+     const branchSet = new Set();
+     data2025.forEach(d => {
+        if (targetColleges.includes(d.collegeId)) {
+           branchSet.add(d.branch);
+        }
+     });
+     return Array.from(branchSet).sort();
+  }, [targetColleges, data2025]);
+
+  const addBranchToAllTargets = () => {
+    if (!selectedBranchToAdd || targetColleges.length === 0) return;
+    
+    const newChoices = [...choices];
+    targetColleges.forEach(cid => {
+       const exists = newChoices.find(c => c.collegeId === cid && c.branch === selectedBranchToAdd);
+       if (!exists) {
+          const cInfo = colleges.find(c => c.id === cid);
+          // Only add if the branch actually exists in that college data
+          const branchExists = data2025.find(d => d.collegeId === cid && d.branch === selectedBranchToAdd);
+          if (branchExists) {
+             newChoices.push({ collegeId: cid, branch: selectedBranchToAdd, collegeName: cInfo.name });
+          }
+       }
+    });
+    setChoices(newChoices);
+    setSelectedBranchToAdd('');
   };
 
   const availableChoices = useMemo(() => {
@@ -342,37 +373,64 @@ function UgeacPredictor() {
                 )}
              </div>
 
-             {/* Step 2: Add Branches to Priority List */}
+             {/* Step 2: Powerful Multi-Branch Addition */}
              {targetColleges.length > 0 && (
-               <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-10 space-y-6 animate-in fade-in duration-500">
-                  <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
-                    <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span> 
-                    Add Branches to Priority Setup
-                  </h3>
-                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Select the branches you want to add to your final priority list.</p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-80 overflow-y-auto pr-2">
-                     {availableChoices.map((ac, i) => {
-                        const isAdded = choices.find(c => c.collegeId === ac.collegeId && c.branch === ac.branch);
-                        return (
-                           <div key={i} className={`flex flex-col justify-between p-4 rounded-2xl border ${isAdded ? 'bg-emerald-50 border-emerald-200 opacity-60' : 'bg-white border-slate-200 shadow-sm'} transition-all`}>
-                               <div className="mb-4">
-                                  <p className="text-[11px] font-[1000] text-slate-800 uppercase tracking-tight">{ac.collegeName}</p>
-                                  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1 bg-slate-100 px-2 py-1 rounded inline-block">{branchMapping[ac.branch] || ac.branch}</p>
+                <div className="bg-white border-2 border-slate-100 rounded-[3rem] p-8 lg:p-12 space-y-8 animate-in slide-in-from-right-4 duration-500 shadow-xl shadow-slate-200/50">
+                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                      <div className="space-y-2">
+                        <h3 className="text-xl font-[1000] text-slate-800 uppercase tracking-tighter flex items-center gap-3">
+                           <span className="bg-indigo-600 text-white w-10 h-10 rounded-2xl flex items-center justify-center text-sm shadow-lg shadow-indigo-200">2</span> 
+                           Add Preferred Branches
+                        </h3>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Choose a branch to add it to <span className="text-indigo-600 font-black">{targetColleges.length} selected colleges</span> at once.</p>
+                      </div>
+                      
+                      <div className="flex-1 flex flex-col md:flex-row gap-4 max-w-2xl bg-slate-50 p-3 rounded-[2rem] border border-slate-200">
+                         <select 
+                            value={selectedBranchToAdd} 
+                            onChange={e => setSelectedBranchToAdd(e.target.value)}
+                            className="flex-1 bg-white border-2 border-transparent focus:border-indigo-500 rounded-2xl px-6 py-4 text-xs font-black outline-none uppercase shadow-sm cursor-pointer"
+                         >
+                            <option value="">-- Choose Branch to Add --</option>
+                            {availableBranchesForTarget.map(b => (
+                               <option key={b} value={b}>{branchMapping[b] || b}</option>
+                            ))}
+                         </select>
+                         <button 
+                            onClick={addBranchToAllTargets}
+                            className="px-10 py-5 bg-indigo-600 hover:bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-200 active:scale-95 transition-all flex items-center justify-center gap-2"
+                         >
+                            <Plus size={16}/> Add to All
+                         </button>
+                      </div>
+                   </div>
+
+                   <div className="p-1 px-2 border-t border-slate-100 pt-8 mt-2">
+                      <h4 className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Or select individual combinations:</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                         {availableChoices.map((ac, i) => {
+                            const isAdded = choices.find(c => c.collegeId === ac.collegeId && c.branch === ac.branch);
+                            return (
+                               <div key={i} onClick={() => {
+                                  if(isAdded) removeChoiceByCombo(ac.collegeId, ac.branch);
+                                  else setChoices([...choices, ac]);
+                               }} className={`group flex flex-col justify-between p-6 rounded-[2.5rem] border-2 cursor-pointer transition-all ${isAdded ? 'bg-indigo-50 border-indigo-200 ring-4 ring-indigo-50' : 'bg-white border-slate-100 hover:border-indigo-300 hover:translate-y-[-4px] shadow-sm hover:shadow-xl'}`}>
+                                   <div className="mb-4">
+                                      <div className="flex justify-between items-start">
+                                         <p className="text-[11px] font-[1000] text-slate-800 uppercase tracking-tight leading-tight max-w-[80%]">{ac.collegeName}</p>
+                                         {isAdded && <CheckCircle2 size={16} className="text-indigo-500" />}
+                                      </div>
+                                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-2 bg-slate-50 group-hover:bg-white px-3 py-1.5 rounded-full inline-block border border-slate-100">{branchMapping[ac.branch] || ac.branch}</p>
+                                   </div>
+                                   <div className={`mt-2 text-[9px] font-black uppercase tracking-widest ${isAdded ? 'text-red-500' : 'text-indigo-600'}`}>
+                                      {isAdded ? 'Remove' : '+ Add Choice'}
+                                   </div>
                                </div>
-                               <button 
-                                 onClick={() => {
-                                    if(isAdded) removeChoiceByCombo(ac.collegeId, ac.branch);
-                                    else setChoices([...choices, ac]);
-                                 }}
-                                 className={`w-full py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${isAdded ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
-                                 {isAdded ? 'Remove from list' : '+ Add to List'}
-                               </button>
-                           </div>
-                        )
-                     })}
-                  </div>
-               </div>
+                            )
+                         })}
+                      </div>
+                   </div>
+                </div>
              )}
 
              {/* Step 3: Priority Setup */}
