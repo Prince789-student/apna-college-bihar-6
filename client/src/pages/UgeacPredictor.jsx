@@ -274,9 +274,14 @@ function UgeacPredictor() {
                     <a href={selectedCollege.website} target="_blank" rel="noreferrer" className="w-full py-4 bg-[#2563eb] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors">
                        <Wifi size={16} /> Visit Official Website
                     </a>
-                    <button className="w-full py-4 bg-white border border-slate-200 text-slate-700 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors">
+                    <a 
+                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedCollege.name)}`} 
+                       target="_blank" 
+                       rel="noreferrer" 
+                       className="w-full py-4 bg-white border border-slate-200 text-slate-700 rounded-xl font-bold text-xs flex items-center justify-center gap-2 hover:bg-slate-50 transition-colors"
+                    >
                        <MapPin size={16} className="text-red-500" /> Get Directions
-                    </button>
+                    </a>
                  </div>
 
                  {/* Stats Grid */}
