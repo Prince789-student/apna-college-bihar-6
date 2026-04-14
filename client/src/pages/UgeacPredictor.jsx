@@ -556,44 +556,65 @@ function UgeacPredictor() {
 
           {/* GLOBAL Step 3: Priority Setup (Visible in all modes if choices exist) */}
           {choices.length > 0 && (
-            <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-3xl p-6 lg:p-10 space-y-6 shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom-5 duration-700">
-               <div className="relative z-10">
-                  <div className="flex items-center justify-between mb-2">
-                     <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
-                        <span className="bg-emerald-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span> 
-                        Set Final Priority Order
-                     </h3>
-                     <div className="flex items-center gap-4">
-                        <button onClick={() => setChoices([])} className="text-[9px] font-black text-red-300 uppercase tracking-widest hover:text-white transition-colors">Clear All</button>
-                        <span className="bg-white/10 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">{choices.length} Choices Locked</span>
-                     </div>
-                  </div>
-                  <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest leading-relaxed">Rearrange these choices! The simulator validates choices strictly from 1 to {choices.length}. Rank 1 should be your most desired seat.</p>
+            <div className="bg-slate-900 rounded-[3.5rem] p-10 space-y-8 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] relative overflow-hidden animate-in slide-in-from-bottom-10 duration-1000 border-t-8 border-indigo-600">
+               <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none rotate-12">
+                  <Layers size={220} />
                </div>
                
-               <div className="flex flex-col gap-3 relative z-10">
+               <div className="relative z-10">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+                     <div>
+                        <h3 className="text-xl font-black text-white uppercase tracking-[0.2em] flex items-center gap-4">
+                           <span className="bg-emerald-500 text-white w-10 h-10 rounded-2xl flex items-center justify-center text-sm shadow-[0_0_20px_rgba(16,185,129,0.4)]">3</span> 
+                           Final Priority Order
+                        </h3>
+                        <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest leading-relaxed mt-2 opacity-60">Drag your dream seats to the top. Rank 1 = Your first choice.</p>
+                     </div>
+                     <div className="flex items-center gap-6">
+                        <button onClick={() => setChoices([])} className="px-6 py-3 border border-red-500/30 text-[10px] font-black text-red-300 uppercase tracking-widest rounded-2xl hover:bg-red-500 hover:text-white transition-all">Clear List</button>
+                        <div className="bg-indigo-500/20 border border-indigo-500/30 text-indigo-200 text-xs font-black px-6 py-3 rounded-2xl uppercase tracking-tighter">
+                           {choices.length} Choices Locked
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               
+               <div className="flex flex-col gap-4 relative z-10 max-h-[550px] overflow-y-auto pr-4 custom-scrollbar">
                   {choices.map((choice, i) => (
-                     <div key={`${choice.collegeId}-${choice.branch}`} className="flex flex-col md:flex-row md:items-center justify-between bg-white/5 border border-white/10 px-6 py-4 rounded-2xl backdrop-blur-md gap-4">
-                        <div className="flex items-center gap-4">
-                           <div className="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-200 flex items-center justify-center font-black text-xs border border-indigo-500/30 shrink-0">{i+1}</div>
+                     <div key={`${choice.collegeId}-${choice.branch}`} className="group flex flex-col md:flex-row md:items-center justify-between bg-white/[0.03] border border-white/10 hover:border-white/20 hover:bg-white/[0.07] px-8 py-6 rounded-[2rem] backdrop-blur-xl transition-all gap-6">
+                        <div className="flex items-center gap-6">
+                           <div className="w-12 h-12 rounded-[1.2rem] bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-black text-sm border border-indigo-500/20 group-hover:bg-indigo-600 group-hover:text-white transition-all shrink-0 shadow-inner">{i+1}</div>
                            <div>
-                              <p className="text-sm font-[1000] text-white uppercase tracking-tighter">{choice.collegeName}</p>
-                              <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mt-0.5">{branchMapping[choice.branch] || choice.branch}</p>
+                              <p className="text-xl font-[1000] text-white uppercase tracking-tighter leading-none">{choice.collegeName}</p>
+                              <p className="text-[11px] font-black text-emerald-400 uppercase tracking-[0.15em] mt-2 flex items-center gap-2">
+                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                 {branchMapping[choice.branch] || choice.branch}
+                              </p>
                            </div>
                         </div>
-                        <div className="flex items-center gap-2 md:w-auto w-full justify-end">
-                           <button disabled={i === 0} onClick={() => moveChoice(i, -1)} className="p-2 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-white/10 text-white rounded-lg transition-colors"><ChevronUp size={16}/></button>
-                           <button disabled={i === choices.length - 1} onClick={() => moveChoice(i, 1)} className="p-2 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-white/10 text-white rounded-lg transition-colors"><ChevronDown size={16}/></button>
-                           <button onClick={() => removeChoiceByCombo(choice.collegeId, choice.branch)} className="p-2 ml-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg transition-colors"><Trash2 size={16}/></button>
+                        <div className="flex items-center gap-3">
+                           <div className="flex bg-black/30 p-1 rounded-2xl border border-white/10">
+                              <button disabled={i === 0} onClick={() => moveChoice(i, -1)} className="p-3 hover:bg-white/10 disabled:opacity-20 text-white rounded-xl transition-all"><ChevronUp size={20}/></button>
+                              <button disabled={i === choices.length - 1} onClick={() => moveChoice(i, 1)} className="p-3 hover:bg-white/10 disabled:opacity-20 text-white rounded-xl transition-all"><ChevronDown size={20}/></button>
+                           </div>
+                           <button onClick={() => removeChoiceByCombo(choice.collegeId, choice.branch)} className="p-4 bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white rounded-2xl transition-all shadow-lg"><Trash2 size={20}/></button>
                         </div>
                      </div>
                   ))}
                </div>
             </div>
-              )}
-           </div>
-           
-           <button onClick={calculateResults} className="w-full py-8 mt-8 bg-blue-600 hover:bg-black text-white rounded-[2.5rem] font-[1000] text-xl md:text-2xl uppercase tracking-[0.3em] shadow-2xl shadow-blue-900/40 active:scale-95 transition-all">Analyze Predictor Results</button>
+          )}
+
+          <div className="pt-10 border-t border-slate-100 mt-12 text-center">
+             <button onClick={calculateResults} className="group relative w-full overflow-hidden rounded-[3rem] transition-all active:scale-[0.98]">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-700 group-hover:from-black group-hover:to-slate-900 transition-all duration-500"></div>
+                <div className="relative py-10 flex flex-col items-center justify-center gap-2">
+                   <span className="text-white font-[1000] text-3xl uppercase tracking-[0.4em]">Apply Selection & Analyze Results</span>
+                   <span className="text-blue-200 text-[10px] font-black uppercase tracking-[0.2em] opacity-60">Generate Bihar UGEAC Predictor Mock Report</span>
+                </div>
+             </button>
+          </div>
+       </div>
        </div>
 
       {hasPredicted && (
