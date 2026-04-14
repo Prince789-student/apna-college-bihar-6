@@ -7,8 +7,9 @@ function UgeacPredictor() {
   const [ugeacInput, setUgeacInput] = useState('');
   const [category, setCategory] = useState('UR');
   const [gender, setGender] = useState('Male');
-  const [preferredBranch, setPreferredBranch] = useState('All');
-  const [preferredCollege, setPreferredCollege] = useState('All');
+  // Advanced Priority Choice Filling State
+  const [targetColleges, setTargetColleges] = useState([]);
+  const [selectedCollegeToAdd, setSelectedCollegeToAdd] = useState('All');
   const [choices, setChoices] = useState([]); // Array to hold choice filling preferences
   
   const [hasPredicted, setHasPredicted] = useState(false);
@@ -115,23 +116,45 @@ function UgeacPredictor() {
     return Math.floor(r * (ratios[cat] || 1));
   };
 
-  const handleAddChoice = () => {
-    if (preferredCollege === 'All' || preferredBranch === 'All') {
-       alert("Please select a specific College and Branch to add to your Preference List.");
-       return;
-    }
-    const exists = choices.find(c => c.collegeId == preferredCollege && c.branch === preferredBranch);
-    if (!exists) {
-       const collegeInfo = colleges.find(c => c.id == preferredCollege);
-       setChoices([...choices, { collegeId: preferredCollege, branch: preferredBranch, collegeName: collegeInfo.name }]);
+  const addTargetCollege = () => {
+    if (selectedCollegeToAdd === 'All') return;
+    const cid = parseInt(selectedCollegeToAdd);
+    if (!targetColleges.includes(cid)) {
+       setTargetColleges([...targetColleges, cid]);
     }
   };
 
-  const removeChoice = (index) => {
-    const newChoices = [...choices];
-    newChoices.splice(index, 1);
-    setChoices(newChoices);
+  const removeTargetCollege = (id) => {
+    setTargetColleges(targetColleges.filter(cId => cId !== id));
+    setChoices(choices.filter(c => c.collegeId !== id));
   };
+
+  const removeChoiceByCombo = (cid, branch) => {
+     setChoices(choices.filter(c => !(c.collegeId === cid && c.branch === branch)));
+  };
+
+  const moveChoice = (index, shift) => {
+     if (index + shift < 0 || index + shift >= choices.length) return;
+     const newArr = [...choices];
+     const temp = newArr[index];
+     newArr[index] = newArr[index + shift];
+     newArr[index + shift] = temp;
+     setChoices(newArr);
+  };
+
+  const availableChoices = useMemo(() => {
+    if (targetColleges.length === 0) return [];
+    const combos = [];
+    data2025.forEach(d => {
+       if (targetColleges.includes(d.collegeId)) {
+          if (!combos.find(c => c.collegeId === d.collegeId && c.branch === d.branch)) {
+             const cInfo = colleges.find(c => c.id === d.collegeId);
+             combos.push({ collegeId: d.collegeId, branch: d.branch, collegeName: cInfo.name });
+          }
+       }
+    });
+    return combos;
+  }, [targetColleges, data2025, colleges]);
 
 
   const calculateResults = () => {
@@ -145,10 +168,9 @@ function UgeacPredictor() {
     const seen = new Map();
 
     data2025.forEach(cut25 => {
-      // General filtering ONLY applies if choices are empty, otherwise process ALL for simulation
+      // General filtering ONLY applies if choices are empty
       if (choices.length === 0) {
-          if (preferredBranch !== 'All' && cut25.branch !== preferredBranch) return;
-          if (preferredCollege !== 'All' && cut25.collegeId !== parseInt(preferredCollege)) return;
+          if (targetColleges.length > 0 && !targetColleges.includes(cut25.collegeId)) return;
       }
       if (!eligibleCategories.includes(cut25.category)) return;
 
@@ -195,9 +217,12 @@ function UgeacPredictor() {
     let mockDiscussions = [];
     
     // Simulate Choice Filling (Mock Counselling Algorithm)
-    if (choices.length > 0) {
-       for (let i = 0; i < choices.length; i++) {
-          const ch = choices[i];
+    let activeChoices = [...choices];
+    
+    // Simulate Choice Filling (Mock Counselling Algorithm)
+    if (activeChoices.length > 0) {
+       for (let i = 0; i < activeChoices.length; i++) {
+          const ch = activeChoices[i];
           const entry = allRes.find(r => r.college.id == ch.collegeId && r.branch === ch.branch);
           
           if (entry && (entry.chance === 'High' || entry.chance === 'Medium')) {
@@ -247,76 +272,125 @@ function UgeacPredictor() {
                </select>
             </div>
 
-            <div className="space-y-3">
+             <div className="space-y-3">
                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Gender</label>
                <select value={gender} onChange={e => setGender(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-3xl p-6 text-sm font-[1000] outline-none transition-all uppercase appearance-none cursor-pointer">
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                </select>
-            </div>
-            
-            <div className="space-y-3 lg:col-span-1">
-               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">College Preference</label>
-               <select value={preferredCollege} onChange={e => setPreferredCollege(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-3xl p-6 text-[10px] font-[1000] outline-none transition-all uppercase appearance-none cursor-pointer">
-                  <option value="All">All 38 Colleges</option>
-                  {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-               </select>
-            </div>
-            <div className="space-y-3 lg:col-span-2">
-               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Branch Preference</label>
-               <select value={preferredBranch} onChange={e => setPreferredBranch(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-3xl p-6 text-[11px] font-[1000] outline-none transition-all uppercase appearance-none cursor-pointer">
-                  <option value="All">Any Branch (Select For List)</option>
-                  {Object.entries(categorizedBranchList).map(([group, branches]) => (
-                    <optgroup key={group} label={group} className="text-blue-600 font-black tracking-widest bg-blue-50 my-2">
-                      {branches.map(b => (
-                        <option key={b} value={b} className="text-slate-900 font-bold">
-                          {branchMapping[b] || b}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-               </select>
-            </div>
-            <div className="space-y-3 lg:col-span-1 flex items-end">
-               <button onClick={handleAddChoice} className="w-full h-[72px] bg-indigo-600 hover:bg-slate-900 text-white rounded-3xl font-[1000] text-sm uppercase tracking-widest shadow-xl shadow-indigo-900/20 active:scale-95 transition-all flex items-center justify-center gap-2">
-                 + Add To Choice List
-               </button>
-            </div>
-         </div>
+             </div>
+          </div>
 
-         {/* Choice Filling List Display */}
-         {choices.length > 0 && (
-           <div className="bg-slate-50 border-2 border-dashed border-slate-300 rounded-3xl p-8 space-y-4">
-              <div className="flex items-center justify-between">
-                 <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest">Your Preference List (Mock Counselling)</h3>
-                 <span className="bg-indigo-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">{choices.length} Choices Added</span>
-              </div>
-              <div className="flex flex-col gap-2">
-                 {choices.map((choice, i) => (
-                    <div key={i} className="flex items-center justify-between bg-white px-6 py-4 rounded-2xl shadow-sm border border-slate-200">
-                       <div className="flex items-center gap-4">
-                          <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-black text-xs">{i+1}</div>
-                          <div>
-                             <p className="text-sm font-[1000] text-slate-800 uppercase tracking-tighter">{choice.collegeName}</p>
-                             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{branchMapping[choice.branch] || choice.branch}</p>
-                          </div>
-                       </div>
-                       <button onClick={() => removeChoice(i)} className="text-red-500 font-bold text-xs uppercase hover:underline">Remove</button>
-                    </div>
-                 ))}
-              </div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">The simulator validates choices in this strict order to determine your final allotted seat.</p>
-           </div>
-         )}
+          {/* PRIORITY CHOICE FILLING UI MODULE */}
+          <div className="grid grid-cols-1 gap-8 pt-4">
+             {/* Step 1: Target Colleges */}
+             <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-10 space-y-4">
+                <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
+                  <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span> 
+                  Select Colleges
+                </h3>
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Select colleges to view their available branches.</p>
+                
+                <div className="flex flex-col md:flex-row gap-4">
+                   <select value={selectedCollegeToAdd} onChange={e => setSelectedCollegeToAdd(e.target.value)} className="flex-1 bg-white border-2 border-slate-200 focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none cursor-pointer shadow-sm">
+                      <option value="All">-- Select College Details --</option>
+                      {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                   </select>
+                   <button onClick={addTargetCollege} className="md:w-auto w-full px-8 py-4 bg-indigo-600 hover:bg-slate-900 text-white rounded-2xl font-[1000] text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
+                     + Add College
+                   </button>
+                </div>
 
-         <button onClick={calculateResults} className="w-full py-8 bg-blue-600 hover:bg-black text-white rounded-[2.5rem] font-[1000] text-xl uppercase tracking-[0.3em] shadow-2xl shadow-blue-900/40 active:scale-95 transition-all">Analyze Predictor Results</button>
-      </div>
+                {targetColleges.length > 0 && (
+                  <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-200 mt-4">
+                     {targetColleges.map(id => {
+                        const c = colleges.find(co => co.id === id);
+                        return <div key={id} className="flex items-center gap-2 bg-indigo-100 text-indigo-900 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-200 shadow-sm animate-in zoom-in duration-300">
+                          {c?.short || c?.name}
+                          <button onClick={() => removeTargetCollege(id)} className="text-indigo-500 hover:text-white hover:bg-red-500 bg-white rounded-full w-4 h-4 flex items-center justify-center transition-colors"><Trash2 size={10}/></button>
+                        </div>
+                     })}
+                  </div>
+                )}
+             </div>
+
+             {/* Step 2: Add Branches to Priority List */}
+             {targetColleges.length > 0 && (
+               <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-10 space-y-6 animate-in fade-in duration-500">
+                  <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
+                    <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span> 
+                    Add Branches to Priority Setup
+                  </h3>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Select the branches you want to add to your final priority list.</p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-80 overflow-y-auto pr-2">
+                     {availableChoices.map((ac, i) => {
+                        const isAdded = choices.find(c => c.collegeId === ac.collegeId && c.branch === ac.branch);
+                        return (
+                           <div key={i} className={`flex flex-col justify-between p-4 rounded-2xl border ${isAdded ? 'bg-emerald-50 border-emerald-200 opacity-60' : 'bg-white border-slate-200 shadow-sm'} transition-all`}>
+                               <div className="mb-4">
+                                  <p className="text-[11px] font-[1000] text-slate-800 uppercase tracking-tight">{ac.collegeName}</p>
+                                  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1 bg-slate-100 px-2 py-1 rounded inline-block">{branchMapping[ac.branch] || ac.branch}</p>
+                               </div>
+                               <button 
+                                 onClick={() => {
+                                    if(isAdded) removeChoiceByCombo(ac.collegeId, ac.branch);
+                                    else setChoices([...choices, ac]);
+                                 }}
+                                 className={`w-full py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${isAdded ? 'bg-red-100 text-red-600 hover:bg-red-200' : 'bg-blue-100 text-blue-600 hover:bg-blue-600 hover:text-white'}`}>
+                                 {isAdded ? 'Remove from list' : '+ Add to List'}
+                               </button>
+                           </div>
+                        )
+                     })}
+                  </div>
+               </div>
+             )}
+
+             {/* Step 3: Priority Setup */}
+             {choices.length > 0 && (
+               <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-3xl p-6 lg:p-10 space-y-6 shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom-5 duration-700">
+                  <div className="relative z-10">
+                     <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                           <span className="bg-emerald-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span> 
+                           Set Final Priority Order
+                        </h3>
+                        <span className="bg-white/10 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">{choices.length} Choices Locked</span>
+                     </div>
+                     <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest leading-relaxed">Rearrange these choices! The simulator validates choices strictly from 1 to {choices.length}. Rank 1 should be your most desired seat.</p>
+                  </div>
+                  
+                  <div className="flex flex-col gap-3 relative z-10">
+                     {choices.map((choice, i) => (
+                        <div key={`${choice.collegeId}-${choice.branch}`} className="flex flex-col md:flex-row md:items-center justify-between bg-white/5 border border-white/10 px-6 py-4 rounded-2xl backdrop-blur-md gap-4">
+                           <div className="flex items-center gap-4">
+                              <div className="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-200 flex items-center justify-center font-black text-xs border border-indigo-500/30 shrink-0">{i+1}</div>
+                              <div>
+                                 <p className="text-sm font-[1000] text-white uppercase tracking-tighter">{choice.collegeName}</p>
+                                 <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mt-0.5">{branchMapping[choice.branch] || choice.branch}</p>
+                              </div>
+                           </div>
+                           <div className="flex items-center gap-2 md:w-auto w-full justify-end">
+                              <button disabled={i === 0} onClick={() => moveChoice(i, -1)} className="p-2 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-white/10 text-white rounded-lg transition-colors"><ChevronUp size={16}/></button>
+                              <button disabled={i === choices.length - 1} onClick={() => moveChoice(i, 1)} className="p-2 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-white/10 text-white rounded-lg transition-colors"><ChevronDown size={16}/></button>
+                              <button onClick={() => removeChoiceByCombo(choice.collegeId, choice.branch)} className="p-2 ml-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg transition-colors"><Trash2 size={16}/></button>
+                           </div>
+                        </div>
+                     ))}
+                  </div>
+               </div>
+             )}
+          </div>
+
+          <button onClick={calculateResults} className="w-full py-8 mt-8 bg-blue-600 hover:bg-black text-white rounded-[2.5rem] font-[1000] text-xl md:text-2xl uppercase tracking-[0.3em] shadow-2xl shadow-blue-900/40 active:scale-95 transition-all">Analyze Predictor Results</button>
+       </div>
 
       {hasPredicted && (
         <div className="space-y-16 animate-in slide-in-from-bottom-20 duration-1000">
            
            {/* Choice Filling Results (Discussion) */}
-           {choices.length > 0 && (
+           {choices.length > 0 && results.mockDiscussions.length > 0 && (
              <div className="bg-gradient-to-br from-indigo-950 to-slate-900 p-12 rounded-[4.5rem] shadow-2xl space-y-10 border border-indigo-500/20 relative overflow-hidden">
                 <div className="absolute top-0 right-0 p-10 opacity-10 pointer-events-none">
                   <Building2 size={200} />
@@ -425,11 +499,11 @@ function UgeacPredictor() {
                             <td className="px-12 py-10 text-xs font-black text-slate-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{r.branch}</td>
                             <td className="px-8 py-10 text-center border-l border-slate-50">
                                <p className="text-sm font-black text-slate-900">{r.cutoff24}</p>
-                               <p className="text-[9px] font-black text-slate-400 uppercase mt-1 tracking-widest">Your Rank: {r.myCompRank}</p>
+                               <p className="text-[9px] font-black text-slate-400 uppercase mt-1 tracking-widest text-center block w-full">Your <span className="text-blue-500">{r.cat}</span> Rank: {r.myCompRank}</p>
                             </td>
-                            <td className="px-8 py-10 text-center bg-blue-50/30">
-                               <p className="text-lg font-[1000] text-blue-600">{r.cutoff25}</p>
-                               <p className="text-[10px] font-[1000] text-blue-400 uppercase mt-0.5 tracking-tighter">Your Rank: {r.myCompRank}</p>
+                            <td className="px-8 py-10 flex flex-col items-center border-l border-r border-[#f1f5f9] bg-blue-50/20">
+                               <p className="text-xl font-[1000] text-blue-600 flex items-center justify-center gap-2">{r.cutoff25} <span className="px-2 py-0.5 bg-blue-100 text-[9px] font-black tracking-widest text-blue-500 rounded-lg">{r.cat} Cutoff</span></p>
+                               <p className="text-[10px] font-black text-blue-400 uppercase mt-1.5 tracking-wider bg-white px-3 py-1 rounded-full shadow-sm border border-blue-100">Your {r.cat} Rank: <span className="font-[1000] text-blue-600">{r.myCompRank}</span></p>
                             </td>
                             <td className="px-12 py-10 text-center">
                                <span className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest ${r.chance === 'High' ? 'bg-emerald-600 text-white' : 'bg-red-500 text-white'} shadow-lg`}>{r.chance}</span>
