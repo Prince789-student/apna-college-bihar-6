@@ -25,25 +25,27 @@ function UgeacPredictor() {
     "Electrical & Electronics (EEE)": "EEE",
     "Internet of Things (IoT)": "CSE (IoT)",
     "CSE (IOT & Cyber Security)": "CSE (Cyber Security)",
-    "Agriculture Engineering": "Agriculture Engineering",
-    "Bio-Technology": "Bio-Technology",
-    "Food Processing & Preservation": "Food Processing"
+    "Computer Science & Engineering": "Computer Science (CSE)",
+    "Electronics & Communication": "Electronics (ECE)",
+    "Electrical & Electronics (EEE)": "Electrical & Electronics (EEE)",
+    "Electrical Engineering": "Electrical (EE)",
+    "Mechanical Engineering": "Mechanical (ME)",
+    "Civil Engineering": "Civil (CE)",
+    "Information Technology": "Information Technology (IT)",
+    "CSE (AI & ML)": "CSE (AI & Machine Learning)",
+    "Aeronautical Engineering": "Aeronautical (AE)",
+    "Robotics and Automation": "Robotics & Automation",
+    "VLSI Design": "VLSI Design & Technology",
+    "Chemical Engineering": "Chemical Engineering",
+    "Mining Engineering": "Mining Engineering",
+    "Fire Technology & Safety": "Fire Tech & Safety",
+    "3D Animation": "3D Animation & VFX",
+    "Food Processing": "Food Processing & Tech"
   };
 
   // Grouped Branches based on Screenshot structure
   const branchGroups = {
     "Core Branches": [
-      "Computer Science & Engineering", "Civil Engineering", "Mechanical Engineering", 
-      "Electrical Engineering", "Electronics & Communication", "Electrical & Electronics (EEE)", 
-      "Information Technology"
-    ],
-    "CSE Specializations": [
-      "CSE (AI & ML)", "CSE (Data Science)", "CSE (Cyber Security)", "CSE (IoT)", 
-      "Internet of Things (IoT)", "CSE (IOT & Cyber Security)", "CSE (IoT)"
-    ],
-    "Emerging & Other Branches": [
-      "Aeronautical Engineering", "Robotics & Automation", "Robotics and Automation", 
-      "Mining Engineering", "Chemical Engineering", "Fire Technology & Safety", 
       "Leather Technology", "VLSI Design & Tech", "VLSI Design", "Food Processing & Preservation", 
       "Food Processing", "3D Animation & Graphics", "3D Animation", "Audio Engineering", 
       "Agriculture Engineering", "Bioinformatics", "Bio-Technology", "Textile Engineering"
