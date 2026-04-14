@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { colleges, data2024, data2025, allUgeacBranches } from '../UgeacData';
-import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, CheckCircle2, Building2, Wifi, BookOpen } from 'lucide-react';
+import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2 } from 'lucide-react';
 
 function UgeacPredictor() {
   const [rank, setRank] = useState('');
