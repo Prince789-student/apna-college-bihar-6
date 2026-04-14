@@ -200,7 +200,7 @@ function UgeacPredictor() {
                   {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                </select>
             </div>
-            <div className="space-y-3 lg:col-span-2">
+            <div className="space-y-3 lg:col-span-3">
                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Branch Search</label>
                <select value={preferredBranch} onChange={e => setPreferredBranch(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-3xl p-6 text-[11px] font-[1000] outline-none transition-all uppercase appearance-none cursor-pointer">
                   <option value="All">Any Branch (Show All)</option>
