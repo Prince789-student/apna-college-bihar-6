@@ -179,18 +179,21 @@ function UgeacPredictor() {
 
       const compRank = cut25.category === 'UR' ? ugeacRank : getEstimatedCategoryRank(ugeacRank, cut25.category);
 
-      let chance = '';
+      // If user is Male, they are not eligible for Female seat_type.
+      if (gender === 'Male' && cut25.seat_type === 'Female') return;
+
+      let chance = 'No Chance';
       if (compRank <= cut25.closing * 1.05) chance = 'High';
       else if (compRank <= cut25.closing * 1.25) chance = 'Medium';
       else if (compRank <= cut25.closing * 1.5) chance = 'Low';
-      else return; 
 
       const cut24 = data2024.find(c => 
         c.collegeId === cut25.collegeId && c.branch === cut25.branch && 
         c.category === cut25.category && c.seat_type === cut25.seat_type
       );
 
-      const key = `${cut25.collegeId}-${cut25.branch}`;
+      // Separate exactly by category and seat type to prevent magic shifting
+      const key = `${cut25.collegeId}-${cut25.branch}-${cut25.category}-${cut25.seat_type}`;
       const entry = { 
         college: collegeInfo, 
         branch: cut25.branch, 
@@ -198,15 +201,14 @@ function UgeacPredictor() {
         cutoff25: cut25.closing, 
         cutoff24: cut24 ? cut24.closing : 'N/A',
         cat: cut25.category,
+        seatType: cut25.seat_type,
         myCompRank: compRank 
       };
       
-      if (!seen.has(key) || chanceScore(chance) < chanceScore(seen.get(key).chance)) {
-        seen.set(key, entry);
-      }
+      seen.set(key, entry);
     });
 
-    function chanceScore(c) { return c === 'High' ? 1 : c === 'Medium' ? 2 : 3; }
+    function chanceScore(c) { return c === 'High' ? 1 : c === 'Medium' ? 2 : c === 'Low' ? 3 : 4; }
 
     const allRes = Array.from(seen.values()).sort((a,b) => {
         if (chanceScore(a.chance) !== chanceScore(b.chance)) return chanceScore(a.chance) - chanceScore(b.chance);
@@ -223,7 +225,9 @@ function UgeacPredictor() {
     if (activeChoices.length > 0) {
        for (let i = 0; i < activeChoices.length; i++) {
           const ch = activeChoices[i];
-          const entry = allRes.find(r => r.college.id == ch.collegeId && r.branch === ch.branch);
+          const branchEntries = allRes.filter(r => r.college.id == ch.collegeId && r.branch === ch.branch);
+          branchEntries.sort((a,b) => chanceScore(a.chance) - chanceScore(b.chance));
+          const entry = branchEntries[0];
           
           if (entry && (entry.chance === 'High' || entry.chance === 'Medium')) {
              if (!mockAllotment) {
@@ -499,10 +503,10 @@ function UgeacPredictor() {
                             <td className="px-12 py-10 text-xs font-black text-slate-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{r.branch}</td>
                             <td className="px-8 py-10 text-center border-l border-slate-50">
                                <p className="text-sm font-black text-slate-900">{r.cutoff24}</p>
-                               <p className="text-[9px] font-black text-slate-400 uppercase mt-1 tracking-widest text-center block w-full">Your <span className="text-blue-500">{r.cat}</span> Rank: {r.myCompRank}</p>
+                               <p className="text-[9px] font-black text-slate-400 uppercase mt-1 tracking-widest text-center block w-full"><span className="text-blue-500">{r.cat} ({r.seatType === 'Female' ? 'F' : 'Gen'})</span></p>
                             </td>
                             <td className="px-8 py-10 flex flex-col items-center border-l border-r border-[#f1f5f9] bg-blue-50/20">
-                               <p className="text-xl font-[1000] text-blue-600 flex items-center justify-center gap-2">{r.cutoff25} <span className="px-2 py-0.5 bg-blue-100 text-[9px] font-black tracking-widest text-blue-500 rounded-lg">{r.cat} Cutoff</span></p>
+                               <p className="text-xl font-[1000] text-blue-600 flex items-center justify-center gap-2">{r.cutoff25} <span className="px-2 py-0.5 bg-blue-100 text-[9px] font-black tracking-widest text-blue-500 rounded-lg">{r.cat} ({r.seatType === 'Female' ? 'F' : 'Gen'}) Cutoff</span></p>
                                <p className="text-[10px] font-black text-blue-400 uppercase mt-1.5 tracking-wider bg-white px-3 py-1 rounded-full shadow-sm border border-blue-100">Your {r.cat} Rank: <span className="font-[1000] text-blue-600">{r.myCompRank}</span></p>
                             </td>
                             <td className="px-12 py-10 text-center">
