@@ -9,12 +9,15 @@ function UgeacPredictor() {
   const [gender, setGender] = useState('Male');
   const [preferredBranch, setPreferredBranch] = useState('All');
   const [preferredCollege, setPreferredCollege] = useState('All');
+  const [choices, setChoices] = useState([]); // Array to hold choice filling preferences
   
   const [hasPredicted, setHasPredicted] = useState(false);
   const [results, setResults] = useState({
      all: [],
      smartChoices: [],
-     calculatedRank: 0
+     calculatedRank: 0,
+     mockAllotment: null,
+     mockDiscussions: []
   });
   const [selectedCollege, setSelectedCollege] = useState(null);
 
@@ -115,6 +118,25 @@ function UgeacPredictor() {
     return Math.floor(r * (ratios[cat] || 1));
   };
 
+  const handleAddChoice = () => {
+    if (preferredCollege === 'All' || preferredBranch === 'All') {
+       alert("Please select a specific College and Branch to add to your Preference List.");
+       return;
+    }
+    const exists = choices.find(c => c.collegeId == preferredCollege && c.branch === preferredBranch);
+    if (!exists) {
+       const collegeInfo = colleges.find(c => c.id == preferredCollege);
+       setChoices([...choices, { collegeId: preferredCollege, branch: preferredBranch, collegeName: collegeInfo.name }]);
+    }
+  };
+
+  const removeChoice = (index) => {
+    const newChoices = [...choices];
+    newChoices.splice(index, 1);
+    setChoices(newChoices);
+  };
+
+
   const calculateResults = () => {
     if (!rank && !ugeacInput) return alert('Please enter rank info');
     const ugeacRank = ugeacInput ? parseInt(ugeacInput) : estimateUgeacRank(parseInt(rank));
@@ -126,8 +148,11 @@ function UgeacPredictor() {
     const seen = new Map();
 
     data2025.forEach(cut25 => {
-      if (preferredBranch !== 'All' && cut25.branch !== preferredBranch) return;
-      if (preferredCollege !== 'All' && cut25.collegeId !== parseInt(preferredCollege)) return;
+      // General filtering ONLY applies if choices are empty, otherwise process ALL for simulation
+      if (choices.length === 0) {
+          if (preferredBranch !== 'All' && cut25.branch !== preferredBranch) return;
+          if (preferredCollege !== 'All' && cut25.collegeId !== parseInt(preferredCollege)) return;
+      }
       if (!eligibleCategories.includes(cut25.category)) return;
 
       const collegeInfo = colleges.find(c => c.id === cut25.collegeId);
@@ -169,10 +194,32 @@ function UgeacPredictor() {
         return a.college.tier - b.college.tier;
     });
 
+    let mockAllotment = null;
+    let mockDiscussions = [];
+    
+    // Simulate Choice Filling (Mock Counselling Algorithm)
+    if (choices.length > 0) {
+       for (let i = 0; i < choices.length; i++) {
+          const ch = choices[i];
+          const entry = allRes.find(r => r.college.id == ch.collegeId && r.branch === ch.branch);
+          
+          if (entry && (entry.chance === 'High' || entry.chance === 'Medium')) {
+             if (!mockAllotment) {
+                 mockAllotment = { choice: ch, choiceNumber: i + 1, entry };
+             }
+             mockDiscussions.push({ choiceNumber: i + 1, status: entry.chance, entry, choice: ch });
+          } else {
+             mockDiscussions.push({ choiceNumber: i + 1, status: 'No Chance', entry: null, choice: ch });
+          }
+       }
+    }
+
     setResults({
       all: allRes,
       smartChoices: allRes.slice(0, 10),
-      calculatedRank: ugeacRank
+      calculatedRank: ugeacRank,
+      mockAllotment,
+      mockDiscussions
     });
     setHasPredicted(true);
   };
@@ -212,16 +259,16 @@ function UgeacPredictor() {
             </div>
             
             <div className="space-y-3 lg:col-span-1">
-               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Preferred College</label>
+               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">College Preference</label>
                <select value={preferredCollege} onChange={e => setPreferredCollege(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-3xl p-6 text-[10px] font-[1000] outline-none transition-all uppercase appearance-none cursor-pointer">
                   <option value="All">All 38 Colleges</option>
                   {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                </select>
             </div>
-            <div className="space-y-3 lg:col-span-3">
-               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Branch Search</label>
+            <div className="space-y-3 lg:col-span-2">
+               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Branch Preference</label>
                <select value={preferredBranch} onChange={e => setPreferredBranch(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-3xl p-6 text-[11px] font-[1000] outline-none transition-all uppercase appearance-none cursor-pointer">
-                  <option value="All">Any Branch (Show All)</option>
+                  <option value="All">Any Branch (Select For List)</option>
                   {Object.entries(categorizedBranchList).map(([group, branches]) => (
                     <optgroup key={group} label={group} className="text-blue-600 font-black tracking-widest bg-blue-50 my-2">
                       {branches.map(b => (
@@ -233,7 +280,37 @@ function UgeacPredictor() {
                   ))}
                </select>
             </div>
+            <div className="space-y-3 lg:col-span-1 flex items-end">
+               <button onClick={handleAddChoice} className="w-full h-[72px] bg-indigo-600 hover:bg-slate-900 text-white rounded-3xl font-[1000] text-sm uppercase tracking-widest shadow-xl shadow-indigo-900/20 active:scale-95 transition-all flex items-center justify-center gap-2">
+                 + Add To Choice List
+               </button>
+            </div>
          </div>
+
+         {/* Choice Filling List Display */}
+         {choices.length > 0 && (
+           <div className="bg-slate-50 border-2 border-dashed border-slate-300 rounded-3xl p-8 space-y-4">
+              <div className="flex items-center justify-between">
+                 <h3 className="text-xs font-black text-slate-500 uppercase tracking-widest">Your Preference List (Mock Counselling)</h3>
+                 <span className="bg-indigo-600 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">{choices.length} Choices Added</span>
+              </div>
+              <div className="flex flex-col gap-2">
+                 {choices.map((choice, i) => (
+                    <div key={i} className="flex items-center justify-between bg-white px-6 py-4 rounded-2xl shadow-sm border border-slate-200">
+                       <div className="flex items-center gap-4">
+                          <div className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center font-black text-xs">{i+1}</div>
+                          <div>
+                             <p className="text-sm font-[1000] text-slate-800 uppercase tracking-tighter">{choice.collegeName}</p>
+                             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{branchMapping[choice.branch] || choice.branch}</p>
+                          </div>
+                       </div>
+                       <button onClick={() => removeChoice(i)} className="text-red-500 font-bold text-xs uppercase hover:underline">Remove</button>
+                    </div>
+                 ))}
+              </div>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">The simulator validates choices in this strict order to determine your final allotted seat.</p>
+           </div>
+         )}
 
          <button onClick={calculateResults} className="w-full py-8 bg-blue-600 hover:bg-black text-white rounded-[2.5rem] font-[1000] text-xl uppercase tracking-[0.3em] shadow-2xl shadow-blue-900/40 active:scale-95 transition-all">Analyze Predictor Results</button>
       </div>
@@ -241,7 +318,63 @@ function UgeacPredictor() {
       {hasPredicted && (
         <div className="space-y-16 animate-in slide-in-from-bottom-20 duration-1000">
            
-           {/* Smart List */}
+           {/* Choice Filling Results (Discussion) */}
+           {choices.length > 0 && (
+             <div className="bg-gradient-to-br from-indigo-950 to-slate-900 p-12 rounded-[4.5rem] shadow-2xl space-y-10 border border-indigo-500/20 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-10 opacity-10 pointer-events-none">
+                  <Building2 size={200} />
+                </div>
+                <div className="relative z-10">
+                   <h2 className="text-3xl lg:text-5xl font-[1000] text-white tracking-tighter mb-4">Counselling Simulation</h2>
+                   <p className="text-indigo-200 font-medium text-lg leading-relaxed max-w-2xl">
+                     Based on your rank of <strong className="text-white bg-indigo-500/30 px-2 py-1 rounded">{results.calculatedRank}</strong> and category <strong className="text-white bg-indigo-500/30 px-2 py-1 rounded">{category}</strong>, here is a detailed breakdown of your preference list.
+                   </p>
+                </div>
+
+                {results.mockAllotment ? (
+                   <div className="bg-emerald-500/10 border border-emerald-500/30 p-8 rounded-[2.5rem] relative z-10 flex flex-col md:flex-row items-center gap-8">
+                      <div className="w-20 h-20 bg-emerald-500 rounded-[2rem] flex items-center justify-center text-white shrink-0 shadow-xl shadow-emerald-900/50">
+                         <CheckCircle2 size={40} />
+                      </div>
+                      <div>
+                         <span className="text-emerald-400 font-black text-[10px] uppercase tracking-widest bg-emerald-950 px-3 py-1 rounded-full border border-emerald-800">Choice #{results.mockAllotment.choiceNumber} Allotted</span>
+                         <h3 className="text-3xl font-[1000] text-white mt-4">{results.mockAllotment.choice.collegeName}</h3>
+                         <p className="text-emerald-100 font-bold text-lg">{branchMapping[results.mockAllotment.choice.branch] || results.mockAllotment.choice.branch}</p>
+                      </div>
+                   </div>
+                ) : (
+                   <div className="bg-red-500/10 border border-red-500/30 p-8 rounded-[2.5rem] relative z-10 flex flex-col md:flex-row items-center gap-8">
+                      <div className="w-20 h-20 bg-red-500 rounded-[2rem] flex items-center justify-center text-white shrink-0 shadow-xl shadow-red-900/50">
+                         <AlertTriangle size={40} />
+                      </div>
+                      <div>
+                         <span className="text-red-400 font-black text-[10px] uppercase tracking-widest bg-red-950 px-3 py-1 rounded-full border border-red-800">No Allotment</span>
+                         <h3 className="text-3xl font-[1000] text-white mt-4">Rank Not Sufficient</h3>
+                         <p className="text-red-200 font-bold text-lg">Your rank is outside the estimated cutoff for all filled choices. Please add more colleges.</p>
+                      </div>
+                   </div>
+                )}
+
+                <div className="relative z-10 space-y-4 pt-6">
+                   <h4 className="text-indigo-300 font-black text-[10px] uppercase tracking-widest">Preference Breakdown:</h4>
+                   {results.mockDiscussions.map((d, i) => (
+                      <div key={i} className={`flex items-center justify-between p-6 rounded-3xl border ${d.status === 'High' ? 'bg-emerald-500/5 border-emerald-500/20' : d.status === 'Medium' ? 'bg-amber-500/5 border-amber-500/20' : 'bg-slate-800/50 border-slate-700/50'} backdrop-blur-md`}>
+                         <div>
+                            <span className="text-slate-400 font-black text-[9px] uppercase tracking-widest">Choice {d.choiceNumber}</span>
+                            <p className="text-white font-[1000] text-lg uppercase tracking-tighter mt-1">{d.choice.collegeName}</p>
+                            <p className="text-slate-300 text-xs font-bold">{branchMapping[d.choice.branch] || d.choice.branch}</p>
+                         </div>
+                         <div className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest ${d.status === 'High' ? 'bg-emerald-500/20 text-emerald-400' : d.status === 'Medium' ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-700 text-slate-400'}`}>
+                            {d.status}
+                         </div>
+                      </div>
+                   ))}
+                </div>
+             </div>
+           )}
+
+           {/* Smart List (General Recommendations) */}
+           {results.smartChoices.length > 0 && choices.length === 0 && (
            <div className="bg-white p-12 rounded-[4.5rem] border border-slate-200 shadow-2xl space-y-10">
               <div className="flex items-center gap-4">
                  <div className="w-14 h-14 bg-emerald-600 text-white rounded-3xl flex items-center justify-center"><CheckCircle2 size={28}/></div>
@@ -264,7 +397,7 @@ function UgeacPredictor() {
                     </div>
                  ))}
               </div>
-           </div>
+           )}
 
            {/* Results Table (MATCHING SCREENSHOT) */}
            <div className="bg-white rounded-[4.5rem] border border-slate-200 shadow-2xl overflow-hidden">
