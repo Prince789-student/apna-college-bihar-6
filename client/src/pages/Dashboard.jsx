@@ -4,7 +4,7 @@ import {
   ChevronRight, CalendarDays, Timer, 
   BarChart2, BookOpen, Bell, ArrowRight,
   TrendingUp, Globe, Shield, RefreshCw,
-  Calculator
+  Calculator, Send
 } from 'lucide-react';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
@@ -95,6 +95,9 @@ export default function Dashboard() {
          <div className="relative z-10 flex flex-wrap gap-4">
             <Link to="/dashboard/calculator" className="px-8 py-4 bg-slate-100 hover:bg-slate-100 text-slate-900 border border-slate-200/80 rounded-[2rem] font-black text-xs uppercase tracking-widest flex items-center gap-3 transition-all active:scale-95 shadow-lg group">
                Sci-Calc <Calculator size={14} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <Link to="/dashboard/ugeac-predictor" className="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest flex items-center gap-3 transition-all active:scale-95 shadow-xl shadow-emerald-950/20 group">
+               UGEAC 2025 <Send size={14} />
             </Link>
             <Link to="/dashboard/notes" className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest flex items-center gap-3 transition-all active:scale-95 shadow-xl shadow-blue-950/20 group">
                Vault <BookOpen size={14} />

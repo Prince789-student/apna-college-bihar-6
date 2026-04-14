@@ -92,6 +92,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
            {[
+             { title: "UGEAC COUNSELLING", ic: <Send className="text-emerald-500"/>, d: "Official 2025 data-driven college recommendation engine for Bihar.", link: "/dashboard/ugeac-predictor" },
              { title: "Smart Notes Hub", ic: <BookOpen className="text-blue-500"/>, d: "Access handwritten & verified notes for all BEU semesters in one tap.", link: "/dashboard/notes" },
              { title: "Bihar Grade Engine", ic: <Calculator className="text-emerald-500"/>, d: "Accurate BEU SGPA/CGPA calculators with Hostinger-level speed.", link: "/dashboard/cgpa" },
              { title: "Deep Focus Protocol", ic: <Timer className="text-orange-500"/>, d: "Integrated Pomodoro & Stopwatch to track your daily study grind.", link: "/dashboard/study" },

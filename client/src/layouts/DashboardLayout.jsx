@@ -72,6 +72,7 @@ export default function DashboardLayout() {
     { name: 'Notes & PYQ', path: '/dashboard/notes', icon: <Book size={20} /> },
     { name: 'Scientific Calc', path: '/dashboard/calculator', icon: <Calculator size={20} /> },
     { name: 'BEU CGPA', path: '/dashboard/cgpa', icon: <GraduationCap size={20} /> },
+    { name: 'UGEAC COUNSELLING', path: '/dashboard/ugeac-predictor', icon: <Send size={20} className="text-emerald-500" /> },
     ...(isAdmin ? [{ name: 'Admin Operations', path: '/dashboard/admin', icon: <Shield size={20} className="text-red-500" /> }] : []),
   ];
 

@@ -1,0 +1,758 @@
+[
+  {
+    "name_branch": "B.C.E. BAKHTIYARPUR CIVIL ENGINEERING",
+    "closing": "1537"
+  },
+  {
+    "name_branch": "B.C.E. BAKHTIYARPUR COMPUTER SC. & ENGINEERING",
+    "closing": "197"
+  },
+  {
+    "name_branch": "B.C.E. BAKHTIYARPUR COMPUTER SCIENCE & ENGG  (INTERNET OF THINGS)",
+    "closing": "492"
+  },
+  {
+    "name_branch": "B.C.E. BAKHTIYARPUR ELECTRICAL & ELECTRONICS ENGINEERING",
+    "closing": "1010"
+  },
+  {
+    "name_branch": "B.C.E. BAKHTIYARPUR FIRE TECHNOLOGY & SAFETY",
+    "closing": "5197"
+  },
+  {
+    "name_branch": "B.C.E. BAKHTIYARPUR MECHANICAL ENGINEERING",
+    "closing": "2411"
+  },
+  {
+    "name_branch": "B.C.E. BHAGALPUR CIVIL ENGINEERING",
+    "closing": "1215"
+  },
+  {
+    "name_branch": "B.C.E. BHAGALPUR COMPUTER SC. & ENGINEERING",
+    "closing": "62"
+  },
+  {
+    "name_branch": "B.C.E. BHAGALPUR ELECTRICAL ENGINEERING",
+    "closing": "741"
+  },
+  {
+    "name_branch": "B.C.E. BHAGALPUR ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "394"
+  },
+  {
+    "name_branch": "B.C.E. BHAGALPUR MECHANICAL ENGINEERING",
+    "closing": "1520"
+  },
+  {
+    "name_branch": "B.P.M.C.E. MADHEPURA 3-D ANIMATION & GRAPHICS",
+    "closing": "5017"
+  },
+  {
+    "name_branch": "B.P.M.C.E. MADHEPURA CIVIL ENGG  WITH COMPUTER APPLICATION",
+    "closing": "3587"
+  },
+  {
+    "name_branch": "B.P.M.C.E. MADHEPURA CIVIL ENGINEERING",
+    "closing": "5622"
+  },
+  {
+    "name_branch": "B.P.M.C.E. MADHEPURA COMPUTER SC. & ENGINEERING",
+    "closing": "1399"
+  },
+  {
+    "name_branch": "B.P.M.C.E. MADHEPURA COMPUTER SCIENCE & ENGG  (ARTIFICAL INTELLIGENCE & MACHINE LEARNING)",
+    "closing": "2134"
+  },
+  {
+    "name_branch": "B.P.M.C.E. MADHEPURA ELECTRICAL & ELECTRONICS ENGINEERING",
+    "closing": "5034"
+  },
+  {
+    "name_branch": "B.P.M.C.E. MADHEPURA MECHANICAL ENGINEERING",
+    "closing": "5195"
+  },
+  {
+    "name_branch": "CIPET:IPT, BIHTA, PATNA CHEMICAL ENGINEERING (PLASTIC AND POLYMER)",
+    "closing": "4705"
+  },
+  {
+    "name_branch": "CIPET:IPT, BIHTA, PATNA MECHANICAL ENGINEERING",
+    "closing": "3889"
+  },
+  {
+    "name_branch": "CIPET:IPT, BIHTA, PATNA PETROCHEMICAL ENGINEERING",
+    "closing": "3497"
+  },
+  {
+    "name_branch": "D.C.E. DARBHANGA CIVIL ENGINEERING",
+    "closing": "2718"
+  },
+  {
+    "name_branch": "D.C.E. DARBHANGA COMPUTER SC. & ENGINEERING",
+    "closing": "454"
+  },
+  {
+    "name_branch": "D.C.E. DARBHANGA COMPUTER SCIENCE & ENGG  (CYBER SECURITY)",
+    "closing": "768"
+  },
+  {
+    "name_branch": "D.C.E. DARBHANGA ELECTRICAL & ELECTRONICS ENGINEERING",
+    "closing": "1782"
+  },
+  {
+    "name_branch": "D.C.E. DARBHANGA FIRE TECHNOLOGY & SAFETY",
+    "closing": "4330"
+  },
+  {
+    "name_branch": "D.C.E. DARBHANGA MECHANICAL ENGINEERING",
+    "closing": "3553"
+  },
+  {
+    "name_branch": "DR. APJ ABDUL KALAM WOMENS INST. OF TECH.BIOINFORMATICS (BI)",
+    "closing": "7600"
+  },
+  {
+    "name_branch": "DR. APJ ABDUL KALAM WOMENS INST. OF TECH.COMPUTER SC. & ENGINEERING",
+    "closing": "5435"
+  },
+  {
+    "name_branch": "DR. APJ ABDUL KALAM WOMENS INST. OF TECH.I.T.",
+    "closing": "7854"
+  },
+  {
+    "name_branch": "G.C.E. GAYA CIVIL ENGINEERING",
+    "closing": "2039"
+  },
+  {
+    "name_branch": "G.C.E. GAYA COMPUTER SC. & ENGINEERING",
+    "closing": "366"
+  },
+  {
+    "name_branch": "G.C.E. GAYA ELECTRICAL & ELECTRONICS ENGINEERING",
+    "closing": "1373"
+  },
+  {
+    "name_branch": "G.C.E. GAYA MECHANICAL ENGINEERING",
+    "closing": "2923"
+  },
+  {
+    "name_branch": "GOVT ENGG COLLEGE W. CHAMPARAN CIVIL ENGINEERING",
+    "closing": "4607"
+  },
+  {
+    "name_branch": "GOVT ENGG COLLEGE W. CHAMPARAN COMPUTER SC. & ENGINEERING",
+    "closing": "2105"
+  },
+  {
+    "name_branch": "GOVT ENGG COLLEGE W. CHAMPARAN COMPUTER SCIENCE & ENGG  (CYBER SECURITY)",
+    "closing": "4004"
+  },
+  {
+    "name_branch": "GOVT ENGG COLLEGE W. CHAMPARAN ELECTRICAL ENGINEERING",
+    "closing": "4380"
+  },
+  {
+    "name_branch": "GOVT ENGG COLLEGE W. CHAMPARAN ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "4819"
+  },
+  {
+    "name_branch": "GOVT ENGG COLLEGE W. CHAMPARAN MECHANICAL ENGINEERING",
+    "closing": "5305"
+  },
+  {
+    "name_branch": "GOVT ENGG. COLLEGE SHEOHAR COMPUTER SCIENCE & ENGG  (DATA SCIENCE)",
+    "closing": "5226"
+  },
+  {
+    "name_branch": "GOVT ENGG. COLLEGE SHEOHAR ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "1717"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE OF LAKHISARAI COMPUTER SCIENCE & ENGG  (ARTIFICAL INTELLIGENCE)",
+    "closing": "4621"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE OF LAKHISARAI COMPUTER SCIENCE & ENGG  (DATA SCIENCE)",
+    "closing": "5626"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE OF SAMASTIPUR CIVIL ENGINEERING",
+    "closing": "5577"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE OF SAMASTIPUR COMPUTER SCIENCE & ENGG  (ARTIFICAL INTELLIGENCE & MACHINE LEARNING)",
+    "closing": "2616"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE OF SAMASTIPUR COMPUTER SCIENCE & ENGG  (CYBER SECURITY)",
+    "closing": "4033"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE OF SAMASTIPUR ELECTRICAL ENGINEERING",
+    "closing": "5586"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE OF SAMASTIPUR ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "5564"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE OF SAMASTIPUR MECHANICAL ENGINEERING",
+    "closing": "4608"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, ARWAL CIVIL ENGINEERING",
+    "closing": "5072"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, ARWAL COMPUTER SC. & ENGINEERING",
+    "closing": "3902"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, ARWAL COMPUTER SCIENCE & ENGG  (DATA SCIENCE)",
+    "closing": "5476"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, ARWAL ROBOTICS AND AUTOMATION",
+    "closing": "4896"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, AURANGABAD ARTIFICIAL INTELLIGENCE & MACHINE LEARNING",
+    "closing": "4160"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, AURANGABAD CIVIL ENGINEERING",
+    "closing": "5584"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, AURANGABAD COMPUTER SC AND ENGG (DATA SCIENCE)",
+    "closing": "3620"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, AURANGABAD ELECTRICAL ENGINEERING",
+    "closing": "5621"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, AURANGABAD ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "5277"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BANKA CIVIL ENGINEERING",
+    "closing": "5618"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BANKA COMPUTER SC. & ENGINEERING",
+    "closing": "3056"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BANKA COMPUTER SCIENCE & ENGG  (INTERNET OF THINGS)",
+    "closing": "5471"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BANKA ELECTRICAL ENGINEERING",
+    "closing": "4617"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BANKA ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "5496"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BANKA MECHANICAL ENGINEERING",
+    "closing": "4402"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BHOJPUR CIVIL ENGINEERING",
+    "closing": "5613"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BHOJPUR COMPUTER SC. & ENGINEERING",
+    "closing": "3130"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BHOJPUR ELECTRICAL ENGINEERING",
+    "closing": "5489"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BHOJPUR ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "5246"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BHOJPUR MECHANICAL ENGINEERING",
+    "closing": "5186"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BUXAR CIVIL ENGINEERING",
+    "closing": "4628"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BUXAR COMPUTER SC. & ENGINEERING",
+    "closing": "4046"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BUXAR ELECTRICAL ENGINEERING",
+    "closing": "4720"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BUXAR ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "2513"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, BUXAR MECHANICAL ENGINEERING",
+    "closing": "2678"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, GOPALGANJ AERONAUTICAL ENGG",
+    "closing": "5154"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, GOPALGANJ CIVIL ENGINEERING",
+    "closing": "3332"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, GOPALGANJ COMPUTER SCIENCE & ENGG  (ARTIFICAL INTELLIGENCE)",
+    "closing": "4900"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, GOPALGANJ MECHANICAL ENGINEERING",
+    "closing": "4508"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, JAMUI  COMPUTER SCIENCE & ENGG  (ARTIFICAL INTELLIGENCE & MACHINE LEARNING)",
+    "closing": "4418"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, JAMUI  COMPUTER SCIENCE & ENGG  (DATA SCIENCE)",
+    "closing": "5005"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, JAMUI  COMPUTER SCIENCE & ENGG  (INTERNET OF THINGS)",
+    "closing": "5617"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, JAMUI  ELECTRICAL ENGINEERING",
+    "closing": "3926"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, JAMUI  MECHANICAL ENGINEERING",
+    "closing": "3738"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, JEHANABAD CIVIL ENGINEERING",
+    "closing": "5397"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, JEHANABAD COMPUTER SCIENCE & ENGG  (CYBER SECURITY)",
+    "closing": "4568"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, JEHANABAD ELECTRICAL ENGINEERING",
+    "closing": "4723"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, KAIMUR CIVIL ENGINEERING",
+    "closing": "5436"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, KAIMUR COMPUTER SCIENCE & ENGG  (CYBER SECURITY)",
+    "closing": "5031"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, KAIMUR COMPUTER SCIENCE & ENGG  (NETWORKS)",
+    "closing": "5439"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, KAIMUR ELECTRICAL ENGINEERING",
+    "closing": "4056"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, KAIMUR ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "5532"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, KHAGARIA COMPUTER SCIENCE & ENGG  (ARTIFICAL INTELLIGENCE & MACHINE LEARNING)",
+    "closing": "5257"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, KHAGARIA COMPUTER SCIENCE & ENGG  (INTERNET OF THINGS)",
+    "closing": "5318"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, KHAGARIA ELECTRICAL ENGINEERING",
+    "closing": "3994"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, MADHUBANI CIVIL ENGINEERING",
+    "closing": "4849"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, MADHUBANI COMPUTER SC. & ENGINEERING",
+    "closing": "3370"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, MADHUBANI COMPUTER SCIENCE & ENGG  (INTERNET OF THINGS)",
+    "closing": "5525"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, NAWADA CIVIL ENGINEERING",
+    "closing": "5546"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, NAWADA COMPUTER SC. & ENGINEERING",
+    "closing": "3174"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, NAWADA ELECTRICAL ENGINEERING",
+    "closing": "5300"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, NAWADA ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "5595"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, SHEIKHPURA CIVIL ENGINEERING",
+    "closing": "5555"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, SHEIKHPURA COMPUTER SC. & ENGINEERING",
+    "closing": "4569"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, SHEIKHPURA ELECTRICAL ENGINEERING",
+    "closing": "4468"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, SIWAN CIVIL ENGINEERING",
+    "closing": "5202"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, SIWAN COMPUTER SC. & ENGINEERING",
+    "closing": "3303"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, SIWAN COMPUTER SCIENCE & ENGG  (INTERNET OF THINGS)",
+    "closing": "5508"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, SIWAN ELECTRICAL ENGINEERING",
+    "closing": "4945"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, SIWAN MECHANICAL ENGINEERING",
+    "closing": "5196"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, VAISHALI  CIVIL ENGINEERING",
+    "closing": "5348"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, VAISHALI  COMPUTER SC. & ENGINEERING",
+    "closing": "1666"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, VAISHALI  COMPUTER SCIENCE & ENGG  (INTERNET OF THINGS)",
+    "closing": "2983"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, VAISHALI  ELECTRICAL ENGINEERING",
+    "closing": "5609"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, VAISHALI  ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "4392"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, VAISHALI  ELECTRO AND COMMUNICATION ENGINEERING (ACT)",
+    "closing": "5372"
+  },
+  {
+    "name_branch": "GOVT. ENGG. COLLEGE, VAISHALI  MECHANICAL ENGINEERING",
+    "closing": "5517"
+  },
+  {
+    "name_branch": "GOVT. ENGG.COLLEGE MUNGER CIVIL ENGINEERING",
+    "closing": "4075"
+  },
+  {
+    "name_branch": "GOVT. ENGG.COLLEGE MUNGER COMPUTER SCIENCE & ENGG  (ARTIFICAL INTELLIGENCE)",
+    "closing": "4237"
+  },
+  {
+    "name_branch": "GOVT. ENGG.COLLEGE MUNGER COMPUTER SCIENCE & ENGG  (DATA SCIENCE)",
+    "closing": "5524"
+  },
+  {
+    "name_branch": "GOVT. ENGG.COLLEGE MUNGER ELECTRICAL ENGINEERING",
+    "closing": "4827"
+  },
+  {
+    "name_branch": "GOVT. ENGG.COLLEGE MUNGER MECHANICAL ENGINEERING",
+    "closing": "5597"
+  },
+  {
+    "name_branch": "GOVT.ENGG. COLLEGE KISHANGANJ COMPUTER SC. & ENGINEERING",
+    "closing": "3863"
+  },
+  {
+    "name_branch": "GOVT.ENGG. COLLEGE KISHANGANJ COMPUTER SCIENCE & ENGG  (ARTIFICAL INTELLIGENCE & MACHINE LEARNING)",
+    "closing": "5563"
+  },
+  {
+    "name_branch": "K.C.E., KATIHAR CIVIL ENGINEERING",
+    "closing": "4761"
+  },
+  {
+    "name_branch": "K.C.E., KATIHAR COMPUTER SC. & ENGINEERING",
+    "closing": "1971"
+  },
+  {
+    "name_branch": "K.C.E., KATIHAR ELECTRICAL & ELECTRONICS ENGINEERING",
+    "closing": "5349"
+  },
+  {
+    "name_branch": "K.C.E., KATIHAR ELECTRONICS ENGG. (VLSI DESIGN & TECHNOLOGY)",
+    "closing": "4790"
+  },
+  {
+    "name_branch": "K.C.E., KATIHAR MECHANICAL ENGINEERING",
+    "closing": "5481"
+  },
+  {
+    "name_branch": "L.N.J.P.I.T. TECHNOLOGY. CHAPRA CIVIL ENGINEERING",
+    "closing": "3470"
+  },
+  {
+    "name_branch": "L.N.J.P.I.T. TECHNOLOGY. CHAPRA COMPUTER SC. & ENGINEERING",
+    "closing": "992"
+  },
+  {
+    "name_branch": "L.N.J.P.I.T. TECHNOLOGY. CHAPRA ELECTRICAL & ELECTRONICS ENGINEERING",
+    "closing": "2836"
+  },
+  {
+    "name_branch": "L.N.J.P.I.T. TECHNOLOGY. CHAPRA FOOD PROCESSING & PRESERVATION",
+    "closing": "3328"
+  },
+  {
+    "name_branch": "L.N.J.P.I.T. TECHNOLOGY. CHAPRA MECHANICAL ENGINEERING",
+    "closing": "5542"
+  },
+  {
+    "name_branch": "M..C.E. MOTIHARI CIVIL ENGG  WITH COMPUTER APPLICATION",
+    "closing": "5523"
+  },
+  {
+    "name_branch": "M..C.E. MOTIHARI CIVIL ENGINEERING",
+    "closing": "3841"
+  },
+  {
+    "name_branch": "M..C.E. MOTIHARI COMPUTER SC. & ENGINEERING",
+    "closing": "854"
+  },
+  {
+    "name_branch": "M..C.E. MOTIHARI COMPUTER SCIENCE & ENGG  (ARTIFICAL INTELLIGENCE)",
+    "closing": "1287"
+  },
+  {
+    "name_branch": "M..C.E. MOTIHARI ELECTRICAL & ELECTRONICS ENGINEERING",
+    "closing": "3258"
+  },
+  {
+    "name_branch": "M..C.E. MOTIHARI MECHANICAL ENGINEERING",
+    "closing": "5562"
+  },
+  {
+    "name_branch": "M.I.T. MUZAFFARPUR BIOMEDICAL ROBOTIC ENGG",
+    "closing": "3248"
+  },
+  {
+    "name_branch": "M.I.T. MUZAFFARPUR CHEMICAL ENGG",
+    "closing": "1811"
+  },
+  {
+    "name_branch": "M.I.T. MUZAFFARPUR CHEMICAL TECHNOLOGY (LEATHER TECH)",
+    "closing": "4584"
+  },
+  {
+    "name_branch": "M.I.T. MUZAFFARPUR CIVIL ENGINEERING",
+    "closing": "452"
+  },
+  {
+    "name_branch": "M.I.T. MUZAFFARPUR COMPUTER SC. & ENGINEERING",
+    "closing": "30"
+  },
+  {
+    "name_branch": "M.I.T. MUZAFFARPUR ELECTRICAL ENGINEERING",
+    "closing": "498"
+  },
+  {
+    "name_branch": "M.I.T. MUZAFFARPUR ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "274"
+  },
+  {
+    "name_branch": "M.I.T. MUZAFFARPUR I.T.",
+    "closing": "139"
+  },
+  {
+    "name_branch": "M.I.T. MUZAFFARPUR MECHANICAL ENGINEERING",
+    "closing": "1005"
+  },
+  {
+    "name_branch": "NALANDA COLLEGE. OF ENGG,CHANDI AERONAUTICAL ENGG",
+    "closing": "3171"
+  },
+  {
+    "name_branch": "NALANDA COLLEGE. OF ENGG,CHANDI ARTIFICIAL INTELLIGENCE & MACHINE LEARNING",
+    "closing": "726"
+  },
+  {
+    "name_branch": "NALANDA COLLEGE. OF ENGG,CHANDI CIVIL ENGINEERING",
+    "closing": "2435"
+  },
+  {
+    "name_branch": "NALANDA COLLEGE. OF ENGG,CHANDI COMPUTER SC. & ENGINEERING",
+    "closing": "457"
+  },
+  {
+    "name_branch": "NALANDA COLLEGE. OF ENGG,CHANDI ELECTRICAL & ELECTRONICS ENGINEERING",
+    "closing": "1631"
+  },
+  {
+    "name_branch": "NALANDA COLLEGE. OF ENGG,CHANDI MECHANICAL ENGINEERING",
+    "closing": "3722"
+  },
+  {
+    "name_branch": "PURNEA COLLEGE OF ENGG. CIVIL ENGINEERING",
+    "closing": "5354"
+  },
+  {
+    "name_branch": "PURNEA COLLEGE OF ENGG. COMPUTER SC. & ENGINEERING",
+    "closing": "1797"
+  },
+  {
+    "name_branch": "PURNEA COLLEGE OF ENGG. COMPUTER SCIENCE & ENGG  (ARTIFICAL INTELLIGENCE)",
+    "closing": "2743"
+  },
+  {
+    "name_branch": "PURNEA COLLEGE OF ENGG. ELECTRICAL ENGINEERING",
+    "closing": "5593"
+  },
+  {
+    "name_branch": "PURNEA COLLEGE OF ENGG. ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "4269"
+  },
+  {
+    "name_branch": "PURNEA COLLEGE OF ENGG. MECHANICAL ENGINEERING",
+    "closing": "5011"
+  },
+  {
+    "name_branch": "R.R.S.D.C.E, BEGUSARAI CHEMICAL ENGG",
+    "closing": "5323"
+  },
+  {
+    "name_branch": "R.R.S.D.C.E, BEGUSARAI CIVIL ENGINEERING",
+    "closing": "4814"
+  },
+  {
+    "name_branch": "R.R.S.D.C.E, BEGUSARAI COMPUTER SC. & ENGINEERING",
+    "closing": "1189"
+  },
+  {
+    "name_branch": "R.R.S.D.C.E, BEGUSARAI COMPUTER SCIENCE & ENGG  (DATA SCIENCE)",
+    "closing": "2021"
+  },
+  {
+    "name_branch": "R.R.S.D.C.E, BEGUSARAI ELECTRICAL & ELECTRONICS ENGINEERING",
+    "closing": "4337"
+  },
+  {
+    "name_branch": "R.R.S.D.C.E, BEGUSARAI MECHANICAL ENGINEERING",
+    "closing": "5512"
+  },
+  {
+    "name_branch": "S.C.E SASARAM CIVIL ENGINEERING",
+    "closing": "4563"
+  },
+  {
+    "name_branch": "S.C.E SASARAM COMPUTER SCIENCE AND TECHNOLOGY",
+    "closing": "2228"
+  },
+  {
+    "name_branch": "S.C.E SASARAM ELECTRICAL & ELECTRONICS ENGINEERING",
+    "closing": "5205"
+  },
+  {
+    "name_branch": "S.C.E SASARAM ELECTRONICS ENGG. (VLSI DESIGN & TECHNOLOGY)",
+    "closing": "4881"
+  },
+  {
+    "name_branch": "S.C.E SASARAM MECHANICAL ENGINEERING",
+    "closing": "5616"
+  },
+  {
+    "name_branch": "S.C.E SASARAM MINING ENGG",
+    "closing": "3548"
+  },
+  {
+    "name_branch": "S.G.I.D.T. PATNA DAIRY TECH (OPEN)",
+    "closing": "6410"
+  },
+  {
+    "name_branch": "S.G.I.D.T. PATNA DAIRY TECH SELF FINANCE",
+    "closing": "5204"
+  },
+  {
+    "name_branch": "S.I.T. SITAMARHI CIVIL ENGG  WITH COMPUTER APPLICATION",
+    "closing": "4653"
+  },
+  {
+    "name_branch": "S.I.T. SITAMARHI CIVIL ENGINEERING",
+    "closing": "5175"
+  },
+  {
+    "name_branch": "S.I.T. SITAMARHI COMPUTER SC. & ENGINEERING",
+    "closing": "1683"
+  },
+  {
+    "name_branch": "S.I.T. SITAMARHI COMPUTER SCIENCE & ENGG  (ARTIFICAL INTELLIGENCE & MACHINE LEARNING)",
+    "closing": "2254"
+  },
+  {
+    "name_branch": "S.I.T. SITAMARHI ELECTRICAL ENGINEERING",
+    "closing": "5287"
+  },
+  {
+    "name_branch": "S.I.T. SITAMARHI MECHANICAL ENGINEERING",
+    "closing": "4695"
+  },
+  {
+    "name_branch": "SAHARSA COLLEGE OF ENGG. CIVIL ENGINEERING",
+    "closing": "5576"
+  },
+  {
+    "name_branch": "SAHARSA COLLEGE OF ENGG. COMPUTER SC. & ENGINEERING",
+    "closing": "2235"
+  },
+  {
+    "name_branch": "SAHARSA COLLEGE OF ENGG. COMPUTER SCIENCE & ENGG  (DATA SCIENCE)",
+    "closing": "4087"
+  },
+  {
+    "name_branch": "SAHARSA COLLEGE OF ENGG. ELECTRICAL ENGINEERING",
+    "closing": "5144"
+  },
+  {
+    "name_branch": "SAHARSA COLLEGE OF ENGG. ELECTRO  & COMMUNICATION ENGINEERING",
+    "closing": "5587"
+  },
+  {
+    "name_branch": "SHRI PHANISHWAR NATH RENU ENGG. COLLEGE, ARARIACOMPUTER SC. & ENGINEERING",
+    "closing": "4883"
+  },
+  {
+    "name_branch": "SUPAUL ENGG. COLLEGE, SUPAUL COMPUTER SC. & ENGINEERING",
+    "closing": "2583"
+  },
+  {
+    "name_branch": "SUPAUL ENGG. COLLEGE, SUPAUL COMPUTER SCIENCE & ENGG  (ARTIFICAL INTELLIGENCE)",
+    "closing": "3561"
+  }
+]
