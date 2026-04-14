@@ -18,7 +18,19 @@ function UgeacPredictor() {
   });
   const [selectedCollege, setSelectedCollege] = useState(null);
 
-  // Grouped Branches based on Screenshot
+  // Manual Mapping to match Screenshot Terminology
+  const branchMapping = {
+    "Computer Science & Engineering": "CSE (Core)",
+    "Electronics & Communication": "ECE",
+    "Electrical & Electronics (EEE)": "EEE",
+    "Internet of Things (IoT)": "CSE (IoT)",
+    "CSE (IOT & Cyber Security)": "CSE (Cyber Security)",
+    "Agriculture Engineering": "Agriculture Engineering",
+    "Bio-Technology": "Bio-Technology",
+    "Food Processing & Preservation": "Food Processing"
+  };
+
+  // Grouped Branches based on Screenshot structure
   const branchGroups = {
     "Core Branches": [
       "Computer Science & Engineering", "Civil Engineering", "Mechanical Engineering", 
@@ -27,7 +39,7 @@ function UgeacPredictor() {
     ],
     "CSE Specializations": [
       "CSE (AI & ML)", "CSE (Data Science)", "CSE (Cyber Security)", "CSE (IoT)", 
-      "Internet of Things (IoT)", "CSE (IOT & Cyber Security)"
+      "Internet of Things (IoT)", "CSE (IOT & Cyber Security)", "CSE (IoT)"
     ],
     "Emerging & Other Branches": [
       "Aeronautical Engineering", "Robotics & Automation", "Robotics and Automation", 
@@ -37,6 +49,31 @@ function UgeacPredictor() {
       "Agriculture Engineering", "Bioinformatics", "Bio-Technology", "Textile Engineering"
     ]
   };
+
+  // Ensure ALL branches from database are in the groups
+  const categorizedBranchList = useMemo(() => {
+    const used = new Set();
+    const result = {};
+
+    Object.entries(branchGroups).forEach(([groupName, branches]) => {
+      result[groupName] = allUgeacBranches.filter(b => {
+        if (used.has(b)) return false;
+        if (branches.includes(b)) {
+           used.add(b);
+           return true;
+        }
+        return false;
+      });
+    });
+
+    // Any leftovers go to Emerging
+    const leftovers = allUgeacBranches.filter(b => !used.has(b));
+    if (leftovers.length > 0) {
+      result["Emerging & Other Branches"] = [...(result["Emerging & Other Branches"] || []), ...leftovers];
+    }
+
+    return result;
+  }, [allUgeacBranches]);
 
   const sortedColleges = useMemo(() => {
     // Sort by Tier (1 is best) then by Name
@@ -159,9 +196,13 @@ function UgeacPredictor() {
                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Branch Search</label>
                <select value={preferredBranch} onChange={e => setPreferredBranch(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-3xl p-6 text-[11px] font-[1000] outline-none transition-all uppercase appearance-none cursor-pointer">
                   <option value="All">Any Branch (Show All)</option>
-                  {Object.entries(branchGroups).map(([group, branches]) => (
+                  {Object.entries(categorizedBranchList).map(([group, branches]) => (
                     <optgroup key={group} label={group} className="text-blue-600 font-black tracking-widest bg-blue-50 my-2">
-                      {branches.map(b => <option key={b} value={b} className="text-slate-900 font-bold">{b}</option>)}
+                      {branches.map(b => (
+                        <option key={b} value={b} className="text-slate-900 font-bold">
+                          {branchMapping[b] || b}
+                        </option>
+                      ))}
                     </optgroup>
                   ))}
                </select>
