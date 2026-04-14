@@ -174,8 +174,8 @@ function UgeacPredictor() {
                        <tr>
                           <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">College Name</th>
                           <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Branch</th>
+                          <th className="px-6 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">2023 Cutoff</th>
                           <th className="px-6 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">2024 Cutoff</th>
-                          <th className="px-6 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">2025 Cutoff</th>
                           <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Chance</th>
                           <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Info</th>
                        </tr>
