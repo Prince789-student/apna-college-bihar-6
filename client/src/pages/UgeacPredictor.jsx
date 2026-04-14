@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { colleges, data2024, data2025 } from '../UgeacData';
-import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown } from 'lucide-react';
+import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, CheckCircle2, Building2, Wifi, BookOpen } from 'lucide-react';
 
 function UgeacPredictor() {
   const [rank, setRank] = useState('');
@@ -12,11 +12,11 @@ function UgeacPredictor() {
   const [hasPredicted, setHasPredicted] = useState(false);
   const [results, setResults] = useState({
      all: [],
+     smartChoices: [],
      calculatedRank: 0
   });
   const [selectedCollege, setSelectedCollege] = useState(null);
 
-  // Dynamically extract ALL branches from dataset
   const dynamicBranches = useMemo(() => {
     const branches = new Set();
     data2025.forEach(d => branches.add(d.branch));
@@ -28,46 +28,28 @@ function UgeacPredictor() {
     if (!r) return 0;
     if (r < 10000) return 1; 
     if (r < 45000) return Math.floor((r - 10000) * 0.004) + 1;
-    if (r < 82000) return Math.floor((r - 45000) * 0.038) + 142;
-    if (r < 120000) return Math.floor((r - 82000) * 0.041) + 1548;
-    if (r < 180000) return Math.floor((r - 120000) * 0.03) + 3106;
-    if (r < 250000) return Math.floor((r - 180000) * 0.027) + 4906;
-    if (r < 350000) return Math.floor((r - 250000) * 0.024) + 6796;
-    if (r < 500000) return Math.floor((r - 350000) * 0.022) + 9196;
-    if (r < 800000) return Math.floor((r - 500000) * 0.015) + 12496;
-    return 18000;
+    return Math.floor((r - 45000) * 0.038) + 142; // Basic approximation
   };
 
   const getEstimatedCategoryRank = (urRank, cat) => {
     const r = parseInt(urRank);
-    switch(cat) {
-      case 'BC': return Math.floor(r * 0.32);
-      case 'EBC': return Math.floor(r * 0.38);
-      case 'SC': return Math.floor(r * 0.18); 
-      case 'ST': return Math.floor(r * 0.01);
-      case 'EWS': return Math.floor(r * 0.15);
-      case 'RCG': return Math.floor(r * 0.40); // Adjusted for reality
-      default: return r;
-    }
+    const ratios = { 'BC': 0.32, 'EBC': 0.38, 'SC': 0.18, 'ST': 0.01, 'EWS': 0.15, 'RCG': 0.40 };
+    return Math.floor(r * (ratios[cat] || 1));
   };
 
   const calculateResults = () => {
-    if (!rank && !ugeacInput) return alert('Please enter either JEE Main Rank or UGEAC Rank');
+    if (!rank && !ugeacInput) return alert('Please enter rank');
     const ugeacRank = ugeacInput ? parseInt(ugeacInput) : estimateUgeacRank(parseInt(rank));
 
     const eligibleCategories = ['UR'];
     if (category !== 'UR') eligibleCategories.push(category);
     if (gender === 'Female' && !eligibleCategories.includes('RCG')) eligibleCategories.push('RCG');
 
-    const eligibleSeats = ['General'];
-    if (gender === 'Female') eligibleSeats.push('Female');
-
     const seen = new Map();
 
     data2025.forEach(cut25 => {
       if (preferredBranch !== 'All' && cut25.branch !== preferredBranch) return;
       if (!eligibleCategories.includes(cut25.category)) return;
-      if (!eligibleSeats.includes(cut25.seat_type)) return;
 
       const collegeInfo = colleges.find(c => c.id === cut25.collegeId);
       if (!collegeInfo) return;
@@ -81,10 +63,8 @@ function UgeacPredictor() {
       else return; 
 
       const cut24 = data2024.find(c => 
-        c.collegeId === cut25.collegeId && 
-        c.branch === cut25.branch && 
-        c.category === cut25.category && 
-        c.seat_type === cut25.seat_type
+        c.collegeId === cut25.collegeId && c.branch === cut25.branch && 
+        c.category === cut25.category && c.seat_type === cut25.seat_type
       );
 
       const key = `${cut25.collegeId}-${cut25.branch}`;
@@ -97,224 +77,169 @@ function UgeacPredictor() {
         cat: cut25.category 
       };
       
-      if (!seen.has(key) || chanceWeight(chance) < chanceWeight(seen.get(key).chance)) {
+      if (!seen.has(key) || chanceScore(chance) < chanceScore(seen.get(key).chance)) {
         seen.set(key, entry);
       }
     });
 
-    function chanceWeight(c) {
-      if (c === 'High') return 1;
-      if (c === 'Medium') return 2;
-      return 3;
-    }
+    function chanceScore(c) { return c === 'High' ? 1 : c === 'Medium' ? 2 : 3; }
 
-    const finalResults = Array.from(seen.values());
-    
-    setResults({
-      all: finalResults.sort((a,b) => {
-        if (chanceWeight(a.chance) !== chanceWeight(b.chance)) return chanceWeight(a.chance) - chanceWeight(b.chance);
+    const allRes = Array.from(seen.values()).sort((a,b) => {
+        if (chanceScore(a.chance) !== chanceScore(b.chance)) return chanceScore(a.chance) - chanceScore(b.chance);
         return a.college.tier - b.college.tier;
-      }),
+    });
+
+    setResults({
+      all: allRes,
+      smartChoices: allRes.slice(0, 5),
       calculatedRank: ugeacRank
     });
     setHasPredicted(true);
   };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-10 py-6 px-4 animate-in fade-in duration-500">
+    <div className="max-w-7xl mx-auto space-y-10 py-6 px-4 animate-in fade-in duration-500 font-sans">
       
-      {/* Header Section - Larger Text */}
-      <div className="bg-white p-10 md:p-16 rounded-[4rem] border border-slate-200 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-10">
-         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-600/5 rounded-full blur-[120px] pointer-events-none"></div>
-         <div className="relative z-10 flex flex-col gap-6 max-w-3xl text-center md:text-left">
-            <h1 className="text-5xl md:text-8xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.8]">
-               UGEAC <span className="text-emerald-500">COUNSELLING</span>
-            </h1>
-            <p className="text-xs md:text-xl text-slate-500 font-black uppercase tracking-[0.4em] leading-relaxed">
-               Bihar Engineering Admission Predictor & Smart Choice Filling Engine
-            </p>
+      {/* Search Header */}
+      <div className="bg-white p-12 rounded-[3.5rem] border border-slate-200 shadow-2xl space-y-8">
+         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <h1 className="text-5xl font-[1000] text-slate-800 tracking-tighter uppercase">UGEAC <span className="text-blue-600">COUNSELLING</span></h1>
+            <a href="https://bceceboard.bihar.gov.in" target="_blank" rel="noreferrer" className="px-8 py-4 bg-slate-50 border-2 border-slate-200 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:bg-white transition-all">Official Portal <ExternalLink size={14}/></a>
          </div>
-         <a href="https://bceceboard.bihar.gov.in" target="_blank" rel="noreferrer" className="relative z-10 px-10 py-6 bg-white border-2 border-slate-200 hover:border-emerald-500 text-slate-900 rounded-[2.5rem] font-black text-sm uppercase tracking-widest flex items-center gap-4 transition-all active:scale-95 shadow-2xl group">
-             BCECEB Portal <ExternalLink size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-         </a>
+
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="space-y-2">
+               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">JEE CRL Rank</label>
+               <input type="number" placeholder="Enter Rank..." value={rank} onChange={e => setRank(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl p-4 text-sm font-black outline-none transition-all" />
+            </div>
+            <div className="space-y-2">
+               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">UGEAC Rank</label>
+               <input type="number" placeholder="Optional..." value={ugeacInput} onChange={e => setUgeacInput(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl p-4 text-sm font-black outline-none transition-all" />
+            </div>
+            <div className="space-y-2">
+               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Category</label>
+               <select value={category} onChange={e => setCategory(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl p-4 text-xs font-[1000] outline-none transition-all uppercase appearance-none">
+                  <option value="UR">UR</option><option value="EBC">EBC</option><option value="BC">BC</option><option value="SC">SC</option><option value="EWS">EWS</option>
+               </select>
+            </div>
+            <div className="space-y-2">
+               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-1">Branch</label>
+               <select value={preferredBranch} onChange={e => setPreferredBranch(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl p-4 text-xs font-[1000] outline-none transition-all uppercase appearance-none">
+                  <option value="All">All Branches</option>
+                  {dynamicBranches.map(b => <option key={b} value={b}>{b}</option>)}
+               </select>
+            </div>
+         </div>
+
+         <button onClick={calculateResults} className="w-full py-6 bg-blue-600 hover:bg-blue-500 text-white rounded-3xl font-[1000] text-lg uppercase tracking-widest shadow-2xl shadow-blue-900/20 active:scale-95 transition-all">Analyze Predictor</button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-        
-        {/* INPUT CARD - Bolder Inputs */}
-        <div className="lg:col-span-12 xl:col-span-4 bg-white p-10 rounded-[4rem] border border-slate-200 shadow-2xl space-y-10">
-           <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-emerald-600/10 rounded-2xl flex items-center justify-center text-emerald-600">
-                 <ShieldCheck size={24} />
+      {hasPredicted && (
+        <div className="space-y-12 animate-in slide-in-from-bottom-10 duration-700">
+           
+           {/* SMART CHOICE FILLING SECTION */}
+           <div className="bg-white p-10 rounded-[3.5rem] border border-slate-200 shadow-2xl space-y-8">
+              <div className="flex items-center gap-3">
+                 <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center"><CheckCircle2 size={20}/></div>
+                 <h2 className="text-xl font-[1000] text-slate-800 tracking-tight">Smart Choice Filling List (Auto-Generated)</h2>
               </div>
-              <h2 className="text-lg font-[1000] uppercase text-slate-900 tracking-widest">User Profile</h2>
-           </div>
-
-           <div className="space-y-8">
-              <div className="space-y-3">
-                <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">JEE Main Rank (CRL)</label>
-                <input type="number" placeholder="Enter CRL Rank..." value={rank} onChange={e => setRank(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-emerald-500 rounded-2xl p-6 text-slate-900 text-lg font-black outline-none transition-all placeholder:text-slate-300" />
-              </div>
-
-              <div className="space-y-3 p-8 bg-emerald-50/50 border-2 border-dashed border-emerald-200 rounded-[3rem]">
-                <label className="text-xs font-black text-emerald-600 uppercase tracking-widest ml-1 text-center block">UGEAC State Rank</label>
-                <input type="number" placeholder="State Merit Rank..." value={ugeacInput} onChange={e => setUgeacInput(e.target.value)} className="w-full bg-white border-2 border-emerald-300 focus:border-emerald-600 rounded-2xl p-6 text-slate-900 text-lg font-black outline-none transition-all placeholder:text-emerald-200 shadow-inner" />
-                <p className="text-[10px] text-emerald-600 font-black uppercase text-center tracking-[0.2em] animate-pulse">Recommended for Accuracy</p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-6">
-                 <div className="space-y-3">
-                    <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Category</label>
-                    <div className="relative">
-                       <select value={category} onChange={e => setCategory(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-emerald-500 rounded-2xl p-6 text-slate-900 text-xs font-[1000] outline-none transition-all appearance-none uppercase tracking-widest cursor-pointer">
-                         <option value="UR">UR (General)</option>
-                         <option value="EBC">EBC</option>
-                         <option value="BC">BC</option>
-                         <option value="SC">SC</option>
-                         <option value="ST">ST</option>
-                         <option value="EWS">EWS</option>
-                       </select>
-                       <ChevronDown size={16} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                    </div>
-                 </div>
-                 <div className="space-y-3">
-                    <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Gender</label>
-                    <div className="relative">
-                       <select value={gender} onChange={e => setGender(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-emerald-500 rounded-2xl p-6 text-slate-900 text-xs font-[1000] outline-none transition-all appearance-none uppercase tracking-widest cursor-pointer">
-                         <option value="Male">Male</option>
-                         <option value="Female">Female</option>
-                       </select>
-                       <ChevronDown size={16} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                    </div>
-                 </div>
-              </div>
-
-              <div className="space-y-3">
-                <label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Select Engineering Branch</label>
-                <div className="relative">
-                   <select value={preferredBranch} onChange={e => setPreferredBranch(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-emerald-500 rounded-2xl p-6 text-slate-900 text-[10px] font-[1000] outline-none transition-all appearance-none uppercase tracking-widest cursor-pointer">
-                     <option value="All">Show All Branches ({dynamicBranches.length})</option>
-                     {dynamicBranches.map(b => <option key={b} value={b}>{b}</option>)}
-                   </select>
-                   <ChevronDown size={16} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                </div>
-              </div>
-
-              <button onClick={calculateResults} className="w-full py-7 bg-emerald-600 hover:bg-emerald-500 text-white rounded-[2.5rem] font-[1000] text-lg uppercase tracking-[0.2em] shadow-2xl shadow-emerald-950/20 active:scale-95 transition-all flex items-center justify-center gap-4">
-                 Predict Now <Send size={20} />
-              </button>
-           </div>
-        </div>
-
-        {/* RESULTS FEED - Larger Rows */}
-        <div className="lg:col-span-12 xl:col-span-8 space-y-10">
-           {!hasPredicted ? (
-              <div className="bg-slate-50 border-4 border-dashed border-slate-200 rounded-[5rem] p-32 flex flex-col items-center justify-center text-center space-y-8">
-                 <div className="w-24 h-24 bg-white rounded-[2rem] flex items-center justify-center text-slate-200 shadow-2xl border border-slate-100">
-                    <GraduationCap size={50} />
-                 </div>
-                 <div>
-                    <h3 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter mb-2">Ready for Prediction</h3>
-                    <p className="text-xs text-slate-400 font-black uppercase tracking-[0.4em]">Enter your rank data to begin simulation</p>
-                 </div>
-              </div>
-           ) : (
-              <div className="space-y-10 animate-in slide-in-from-bottom-10 duration-700">
-                 
-                 {/* Detailed Table */}
-                 <div className="bg-white rounded-[4rem] border border-slate-200 shadow-2xl overflow-hidden">
-                    <div className="p-10 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row items-center justify-between gap-4">
-                       <div>
-                          <h2 className="text-xl font-[1000] uppercase text-slate-900 tracking-tight">Eligibility Report</h2>
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Based on Estimated State Rank: {results.calculatedRank}</p>
-                       </div>
-                       <span className="px-6 py-2 bg-emerald-500 text-white rounded-full text-[10px] font-black uppercase tracking-[0.2em]">{results.all.length} Matches Found</span>
-                    </div>
-                    <div className="overflow-x-auto">
-                       <table className="w-full text-left border-collapse">
-                          <thead className="bg-[#f8fafc] border-b border-slate-200/50">
-                             <tr>
-                                <th className="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">Institution & Infrastructure</th>
-                                <th className="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest">Branch Name</th>
-                                <th className="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-center">Admission Chance</th>
-                                <th className="px-10 py-6 text-xs font-black text-slate-400 uppercase tracking-widest text-right">Details</th>
-                             </tr>
-                          </thead>
-                          <tbody className="divide-y divide-slate-100">
-                             {results.all.map((r, i) => (
-                               <tr key={i} className="group hover:bg-emerald-50 transition-all cursor-default">
-                                  <td className="px-10 py-8">
-                                     <p className="text-lg font-[1000] text-slate-900 uppercase tracking-tighter group-hover:text-emerald-700 transition-colors">{r.college.name}</p>
-                                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-2 flex items-center gap-2"><MapPin size={12}/> {r.college.location}</p>
-                                  </td>
-                                  <td className="px-10 py-8 text-xs font-[1000] text-slate-600 uppercase tracking-widest">{r.branch}</td>
-                                  <td className="px-10 py-8 text-center">
-                                     <span className={`px-6 py-2.5 rounded-full text-[10px] font-[1000] uppercase tracking-widest shadow-sm ${
-                                       r.chance === 'High' ? 'bg-emerald-600 text-white' : 
-                                       r.chance === 'Medium' ? 'bg-amber-500 text-white' : 
-                                       'bg-red-500 text-white'
-                                     }`}>
-                                       {r.chance}
-                                     </span>
-                                  </td>
-                                  <td className="px-10 py-8 text-right">
-                                     <button onClick={() => setSelectedCollege(r.college)} className="p-4 bg-white border-2 border-slate-200 rounded-2xl text-slate-500 hover:text-emerald-600 hover:border-emerald-500 transition-all group-hover:shadow-xl">
-                                        <Info size={24} />
-                                     </button>
-                                  </td>
-                               </tr>
-                             ))}
-                          </tbody>
-                       </table>
-                    </div>
-                 </div>
-
-              </div>
-           )}
-        </div>
-      </div>
-
-      {/* College Modal - Super Size */}
-      {selectedCollege && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/80 backdrop-blur-md animate-in fade-in duration-300">
-           <div className="w-full max-w-2xl bg-white rounded-[5rem] p-12 md:p-20 shadow-[-20px_20px_60px_-15px_rgba(0,0,0,0.3)] relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-80 h-80 bg-emerald-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-              <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-600/5 rounded-full blur-[100px] pointer-events-none"></div>
               
-              <div className="relative z-10 flex flex-col items-center text-center space-y-10">
-                 <div className="inline-flex p-8 bg-emerald-600/10 text-emerald-600 rounded-[2.5rem] shadow-inner">
-                    <GraduationCap size={60} />
-                 </div>
-                 
-                 <div className="space-y-4">
-                    <h2 className="text-4xl md:text-5xl font-[1000] text-slate-900 uppercase tracking-tighter leading-none">{selectedCollege.name}</h2>
-                    <div className="flex flex-wrap items-center justify-center gap-4">
-                       <span className="px-4 py-2 bg-slate-100 rounded-full text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2"><MapPin size={10}/> {selectedCollege.location}</span>
-                       <span className="px-4 py-2 bg-slate-100 rounded-full text-[10px] font-black text-slate-500 uppercase tracking-widest">Estd {selectedCollege.estd}</span>
-                       <span className="px-4 py-2 bg-blue-100 text-blue-600 rounded-full text-[10px] font-black uppercase tracking-widest">Tier {selectedCollege.tier}</span>
+              <div className="grid gap-4">
+                 {results.smartChoices.map((r, i) => (
+                    <div key={i} className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-slate-50 border border-slate-200 rounded-3xl hover:border-blue-500 hover:bg-white transition-all group">
+                       <div className="flex items-center gap-5">
+                          <div className="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center font-black text-lg shadow-lg shrink-0">{i+1}</div>
+                          <div>
+                             <p className="text-lg font-black text-slate-800 uppercase tracking-tight">{r.college.name}</p>
+                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">{r.branch}</p>
+                          </div>
+                       </div>
+                       <div className={`mt-4 md:mt-0 px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest ${r.chance === 'High' ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-white'}`}>
+                          {r.chance} Chance
+                       </div>
+                    </div>
+                 ))}
+                 <p className="text-center text-[10px] font-black text-slate-400 uppercase tracking-widest italic mt-4">Tip: Copy this sequence for best admission probability.</p>
+              </div>
+           </div>
+
+           {/* ALL ELIGIBLE COLLEGES TABLE */}
+           <div className="bg-white rounded-[3.5rem] border border-slate-200 shadow-2xl overflow-hidden">
+              <div className="p-10 border-b border-slate-100 flex items-center justify-between">
+                 <h2 className="text-xl font-[1000] text-slate-800 tracking-tight uppercase">All Eligible Colleges ({results.all.length})</h2>
+              </div>
+              <div className="overflow-x-auto">
+                 <table className="w-full text-left border-collapse">
+                    <thead className="bg-[#f8fafc] border-b border-slate-200">
+                       <tr>
+                          <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">College Name</th>
+                          <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">Branch</th>
+                          <th className="px-6 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">2024 Cutoff</th>
+                          <th className="px-6 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">2025 Cutoff</th>
+                          <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Chance</th>
+                          <th className="px-10 py-6 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Info</th>
+                       </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                       {results.all.map((r, i) => (
+                         <tr key={i} className="hover:bg-slate-50 transition-all">
+                            <td className="px-10 py-8">
+                               <p className="text-sm font-black text-slate-800 uppercase tracking-tight">{r.college.name}</p>
+                               <p className="text-[9px] font-black text-slate-400 uppercase mt-1">{r.college.location}</p>
+                            </td>
+                            <td className="px-10 py-8 text-xs font-bold text-slate-600 uppercase italic">{r.branch}</td>
+                            <td className="px-6 py-8 text-center text-xs font-black text-slate-400">{r.cutoff24}</td>
+                            <td className="px-6 py-8 text-center text-sm font-black text-slate-900 bg-blue-50/10 shadow-inner">{r.cutoff25}</td>
+                            <td className="px-10 py-8 text-center">
+                               <span className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest ${r.chance === 'High' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}`}>{r.chance}</span>
+                            </td>
+                            <td className="px-10 py-8 text-right">
+                               <button onClick={() => setSelectedCollege(r.college)} className="p-3 bg-white border border-slate-200 rounded-xl text-blue-600 hover:border-blue-500 transition-all shadow-sm"><Info size={18}/></button>
+                            </td>
+                         </tr>
+                       ))}
+                    </tbody>
+                 </table>
+              </div>
+           </div>
+
+        </div>
+      )}
+
+      {/* DETAILED COLLEGE MODAL */}
+      {selectedCollege && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-md animate-in fade-in duration-300">
+           <div className="w-full max-w-2xl bg-white rounded-[4rem] p-10 md:p-16 shadow-2xl relative overflow-hidden">
+              <div className="relative z-10 space-y-8">
+                 <div className="flex flex-col items-center text-center space-y-6">
+                    <div className="w-20 h-20 bg-blue-600 text-white rounded-3xl flex items-center justify-center shadow-2xl"><Building2 size={40}/></div>
+                    <div>
+                       <h2 className="text-4xl font-[1000] text-slate-900 uppercase tracking-tighter">{selectedCollege.name}</h2>
+                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mt-2">{selectedCollege.location} • Estd {selectedCollege.estd}</p>
                     </div>
                  </div>
 
-                 <div className="grid grid-cols-1 md:grid-cols-2 w-full gap-6">
-                    <div className="p-8 bg-slate-50 border-2 border-slate-100 rounded-[2.5rem] space-y-2 text-left">
-                       <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Infrastructure</p>
-                       <p className="text-lg font-[1000] text-slate-800">{selectedCollege.labs}</p>
-                       <p className="text-[10px] font-black text-emerald-500 uppercase">{selectedCollege.wifi}</p>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="p-8 bg-slate-50 border border-slate-200 rounded-3xl space-y-4">
+                       <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200 pb-2">Infrastructure</h4>
+                       <div className="space-y-3">
+                          <p className="text-xs font-black text-slate-700 flex items-center gap-3"><Building2 size={16} className="text-blue-500"/> {selectedCollege.labs}</p>
+                          <p className="text-xs font-black text-slate-700 flex items-center gap-3"><Wifi size={16} className="text-emerald-500"/> {selectedCollege.wifi}</p>
+                          <p className="text-xs font-black text-slate-700 flex items-center gap-3"><BookOpen size={16} className="text-orange-500"/> Digital Library Available</p>
+                       </div>
                     </div>
-                    <div className="p-8 bg-slate-50 border-2 border-slate-100 rounded-[2.5rem] space-y-2 text-left">
-                       <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Placement Hub</p>
-                       <p className="text-lg font-[1000] text-slate-800">{selectedCollege.placement?.avg} Avg Package</p>
-                       <p className="text-xs font-black text-blue-600 uppercase tracking-wider">{selectedCollege.placement?.highest} Highest</p>
+                    <div className="p-8 bg-slate-50 border border-slate-200 rounded-3xl space-y-4">
+                       <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200 pb-2">Placement Stats</h4>
+                       <div className="space-y-2">
+                          <p className="text-xl font-[1000] text-slate-900">₹{selectedCollege.placement?.avg} <span className="text-[10px] font-black text-slate-400 uppercase">Avg Package</span></p>
+                          <p className="text-sm font-black text-emerald-600">{selectedCollege.placement?.highest} Highest</p>
+                       </div>
                     </div>
                  </div>
 
-                 <div className="w-full space-y-4 pt-4">
-                    <a href={selectedCollege.website} target="_blank" rel="noreferrer" className="w-full py-7 bg-emerald-600 hover:bg-emerald-500 text-white rounded-[2.5rem] font-[1000] text-sm uppercase tracking-[0.2em] transition-all shadow-2xl shadow-emerald-950/20 active:scale-95 flex items-center justify-center gap-4">
-                       🌐 Visit Official Portal
-                    </a>
-                    <button onClick={() => setSelectedCollege(null)} className="w-full py-6 text-slate-400 hover:text-slate-900 font-black text-xs uppercase tracking-widest transition-all">
-                       Return to Predictor
-                    </button>
+                 <div className="grid grid-cols-1 gap-4">
+                    <a href={selectedCollege.website} target="_blank" rel="noreferrer" className="w-full py-6 bg-blue-600 hover:bg-blue-500 text-white rounded-3xl font-[1000] text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-2xl transition-all">Visit Official Website <ExternalLink size={16}/></a>
+                    <button onClick={() => setSelectedCollege(null)} className="w-full py-5 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-3xl font-black text-[10px] uppercase tracking-widest transition-all">Close Details</button>
                  </div>
               </div>
            </div>
