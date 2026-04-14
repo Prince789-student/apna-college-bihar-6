@@ -389,34 +389,83 @@ function UgeacPredictor() {
                </div>
              )}
 
-             {/* MODE 2: SPECIFIC FINDER */}
-             {mode === 'finder' && (
-               <div className="bg-slate-50 border border-slate-200 rounded-[3rem] p-10 space-y-8 animate-in slide-in-from-top-4 duration-500">
-                  <div className="flex flex-col md:flex-row items-center gap-6">
-                     <div className="flex-1 space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Filter by College</label>
-                        <select 
-                           value={selectedCollegeToAdd === 'All' ? 'All' : selectedCollegeToAdd} 
-                           onChange={e => setSelectedCollegeToAdd(e.target.value)}
-                           className="w-full bg-white border-2 border-slate-100 focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none shadow-sm"
-                        >
-                           <option value="All">All Bihar Colleges</option>
-                           {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                        </select>
-                     </div>
-                     <div className="flex-1 space-y-3">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Filter by Branch</label>
-                        <select 
-                           onChange={e => setSelectedBranchToAdd(e.target.value)}
-                           className="w-full bg-white border-2 border-slate-100 focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none shadow-sm"
-                        >
-                           <option value="">All Engineering Branches</option>
-                           {allUgeacBranches.map(b => <option key={b} value={b}>{branchMapping[b] || b}</option>)}
-                        </select>
-                     </div>
-                  </div>
-               </div>
-             )}
+              {/* MODE 2: SPECIFIC FINDER (Enhanced with Priority Tools) */}
+              {mode === 'finder' && (
+                <div className="space-y-8 animate-in slide-in-from-top-4 duration-500">
+                   {/* Shared Preference Toggles */}
+                   <div className="flex items-center justify-center gap-6 p-6 bg-blue-50/50 rounded-[2.5rem] border border-blue-100">
+                      <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Selection Workflow:</span>
+                      <div className="flex bg-white p-1 rounded-2xl border border-blue-100 shadow-sm">
+                         <button onClick={() => setPreferenceBasis('college')} className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'college' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-blue-600'}`}>I Prefer College</button>
+                         <button onClick={() => setPreferenceBasis('branch')} className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'branch' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-blue-600'}`}>I Prefer Branch</button>
+                      </div>
+                   </div>
+
+                   <div className="bg-slate-50 border border-slate-200 rounded-[3rem] p-10 space-y-8 shadow-sm">
+                      <div className="flex flex-col md:flex-row items-center gap-6">
+                         <div className="flex-1 space-y-3">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Institution</label>
+                            <select 
+                               value={selectedCollegeToAdd === 'All' ? 'All' : selectedCollegeToAdd} 
+                               onChange={e => setSelectedCollegeToAdd(e.target.value)}
+                               className="w-full bg-white border-2 border-slate-100 focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none shadow-sm"
+                            >
+                               <option value="All">All Bihar Colleges</option>
+                               {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                            </select>
+                         </div>
+                         <div className="flex-1 space-y-3">
+                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Pick Branch</label>
+                            <select 
+                               value={selectedBranchToAdd}
+                               onChange={e => setSelectedBranchToAdd(e.target.value)}
+                               className="w-full bg-white border-2 border-slate-100 focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none shadow-sm"
+                            >
+                               <option value="">All Engineering Branches</option>
+                               {allUgeacBranches.map(b => <option key={b} value={b}>{branchMapping[b] || b}</option>)}
+                            </select>
+                         </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-4 justify-center border-t border-slate-200 pt-8 mt-2">
+                         {selectedCollegeToAdd !== 'All' && selectedBranchToAdd && (
+                            <button 
+                               onClick={() => {
+                                  const cid = parseInt(selectedCollegeToAdd);
+                                  const cName = colleges.find(c => c.id === cid)?.name;
+                                  if (!choices.find(c => c.collegeId === cid && c.branch === selectedBranchToAdd)) {
+                                     setChoices([...choices, { collegeId: cid, branch: selectedBranchToAdd, collegeName: cName }]);
+                                  }
+                               }}
+                               className="px-10 py-5 bg-blue-600 hover:bg-black text-white rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-200 active:scale-95 transition-all"
+                            >
+                               + Add This Combo to Priority
+                            </button>
+                         )}
+                         {preferenceBasis === 'college' && selectedCollegeToAdd !== 'All' && (
+                            <button 
+                               onClick={() => {
+                                  const cid = parseInt(selectedCollegeToAdd);
+                                  const cInfo = colleges.find(c => c.id === cid);
+                                  const collegeBranches = data2025.filter(d => d.collegeId === cid);
+                                  const uniqueBranches = Array.from(new Set(collegeBranches.map(d => d.branch)));
+                                  const newChoices = [...choices];
+                                  uniqueBranches.forEach(b => {
+                                     if (!newChoices.find(c => c.collegeId === cid && c.branch === b)) {
+                                        newChoices.push({ collegeId: cid, branch: b, collegeName: cInfo.name });
+                                     }
+                                  });
+                                  setChoices(newChoices);
+                               }}
+                               className="px-10 py-5 bg-emerald-600 hover:bg-slate-900 text-white rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-emerald-200 active:scale-95 transition-all"
+                            >
+                               + Add All Branches of this College
+                            </button>
+                         )}
+                      </div>
+                   </div>
+                </div>
+              )}
 
              {/* MODE 3: PRIORITY WIZARD */}
              {mode === 'wizard' && (
