@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { colleges, data2024, data2025 } from '../UgeacData';
+import { colleges, data2024, data2025, allUgeacBranches } from '../UgeacData';
 import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, CheckCircle2, Building2, Wifi, BookOpen } from 'lucide-react';
 
 function UgeacPredictor() {
@@ -144,8 +144,8 @@ function UgeacPredictor() {
             <div className="space-y-3 lg:col-span-2">
                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Engineering Branch</label>
                <select value={preferredBranch} onChange={e => setPreferredBranch(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-3xl p-6 text-[10px] font-[1000] outline-none transition-all uppercase appearance-none">
-                  <option value="All">Show All Branches</option>
-                  {dynamicBranches.map(b => <option key={b} value={b}>{b}</option>)}
+                  <option value="All">Show All Branches ({allUgeacBranches.length})</option>
+                  {allUgeacBranches.map(b => <option key={b} value={b}>{b}</option>)}
                </select>
             </div>
          </div>

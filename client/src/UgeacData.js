@@ -62,3 +62,9 @@ const processCutoffs = (raw) => {
 
 export const data2024 = processCutoffs(cutoffs2024);
 export const data2025 = processCutoffs(cutoffs2025);
+
+// Master list of ALL branches from the raw data
+export const allUgeacBranches = Array.from(new Set([
+  ...cutoffs2024.map(c => c.branch.trim()),
+  ...cutoffs2025.map(c => c.branch.trim())
+])).sort();
