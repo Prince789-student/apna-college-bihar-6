@@ -551,46 +551,49 @@ function UgeacPredictor() {
                    </div>
                 </div>
              )}
+             </div>
+          )}
 
-             {/* Step 3: Priority Setup */}
-             {choices.length > 0 && (
-               <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-3xl p-6 lg:p-10 space-y-6 shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom-5 duration-700">
-                  <div className="relative z-10">
-                     <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
-                           <span className="bg-emerald-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span> 
-                           Set Final Priority Order
-                        </h3>
+          {/* GLOBAL Step 3: Priority Setup (Visible in all modes if choices exist) */}
+          {choices.length > 0 && (
+            <div className="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-3xl p-6 lg:p-10 space-y-6 shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom-5 duration-700">
+               <div className="relative z-10">
+                  <div className="flex items-center justify-between mb-2">
+                     <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                        <span className="bg-emerald-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span> 
+                        Set Final Priority Order
+                     </h3>
+                     <div className="flex items-center gap-4">
+                        <button onClick={() => setChoices([])} className="text-[9px] font-black text-red-300 uppercase tracking-widest hover:text-white transition-colors">Clear All</button>
                         <span className="bg-white/10 text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">{choices.length} Choices Locked</span>
                      </div>
-                     <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest leading-relaxed">Rearrange these choices! The simulator validates choices strictly from 1 to {choices.length}. Rank 1 should be your most desired seat.</p>
                   </div>
-                  
-                  <div className="flex flex-col gap-3 relative z-10">
-                     {choices.map((choice, i) => (
-                        <div key={`${choice.collegeId}-${choice.branch}`} className="flex flex-col md:flex-row md:items-center justify-between bg-white/5 border border-white/10 px-6 py-4 rounded-2xl backdrop-blur-md gap-4">
-                           <div className="flex items-center gap-4">
-                              <div className="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-200 flex items-center justify-center font-black text-xs border border-indigo-500/30 shrink-0">{i+1}</div>
-                              <div>
-                                 <p className="text-sm font-[1000] text-white uppercase tracking-tighter">{choice.collegeName}</p>
-                                 <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mt-0.5">{branchMapping[choice.branch] || choice.branch}</p>
-                              </div>
-                           </div>
-                           <div className="flex items-center gap-2 md:w-auto w-full justify-end">
-                              <button disabled={i === 0} onClick={() => moveChoice(i, -1)} className="p-2 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-white/10 text-white rounded-lg transition-colors"><ChevronUp size={16}/></button>
-                              <button disabled={i === choices.length - 1} onClick={() => moveChoice(i, 1)} className="p-2 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-white/10 text-white rounded-lg transition-colors"><ChevronDown size={16}/></button>
-                              <button onClick={() => removeChoiceByCombo(choice.collegeId, choice.branch)} className="p-2 ml-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg transition-colors"><Trash2 size={16}/></button>
+                  <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest leading-relaxed">Rearrange these choices! The simulator validates choices strictly from 1 to {choices.length}. Rank 1 should be your most desired seat.</p>
+               </div>
+               
+               <div className="flex flex-col gap-3 relative z-10">
+                  {choices.map((choice, i) => (
+                     <div key={`${choice.collegeId}-${choice.branch}`} className="flex flex-col md:flex-row md:items-center justify-between bg-white/5 border border-white/10 px-6 py-4 rounded-2xl backdrop-blur-md gap-4">
+                        <div className="flex items-center gap-4">
+                           <div className="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-200 flex items-center justify-center font-black text-xs border border-indigo-500/30 shrink-0">{i+1}</div>
+                           <div>
+                              <p className="text-sm font-[1000] text-white uppercase tracking-tighter">{choice.collegeName}</p>
+                              <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mt-0.5">{branchMapping[choice.branch] || choice.branch}</p>
                            </div>
                         </div>
-                     ))}
-                  </div>
+                        <div className="flex items-center gap-2 md:w-auto w-full justify-end">
+                           <button disabled={i === 0} onClick={() => moveChoice(i, -1)} className="p-2 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-white/10 text-white rounded-lg transition-colors"><ChevronUp size={16}/></button>
+                           <button disabled={i === choices.length - 1} onClick={() => moveChoice(i, 1)} className="p-2 bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:hover:bg-white/10 text-white rounded-lg transition-colors"><ChevronDown size={16}/></button>
+                           <button onClick={() => removeChoiceByCombo(choice.collegeId, choice.branch)} className="p-2 ml-2 bg-red-500/20 hover:bg-red-500/40 text-red-300 rounded-lg transition-colors"><Trash2 size={16}/></button>
+                        </div>
+                     </div>
+                  ))}
                </div>
-             )}
-          </div>
-          )}
-        </div>
-          
-          <button onClick={calculateResults} className="w-full py-8 mt-8 bg-blue-600 hover:bg-black text-white rounded-[2.5rem] font-[1000] text-xl md:text-2xl uppercase tracking-[0.3em] shadow-2xl shadow-blue-900/40 active:scale-95 transition-all">Analyze Predictor Results</button>
+            </div>
+              )}
+           </div>
+           
+           <button onClick={calculateResults} className="w-full py-8 mt-8 bg-blue-600 hover:bg-black text-white rounded-[2.5rem] font-[1000] text-xl md:text-2xl uppercase tracking-[0.3em] shadow-2xl shadow-blue-900/40 active:scale-95 transition-all">Analyze Predictor Results</button>
        </div>
 
       {hasPredicted && (
@@ -647,8 +650,8 @@ function UgeacPredictor() {
                          </div>
                       </div>
                    ))}
-                </div>
-             </div>
+                 </div>
+              </div>
            )}
 
            {/* Smart List (General Recommendations) */}
@@ -715,9 +718,22 @@ function UgeacPredictor() {
                             <td className="px-12 py-10 text-center">
                                <span className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest ${r.chance === 'High' ? 'bg-emerald-600 text-white' : 'bg-red-500 text-white'} shadow-lg`}>{r.chance}</span>
                             </td>
-                            <td className="px-12 py-10 text-right">
-                               <button onClick={() => setSelectedCollege(r.college)} className="px-6 py-3 bg-white border-2 border-slate-200 rounded-2xl text-[10px] font-[1000] text-slate-500 uppercase tracking-widest hover:border-blue-600 hover:text-blue-600 transition-all shadow-md">View Info</button>
-                            </td>
+                             <td className="px-12 py-10 text-right space-x-2">
+                                <button 
+                                   onClick={() => {
+                                      const isAdded = choices.find(c => c.collegeId === r.college.id && c.branch === r.branch);
+                                      if (isAdded) {
+                                         removeChoiceByCombo(r.college.id, r.branch);
+                                      } else {
+                                         setChoices([...choices, { collegeId: r.college.id, branch: r.branch, collegeName: r.college.name }]);
+                                      }
+                                   }}
+                                   className={`px-6 py-3 border-2 rounded-2xl text-[10px] font-[1000] uppercase tracking-widest transition-all ${choices.find(c => c.collegeId === r.college.id && c.branch === r.branch) ? 'bg-red-50 border-red-200 text-red-600' : 'bg-emerald-50 border-emerald-200 text-emerald-600 hover:bg-emerald-600 hover:text-white'}`}
+                                >
+                                   {choices.find(c => c.collegeId === r.college.id && c.branch === r.branch) ? 'Remove Priority' : '+ Add Priority'}
+                                </button>
+                                <button onClick={() => setSelectedCollege(r.college)} className="px-6 py-3 bg-white border-2 border-slate-200 rounded-2xl text-[10px] font-[1000] text-slate-500 uppercase tracking-widest hover:border-blue-600 hover:text-blue-600 transition-all shadow-md">View Info</button>
+                             </td>
                          </tr>
                        ))}
                     </tbody>
