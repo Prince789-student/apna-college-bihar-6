@@ -212,7 +212,6 @@ export default function StudyDashboard() {
       await updateDoc(doc(db, 'users', user.uid), {
         streak: newStreak,
         streakDate: streakDate,
-        streakDate: streakDate,
         lastStudyDate: todayStr,
         totalStudyTime: (userData?.totalStudyTime || 0) + timeToSave,
         isStudying: false
