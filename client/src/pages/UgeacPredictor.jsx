@@ -394,6 +394,7 @@ function UgeacPredictor() {
                     </div>
                  ))}
               </div>
+           </div>
            )}
 
            {/* Results Table (MATCHING SCREENSHOT) */}
