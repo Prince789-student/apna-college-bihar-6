@@ -39,7 +39,11 @@ function UgeacPredictor() {
   };
 
   const sortedColleges = useMemo(() => {
-    return [...colleges].sort((a,b) => a.name.localeCompare(b.name));
+    // Sort by Tier (1 is best) then by Name
+    return [...colleges].sort((a, b) => {
+      if (a.tier !== b.tier) return a.tier - b.tier;
+      return a.name.localeCompare(b.name);
+    });
   }, []);
 
   const estimateUgeacRank = (jeeRank) => {
