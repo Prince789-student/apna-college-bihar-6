@@ -20,11 +20,6 @@ function UgeacPredictor() {
 
   // Manual Mapping to match Screenshot Terminology
   const branchMapping = {
-    "Computer Science & Engineering": "CSE (Core)",
-    "Electronics & Communication": "ECE",
-    "Electrical & Electronics (EEE)": "EEE",
-    "Internet of Things (IoT)": "CSE (IoT)",
-    "CSE (IOT & Cyber Security)": "CSE (Cyber Security)",
     "Computer Science & Engineering": "Computer Science (CSE)",
     "Electronics & Communication": "Electronics (ECE)",
     "Electrical & Electronics (EEE)": "Electrical & Electronics (EEE)",
@@ -40,16 +35,37 @@ function UgeacPredictor() {
     "Mining Engineering": "Mining Engineering",
     "Fire Technology & Safety": "Fire Tech & Safety",
     "3D Animation": "3D Animation & VFX",
-    "Food Processing": "Food Processing & Tech"
+    "Food Processing": "Food Processing & Tech",
+    "Leather Technology": "Leather Technology"
   };
 
   // Grouped Branches based on Screenshot structure
   const branchGroups = {
     "Core Branches": [
-      "Leather Technology", "VLSI Design & Tech", "VLSI Design", "Food Processing & Preservation", 
-      "Food Processing", "3D Animation & Graphics", "3D Animation", "Audio Engineering", 
-      "Agriculture Engineering", "Bioinformatics", "Bio-Technology", "Textile Engineering"
-    ]
+      "Civil Engineering",
+      "Mechanical Engineering",
+      "Electrical Engineering",
+      "Electrical & Electronics (EEE)",
+    ],
+    "Computer Science & IT": [
+      "Computer Science & Engineering",
+      "Information Technology",
+      "CSE (AI & ML)",
+    ],
+    "Electronics & High-Tech": [
+      "Electronics & Communication",
+      "VLSI Design",
+      "Robotics and Automation",
+    ],
+    "Industrial & Specialized": [
+      "Chemical Engineering",
+      "Mining Engineering",
+      "Fire Technology & Safety",
+      "Aeronautical Engineering",
+      "Food Processing",
+      "3D Animation",
+      "Leather Technology"
+    ],
   };
 
   // Ensure ALL branches from database are in the groups
