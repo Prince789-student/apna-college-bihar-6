@@ -6,7 +6,7 @@ const branches = new Set();
 let match;
 
 while ((match = branchRegex.exec(content)) !== null) {
-  branches.add(match[1]);
+  branches.add(match[1].trim());
 }
 
 console.log('--- ALL BRANCHES FOUND ---');
