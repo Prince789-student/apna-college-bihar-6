@@ -169,14 +169,14 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "BPMCE Madhepura",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "UR",
     "seat_type": "General",
     "closing": 6010
   },
   {
     "collegeShort": "BPMCE Madhepura",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "UR",
     "seat_type": "Female",
     "closing": 10137
@@ -442,7 +442,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "GEC Sheohar",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "UR",
     "seat_type": "General",
     "closing": 3733
@@ -1618,14 +1618,14 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "UR",
     "seat_type": "General",
     "closing": 5051
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "UR",
     "seat_type": "Female",
     "closing": 12011
@@ -2129,14 +2129,14 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "UR",
     "seat_type": "General",
     "closing": 6055
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "UR",
     "seat_type": "Female",
     "closing": 6027
@@ -2458,7 +2458,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "GEC Sheohar",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "ST",
     "seat_type": "General",
     "closing": 73
@@ -3543,7 +3543,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "BPMCE Madhepura",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "SC",
     "seat_type": "General",
     "closing": 1155
@@ -3732,7 +3732,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "GEC Sheohar",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "SC",
     "seat_type": "General",
     "closing": 1016
@@ -4334,7 +4334,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "SC",
     "seat_type": "General",
     "closing": 1127
@@ -5496,7 +5496,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "BPMCE Madhepura",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EWS",
     "seat_type": "General",
     "closing": 1824
@@ -5741,7 +5741,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "GEC Sheohar",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EWS",
     "seat_type": "General",
     "closing": 2616
@@ -6665,7 +6665,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "KCE Katihar",
-    "branch": "Mechanical",
+    "branch": "Mechanical (Smart Manufacturing)",
     "category": "EWS",
     "seat_type": "General",
     "closing": 2453
@@ -6735,7 +6735,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EWS",
     "seat_type": "General",
     "closing": 1684
@@ -7176,7 +7176,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EWS",
     "seat_type": "General",
     "closing": 2123
@@ -7638,7 +7638,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "GEC Sheohar",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "E-UR",
     "seat_type": "General",
     "closing": 6167
@@ -8282,7 +8282,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "E-UR",
     "seat_type": "General",
     "closing": 5221
@@ -8639,7 +8639,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "E-UR",
     "seat_type": "General",
     "closing": 6392
@@ -9360,7 +9360,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "E-EBC",
     "seat_type": "General",
     "closing": 1919
@@ -9479,7 +9479,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "E-EBC",
     "seat_type": "General",
     "closing": 2176
@@ -9640,7 +9640,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "GEC Sheohar",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "E-BC",
     "seat_type": "General",
     "closing": 3798
@@ -10249,7 +10249,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "BPMCE Madhepura",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EBC",
     "seat_type": "General",
     "closing": 1910
@@ -10487,7 +10487,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "GEC Sheohar",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EBC",
     "seat_type": "General",
     "closing": 3236
@@ -11376,14 +11376,14 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "KCE Katihar",
-    "branch": "Mechanical",
+    "branch": "Mechanical (Smart Manufacturing)",
     "category": "EBC",
     "seat_type": "General",
     "closing": 2758
   },
   {
     "collegeShort": "KCE Katihar",
-    "branch": "Mechanical",
+    "branch": "Mechanical (Smart Manufacturing)",
     "category": "EBC",
     "seat_type": "Female",
     "closing": 3225
@@ -11453,7 +11453,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EBC",
     "seat_type": "General",
     "closing": 1884
@@ -11908,7 +11908,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EBC",
     "seat_type": "General",
     "closing": 2366
@@ -12384,7 +12384,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "BPMCE Madhepura",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "BC",
     "seat_type": "General",
     "closing": 2841
@@ -12636,7 +12636,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "GEC Sheohar",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "BC",
     "seat_type": "General",
     "closing": 3679
@@ -13637,7 +13637,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "KCE Katihar",
-    "branch": "Mechanical",
+    "branch": "Mechanical (Smart Manufacturing)",
     "category": "BC",
     "seat_type": "General",
     "closing": 4208
@@ -13714,7 +13714,7 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "BC",
     "seat_type": "General",
     "closing": 2226
@@ -14169,14 +14169,14 @@ export const cutoffs2024 = [
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "BC",
     "seat_type": "General",
     "closing": 3296
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "BC",
     "seat_type": "Female",
     "closing": 4499
@@ -15537,7 +15537,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "BPMCE Madhepura",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "UR",
     "seat_type": "General",
     "closing": 3587
@@ -15628,7 +15628,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "BPMCE Madhepura",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "SMQ",
     "seat_type": "General",
     "closing": 148
@@ -15663,7 +15663,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "BPMCE Madhepura",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "SC",
     "seat_type": "General",
     "closing": 937
@@ -15733,7 +15733,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "BPMCE Madhepura",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EWS",
     "seat_type": "General",
     "closing": 1592
@@ -15880,7 +15880,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "BPMCE Madhepura",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EBC",
     "seat_type": "General",
     "closing": 2009
@@ -15943,7 +15943,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "BPMCE Madhepura",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "BC",
     "seat_type": "General",
     "closing": 3141
@@ -17308,7 +17308,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "GEC Sheohar",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "SC",
     "seat_type": "General",
     "closing": 958
@@ -17336,7 +17336,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "GEC Sheohar",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EWS",
     "seat_type": "General",
     "closing": 2154
@@ -17399,7 +17399,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "GEC Sheohar",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "E-BC",
     "seat_type": "General",
     "closing": 3844
@@ -17420,7 +17420,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "GEC Sheohar",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EBC",
     "seat_type": "General",
     "closing": 2685
@@ -17462,7 +17462,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "GEC Sheohar",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "BC",
     "seat_type": "General",
     "closing": 3706
@@ -23097,7 +23097,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "KCE Katihar",
-    "branch": "Mechanical",
+    "branch": "Mechanical (Smart Manufacturing)",
     "category": "EWS",
     "seat_type": "General",
     "closing": 1905
@@ -23258,7 +23258,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "KCE Katihar",
-    "branch": "Mechanical",
+    "branch": "Mechanical (Smart Manufacturing)",
     "category": "BC",
     "seat_type": "General",
     "closing": 3858
@@ -23643,14 +23643,14 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "UR",
     "seat_type": "General",
     "closing": 5523
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "UR",
     "seat_type": "Female",
     "closing": 8754
@@ -23762,7 +23762,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "SC",
     "seat_type": "General",
     "closing": 930
@@ -23832,7 +23832,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EWS",
     "seat_type": "General",
     "closing": 1433
@@ -23902,7 +23902,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "E-UR",
     "seat_type": "General",
     "closing": 5661
@@ -23965,7 +23965,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "E-EBC",
     "seat_type": "General",
     "closing": 2197
@@ -24000,7 +24000,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EBC",
     "seat_type": "General",
     "closing": 2164
@@ -24070,7 +24070,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "MCE Motihari",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "BC",
     "seat_type": "General",
     "closing": 2649
@@ -26905,7 +26905,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "UR",
     "seat_type": "General",
     "closing": 4653
@@ -27003,7 +27003,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "SC",
     "seat_type": "General",
     "closing": 875
@@ -27052,7 +27052,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EWS",
     "seat_type": "General",
     "closing": 1977
@@ -27157,7 +27157,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "E-EBC",
     "seat_type": "General",
     "closing": 2179
@@ -27171,7 +27171,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "E-BC",
     "seat_type": "General",
     "closing": 3655
@@ -27192,7 +27192,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "EBC",
     "seat_type": "General",
     "closing": 2389
@@ -27248,7 +27248,7 @@ export const cutoffs2025 = [
   },
   {
     "collegeShort": "SIT Sitamarhi",
-    "branch": "Civil",
+    "branch": "Civil + Computer Application",
     "category": "BC",
     "seat_type": "General",
     "closing": 3643

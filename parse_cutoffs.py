@@ -89,6 +89,8 @@ def parse_raw(raw):
     # Branch mapping (Standardizing based on user list)
     # CRITICAL: Highly specific branches MUST come FIRST
     branch_rules = [
+        ("WITH COMPUTER APPLICATION", "Civil + Computer Application"),
+        ("SMART MANUFACTURING", "Mechanical (Smart Manufacturing)"),
         ("INTERNET OF THINGS", "CSE (IoT)"),
         ("CSE (IOT)", "CSE (IoT)"),
         ("AI & MACHINE LEARNING", "CSE (AI & ML)"),
