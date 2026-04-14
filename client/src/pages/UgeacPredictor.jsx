@@ -97,11 +97,8 @@ function UgeacPredictor() {
   }, [allUgeacBranches]);
 
   const sortedColleges = useMemo(() => {
-    // Sort by Tier (1 is best) then by Name
-    return [...colleges].sort((a, b) => {
-      if (a.tier !== b.tier) return a.tier - b.tier;
-      return a.name.localeCompare(b.name);
-    });
+    // Preserve exact ranking configuration and order to keep MIT above BCE
+    return colleges;
   }, []);
 
   const estimateUgeacRank = (jeeRank) => {
