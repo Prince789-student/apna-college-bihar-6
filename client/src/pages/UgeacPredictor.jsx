@@ -18,6 +18,72 @@ function UgeacPredictor() {
   const [selectedCollegeToAdd, setSelectedCollegeToAdd] = useState('All');
   const [choices, setChoices] = useState([]); // Array to hold choice filling preferences
   const [selectedBranchToAdd, setSelectedBranchToAdd] = useState('');
+
+  const standardColleges = useMemo(() => [
+    "MIT Muzaffarpur", "BCE Bhagalpur", "GCE Gaya", "MCE Motihari", "DCE Darbhanga",
+    "Nalanda College of Engineering, Chandi", "LNJPIT Chapra", "BCE Bakhtiyarpur",
+    "SIT Sitamarhi", "RRSDCE Begusarai", "SCE Sasaram", "B.P.M.C.E. Madhepura",
+    "K.C.E. Katihar", "Purnea College of Engineering", "Saharsa College of Engineering",
+    "Supaul College of Engineering", "Government Engineering College, Banka",
+    "Government Engineering College, Vaishali", "Government Engineering College, Jamui",
+    "Government Engineering College, Nawada", "Government Engineering College, Kishanganj",
+    "Shri Phanishwar Nath Renu Engineering College, Araria", "Government Engineering College, Munger",
+    "Government Engineering College, Sheohar", "Government Engineering College, West Champaran",
+    "Government Engineering College, Aurangabad", "Government Engineering College, Kaimur",
+    "Government Engineering College, Gopalganj", "Government Engineering College, Madhubani",
+    "Government Engineering College, Siwan", "Government Engineering College, Jehanabad",
+    "Government Engineering College, Arwal", "Government Engineering College, Khagaria",
+    "Government Engineering College, Buxar", "Government Engineering College, Bhojpur",
+    "Government Engineering College, Sheikhpura", "Government Engineering College, Lakhisarai",
+    "Government Engineering College, Samastipur"
+  ], []);
+
+  const normalizedMap = useMemo(() => ({
+    "B.C.E. BHAGALPUR": "BCE Bhagalpur",
+    "M.I.T. MUZAFFARPUR": "MIT Muzaffarpur",
+    "B.C.E. BAKHTIYARPUR": "BCE Bakhtiyarpur",
+    "G.C.E. GAYA": "GCE Gaya",
+    "D.C.E. DARBHANGA": "DCE Darbhanga",
+    "NALANDA COLLEGE. OF ENGG,CHANDI": "Nalanda College of Engineering, Chandi",
+    "NCE CHANDI": "Nalanda College of Engineering, Chandi",
+    "M..C.E. MOTIHARI": "MCE Motihari",
+    "MCE MOTIHARI": "MCE Motihari",
+    "P.C.E. PURNEA": "Purnea College of Engineering",
+    "PURNEA COLLEGE OF ENGINEERING": "Purnea College of Engineering",
+    "S.C.E. SAHARSA": "Saharsa College of Engineering",
+    "SAHARSA COLLEGE OF ENGINEERING": "Saharsa College of Engineering",
+    "S.C.E. SUPAUL": "Supaul College of Engineering",
+    "SUPAUL COLLEGE OF ENGINEERING": "Supaul College of Engineering",
+    "S.C.E. SASARAM": "SCE Sasaram",
+    "B.P.M.C.E. MADHEPURA": "B.P.M.C.E. Madhepura",
+    "S.I.T. SITAMARHI": "SIT Sitamarhi",
+    "R.R.S.D.C.E. BEGUSARAI": "RRSDCE Begusarai",
+    "LNJPIT CHAPRA": "LNJPIT Chapra",
+    "KCE KATIHAR": "K.C.E. Katihar",
+    "G.E.C. BANKA": "Government Engineering College, Banka",
+    "G.E.C. VAISHALI": "Government Engineering College, Vaishali",
+    "G.E.C. JAMUI": "Government Engineering College, Jamui",
+    "G.E.C. NAWADA": "Government Engineering College, Nawada",
+    "G.E.C. KISHANGANJ": "Government Engineering College, Kishanganj",
+    "G.E.C. ARARIA": "Shri Phanishwar Nath Renu Engineering College, Araria",
+    "G.E.C. MUNGER": "Government Engineering College, Munger",
+    "G.E.C. SHEOHAR": "Government Engineering College, Sheohar",
+    "G.E.C. BETTIAH": "Government Engineering College, West Champaran",
+    "G.E.C. WEST CHAMPARAN": "Government Engineering College, West Champaran",
+    "G.E.C. AURANGABAD": "Government Engineering College, Aurangabad",
+    "G.E.C. KAIMUR": "Government Engineering College, Kaimur",
+    "G.E.C. GOPALGANJ": "Government Engineering College, Gopalganj",
+    "G.E.C. MADHUBANI": "Government Engineering College, Madhubani",
+    "G.E.C. SIWAN": "Government Engineering College, Siwan",
+    "G.E.C. JEHANABAD": "Government Engineering College, Jehanabad",
+    "G.E.C. ARWAL": "Government Engineering College, Arwal",
+    "G.E.C. KHAGARIA": "Government Engineering College, Khagaria",
+    "G.E.C. BUXAR": "Government Engineering College, Buxar",
+    "G.E.C. BHOJPUR": "Government Engineering College, Bhojpur",
+    "G.E.C. SHEIKHPURA": "Government Engineering College, Sheikhpura",
+    "G.E.C. LAKHISARAI": "Government Engineering College, Lakhisarai",
+    "G.E.C. SAMASTIPUR": "Government Engineering College, Samastipur"
+  }), []);
   
   const [ugeacData, setUgeacData] = useState({ data2024: [], data2025: [], branches: [] });
   const [loadingData, setLoadingData] = useState(true);
@@ -28,8 +94,14 @@ function UgeacPredictor() {
       .then(res => res.json())
       .then(json => {
         const process = (raw) => raw.map(c => {
-          const col = colleges.find(co => co.short === c.collegeShort);
-          return { ...c, collegeId: col ? col.id : null };
+          const key = c.collegeShort?.toUpperCase().trim();
+          const formalName = normalizedMap[key] || c.collegeShort;
+          const col = colleges.find(co => co.name === formalName || co.short === c.collegeShort);
+          return { 
+            ...c, 
+            collegeId: col ? col.id : null, 
+            collegeName: col ? col.name : formalName 
+          };
         }).filter(c => c.collegeId !== null);
 
         const d24 = process(json.cutoffs2024);
@@ -153,10 +225,6 @@ function UgeacPredictor() {
     return result;
   }, [ugeacData.branches]);
 
-  const sortedColleges = useMemo(() => {
-    // Preserve exact ranking configuration and order to keep MIT above BCE
-    return colleges;
-  }, []);
 
   // Deep Allotment Rank Mapping from 7,866 PDF Records
   const UGEAC_RANK_MAP = [
@@ -386,6 +454,12 @@ function UgeacPredictor() {
               return targetBranches.indexOf(a.branch) - targetBranches.indexOf(b.branch);
            }
         }
+        if (mode === 'explore') {
+           const idxA = standardColleges.indexOf(a.college.name);
+           const idxB = standardColleges.indexOf(b.college.name);
+           if (idxA !== -1 && idxB !== -1 && idxA !== idxB) return idxA - idxB;
+           if (chanceScore(a.chance) !== chanceScore(b.chance)) return chanceScore(a.chance) - chanceScore(b.chance);
+        }
         if (chanceScore(a.chance) !== chanceScore(b.chance)) return chanceScore(a.chance) - chanceScore(b.chance);
         return a.college.tier - b.college.tier;
     });
@@ -419,6 +493,14 @@ function UgeacPredictor() {
     });
     setHasPredicted(true);
   };
+
+  const sortedColleges = useMemo(() => {
+    return [...colleges].sort((a,b) => {
+        const idxA = standardColleges.indexOf(a.name);
+        const idxB = standardColleges.indexOf(b.name);
+        return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
+    });
+  }, [colleges, standardColleges]);
 
   return (
     <div className="max-w-7xl mx-auto space-y-12 py-10 px-4 animate-in fade-in duration-500 font-sans">
