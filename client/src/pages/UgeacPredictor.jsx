@@ -521,7 +521,7 @@ function UgeacPredictor() {
                <div className="space-y-8 animate-in slide-in-from-bottom-5 duration-500">
                   {/* Sub-Preference Toggles */}
                   <div className="flex items-center justify-center gap-6 p-6 bg-indigo-50/50 rounded-[2.5rem] border border-indigo-100">
-                     <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Selection Workflow:</span>
+
                      <div className="flex bg-white p-1 rounded-2xl border border-indigo-100 shadow-sm">
                         <button 
                            onClick={() => setPreferenceBasis('college')}
