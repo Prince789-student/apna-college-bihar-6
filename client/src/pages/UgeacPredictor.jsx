@@ -373,7 +373,7 @@ function UgeacPredictor() {
                 onClick={() => setMode('wizard')}
                 className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'wizard' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-200' : 'text-slate-500 hover:bg-white hover:text-indigo-600'}`}
              >
-                <Zap size={16}/> 3. Priority Wizard
+                <Zap size={16}/> 3. Selection Wizard
              </button>
           </div>
 
@@ -439,7 +439,7 @@ function UgeacPredictor() {
                                }}
                                className="px-10 py-5 bg-blue-600 hover:bg-black text-white rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-200 active:scale-95 transition-all"
                             >
-                               + Add This Combo to Priority
+                               + Add This Combo to My List
                             </button>
                          )}
                          {preferenceBasis === 'college' && selectedCollegeToAdd !== 'All' && (
@@ -472,7 +472,7 @@ function UgeacPredictor() {
                <div className="space-y-8 animate-in slide-in-from-bottom-5 duration-500">
                   {/* Sub-Preference Toggles */}
                   <div className="flex items-center justify-center gap-6 p-6 bg-indigo-50/50 rounded-[2.5rem] border border-indigo-100">
-                     <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Counseling Priority:</span>
+                     <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Selection Workflow:</span>
                      <div className="flex bg-white p-1 rounded-2xl border border-indigo-100 shadow-sm">
                         <button 
                            onClick={() => setPreferenceBasis('college')}
@@ -615,7 +615,7 @@ function UgeacPredictor() {
                      <div>
                         <h3 className="text-xl font-black text-white uppercase tracking-[0.2em] flex items-center gap-4">
                            <span className="bg-emerald-500 text-white w-10 h-10 rounded-2xl flex items-center justify-center text-sm shadow-[0_0_20px_rgba(16,185,129,0.4)]">3</span> 
-                           Final Priority Order
+                           Final Choice Filling Order
                         </h3>
                         <p className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest leading-relaxed mt-2 opacity-60">Drag your dream seats to the top. Rank 1 = Your first choice.</p>
                      </div>
@@ -800,7 +800,7 @@ function UgeacPredictor() {
                                    }}
                                    className={`px-6 py-3 border-2 rounded-2xl text-[10px] font-[1000] uppercase tracking-widest transition-all ${choices.find(c => c.collegeId === r.college.id && c.branch === r.branch) ? 'bg-red-50 border-red-200 text-red-600' : 'bg-emerald-50 border-emerald-200 text-emerald-600 hover:bg-emerald-600 hover:text-white'}`}
                                 >
-                                   {choices.find(c => c.collegeId === r.college.id && c.branch === r.branch) ? 'Remove Priority' : '+ Add Priority'}
+                                   {choices.find(c => c.collegeId === r.college.id && c.branch === r.branch) ? 'Remove Choice' : '+ Add Choice'}
                                 </button>
                                 <button onClick={() => setSelectedCollege(r.college)} className="px-6 py-3 bg-white border-2 border-slate-200 rounded-2xl text-[10px] font-[1000] text-slate-500 uppercase tracking-widest hover:border-blue-600 hover:text-blue-600 transition-all shadow-md">View Info</button>
                              </td>
