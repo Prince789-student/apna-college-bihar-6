@@ -203,6 +203,13 @@ function UgeacPredictor() {
     return Math.max(1, Math.floor(r * (ratios[cat] || 1)));
   };
 
+  // Auto-Update results when switching modes or data changes
+  useEffect(() => {
+    if (rank && rank > 0) {
+       calculateResults();
+    }
+  }, [mode, ugeacData]);
+
   const addTargetCollege = () => {
     if (selectedCollegeToAdd === 'All') return;
     const cid = parseInt(selectedCollegeToAdd);
