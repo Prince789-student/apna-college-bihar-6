@@ -1,0 +1,4328 @@
+[
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 3838
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 3278
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 8633
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 1010
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 5854
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1092
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 807
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 472
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 3718
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 354
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 4584
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 59
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 2694
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 3433
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3278
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Electrical",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 498
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 2846
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 1432
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 1005
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 55
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 101
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 42
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 1768
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1269
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2732
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 8412
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1598
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 3212
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 138
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 968
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5552
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Computer Science",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 4
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 505
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 1165
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 3840
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Electrical",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 1784
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 468
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Computer Science",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 25
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 621
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 2305
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil + Computer Application",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 28
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 120
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 427
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 185
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 2388
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 462
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Computer Science",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 43
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Electrical",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 741
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 303
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 70
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 27
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1863
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1816
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 3721
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5579
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 215
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 3961
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 2109
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 223
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1072
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 1284
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 137
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 2108
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 1417
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Electrical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 155
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 895
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Electrical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 271
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Electrical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 229
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1732
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 32
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 177
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 992
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "CSE (AI)",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 3171
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 1520
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Electrical",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 1481
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 1537
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "CSE (AI)",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 836
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 83
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 645
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 7988
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 957
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 1071
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 215
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 2743
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 2903
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 2134
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 2578
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 716
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Electrical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 278
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Electrical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 380
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 1083
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 394
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Computer Science",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 280
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 779
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2313
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 271
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "CSE (AI)",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 6481
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1485
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 437
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 574
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Computer Science",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 350
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1316
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9905
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 290
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 1631
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Electrical",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 750
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Electrical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 316
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 2037
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 281
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 493
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 1066
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 322
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 640
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 1950
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 620
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 1782
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 383
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 2254
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 3673
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 429
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 4667
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 301
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "CSE (AI)",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1649
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 300
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Computer Science",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 159
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 560
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 330
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5034
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 4694
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "CSE (AI)",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5323
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1116
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 5230
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 1338
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 730
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 537
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Computer Science",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 165
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 350
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9987
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 362
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "CSE (AI)",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 4330
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 978
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 324
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 1350
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 5743
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 479
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Computer Science",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 2
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 159
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 1826
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil + Computer Application",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 353
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 1438
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 1664
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 2993
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 600
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil + Computer Application",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 602
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 2962
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 629
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 57
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 434
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Computer Science",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 26
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 895
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 2718
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 232
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 416
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 681
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 2836
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 546
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1689
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Electrical",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 641
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 759
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "CSE (AI)",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 376
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 8765
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 776
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 403
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 506
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 598
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 981
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 3920
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil + Computer Application",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 400
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2579
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 215
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 571
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil + Computer Application",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 33
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 573
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 4644
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 731
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 124
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 759
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 3258
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 961
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2702
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 574
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 938
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "CSE (AI)",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 31
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2479
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 6272
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 1137
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 47
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 850
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 510
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil + Computer Application",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 800
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil + Computer Application",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 477
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 1579
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil + Computer Application",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 42
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 1911
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil + Computer Application",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 816
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Electrical",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 490
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Electrical",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5593
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1493
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2116
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 3470
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 2031
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil + Computer Application",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 651
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Electrical",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 761
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1706
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Electrical",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 269
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 307
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1548
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil + Computer Application",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 513
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Computer Science",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 3
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 4411
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5523
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1843
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 476
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3052
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 3553
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 7116
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Computer Science",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 6816
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 792
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 3969
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Electrical",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 949
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 3722
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Electrical",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 306
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 669
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 1217
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 1342
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 1094
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1963
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 809
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1197
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 684
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 233
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 1215
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "IT",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 3328
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 950
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1431
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 417
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Mechanical",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 284
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2107
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 4337
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 839
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 44
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 338
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 693
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5622
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 912
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 5
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Mechanical",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 46
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 807
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1339
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 1180
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Electrical & Electronics",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 188
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 384
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 4759
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2508
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 343
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 979
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 982
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 1274
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 4814
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 752
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 1344
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 7656
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 1313
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 919
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "CSE (AI)",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5197
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 790
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Electrical",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 936
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Electrical",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 705
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5354
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "CSE (AI)",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5017
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Electrical",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 206
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 9683
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 359
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 996
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Electrical & Electronics",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 60
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9432
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Electronics & Communication",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 4790
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5613
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Civil",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 63
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5349
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 573
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Electrical & Electronics",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 566
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 810
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 6118
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 928
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 176
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1040
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 6617
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2401
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 954
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 6182
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Computer Science",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 471
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 249
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5301
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 2166
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Civil + Computer Application",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2533
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2215
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 1449
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Electrical & Electronics",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 470
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 1673
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 7485
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 2292
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 1315
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Electrical",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 740
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1178
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 956
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Civil + Computer Application",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3655
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1349
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "CSE (AI)",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 3743
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1605
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5542
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1365
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9775
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2233
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1185
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 1531
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 1602
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 919
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 1654
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2822
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1499
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Mechanical",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 319
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 8417
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Electrical",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 8
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 77
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 1701
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 3996
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5512
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 584
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1291
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Civil + Computer Application",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2389
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 2240
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Computer Science",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 948
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 396
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1145
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 2854
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 2290
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Civil + Computer Application",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2197
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 2412
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1484
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1098
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1679
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 8913
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "ST",
+    "seat_type": "Female",
+    "closing": 9
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 803
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Civil + Computer Application",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 981
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Civil + Computer Application",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 247
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9661
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 1448
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "IT",
+    "category": "DQ",
+    "seat_type": "General",
+    "closing": 24
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Computer Science",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 10
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 786
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Electrical & Electronics",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 333
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1209
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1846
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Civil + Computer Application",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 263
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 750
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 428
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Computer Science",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 11
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Electrical & Electronics",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 599
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5195
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 2557
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Computer Science",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 1051
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 4527
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Civil + Computer Application",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 1754
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9619
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Civil",
+    "category": "ST",
+    "seat_type": "Female",
+    "closing": 12
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Computer Science",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 13
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Electrical & Electronics",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 898
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 757
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Mechanical",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 730
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 703
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Mechanical",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 280
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2612
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3382
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2097
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3233
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Computer Science",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 963
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Mechanical",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 14
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Electrical",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 4745
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 692
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Civil",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 15
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 1997
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 299
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Mechanical",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 554
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 2083
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 91
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 2035
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 2052
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electronics & Communication",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 4881
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 2367
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Electrical & Electronics",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 477
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 1998
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 2015
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1678
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 2129
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1249
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5011
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1236
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9647
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Electrical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2726
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "General",
+    "closing": 5174
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Computer Science",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 2066
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 1693
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1352
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1242
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1275
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9566
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Computer Science",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 3231
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1256
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 581
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Mechanical",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 698
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Computer Science",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 1258
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 739
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 1677
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1557
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3030
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2462
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Electrical & Electronics",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 1061
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1978
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Electrical & Electronics",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 834
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9026
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 424
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1524
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1874
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Electrical & Electronics",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 881
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil + Computer Application",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1433
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Civil + Computer Application",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 17
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 2062
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1965
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "CSE (AI)",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1792
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil + Computer Application",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2649
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Computer Science",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 18
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Civil + Computer Application",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1265
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "CSE (AI)",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2658
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Computer Science",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1587
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 8754
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1802
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Electrical",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 821
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "CSE (AI)",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2381
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "CSE (AI)",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3979
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3542
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 725
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2829
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Civil + Computer Application",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 2044
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1487
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2959
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9875
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1836
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 6804
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 798
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "CSE (AI)",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 19
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1736
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1374
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Civil + Computer Application",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 419
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9653
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1879
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Electrical & Electronics",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 945
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2509
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Civil + Computer Application",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 875
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Electrical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1656
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 2469
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 650
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "CSE (AI)",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 912
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Mechanical",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 790
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Electrical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3033
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Electrical & Electronics",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9442
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Civil",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 21
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 904
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1604
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electronics & Communication",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3604
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1666
+  },
+  {
+    "collegeShort": "MIT Muzaffarpur",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1751
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 2454
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Civil + Computer Application",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3011
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Electronics & Communication",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 2135
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "CSE (AI)",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 468
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 6409
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1551
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1821
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Electrical",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9395
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3429
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Civil + Computer Application",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1940
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Civil",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 919
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "CSE (AI)",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1989
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "CSE (AI)",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 2107
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 1834
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Computer Science",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 24
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2090
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Computer Science",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 105
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil + Computer Application",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2164
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3328
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil + Computer Application",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1453
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science",
+    "category": "ST",
+    "seat_type": "Female",
+    "closing": 25
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 598
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 635
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Electrical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1961
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 8218
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Civil",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 1083
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "CSE (AI)",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1638
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1674
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1671
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2839
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 2950
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 2837
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 2254
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1655
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "CSE (AI)",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2119
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electronics & Communication",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9141
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 1972
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Civil + Computer Application",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 547
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "CSE (AI)",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3128
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Civil",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9583
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Mechanical",
+    "category": "ST",
+    "seat_type": "Female",
+    "closing": 28
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Civil + Computer Application",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 718
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 7522
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "CSE (AI)",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1562
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "Mechanical",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 112
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2610
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electronics & Communication",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2192
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science (Networks)",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1781
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2264
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Civil + Computer Application",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2009
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2301
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Electrical & Electronics",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 903
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Computer Science (Networks)",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 1808
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "CSE (AI)",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 115
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2224
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Computer Science",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 30
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Mechanical",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 586
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2520
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3702
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Electrical",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 7551
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 896
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "CSE (AI)",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 7728
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "CSE (AI)",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 954
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2003
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2387
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Mechanical",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9359
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "CSE (AI)",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2355
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Electronics & Communication",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 685
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 7916
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil + Computer Application",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 930
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 842
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "CSE (AI)",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3834
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Mechanical",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 767
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Civil + Computer Application",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 8064
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electrical & Electronics",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 826
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "CSE (AI)",
+    "category": "SMQ",
+    "seat_type": "General",
+    "closing": 124
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3858
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Mechanical",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2552
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "CSE (AI)",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3700
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Civil + Computer Application",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 1170
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1767
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "CSE (AI)",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2094
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Electrical & Electronics",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 38
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Mechanical",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 832
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1935
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Mechanical",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 966
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3695
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Electronics & Communication",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 8662
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Electronics & Communication",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2681
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 2109
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 3848
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Electrical & Electronics",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 874
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Civil",
+    "category": "ST",
+    "seat_type": "Female",
+    "closing": 41
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "IT",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3980
+  },
+  {
+    "collegeShort": "BCE Bhagalpur",
+    "branch": "Mechanical",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 1251
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Electrical & Electronics",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 1862
+  },
+  {
+    "collegeShort": "DCE Darbhanga",
+    "branch": "CSE (AI)",
+    "category": "EBC",
+    "seat_type": "General",
+    "closing": 2237
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3697
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 2583
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Mechanical",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 778
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Electronics & Communication",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3725
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 2559
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 3668
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 947
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "CSE (AI)",
+    "category": "UR",
+    "seat_type": "Female",
+    "closing": 9373
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 948
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 3615
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 3691
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 2522
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electrical & Electronics",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 3915
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 2087
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 2102
+  },
+  {
+    "collegeShort": "KCE Katihar",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 841
+  },
+  {
+    "collegeShort": "SIT Sitamarhi",
+    "branch": "Mechanical",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 1996
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electronics & Communication",
+    "category": "EWS",
+    "seat_type": "General",
+    "closing": 2003
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Electrical & Electronics",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 1403
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "CSE (AI)",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 905
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Electrical & Electronics",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 1518
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Civil",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 49
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 50
+  },
+  {
+    "collegeShort": "BCE Bakhtiyarpur",
+    "branch": "Mechanical",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 3760
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 940
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Computer Science",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 52
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil",
+    "category": "EWS",
+    "seat_type": "Female",
+    "closing": 2083
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 931
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 3866
+  },
+  {
+    "collegeShort": "BPMCE Madhepura",
+    "branch": "Civil + Computer Application",
+    "category": "SC",
+    "seat_type": "General",
+    "closing": 937
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Electrical",
+    "category": "BC",
+    "seat_type": "General",
+    "closing": 3897
+  },
+  {
+    "collegeShort": "PCE Purnea",
+    "branch": "Computer Science",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 944
+  },
+  {
+    "collegeShort": "NCE Chandi",
+    "branch": "Electrical & Electronics",
+    "category": "ST",
+    "seat_type": "General",
+    "closing": 54
+  },
+  {
+    "collegeShort": "GCE Gaya",
+    "branch": "Electrical & Electronics",
+    "category": "SC",
+    "seat_type": "Female",
+    "closing": 951
+  },
+  {
+    "collegeShort": "MCE Motihari",
+    "branch": "Electrical & Electronics",
+    "category": "EBC",
+    "seat_type": "Female",
+    "closing": 2664
+  },
+  {
+    "collegeShort": "RRSDCE Begusarai",
+    "branch": "Civil",
+    "category": "BC",
+    "seat_type": "Female",
+    "closing": 3978
+  },
+  {
+    "collegeShort": "SCE Sasaram",
+    "branch": "Civil",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 1540
+  },
+  {
+    "collegeShort": "LNJPIT Chapra",
+    "branch": "Civil",
+    "category": "RCG",
+    "seat_type": "Female",
+    "closing": 1541
+  }
+]
