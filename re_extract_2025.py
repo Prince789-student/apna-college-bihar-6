@@ -37,32 +37,49 @@ for r in records:
     raw = r["raw"]
     
     # COLLEGE EXTRACT
-    col_match = re.search(r'(B\.C\.E\.\s+BHAGALPUR|M\.I\.T\.\s+MUZAFFARPUR|B\.C\.E\.\s+BAKHTIYARPUR|G\.C\.E\.\s+GAYA|D\.C\.E\.\s+DARBHANGA|M\.\.C\.E\.\s+MOTIHARI|NALANDA\s+COLLEGE\.\s+OF\s+ENGG,CHANDI|P\.C\.E\.\s+PURNEA|S\.C\.E\.\s+SAHARSA|G\.E\.C\.\s+SIWAN|G\.E\.C\.\s+AURANGABAD|G\.E\.C\.\s+KAIMUR|G\.E\.C\.\s+ARWAL|G\.E\.C\.\s+SHEIKHPURA)', raw)
+    # Support all Govt Colleges (GEC, BCE, MIT, DCE, etc.)
+    col_match = re.search(r'((?:B\.C\.E\.|M\.I\.T\.|G\.C\.E\.|D\.C\.E\.|M\.\.C\.E\.|NALANDA\s+COLLEGE\.|P\.C\.E\.|S\.C\.E\.|G\.E\.C\.|B\.P\.M\.C\.E\.|K\.C\.E\.|L\.N\.J\.P\.I\.T\.|S\.I\.T\.|R\.R\.S\.D\.C\.E\.|SHRI\s+PHANISHWAR\s+NATH\s+RENU)\s+[\w\s,]+)', raw)
     if not col_match: continue
-    college = col_match.group(1).replace('  ', ' ').strip()
+    college_raw = col_match.group(1).replace('  ', ' ').strip()
     
-    # Map back to standard names
-    college_map = {
-        'B.C.E. BHAGALPUR': 'BCE Bhagalpur',
-        'M.I.T. MUZAFFARPUR': 'MIT Muzaffarpur',
-        'B.C.E. BAKHTIYARPUR': 'BCE Bakhtiyarpur',
-        'G.C.E. GAYA': 'GCE Gaya',
-        'D.C.E. DARBHANGA': 'DCE Darbhanga',
-        'NALANDA COLLEGE. OF ENGG,CHANDI': 'NCE Chandi',
-        'M..C.E. MOTIHARI': 'MCE Motihari',
-        'P.C.E. PURNEA': 'PCE Purnia'
-    }
-    college = college_map.get(college, college)
+    # Map back to standard names (Heuristic)
+    college = college_raw.replace('.', '').replace('  ', ' ')
+    if 'BHAGALPUR' in college: college = 'BCE Bhagalpur'
+    elif 'MUZAFFARPUR' in college: college = 'MIT Muzaffarpur'
+    elif 'BAKHTIYARPUR' in college: college = 'BCE Bakhtiyarpur'
+    elif 'GAYA' in college: college = 'GCE Gaya'
+    elif 'DARBHANGA' in college: college = 'DCE Darbhanga'
+    elif 'MOTIHARI' in college: college = 'MCE Motihari'
+    elif 'CHANDI' in college: college = 'NCE Chandi'
+    elif 'CHAPRA' in college: college = 'LNJPIT Chapra'
+    elif 'PURNEA' in college: college = 'PCE Purnea'
+    elif 'SAHARSA' in college: college = 'SCE Saharsa'
+    elif 'SUPAUL' in college: college = 'SCE Supaul'
+    elif 'SASARAM' in college: college = 'SCE Sasaram'
+    elif 'MADHEPURA' in college: college = 'BPMCE Madhepura'
+    elif 'KATIHAR' in college: college = 'KCE Katihar'
+    elif 'SITAMARHI' in college: college = 'SIT Sitamarhi'
+    elif 'BEGUSARAI' in college: college = 'RRSDCE Begusarai'
+    elif 'ARARIA' in college: college = 'GEC Araria'
+    elif 'BETTIAH' in college: college = 'GEC Bettiah'
+    elif 'WEST CHAMPARAN' in college: college = 'GEC Bettiah'
+    
+    # Generic GEC Handler
+    if 'GEC' in college or 'GOVERNMENT ENGINEERING COLLEGE' in college or 'G E C' in college:
+        parts = college.split()
+        city = parts[-1]
+        college = f"GEC {city.capitalize()}"
 
     # BRANCH EXTRACT
     branch = "Unknown"
-    if "COMPUTER SC. & ENGINEERING" in raw: branch = "Computer Science"
-    elif "COMPUTER SCIENCE & ENGG" in raw: branch = "Computer Science"
-    elif "I.T." in raw: branch = "IT"
-    elif "CIVIL ENGINEERING" in raw: branch = "Civil"
-    elif "ELECTRICAL ENGINEERING" in raw: branch = "Electrical"
-    elif "ELECTRO & COMMUNICATION" in raw: branch = "Electronics & Communication"
-    elif "MECHANICAL ENGINEERING" in raw: branch = "Mechanical"
+    if "COMPUTER SC" in raw or "CSE" in raw: branch = "Computer Science"
+    elif "CS(AI & ML)" in raw or "AI & ML" in raw: branch = "CSE (AI & ML)"
+    elif "INFORMATION TECHNOLOGY" in raw or "I.T." in raw: branch = "IT"
+    elif "CIVIL" in raw: branch = "Civil"
+    elif "ELECTRICAL" in raw: branch = "Electrical"
+    elif "ELECTRO" in raw or "ELECTRONICS" in raw: branch = "Electronics & Communication"
+    elif "MECHANICAL" in raw: branch = "Mechanical"
+    elif "FOOD" in raw: branch = "Food Processing"
 
     # UR RANK EXTRACT (Crucial Fix)
     ur_match = re.search(r'UR-\s*(\d+)', raw)
@@ -104,11 +121,19 @@ for d in final_data:
 
 results2025 = list(closing_ranks.values())
 
-# For 2024, load from real_cutoffs.js if available or use a small reliable set
-# Since we have the 18,000 lines file, I'll extract it properly in JS.
-with open('client/public/data/cutoffs.json', 'w') as f:
-    # Just temporary, we will overwrite 2024 in next step
-    json.dump({"cutoffs2024": [], "cutoffs2025": results2025}, f)
+# LOAD EXISTING DATA TO PRESERVE 2024
+output_path = 'client/public/data/cutoffs.json'
+existing_2024 = []
+if os.path.exists(output_path):
+    try:
+        with open(output_path, 'r') as f:
+            old_data = json.load(f)
+            existing_2024 = old_data.get('cutoffs2024', [])
+    except:
+        pass
+
+with open(output_path, 'w') as f:
+    json.dump({"cutoffs2024": existing_2024, "cutoffs2025": results2025}, f, indent=2)
 
 print(f"Saved {len(results2025)} verified 2025 records.")
 print("Sample:", results2025[:2])

@@ -517,66 +517,66 @@ function UgeacPredictor() {
       <>
       
       {/* Header */}
-      <div className="bg-white p-14 rounded-[4.5rem] border border-slate-200 shadow-2xl space-y-12">
-         <div className="flex flex-col md:flex-row items-center justify-between gap-10">
-            <h1 className="text-6xl md:text-7xl font-[1000] text-slate-800 tracking-tighter uppercase whitespace-nowrap">UGEAC <span className="text-blue-600">COUNSELLING</span></h1>
-            <a href="https://bceceboard.bihar.gov.in" target="_blank" rel="noreferrer" className="px-10 py-5 bg-slate-50 border-2 border-slate-200 rounded-[2rem] font-black text-xs uppercase tracking-widest flex items-center gap-3 hover:bg-black hover:text-white transition-all">Official Portal <ExternalLink size={18}/></a>
+      <div className="bg-white p-6 md:p-14 rounded-[2.5rem] md:rounded-[4.5rem] border border-slate-200 shadow-2xl space-y-8 md:space-y-12">
+         <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10">
+            <h1 className="text-3xl md:text-7xl font-[1000] text-slate-800 tracking-tighter uppercase whitespace-normal md:whitespace-nowrap text-center md:text-left">UGEAC <span className="text-blue-600">COUNSELLING</span></h1>
+            <a href="https://bceceboard.bihar.gov.in" target="_blank" rel="noreferrer" className="w-full md:w-auto px-8 py-4 md:px-10 md:py-5 bg-slate-50 border-2 border-slate-200 rounded-2xl md:rounded-[2rem] font-black text-[10px] md:text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-black hover:text-white transition-all text-center">Official Portal <ExternalLink size={16}/></a>
          </div>
 
-         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
             <div className="space-y-3">
-               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">JEE Main Rank (CRL)</label>
-               <input type="number" placeholder="Enter CRL Rank..." value={rank} onChange={e => setRank(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-3xl p-6 text-xl font-[1000] outline-none transition-all placeholder:text-slate-200" />
+               <label className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">JEE Main Rank (CRL)</label>
+               <input type="number" placeholder="Enter CRL Rank..." value={rank} onChange={e => setRank(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl md:rounded-3xl p-4 md:p-6 text-lg md:text-xl font-[1000] outline-none transition-all placeholder:text-slate-200" />
             </div>
-            <div className="space-y-3 p-2 bg-blue-50/50 rounded-[2.5rem] border border-blue-100">
-               <label className="text-[10px] font-black text-blue-600 uppercase tracking-widest pl-2 block text-center">UGEAC State Rank</label>
-               <input type="number" placeholder="Optional Rank..." value={ugeacInput} onChange={e => setUgeacInput(e.target.value)} className="w-full bg-white border-2 border-transparent focus:border-blue-600 rounded-2xl p-6 text-xl font-[1000] outline-none transition-all placeholder:text-blue-100 shadow-inner" />
+            <div className="space-y-3 p-2 bg-blue-50/50 rounded-2xl md:rounded-[2.5rem] border border-blue-100">
+               <label className="text-[9px] md:text-[10px] font-black text-blue-600 uppercase tracking-widest pl-2 block text-center">UGEAC State Rank</label>
+               <input type="number" placeholder="Optional Rank..." value={ugeacInput} onChange={e => setUgeacInput(e.target.value)} className="w-full bg-white border-2 border-transparent focus:border-blue-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-lg md:text-xl font-[1000] outline-none transition-all placeholder:text-blue-100 shadow-inner" />
             </div>
              <div className="space-y-3">
-               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Category</label>
-               <select value={category} onChange={e => setCategory(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-3xl p-6 text-sm font-[1000] outline-none transition-all uppercase appearance-none cursor-pointer">
+               <label className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Category</label>
+               <select value={category} onChange={e => setCategory(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl md:rounded-3xl p-4 md:p-6 text-xs md:text-sm font-[1000] outline-none transition-all uppercase appearance-none cursor-pointer">
                   <option value="UR">UR (General)</option><option value="EBC">EBC</option><option value="BC">BC</option><option value="SC">SC</option><option value="EWS">EWS</option>
                </select>
             </div>
 
              <div className="space-y-3">
-               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Gender</label>
-               <select value={gender} onChange={e => setGender(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-3xl p-6 text-sm font-[1000] outline-none transition-all uppercase appearance-none cursor-pointer">
+               <label className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Gender</label>
+               <select value={gender} onChange={e => setGender(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl md:rounded-3xl p-4 md:p-6 text-xs md:text-sm font-[1000] outline-none transition-all uppercase appearance-none cursor-pointer">
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                </select>
              </div>
           </div>
           
-          <div className="flex flex-col items-center gap-6 py-4">
-             <div className="bg-emerald-50 text-emerald-600 px-5 py-2.5 rounded-full text-[9px] font-[1000] uppercase tracking-widest border border-emerald-100 flex items-center gap-2 shadow-sm animate-pulse">
-                <ShieldCheck size={14}/> 100% Data Accuracy: Verified with Official UGEAC 2025 PDF
+          <div className="flex flex-col items-center gap-6 py-2">
+             <div className="bg-emerald-50 text-emerald-600 px-4 py-2.5 rounded-full text-[8px] md:text-[9px] font-[1000] uppercase tracking-widest border border-emerald-100 flex items-center gap-2 shadow-sm animate-pulse text-center">
+                <ShieldCheck size={14}/> 100% Data Accuracy: Verified 2025 PDF
              </div>
 
              {rank && (
-               <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-6 animate-in slide-in-from-top-4 duration-700">
-                  <div className="bg-white border-2 border-blue-100 rounded-[2.5rem] p-6 text-center shadow-xl shadow-blue-50 relative overflow-hidden group">
+               <div className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 animate-in slide-in-from-top-4 duration-700">
+                  <div className="bg-white border-2 border-blue-100 rounded-[2rem] md:rounded-[2.5rem] p-5 md:p-6 text-center shadow-xl shadow-blue-50 relative overflow-hidden group">
                      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"><Zap size={40}/></div>
-                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Estimated UGEAC Rank</p>
-                     <p className="text-4xl font-[1000] text-blue-600 tracking-tighter">#{estimateUgeacRank(rank)}</p>
-                     <p className="text-[9px] font-bold text-blue-300 mt-2 uppercase">Official 2025 State Merit</p>
+                     <p className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">UGEAC Rank</p>
+                     <p className="text-3xl md:text-4xl font-[1000] text-blue-600 tracking-tighter">#{estimateUgeacRank(rank)}</p>
+                     <p className="text-[8px] md:text-[9px] font-bold text-blue-300 mt-2 uppercase">Official 2025 State Merit</p>
                   </div>
 
                   {category !== 'UR' && (
-                  <div className="bg-white border-2 border-indigo-100 rounded-[2.5rem] p-6 text-center shadow-xl shadow-indigo-50 relative overflow-hidden group">
+                  <div className="bg-white border-2 border-indigo-100 rounded-[2rem] md:rounded-[2.5rem] p-5 md:p-6 text-center shadow-xl shadow-indigo-50 relative overflow-hidden group">
                      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"><ShieldCheck size={40}/></div>
-                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{category} Category Rank</p>
-                     <p className="text-4xl font-[1000] text-indigo-600 tracking-tighter">#{getEstimatedCategoryRank(estimateUgeacRank(rank), category)}</p>
-                     <p className="text-[9px] font-bold text-indigo-300 mt-2 uppercase">Based on Bihar PDF Analysis</p>
+                     <p className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{category} Rank</p>
+                     <p className="text-3xl md:text-4xl font-[1000] text-indigo-600 tracking-tighter">#{getEstimatedCategoryRank(estimateUgeacRank(rank), category)}</p>
+                     <p className="text-[8px] md:text-[9px] font-bold text-indigo-300 mt-2 uppercase">Bihar PDF Analysis</p>
                   </div>
                   )}
 
                   {gender === 'Female' && (
-                  <div className="bg-white border-2 border-rose-100 rounded-[2.5rem] p-6 text-center shadow-xl shadow-rose-50 relative overflow-hidden group">
+                  <div className="bg-white border-2 border-rose-100 rounded-[2rem] md:rounded-[2.5rem] p-5 md:p-6 text-center shadow-xl shadow-rose-50 relative overflow-hidden group">
                      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"><CheckCircle2 size={40}/></div>
-                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">RCG (Girls) Rank</p>
-                     <p className="text-4xl font-[1000] text-rose-600 tracking-tighter">#{getEstimatedCategoryRank(estimateUgeacRank(rank), 'RCG')}</p>
-                     <p className="text-[9px] font-bold text-rose-300 mt-2 uppercase">Verified Female Reservation</p>
+                     <p className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">RCG Rank</p>
+                     <p className="text-3xl md:text-4xl font-[1000] text-rose-600 tracking-tighter">#{getEstimatedCategoryRank(estimateUgeacRank(rank), 'RCG')}</p>
+                     <p className="text-[8px] md:text-[9px] font-bold text-rose-300 mt-2 uppercase">Female Reservation</p>
                   </div>
                   )}
                </div>
@@ -584,54 +584,54 @@ function UgeacPredictor() {
           </div>
 
           {/* MODE SWITCHER TABS */}
-          <div className="flex flex-wrap justify-center gap-4 bg-slate-50 p-2 rounded-[2.5rem] border border-slate-200">
+          <div className="flex flex-wrap md:flex-nowrap justify-center gap-2 md:gap-4 bg-slate-50 p-1 md:p-2 rounded-2xl md:rounded-[2.5rem] border border-slate-200">
              <button 
                 onClick={() => setMode('explore')}
-                className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'explore' ? 'bg-blue-600 text-white shadow-xl shadow-blue-200' : 'text-slate-500 hover:bg-white hover:text-blue-600'}`}
+                className={`flex-1 flex items-center justify-center gap-2 md:gap-3 px-4 md:px-8 py-3 md:py-4 rounded-xl md:rounded-[2rem] text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'explore' ? 'bg-blue-600 text-white shadow-xl shadow-blue-200' : 'text-slate-500 hover:bg-white hover:text-blue-600'}`}
              >
-                <LayoutGrid size={16}/> 1. Explore All
+                <LayoutGrid size={14}/> <span className="hidden xs:inline">1.</span> Explore
              </button>
              <button 
                 onClick={() => setMode('finder')}
-                className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'finder' ? 'bg-blue-600 text-white shadow-xl shadow-blue-200' : 'text-slate-500 hover:bg-white hover:text-blue-600'}`}
+                className={`flex-1 flex items-center justify-center gap-2 md:gap-3 px-4 md:px-8 py-3 md:py-4 rounded-xl md:rounded-[2rem] text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'finder' ? 'bg-blue-600 text-white shadow-xl shadow-blue-200' : 'text-slate-500 hover:bg-white hover:text-blue-600'}`}
              >
-                <Search size={16}/> 2. Specific Finder
+                <Search size={14}/> <span className="hidden xs:inline">2.</span> Finder
              </button>
              <button 
                 onClick={() => setMode('wizard')}
-                className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'wizard' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-200' : 'text-slate-500 hover:bg-white hover:text-indigo-600'}`}
+                className={`flex-1 flex items-center justify-center gap-2 md:gap-3 px-4 md:px-8 py-3 md:py-4 rounded-xl md:rounded-[2rem] text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${mode === 'wizard' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-200' : 'text-slate-500 hover:bg-white hover:text-indigo-600'}`}
              >
-                <Zap size={16}/> 3. Selection Wizard
+                <Zap size={14}/> <span className="hidden xs:inline">3.</span> Wizard
              </button>
           </div>
 
           <div className="pt-2">
              {/* MODE 1: EXPLORE ALL (General Entry Only) */}
              {mode === 'explore' && (
-               <div className="text-center py-10 space-y-4 animate-in fade-in zoom-in duration-500">
-                  <div className="w-20 h-20 bg-blue-50 text-blue-600 rounded-[2.5rem] flex items-center justify-center mx-auto mb-6">
-                     <LayoutGrid size={32} />
+               <div className="text-center py-6 md:py-10 space-y-4 animate-in fade-in zoom-in duration-500">
+                  <div className="w-16 h-16 md:w-20 md:h-20 bg-blue-50 text-blue-600 rounded-2xl md:rounded-[2.5rem] flex items-center justify-center mx-auto mb-4 md:mb-6">
+                     <LayoutGrid size={28} md:size={32} />
                   </div>
-                  <h3 className="text-2xl font-[1000] text-slate-800 uppercase tracking-tighter">Full Potential View</h3>
-                  <p className="max-w-md mx-auto text-xs font-bold text-slate-400 uppercase tracking-widest leading-loose">Enter your details above and hit calculate. We will analyze all 38 colleges to find your best matches.</p>
+                  <h3 className="text-xl md:text-2xl font-[1000] text-slate-800 uppercase tracking-tighter">Full Potential View</h3>
+                  <p className="max-w-md mx-auto text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest leading-relaxed md:leading-loose">Enter your details above and analyze all 38 colleges to find your best matches.</p>
                </div>
              )}
 
                {/* MODE 2: SPECIFIC FINDER (Multi-Selection Workflow) */}
                {mode === 'finder' && (
-                 <div className="space-y-8 animate-in slide-in-from-top-4 duration-500">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                 <div className="space-y-6 md:space-y-8 animate-in slide-in-from-top-4 duration-500">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
                        
                        {/* Step 1: Multiple College Selection */}
-                       <div className="bg-white border-2 border-slate-100 rounded-[3rem] p-8 space-y-6 shadow-sm">
-                          <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                             <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">1</span> Focus Institutions
+                       <div className="bg-white border-2 border-slate-100 rounded-[2rem] md:rounded-[3rem] p-6 md:p-8 space-y-4 md:space-y-6 shadow-sm">
+                          <h3 className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                             <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-[9px] md:text-[10px]">1</span> Focus Institutions
                           </h3>
-                          <div className="flex gap-3">
+                          <div className="flex gap-2 md:gap-3">
                              <select 
                                 value={selectedCollegeToAdd} 
                                 onChange={e => setSelectedCollegeToAdd(e.target.value)}
-                                className="flex-1 bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none"
+                                className="flex-1 bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-xl md:rounded-2xl p-3 md:p-4 text-[10px] md:text-[11px] font-[1000] outline-none uppercase appearance-none"
                              >
                                 <option value="All">-- Select College --</option>
                                 {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
@@ -642,29 +642,29 @@ function UgeacPredictor() {
                                    const cid = parseInt(selectedCollegeToAdd);
                                    if (!targetColleges.includes(cid)) setTargetColleges([...targetColleges, cid]);
                                 }}
-                                className="px-6 bg-blue-600 text-white rounded-2xl font-black transition-all flex items-center justify-center hover:bg-blue-700 active:scale-95 shadow-lg shadow-blue-100"
+                                className="px-5 md:px-6 bg-blue-600 text-white rounded-xl md:rounded-2xl font-black transition-all flex items-center justify-center hover:bg-blue-700 active:scale-95 shadow-lg shadow-blue-100"
                              >
-                                <Plus size={24} strokeWidth={3}/>
+                                <Plus size={20} md:size={24} strokeWidth={3}/>
                              </button>
                           </div>
                           
                           <div className="flex flex-col gap-2 min-h-[40px]">
                              {targetColleges.length === 0 ? (
-                                <p className="text-[10px] font-bold text-slate-300 uppercase italic">No colleges selected yet...</p>
+                                <p className="text-[9px] md:text-[10px] font-bold text-slate-300 uppercase italic">No colleges selected yet...</p>
                              ) : (
                                 targetColleges.map((id, idx) => {
                                    const c = colleges.find(co => co.id === id);
                                    return (
-                                      <div key={id} className="group flex items-center justify-between bg-white border border-slate-200 p-3 rounded-2xl animate-in slide-in-from-left-2 duration-300">
-                                         <div className="flex items-center gap-4">
-                                            <span className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center text-[9px] font-black">{idx + 1}</span>
-                                            <p className="text-[10px] font-black text-slate-800 uppercase tracking-tight">{c?.short || c?.name}</p>
+                                      <div key={id} className="group flex items-center justify-between bg-white border border-slate-200 p-2.5 md:p-3 rounded-xl md:rounded-2xl animate-in slide-in-from-left-2 duration-300">
+                                         <div className="flex items-center gap-3 md:gap-4">
+                                            <span className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center text-[8px] md:text-[9px] font-black">{idx + 1}</span>
+                                            <p className="text-[9px] md:text-[10px] font-black text-slate-800 uppercase tracking-tight">{c?.short || c?.name}</p>
                                          </div>
                                          <div className="flex items-center gap-1">
-                                            <button disabled={idx === 0} onClick={() => moveTargetCollege(idx, -1)} className="p-1.5 hover:bg-blue-50 text-blue-400 disabled:opacity-10 transition-colors"><ChevronUp size={14}/></button>
-                                            <button disabled={idx === targetColleges.length - 1} onClick={() => moveTargetCollege(idx, 1)} className="p-1.5 hover:bg-blue-50 text-blue-400 disabled:opacity-10 transition-colors"><ChevronDown size={14}/></button>
-                                            <button onClick={() => setTargetColleges(targetColleges.filter(t => t !== id))} className="p-1.5 bg-red-50 hover:bg-red-100 text-red-500 rounded-full h-7 w-7 flex items-center justify-center transition-all">
-                                               <Minus size={14} strokeWidth={4}/>
+                                            <button disabled={idx === 0} onClick={() => moveTargetCollege(idx, -1)} className="p-1 md:p-1.5 hover:bg-blue-50 text-blue-400 disabled:opacity-10 transition-colors"><ChevronUp size={12} md:size={14}/></button>
+                                            <button disabled={idx === targetColleges.length - 1} onClick={() => moveTargetCollege(idx, 1)} className="p-1 md:p-1.5 hover:bg-blue-50 text-blue-400 disabled:opacity-10 transition-colors"><ChevronDown size={12} md:size={14}/></button>
+                                            <button onClick={() => setTargetColleges(targetColleges.filter(t => t !== id))} className="p-1.5 bg-red-50 hover:bg-red-100 text-red-500 rounded-full h-6 w-6 md:h-7 md:w-7 flex items-center justify-center transition-all">
+                                               <Minus size={12} md:size={14} strokeWidth={4}/>
                                             </button>
                                          </div>
                                       </div>
@@ -675,15 +675,15 @@ function UgeacPredictor() {
                        </div>
 
                        {/* Step 2: Multiple Branch Selection (Filtered by selected colleges) */}
-                       <div className="bg-white border-2 border-slate-100 rounded-[3rem] p-8 space-y-6 shadow-sm">
-                          <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                             <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">2</span> Preferred Branches
+                       <div className="bg-white border-2 border-slate-100 rounded-[2rem] md:rounded-[3rem] p-6 md:p-8 space-y-4 md:space-y-6 shadow-sm">
+                          <h3 className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                             <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-[9px] md:text-[10px]">2</span> Preferred Branches
                           </h3>
-                          <div className="flex gap-3">
+                          <div className="flex gap-2 md:gap-3">
                              <select 
                                 value={selectedBranchToAdd}
                                 onChange={e => setSelectedBranchToAdd(e.target.value)}
-                                className="flex-1 bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none"
+                                className="flex-1 bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-xl md:rounded-2xl p-3 md:p-4 text-[10px] md:text-[11px] font-[1000] outline-none uppercase appearance-none"
                              >
                                 <option value="">-- Select Branch --</option>
                                 {(targetColleges.length > 0 ? availableBranchesForTarget : ugeacData.branches).map(b => (
@@ -695,27 +695,27 @@ function UgeacPredictor() {
                                    if (!selectedBranchToAdd) return;
                                    if (!targetBranches.includes(selectedBranchToAdd)) setTargetBranches([...targetBranches, selectedBranchToAdd]);
                                 }}
-                                className="px-6 bg-emerald-600 text-white rounded-2xl font-black transition-all flex items-center justify-center hover:bg-emerald-700 active:scale-95 shadow-lg shadow-emerald-100"
+                                className="px-5 md:px-6 bg-emerald-600 text-white rounded-xl md:rounded-2xl font-black transition-all flex items-center justify-center hover:bg-emerald-700 active:scale-95 shadow-lg shadow-emerald-100"
                              >
-                                <Plus size={24} strokeWidth={3}/>
+                                <Plus size={20} md:size={24} strokeWidth={3}/>
                              </button>
                           </div>
 
                           <div className="flex flex-col gap-2 min-h-[40px]">
                              {targetBranches.length === 0 ? (
-                                <p className="text-[10px] font-bold text-slate-300 uppercase italic">Showing all branches if empty...</p>
+                                <p className="text-[9px] md:text-[10px] font-bold text-slate-300 uppercase italic">Showing all branches if empty...</p>
                              ) : (
                                 targetBranches.map((b, idx) => (
-                                   <div key={b} className="group flex items-center justify-between bg-white border border-slate-200 p-3 rounded-2xl animate-in slide-in-from-right-2 duration-300">
-                                      <div className="flex items-center gap-4">
-                                         <span className="w-5 h-5 bg-emerald-600 text-white rounded-full flex items-center justify-center text-[9px] font-black">{idx + 1}</span>
-                                         <p className="text-[10px] font-black text-slate-800 uppercase tracking-tight">{branchMapping[b] || b}</p>
+                                   <div key={b} className="group flex items-center justify-between bg-white border border-slate-200 p-2.5 md:p-3 rounded-xl md:rounded-2xl animate-in slide-in-from-right-2 duration-300">
+                                      <div className="flex items-center gap-3 md:gap-4">
+                                         <span className="w-5 h-5 bg-emerald-600 text-white rounded-full flex items-center justify-center text-[8px] md:text-[9px] font-black">{idx + 1}</span>
+                                         <p className="text-[9px] md:text-[10px] font-black text-slate-800 uppercase tracking-tight">{branchMapping[b] || b}</p>
                                       </div>
                                       <div className="flex items-center gap-1">
-                                         <button disabled={idx === 0} onClick={() => moveTargetBranch(idx, -1)} className="p-1.5 hover:bg-emerald-50 text-emerald-400 disabled:opacity-10 transition-colors"><ChevronUp size={14}/></button>
-                                         <button disabled={idx === targetBranches.length - 1} onClick={() => moveTargetBranch(idx, 1)} className="p-1.5 hover:bg-emerald-50 text-emerald-400 disabled:opacity-10 transition-colors"><ChevronDown size={14}/></button>
-                                         <button onClick={() => setTargetBranches(targetBranches.filter(t => t !== b))} className="p-1.5 bg-red-50 hover:bg-red-100 text-red-500 rounded-full h-7 w-7 flex items-center justify-center transition-all">
-                                            <Minus size={14} strokeWidth={4}/>
+                                         <button disabled={idx === 0} onClick={() => moveTargetBranch(idx, -1)} className="p-1 md:p-1.5 hover:bg-emerald-50 text-emerald-400 disabled:opacity-10 transition-colors"><ChevronUp size={12} md:size={14}/></button>
+                                         <button disabled={idx === targetBranches.length - 1} onClick={() => moveTargetBranch(idx, 1)} className="p-1 md:p-1.5 hover:bg-emerald-50 text-emerald-400 disabled:opacity-10 transition-colors"><ChevronDown size={12} md:size={14}/></button>
+                                         <button onClick={() => setTargetBranches(targetBranches.filter(t => t !== b))} className="p-1.5 bg-red-50 hover:bg-red-100 text-red-500 rounded-full h-6 w-6 md:h-7 md:w-7 flex items-center justify-center transition-all">
+                                            <Minus size={12} md:size={14} strokeWidth={4}/>
                                          </button>
                                       </div>
                                    </div>
@@ -726,23 +726,23 @@ function UgeacPredictor() {
                     </div>
 
                     {/* Step 3: Result Priority Toggles */}
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-8 p-10 bg-slate-50 rounded-[3rem] border border-slate-200 shadow-inner">
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 p-6 md:p-10 bg-slate-50 rounded-[2rem] md:rounded-[3rem] border border-slate-200 shadow-inner">
                        <div className="text-center md:text-left">
-                          <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest">3. Optimization Strategy</h4>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">How should we prioritize your results?</p>
+                          <h4 className="text-xs md:text-sm font-black text-slate-800 uppercase tracking-widest">3. Strategy</h4>
+                          <p className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Optimization preference?</p>
                        </div>
-                       <div className="flex bg-white p-2 rounded-[2rem] border border-slate-200 shadow-sm scale-110">
+                       <div className="flex bg-white p-1 md:p-2 rounded-2xl md:rounded-[2rem] border border-slate-200 shadow-sm scale-110 md:scale-100">
                           <button 
                              onClick={() => setPreferenceBasis('college')} 
-                             className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'college' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-blue-600'}`}
+                             className={`px-4 md:px-8 py-2 md:py-3 rounded-xl md:rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'college' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-blue-600'}`}
                           >
-                             Group by College
+                             College First
                           </button>
                           <button 
                              onClick={() => setPreferenceBasis('branch')} 
-                             className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'branch' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-blue-600'}`}
+                             className={`px-4 md:px-8 py-2 md:py-3 rounded-xl md:rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'branch' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-blue-600'}`}
                           >
-                             Group by Branch
+                             Branch First
                           </button>
                        </div>
                     </div>
@@ -753,38 +753,38 @@ function UgeacPredictor() {
              {mode === 'wizard' && (
                <div className="space-y-8 animate-in slide-in-from-bottom-5 duration-500">
                   {/* Sub-Preference Toggles */}
-                  <div className="flex items-center justify-center gap-6 p-6 bg-indigo-50/50 rounded-[2.5rem] border border-indigo-100">
+                  <div className="flex items-center justify-center gap-4 md:gap-6 p-4 md:p-6 bg-indigo-50/50 rounded-[2rem] md:rounded-[2.5rem] border border-indigo-100">
 
-                     <div className="flex bg-white p-1 rounded-2xl border border-indigo-100 shadow-sm">
+                     <div className="flex bg-white p-1 rounded-xl md:rounded-2xl border border-indigo-100 shadow-sm">
                         <button 
                            onClick={() => setPreferenceBasis('college')}
-                           className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'college' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600'}`}
+                           className={`px-4 md:px-6 py-2 rounded-lg md:rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'college' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600'}`}
                         >
-                           I Prefer College
+                           College
                         </button>
                         <button 
                            onClick={() => setPreferenceBasis('branch')}
-                           className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'branch' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600'}`}
+                           className={`px-4 md:px-6 py-2 rounded-lg md:rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'branch' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600'}`}
                         >
-                           I Prefer Branch
+                           Branch
                         </button>
                      </div>
                   </div>
 
                   {/* Step 1: Target Colleges */}
-                  <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 lg:p-10 space-y-4 shadow-sm">
-                    <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
-                      <span className="bg-indigo-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs shadow-lg">1</span> 
-                      {preferenceBasis === 'college' ? 'Choose Targeted Institutions' : 'Select Target Colleges'}
+                  <div className="bg-slate-50 border border-slate-200 rounded-[2rem] md:rounded-3xl p-6 lg:p-10 space-y-4 shadow-sm">
+                    <h3 className="text-[11px] md:text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
+                      <span className="bg-indigo-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px] md:text-xs shadow-lg">1</span> 
+                      Target Institutions
                     </h3>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Select your dream colleges first.</p>
+                    <p className="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase tracking-widest">Select your dream colleges.</p>
                     
-                    <div className="flex flex-col md:flex-row gap-4">
-                       <select value={selectedCollegeToAdd} onChange={e => setSelectedCollegeToAdd(e.target.value)} className="flex-1 bg-white border-2 border-slate-200 focus:border-indigo-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none cursor-pointer shadow-sm">
+                    <div className="flex flex-col md:flex-row gap-3 md:gap-4">
+                       <select value={selectedCollegeToAdd} onChange={e => setSelectedCollegeToAdd(e.target.value)} className="flex-1 bg-white border-2 border-slate-200 focus:border-indigo-500 rounded-xl md:rounded-2xl p-3 md:p-4 text-[10px] md:text-[11px] font-[1000] outline-none uppercase appearance-none cursor-pointer shadow-sm">
                           <option value="All">-- Select College Details --</option>
                           {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                        </select>
-                       <button onClick={addTargetCollege} className="md:w-auto w-full px-8 py-4 bg-indigo-600 hover:bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
+                       <button onClick={addTargetCollege} className="md:w-auto w-full px-6 md:px-8 py-3.5 md:py-4 bg-indigo-600 hover:bg-black text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
                          + Add Selection
                        </button>
                        {preferenceBasis === 'college' && selectedCollegeToAdd !== 'All' && (
@@ -803,9 +803,9 @@ function UgeacPredictor() {
                                 setChoices(newChoices);
                                 if (!targetColleges.includes(cid)) setTargetColleges([...targetColleges, cid]);
                              }}
-                             className="md:w-auto w-full px-8 py-4 bg-emerald-600 hover:bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all"
+                             className="md:w-auto w-full px-6 md:px-8 py-3.5 md:py-4 bg-emerald-600 hover:bg-slate-900 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all"
                           >
-                             + Add All Branches of this College
+                             + Select All Branches
                           </button>
                        )}
                     </div>

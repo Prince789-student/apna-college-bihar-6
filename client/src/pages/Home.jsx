@@ -11,12 +11,12 @@ export default function Home() {
     <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center p-4 font-['Inter'] relative overflow-hidden">
 
       {/* ── Navbar ── */}
-      <nav className="sticky top-0 left-0 w-full z-[100] bg-[#f8fafc]/80 backdrop-blur-xl border-b border-slate-200/50 px-6 md:px-16 py-5 flex items-center justify-between">
-        <div className="flex items-center gap-3 group">
-           <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
-           <div className="hidden sm:block">
-             <span className="text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE BIHAR</span>
-             <span className="text-[7px] text-blue-500 font-bold uppercase tracking-[0.5em] mt-1 block">OFFICIAL WEBSITE</span>
+      <nav className="sticky top-0 left-0 w-full z-[100] bg-[#f8fafc]/80 backdrop-blur-xl border-b border-slate-200/50 px-4 md:px-16 py-4 md:py-5 flex items-center justify-between">
+        <div className="flex items-center gap-2 md:gap-3 group">
+           <img src="/logo.jpg" alt="Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl" />
+           <div className="block">
+             <span className="text-sm md:text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE</span>
+             <span className="text-[6px] md:text-[7px] text-blue-500 font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mt-0.5 md:mt-1 block">BIHAR OFFICIAL</span>
            </div>
         </div>
         <div className="hidden md:flex items-center gap-10">
@@ -24,9 +24,9 @@ export default function Home() {
            <Link to="/about" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">About</Link>
            <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Contact</Link>
         </div>
-        <div className="flex items-center gap-4">
-           <Link to="/login" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Login</Link>
-           <Link to="/signup" className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95">Signup</Link>
+        <div className="flex items-center gap-3 md:gap-4">
+           <Link to="/login" className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Login</Link>
+           <Link to="/signup" className="px-4 py-2.5 md:px-6 md:py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95">Signup</Link>
         </div>
       </nav>
 
@@ -42,19 +42,19 @@ export default function Home() {
              <span className="text-[10px] font-black uppercase tracking-widest">v2.0 Performance Hub is Live</span>
            </div>
            
-           <h1 className="text-4xl md:text-7xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.8] mb-6">
+           <h1 className="text-4xl md:text-7xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.9] md:leading-[0.8] mb-6">
                    Bihar's Digital <br/>
                    <span className="text-blue-500">Study Engine</span>
                 </h1>
-                <p className="text-slate-500 text-xs md:text-sm font-black uppercase tracking-[0.4em] mb-12 max-w-xl mx-auto md:mx-0">
+                <p className="text-slate-500 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mb-8 md:mb-12 max-w-xl mx-auto">
                    Apna College Bihar - Engineering Notes · CGPA · Networking
                 </p>
 
-           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Link to="/signup" className="w-full sm:w-auto px-10 py-5 bg-white text-black rounded-[2rem] font-[1000] text-sm uppercase tracking-widest hover:bg-slate-200 transition-all flex items-center justify-center gap-3 active:scale-95 shadow-2xl">
-                Get Started Now <ArrowRight size={20}/>
+           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 px-4 w-full">
+              <Link to="/signup" className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-white text-black rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-slate-200 transition-all flex items-center justify-center gap-3 active:scale-95 shadow-2xl border border-slate-200">
+                Get Started Now <ArrowRight size={18}/>
               </Link>
-              <Link to="/login" className="w-full sm:w-auto px-10 py-5 bg-slate-100/50 border border-slate-200 text-slate-900 rounded-[2rem] font-[1000] text-sm uppercase tracking-widest hover:bg-slate-100 transition-all active:scale-95">
+              <Link to="/login" className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-slate-100/50 border border-slate-200 text-slate-900 rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-slate-100 transition-all active:scale-95">
                 Visit Campus Hub
               </Link>
            </div>

@@ -109,12 +109,12 @@ export default function DashboardLayout() {
           const isActive = location.pathname === link.path;
           return (
             <Link key={link.name} to={link.path}
-              className={`flex items-center gap-3 p-3 rounded-2xl transition-all duration-300 group relative ${isActive ? 'bg-blue-600 text-slate-900 shadow-xl shadow-blue-500/30' : 'text-slate-500 hover:bg-slate-100/50 hover:text-slate-900'}`}>
+              className={`flex items-center gap-3 p-3.5 md:p-3 rounded-2xl transition-all duration-300 group relative ${isActive ? 'bg-blue-600 text-slate-900 shadow-xl shadow-blue-500/30' : 'text-slate-500 hover:bg-slate-100/50 hover:text-slate-900'}`}>
               <div className={`${isActive ? 'scale-110' : 'group-hover:scale-110'} transition-transform shrink-0`}>{link.icon}</div>
-              <span className={`font-black text-[9px] uppercase tracking-widest transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+              <span className={`font-black text-[11px] md:text-[9px] uppercase tracking-widest transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                 {link.name}
               </span>
-              {isActive && (isSidebarOpen || isMobile) && <div className="absolute right-4 w-1 h-1 bg-white rounded-full animate-pulse shadow-[0_0_10px_white]" />}
+              {isActive && (isSidebarOpen || isMobile) && <div className="absolute right-4 w-1.5 h-1.5 bg-white rounded-full animate-pulse shadow-[0_0_10px_white]" />}
             </Link>
           );
         })}
@@ -127,7 +127,7 @@ export default function DashboardLayout() {
         )}
       </nav>
 
-      <div className="p-6 md:p-8 border-t border-slate-200/50">
+      <div className="p-6 md:p-8 border-t border-slate-200/50 mt-auto">
          {user ? (
            (isSidebarOpen || isMobile) ? (
              <div className="space-y-4">
@@ -135,12 +135,12 @@ export default function DashboardLayout() {
                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center font-[1000] text-slate-900 shadow-lg shrink-0">
                       {user?.name?.[0]?.toUpperCase()}
                    </div>
-                   <div className="flex-1 min-w-0">
+                   <div className="flex-1 min-w-0 text-left">
                       <p className="text-[10px] font-black text-slate-900 uppercase tracking-tighter truncate">{user?.name || 'Scholar'}</p>
                       <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">{user?.role || 'Verified'}</p>
                    </div>
                 </div>
-                <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 p-3 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-slate-900 border border-red-500/20 rounded-xl font-black text-[8px] uppercase tracking-widest transition-all group active:scale-95">
+                <button onClick={handleLogout} className="w-full flex items-center justify-center gap-2 p-4 md:p-3 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-slate-900 border border-red-500/20 rounded-xl font-black text-[9px] md:text-[8px] uppercase tracking-widest transition-all group active:scale-95">
                   <LogOut size={14} /> <span>Terminate Hub</span>
                 </button>
              </div>
@@ -151,11 +151,11 @@ export default function DashboardLayout() {
            )
          ) : (
            <div className="space-y-3">
-             <Link to="/login" className={`w-full flex items-center justify-center gap-3 p-4 bg-blue-600 hover:bg-blue-500 text-slate-900 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all shadow-lg shadow-blue-900/20 ${!isSidebarOpen && !isMobile ? 'px-0' : ''}`}>
+             <Link to="/login" className={`w-full flex items-center justify-center gap-3 p-4 bg-blue-600 hover:bg-blue-500 text-slate-900 rounded-[1.5rem] font-black text-[10px] md:text-[9px] uppercase tracking-widest transition-all shadow-lg shadow-blue-900/20 ${!isSidebarOpen && !isMobile ? 'px-0' : ''}`}>
                <User size={16} /> {(isSidebarOpen || isMobile) && <span>Student Login</span>}
              </Link>
              {(isSidebarOpen || isMobile) && (
-               <Link to="/signup" className="w-full flex items-center justify-center gap-3 p-4 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 rounded-[1.5rem] font-black text-[9px] uppercase tracking-widest transition-all">
+               <Link to="/signup" className="w-full flex items-center justify-center gap-3 p-4 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 rounded-[1.5rem] font-black text-[10px] md:text-[9px] uppercase tracking-widest transition-all">
                  Join Community
                </Link>
              )}
@@ -179,7 +179,7 @@ export default function DashboardLayout() {
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[100] md:hidden">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
-          <aside className="absolute top-0 left-0 h-full w-[280px] bg-white shadow-2xl flex flex-col animate-in slide-in-from-left duration-300">
+          <aside className="absolute top-0 left-0 h-full w-[85%] max-w-[320px] bg-white shadow-2xl flex flex-col animate-in slide-in-from-left duration-300">
             <SidebarContent isMobile />
           </aside>
         </div>
@@ -190,41 +190,47 @@ export default function DashboardLayout() {
         
         {/* Mobile Navbar Header */}
         {!isAppMode && (
-          <div className="md:hidden flex items-center justify-between px-4 py-2 bg-white border-b border-slate-200/80 sticky top-0 z-30">
+          <div className="md:hidden flex items-center justify-between px-5 py-3 bg-white border-b border-slate-200/80 sticky top-0 z-30">
             <div className="flex items-center gap-2">
                <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
-               <span className="text-xs font-[1000] tracking-tighter uppercase text-slate-900 leading-none">APNA COLLEGE BIHAR</span>
+               <div className="flex flex-col">
+                 <span className="text-[10px] font-black tracking-tighter uppercase text-slate-900 leading-none">APNA COLLEGE BIHAR</span>
+                 <span className="text-[5px] text-slate-500 font-bold uppercase tracking-[0.2em]">Official Official Website</span>
+               </div>
             </div>
-            <button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-100/50 border border-slate-200 rounded-xl">
+            <button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-100/50 border border-slate-200 rounded-xl relative">
                <Menu size={20} />
+               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-blue-600 rounded-full border-2 border-white"></span>
             </button>
           </div>
         )}
 
         {/* Scrollable Area */}
-        <div className={`flex-1 overflow-y-auto min-h-0 custom-scrollbar relative z-10 pb-32 ${isAppMode ? 'p-3' : 'p-3 md:p-6 lg:p-8'}`}>
+        <div className={`flex-1 overflow-y-auto min-h-0 custom-scrollbar relative z-10 pb-32 ${isAppMode ? 'p-3' : 'p-4 md:p-6 lg:p-8'}`}>
            <div className="min-h-[80vh]">
              <Outlet />
            </div>
 
            {/* ── Dashboard Footer (SEO & Legal) ── */}
             {!isAppMode && (
-              <footer className="mt-10 py-10 border-t border-slate-200/30 flex flex-col md:flex-row items-center justify-between gap-6 opacity-60 hover:opacity-100 transition-opacity">
-                <div className="flex flex-col items-center md:items-start gap-1">
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-900">Apna College Bihar</p>
-                  <p className="text-[8px] font-bold uppercase tracking-widest text-slate-500">© 2026 Official Website</p>
+              <footer className="mt-10 py-12 border-t border-slate-200/30 flex flex-col items-center justify-center gap-8 opacity-70 hover:opacity-100 transition-opacity">
+                <div className="flex flex-col items-center gap-1.5">
+                  <p className="text-[11px] font-[1000] uppercase tracking-[0.4em] text-slate-900">Apna College Bihar</p>
+                  <p className="text-[9px] font-bold uppercase tracking-widest text-slate-500">© 2026 Official Study Engine</p>
                 </div>
-                <div className="flex flex-wrap items-center justify-center gap-6">
-                  <Link to="/about" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-blue-400 transition-colors">About Us</Link>
-                  <Link to="/contact" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-emerald-400 transition-colors">Contact Us</Link>
-                  <Link to="/privacy" className="text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-orange-400 transition-colors">Privacy Policy</Link>
+                <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 px-6">
+                  <Link to="/about" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-blue-400 transition-colors">About Us</Link>
+                  <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-emerald-400 transition-colors">Contact Us</Link>
+                  <Link to="/privacy" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-orange-400 transition-colors">Privacy Policy</Link>
                 </div>
-                 <div className="flex items-center gap-4">
-                    <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="p-2 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-slate-900 rounded-lg transition-all border border-red-500/10">
-                      <Youtube size={14} />
+                 <div className="flex items-center gap-6">
+                    <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="p-3 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-slate-900 rounded-xl transition-all border border-red-500/10 scale-110 md:scale-100">
+                      <Youtube size={16} />
                     </a>
-                    <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                    <span className="text-[8px] font-black uppercase tracking-[0.2em] text-slate-600">All Systems Operational</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]"></div>
+                      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">Secure & Operational</span>
+                    </div>
                  </div>
               </footer>
             )}
@@ -232,21 +238,21 @@ export default function DashboardLayout() {
 
         {/* ── App-Mode Bottom Navigation ── */}
         {isAppMode && (
-          <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl border-t border-slate-200/80 px-4 py-3 flex justify-around items-center z-50">
+          <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-2xl border-t border-slate-200/80 px-2 py-3 flex justify-around items-center z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
                 <Link key={link.name} to={link.path} 
-                  className={`flex flex-col items-center gap-1 transition-all duration-300 ${isActive ? 'text-blue-600 scale-110' : 'text-slate-400'}`}>
-                  {link.icon}
-                  <span className="text-[8px] font-black uppercase tracking-tighter">{link.name.split(' ')[0]}</span>
-                  {isActive && <div className="w-1 h-1 bg-blue-600 rounded-full mt-0.5" />}
+                  className={`flex flex-col items-center gap-1.5 transition-all duration-300 ${isActive ? 'text-blue-600 scale-110' : 'text-slate-400'}`}>
+                  {React.cloneElement(link.icon, { size: 20 })}
+                  <span className="text-[9px] font-black uppercase tracking-tighter">{link.name.split(' ')[0]}</span>
+                  {isActive && <div className="w-1.5 h-1.5 bg-blue-600 rounded-full" />}
                 </Link>
               );
             })}
-            <button onClick={handleLogout} className="flex flex-col items-center gap-1 text-slate-400">
+            <button onClick={handleLogout} className="flex flex-col items-center gap-1.5 text-slate-400">
                <LogOut size={20} />
-               <span className="text-[8px] font-black uppercase tracking-tighter">Exit</span>
+               <span className="text-[9px] font-black uppercase tracking-tighter">Exit</span>
             </button>
           </div>
         )}
