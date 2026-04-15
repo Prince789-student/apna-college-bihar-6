@@ -250,13 +250,13 @@ function UgeacPredictor() {
   const availableBranchesForTarget = useMemo(() => {
      if (targetColleges.length === 0) return [];
      const branchSet = new Set();
-     data2025.forEach(d => {
+     ugeacData.data2025.forEach(d => {
         if (targetColleges.includes(d.collegeId)) {
            branchSet.add(d.branch);
         }
      });
      return Array.from(branchSet).sort();
-  }, [targetColleges, data2025]);
+  }, [targetColleges, ugeacData.data2025]);
 
   const addBranchToAllTargets = () => {
     if (!selectedBranchToAdd || targetColleges.length === 0) return;
@@ -267,7 +267,7 @@ function UgeacPredictor() {
        if (!exists) {
           const cInfo = colleges.find(c => c.id === cid);
           // Only add if the branch actually exists in that college data
-          const branchExists = data2025.find(d => d.collegeId === cid && d.branch === selectedBranchToAdd);
+          const branchExists = ugeacData.data2025.find(d => d.collegeId === cid && d.branch === selectedBranchToAdd);
           if (branchExists) {
              newChoices.push({ collegeId: cid, branch: selectedBranchToAdd, collegeName: cInfo.name });
           }
@@ -280,7 +280,7 @@ function UgeacPredictor() {
   const availableChoices = useMemo(() => {
     if (targetColleges.length === 0) return [];
     const combos = [];
-    data2025.forEach(d => {
+    ugeacData.data2025.forEach(d => {
        if (targetColleges.includes(d.collegeId)) {
           if (!combos.find(c => c.collegeId === d.collegeId && c.branch === d.branch)) {
              const cInfo = colleges.find(c => c.id === d.collegeId);
@@ -289,7 +289,7 @@ function UgeacPredictor() {
        }
     });
     return combos;
-  }, [targetColleges, data2025, colleges]);
+  }, [targetColleges, ugeacData.data2025, colleges]);
 
 
   const calculateResults = () => {
@@ -697,7 +697,7 @@ function UgeacPredictor() {
                              onClick={() => {
                                 const cid = parseInt(selectedCollegeToAdd);
                                 const cInfo = colleges.find(c => c.id === cid);
-                                const collegeBranches = data2025.filter(d => d.collegeId === cid);
+                                const collegeBranches = ugeacData.data2025.filter(d => d.collegeId === cid);
                                 const uniqueBranches = Array.from(new Set(collegeBranches.map(d => d.branch)));
                                 const newChoices = [...choices];
                                 uniqueBranches.forEach(b => {
