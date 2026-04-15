@@ -309,55 +309,71 @@ function UgeacPredictor() {
 
     const seen = new Map();
 
-    ugeacData.data2025.forEach(cut25 => {
-      // MODE-BASED FILTERING
-      if (mode === 'wizard') {
-          // In Wizard mode, only care about what's in 'choices'? No, actually, 
-          // we might still want to see the full list below for comparison.
-          // But 'choices' defines the 'mockAllotment'.
-      } else if (mode === 'finder') {
-          // Multi-Filter by selected targets
-          if (targetColleges.length > 0 && !targetColleges.includes(cut25.collegeId)) return;
-          if (targetBranches.length > 0 && !targetBranches.includes(cut25.branch)) return;
-      } else {
-          // Explore mode: Show everything or respect targetColleges if any
-          if (targetColleges.length > 0 && !targetColleges.includes(cut25.collegeId)) return;
-      }
+    // Strategy: Process 2024 as base (38 colleges) + 2025 updates
+    const allUniquePairs = [];
+    const pairKeys = new Set();
 
-      if (!eligibleCategories.includes(cut25.category)) return;
+    // Collect every unique college-branch-category-seat combination across both years
+    [...ugeacData.data2024, ...ugeacData.data2025].forEach(d => {
+       const key = `${d.collegeId}-${d.branch}-${d.category}-${d.seat_type}`;
+       if (!pairKeys.has(key)) {
+          pairKeys.add(key);
+          allUniquePairs.push({ collegeId: d.collegeId, branch: d.branch, category: d.category, seat_type: d.seat_type });
+       }
+    });
 
-      const collegeInfo = colleges.find(c => c.id === cut25.collegeId);
-      if (!collegeInfo) return;
-
-      const compRank = cut25.category === 'UR' ? ugeacRank : getEstimatedCategoryRank(ugeacRank, cut25.category);
-
-      // If user is Male, they are not eligible for Female seat_type.
-      if (gender === 'Male' && cut25.seat_type === 'Female') return;
-
-      let chance = 'No Chance';
-      if (compRank <= cut25.closing * 1.05) chance = 'High';
-      else if (compRank <= cut25.closing * 1.25) chance = 'Medium';
-      else if (compRank <= cut25.closing * 1.5) chance = 'Low';
-
+    allUniquePairs.forEach(pair => {
+      // Find latest available data for this pair
+      const cut25 = ugeacData.data2025.find(c => 
+        c.collegeId === pair.collegeId && c.branch === pair.branch && 
+        c.category === pair.category && c.seat_type === pair.seat_type
+      );
+      
       const cut24 = ugeacData.data2024.find(c => 
-        c.collegeId === cut25.collegeId && c.branch === cut25.branch && 
-        c.category === cut25.category && c.seat_type === cut25.seat_type
+        c.collegeId === pair.collegeId && c.branch === pair.branch && 
+        c.category === pair.category && c.seat_type === pair.seat_type
       );
 
-      // Separate exactly by category and seat type to prevent magic shifting
-      const key = `${cut25.collegeId}-${cut25.branch}-${cut25.category}-${cut25.seat_type}`;
-      const entry = { 
+      // Use 2025 for chance prediction if exists, else 2024
+      const reference = cut25 || cut24;
+      if (!reference) return;
+
+      // MODE-BASED FILTERING
+      if (mode === 'wizard') {
+          // Logic handled by choices
+      } else if (mode === 'finder') {
+          if (targetColleges.length > 0 && !targetColleges.includes(reference.collegeId)) return;
+          if (targetBranches.length > 0 && !targetBranches.includes(reference.branch)) return;
+      } else {
+          if (targetColleges.length > 0 && !targetColleges.includes(reference.collegeId)) return;
+      }
+
+      if (!eligibleCategories.includes(reference.category)) return;
+
+      const collegeInfo = colleges.find(c => c.id === reference.collegeId);
+      if (!collegeInfo) return;
+
+      const compRank = reference.category === 'UR' ? ugeacRank : getEstimatedCategoryRank(ugeacRank, reference.category);
+      if (gender === 'Male' && reference.seat_type === 'Female') return;
+
+      // Calculate chance based on most recent data
+      let chance = 'No Chance';
+      const latestClosing = reference.closing;
+      if (compRank <= latestClosing * 1.05) chance = 'High';
+      else if (compRank <= latestClosing * 1.25) chance = 'Medium';
+      else if (compRank <= latestClosing * 1.5) chance = 'Low';
+
+      const key = `${reference.collegeId}-${reference.branch}-${reference.category}-${reference.seat_type}`;
+      seen.set(key, { 
         college: collegeInfo, 
-        branch: cut25.branch, 
+        branch: reference.branch, 
         chance, 
-        cutoff25: cut25.closing, 
+        cutoff25: cut25 ? cut25.closing : 'N/A', 
         cutoff24: cut24 ? cut24.closing : 'N/A',
-        cat: cut25.category,
-        seatType: cut25.seat_type,
+        cat: reference.category,
+        seatType: reference.seat_type,
         myCompRank: compRank 
-      };
-      
-      seen.set(key, entry);
+      });
     });
 
     function chanceScore(c) { return c === 'High' ? 1 : c === 'Medium' ? 2 : c === 'Low' ? 3 : 4; }
@@ -365,11 +381,9 @@ function UgeacPredictor() {
     const allRes = Array.from(seen.values()).sort((a,b) => {
         if (mode === 'finder') {
            if (preferenceBasis === 'branch') {
-              // Priority: User's Branch Order, then User's College Order
               if (a.branch !== b.branch) return targetBranches.indexOf(a.branch) - targetBranches.indexOf(b.branch);
               return targetColleges.indexOf(a.college.id) - targetColleges.indexOf(b.college.id);
            } else {
-              // Priority: User's College Order, then User's Branch Order
               if (a.college.id !== b.college.id) return targetColleges.indexOf(a.college.id) - targetColleges.indexOf(b.college.id);
               if (chanceScore(a.chance) !== chanceScore(b.chance)) return chanceScore(a.chance) - chanceScore(b.chance);
               return targetBranches.indexOf(a.branch) - targetBranches.indexOf(b.branch);
@@ -381,11 +395,8 @@ function UgeacPredictor() {
 
     let mockAllotment = null;
     let mockDiscussions = [];
-    
-    // Simulate Choice Filling (Mock Counselling Algorithm)
     let activeChoices = [...choices];
-    
-    // Simulate Choice Filling (Mock Counselling Algorithm)
+
     if (activeChoices.length > 0) {
        for (let i = 0; i < activeChoices.length; i++) {
           const ch = activeChoices[i];
@@ -394,9 +405,7 @@ function UgeacPredictor() {
           const entry = branchEntries[0];
           
           if (entry && (entry.chance === 'High' || entry.chance === 'Medium')) {
-             if (!mockAllotment) {
-                 mockAllotment = { choice: ch, choiceNumber: i + 1, entry };
-             }
+             if (!mockAllotment) mockAllotment = { choice: ch, choiceNumber: i + 1, entry };
              mockDiscussions.push({ choiceNumber: i + 1, status: entry.chance, entry, choice: ch });
           } else {
              mockDiscussions.push({ choiceNumber: i + 1, status: 'No Chance', entry: null, choice: ch });

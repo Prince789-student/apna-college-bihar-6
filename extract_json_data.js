@@ -1,48 +1,70 @@
 const fs = require('fs');
 const path = require('path');
 
-// Safe Extraction: We will use a more robust way to capture the arrays
 const filePath = path.join(__dirname, 'client/src/real_cutoffs.js');
-let content = fs.readFileSync(filePath, 'utf8');
+const rawContent = fs.readFileSync(filePath, 'utf8');
 
-// Instead of JSON.parse on a raw slice, we will clean the JS first
-function captureArray(varName) {
-    const regex = new RegExp(`export const ${varName} = \\[([\\s\\S]*?)\\];`, 'm');
-    const match = content.match(regex);
-    if (!match) {
-        console.error(`Could not find ${varName}`);
-        return [];
+// A much more reliable parser for this specific file format
+function extractArrayManually(varName) {
+    const startMarker = `export const ${varName} = [`;
+    const startIdx = rawContent.indexOf(startMarker);
+    if (startIdx === -1) return [];
+    
+    // Find the end of the array by matching brackets correctly
+    let depth = 0;
+    let endIdx = -1;
+    for (let i = startIdx + startMarker.length - 1; i < rawContent.length; i++) {
+        if (rawContent[i] === '[') depth++;
+        if (rawContent[i] === ']') {
+            depth--;
+            if (depth === 0) {
+                endIdx = i;
+                break;
+            }
+        }
     }
     
-    // Clean the content: Replace single quotes with double quotes for JSON compatibility
-    // and remove trailing commas which break JSON.parse
-    let raw = match[1]
-        .replace(/'/g, '"') // Single to Double quotes
-        .replace(/,\s*([\]}])/g, '$1') // Remove trailing commas before ] or }
-        .trim();
+    if (endIdx === -1) return [];
+    
+    const arrayStr = rawContent.substring(startIdx + startMarker.length - 1, endIdx + 1);
+    
+    // Convert JS object format to JSON format
+    // 1. Replace property names with quoted property names (e.g., collegeShort: -> "collegeShort":)
+    // 2. Replace single quotes with double quotes for values (e.g., 'MIT' -> "MIT")
+    let jsonStr = arrayStr
+        .replace(/([a-zA-Z0-9_]+):/g, '"$1":') // keys
+        .replace(/'([^']*)'/g, '"$1"')       // values
+        .replace(/,\s*([\]}])/g, '$1');      // trailing commas
         
     try {
-        return JSON.parse(`[${raw}]`);
+        return JSON.parse(jsonStr);
     } catch (e) {
-        console.error(`Failed to parse ${varName}:`, e.message);
-        // Fallback: If JSON.parse fails, try a riskier eval-style capture 
-        // (Only safe because we trust our own file content)
-        try {
-            const evalStr = `(function() { return [${match[1]}]; })()`;
-            return eval(evalStr);
-        } catch (e2) {
-            console.error(`Eval fallback also failed for ${varName}`);
-            return [];
+        console.error(`Regex JSON parse failed for ${varName}, using alternate line-parser...`);
+        // Fallback: Line by line extraction for safety
+        const items = [];
+        const itemRegex = /\{[\s\S]*?\}/g;
+        let m;
+        while ((m = itemRegex.exec(arrayStr)) !== null) {
+            try {
+                let cleaned = m[0]
+                    .replace(/([a-zA-Z0-9_]+):/g, '"$1":')
+                    .replace(/'([^']*)'/g, '"$1"')
+                    .replace(/,\s*([\]}])/g, '$1');
+                items.push(JSON.parse(cleaned));
+            } catch (innerE) {}
         }
+        return items;
     }
 }
 
-const c24 = captureArray('cutoffs2024');
-const c25 = captureArray('cutoffs2025');
+const cutoffs2024 = extractArrayManually('cutoffs2024');
+const cutoffs2025 = extractArrayManually('cutoffs2025');
 
-const output = { cutoffs2024: c24, cutoffs2025: c25 };
-fs.writeFileSync(path.join(__dirname, 'client/public/data/cutoffs.json'), JSON.stringify(output));
+console.log(`Extracted 2024: ${cutoffs2024.length} items`);
+console.log(`Extracted 2025: ${cutoffs2025.length} items`);
 
-console.log(`Success! Extracted ${c24.length} records for 2024 and ${c25.length} records for 2025.`);
-const shorts = new Set(c25.map(x => x.collegeShort));
-console.log(`Total unique colleges found in 2025 data: ${shorts.size}`);
+fs.writeFileSync(path.join(__dirname, 'client/public/data/cutoffs.json'), JSON.stringify({ cutoffs2024, cutoffs2025 }));
+
+const shorts = new Set(cutoffs2025.map(x => x.collegeShort));
+console.log(`Unique colleges in 2025: ${shorts.size}`);
+console.log('Sample from 2025:', cutoffs2025.slice(0, 2));
