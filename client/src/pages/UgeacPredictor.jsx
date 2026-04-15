@@ -511,9 +511,9 @@ function UgeacPredictor() {
                                    const cid = parseInt(selectedCollegeToAdd);
                                    if (!targetColleges.includes(cid)) setTargetColleges([...targetColleges, cid]);
                                 }}
-                                className="px-6 bg-blue-600 text-white rounded-2xl font-black transition-all flex items-center justify-center"
+                                className="px-6 bg-blue-600 text-white rounded-2xl font-black transition-all flex items-center justify-center hover:bg-blue-700 active:scale-95 shadow-lg shadow-blue-100"
                              >
-                                <Plus size={20}/>
+                                <Plus size={24} strokeWidth={3}/>
                              </button>
                           </div>
                           
@@ -532,7 +532,9 @@ function UgeacPredictor() {
                                          <div className="flex items-center gap-1">
                                             <button disabled={idx === 0} onClick={() => moveTargetCollege(idx, -1)} className="p-1.5 hover:bg-blue-50 text-blue-400 disabled:opacity-10 transition-colors"><ChevronUp size={14}/></button>
                                             <button disabled={idx === targetColleges.length - 1} onClick={() => moveTargetCollege(idx, 1)} className="p-1.5 hover:bg-blue-50 text-blue-400 disabled:opacity-10 transition-colors"><ChevronDown size={14}/></button>
-                                            <button onClick={() => setTargetColleges(targetColleges.filter(t => t !== id))} className="p-1.5 hover:bg-red-50 text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={14}/></button>
+                                            <button onClick={() => setTargetColleges(targetColleges.filter(t => t !== id))} className="p-1.5 bg-red-50 hover:bg-red-100 text-red-500 rounded-full h-7 w-7 flex items-center justify-center transition-all">
+                                               <Minus size={14} strokeWidth={4}/>
+                                            </button>
                                          </div>
                                       </div>
                                    )
@@ -562,9 +564,9 @@ function UgeacPredictor() {
                                    if (!selectedBranchToAdd) return;
                                    if (!targetBranches.includes(selectedBranchToAdd)) setTargetBranches([...targetBranches, selectedBranchToAdd]);
                                 }}
-                                className="px-6 bg-blue-600 text-white rounded-2xl font-black transition-all flex items-center justify-center"
+                                className="px-6 bg-emerald-600 text-white rounded-2xl font-black transition-all flex items-center justify-center hover:bg-emerald-700 active:scale-95 shadow-lg shadow-emerald-100"
                              >
-                                <Plus size={20}/>
+                                <Plus size={24} strokeWidth={3}/>
                              </button>
                           </div>
 
@@ -581,7 +583,9 @@ function UgeacPredictor() {
                                       <div className="flex items-center gap-1">
                                          <button disabled={idx === 0} onClick={() => moveTargetBranch(idx, -1)} className="p-1.5 hover:bg-emerald-50 text-emerald-400 disabled:opacity-10 transition-colors"><ChevronUp size={14}/></button>
                                          <button disabled={idx === targetBranches.length - 1} onClick={() => moveTargetBranch(idx, 1)} className="p-1.5 hover:bg-emerald-50 text-emerald-400 disabled:opacity-10 transition-colors"><ChevronDown size={14}/></button>
-                                         <button onClick={() => setTargetBranches(targetBranches.filter(t => t !== b))} className="p-1.5 hover:bg-red-50 text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={14}/></button>
+                                         <button onClick={() => setTargetBranches(targetBranches.filter(t => t !== b))} className="p-1.5 bg-red-50 hover:bg-red-100 text-red-500 rounded-full h-7 w-7 flex items-center justify-center transition-all">
+                                            <Minus size={14} strokeWidth={4}/>
+                                         </button>
                                       </div>
                                    </div>
                                 ))
