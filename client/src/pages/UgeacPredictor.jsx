@@ -14,6 +14,7 @@ function UgeacPredictor() {
 
   // Advanced Priority Choice Filling State
   const [targetColleges, setTargetColleges] = useState([]);
+  const [targetBranches, setTargetBranches] = useState([]);
   const [selectedCollegeToAdd, setSelectedCollegeToAdd] = useState('All');
   const [choices, setChoices] = useState([]); // Array to hold choice filling preferences
   const [selectedBranchToAdd, setSelectedBranchToAdd] = useState('');
@@ -234,9 +235,9 @@ function UgeacPredictor() {
           // we might still want to see the full list below for comparison.
           // But 'choices' defines the 'mockAllotment'.
       } else if (mode === 'finder') {
-          // Filter by selected dropdowns
-          if (selectedCollegeToAdd !== 'All' && cut25.collegeId !== parseInt(selectedCollegeToAdd)) return;
-          if (selectedBranchToAdd && cut25.branch !== selectedBranchToAdd) return;
+          // Multi-Filter by selected targets
+          if (targetColleges.length > 0 && !targetColleges.includes(cut25.collegeId)) return;
+          if (targetBranches.length > 0 && !targetBranches.includes(cut25.branch)) return;
       } else {
           // Explore mode: Show everything or respect targetColleges if any
           if (targetColleges.length > 0 && !targetColleges.includes(cut25.collegeId)) return;
@@ -281,6 +282,18 @@ function UgeacPredictor() {
     function chanceScore(c) { return c === 'High' ? 1 : c === 'Medium' ? 2 : c === 'Low' ? 3 : 4; }
 
     const allRes = Array.from(seen.values()).sort((a,b) => {
+        if (mode === 'finder') {
+           if (preferenceBasis === 'branch') {
+              // Group by Branch first, then by College Tier
+              if (a.branch !== b.branch) return a.branch.localeCompare(b.branch);
+              return a.college.tier - b.college.tier;
+           } else {
+              // Group by College first, then by Branch/Chance
+              if (a.college.id !== b.college.id) return a.college.tier - b.college.tier;
+              if (chanceScore(a.chance) !== chanceScore(b.chance)) return chanceScore(a.chance) - chanceScore(b.chance);
+              return a.branch.localeCompare(b.branch);
+           }
+        }
         if (chanceScore(a.chance) !== chanceScore(b.chance)) return chanceScore(a.chance) - chanceScore(b.chance);
         return a.college.tier - b.college.tier;
     });
@@ -389,83 +402,119 @@ function UgeacPredictor() {
                </div>
              )}
 
-              {/* MODE 2: SPECIFIC FINDER (Enhanced with Priority Tools) */}
-              {mode === 'finder' && (
-                <div className="space-y-8 animate-in slide-in-from-top-4 duration-500">
-                   {/* Shared Preference Toggles */}
-                   <div className="flex items-center justify-center gap-6 p-6 bg-blue-50/50 rounded-[2.5rem] border border-blue-100">
-                      <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Selection Workflow:</span>
-                      <div className="flex bg-white p-1 rounded-2xl border border-blue-100 shadow-sm">
-                         <button onClick={() => setPreferenceBasis('college')} className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'college' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-blue-600'}`}>I Prefer College</button>
-                         <button onClick={() => setPreferenceBasis('branch')} className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'branch' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-blue-600'}`}>I Prefer Branch</button>
-                      </div>
-                   </div>
+               {/* MODE 2: SPECIFIC FINDER (Multi-Selection Workflow) */}
+               {mode === 'finder' && (
+                 <div className="space-y-8 animate-in slide-in-from-top-4 duration-500">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                       
+                       {/* Step 1: Multiple College Selection */}
+                       <div className="bg-white border-2 border-slate-100 rounded-[3rem] p-8 space-y-6 shadow-sm">
+                          <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                             <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">1</span> Focus Institutions
+                          </h3>
+                          <div className="flex gap-3">
+                             <select 
+                                value={selectedCollegeToAdd} 
+                                onChange={e => setSelectedCollegeToAdd(e.target.value)}
+                                className="flex-1 bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none"
+                             >
+                                <option value="All">-- Select College --</option>
+                                {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                             </select>
+                             <button 
+                                onClick={() => {
+                                   if (selectedCollegeToAdd === 'All') return;
+                                   const cid = parseInt(selectedCollegeToAdd);
+                                   if (!targetColleges.includes(cid)) setTargetColleges([...targetColleges, cid]);
+                                }}
+                                className="px-6 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-black transition-all"
+                             >
+                                Add
+                             </button>
+                          </div>
+                          
+                          <div className="flex flex-wrap gap-2 min-h-[40px]">
+                             {targetColleges.length === 0 ? (
+                                <p className="text-[10px] font-bold text-slate-300 uppercase italic">No colleges selected yet...</p>
+                             ) : (
+                                targetColleges.map(id => {
+                                   const c = colleges.find(co => co.id === id);
+                                   return (
+                                      <div key={id} className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border border-blue-100 animate-in zoom-in duration-300">
+                                         {c?.short || c?.name}
+                                         <button onClick={() => setTargetColleges(targetColleges.filter(t => t !== id))} className="hover:text-red-500"><Trash2 size={12}/></button>
+                                      </div>
+                                   )
+                                })
+                             )}
+                          </div>
+                       </div>
 
-                   <div className="bg-slate-50 border border-slate-200 rounded-[3rem] p-10 space-y-8 shadow-sm">
-                      <div className="flex flex-col md:flex-row items-center gap-6">
-                         <div className="flex-1 space-y-3">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Institution</label>
-                            <select 
-                               value={selectedCollegeToAdd === 'All' ? 'All' : selectedCollegeToAdd} 
-                               onChange={e => setSelectedCollegeToAdd(e.target.value)}
-                               className="w-full bg-white border-2 border-slate-100 focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none shadow-sm"
-                            >
-                               <option value="All">All Bihar Colleges</option>
-                               {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                            </select>
-                         </div>
-                         <div className="flex-1 space-y-3">
-                            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Pick Branch</label>
-                            <select 
-                               value={selectedBranchToAdd}
-                               onChange={e => setSelectedBranchToAdd(e.target.value)}
-                               className="w-full bg-white border-2 border-slate-100 focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none shadow-sm"
-                            >
-                               <option value="">All Engineering Branches</option>
-                               {allUgeacBranches.map(b => <option key={b} value={b}>{branchMapping[b] || b}</option>)}
-                            </select>
-                         </div>
-                      </div>
+                       {/* Step 2: Multiple Branch Selection (Filtered by selected colleges) */}
+                       <div className="bg-white border-2 border-slate-100 rounded-[3rem] p-8 space-y-6 shadow-sm">
+                          <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                             <span className="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">2</span> Preferred Branches
+                          </h3>
+                          <div className="flex gap-3">
+                             <select 
+                                value={selectedBranchToAdd}
+                                onChange={e => setSelectedBranchToAdd(e.target.value)}
+                                className="flex-1 bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none"
+                             >
+                                <option value="">-- Select Branch --</option>
+                                {(targetColleges.length > 0 ? availableBranchesForTarget : allUgeacBranches).map(b => (
+                                   <option key={b} value={b}>{branchMapping[b] || b}</option>
+                                ))}
+                             </select>
+                             <button 
+                                onClick={() => {
+                                   if (!selectedBranchToAdd) return;
+                                   if (!targetBranches.includes(selectedBranchToAdd)) setTargetBranches([...targetBranches, selectedBranchToAdd]);
+                                }}
+                                className="px-6 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-black transition-all"
+                             >
+                                Add
+                             </button>
+                          </div>
 
-                      <div className="flex flex-wrap gap-4 justify-center border-t border-slate-200 pt-8 mt-2">
-                         {selectedCollegeToAdd !== 'All' && selectedBranchToAdd && (
-                            <button 
-                               onClick={() => {
-                                  const cid = parseInt(selectedCollegeToAdd);
-                                  const cName = colleges.find(c => c.id === cid)?.name;
-                                  if (!choices.find(c => c.collegeId === cid && c.branch === selectedBranchToAdd)) {
-                                     setChoices([...choices, { collegeId: cid, branch: selectedBranchToAdd, collegeName: cName }]);
-                                  }
-                               }}
-                               className="px-10 py-5 bg-blue-600 hover:bg-black text-white rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-200 active:scale-95 transition-all"
-                            >
-                               + Add This Combo to My List
-                            </button>
-                         )}
-                         {preferenceBasis === 'college' && selectedCollegeToAdd !== 'All' && (
-                            <button 
-                               onClick={() => {
-                                  const cid = parseInt(selectedCollegeToAdd);
-                                  const cInfo = colleges.find(c => c.id === cid);
-                                  const collegeBranches = data2025.filter(d => d.collegeId === cid);
-                                  const uniqueBranches = Array.from(new Set(collegeBranches.map(d => d.branch)));
-                                  const newChoices = [...choices];
-                                  uniqueBranches.forEach(b => {
-                                     if (!newChoices.find(c => c.collegeId === cid && c.branch === b)) {
-                                        newChoices.push({ collegeId: cid, branch: b, collegeName: cInfo.name });
-                                     }
-                                  });
-                                  setChoices(newChoices);
-                               }}
-                               className="px-10 py-5 bg-emerald-600 hover:bg-slate-900 text-white rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-emerald-200 active:scale-95 transition-all"
-                            >
-                               + Add All Branches of this College
-                            </button>
-                         )}
-                      </div>
-                   </div>
-                </div>
-              )}
+                          <div className="flex flex-wrap gap-2 min-h-[40px]">
+                             {targetBranches.length === 0 ? (
+                                <p className="text-[10px] font-bold text-slate-300 uppercase italic">Showing all branches if empty...</p>
+                             ) : (
+                                targetBranches.map(b => (
+                                   <div key={b} className="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-100 animate-in zoom-in duration-300">
+                                      {branchMapping[b] || b}
+                                      <button onClick={() => setTargetBranches(targetBranches.filter(t => t !== b))} className="hover:text-red-500"><Trash2 size={12}/></button>
+                                   </div>
+                                ))
+                             )}
+                          </div>
+                       </div>
+                    </div>
+
+                    {/* Step 3: Result Priority Toggles */}
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-8 p-10 bg-slate-50 rounded-[3rem] border border-slate-200 shadow-inner">
+                       <div className="text-center md:text-left">
+                          <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest">3. Optimization Strategy</h4>
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">How should we prioritize your results?</p>
+                       </div>
+                       <div className="flex bg-white p-2 rounded-[2rem] border border-slate-200 shadow-sm scale-110">
+                          <button 
+                             onClick={() => setPreferenceBasis('college')} 
+                             className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'college' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-blue-600'}`}
+                          >
+                             Group by College
+                          </button>
+                          <button 
+                             onClick={() => setPreferenceBasis('branch')} 
+                             className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${preferenceBasis === 'branch' ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-400 hover:text-blue-600'}`}
+                          >
+                             Group by Branch
+                          </button>
+                       </div>
+                    </div>
+                 </div>
+               )}
 
              {/* MODE 3: PRIORITY WIZARD */}
              {mode === 'wizard' && (
