@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { colleges, data2024, data2025, allUgeacBranches } from '../UgeacData';
-import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus, Layers, Search, Zap, Filter, LayoutGrid } from 'lucide-react';
+import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus, Minus, Layers, Search, Zap, Filter, LayoutGrid } from 'lucide-react';
 
 function UgeacPredictor() {
   const [rank, setRank] = useState('');
@@ -445,9 +445,9 @@ function UgeacPredictor() {
                                    const cid = parseInt(selectedCollegeToAdd);
                                    if (!targetColleges.includes(cid)) setTargetColleges([...targetColleges, cid]);
                                 }}
-                                className="px-6 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-black transition-all"
+                                className="px-6 bg-blue-600 text-white rounded-2xl font-black transition-all flex items-center justify-center"
                              >
-                                Add
+                                <Plus size={20}/>
                              </button>
                           </div>
                           
@@ -496,9 +496,9 @@ function UgeacPredictor() {
                                    if (!selectedBranchToAdd) return;
                                    if (!targetBranches.includes(selectedBranchToAdd)) setTargetBranches([...targetBranches, selectedBranchToAdd]);
                                 }}
-                                className="px-6 bg-blue-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-black transition-all"
+                                className="px-6 bg-blue-600 text-white rounded-2xl font-black transition-all flex items-center justify-center"
                              >
-                                Add
+                                <Plus size={20}/>
                              </button>
                           </div>
 
@@ -584,7 +584,7 @@ function UgeacPredictor() {
                           {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                        </select>
                        <button onClick={addTargetCollege} className="md:w-auto w-full px-8 py-4 bg-indigo-600 hover:bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
-                         + Add to Selection
+                         + Add Selection
                        </button>
                        {preferenceBasis === 'college' && selectedCollegeToAdd !== 'All' && (
                           <button 
@@ -881,7 +881,7 @@ function UgeacPredictor() {
                                    }}
                                    className={`px-6 py-3 border-2 rounded-2xl text-[10px] font-[1000] uppercase tracking-widest transition-all ${choices.find(c => c.collegeId === r.college.id && c.branch === r.branch) ? 'bg-red-50 border-red-200 text-red-600' : 'bg-emerald-50 border-emerald-200 text-emerald-600 hover:bg-emerald-600 hover:text-white'}`}
                                 >
-                                   {choices.find(c => c.collegeId === r.college.id && c.branch === r.branch) ? 'Remove Choice' : '+ Add Choice'}
+                                   {choices.find(c => c.collegeId === r.college.id && c.branch === r.branch) ? <span className="flex items-center gap-1"><Minus size={14}/> Remove</span> : <span className="flex items-center gap-1"><Plus size={14}/> Add</span>}
                                 </button>
                                 <button onClick={() => setSelectedCollege(r.college)} className="px-6 py-3 bg-white border-2 border-slate-200 rounded-2xl text-[10px] font-[1000] text-slate-500 uppercase tracking-widest hover:border-blue-600 hover:text-blue-600 transition-all shadow-md">View Info</button>
                              </td>
