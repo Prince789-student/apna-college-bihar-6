@@ -250,13 +250,15 @@ function UgeacPredictor() {
   const availableBranchesForTarget = useMemo(() => {
      if (targetColleges.length === 0) return [];
      const branchSet = new Set();
+     // Check both years to ensure we get branches for all 38 colleges
      ugeacData.data2025.forEach(d => {
-        if (targetColleges.includes(d.collegeId)) {
-           branchSet.add(d.branch);
-        }
+        if (targetColleges.includes(d.collegeId)) branchSet.add(d.branch);
+     });
+     ugeacData.data2024.forEach(d => {
+        if (targetColleges.includes(d.collegeId)) branchSet.add(d.branch);
      });
      return Array.from(branchSet).sort();
-  }, [targetColleges, ugeacData.data2025]);
+  }, [targetColleges, ugeacData.data2025, ugeacData.data2024]);
 
   const addBranchToAllTargets = () => {
     if (!selectedBranchToAdd || targetColleges.length === 0) return;
@@ -266,8 +268,9 @@ function UgeacPredictor() {
        const exists = newChoices.find(c => c.collegeId === cid && c.branch === selectedBranchToAdd);
        if (!exists) {
           const cInfo = colleges.find(c => c.id === cid);
-          // Only add if the branch actually exists in that college data
-          const branchExists = ugeacData.data2025.find(d => d.collegeId === cid && d.branch === selectedBranchToAdd);
+          // Only add if the branch actually exists in that college data (Check BOTH years)
+          const branchExists = ugeacData.data2025.find(d => d.collegeId === cid && d.branch === selectedBranchToAdd) ||
+                               ugeacData.data2024.find(d => d.collegeId === cid && d.branch === selectedBranchToAdd);
           if (branchExists) {
              newChoices.push({ collegeId: cid, branch: selectedBranchToAdd, collegeName: cInfo.name });
           }
@@ -280,16 +283,20 @@ function UgeacPredictor() {
   const availableChoices = useMemo(() => {
     if (targetColleges.length === 0) return [];
     const combos = [];
-    ugeacData.data2025.forEach(d => {
-       if (targetColleges.includes(d.collegeId)) {
-          if (!combos.find(c => c.collegeId === d.collegeId && c.branch === d.branch)) {
-             const cInfo = colleges.find(c => c.id === d.collegeId);
-             combos.push({ collegeId: d.collegeId, branch: d.branch, collegeName: cInfo.name });
-          }
-       }
-    });
+    const process = (data) => {
+      data.forEach(d => {
+        if (targetColleges.includes(d.collegeId)) {
+           if (!combos.find(c => c.collegeId === d.collegeId && c.branch === d.branch)) {
+              const cInfo = colleges.find(c => c.id === d.collegeId);
+              combos.push({ collegeId: d.collegeId, branch: d.branch, collegeName: cInfo?.name });
+           }
+        }
+      });
+    };
+    process(ugeacData.data2025);
+    process(ugeacData.data2024);
     return combos;
-  }, [targetColleges, ugeacData.data2025, colleges]);
+  }, [targetColleges, ugeacData.data2025, ugeacData.data2024, colleges]);
 
 
   const calculateResults = () => {
