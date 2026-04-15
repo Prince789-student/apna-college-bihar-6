@@ -1,5 +1,3 @@
-import { cutoffs2024, cutoffs2025 } from './real_cutoffs';
-
 export const colleges = [
   // Tier 1: Top Tier
   { id: 101, name: "M.I.T. Muzaffarpur", short: "MIT Muzaffarpur", tier: 1, location: "Muzaffarpur", estd: 1954, website: "https://www.mitmuzaffarpur.org", placement: { avg: "6.5 LPA", highest: "22 LPA" }, labs: "Advanced R&D Labs", wifi: "Fully WiFi Enabled", fees: "₹10,500 / year", hostel: "Yes", library: "Fully Digital", pros: "Top Rated Govt Engineering College", cons: "Old Infrastructure (Renovating)" },
@@ -51,19 +49,4 @@ export const colleges = [
   { id: 135, name: "GEC Samastipur", short: "GEC Samastipur", tier: 6, location: "Samastipur", estd: 2019, website: "https://gecsamastipur.ac.in", placement: { avg: "3.5 LPA", highest: "5 LPA" }, labs: "Standard", wifi: "No" },
   { id: 128, name: "GEC Araria", short: "GEC Araria", tier: 6, location: "Araria", estd: 2019, website: "https://gecararia.ac.in", placement: { avg: "3.5 LPA", highest: "5 LPA" }, labs: "Standard", wifi: "No" }
 ];
-
-const processCutoffs = (raw) => {
-  return raw.map(c => {
-    const col = colleges.find(co => co.short === c.collegeShort);
-    return { ...c, collegeId: col ? col.id : null };
-  }).filter(c => c.collegeId !== null);
-};
-
-export const data2024 = processCutoffs(cutoffs2024);
-export const data2025 = processCutoffs(cutoffs2025);
-
-// Master list of ALL branches from the raw data
-export const allUgeacBranches = Array.from(new Set([
-  ...cutoffs2024.map(c => c.branch.trim()),
-  ...cutoffs2025.map(c => c.branch.trim())
-])).sort();
+// Cutoff data is now served via /public/data/cutoffs.json for max performance and low memory.

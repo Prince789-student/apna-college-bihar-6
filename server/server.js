@@ -5,7 +5,22 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 
+const compression = require('compression');
+const rateLimit = require('express-rate-limit');
+
 const app = express();
+
+// 1. Max Output Performance: Gzip Compression
+app.use(compression());
+
+// 2. Load Control: Prevent server crash from too many requests
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  message: "Too many requests from this IP, please try again after 15 minutes"
+});
+app.use('/api/', limiter);
+
 app.use(express.json());
 app.use(cors());
 app.use((req, res, next) => {

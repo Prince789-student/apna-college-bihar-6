@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { colleges, data2024, data2025, allUgeacBranches } from '../UgeacData';
+import React, { useState, useMemo, useEffect } from 'react';
+import { colleges } from '../UgeacData';
 import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus, Minus, Layers, Search, Zap, Filter, LayoutGrid } from 'lucide-react';
 
 function UgeacPredictor() {
@@ -19,6 +19,31 @@ function UgeacPredictor() {
   const [choices, setChoices] = useState([]); // Array to hold choice filling preferences
   const [selectedBranchToAdd, setSelectedBranchToAdd] = useState('');
   
+  const [ugeacData, setUgeacData] = useState({ data2024: [], data2025: [], branches: [] });
+  const [loadingData, setLoadingData] = useState(true);
+
+  // Load High-Precision Data asynchronously to handle 5000+ users without RAM spikes
+  useEffect(() => {
+    fetch('/data/cutoffs.json')
+      .then(res => res.json())
+      .then(json => {
+        const process = (raw) => raw.map(c => {
+          const col = colleges.find(co => co.short === c.collegeShort);
+          return { ...c, collegeId: col ? col.id : null };
+        }).filter(c => c.collegeId !== null);
+
+        const d24 = process(json.cutoffs2024);
+        const d25 = process(json.cutoffs2025);
+        const brs = Array.from(new Set([
+          ...json.cutoffs2024.map(c => c.branch.trim()),
+          ...json.cutoffs2025.map(c => c.branch.trim())
+        ])).sort();
+
+        setUgeacData({ data2024: d24, data2025: d25, branches: brs });
+        setLoadingData(false);
+      });
+  }, []);
+
   const [hasPredicted, setHasPredicted] = useState(false);
   const [results, setResults] = useState({
      all: [],
@@ -109,7 +134,7 @@ function UgeacPredictor() {
     const result = {};
 
     Object.entries(branchGroups).forEach(([groupName, branches]) => {
-      result[groupName] = allUgeacBranches.filter(b => {
+      result[groupName] = ugeacData.branches.filter(b => {
         if (used.has(b)) return false;
         if (branches.includes(b)) {
            used.add(b);
@@ -120,13 +145,13 @@ function UgeacPredictor() {
     });
 
     // Any leftovers go to Emerging
-    const leftovers = allUgeacBranches.filter(b => !used.has(b));
+    const leftovers = ugeacData.branches.filter(b => !used.has(b));
     if (leftovers.length > 0) {
       result["Emerging & Other Branches"] = [...(result["Emerging & Other Branches"] || []), ...leftovers];
     }
 
     return result;
-  }, [allUgeacBranches]);
+  }, [ugeacData.branches]);
 
   const sortedColleges = useMemo(() => {
     // Preserve exact ranking configuration and order to keep MIT above BCE
@@ -277,7 +302,7 @@ function UgeacPredictor() {
 
     const seen = new Map();
 
-    data2025.forEach(cut25 => {
+    ugeacData.data2025.forEach(cut25 => {
       // MODE-BASED FILTERING
       if (mode === 'wizard') {
           // In Wizard mode, only care about what's in 'choices'? No, actually, 
@@ -307,7 +332,7 @@ function UgeacPredictor() {
       else if (compRank <= cut25.closing * 1.25) chance = 'Medium';
       else if (compRank <= cut25.closing * 1.5) chance = 'Low';
 
-      const cut24 = data2024.find(c => 
+      const cut24 = ugeacData.data2024.find(c => 
         c.collegeId === cut25.collegeId && c.branch === cut25.branch && 
         c.category === cut25.category && c.seat_type === cut25.seat_type
       );
@@ -384,6 +409,17 @@ function UgeacPredictor() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-12 py-10 px-4 animate-in fade-in duration-500 font-sans">
+      
+      {loadingData ? (
+         <div className="flex flex-col items-center justify-center p-20 bg-white border-2 border-slate-100 rounded-[4rem] text-center space-y-6 shadow-2xl">
+            <div className="w-24 h-24 border-8 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="space-y-4">
+               <h3 className="text-3xl font-[1000] text-slate-800 uppercase tracking-tighter">Initializing Admissions Matrix</h3>
+               <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] animate-pulse">Syncing Rounds 1 & 2 Data • 5000+ Connection Capacity Mode</p>
+            </div>
+         </div>
+      ) : (
+      <>
       
       {/* Header */}
       <div className="bg-white p-14 rounded-[4.5rem] border border-slate-200 shadow-2xl space-y-12">
@@ -555,7 +591,7 @@ function UgeacPredictor() {
                                 className="flex-1 bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl p-4 text-[11px] font-[1000] outline-none uppercase appearance-none"
                              >
                                 <option value="">-- Select Branch --</option>
-                                {(targetColleges.length > 0 ? availableBranchesForTarget : allUgeacBranches).map(b => (
+                                {(targetColleges.length > 0 ? availableBranchesForTarget : ugeacData.branches).map(b => (
                                    <option key={b} value={b}>{branchMapping[b] || b}</option>
                                 ))}
                              </select>
@@ -1041,6 +1077,8 @@ function UgeacPredictor() {
               </div>
            </div>
         </div>
+      )}
+          </>
       )}
     </div>
   );
