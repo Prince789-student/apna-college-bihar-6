@@ -309,72 +309,62 @@ function UgeacPredictor() {
 
     const seen = new Map();
 
-    // Strategy: Process 2024 as base (38 colleges) + 2025 updates
-    const allUniquePairs = [];
-    const pairKeys = new Set();
+    // Strategy: Simple and Clean Merge
+    const processSet = (data) => {
+      data.forEach(d => {
+        // Basic eligibility filters
+        if (!eligibleCategories.includes(d.category)) return;
+        if (gender === 'Male' && d.seat_type === 'Female') return;
+        
+        // Mode-based filters
+        if (mode === 'finder') {
+           if (targetColleges.length > 0 && !targetColleges.includes(d.collegeId)) return;
+           if (targetBranches.length > 0 && !targetBranches.includes(d.branch)) return;
+        } else if (mode === 'explore' || mode === 'wizard') {
+           if (targetColleges.length > 0 && !targetColleges.includes(d.collegeId)) return;
+        }
 
-    // Collect every unique college-branch-category-seat combination across both years
-    [...ugeacData.data2024, ...ugeacData.data2025].forEach(d => {
-       const key = `${d.collegeId}-${d.branch}-${d.category}-${d.seat_type}`;
-       if (!pairKeys.has(key)) {
-          pairKeys.add(key);
-          allUniquePairs.push({ collegeId: d.collegeId, branch: d.branch, category: d.category, seat_type: d.seat_type });
-       }
-    });
+        const collegeInfo = colleges.find(c => c.id === d.collegeId);
+        if (!collegeInfo) return;
 
-    allUniquePairs.forEach(pair => {
-      // Find latest available data for this pair
-      const cut25 = ugeacData.data2025.find(c => 
-        c.collegeId === pair.collegeId && c.branch === pair.branch && 
-        c.category === pair.category && c.seat_type === pair.seat_type
-      );
-      
-      const cut24 = ugeacData.data2024.find(c => 
-        c.collegeId === pair.collegeId && c.branch === pair.branch && 
-        c.category === pair.category && c.seat_type === pair.seat_type
-      );
+        const key = `${d.collegeId}-${d.branch}-${d.category}-${d.seat_type}`;
+        
+        // If not already in seen, or if this is 2025 data (update)
+        const is2025 = ugeacData.data2025.includes(d);
+        if (!seen.has(key) || is2025) {
+           const cut24 = ugeacData.data2024.find(c => 
+             c.collegeId === d.collegeId && c.branch === d.branch && 
+             c.category === d.category && c.seat_type === d.seat_type
+           );
+           const cut25 = ugeacData.data2025.find(c => 
+             c.collegeId === d.collegeId && c.branch === d.branch && 
+             c.category === d.category && c.seat_type === d.seat_type
+           );
 
-      // Use 2025 for chance prediction if exists, else 2024
-      const reference = cut25 || cut24;
-      if (!reference) return;
+           const compRank = d.category === 'UR' ? ugeacRank : getEstimatedCategoryRank(ugeacRank, d.category);
+           const latestClosing = (cut25 || cut24).closing;
+           
+           let chance = 'No Chance';
+           if (compRank <= latestClosing * 1.05) chance = 'High';
+           else if (compRank <= latestClosing * 1.25) chance = 'Medium';
+           else if (compRank <= latestClosing * 1.5) chance = 'Low';
 
-      // MODE-BASED FILTERING
-      if (mode === 'wizard') {
-          // Logic handled by choices
-      } else if (mode === 'finder') {
-          if (targetColleges.length > 0 && !targetColleges.includes(reference.collegeId)) return;
-          if (targetBranches.length > 0 && !targetBranches.includes(reference.branch)) return;
-      } else {
-          if (targetColleges.length > 0 && !targetColleges.includes(reference.collegeId)) return;
-      }
-
-      if (!eligibleCategories.includes(reference.category)) return;
-
-      const collegeInfo = colleges.find(c => c.id === reference.collegeId);
-      if (!collegeInfo) return;
-
-      const compRank = reference.category === 'UR' ? ugeacRank : getEstimatedCategoryRank(ugeacRank, reference.category);
-      if (gender === 'Male' && reference.seat_type === 'Female') return;
-
-      // Calculate chance based on most recent data
-      let chance = 'No Chance';
-      const latestClosing = reference.closing;
-      if (compRank <= latestClosing * 1.05) chance = 'High';
-      else if (compRank <= latestClosing * 1.25) chance = 'Medium';
-      else if (compRank <= latestClosing * 1.5) chance = 'Low';
-
-      const key = `${reference.collegeId}-${reference.branch}-${reference.category}-${reference.seat_type}`;
-      seen.set(key, { 
-        college: collegeInfo, 
-        branch: reference.branch, 
-        chance, 
-        cutoff25: cut25 ? cut25.closing : 'N/A', 
-        cutoff24: cut24 ? cut24.closing : 'N/A',
-        cat: reference.category,
-        seatType: reference.seat_type,
-        myCompRank: compRank 
+           seen.set(key, {
+             college: collegeInfo, 
+             branch: d.branch, 
+             chance, 
+             cutoff25: cut25 ? cut25.closing : 'N/A', 
+             cutoff24: cut24 ? cut24.closing : 'N/A',
+             cat: d.category,
+             seatType: d.seat_type,
+             myCompRank: compRank 
+           });
+        }
       });
-    });
+    };
+
+    processSet(ugeacData.data2024);
+    processSet(ugeacData.data2025);
 
     function chanceScore(c) { return c === 'High' ? 1 : c === 'Medium' ? 2 : c === 'Low' ? 3 : 4; }
 
