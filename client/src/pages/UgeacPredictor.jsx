@@ -173,6 +173,24 @@ function UgeacPredictor() {
      setChoices(newArr);
   };
 
+  const moveTargetCollege = (index, shift) => {
+     if (index + shift < 0 || index + shift >= targetColleges.length) return;
+     const newArr = [...targetColleges];
+     const temp = newArr[index];
+     newArr[index] = newArr[index + shift];
+     newArr[index + shift] = temp;
+     setTargetColleges(newArr);
+  };
+
+  const moveTargetBranch = (index, shift) => {
+     if (index + shift < 0 || index + shift >= targetBranches.length) return;
+     const newArr = [...targetBranches];
+     const temp = newArr[index];
+     newArr[index] = newArr[index + shift];
+     newArr[index + shift] = temp;
+     setTargetBranches(newArr);
+  };
+
   const availableBranchesForTarget = useMemo(() => {
      if (targetColleges.length === 0) return [];
      const branchSet = new Set();
@@ -284,14 +302,14 @@ function UgeacPredictor() {
     const allRes = Array.from(seen.values()).sort((a,b) => {
         if (mode === 'finder') {
            if (preferenceBasis === 'branch') {
-              // Group by Branch first, then by College Tier
-              if (a.branch !== b.branch) return a.branch.localeCompare(b.branch);
-              return a.college.tier - b.college.tier;
+              // Priority: User's Branch Order, then User's College Order
+              if (a.branch !== b.branch) return targetBranches.indexOf(a.branch) - targetBranches.indexOf(b.branch);
+              return targetColleges.indexOf(a.college.id) - targetColleges.indexOf(b.college.id);
            } else {
-              // Group by College first, then by Branch/Chance
-              if (a.college.id !== b.college.id) return a.college.tier - b.college.tier;
+              // Priority: User's College Order, then User's Branch Order
+              if (a.college.id !== b.college.id) return targetColleges.indexOf(a.college.id) - targetColleges.indexOf(b.college.id);
               if (chanceScore(a.chance) !== chanceScore(b.chance)) return chanceScore(a.chance) - chanceScore(b.chance);
-              return a.branch.localeCompare(b.branch);
+              return targetBranches.indexOf(a.branch) - targetBranches.indexOf(b.branch);
            }
         }
         if (chanceScore(a.chance) !== chanceScore(b.chance)) return chanceScore(a.chance) - chanceScore(b.chance);
@@ -433,16 +451,23 @@ function UgeacPredictor() {
                              </button>
                           </div>
                           
-                          <div className="flex flex-wrap gap-2 min-h-[40px]">
+                          <div className="flex flex-col gap-2 min-h-[40px]">
                              {targetColleges.length === 0 ? (
                                 <p className="text-[10px] font-bold text-slate-300 uppercase italic">No colleges selected yet...</p>
                              ) : (
-                                targetColleges.map(id => {
+                                targetColleges.map((id, idx) => {
                                    const c = colleges.find(co => co.id === id);
                                    return (
-                                      <div key={id} className="flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border border-blue-100 animate-in zoom-in duration-300">
-                                         {c?.short || c?.name}
-                                         <button onClick={() => setTargetColleges(targetColleges.filter(t => t !== id))} className="hover:text-red-500"><Trash2 size={12}/></button>
+                                      <div key={id} className="group flex items-center justify-between bg-white border border-slate-200 p-3 rounded-2xl animate-in slide-in-from-left-2 duration-300">
+                                         <div className="flex items-center gap-4">
+                                            <span className="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center text-[9px] font-black">{idx + 1}</span>
+                                            <p className="text-[10px] font-black text-slate-800 uppercase tracking-tight">{c?.short || c?.name}</p>
+                                         </div>
+                                         <div className="flex items-center gap-1">
+                                            <button disabled={idx === 0} onClick={() => moveTargetCollege(idx, -1)} className="p-1.5 hover:bg-blue-50 text-blue-400 disabled:opacity-10 transition-colors"><ChevronUp size={14}/></button>
+                                            <button disabled={idx === targetColleges.length - 1} onClick={() => moveTargetCollege(idx, 1)} className="p-1.5 hover:bg-blue-50 text-blue-400 disabled:opacity-10 transition-colors"><ChevronDown size={14}/></button>
+                                            <button onClick={() => setTargetColleges(targetColleges.filter(t => t !== id))} className="p-1.5 hover:bg-red-50 text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={14}/></button>
+                                         </div>
                                       </div>
                                    )
                                 })
@@ -477,14 +502,21 @@ function UgeacPredictor() {
                              </button>
                           </div>
 
-                          <div className="flex flex-wrap gap-2 min-h-[40px]">
+                          <div className="flex flex-col gap-2 min-h-[40px]">
                              {targetBranches.length === 0 ? (
                                 <p className="text-[10px] font-bold text-slate-300 uppercase italic">Showing all branches if empty...</p>
                              ) : (
-                                targetBranches.map(b => (
-                                   <div key={b} className="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-100 animate-in zoom-in duration-300">
-                                      {branchMapping[b] || b}
-                                      <button onClick={() => setTargetBranches(targetBranches.filter(t => t !== b))} className="hover:text-red-500"><Trash2 size={12}/></button>
+                                targetBranches.map((b, idx) => (
+                                   <div key={b} className="group flex items-center justify-between bg-white border border-slate-200 p-3 rounded-2xl animate-in slide-in-from-right-2 duration-300">
+                                      <div className="flex items-center gap-4">
+                                         <span className="w-5 h-5 bg-emerald-600 text-white rounded-full flex items-center justify-center text-[9px] font-black">{idx + 1}</span>
+                                         <p className="text-[10px] font-black text-slate-800 uppercase tracking-tight">{branchMapping[b] || b}</p>
+                                      </div>
+                                      <div className="flex items-center gap-1">
+                                         <button disabled={idx === 0} onClick={() => moveTargetBranch(idx, -1)} className="p-1.5 hover:bg-emerald-50 text-emerald-400 disabled:opacity-10 transition-colors"><ChevronUp size={14}/></button>
+                                         <button disabled={idx === targetBranches.length - 1} onClick={() => moveTargetBranch(idx, 1)} className="p-1.5 hover:bg-emerald-50 text-emerald-400 disabled:opacity-10 transition-colors"><ChevronDown size={14}/></button>
+                                         <button onClick={() => setTargetBranches(targetBranches.filter(t => t !== b))} className="p-1.5 hover:bg-red-50 text-slate-300 hover:text-red-500 transition-colors"><Trash2 size={14}/></button>
+                                      </div>
                                    </div>
                                 ))
                              )}
