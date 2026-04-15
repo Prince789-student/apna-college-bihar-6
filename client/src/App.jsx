@@ -20,6 +20,7 @@ import PrivacyPolicy from './pages/legal/PrivacyPolicy';
 import AboutUs from './pages/legal/AboutUs';
 import ContactUs from './pages/legal/ContactUs';
 import UgeacPredictor from './pages/UgeacPredictor';
+import PersonalManager from './pages/PersonalManager';
 import { Youtube, ArrowRight } from 'lucide-react';
 
 // Role-Based Admin Guard (Restricted to Founder Identity)
@@ -76,6 +77,7 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route index element={<StudyDashboard />} />
               <Route path="notes" element={<Notes />} />
+              <Route path="notes/personal" element={<PersonalManager />} />
               <Route path="study" element={<StudyDashboard />} />
               <Route path="timer" element={<StudyDashboard />} />
               <Route path="ugeac-predictor" element={<UgeacPredictor />} />

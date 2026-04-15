@@ -70,6 +70,7 @@ export default function DashboardLayout() {
   const navLinks = [
     { name: 'Study Protocol', path: '/dashboard/study', icon: <Timer size={22} className="text-blue-500" /> },
     { name: 'Notes & PYQ', path: '/dashboard/notes', icon: <Book size={20} /> },
+    { name: 'Personal Vault', path: '/dashboard/notes/personal', icon: <Shield size={20} className="text-indigo-400" /> },
     { name: 'Scientific Calc', path: '/dashboard/calculator', icon: <Calculator size={20} /> },
     { name: 'BEU CGPA', path: '/dashboard/cgpa', icon: <GraduationCap size={20} /> },
     { name: 'UGEAC COUNSELLING', path: '/dashboard/ugeac-predictor', icon: <Send size={20} className="text-emerald-500" /> },
