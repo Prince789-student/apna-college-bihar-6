@@ -495,12 +495,8 @@ function UgeacPredictor() {
   };
 
   const sortedColleges = useMemo(() => {
-    return [...colleges].sort((a,b) => {
-        const idxA = standardColleges.indexOf(a.name);
-        const idxB = standardColleges.indexOf(b.name);
-        return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
-    });
-  }, [colleges, standardColleges]);
+    return [...colleges].sort((a, b) => a.name.localeCompare(b.name));
+  }, [colleges]);
 
   return (
     <div className="max-w-7xl mx-auto space-y-12 py-10 px-4 animate-in fade-in duration-500 font-sans">
