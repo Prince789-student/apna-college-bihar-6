@@ -601,10 +601,10 @@ function UgeacPredictor() {
            const compRank = d.category === 'UR' ? ugeacRank : getEstimatedCategoryRank(ugeacRank, d.category);
            const latestClosing = (cut25 || cut24).closing;
            
-           let chance = 'No Chance';
-           if (compRank <= latestClosing * 1.05) chance = 'High';
-           else if (compRank <= latestClosing * 1.25) chance = 'Medium';
-           else if (compRank <= latestClosing * 1.5) chance = 'Low';
+           let chance = 'No';
+           if (compRank <= latestClosing) chance = 'High';
+           else if (compRank <= latestClosing * 1.1) chance = 'Medium';
+           else if (compRank <= latestClosing * 1.25) chance = 'Low';
 
            seen.set(key, {
              college: collegeInfo, 
