@@ -7,30 +7,53 @@ import os
 COLLEGES = [
     ('M.I.T. MUZAFFARPUR', 'MIT Muzaffarpur'), ('B.C.E. BHAGALPUR', 'BCE Bhagalpur'), 
     ('G.C.E. GAYA', 'GCE Gaya'), ('D.C.E. DARBHANGA', 'DCE Darbhanga'), 
-    ('N.C.E. CHANDI', 'NCE Chandi'), ('L.N.J.P.I.T. CHAPRA', 'LNJPIT Chapra'),
-    ('B.C.E. BAKHTIYARPUR', 'BCE Bakhtiyarpur'), ('S.I.T. SITAMARHI', 'SIT Sitamarhi'), 
-    ('R.R.S.D.C.E. BEGUSARAI', 'RRSDCE Begusarai'), ('S.C.E. SASARAM', 'SCE Sasaram'), 
-    ('M.C.E. MOTIHARI', 'MCE Motihari'), ('B.P.M.C.E. MADHEPURA', 'BPMCE Madhepura'),
-    ('K.C.E. KATIHAR', 'KCE Katihar'), ('P.C.E. PURNEA', 'PCE Purnea'), 
-    ('S.C.E. SAHARSA', 'SCE Saharsa'), ('S.C.E. SUPAUL', 'SCE Supaul'), 
-    ('G.E.C. BANKA', 'GEC Banka'), ('G.E.C. VAISHALI', 'GEC Vaishali'),
-    ('G.E.C. JAMUI', 'GEC Jamui'), ('G.E.C. NAWADA', 'GEC Nawada'), 
-    ('G.E.C. KISHANGANJ', 'GEC Kishanganj'), ('G.E.C. MUNGER', 'GEC Munger'), 
-    ('G.E.C. SHEOHAR', 'GEC Sheohar'), ('G.E.C. BETTIAH', 'GEC Bettiah'),
-    ('G.E.C. AURANGABAD', 'GEC Aurangabad'), ('G.E.C. KAIMUR', 'GEC Kaimur'),
-    ('G.E.C. GOPALGANJ', 'GEC Gopalganj'), ('G.E.C. MADHUBANI', 'GEC Madhubani'), 
-    ('G.E.C. SIWAN', 'GEC Siwan'), ('G.E.C. JEHANABAD', 'GEC Jehanabad'), 
-    ('G.E.C. ARWAL', 'GEC Arwal'), ('G.E.C. KHAGARIA', 'GEC Khagaria'),
-    ('G.E.C. BUXAR', 'GEC Buxar'), ('G.E.C. BHOJPUR', 'GEC Bhojpur'), 
-    ('G.E.C. SHEIKHPURA', 'GEC Sheikhpura'), ('G.E.C. LAKHISARAI', 'GEC Lakhisarai'), 
-    ('G.E.C. SAMASTIPUR', 'GEC Samastipur'), ('G.E.C. ARARIA', 'GEC Araria'),
-    ('W.I.T. DARBHANGA', 'WIT Darbhanga'), ('WOMEN\'S INST', 'WIT Darbhanga')
+    ('M.I.T. MUZAFFARPUR', 'MIT Muzaffarpur'),
+    ('B.C.E. BHAGALPUR', 'BCE Bhagalpur'),
+    ('G.C.E. GAYA', 'GCE Gaya'),
+    ('D.C.E. DARBHANGA', 'DCE Darbhanga'),
+    ('NALANDA COLLEGE. OF ENGG,CHANDI', 'NCE Chandi'),
+    ('L.N.J.P.I.T. CHAPRA', 'LNJPIT Chapra'),
+    ('B.C.E. BAKHTIYARPUR', 'BCE Bakhtiyarpur'),
+    ('S.I.T. SITAMARHI', 'SIT Sitamarhi'), 
+    ('R.R.S.D.C.E, BEGUSARAI', 'RRSDCE Begusarai'),
+    ('S.C.E SASARAM', 'SCE Sasaram'),
+    ('M..C.E. MOTIHARI', 'MCE Motihari'),
+    ('B.P.M.C.E. MADHEPURA', 'BPMCE Madhepura'),
+    ('K.C.E., KATIHAR', 'KCE Katihar'),
+    ('PURNEA COLLEGE OF ENGG.', 'PCE Purnea'),
+    ('SAHARSA COLLEGE OF ENGG.', 'SCE Saharsa'),
+    ('SUPAUL ENGG. COLLEGE, SUPAUL', 'SCE Supaul'),
+    ('GOVT. ENGG. COLLEGE, BANKA', 'GEC Banka'),
+    ('GOVT. ENGG. COLLEGE, VAISHALI', 'GEC Vaishali'),
+    ('GOVT. ENGG. COLLEGE, JAMUI', 'GEC Jamui'),
+    ('GOVT. ENGG. COLLEGE, NAWADA', 'GEC Nawada'),
+    ('GOVT. ENGG. COLLEGE, KISHANGANJ', 'GEC Kishanganj'),
+    ('GOVT. ENGG. COLLEGE, MUNGER', 'GEC Munger'),
+    ('GOVT ENGG. COLLEGE SHEOHAR', 'GEC Sheohar'),
+    ('GOVT. ENGG. COLLEGE, BETTIAH', 'GEC Bettiah'),
+    ('GOVT. ENGG. COLLEGE, AURANGABAD', 'GEC Aurangabad'),
+    ('GOVT. ENGG. COLLEGE, KAIMUR', 'GEC Kaimur'),
+    ('GOVT. ENGG. COLLEGE, GOPALGANJ', 'GEC Gopalganj'),
+    ('GOVT. ENGG. COLLEGE, MADHUBANI', 'GEC Madhubani'),
+    ('GOVT. ENGG. COLLEGE, SIWAN', 'GEC Siwan'),
+    ('GOVT. ENGG. COLLEGE, JEHANABAD', 'GEC Jehanabad'),
+    ('GOVT. ENGG. COLLEGE, ARWAL', 'GEC Arwal'),
+    ('GOVT. ENGG. COLLEGE, KHAGARIA', 'GEC Khagaria'),
+    ('GOVT. ENGG. COLLEGE, BUXAR', 'GEC Buxar'),
+    ('GOVT. ENGG. COLLEGE, BHOJPUR', 'GEC Bhojpur'),
+    ('GOVT. ENGG. COLLEGE, SHEIKHPURA', 'GEC Sheikhpura'),
+    ('GOVT. ENGG. COLLEGE OF LAKHISARAI', 'GEC Lakhisarai'),
+    ('GOVT. ENGG. COLLEGE, SAMASTIPUR', 'GEC Samastipur'),
+    ('SHRI PHANISHWAR NATH RENU ENGG. COLLEGE, ARARIA', 'GEC Araria'),
+    ('WOMEN\'S INST', 'WIT Darbhanga')
 ]
 
 # Branch Mapping Ordered by SPECIFICITY (Longest/Most Specific First)
 BRANCH_PRIORITY = [
     ('IOT & CYBER', 'CSE (IoT + CS)'), 
     ('CYBER SECURITY & BLOCKCHAIN', 'CSE (Cyber Security)'),
+    ('CIVIL ENGG  WITH COMPUTER APPLICATION', 'Civil with Computer Application'),
+    ('CIVIL ENGINEERING WITH COMPUTER APPLICATION', 'Civil with Computer Application'),
     ('AI & MACHINE', 'CSE (AI & ML)'), 
     ('ARTIFICIAL INTELLIGENCE & MACHINE', 'CSE (AI & ML)'),
     ('ARTIFICAL INTELLIGENCE & MACHINE', 'CSE (AI & ML)'),
@@ -91,6 +114,13 @@ def parse_any_pdf(file_path):
                     last_coll = val
                     matched_key = key
                     break
+            
+            if not matched_key and last_coll:
+                # Debug: See if we are missing a college transition
+                # If the line contains something that looks like a NEW college name, we might be bleeding
+                if any(kw in t for kw in ['COLLEGE', 'INSTITUTE', 'ENGINEERING']):
+                    pass # We will check manually if needed
+            
             if not last_coll: continue
             
             # REMOVE College Name from line to avoid branch matching initials (like M.I.T. matching I.T.)
