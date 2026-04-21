@@ -415,24 +415,48 @@ function UgeacPredictor() {
         doc.setFont("helvetica", "bold");
         doc.text("COMPREHENSIVE CUTOFF MATRIX (Verified 2025)", 14, finalY);
 
-        const tableData = results.all.map((item, idx) => [
-           idx + 1,
-           item.college.name,
-           branchMapping[item.branch] || item.branch,
-           `${item.cat} (${item.seatType === 'Female' ? 'F' : 'G'})`,
-           item.cutoff25,
-           item.myCompRank,
-           item.chance
-        ]);
+        // Grouping Logic for "Organised Way"
+        // We detect the first row's college and group by it if the next row is the same
+        const tableData = [];
+        let currentGroup = null;
+        let groupCount = 0;
+
+        results.all.forEach((item, idx) => {
+           const collegeName = item.college.name;
+           
+           // If we have a lot of data, we use numbering 1, 2, 3...
+           tableData.push([
+              idx + 1,
+              collegeName,
+              branchMapping[item.branch] || item.branch,
+              `${item.cat} (${item.seatType === 'Female' ? 'F' : 'G'})`,
+              item.cutoff25,
+              item.myCompRank,
+              item.chance
+           ]);
+        });
 
         autoTable(doc, {
           startY: finalY + 6,
-          head: [['#', 'College Name', 'Branch', 'Cat (Type)', 'Closing Rank', 'Your Rank', 'Chance']],
+          head: [['#', 'Engineering College', 'Specialized Branch', 'Cat (Type)', '2025 Cutoff', 'Your Rank', 'Chance']],
           body: tableData,
           theme: 'grid',
           styles: { fontSize: 7, cellPadding: 2, font: 'helvetica' },
-          headStyles: { fillColor: [45, 55, 72], textColor: [255, 255, 255], fontStyle: 'bold' },
+          headStyles: { fillColor: [30, 41, 59], textColor: [255, 255, 255], fontStyle: 'bold' },
           alternateRowStyles: { fillColor: [249, 250, 251] },
+          columnStyles: {
+            0: { cellWidth: 8 },
+            1: { cellWidth: 50 },
+            4: { fontStyle: 'bold', textColor: [37, 99, 235] },
+            6: { fontStyle: 'bold' }
+          },
+          didParseCell: (data) => {
+            if (data.column.index === 6 && data.cell.text[0] === 'High') {
+               data.cell.styles.textColor = [5, 150, 105]; // emerald-600
+            } else if (data.column.index === 6 && data.cell.text[0] === 'No') {
+               data.cell.styles.textColor = [220, 38, 38]; // red-600
+            }
+          },
           margin: { top: 10 }
         });
       }
@@ -440,7 +464,7 @@ function UgeacPredictor() {
       // Apply Branding to all pages
       addBranding(doc);
 
-      doc.save(`UGEAC_Analysis_Report.pdf`);
+      doc.save(`UGEAC_Official_Report_2025.pdf`);
       console.log("PDF Saved Successfully!");
     } catch (err) {
       console.error("Critical PDF Failure:", err);

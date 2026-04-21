@@ -5,20 +5,26 @@ import os
 
 # Final 100% Accurate College Map
 COLLEGES = [
-    ('MIT', 'MIT Muzaffarpur'), ('BHAGALPUR', 'BCE Bhagalpur'), ('GAYA', 'GCE Gaya'),
-    ('DARBHANGA', 'DCE Darbhanga'), ('CHANDI', 'NCE Chandi'), ('CHAPRA', 'LNJPIT Chapra'),
-    ('BAKHTIYARPUR', 'BCE Bakhtiyarpur'), ('SITAMARHI', 'SIT Sitamarhi'), ('BEGUSARAI', 'RRSDCE Begusarai'),
-    ('SASARAM', 'SCE Sasaram'), ('MOTIHARI', 'MCE Motihari'), ('MADHEPURA', 'BPMCE Madhepura'),
-    ('KATIHAR', 'KCE Katihar'), ('PURNEA', 'PCE Purnea'), ('SAHARSA', 'SCE Saharsa'),
-    ('SUPAUL', 'SCE Supaul'), ('BANKA', 'GEC Banka'), ('VAISHALI', 'GEC Vaishali'),
-    ('JAMUI', 'GEC Jamui'), ('NAWADA', 'GEC Nawada'), ('KISHANGANJ', 'GEC Kishanganj'),
-    ('MUNGER', 'GEC Munger'), ('SHEOHAR', 'GEC Sheohar'), ('BETTIAH', 'GEC Bettiah'),
-    ('BETTIA', 'GEC Bettiah'), ('AURANGABAD', 'GEC Aurangabad'), ('KAIMUR', 'GEC Kaimur'),
-    ('GOPALGANJ', 'GEC Gopalganj'), ('MADHUBANI', 'GEC Madhubani'), ('SIWAN', 'GEC Siwan'),
-    ('JEHANABAD', 'GEC Jehanabad'), ('ARWAL', 'GEC Arwal'), ('KHAGARIA', 'GEC Khagaria'),
-    ('BUXAR', 'GEC Buxar'), ('BHOJPUR', 'GEC Bhojpur'), ('SHEIKHPURA', 'GEC Sheikhpura'),
-    ('LAKHISARAI', 'GEC Lakhisarai'), ('SAMASTIPUR', 'GEC Samastipur'), ('ARARIA', 'GEC Araria'),
-    ('WOMENS INST', 'WIT Darbhanga'), ('MUZAFFARPUR', 'MIT Muzaffarpur'), ('WEST CHAMPARAN', 'GEC Bettiah')
+    ('M.I.T. MUZAFFARPUR', 'MIT Muzaffarpur'), ('B.C.E. BHAGALPUR', 'BCE Bhagalpur'), 
+    ('G.C.E. GAYA', 'GCE Gaya'), ('D.C.E. DARBHANGA', 'DCE Darbhanga'), 
+    ('N.C.E. CHANDI', 'NCE Chandi'), ('L.N.J.P.I.T. CHAPRA', 'LNJPIT Chapra'),
+    ('B.C.E. BAKHTIYARPUR', 'BCE Bakhtiyarpur'), ('S.I.T. SITAMARHI', 'SIT Sitamarhi'), 
+    ('R.R.S.D.C.E. BEGUSARAI', 'RRSDCE Begusarai'), ('S.C.E. SASARAM', 'SCE Sasaram'), 
+    ('M.C.E. MOTIHARI', 'MCE Motihari'), ('B.P.M.C.E. MADHEPURA', 'BPMCE Madhepura'),
+    ('K.C.E. KATIHAR', 'KCE Katihar'), ('P.C.E. PURNEA', 'PCE Purnea'), 
+    ('S.C.E. SAHARSA', 'SCE Saharsa'), ('S.C.E. SUPAUL', 'SCE Supaul'), 
+    ('G.E.C. BANKA', 'GEC Banka'), ('G.E.C. VAISHALI', 'GEC Vaishali'),
+    ('G.E.C. JAMUI', 'GEC Jamui'), ('G.E.C. NAWADA', 'GEC Nawada'), 
+    ('G.E.C. KISHANGANJ', 'GEC Kishanganj'), ('G.E.C. MUNGER', 'GEC Munger'), 
+    ('G.E.C. SHEOHAR', 'GEC Sheohar'), ('G.E.C. BETTIAH', 'GEC Bettiah'),
+    ('G.E.C. AURANGABAD', 'GEC Aurangabad'), ('G.E.C. KAIMUR', 'GEC Kaimur'),
+    ('G.E.C. GOPALGANJ', 'GEC Gopalganj'), ('G.E.C. MADHUBANI', 'GEC Madhubani'), 
+    ('G.E.C. SIWAN', 'GEC Siwan'), ('G.E.C. JEHANABAD', 'GEC Jehanabad'), 
+    ('G.E.C. ARWAL', 'GEC Arwal'), ('G.E.C. KHAGARIA', 'GEC Khagaria'),
+    ('G.E.C. BUXAR', 'GEC Buxar'), ('G.E.C. BHOJPUR', 'GEC Bhojpur'), 
+    ('G.E.C. SHEIKHPURA', 'GEC Sheikhpura'), ('G.E.C. LAKHISARAI', 'GEC Lakhisarai'), 
+    ('G.E.C. SAMASTIPUR', 'GEC Samastipur'), ('G.E.C. ARARIA', 'GEC Araria'),
+    ('W.I.T. DARBHANGA', 'WIT Darbhanga'), ('WOMEN\'S INST', 'WIT Darbhanga')
 ]
 
 # Branch Mapping Ordered by SPECIFICITY (Longest/Most Specific First)
@@ -35,14 +41,14 @@ BRANCH_PRIORITY = [
     ('CYBER SECURITY', 'CSE (Cyber Security)'),
     ('NETWORKS', 'Computer Science (Networks)'),
     ('SMART MANUFACTURING', 'Mechanical (Smart Manufacturing)'),
-    ('COMPUTER SCIENCE', 'Computer Science'),
     ('COMPUTER SC.', 'Computer Science'),
+    ('COMPUTER SCIENCE', 'Computer Science'),
     ('INFORMATION TECHNOLOGY', 'IT'),
-    ('I.T.', 'IT'),
+    (' ELECTRICAL ENGINEERING', 'Electrical'),
+    ('ELECTRICAL ENGINEERING', 'Electrical'),
     ('ELECTRICAL & ELECTRONICS', 'Electrical & Electronics'),
     ('ELECTRO  & COMMUNICATION', 'Electronics & Communication'),
     ('ELECTRONICS & COMMUNICATION', 'Electronics & Communication'),
-    ('ELECTRICAL ENGINEERING', 'Electrical'),
     ('MECHANICAL ENGINEERING', 'Mechanical'),
     ('CIVIL ENGINEERING', 'Civil'),
     ('CIVIL ENGG', 'Civil'),
@@ -51,15 +57,14 @@ BRANCH_PRIORITY = [
     ('FOOD', 'Food Processing'),
     ('MINING', 'Mining Engineering'),
     ('CHEMICAL', 'Chemical Engineering'),
-    ('Aeronautical', 'Aeronautical Engineering'),
+    ('AERONAUTICAL', 'Aeronautical Engineering'),
     ('ROBOTICS', 'Robotics and Automation'),
     ('VLSI', 'VLSI Design'),
     ('BIOINFORMATICS', 'Bioinformatics'),
     ('AGRICULTURE', 'Agriculture'),
     ('LEATHER', 'Leather Technology'),
     ('TEXTILE', 'Textile'),
-    ('SILK', 'Silk Technology'),
-    ('LEATHER', 'Leather Technology')
+    ('SILK', 'Silk Technology')
 ]
 
 def get_normalized_branch(t):
@@ -80,13 +85,24 @@ def parse_any_pdf(file_path):
             if "OPENING" in t: continue
             
             # Find College
+            matched_key = None
             for key, val in COLLEGES:
-                if key in t: last_coll = val; break
+                if key in t: 
+                    last_coll = val
+                    matched_key = key
+                    break
             if not last_coll: continue
             
+            # REMOVE College Name from line to avoid branch matching initials (like M.I.T. matching I.T.)
+            clean_t = t
+            if matched_key: clean_t = t.replace(matched_key, "")
+            
             # Find Branch (Specificity First)
-            br = get_normalized_branch(t)
-            if not br: continue
+            br = get_normalized_branch(clean_t)
+            if not br: 
+                # Fallback for I.T. which is tricky
+                if " I.T. " in line or " I.T." in line: br = "IT"
+                else: continue
             
             # Find Category
             cat = "UR"
