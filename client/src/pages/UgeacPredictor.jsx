@@ -303,14 +303,21 @@ function UgeacPredictor() {
     for(let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         
-        // Ultra-Soft Minimal Watermark (Nearly Horizontal & Very Light)
-        doc.setFontSize(22);
-        doc.setFont("helvetica", "normal");
-        doc.setTextColor(245, 235, 235); // Ultra Light Pink (Almost white)
-        
-        // Single central watermark to avoid clutter
-        doc.text("APNA COLLEGE BIHAR ANALYSIS", 105, 150, { align: 'center', angle: 5 });
-        doc.text("APNA COLLEGE BIHAR ANALYSIS", 105, 220, { align: 'center', angle: 5 });
+        // Transparent, diagonal, professional center watermark
+        try {
+            doc.setGState(new doc.GState({opacity: 0.06}));
+            doc.setFontSize(50);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(15, 23, 42); // slate-900
+            doc.text("APNA COLLEGE BIHAR", 105, 148, { align: 'center', angle: 45 });
+            doc.setGState(new doc.GState({opacity: 1.0}));
+        } catch (e) {
+            // Safe fallback for older versions without GState
+            doc.setFontSize(50);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(245, 245, 247); 
+            doc.text("APNA COLLEGE BIHAR", 105, 148, { align: 'center', angle: 45 });
+        }
 
         // Professional Footer
         doc.setFontSize(8);
@@ -464,7 +471,16 @@ function UgeacPredictor() {
       // Apply Branding to all pages
       addBranding(doc);
 
-      doc.save(`UGEAC_Analysis_2025.pdf`);
+      const blob = doc.output('blob');
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `UGEAC_Analysis_2025.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
       console.log("PDF Saved Successfully!");
     } catch (err) {
       console.error("Critical PDF Failure:", err);
