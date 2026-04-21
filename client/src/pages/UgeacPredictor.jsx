@@ -678,7 +678,31 @@ function UgeacPredictor() {
                                          className="w-full bg-slate-50 rounded-xl py-2.5 pl-9 pr-4 text-[10px] md:text-[11px] font-black uppercase outline-none border border-transparent focus:border-blue-100"
                                       />
                                    </div>
+                                   <div className="flex gap-2">
+                                      <button 
+                                         onClick={() => setTargetColleges(sortedColleges.map(c => c.id))}
+                                         className="flex-1 py-2 bg-blue-600 text-white rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-black transition-colors"
+                                      >
+                                         Select All
+                                      </button>
+                                      <button 
+                                         onClick={() => setTargetColleges([])}
+                                         className="flex-1 py-2 bg-slate-100 text-slate-500 rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-colors"
+                                      >
+                                         Remove All
+                                      </button>
+                                   </div>
                                    <div className="max-h-[250px] overflow-y-auto custom-scrollbar space-y-1 pr-1">
+                                      <div 
+                                         onClick={() => {
+                                            if (targetColleges.length === sortedColleges.length) setTargetColleges([]);
+                                            else setTargetColleges(sortedColleges.map(c => c.id));
+                                         }}
+                                         className={`flex items-center justify-between p-2.5 md:p-3 rounded-xl cursor-pointer transition-all border-2 ${targetColleges.length === sortedColleges.length ? 'bg-blue-600 text-white border-blue-600' : 'bg-slate-50 text-slate-800 border-transparent hover:border-blue-200'}`}
+                                      >
+                                         <span className="text-[10px] font-black uppercase tracking-widest">--- ALL 39 BEU COLLEGES ---</span>
+                                         {targetColleges.length === sortedColleges.length ? <CheckCircle2 size={16} /> : <Plus size={16} />}
+                                      </div>
                                       {sortedColleges.filter(c => c.name.toLowerCase().includes(finderCollegeSearch.toLowerCase())).map(c => {
                                          const isSelected = targetColleges.includes(c.id);
                                          return (
@@ -763,7 +787,32 @@ function UgeacPredictor() {
                                          className="w-full bg-slate-50 rounded-xl py-2.5 pl-9 pr-4 text-[10px] md:text-[11px] font-black uppercase outline-none border border-transparent focus:border-emerald-100"
                                       />
                                    </div>
+                                   <div className="flex gap-2">
+                                      <button 
+                                         onClick={() => setTargetBranches(targetColleges.length > 0 ? availableBranchesForTarget : ugeacData.branches)}
+                                         className="flex-1 py-2 bg-emerald-600 text-white rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-black transition-colors"
+                                      >
+                                         Select All
+                                      </button>
+                                      <button 
+                                         onClick={() => setTargetBranches([])}
+                                         className="flex-1 py-2 bg-slate-100 text-slate-500 rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-colors"
+                                      >
+                                         Remove All
+                                      </button>
+                                   </div>
                                    <div className="max-h-[250px] overflow-y-auto custom-scrollbar space-y-1 pr-1">
+                                      <div 
+                                         onClick={() => {
+                                            const all = targetColleges.length > 0 ? availableBranchesForTarget : ugeacData.branches;
+                                            if (targetBranches.length === all.length) setTargetBranches([]);
+                                            else setTargetBranches(all);
+                                         }}
+                                         className={`flex items-center justify-between p-2.5 md:p-3 rounded-xl cursor-pointer transition-all border-2 ${targetBranches.length === (targetColleges.length > 0 ? availableBranchesForTarget : ugeacData.branches).length ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-slate-50 text-slate-800 border-transparent hover:border-emerald-200'}`}
+                                      >
+                                         <span className="text-[10px] font-black uppercase tracking-widest">--- ALL BRANCHES ---</span>
+                                         {targetBranches.length === (targetColleges.length > 0 ? availableBranchesForTarget : ugeacData.branches).length ? <CheckCircle2 size={16} /> : <Plus size={16} />}
+                                      </div>
                                       {(targetColleges.length > 0 ? availableBranchesForTarget : ugeacData.branches).filter(b => (branchMapping[b] || b).toLowerCase().includes(finderBranchSearch.toLowerCase())).map(b => {
                                          const isSelected = targetBranches.includes(b);
                                          return (
