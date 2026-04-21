@@ -645,20 +645,20 @@ function UgeacPredictor() {
                 <ShieldCheck size={14}/> 100% Data Accuracy: Verified 2025 PDF
              </div>
 
-             {rank && (
+             {(rank || ugeacInput) && (
                <div className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 animate-in slide-in-from-top-4 duration-700">
                   <div className="bg-white border-2 border-blue-100 rounded-[2rem] md:rounded-[2.5rem] p-5 md:p-6 text-center shadow-xl shadow-blue-50 relative overflow-hidden group">
                      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"><Zap size={40}/></div>
                      <p className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">UGEAC Rank</p>
-                     <p className="text-3xl md:text-4xl font-[1000] text-blue-600 tracking-tighter">#{estimateUgeacRank(rank)}</p>
-                     <p className="text-[8px] md:text-[9px] font-bold text-blue-300 mt-2 uppercase">Official 2025 State Merit</p>
+                     <p className="text-3xl md:text-4xl font-[1000] text-blue-600 tracking-tighter">#{ugeacInput ? ugeacInput : estimateUgeacRank(rank)}</p>
+                     <p className="text-[8px] md:text-[9px] font-bold text-blue-300 mt-2 uppercase">{ugeacInput ? 'Direct Input Rank' : 'Official 2025 State Merit'}</p>
                   </div>
 
                   {category !== 'UR' && (
                   <div className="bg-white border-2 border-indigo-100 rounded-[2rem] md:rounded-[2.5rem] p-5 md:p-6 text-center shadow-xl shadow-indigo-50 relative overflow-hidden group">
                      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"><ShieldCheck size={40}/></div>
                      <p className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{category} Rank</p>
-                     <p className="text-3xl md:text-4xl font-[1000] text-indigo-600 tracking-tighter">#{getEstimatedCategoryRank(estimateUgeacRank(rank), category)}</p>
+                     <p className="text-3xl md:text-4xl font-[1000] text-indigo-600 tracking-tighter">#{getEstimatedCategoryRank(ugeacInput ? ugeacInput : estimateUgeacRank(rank), category)}</p>
                      <p className="text-[8px] md:text-[9px] font-bold text-indigo-300 mt-2 uppercase">Bihar PDF Analysis</p>
                   </div>
                   )}
@@ -667,7 +667,7 @@ function UgeacPredictor() {
                   <div className="bg-white border-2 border-rose-100 rounded-[2rem] md:rounded-[2.5rem] p-5 md:p-6 text-center shadow-xl shadow-rose-50 relative overflow-hidden group">
                      <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity"><CheckCircle2 size={40}/></div>
                      <p className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">RCG Rank</p>
-                     <p className="text-3xl md:text-4xl font-[1000] text-rose-600 tracking-tighter">#{getEstimatedCategoryRank(estimateUgeacRank(rank), 'RCG')}</p>
+                     <p className="text-3xl md:text-4xl font-[1000] text-rose-600 tracking-tighter">#{getEstimatedCategoryRank(ugeacInput ? ugeacInput : estimateUgeacRank(rank), 'RCG')}</p>
                      <p className="text-[8px] md:text-[9px] font-bold text-rose-300 mt-2 uppercase">Female Reservation</p>
                   </div>
                   )}
