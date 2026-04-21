@@ -228,11 +228,13 @@ function UgeacPredictor() {
 
   // Deep Allotment Rank Mapping from 7,866 PDF Records
   const UGEAC_RANK_MAP = [
-    { "air": 16960, "ur": 5 }, { "air": 161815, "ur": 625 }, { "air": 235940, "ur": 1391 }, { "air": 286236, "ur": 1908 },
-    { "air": 321798, "ur": 2302 }, { "air": 361545, "ur": 2772 }, { "air": 395982, "ur": 3144 }, { "air": 435759, "ur": 3538 },
-    { "air": 472170, "ur": 3951 }, { "air": 509292, "ur": 4376 }, { "air": 550604, "ur": 4784 }, { "air": 591667, "ur": 5191 },
-    { "air": 639735, "ur": 5606 }, { "air": 692791, "ur": 6116 }, { "air": 757885, "ur": 6701 }, { "air": 816664, "ur": 7226 },
-    { "air": 880227, "ur": 7729 }, { "air": 961129, "ur": 8303 }, { "air": 1084205, "ur": 9037 }, { "air": 1198428, "ur": 9691 }
+    { "air": 28003, "ur": 4 }, { "air": 150732, "ur": 525 }, { "air": 197425, "ur": 1012 }, 
+    { "air": 247321, "ur": 1507 }, { "air": 297962, "ur": 2041 }, { "air": 339013, "ur": 2522 }, 
+    { "air": 383352, "ur": 3003 }, { "air": 430878, "ur": 3501 }, { "air": 476591, "ur": 3992 }, 
+    { "air": 518100, "ur": 4474 }, { "air": 568797, "ur": 4966 }, { "air": 620541, "ur": 5441 }, 
+    { "air": 673598, "ur": 5946 }, { "air": 732511, "ur": 6468 }, { "air": 795064, "ur": 7036 }, 
+    { "air": 859488, "ur": 7570 }, { "air": 933806, "ur": 8130 }, { "air": 1010934, "ur": 8643 }, 
+    { "air": 1091239, "ur": 9161 }, { "air": 1183901, "ur": 9674 }
   ];
 
   const estimateUgeacRank = (jeeRank) => {
@@ -259,14 +261,14 @@ function UgeacPredictor() {
     const r = parseInt(urRank);
     // Verified 2025 Medians from 7,800+ records
     const ratios = { 
-      'EBC': 0.2392, 
-      'BC': 0.3857, 
-      'SC': 0.0718, 
-      'ST': 0.0037, 
-      'EWS': 0.2246, 
-      'RCG': 0.1340, 
-      'DQ': 0.0020, 
-      'SMQ': 0.0169 
+      'EBC': 0.2390, 
+      'BC': 0.3889, 
+      'SC': 0.0657, 
+      'ST': 0.0036, 
+      'EWS': 0.2279, 
+      'RCG': 0.1323, 
+      'DQ': 0.0018, 
+      'SMQ': 0.0173 
     };
     return Math.max(1, Math.floor(r * (ratios[cat] || 1)));
   };
@@ -525,8 +527,8 @@ function UgeacPredictor() {
                <input type="number" placeholder="Enter CRL Rank..." value={rank} onChange={e => setRank(e.target.value)} className="w-full bg-slate-50 border-2 border-transparent focus:border-blue-500 rounded-2xl md:rounded-3xl p-4 md:p-6 text-lg md:text-xl font-[1000] outline-none transition-all placeholder:text-slate-200" />
             </div>
             <div className="space-y-3 p-2 bg-blue-50/50 rounded-2xl md:rounded-[2.5rem] border border-blue-100">
-               <label className="text-[9px] md:text-[10px] font-black text-blue-600 uppercase tracking-widest pl-2 block text-center">UGEAC State Rank</label>
-               <input type="number" placeholder="Optional Rank..." value={ugeacInput} onChange={e => setUgeacInput(e.target.value)} className="w-full bg-white border-2 border-transparent focus:border-blue-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-lg md:text-xl font-[1000] outline-none transition-all placeholder:text-blue-100 shadow-inner" />
+               <label className="text-[9px] md:text-[10px] font-black text-blue-600 uppercase tracking-widest pl-2 block text-center">Your Bihar Merritt (UGEAC) Rank</label>
+               <input type="number" placeholder="Enter UR State Rank..." value={ugeacInput} onChange={e => setUgeacInput(e.target.value)} className="w-full bg-white border-2 border-transparent focus:border-blue-600 rounded-xl md:rounded-2xl p-4 md:p-6 text-lg md:text-xl font-[1000] outline-none transition-all placeholder:text-blue-100 shadow-inner" />
             </div>
              <div className="space-y-3">
                <label className="text-[9px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest pl-2">Category</label>
