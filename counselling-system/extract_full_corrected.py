@@ -40,9 +40,9 @@ COLLEGES = [
     ('GOVT. ENGG. COLLEGE OF LAKHISARAI', 'GEC Lakhisarai'),
     ('GOVT. ENGG. COLLEGE, SAMASTIPUR', 'GEC Samastipur'),
     ('SHRI PHANISHWAR NATH RENU ENGG. COLLEGE, ARARIA', 'GEC Araria'),
-    ('DR. C.P. THAKUR INSTITUTE OF', 'CP Thakur Inst.'),
-    ('CIPET:IPT, HAJIPUR', 'CIPET Hajipur'),
-    ('S.G.I.D.T.', 'SGIDT Patna'),
+    ('DR. C.P. THAKUR COLLEGE', 'CP Thakur Inst.'),
+    ('CIPET:IPT, BIHTA, PATNA', 'CIPET Bihta'),
+    ('S.G.I.D.T. PATNA', 'SGIDT Patna'),
     ('WOMEN\'S INST', 'WIT Darbhanga')
 ]
 
@@ -79,8 +79,12 @@ BRANCH_PRIORITY = [
     ('ANIMATION', '3D Animation'),
     ('FOOD', 'Food Processing'),
     ('MINING', 'Mining Engineering'),
+    ('CHEMICAL ENGINEERING (PLASTIC', 'Chemical Engineering (Plastic & Polymer)'),
     ('CHEMICAL', 'Chemical Engineering'),
     ('AERONAUTICAL', 'Aeronautical Engineering'),
+    ('PETROCHEMICAL', 'Petrochemical Engineering'),
+    ('DAIRY TECH (OPEN)', 'Dairy Tech (Open)'),
+    ('DAIRY TECH SELF FINANCE', 'Dairy Tech (Self Finance)'),
     ('VLSI', 'VLSI Design'),
     ('AGRICULTURE', 'Agriculture Engineering'),
     ('LEATHER', 'Leather Technology'),

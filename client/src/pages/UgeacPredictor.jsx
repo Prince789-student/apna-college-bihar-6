@@ -37,7 +37,7 @@ function UgeacPredictor() {
     "Government Engineering College, Arwal", "Government Engineering College, Khagaria",
     "Government Engineering College, Buxar", "Government Engineering College, Bhojpur",
     "Government Engineering College, Sheikhpura", "Government Engineering College, Lakhisarai",
-    "Government Engineering College, Samastipur"
+    "Government Engineering College, Samastipur", "CP Thakur Inst.", "CIPET Bihta", "SGIDT Patna", "WIT Darbhanga"
   ], []);
 
   const normalizedMap = useMemo(() => ({
@@ -84,7 +84,11 @@ function UgeacPredictor() {
     "G.E.C. BHOJPUR": "Government Engineering College, Bhojpur",
     "G.E.C. SHEIKHPURA": "Government Engineering College, Sheikhpura",
     "G.E.C. LAKHISARAI": "Government Engineering College, Lakhisarai",
-    "G.E.C. SAMASTIPUR": "Government Engineering College, Samastipur"
+    "G.E.C. SAMASTIPUR": "Government Engineering College, Samastipur",
+    "CP THAKUR INST.": "DR. C.P. Thakur Institute",
+    "CIPET BIHTA": "CIPET:IPT, Bihta, Patna",
+    "SGIDT PATNA": "S.G.I.D.T. Patna",
+    "WIT DARBHANGA": "Women's Institute of Tech, Darbhanga"
   }), []);
   
   const [ugeacData, setUgeacData] = useState({ data2024: [], data2025: [], branches: [] });
@@ -156,11 +160,16 @@ function UgeacPredictor() {
     "Fire Technology": "Fire Technology & Safety",
     "Food Processing": "Food Processing & Tech",
     "Bioinformatics": "Bioinformatics",
-    "Civil + Computer Application": "Civil + Comp. App.",
+    "Civil with Computer Application": "Civil with Computer Application (Spl.)",
     "Agriculture Engineering": "Agriculture Engineering",
+    "Mechatronics": "Mechatronics Engineering",
     "Leather Technology": "Leather Technology",
     "Silk Technology": "Silk Technology",
-    "Textile Engineering": "Textile Engineering"
+    "Textile Engineering": "Textile Engineering",
+    "Petrochemical Engineering": "Petrochemical Engineering",
+    "Chemical Engineering (Plastic & Polymer)": "Chemical Engg (Plastic & Polymer)",
+    "Dairy Tech (Open)": "Dairy Tech (Open Category)",
+    "Dairy Tech (Self Finance)": "Dairy Tech (Self Finance)"
   };
 
   // Grouped Branches based on Screenshot structure
@@ -286,15 +295,14 @@ function UgeacPredictor() {
     for(let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         
-        // Ultra-Soft Light Red Watermark (Soft Pink)
+        // Ultra-Soft Minimal Watermark (Nearly Horizontal & Very Light)
         doc.setFontSize(22);
         doc.setFont("helvetica", "normal");
-        doc.setTextColor(255, 235, 235); // Light Red / Soft Pink
+        doc.setTextColor(245, 235, 235); // Ultra Light Pink (Almost white)
         
-        // Pattern placement in non-critical areas
-        for(let y = 100; y < 280; y += 70) {
-            doc.text("APNA COLLEGE BIHAR • OFFICIAL ANALYSIS", 105, y, { align: 'center', angle: 30 });
-        }
+        // Single central watermark to avoid clutter
+        doc.text("APNA COLLEGE BIHAR ANALYSIS", 105, 150, { align: 'center', angle: 5 });
+        doc.text("APNA COLLEGE BIHAR ANALYSIS", 105, 220, { align: 'center', angle: 5 });
 
         // Professional Footer
         doc.setFontSize(8);
