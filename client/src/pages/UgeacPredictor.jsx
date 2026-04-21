@@ -286,24 +286,31 @@ function UgeacPredictor() {
     for(let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         
-        // Main Diagonal Watermark - Light Red/Pink Subtle
-        doc.setFontSize(45);
+        // Ghost Watermark - Extremely light and non-intrusive
+        doc.setFontSize(28);
         doc.setFont("helvetica", "bold");
-        doc.setTextColor(253, 242, 242); // Extremely light red
-        doc.text("APNA COLLEGE BIHAR", 20, 200, { angle: 45 });
-        doc.text("APNA COLLEGE BIHAR", 100, 100, { angle: 45 });
+        doc.setTextColor(253, 246, 246); // Ghost Red (Nearly White)
+        
+        // Place in specific safe zones
+        doc.text("APNA COLLEGE BIHAR OFFICIAL REPORT", 105, 120, { align: 'center', angle: 45 });
+        doc.text("APNA COLLEGE BIHAR OFFICIAL REPORT", 105, 220, { align: 'center', angle: 45 });
 
-        // Center stylized "logo" watermark
-        doc.setFontSize(80);
-        doc.setTextColor(254, 244, 244); 
-        doc.text("ACB", 105, 150, { align: 'center' });
+        // Stylized "ACB" Background Logo
+        doc.setFontSize(70);
+        doc.setTextColor(254, 248, 248); 
+        doc.text("ACB", 105, 160, { align: 'center' });
 
-        // Footer
+        // High-Quality Footer
         doc.setFontSize(8);
-        doc.setTextColor(148, 163, 184); // light slate
-        doc.text("Copyright © 2025 Apna College Bihar. All rights reserved.", 14, 285);
-        doc.text("Official Portal: apnacollegebihar.online", 14, 290);
-        doc.text(`Page ${i} of ${pageCount}`, 190, 290, { align: 'right' });
+        doc.setTextColor(160, 174, 192); // light slate
+        doc.text("This is an AI-generated analysis based on official 2024-25 data. Verification required from official sources.", 14, 282);
+        doc.text("Copyright © 2025 Apna College Bihar. Official: apnacollegebihar.online", 14, 287);
+        doc.text(`Page ${i} of ${pageCount}`, 196, 287, { align: 'right' });
+        
+        // Border
+        doc.setDrawColor(241, 245, 249);
+        doc.setLineWidth(0.1);
+        doc.rect(10, 10, 190, 277);
     }
   };
 
