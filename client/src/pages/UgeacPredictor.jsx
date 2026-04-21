@@ -282,145 +282,148 @@ function UgeacPredictor() {
   };
 
   const downloadResultsPDF = () => {
-    const doc = new jsPDF();
-    
-    // Header Style
-    doc.setFillColor(30, 41, 59); // slate-800
-    doc.rect(0, 0, 210, 48, 'F');
-    
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(24);
-    doc.setFont("helvetica", "bold");
-    doc.text("APNA COLLEGE BIHAR", 14, 20);
-    
-    doc.setFontSize(11);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(255, 255, 255);
-    doc.text("OFFICIAL UGEAC COUNSELLING REPORT 2025", 14, 28);
-    
-    doc.setFontSize(9);
-    doc.setFont("helvetica", "normal");
-    doc.setTextColor(203, 213, 225);
-    doc.text(`Platform: apnacollegebihar.online`, 14, 35);
-    doc.text(`Report ID: ACB-${Math.floor(100000 + Math.random() * 900000)} | Date: ${new Date().toLocaleString()}`, 14, 40);
-
-    // User Details Box
-    doc.setFillColor(248, 250, 252);
-    doc.rect(14, 55, 182, 35, 'F');
-    doc.setLink({ url: 'https://apnacollegebihar.online' }, 14, 55, 182, 35);
-    doc.setDrawColor(226, 232, 240);
-    doc.rect(14, 55, 182, 35, 'S');
-    
-    doc.setTextColor(30, 41, 59);
-    doc.setFontSize(9);
-    doc.setFont("helvetica", "bold");
-    doc.text("CANDIDATE ANALYSIS SUMMARY", 20, 63);
-    doc.setFont("helvetica", "normal");
-    doc.text(`JEE Main CRL: ${rank || 'N/A'}`, 20, 70);
-    doc.text(`Bihar State Rank (UR): #${results.calculatedRank}`, 20, 76);
-    doc.text(`Category: ${category} | Gender: ${gender}`, 20, 82);
-    doc.text(`Verified Category Rank: #${getEstimatedCategoryRank(results.calculatedRank, category)}`, 110, 76);
-
-    let finalY = 100;
-
-    // 1. Predicted Result Section
-    if (results.mockAllotment) {
-       doc.setFillColor(16, 185, 129); // emerald-500
-       doc.rect(14, 95, 182, 22, 'F');
-       doc.setTextColor(255, 255, 255);
-       doc.setFontSize(10);
-       doc.setFont("helvetica", "bold");
-       doc.text(`SIMULATED ALLOTMENT: CHOICE #${results.mockAllotment.choiceNumber}`, 20, 102);
-       doc.setFontSize(12);
-       doc.text(`${results.mockAllotment.choice.collegeName} - ${branchMapping[results.mockAllotment.choice.branch] || results.mockAllotment.choice.branch}`, 20, 110);
-       finalY = 125;
-    } else {
-       doc.setFillColor(239, 68, 68); // red-500
-       doc.rect(14, 95, 182, 12, 'F');
-       doc.setTextColor(255, 255, 255);
-       doc.setFontSize(9);
-       doc.setFont("helvetica", "bold");
-       doc.text("ALLOTMENT STATUS: NO SEAT ALLOTTED IN GIVEN CHOICES", 20, 103);
-       finalY = 115;
-    }
-
-    // 2. Preference List (If choices exist)
-    if (choices.length > 0) {
-      doc.setTextColor(30, 41, 59);
-      doc.setFontSize(13);
-      doc.setFont("helvetica", "bold");
-      doc.text("OFFICIAL PREFERENCE LIST (CHOICE FILLING)", 14, finalY);
-      
-      const choiceData = choices.map((c, idx) => [
-        idx + 1,
-        c.collegeName,
-        branchMapping[c.branch] || c.branch
-      ]);
-
-      autoTable(doc, {
-        startY: finalY + 6,
-        head: [['S.No', 'College Name', 'Engineering Branch']],
-        body: choiceData,
-        theme: 'grid',
-        styles: { fontSize: 8, font: 'helvetica', cellPadding: 3 },
-        headStyles: { fillColor: [30, 41, 59], textColor: [255, 255, 255], fontStyle: 'bold' }
-      });
-      finalY = doc.lastAutoTable.finalY + 15;
-    } else {
-      finalY += 10;
-    }
-
-    // 3. Full Comparison Matrix
-    doc.setTextColor(30, 41, 59);
-    doc.setFontSize(13);
-    doc.setFont("helvetica", "bold");
-    doc.text("COMPREHENSIVE CUTOFF MATRIX (Verified 2025)", 14, finalY);
-
-    const tableData = results.all.map((item, idx) => [
-       idx + 1,
-       item.college.name,
-       branchMapping[item.branch] || item.branch,
-       `${item.cat} (${item.seatType === 'Female' ? 'F' : 'G'})`,
-       item.cutoff25,
-       item.myCompRank,
-       item.chance
-    ]);
-
-    autoTable(doc, {
-      startY: finalY + 6,
-      head: [['#', 'College Name', 'Branch', 'Cat (Type)', 'Closing Rank', 'Your Rank', 'Chance']],
-      body: tableData,
-      theme: 'grid',
-      styles: { fontSize: 7, cellPadding: 2, font: 'helvetica' },
-      headStyles: { fillColor: [45, 55, 72], textColor: [255, 255, 255], fontStyle: 'bold' },
-      alternateRowStyles: { fillColor: [249, 250, 251] },
-      margin: { top: 10 }
-    });
-
-    // Footer & Watermark
-    const pageCount = doc.internal.getNumberOfPages();
-    for(let i = 1; i <= pageCount; i++) {
-        doc.setPage(i);
-        
-        // Watermark Implementation (Simplified for high compatibility)
-        doc.setFontSize(50);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(245, 247, 250); // Very light slate/grey watermark
-        doc.text("APNA COLLEGE BIHAR", 40, 180, { angle: 45 });
-        doc.text("APNA COLLEGE BIHAR", 40, 80, { angle: 45 });
-
-        doc.setFontSize(8);
-        doc.setTextColor(100, 116, 139);
-        doc.text("Copyright © 2025 Apna College Bihar. All rights reserved.", 14, 285);
-        doc.text("Official Portal: apnacollegebihar.online", 14, 290);
-        doc.text(`Page ${i} of ${pageCount}`, 190, 290, { align: 'right' });
-    }
-
+    console.log("Starting PDF Generation...");
     try {
-       doc.save(`UGEAC_Analysis_ACB_${results.calculatedRank}.pdf`);
+      const doc = new jsPDF();
+      
+      // Header Style
+      doc.setFillColor(30, 41, 59); // slate-800
+      doc.rect(0, 0, 210, 48, 'F');
+      
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(24);
+      doc.setFont("helvetica", "bold");
+      doc.text("APNA COLLEGE BIHAR", 14, 20);
+      
+      doc.setFontSize(11);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(255, 255, 255);
+      doc.text("OFFICIAL UGEAC COUNSELLING REPORT 2025", 14, 28);
+      
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "normal");
+      doc.setTextColor(203, 213, 225);
+      doc.text(`Platform: apnacollegebihar.online`, 14, 35);
+      doc.text(`Report ID: ACB-${Math.floor(100000 + Math.random() * 900000)} | Date: ${new Date().toLocaleString()}`, 14, 40);
+
+      // User Details Box
+      doc.setFillColor(248, 250, 252);
+      doc.rect(14, 55, 182, 35, 'F');
+      doc.setDrawColor(226, 232, 240);
+      doc.rect(14, 55, 182, 35, 'S');
+      
+      doc.setTextColor(30, 41, 59);
+      doc.setFontSize(9);
+      doc.setFont("helvetica", "bold");
+      doc.text("CANDIDATE ANALYSIS SUMMARY", 20, 63);
+      doc.setFont("helvetica", "normal");
+      doc.text(`JEE Main CRL: ${rank || 'N/A'}`, 20, 70);
+      doc.text(`Bihar State Rank (UR): #${results.calculatedRank || ugeacInput || 'N/A'}`, 20, 76);
+      doc.text(`Category: ${category} | Gender: ${gender}`, 20, 82);
+      doc.text(`Verified Category Rank: #${getEstimatedCategoryRank(results.calculatedRank || ugeacInput, category)}`, 110, 76);
+
+      let finalY = 100;
+
+      // 1. Predicted Result Section
+      if (results.mockAllotment) {
+         doc.setFillColor(16, 185, 129); // emerald-500
+         doc.rect(14, 95, 182, 22, 'F');
+         doc.setTextColor(255, 255, 255);
+         doc.setFontSize(10);
+         doc.setFont("helvetica", "bold");
+         doc.text(`SIMULATED ALLOTMENT: CHOICE #${results.mockAllotment.choiceNumber}`, 20, 102);
+         doc.setFontSize(12);
+         doc.text(`${results.mockAllotment.choice.collegeName} - ${branchMapping[results.mockAllotment.choice.branch] || results.mockAllotment.choice.branch}`, 20, 110);
+         finalY = 125;
+      } else {
+         doc.setFillColor(239, 68, 68); // red-500
+         doc.rect(14, 95, 182, 12, 'F');
+         doc.setTextColor(255, 255, 255);
+         doc.setFontSize(9);
+         doc.setFont("helvetica", "bold");
+         doc.text("ALLOTMENT STATUS: NO SEAT ALLOTTED IN GIVEN CHOICES", 20, 103);
+         finalY = 115;
+      }
+
+      // 2. Preference List (If choices exist)
+      if (choices.length > 0) {
+        doc.setTextColor(30, 41, 59);
+        doc.setFontSize(13);
+        doc.setFont("helvetica", "bold");
+        doc.text("OFFICIAL PREFERENCE LIST (CHOICE FILLING)", 14, finalY);
+        
+        const choiceData = choices.map((c, idx) => [
+          idx + 1,
+          c.collegeName,
+          branchMapping[c.branch] || c.branch
+        ]);
+
+        doc.autoTable({
+          startY: finalY + 6,
+          head: [['S.No', 'College Name', 'Engineering Branch']],
+          body: choiceData,
+          theme: 'grid',
+          styles: { fontSize: 8, font: 'helvetica', cellPadding: 3 },
+          headStyles: { fillColor: [30, 41, 59], textColor: [255, 255, 255], fontStyle: 'bold' }
+        });
+        finalY = doc.lastAutoTable.finalY + 15;
+      } else {
+        finalY += 10;
+      }
+
+      // 3. Full Comparison Matrix
+      if (results.all && results.all.length > 0) {
+        doc.setTextColor(30, 41, 59);
+        doc.setFontSize(13);
+        doc.setFont("helvetica", "bold");
+        doc.text("COMPREHENSIVE CUTOFF MATRIX (Verified 2025)", 14, finalY);
+
+        const tableData = results.all.map((item, idx) => [
+           idx + 1,
+           item.college.name,
+           branchMapping[item.branch] || item.branch,
+           `${item.cat} (${item.seatType === 'Female' ? 'F' : 'G'})`,
+           item.cutoff25,
+           item.myCompRank,
+           item.chance
+        ]);
+
+        doc.autoTable({
+          startY: finalY + 6,
+          head: [['#', 'College Name', 'Branch', 'Cat (Type)', 'Closing Rank', 'Your Rank', 'Chance']],
+          body: tableData,
+          theme: 'grid',
+          styles: { fontSize: 7, cellPadding: 2, font: 'helvetica' },
+          headStyles: { fillColor: [45, 55, 72], textColor: [255, 255, 255], fontStyle: 'bold' },
+          alternateRowStyles: { fillColor: [249, 250, 251] },
+          margin: { top: 10 }
+        });
+      }
+
+      // Footer & Watermark
+      const pageCount = doc.internal.getNumberOfPages();
+      for(let i = 1; i <= pageCount; i++) {
+          doc.setPage(i);
+          
+          // Watermark
+          doc.setFontSize(50);
+          doc.setFont("helvetica", "bold");
+          doc.setTextColor(245, 247, 250);
+          doc.text("APNA COLLEGE BIHAR", 40, 180, { angle: 45 });
+          doc.text("APNA COLLEGE BIHAR", 40, 80, { angle: 45 });
+
+          doc.setFontSize(8);
+          doc.setTextColor(100, 116, 139);
+          doc.text("Copyright © 2025 Apna College Bihar. All rights reserved.", 14, 285);
+          doc.text("Official Portal: apnacollegebihar.online", 14, 290);
+          doc.text(`Page ${i} of ${pageCount}`, 190, 290, { align: 'right' });
+      }
+
+      doc.save(`UGEAC_Analysis_Report.pdf`);
+      console.log("PDF Saved Successfully!");
     } catch (err) {
-       console.error("PDF Download Failure:", err);
-       alert("PDF Download failed. Please try again or check your browser settings.");
+      console.error("Critical PDF Failure:", err);
+      alert("Error generating PDF: " + err.message);
     }
   };
 
