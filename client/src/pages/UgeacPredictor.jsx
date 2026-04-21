@@ -111,14 +111,21 @@ function UgeacPredictor() {
           };
         }).filter(c => c.collegeId !== null);
 
-        const d24 = process(json.cutoffs2024);
-        const d25 = process(json.cutoffs2025);
+        const raw2024 = json.cutoffs2024 || [];
+        const raw2025 = json.cutoffs2025 || [];
+
+        const d24 = process(raw2024);
+        const d25 = process(raw2025);
         const brs = Array.from(new Set([
-          ...json.cutoffs2024.map(c => c.branch.trim()),
-          ...json.cutoffs2025.map(c => c.branch.trim())
+          ...raw2024.map(c => c.branch.trim()),
+          ...raw2025.map(c => c.branch.trim())
         ])).sort();
 
         setUgeacData({ data2024: d24, data2025: d25, branches: brs });
+        setLoadingData(false);
+      })
+      .catch(err => {
+        console.error("Failed to load cutoffs object:", err);
         setLoadingData(false);
       });
   }, []);
