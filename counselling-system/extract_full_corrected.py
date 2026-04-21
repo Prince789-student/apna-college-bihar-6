@@ -1,12 +1,7 @@
-import re
-import json
-from pypdf import PdfReader
-import os
+import json, re, pypdf
 
-# Final 100% Accurate College Map
+# Exact Verbatim Map for 2025 PDF
 COLLEGES = [
-    ('M.I.T. MUZAFFARPUR', 'MIT Muzaffarpur'), ('B.C.E. BHAGALPUR', 'BCE Bhagalpur'), 
-    ('G.C.E. GAYA', 'GCE Gaya'), ('D.C.E. DARBHANGA', 'DCE Darbhanga'), 
     ('M.I.T. MUZAFFARPUR', 'MIT Muzaffarpur'),
     ('B.C.E. BHAGALPUR', 'BCE Bhagalpur'),
     ('G.C.E. GAYA', 'GCE Gaya'),
@@ -51,11 +46,11 @@ COLLEGES = [
     ('WOMEN\'S INST', 'WIT Darbhanga')
 ]
 
-# Branch Mapping Ordered by SPECIFICITY (Longest/Most Specific First)
+# Robust Branch Priority with space normalization
 BRANCH_PRIORITY = [
     ('IOT & CYBER', 'CSE (IoT + CS)'), 
     ('CYBER SECURITY & BLOCKCHAIN', 'CSE (Cyber Security)'),
-    ('CIVIL ENGG  WITH COMPUTER APPLICATION', 'Civil with Computer Application'),
+    ('CIVIL ENGG WITH COMPUTER APPLICATION', 'Civil with Computer Application'),
     ('CIVIL ENGINEERING WITH COMPUTER APPLICATION', 'Civil with Computer Application'),
     ('AI & MACHINE', 'CSE (AI & ML)'), 
     ('ARTIFICIAL INTELLIGENCE & MACHINE', 'CSE (AI & ML)'),
@@ -70,113 +65,91 @@ BRANCH_PRIORITY = [
     ('COMPUTER SC.', 'Computer Science'),
     ('COMPUTER SCIENCE', 'Computer Science'),
     ('INFORMATION TECHNOLOGY', 'IT'),
-    (' ELECTRICAL ENGINEERING', 'Electrical'),
-    ('ELECTRICAL ENGINEERING', 'Electrical'),
+    ('I.T.', 'IT'),
     ('ELECTRICAL & ELECTRONICS', 'Electrical & Electronics'),
-    ('ELECTRO  & COMMUNICATION', 'Electronics & Communication'),
+    ('ELECTRO & COMMUNICATION', 'Electronics & Communication'),
     ('ELECTRONICS & COMMUNICATION', 'Electronics & Communication'),
+    ('ELECTRICAL ENGINEERING', 'Electrical'),
     ('MECHANICAL ENGINEERING', 'Mechanical'),
     ('CIVIL ENGINEERING', 'Civil'),
     ('CIVIL ENGG', 'Civil'),
+    ('MECHATRONICS', 'Mechatronics'),
+    ('ROBOTICS', 'Robotics and Automation'),
     ('FIRE', 'Fire Technology'),
     ('ANIMATION', '3D Animation'),
     ('FOOD', 'Food Processing'),
     ('MINING', 'Mining Engineering'),
     ('CHEMICAL', 'Chemical Engineering'),
     ('AERONAUTICAL', 'Aeronautical Engineering'),
-    ('ROBOTICS', 'Robotics and Automation'),
     ('VLSI', 'VLSI Design'),
-    ('BIOINFORMATICS', 'Bioinformatics'),
-    ('AGRICULTURE', 'Agriculture'),
+    ('AGRICULTURE', 'Agriculture Engineering'),
     ('LEATHER', 'Leather Technology'),
-    ('TEXTILE', 'Textile'),
+    ('TEXTILE', 'Textile Engineering'),
     ('SILK', 'Silk Technology')
 ]
 
-def get_normalized_branch(t):
-    for key, val in BRANCH_PRIORITY:
-        if key in t: return val
-    return None
+CAT_MAP = {
+    'UR': 'UR', 'E-UR': 'UR', 'BC': 'BC', 'E-BC': 'BC', 
+    'EBC': 'EBC', 'E-EBC': 'EBC', 'SC': 'SC', 'ST': 'ST', 
+    'EWS': 'EWS', 'DQ': 'DQ', 'SMQ': 'SMQ'
+}
 
-def parse_any_pdf(file_path):
-    if not os.path.exists(file_path): return {}
-    reader = PdfReader(file_path)
-    res = {}
+def extract():
+    reader = pypdf.PdfReader("UGEAC2025_FCOFF.pdf")
+    all_data = []
     last_coll = None
     
     for page in reader.pages:
-        lines = page.extract_text().split('\n')
-        for line in lines:
-            t = line.upper()
-            if "OPENING" in t: continue
+        text = page.extract_text()
+        lines = text.split("\n")
+        
+        for t in lines:
+            # Normalize spaces for consistent matching
+            clean_t = " ".join(t.split()).upper()
             
             # Find College
             matched_key = None
             for key, val in COLLEGES:
-                if key in t: 
+                if key in clean_t: 
                     last_coll = val
                     matched_key = key
                     break
             
-            if not matched_key and last_coll:
-                # Debug: See if we are missing a college transition
-                # If the line contains something that looks like a NEW college name, we might be bleeding
-                if any(kw in t for kw in ['COLLEGE', 'INSTITUTE', 'ENGINEERING']):
-                    pass # We will check manually if needed
-            
             if not last_coll: continue
             
-            # REMOVE College Name from line to avoid branch matching initials (like M.I.T. matching I.T.)
-            clean_t = t
-            if matched_key: clean_t = t.replace(matched_key, "")
-            
-            # Find Branch (Specificity First)
-            br = get_normalized_branch(clean_t)
-            if not br: 
-                # Fallback for I.T. which is tricky
-                if " I.T. " in line or " I.T." in line: br = "IT"
-                else: continue
-            
-            # Find Category
-            cat = "UR"
-            for c in ["BC", "EBC", "SC", "ST", "EWS", "RCG", "DQ", "SMQ"]:
-                if f" {c} " in line: cat = c; break
-            
-            seat = "Female" if "FEMALE" in t else "General"
-            
-            ranks = re.findall(r'\d+', line)
-            if len(ranks) < 2: continue
-            
-            closing = int(ranks[-1])
-            key = (last_coll, br, cat, seat)
-            
-            if key not in res or closing > res[key]:
-                res[key] = closing
+            # Match Ranks using flexible Regex
+            # Cat Open Close (Allowing E- prefixes)
+            m = re.search(r'(UR|E-UR|BC|E-BC|EBC|E-EBC|SC|ST|EWS|DQ|SMQ)\s+(\d+)\s+(\d+)', clean_t)
+            if m:
+                cat_raw, open_r, close_r = m.groups()
+                seat_type = 'Female' if 'FEMALE' in clean_t else 'General'
                 
-    return res
+                # Identify Branch
+                branch_found = None
+                for k, v in BRANCH_PRIORITY:
+                    if k.upper() in clean_t:
+                        branch_found = v
+                        break
+                
+                if branch_found:
+                    all_data.append({
+                        "collegeShort": last_coll,
+                        "branch": branch_found,
+                        "category": CAT_MAP[cat_raw],
+                        "seatType": seat_type,
+                        "opening": int(open_r),
+                        "closing": int(close_r),
+                        "year": 2025
+                    })
 
-def main():
-    print("Executing High-Specificity Aggregation (100% Reliable)...")
-    d25_1 = parse_any_pdf("UGEAC2025_FCOFF.pdf")
-    d25_2 = parse_any_pdf("UGEAC2025_SCOFF.pdf")
-    d25 = d25_1.copy()
-    for k,v in d25_2.items():
-        if k not in d25 or v > d25[k]: d25[k] = v
-        
-    d24_1 = parse_any_pdf("UGEAC2024_FOCRANK.pdf")
-    d24_2 = parse_any_pdf("REV_UGEAC2024_SOCRANK.pdf")
-    d24 = d24_1.copy()
-    for k,v in d24_2.items():
-        if k not in d24 or v > d24[k]: d24[k] = v
-        
-    out = {
-        "cutoffs2024": [{"collegeShort": k[0], "branch": k[1], "category": k[2], "seat_type": k[3], "closing": v} for k,v in d24.items()],
-        "cutoffs2025": [{"collegeShort": k[0], "branch": k[1], "category": k[2], "seat_type": k[3], "closing": v} for k,v in d25.items()]
-    }
+    # Output to single location used by React app
+    output_path = "../client/public/data/cutoffs.json"
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    with open(output_path, "w") as f:
+        json.dump({"cutoffs2025": all_data}, f, indent=2)
     
-    with open("../client/public/data/cutoffs.json", "w") as f:
-        json.dump(out, f, indent=2)
-    print(f"Data Complete! Branches normalized by specificity.")
+    print(f"Extraction Successful! Processed {len(all_data)} ranks across 40+ institutions.")
 
 if __name__ == "__main__":
-    main()
+    import os
+    extract()
