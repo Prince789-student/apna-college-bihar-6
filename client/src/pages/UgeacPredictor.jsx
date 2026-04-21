@@ -1434,7 +1434,7 @@ function UgeacPredictor() {
        </div>
        </div>
 
-      {hasPredicted && useMemo(() => (
+      {hasPredicted && (
         <div className="space-y-16 animate-in slide-in-from-bottom-20 duration-1000">
            
            {/* Choice Filling Results (Discussion) */}
@@ -1599,7 +1599,7 @@ function UgeacPredictor() {
                )}
             </div>
         </div>
-      ), [results, choices, category, visibleCount])}
+      )}
 
       {/* COLLEGE CARD MODAL (MATCHING SCREENSHOT) */}
       {selectedCollege && (
