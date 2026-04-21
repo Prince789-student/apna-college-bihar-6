@@ -1,10 +1,7 @@
 {
-  "pythonPath": "C:\\Users\\princ\\AppData\\Roaming\\uv\\python\\cpython-3.14.3-windows-x86_64-none\\python.exe",
+  "venvPath": ".",
+  "venv": ".venv",
   "pythonVersion": "3.14",
-  "venvPath": "",
-  "extraPaths": [
-    "C:\\Users\\princ\\AppData\\Roaming\\uv\\python\\cpython-3.14.3-windows-x86_64-none\\Lib\\site-packages"
-  ],
-  "reportMissingImports": "none",
-  "reportMissingModuleSource": "none"
+  "reportMissingImports": false,
+  "reportMissingModuleSource": false
 }
