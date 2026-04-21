@@ -286,30 +286,30 @@ function UgeacPredictor() {
     for(let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         
-        // Premium Ghost Watermark - Maximum Softness
-        doc.setFontSize(24);
-        doc.setFont("helvetica", "bold");
-        doc.setTextColor(254, 250, 250); // Nearly Pure White - Minimal Visibility
+        // Ultra-Soft Shadow Watermark
+        doc.setFontSize(22);
+        doc.setFont("helvetica", "normal");
+        doc.setTextColor(245, 245, 245); // Soft Gray/Slate - Nearly Invisible
         
-        // Repetitive subtle pattern for security
-        for(let y = 100; y < 280; y += 80) {
-            doc.text("OFFICIAL SEAT ALLOTMENT ANALYSIS - APNA COLLEGE BIHAR", 105, y, { align: 'center', angle: 30 });
+        // Pattern placement in non-critical areas
+        for(let y = 100; y < 280; y += 70) {
+            doc.text("APNA COLLEGE BIHAR • OFFICIAL ANALYSIS", 105, y, { align: 'center', angle: 30 });
         }
 
-        // Footer Branding
+        // Professional Footer
         doc.setFontSize(8);
         doc.setTextColor(160, 174, 192);
-        doc.text("Verified by apnacollegebihar.online | UGEAC Counseling 2025", 42, 287);
+        doc.text("Verified Analysis: apnacollegebihar.online", 42, 287);
         doc.text(`Page ${i} of ${pageCount}`, 196, 287, { align: 'right' });
         
         try {
-           doc.addImage('/logo.jpg', 'JPEG', 14, 278, 22, 11); 
+           doc.addImage('/logo.jpg', 'JPEG', 14, 278, 20, 10); 
         } catch(e) {}
 
-        // Thin professional border
-        doc.setDrawColor(248, 250, 252);
-        doc.setLineWidth(0.05);
-        doc.rect(8, 8, 194, 281);
+        // Very thin outer margin border
+        doc.setDrawColor(245, 245, 245);
+        doc.setLineWidth(0.01);
+        doc.rect(5, 5, 200, 287);
     }
   };
 
