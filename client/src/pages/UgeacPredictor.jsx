@@ -286,17 +286,17 @@ function UgeacPredictor() {
     for(let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         
-        // Main Diagonal Watermark
-        doc.setFontSize(60);
+        // Main Diagonal Watermark - Light Red/Pink Subtle
+        doc.setFontSize(45);
         doc.setFont("helvetica", "bold");
-        doc.setTextColor(248, 250, 252); // Extremely light (almost invisible)
-        doc.text("APNA COLLEGE BIHAR", 35, 180, { angle: 45 });
-        doc.text("APNA COLLEGE BIHAR", 35, 80, { angle: 45 });
+        doc.setTextColor(253, 242, 242); // Extremely light red
+        doc.text("APNA COLLEGE BIHAR", 20, 200, { angle: 45 });
+        doc.text("APNA COLLEGE BIHAR", 100, 100, { angle: 45 });
 
         // Center stylized "logo" watermark
-        doc.setFontSize(100);
-        doc.setTextColor(249, 250, 251); 
-        doc.text("ACB", 105, 150, { align: 'center', opacity: 0.1 });
+        doc.setFontSize(80);
+        doc.setTextColor(254, 244, 244); 
+        doc.text("ACB", 105, 150, { align: 'center' });
 
         // Footer
         doc.setFontSize(8);
