@@ -309,10 +309,6 @@ function UgeacPredictor() {
         doc.setTextColor(160, 174, 192);
         doc.text("Verified Analysis: apnacollegebihar.online", 42, 287);
         doc.text(`Page ${i} of ${pageCount}`, 196, 287, { align: 'right' });
-        
-        try {
-           doc.addImage('/logo.jpg', 'JPEG', 14, 278, 20, 10); 
-        } catch(e) {}
 
         // Very thin outer margin border
         doc.setDrawColor(245, 245, 245);
@@ -330,26 +326,19 @@ function UgeacPredictor() {
       doc.setFillColor(30, 41, 59);
       doc.rect(0, 0, 210, 48, 'F');
       
-      // Add Website Logo to Header
-      try {
-        doc.addImage('/logo.jpg', 'JPEG', 14, 8, 30, 15);
-      } catch (e) {
-        console.warn("Logo load failed:", e);
-      }
-      
       doc.setTextColor(255, 255, 255);
       doc.setFontSize(22);
       doc.setFont("helvetica", "bold");
-      doc.text("APNA COLLEGE BIHAR", 50, 22);
+      doc.text("APNA COLLEGE BIHAR", 14, 22);
       
       doc.setFontSize(10);
       doc.setFont("helvetica", "bold");
-      doc.text("OFFICIAL UGEAC COUNSELLING DATA-PACK 2025", 50, 30);
+      doc.text("OFFICIAL UGEAC COUNSELLING DATA-PACK 2025", 14, 30);
       
       doc.setFontSize(8);
       doc.setFont("helvetica", "normal");
       doc.setTextColor(203, 213, 225);
-      doc.text(`Report ID: ACB-${Math.floor(100000 + Math.random() * 900000)} | Generated at: ${new Date().toLocaleString()}`, 50, 37);
+      doc.text(`Report ID: ACB-${Math.floor(100000 + Math.random() * 900000)} | Generated at: ${new Date().toLocaleString()}`, 14, 37);
 
       // User Details Box
       doc.setFillColor(248, 250, 252);
