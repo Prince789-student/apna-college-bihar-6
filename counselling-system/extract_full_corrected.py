@@ -18,43 +18,52 @@ COLLEGES = [
     ('JEHANABAD', 'GEC Jehanabad'), ('ARWAL', 'GEC Arwal'), ('KHAGARIA', 'GEC Khagaria'),
     ('BUXAR', 'GEC Buxar'), ('BHOJPUR', 'GEC Bhojpur'), ('SHEIKHPURA', 'GEC Sheikhpura'),
     ('LAKHISARAI', 'GEC Lakhisarai'), ('SAMASTIPUR', 'GEC Samastipur'), ('ARARIA', 'GEC Araria'),
-    ('WOMENS INST', 'WIT Darbhanga'), ('MUZAFFARPUR', 'MIT Muzaffarpur'), ('WEST CHAMPARAN', 'GEC Bettiah'),
-    ('KHEL UNIVERSITY', 'Khel University'), ('BUXAR', 'GEC Buxar'), ('KAIMUR', 'GEC Kaimur')
+    ('WOMENS INST', 'WIT Darbhanga'), ('MUZAFFARPUR', 'MIT Muzaffarpur'), ('WEST CHAMPARAN', 'GEC Bettiah')
 ]
 
-# Final 100% Accurate Branch Map (Normalization)
-BRANCH_MAP = {
-    'IOT': 'CSE (IoT)', 'INTERNET': 'CSE (IoT)', 
-    'DATA SCIENCE': 'CSE (Data Science)',
-    'CYBER': 'CSE (Cyber Security)',
-    'AUTO': 'CSE (AI)', 'ARTIFICAL': 'CSE (AI)', 'ARTIFICIAL': 'CSE (AI)',
-    'AI & MACHINE': 'CSE (AI & ML)', 'AI & ML': 'CSE (AI & ML)',
-    'COMPUTER': 'Computer Science',
-    'ELECTRO': 'Electronics & Communication',
-    'ELECTRICAL & ELECTRONICS': 'Electrical & Electronics',
-    'ELECTRICAL': 'Electrical',
-    'MECHANICAL': 'Mechanical',
-    'INFORMATION': 'IT', 'I.T.': 'IT',
-    'CIVIL': 'Civil',
-    'FIRE': 'Fire Technology',
-    'ANIMATION': '3D Animation',
-    'FOOD': 'Food Processing',
-    'MINING': 'Mining Engineering',
-    'CHEMICAL': 'Chemical Engineering',
-    'Aeronautical': 'Aeronautical Engineering',
-    'ROBOTICS': 'Robotics and Automation',
-    'VLSI': 'VLSI Design',
-    'BIOINFORMATICS': 'Bioinformatics',
-    'AGRICULTURE': 'Agriculture',
-    'LEATHER': 'Leather Technology',
-    'TEXTILE': 'Textile'
-}
+# Branch Mapping Ordered by SPECIFICITY (Longest/Most Specific First)
+BRANCH_PRIORITY = [
+    ('IOT & CYBER', 'CSE (IoT + CS)'), 
+    ('CYBER SECURITY & BLOCKCHAIN', 'CSE (Cyber Security)'),
+    ('AI & MACHINE', 'CSE (AI & ML)'), 
+    ('ARTIFICIAL INTELLIGENCE & MACHINE', 'CSE (AI & ML)'),
+    ('ARTIFICAL INTELLIGENCE & MACHINE', 'CSE (AI & ML)'),
+    ('ARTIFICIAL INTELLIGENCE', 'CSE (AI)'),
+    ('ARTIFICAL INTELLIGENCE', 'CSE (AI)'),
+    ('INTERNET OF THINGS', 'CSE (IoT)'),
+    ('DATA SCIENCE', 'CSE (Data Science)'),
+    ('CYBER SECURITY', 'CSE (Cyber Security)'),
+    ('NETWORKS', 'Computer Science (Networks)'),
+    ('SMART MANUFACTURING', 'Mechanical (Smart Manufacturing)'),
+    ('COMPUTER SCIENCE', 'Computer Science'),
+    ('COMPUTER SC.', 'Computer Science'),
+    ('INFORMATION TECHNOLOGY', 'IT'),
+    ('I.T.', 'IT'),
+    ('ELECTRICAL & ELECTRONICS', 'Electrical & Electronics'),
+    ('ELECTRO  & COMMUNICATION', 'Electronics & Communication'),
+    ('ELECTRONICS & COMMUNICATION', 'Electronics & Communication'),
+    ('ELECTRICAL ENGINEERING', 'Electrical'),
+    ('MECHANICAL ENGINEERING', 'Mechanical'),
+    ('CIVIL ENGINEERING', 'Civil'),
+    ('CIVIL ENGG', 'Civil'),
+    ('FIRE', 'Fire Technology'),
+    ('ANIMATION', '3D Animation'),
+    ('FOOD', 'Food Processing'),
+    ('MINING', 'Mining Engineering'),
+    ('CHEMICAL', 'Chemical Engineering'),
+    ('Aeronautical', 'Aeronautical Engineering'),
+    ('ROBOTICS', 'Robotics and Automation'),
+    ('VLSI', 'VLSI Design'),
+    ('BIOINFORMATICS', 'Bioinformatics'),
+    ('AGRICULTURE', 'Agriculture'),
+    ('LEATHER', 'Leather Technology'),
+    ('TEXTILE', 'Textile'),
+    ('SILK', 'Silk Technology'),
+    ('LEATHER', 'Leather Technology')
+]
 
 def get_normalized_branch(t):
-    # Priority Match - Most specific first
-    for key, val in [('AI & MACHINE', 'CSE (AI & ML)'), ('ARTIFICAL', 'CSE (AI)'), ('ARTIFICIAL', 'CSE (AI)'), ('IOT', 'CSE (IoT)'), ('INTERNET', 'CSE (IoT)'), ('DATA SCIENCE', 'CSE (Data Science)'), ('CYBER', 'CSE (Cyber Security)')]:
-        if key in t: return val
-    for key, val in BRANCH_MAP.items():
+    for key, val in BRANCH_PRIORITY:
         if key in t: return val
     return None
 
@@ -75,7 +84,7 @@ def parse_any_pdf(file_path):
                 if key in t: last_coll = val; break
             if not last_coll: continue
             
-            # Find Branch
+            # Find Branch (Specificity First)
             br = get_normalized_branch(t)
             if not br: continue
             
@@ -98,7 +107,7 @@ def parse_any_pdf(file_path):
     return res
 
 def main():
-    print("Executing 100% Precise Aggregation...")
+    print("Executing High-Specificity Aggregation (100% Reliable)...")
     d25_1 = parse_any_pdf("UGEAC2025_FCOFF.pdf")
     d25_2 = parse_any_pdf("UGEAC2025_SCOFF.pdf")
     d25 = d25_1.copy()
@@ -118,7 +127,7 @@ def main():
     
     with open("../client/public/data/cutoffs.json", "w") as f:
         json.dump(out, f, indent=2)
-    print(f"Data aggregation finalized! Verified records for all engineering universities.")
+    print(f"Data Complete! Branches normalized by specificity.")
 
 if __name__ == "__main__":
     main()

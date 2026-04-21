@@ -44,14 +44,14 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 1768
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 5484
@@ -170,20 +170,6 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Computer Science",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 6010
-    },
-    {
-      "collegeShort": "BPMCE Madhepura",
-      "branch": "Computer Science",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 10137
-    },
-    {
-      "collegeShort": "BPMCE Madhepura",
       "branch": "Civil",
       "category": "UR",
       "seat_type": "General",
@@ -198,14 +184,28 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Computer Science",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 2419
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Computer Science",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 6428
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 7961
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 11810
@@ -282,14 +282,14 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 3642
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 8172
@@ -359,14 +359,14 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
-      "closing": 6008
+      "closing": 2396
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 8284
@@ -414,8 +414,22 @@
       "closing": 12257
     },
     {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electronics & Communication",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 6008
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electronics & Communication",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 6559
+    },
+    {
       "collegeShort": "GEC Sheohar",
-      "branch": "Computer Science",
+      "branch": "Civil",
       "category": "UR",
       "seat_type": "General",
       "closing": 6167
@@ -618,14 +632,14 @@
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "General",
       "closing": 7877
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "Female",
       "closing": 10211
@@ -891,6 +905,20 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 6114
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 11646
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
       "branch": "Electrical",
       "category": "UR",
       "seat_type": "General",
@@ -1038,14 +1066,14 @@
     },
     {
       "collegeShort": "GEC Kaimur",
-      "branch": "Computer Science",
+      "branch": "Computer Science (Networks)",
       "category": "UR",
       "seat_type": "General",
       "closing": 8244
     },
     {
       "collegeShort": "GEC Kaimur",
-      "branch": "Computer Science",
+      "branch": "Computer Science (Networks)",
       "category": "UR",
       "seat_type": "Female",
       "closing": 11764
@@ -1472,17 +1500,31 @@
     },
     {
       "collegeShort": "KCE Katihar",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 7490
     },
     {
       "collegeShort": "KCE Katihar",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 12008
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "VLSI Design",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 6489
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "VLSI Design",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 5732
     },
     {
       "collegeShort": "KCE Katihar",
@@ -1496,14 +1538,14 @@
       "branch": "IT",
       "category": "UR",
       "seat_type": "General",
-      "closing": 4891
+      "closing": 7583
     },
     {
       "collegeShort": "LNJPIT Chapra",
       "branch": "IT",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 10857
+      "closing": 12549
     },
     {
       "collegeShort": "LNJPIT Chapra",
@@ -1520,53 +1562,11 @@
       "closing": 3768
     },
     {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 5664
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 12549
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Mechanical",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 7583
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Mechanical",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 12453
-    },
-    {
-      "collegeShort": "MCE Motihari",
-      "branch": "Computer Science",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 7821
-    },
-    {
-      "collegeShort": "MCE Motihari",
-      "branch": "Computer Science",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 12011
-    },
-    {
       "collegeShort": "MCE Motihari",
       "branch": "Civil",
       "category": "UR",
       "seat_type": "General",
-      "closing": 5186
+      "closing": 7821
     },
     {
       "collegeShort": "MCE Motihari",
@@ -1574,6 +1574,20 @@
       "category": "UR",
       "seat_type": "Female",
       "closing": 12217
+    },
+    {
+      "collegeShort": "MCE Motihari",
+      "branch": "Computer Science",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 1280
+    },
+    {
+      "collegeShort": "MCE Motihari",
+      "branch": "Computer Science",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 2906
     },
     {
       "collegeShort": "MCE Motihari",
@@ -1591,14 +1605,14 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 4110
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 11328
@@ -1622,7 +1636,7 @@
       "branch": "IT",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 9183
+      "closing": 10651
     },
     {
       "collegeShort": "MIT Muzaffarpur",
@@ -1639,57 +1653,15 @@
       "closing": 425
     },
     {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 1115
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 2705
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 535
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 1372
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 2344
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 10651
-    },
-    {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "General",
       "closing": 1044
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "Female",
       "closing": 3936
@@ -1724,14 +1696,14 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 2886
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 9394
@@ -1885,14 +1857,14 @@
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 7713
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 12636
@@ -1934,17 +1906,31 @@
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 7635
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 11867
+    },
+    {
+      "collegeShort": "SCE Sasaram",
+      "branch": "VLSI Design",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 5228
+    },
+    {
+      "collegeShort": "SCE Sasaram",
+      "branch": "VLSI Design",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 10888
     },
     {
       "collegeShort": "SCE Sasaram",
@@ -1969,52 +1955,31 @@
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "Computer Science",
+      "branch": "IT",
       "category": "UR",
       "seat_type": "General",
-      "closing": 6392
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Computer Science",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 6027
+      "closing": 7818
     },
     {
       "collegeShort": "SIT Sitamarhi",
       "branch": "IT",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 7688
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "IT",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 11753
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Electrical",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 7249
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Electrical",
       "category": "UR",
       "seat_type": "Female",
       "closing": 11829
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "Mechanical",
+      "branch": "Computer Science",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 2116
+    },
+    {
+      "collegeShort": "SIT Sitamarhi",
+      "branch": "Computer Science",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 9469
+      "closing": 5114
     },
     {
       "collegeShort": "SCE Saharsa",
@@ -2214,7 +2179,7 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "ST",
       "seat_type": "General",
       "closing": 42
@@ -2256,7 +2221,7 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "ST",
       "seat_type": "General",
       "closing": 34
@@ -2283,18 +2248,18 @@
       "closing": 62
     },
     {
-      "collegeShort": "GEC Sheohar",
-      "branch": "Computer Science",
+      "collegeShort": "GCE Gaya",
+      "branch": "Electronics & Communication",
       "category": "ST",
       "seat_type": "General",
-      "closing": 73
+      "closing": 33
     },
     {
       "collegeShort": "GEC Sheohar",
       "branch": "Civil",
       "category": "ST",
       "seat_type": "General",
-      "closing": 72
+      "closing": 73
     },
     {
       "collegeShort": "GEC Samastipur",
@@ -2305,7 +2270,7 @@
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "ST",
       "seat_type": "General",
       "closing": 84
@@ -2326,10 +2291,10 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (AI)",
+      "branch": "CSE (Cyber Security)",
       "category": "ST",
       "seat_type": "General",
-      "closing": 61
+      "closing": 30
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -2340,7 +2305,7 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "ST",
       "seat_type": "General",
       "closing": 79
@@ -2424,7 +2389,7 @@
     },
     {
       "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
+      "branch": "IT",
       "category": "ST",
       "seat_type": "General",
       "closing": 50
@@ -2445,14 +2410,7 @@
     },
     {
       "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "ST",
-      "seat_type": "General",
-      "closing": 11
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
+      "branch": "IT",
       "category": "ST",
       "seat_type": "General",
       "closing": 19
@@ -2473,7 +2431,7 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "ST",
       "seat_type": "General",
       "closing": 37
@@ -2501,7 +2459,7 @@
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "ST",
       "seat_type": "General",
       "closing": 50
@@ -2578,7 +2536,7 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 145
@@ -2634,7 +2592,7 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 146
@@ -2669,7 +2627,7 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 205
@@ -2697,7 +2655,7 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 47
@@ -2760,7 +2718,7 @@
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 74
@@ -2810,6 +2768,13 @@
     {
       "collegeShort": "GEC Gopalganj",
       "branch": "CSE (AI)",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 173
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 173
@@ -2917,7 +2882,7 @@
       "branch": "IT",
       "category": "SMQ",
       "seat_type": "General",
-      "closing": 109
+      "closing": 161
     },
     {
       "collegeShort": "LNJPIT Chapra",
@@ -2925,13 +2890,6 @@
       "category": "SMQ",
       "seat_type": "General",
       "closing": 32
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "SMQ",
-      "seat_type": "General",
-      "closing": 161
     },
     {
       "collegeShort": "MCE Motihari",
@@ -2956,7 +2914,7 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 146
@@ -2966,7 +2924,7 @@
       "branch": "IT",
       "category": "SMQ",
       "seat_type": "General",
-      "closing": 40
+      "closing": 92
     },
     {
       "collegeShort": "MIT Muzaffarpur",
@@ -2976,29 +2934,8 @@
       "closing": 9
     },
     {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "SMQ",
-      "seat_type": "General",
-      "closing": 37
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "SMQ",
-      "seat_type": "General",
-      "closing": 18
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "SMQ",
-      "seat_type": "General",
-      "closing": 92
-    },
-    {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 89
@@ -3019,7 +2956,7 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 101
@@ -3082,7 +3019,7 @@
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 144
@@ -3222,14 +3159,14 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 456
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "Female",
       "closing": 1004
@@ -3334,17 +3271,17 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Computer Science",
+      "branch": "Civil",
       "category": "SC",
       "seat_type": "General",
       "closing": 1155
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Civil",
+      "branch": "Computer Science",
       "category": "SC",
       "seat_type": "General",
-      "closing": 914
+      "closing": 412
     },
     {
       "collegeShort": "BPMCE Madhepura",
@@ -3355,7 +3292,7 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 1155
@@ -3425,7 +3362,7 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 932
@@ -3481,14 +3418,14 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
-      "closing": 1110
+      "closing": 559
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "Female",
       "closing": 1082
@@ -3515,11 +3452,11 @@
       "closing": 1220
     },
     {
-      "collegeShort": "GEC Sheohar",
-      "branch": "Computer Science",
+      "collegeShort": "GCE Gaya",
+      "branch": "Electronics & Communication",
       "category": "SC",
       "seat_type": "General",
-      "closing": 1016
+      "closing": 1110
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -3628,14 +3565,14 @@
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SC",
       "seat_type": "General",
       "closing": 1227
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SC",
       "seat_type": "Female",
       "closing": 992
@@ -3747,6 +3684,13 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 733
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
       "branch": "Mechanical",
       "category": "SC",
       "seat_type": "General",
@@ -3810,7 +3754,7 @@
     },
     {
       "collegeShort": "GEC Kaimur",
-      "branch": "Computer Science",
+      "branch": "Computer Science (Networks)",
       "category": "SC",
       "seat_type": "General",
       "closing": 668
@@ -4062,7 +4006,7 @@
     },
     {
       "collegeShort": "KCE Katihar",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 1123
@@ -4079,7 +4023,7 @@
       "branch": "IT",
       "category": "SC",
       "seat_type": "General",
-      "closing": 770
+      "closing": 1138
     },
     {
       "collegeShort": "LNJPIT Chapra",
@@ -4096,22 +4040,8 @@
       "closing": 1073
     },
     {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 1120
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Mechanical",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 1138
-    },
-    {
       "collegeShort": "MCE Motihari",
-      "branch": "Computer Science",
+      "branch": "Civil",
       "category": "SC",
       "seat_type": "General",
       "closing": 1127
@@ -4120,15 +4050,15 @@
       "collegeShort": "MCE Motihari",
       "branch": "Civil",
       "category": "SC",
-      "seat_type": "General",
-      "closing": 634
+      "seat_type": "Female",
+      "closing": 1094
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Civil",
+      "branch": "Computer Science",
       "category": "SC",
-      "seat_type": "Female",
-      "closing": 1094
+      "seat_type": "General",
+      "closing": 227
     },
     {
       "collegeShort": "MCE Motihari",
@@ -4153,7 +4083,7 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 1098
@@ -4177,7 +4107,7 @@
       "branch": "IT",
       "category": "SC",
       "seat_type": "Female",
-      "closing": 1041
+      "closing": 1069
     },
     {
       "collegeShort": "MIT Muzaffarpur",
@@ -4194,57 +4124,15 @@
       "closing": 119
     },
     {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 138
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "SC",
-      "seat_type": "Female",
-      "closing": 1069
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 174
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "SC",
-      "seat_type": "Female",
-      "closing": 395
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 479
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "SC",
-      "seat_type": "Female",
-      "closing": 300
-    },
-    {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SC",
       "seat_type": "General",
       "closing": 249
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SC",
       "seat_type": "Female",
       "closing": 537
@@ -4279,7 +4167,7 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 597
@@ -4370,7 +4258,7 @@
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 1047
@@ -4412,7 +4300,7 @@
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 1000
@@ -4429,7 +4317,7 @@
       "branch": "IT",
       "category": "SC",
       "seat_type": "General",
-      "closing": 873
+      "closing": 1124
     },
     {
       "collegeShort": "SIT Sitamarhi",
@@ -4444,13 +4332,6 @@
       "category": "SC",
       "seat_type": "Female",
       "closing": 1190
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Electrical",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 1124
     },
     {
       "collegeShort": "SCE Saharsa",
@@ -4573,7 +4454,7 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "RCG",
       "seat_type": "General",
       "closing": 545
@@ -4657,7 +4538,7 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "RCG",
       "seat_type": "General",
       "closing": 1062
@@ -4678,7 +4559,7 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "RCG",
       "seat_type": "General",
       "closing": 1307
@@ -4713,7 +4594,7 @@
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "RCG",
       "seat_type": "General",
       "closing": 1630
@@ -4845,13 +4726,6 @@
       "closing": 525
     },
     {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "RCG",
-      "seat_type": "General",
-      "closing": 1545
-    },
-    {
       "collegeShort": "MCE Motihari",
       "branch": "Civil",
       "category": "RCG",
@@ -4874,7 +4748,7 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "RCG",
       "seat_type": "General",
       "closing": 1307
@@ -4894,29 +4768,8 @@
       "closing": 41
     },
     {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "RCG",
-      "seat_type": "General",
-      "closing": 317
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "RCG",
-      "seat_type": "General",
-      "closing": 110
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "RCG",
-      "seat_type": "General",
-      "closing": 815
-    },
-    {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "RCG",
       "seat_type": "General",
       "closing": 579
@@ -4937,7 +4790,7 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "RCG",
       "seat_type": "General",
       "closing": 1545
@@ -5063,14 +4916,14 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
       "closing": 533
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 1387
@@ -5175,17 +5028,10 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Computer Science",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 2209
-    },
-    {
-      "collegeShort": "BPMCE Madhepura",
       "branch": "Civil",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 2197
+      "closing": 2209
     },
     {
       "collegeShort": "BPMCE Madhepura",
@@ -5198,12 +5044,19 @@
       "collegeShort": "BPMCE Madhepura",
       "branch": "Computer Science",
       "category": "EWS",
+      "seat_type": "General",
+      "closing": 715
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Computer Science",
+      "category": "EWS",
       "seat_type": "Female",
       "closing": 1069
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2052
@@ -5273,14 +5126,14 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
       "closing": 1011
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 1921
@@ -5350,14 +5203,14 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 2509
+      "closing": 710
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 2108
@@ -5398,18 +5251,25 @@
       "closing": 2562
     },
     {
-      "collegeShort": "GEC Sheohar",
-      "branch": "Computer Science",
+      "collegeShort": "GCE Gaya",
+      "branch": "Electronics & Communication",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 2616
+      "closing": 2481
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "VLSI Design",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 2509
     },
     {
       "collegeShort": "GEC Sheohar",
       "branch": "Civil",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 2604
+      "closing": 2616
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -5581,21 +5441,21 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "CSE (AI)",
+      "branch": "Robotics and Automation",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2240
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 1908
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 2281
@@ -5791,6 +5651,13 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 1695
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
       "branch": "Electrical",
       "category": "EWS",
       "seat_type": "General",
@@ -5798,7 +5665,7 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2602
@@ -5910,7 +5777,7 @@
     },
     {
       "collegeShort": "GEC Kaimur",
-      "branch": "Computer Science",
+      "branch": "Computer Science (Networks)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2150
@@ -6099,7 +5966,7 @@
     },
     {
       "collegeShort": "GEC Siwan",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2592
@@ -6158,7 +6025,7 @@
       "branch": "Electronics & Communication",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 2019
+      "closing": 2004
     },
     {
       "collegeShort": "GEC Vaishali",
@@ -6267,7 +6134,21 @@
     },
     {
       "collegeShort": "KCE Katihar",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 2453
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "VLSI Design",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 2198
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "Mechanical (Smart Manufacturing)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2453
@@ -6308,29 +6189,8 @@
       "closing": 1026
     },
     {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 1494
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "EWS",
-      "seat_type": "Female",
-      "closing": 2442
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Mechanical",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 2463
-    },
-    {
       "collegeShort": "MCE Motihari",
-      "branch": "Computer Science",
+      "branch": "Civil",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2335
@@ -6339,15 +6199,15 @@
       "collegeShort": "MCE Motihari",
       "branch": "Civil",
       "category": "EWS",
-      "seat_type": "General",
-      "closing": 1527
+      "seat_type": "Female",
+      "closing": 2380
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Civil",
+      "branch": "Computer Science",
       "category": "EWS",
-      "seat_type": "Female",
-      "closing": 2380
+      "seat_type": "General",
+      "closing": 421
     },
     {
       "collegeShort": "MCE Motihari",
@@ -6372,14 +6232,14 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
       "closing": 1117
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 2367
@@ -6420,57 +6280,15 @@
       "closing": 125
     },
     {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 352
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "EWS",
-      "seat_type": "Female",
-      "closing": 482
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 97
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "EWS",
-      "seat_type": "Female",
-      "closing": 415
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 626
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "EWS",
-      "seat_type": "Female",
-      "closing": 885
-    },
-    {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 359
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 870
@@ -6505,14 +6323,14 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
       "closing": 807
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 2346
@@ -6638,7 +6456,7 @@
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
       "closing": 1993
@@ -6673,17 +6491,24 @@
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2506
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 2549
+    },
+    {
+      "collegeShort": "SCE Sasaram",
+      "branch": "VLSI Design",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 2014
     },
     {
       "collegeShort": "SCE Sasaram",
@@ -6701,17 +6526,17 @@
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "Computer Science",
+      "branch": "IT",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2610
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "IT",
+      "branch": "Computer Science",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 1956
+      "closing": 570
     },
     {
       "collegeShort": "SIT Sitamarhi",
@@ -6719,20 +6544,6 @@
       "category": "EWS",
       "seat_type": "Female",
       "closing": 1371
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Electrical",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 2584
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Mechanical",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 2415
     },
     {
       "collegeShort": "SCE Saharsa",
@@ -6876,7 +6687,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "CSE (AI)",
+      "branch": "Robotics and Automation",
       "category": "UR",
       "seat_type": "General",
       "closing": 8062
@@ -6931,13 +6742,6 @@
       "closing": 6249
     },
     {
-      "collegeShort": "GEC Sheohar",
-      "branch": "Civil",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 3136
-    },
-    {
       "collegeShort": "GEC Bhojpur",
       "branch": "Mechanical",
       "category": "UR",
@@ -6953,7 +6757,7 @@
     },
     {
       "collegeShort": "GEC Siwan",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "UR",
       "seat_type": "General",
       "closing": 3032
@@ -7072,14 +6876,14 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 520
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 1819
@@ -7184,17 +6988,10 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Computer Science",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 2636
-    },
-    {
-      "collegeShort": "BPMCE Madhepura",
       "branch": "Civil",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 2197
+      "closing": 2636
     },
     {
       "collegeShort": "BPMCE Madhepura",
@@ -7207,12 +7004,19 @@
       "collegeShort": "BPMCE Madhepura",
       "branch": "Computer Science",
       "category": "EBC",
+      "seat_type": "General",
+      "closing": 697
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Computer Science",
+      "category": "EBC",
       "seat_type": "Female",
       "closing": 1845
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2485
@@ -7282,14 +7086,14 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 1188
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 1944
@@ -7352,14 +7156,14 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 3024
+      "closing": 816
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 2777
@@ -7393,18 +7197,25 @@
       "closing": 3037
     },
     {
-      "collegeShort": "GEC Sheohar",
-      "branch": "Computer Science",
+      "collegeShort": "GCE Gaya",
+      "branch": "Electronics & Communication",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 3236
+      "closing": 2987
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "VLSI Design",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 3024
     },
     {
       "collegeShort": "GEC Sheohar",
       "branch": "Civil",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 3162
+      "closing": 3236
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -7562,21 +7373,21 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "CSE (AI)",
+      "branch": "Robotics and Automation",
       "category": "EBC",
       "seat_type": "General",
       "closing": 3167
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2266
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 3178
@@ -7772,6 +7583,13 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 1874
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
       "branch": "Electrical",
       "category": "EBC",
       "seat_type": "General",
@@ -7779,7 +7597,7 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "EBC",
       "seat_type": "General",
       "closing": 3231
@@ -7884,7 +7702,7 @@
     },
     {
       "collegeShort": "GEC Kaimur",
-      "branch": "Computer Science",
+      "branch": "Computer Science (Networks)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2440
@@ -8087,7 +7905,7 @@
     },
     {
       "collegeShort": "GEC Siwan",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "EBC",
       "seat_type": "General",
       "closing": 3207
@@ -8153,7 +7971,7 @@
       "branch": "Electronics & Communication",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 2387
+      "closing": 1984
     },
     {
       "collegeShort": "GEC Vaishali",
@@ -8255,10 +8073,31 @@
     },
     {
       "collegeShort": "KCE Katihar",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2736
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "VLSI Design",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 2370
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "Mechanical (Smart Manufacturing)",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 2758
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "Mechanical (Smart Manufacturing)",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 3225
     },
     {
       "collegeShort": "KCE Katihar",
@@ -8268,18 +8107,11 @@
       "closing": 3208
     },
     {
-      "collegeShort": "KCE Katihar",
-      "branch": "Mechanical",
-      "category": "EBC",
-      "seat_type": "Female",
-      "closing": 3225
-    },
-    {
       "collegeShort": "LNJPIT Chapra",
       "branch": "IT",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 1664
+      "closing": 2995
     },
     {
       "collegeShort": "LNJPIT Chapra",
@@ -8303,29 +8135,8 @@
       "closing": 1191
     },
     {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 1709
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "EBC",
-      "seat_type": "Female",
-      "closing": 2672
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Mechanical",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 2995
-    },
-    {
       "collegeShort": "MCE Motihari",
-      "branch": "Computer Science",
+      "branch": "Civil",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2564
@@ -8334,15 +8145,15 @@
       "collegeShort": "MCE Motihari",
       "branch": "Civil",
       "category": "EBC",
-      "seat_type": "General",
-      "closing": 1454
+      "seat_type": "Female",
+      "closing": 2812
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Civil",
+      "branch": "Computer Science",
       "category": "EBC",
-      "seat_type": "Female",
-      "closing": 2812
+      "seat_type": "General",
+      "closing": 332
     },
     {
       "collegeShort": "MCE Motihari",
@@ -8367,14 +8178,14 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 1736
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 2777
@@ -8398,7 +8209,7 @@
       "branch": "IT",
       "category": "EBC",
       "seat_type": "Female",
-      "closing": 3068
+      "closing": 3183
     },
     {
       "collegeShort": "MIT Muzaffarpur",
@@ -8415,57 +8226,15 @@
       "closing": 77
     },
     {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 329
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "EBC",
-      "seat_type": "Female",
-      "closing": 1128
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 164
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "EBC",
-      "seat_type": "Female",
-      "closing": 414
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 594
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "EBC",
-      "seat_type": "Female",
-      "closing": 3183
-    },
-    {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 365
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 1174
@@ -8500,14 +8269,14 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 907
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 2530
@@ -8633,7 +8402,7 @@
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2140
@@ -8675,17 +8444,24 @@
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2424
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 3160
+    },
+    {
+      "collegeShort": "SCE Sasaram",
+      "branch": "VLSI Design",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 2271
     },
     {
       "collegeShort": "SCE Sasaram",
@@ -8703,17 +8479,17 @@
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "Computer Science",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 3146
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
       "branch": "IT",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 2050
+      "closing": 3157
+    },
+    {
+      "collegeShort": "SIT Sitamarhi",
+      "branch": "Computer Science",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 570
     },
     {
       "collegeShort": "SIT Sitamarhi",
@@ -8721,20 +8497,6 @@
       "category": "EBC",
       "seat_type": "Female",
       "closing": 1311
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Electrical",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 2767
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Mechanical",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 3157
     },
     {
       "collegeShort": "SCE Saharsa",
@@ -8941,7 +8703,7 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "DQ",
       "seat_type": "General",
       "closing": 36
@@ -8987,13 +8749,6 @@
       "category": "DQ",
       "seat_type": "General",
       "closing": 3
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "DQ",
-      "seat_type": "General",
-      "closing": 21
     },
     {
       "collegeShort": "SCE Sasaram",
@@ -9053,14 +8808,14 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 731
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "Female",
       "closing": 2313
@@ -9165,17 +8920,10 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Computer Science",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 3798
-    },
-    {
-      "collegeShort": "BPMCE Madhepura",
       "branch": "Civil",
       "category": "BC",
       "seat_type": "General",
-      "closing": 2980
+      "closing": 3798
     },
     {
       "collegeShort": "BPMCE Madhepura",
@@ -9188,19 +8936,26 @@
       "collegeShort": "BPMCE Madhepura",
       "branch": "Computer Science",
       "category": "BC",
+      "seat_type": "General",
+      "closing": 928
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Computer Science",
+      "category": "BC",
       "seat_type": "Female",
       "closing": 2455
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 3597
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "Female",
       "closing": 4593
@@ -9270,14 +9025,14 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 1354
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "Female",
       "closing": 2840
@@ -9340,14 +9095,14 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
-      "closing": 4210
+      "closing": 968
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "Female",
       "closing": 3112
@@ -9388,18 +9143,25 @@
       "closing": 4230
     },
     {
-      "collegeShort": "GEC Sheohar",
-      "branch": "Computer Science",
+      "collegeShort": "GCE Gaya",
+      "branch": "Electronics & Communication",
       "category": "BC",
       "seat_type": "General",
-      "closing": 4424
+      "closing": 4210
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "VLSI Design",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 3750
     },
     {
       "collegeShort": "GEC Sheohar",
       "branch": "Civil",
       "category": "BC",
       "seat_type": "General",
-      "closing": 4321
+      "closing": 4424
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -9571,21 +9333,21 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "CSE (AI)",
+      "branch": "Robotics and Automation",
       "category": "BC",
       "seat_type": "General",
       "closing": 4171
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "General",
       "closing": 3042
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "Female",
       "closing": 3782
@@ -9795,6 +9557,13 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 2620
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
       "branch": "Electrical",
       "category": "BC",
       "seat_type": "General",
@@ -9802,7 +9571,7 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "BC",
       "seat_type": "General",
       "closing": 3944
@@ -9928,7 +9697,7 @@
     },
     {
       "collegeShort": "GEC Kaimur",
-      "branch": "Computer Science",
+      "branch": "Computer Science (Networks)",
       "category": "BC",
       "seat_type": "General",
       "closing": 3481
@@ -10145,7 +9914,7 @@
     },
     {
       "collegeShort": "GEC Siwan",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "BC",
       "seat_type": "General",
       "closing": 3906
@@ -10211,7 +9980,7 @@
       "branch": "Electronics & Communication",
       "category": "BC",
       "seat_type": "General",
-      "closing": 3400
+      "closing": 2387
     },
     {
       "collegeShort": "GEC Vaishali",
@@ -10341,10 +10110,17 @@
     },
     {
       "collegeShort": "KCE Katihar",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 3885
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "VLSI Design",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 3272
     },
     {
       "collegeShort": "KCE Katihar",
@@ -10352,6 +10128,13 @@
       "category": "BC",
       "seat_type": "General",
       "closing": 4307
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "Mechanical (Smart Manufacturing)",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 4208
     },
     {
       "collegeShort": "KCE Katihar",
@@ -10389,29 +10172,8 @@
       "closing": 1483
     },
     {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 2200
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "BC",
-      "seat_type": "Female",
-      "closing": 3428
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Mechanical",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 4160
-    },
-    {
       "collegeShort": "MCE Motihari",
-      "branch": "Computer Science",
+      "branch": "Civil",
       "category": "BC",
       "seat_type": "General",
       "closing": 3689
@@ -10420,15 +10182,15 @@
       "collegeShort": "MCE Motihari",
       "branch": "Civil",
       "category": "BC",
-      "seat_type": "General",
-      "closing": 2078
+      "seat_type": "Female",
+      "closing": 3465
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Civil",
+      "branch": "Computer Science",
       "category": "BC",
-      "seat_type": "Female",
-      "closing": 3465
+      "seat_type": "General",
+      "closing": 513
     },
     {
       "collegeShort": "MCE Motihari",
@@ -10453,14 +10215,14 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 1545
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "Female",
       "closing": 3326
@@ -10501,57 +10263,15 @@
       "closing": 85
     },
     {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 439
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "BC",
-      "seat_type": "Female",
-      "closing": 708
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 196
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "BC",
-      "seat_type": "Female",
-      "closing": 602
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 1044
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "BC",
-      "seat_type": "Female",
-      "closing": 1792
-    },
-    {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "General",
       "closing": 454
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "Female",
       "closing": 1706
@@ -10586,14 +10306,14 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 1072
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "Female",
       "closing": 3463
@@ -10719,7 +10439,7 @@
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 3266
@@ -10761,17 +10481,24 @@
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 3358
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "Female",
       "closing": 4342
+    },
+    {
+      "collegeShort": "SCE Sasaram",
+      "branch": "VLSI Design",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 2555
     },
     {
       "collegeShort": "SCE Sasaram",
@@ -10789,38 +10516,31 @@
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "Computer Science",
+      "branch": "IT",
       "category": "BC",
       "seat_type": "General",
-      "closing": 4078
+      "closing": 4397
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "Computer Science",
+      "branch": "IT",
       "category": "BC",
       "seat_type": "Female",
       "closing": 4499
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "IT",
+      "branch": "Computer Science",
       "category": "BC",
       "seat_type": "General",
-      "closing": 2958
+      "closing": 824
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "Electrical",
+      "branch": "Computer Science",
       "category": "BC",
-      "seat_type": "General",
-      "closing": 3993
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Mechanical",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 4397
+      "seat_type": "Female",
+      "closing": 2056
     },
     {
       "collegeShort": "SCE Saharsa",
@@ -10998,18 +10718,18 @@
       "closing": 75
     },
     {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (AI)",
+      "category": "ST",
+      "seat_type": "General",
+      "closing": 61
+    },
+    {
       "collegeShort": "PCE Purnea",
       "branch": "Civil",
       "category": "ST",
       "seat_type": "General",
       "closing": 47
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Mechanical",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 7818
     }
   ],
   "cutoffs2025": [
@@ -11057,14 +10777,14 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 1580
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 3883
@@ -11134,7 +10854,7 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 63
@@ -11190,14 +10910,14 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 418
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "Female",
       "closing": 881
@@ -11239,7 +10959,7 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "RCG",
       "seat_type": "General",
       "closing": 3624
@@ -11288,14 +11008,14 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
       "closing": 557
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 1128
@@ -11365,14 +11085,14 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 412
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 1799
@@ -11442,14 +11162,14 @@
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 731
     },
     {
       "collegeShort": "BCE Bakhtiyarpur",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "Female",
       "closing": 2877
@@ -11932,13 +11652,6 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Computer Science",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 3587
-    },
-    {
-      "collegeShort": "BPMCE Madhepura",
       "branch": "Civil",
       "category": "UR",
       "seat_type": "General",
@@ -11955,33 +11668,40 @@
       "collegeShort": "BPMCE Madhepura",
       "branch": "Computer Science",
       "category": "UR",
+      "seat_type": "General",
+      "closing": 2049
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Computer Science",
+      "category": "UR",
       "seat_type": "Female",
       "closing": 4527
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "General",
       "closing": 2184
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "Female",
       "closing": 6272
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 7433
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 9647
@@ -12002,7 +11722,7 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "ST",
       "seat_type": "General",
       "closing": 52
@@ -12016,21 +11736,28 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Computer Science",
+      "branch": "Civil",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 148
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "CSE (AI)",
+      "branch": "Computer Science",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 94
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "CSE (AI & ML)",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 79
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 123
@@ -12044,17 +11771,17 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Computer Science",
+      "branch": "Civil",
       "category": "SC",
       "seat_type": "General",
       "closing": 937
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Civil",
+      "branch": "Computer Science",
       "category": "SC",
       "seat_type": "General",
-      "closing": 823
+      "closing": 549
     },
     {
       "collegeShort": "BPMCE Madhepura",
@@ -12065,14 +11792,14 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SC",
       "seat_type": "General",
       "closing": 573
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 874
@@ -12093,7 +11820,7 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "RCG",
       "seat_type": "General",
       "closing": 7595
@@ -12107,17 +11834,17 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Computer Science",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 1592
-    },
-    {
-      "collegeShort": "BPMCE Madhepura",
       "branch": "Civil",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2145
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Computer Science",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 698
     },
     {
       "collegeShort": "BPMCE Madhepura",
@@ -12128,21 +11855,21 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 629
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 1605
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
       "closing": 1604
@@ -12163,17 +11890,17 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Computer Science",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 2190
-    },
-    {
-      "collegeShort": "BPMCE Madhepura",
       "branch": "Civil",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2280
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Computer Science",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 534
     },
     {
       "collegeShort": "BPMCE Madhepura",
@@ -12184,21 +11911,21 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 678
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 2290
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2592
@@ -12219,17 +11946,17 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Computer Science",
+      "branch": "Civil",
       "category": "BC",
       "seat_type": "General",
       "closing": 3947
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Civil",
+      "branch": "Computer Science",
       "category": "BC",
       "seat_type": "General",
-      "closing": 2947
+      "closing": 986
     },
     {
       "collegeShort": "BPMCE Madhepura",
@@ -12240,21 +11967,21 @@
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "General",
       "closing": 978
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "Female",
       "closing": 2472
     },
     {
       "collegeShort": "BPMCE Madhepura",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 3933
@@ -12373,14 +12100,14 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 3107
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 9642
@@ -12436,7 +12163,7 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 104
@@ -12485,7 +12212,7 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 625
@@ -12520,7 +12247,7 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "RCG",
       "seat_type": "General",
       "closing": 7633
@@ -12569,14 +12296,14 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
       "closing": 956
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 1352
@@ -12639,14 +12366,14 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 888
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 1834
@@ -12709,14 +12436,14 @@
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 1387
     },
     {
       "collegeShort": "DCE Darbhanga",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "Female",
       "closing": 3617
@@ -12835,17 +12562,17 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
-      "closing": 7601
+      "closing": 2455
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 10617
+      "closing": 7054
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12877,7 +12604,7 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "ST",
       "seat_type": "General",
       "closing": 38
@@ -12898,7 +12625,7 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 37
@@ -12940,14 +12667,14 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 590
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "Female",
       "closing": 951
@@ -12975,7 +12702,7 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "RCG",
       "seat_type": "General",
       "closing": 4627
@@ -13010,14 +12737,14 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 2149
+      "closing": 721
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 1716
@@ -13059,14 +12786,14 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 2457
+      "closing": 612
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 1773
@@ -13108,14 +12835,14 @@
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
-      "closing": 3533
+      "closing": 1102
     },
     {
       "collegeShort": "GCE Gaya",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "Female",
       "closing": 2784
@@ -13154,6 +12881,20 @@
       "category": "UR",
       "seat_type": "Female",
       "closing": 9524
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electronics & Communication",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 7601
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electronics & Communication",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 10617
     },
     {
       "collegeShort": "GCE Gaya",
@@ -13199,6 +12940,20 @@
     },
     {
       "collegeShort": "GCE Gaya",
+      "branch": "Electronics & Communication",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 2149
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "VLSI Design",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 1735
+    },
+    {
+      "collegeShort": "GCE Gaya",
       "branch": "CSE (Cyber Security)",
       "category": "EBC",
       "seat_type": "General",
@@ -13220,6 +12975,20 @@
     },
     {
       "collegeShort": "GCE Gaya",
+      "branch": "Electronics & Communication",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 2401
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "VLSI Design",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 2457
+    },
+    {
+      "collegeShort": "GCE Gaya",
       "branch": "CSE (Cyber Security)",
       "category": "BC",
       "seat_type": "General",
@@ -13238,6 +13007,20 @@
       "category": "BC",
       "seat_type": "General",
       "closing": 3475
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electronics & Communication",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 3533
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "VLSI Design",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 3279
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -13276,13 +13059,6 @@
     },
     {
       "collegeShort": "GEC Sheohar",
-      "branch": "Computer Science",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 958
-    },
-    {
-      "collegeShort": "GEC Sheohar",
       "branch": "Civil",
       "category": "SC",
       "seat_type": "General",
@@ -13304,17 +13080,10 @@
     },
     {
       "collegeShort": "GEC Sheohar",
-      "branch": "Computer Science",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 2154
-    },
-    {
-      "collegeShort": "GEC Sheohar",
       "branch": "Civil",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 2007
+      "closing": 2154
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -13335,7 +13104,7 @@
       "branch": "Civil",
       "category": "UR",
       "seat_type": "General",
-      "closing": 5735
+      "closing": 7564
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -13353,24 +13122,10 @@
     },
     {
       "collegeShort": "GEC Sheohar",
-      "branch": "Computer Science",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 7564
-    },
-    {
-      "collegeShort": "GEC Sheohar",
-      "branch": "Computer Science",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 2685
-    },
-    {
-      "collegeShort": "GEC Sheohar",
       "branch": "Civil",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 2673
+      "closing": 2685
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -13402,17 +13157,10 @@
     },
     {
       "collegeShort": "GEC Sheohar",
-      "branch": "Computer Science",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 3879
-    },
-    {
-      "collegeShort": "GEC Sheohar",
       "branch": "Civil",
       "category": "BC",
       "seat_type": "General",
-      "closing": 3683
+      "closing": 3879
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -13605,14 +13353,14 @@
     },
     {
       "collegeShort": "GEC Samastipur",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "General",
       "closing": 2650
     },
     {
       "collegeShort": "GEC Samastipur",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "Female",
       "closing": 4320
@@ -13675,7 +13423,7 @@
     },
     {
       "collegeShort": "GEC Samastipur",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 130
@@ -13696,7 +13444,7 @@
     },
     {
       "collegeShort": "GEC Samastipur",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SC",
       "seat_type": "General",
       "closing": 820
@@ -13717,7 +13465,7 @@
     },
     {
       "collegeShort": "GEC Samastipur",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "RCG",
       "seat_type": "General",
       "closing": 6906
@@ -13745,14 +13493,14 @@
     },
     {
       "collegeShort": "GEC Samastipur",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 783
     },
     {
       "collegeShort": "GEC Samastipur",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 1533
@@ -13808,14 +13556,14 @@
     },
     {
       "collegeShort": "GEC Samastipur",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 854
     },
     {
       "collegeShort": "GEC Samastipur",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 2400
@@ -13871,14 +13619,14 @@
     },
     {
       "collegeShort": "GEC Samastipur",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "General",
       "closing": 1472
     },
     {
       "collegeShort": "GEC Samastipur",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "Female",
       "closing": 2498
@@ -13969,7 +13717,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "CSE (AI)",
+      "branch": "Robotics and Automation",
       "category": "UR",
       "seat_type": "General",
       "closing": 7810
@@ -14018,7 +13766,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "CSE (AI)",
+      "branch": "Robotics and Automation",
       "category": "SC",
       "seat_type": "General",
       "closing": 656
@@ -14074,7 +13822,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "CSE (AI)",
+      "branch": "Robotics and Automation",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2135
@@ -14130,7 +13878,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "CSE (AI)",
+      "branch": "Robotics and Automation",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2203
@@ -14179,21 +13927,21 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "CSE (AI)",
+      "branch": "Robotics and Automation",
       "category": "BC",
       "seat_type": "General",
       "closing": 3941
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "General",
       "closing": 5220
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "Female",
       "closing": 9832
@@ -14263,14 +14011,14 @@
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SC",
       "seat_type": "General",
       "closing": 754
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SC",
       "seat_type": "Female",
       "closing": 852
@@ -14291,7 +14039,7 @@
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 1288
@@ -14326,14 +14074,14 @@
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 1730
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 2469
@@ -14382,7 +14130,7 @@
     },
     {
       "collegeShort": "GEC Aurangabad",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "General",
       "closing": 2380
@@ -14742,7 +14490,7 @@
       "branch": "Electronics & Communication",
       "category": "UR",
       "seat_type": "General",
-      "closing": 7649
+      "closing": 7539
     },
     {
       "collegeShort": "GEC Bhojpur",
@@ -15292,7 +15040,7 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2115
@@ -15320,7 +15068,7 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2669
@@ -15362,7 +15110,7 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "BC",
       "seat_type": "General",
       "closing": 3971
@@ -15376,14 +15124,14 @@
     },
     {
       "collegeShort": "GEC Jamui",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "General",
       "closing": 4421
     },
     {
       "collegeShort": "GEC Jamui",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "Female",
       "closing": 9137
@@ -15439,7 +15187,7 @@
     },
     {
       "collegeShort": "GEC Jamui",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SC",
       "seat_type": "General",
       "closing": 960
@@ -15460,14 +15208,14 @@
     },
     {
       "collegeShort": "GEC Jamui",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 1175
     },
     {
       "collegeShort": "GEC Jamui",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 1984
@@ -15523,7 +15271,7 @@
     },
     {
       "collegeShort": "GEC Jamui",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 1440
@@ -15558,7 +15306,7 @@
     },
     {
       "collegeShort": "GEC Jamui",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "DQ",
       "seat_type": "General",
       "closing": 22
@@ -15572,7 +15320,7 @@
     },
     {
       "collegeShort": "GEC Jamui",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "General",
       "closing": 1912
@@ -15859,14 +15607,14 @@
     },
     {
       "collegeShort": "GEC Kaimur",
-      "branch": "Computer Science",
+      "branch": "Computer Science (Networks)",
       "category": "UR",
       "seat_type": "General",
       "closing": 7598
     },
     {
       "collegeShort": "GEC Kaimur",
-      "branch": "Computer Science",
+      "branch": "Computer Science (Networks)",
       "category": "UR",
       "seat_type": "Female",
       "closing": 8522
@@ -15922,7 +15670,7 @@
     },
     {
       "collegeShort": "GEC Kaimur",
-      "branch": "Computer Science",
+      "branch": "Computer Science (Networks)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2003
@@ -15950,7 +15698,7 @@
     },
     {
       "collegeShort": "GEC Kaimur",
-      "branch": "Computer Science",
+      "branch": "Computer Science (Networks)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2318
@@ -15992,7 +15740,7 @@
     },
     {
       "collegeShort": "GEC Kaimur",
-      "branch": "Computer Science",
+      "branch": "Computer Science (Networks)",
       "category": "BC",
       "seat_type": "General",
       "closing": 3515
@@ -16027,14 +15775,14 @@
     },
     {
       "collegeShort": "GEC Khagaria",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "General",
       "closing": 5297
     },
     {
       "collegeShort": "GEC Khagaria",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "Female",
       "closing": 9700
@@ -16076,7 +15824,7 @@
     },
     {
       "collegeShort": "GEC Khagaria",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SC",
       "seat_type": "General",
       "closing": 761
@@ -16090,14 +15838,14 @@
     },
     {
       "collegeShort": "GEC Khagaria",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 1248
     },
     {
       "collegeShort": "GEC Khagaria",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 2048
@@ -16132,7 +15880,7 @@
     },
     {
       "collegeShort": "GEC Khagaria",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 1577
@@ -16160,7 +15908,7 @@
     },
     {
       "collegeShort": "GEC Khagaria",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "General",
       "closing": 2152
@@ -16825,7 +16573,7 @@
     },
     {
       "collegeShort": "GEC Siwan",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "UR",
       "seat_type": "Female",
       "closing": 9625
@@ -16958,7 +16706,7 @@
     },
     {
       "collegeShort": "GEC Siwan",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2642
@@ -17007,7 +16755,7 @@
     },
     {
       "collegeShort": "GEC Siwan",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "BC",
       "seat_type": "General",
       "closing": 3885
@@ -17087,7 +16835,7 @@
       "branch": "Electronics & Communication",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 10215
+      "closing": 8463
     },
     {
       "collegeShort": "GEC Vaishali",
@@ -17262,7 +17010,7 @@
       "branch": "Electronics & Communication",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 1886
+      "closing": 1479
     },
     {
       "collegeShort": "GEC Vaishali",
@@ -17325,7 +17073,7 @@
       "branch": "Electronics & Communication",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 2501
+      "closing": 2175
     },
     {
       "collegeShort": "GEC Vaishali",
@@ -17388,7 +17136,7 @@
       "branch": "Electronics & Communication",
       "category": "BC",
       "seat_type": "General",
-      "closing": 3716
+      "closing": 2677
     },
     {
       "collegeShort": "GEC Vaishali",
@@ -17630,14 +17378,14 @@
     },
     {
       "collegeShort": "GEC Kishanganj",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "General",
       "closing": 5664
     },
     {
       "collegeShort": "GEC Kishanganj",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "Female",
       "closing": 8395
@@ -17658,7 +17406,7 @@
     },
     {
       "collegeShort": "GEC Kishanganj",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 111
@@ -17679,7 +17427,7 @@
     },
     {
       "collegeShort": "GEC Kishanganj",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 1333
@@ -17714,7 +17462,7 @@
     },
     {
       "collegeShort": "GEC Kishanganj",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 1516
@@ -17742,7 +17490,7 @@
     },
     {
       "collegeShort": "GEC Kishanganj",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "General",
       "closing": 2357
@@ -17798,17 +17546,31 @@
     },
     {
       "collegeShort": "KCE Katihar",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 6902
     },
     {
       "collegeShort": "KCE Katihar",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 10024
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "VLSI Design",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 5767
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "VLSI Design",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 8662
     },
     {
       "collegeShort": "KCE Katihar",
@@ -17861,7 +17623,7 @@
     },
     {
       "collegeShort": "KCE Katihar",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "SC",
       "seat_type": "General",
       "closing": 685
@@ -17903,10 +17665,24 @@
     },
     {
       "collegeShort": "KCE Katihar",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 2118
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "VLSI Design",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2135
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "Mechanical (Smart Manufacturing)",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 1905
     },
     {
       "collegeShort": "KCE Katihar",
@@ -17938,7 +17714,14 @@
     },
     {
       "collegeShort": "KCE Katihar",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 2679
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "VLSI Design",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2681
@@ -17973,10 +17756,24 @@
     },
     {
       "collegeShort": "KCE Katihar",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 3592
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "VLSI Design",
       "category": "BC",
       "seat_type": "General",
       "closing": 3859
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "Mechanical (Smart Manufacturing)",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 3858
     },
     {
       "collegeShort": "KCE Katihar",
@@ -17990,14 +17787,14 @@
       "branch": "IT",
       "category": "UR",
       "seat_type": "General",
-      "closing": 4642
+      "closing": 6040
     },
     {
       "collegeShort": "LNJPIT Chapra",
       "branch": "IT",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 8849
+      "closing": 9359
     },
     {
       "collegeShort": "LNJPIT Chapra",
@@ -18015,34 +17812,6 @@
     },
     {
       "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 4427
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 8913
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Mechanical",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 6040
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Mechanical",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 9359
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
       "branch": "Computer Science",
       "category": "ST",
       "seat_type": "General",
@@ -18053,7 +17822,7 @@
       "branch": "IT",
       "category": "SMQ",
       "seat_type": "General",
-      "closing": 86
+      "closing": 140
     },
     {
       "collegeShort": "LNJPIT Chapra",
@@ -18064,24 +17833,10 @@
     },
     {
       "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "SMQ",
-      "seat_type": "General",
-      "closing": 113
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Mechanical",
-      "category": "SMQ",
-      "seat_type": "General",
-      "closing": 140
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
       "branch": "IT",
       "category": "SC",
       "seat_type": "General",
-      "closing": 840
+      "closing": 898
     },
     {
       "collegeShort": "LNJPIT Chapra",
@@ -18099,20 +17854,6 @@
     },
     {
       "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 898
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Mechanical",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 832
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
       "branch": "IT",
       "category": "RCG",
       "seat_type": "General",
@@ -18127,17 +17868,10 @@
     },
     {
       "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "RCG",
-      "seat_type": "General",
-      "closing": 9848
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
       "branch": "IT",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 1138
+      "closing": 2089
     },
     {
       "collegeShort": "LNJPIT Chapra",
@@ -18162,31 +17896,10 @@
     },
     {
       "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 1203
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "EWS",
-      "seat_type": "Female",
-      "closing": 1862
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Mechanical",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 2089
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
       "branch": "IT",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 1294
+      "closing": 2605
     },
     {
       "collegeShort": "LNJPIT Chapra",
@@ -18201,20 +17914,6 @@
       "category": "EBC",
       "seat_type": "Female",
       "closing": 919
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 1449
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Mechanical",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 2605
     },
     {
       "collegeShort": "LNJPIT Chapra",
@@ -18245,46 +17944,11 @@
       "closing": 1726
     },
     {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 2041
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Electronics & Communication",
-      "category": "BC",
-      "seat_type": "Female",
-      "closing": 3615
-    },
-    {
-      "collegeShort": "LNJPIT Chapra",
-      "branch": "Mechanical",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 3958
-    },
-    {
-      "collegeShort": "MCE Motihari",
-      "branch": "Computer Science",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 7435
-    },
-    {
-      "collegeShort": "MCE Motihari",
-      "branch": "Computer Science",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 8754
-    },
-    {
       "collegeShort": "MCE Motihari",
       "branch": "Civil",
       "category": "UR",
       "seat_type": "General",
-      "closing": 5073
+      "closing": 7435
     },
     {
       "collegeShort": "MCE Motihari",
@@ -18292,6 +17956,20 @@
       "category": "UR",
       "seat_type": "Female",
       "closing": 9123
+    },
+    {
+      "collegeShort": "MCE Motihari",
+      "branch": "Computer Science",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 1236
+    },
+    {
+      "collegeShort": "MCE Motihari",
+      "branch": "Computer Science",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 2977
     },
     {
       "collegeShort": "MCE Motihari",
@@ -18309,14 +17987,14 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 5533
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 10617
@@ -18365,24 +18043,24 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 96
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Computer Science",
+      "branch": "Civil",
       "category": "SC",
       "seat_type": "General",
       "closing": 930
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Civil",
+      "branch": "Computer Science",
       "category": "SC",
       "seat_type": "General",
-      "closing": 760
+      "closing": 250
     },
     {
       "collegeShort": "MCE Motihari",
@@ -18407,7 +18085,7 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 945
@@ -18428,14 +18106,14 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "RCG",
       "seat_type": "General",
       "closing": 10237
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Computer Science",
+      "branch": "Civil",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2024
@@ -18444,15 +18122,15 @@
       "collegeShort": "MCE Motihari",
       "branch": "Civil",
       "category": "EWS",
-      "seat_type": "General",
-      "closing": 1153
+      "seat_type": "Female",
+      "closing": 2083
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Civil",
+      "branch": "Computer Science",
       "category": "EWS",
-      "seat_type": "Female",
-      "closing": 2083
+      "seat_type": "General",
+      "closing": 337
     },
     {
       "collegeShort": "MCE Motihari",
@@ -18477,14 +18155,14 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
       "closing": 1250
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 1767
@@ -18498,7 +18176,7 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Computer Science",
+      "branch": "Civil",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2545
@@ -18507,15 +18185,15 @@
       "collegeShort": "MCE Motihari",
       "branch": "Civil",
       "category": "EBC",
-      "seat_type": "General",
-      "closing": 1546
+      "seat_type": "Female",
+      "closing": 2583
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Civil",
+      "branch": "Computer Science",
       "category": "EBC",
-      "seat_type": "Female",
-      "closing": 2583
+      "seat_type": "General",
+      "closing": 361
     },
     {
       "collegeShort": "MCE Motihari",
@@ -18540,14 +18218,14 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 1746
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 2664
@@ -18561,7 +18239,7 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Computer Science",
+      "branch": "Civil",
       "category": "BC",
       "seat_type": "General",
       "closing": 3932
@@ -18570,15 +18248,15 @@
       "collegeShort": "MCE Motihari",
       "branch": "Civil",
       "category": "BC",
-      "seat_type": "General",
-      "closing": 1973
+      "seat_type": "Female",
+      "closing": 3866
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Civil",
+      "branch": "Computer Science",
       "category": "BC",
-      "seat_type": "Female",
-      "closing": 3866
+      "seat_type": "General",
+      "closing": 548
     },
     {
       "collegeShort": "MCE Motihari",
@@ -18603,14 +18281,14 @@
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 2465
     },
     {
       "collegeShort": "MCE Motihari",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "Female",
       "closing": 3668
@@ -18652,48 +18330,6 @@
     },
     {
       "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 820
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 2046
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 540
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 1629
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 1770
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 5606
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
       "branch": "IT",
       "category": "ST",
       "seat_type": "Female",
@@ -18708,14 +18344,7 @@
     },
     {
       "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "ST",
-      "seat_type": "General",
-      "closing": 14
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
+      "branch": "IT",
       "category": "ST",
       "seat_type": "General",
       "closing": 14
@@ -18736,27 +18365,6 @@
     },
     {
       "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "SMQ",
-      "seat_type": "General",
-      "closing": 20
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "SMQ",
-      "seat_type": "General",
-      "closing": 12
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "SMQ",
-      "seat_type": "General",
-      "closing": 19
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
       "branch": "IT",
       "category": "SC",
       "seat_type": "General",
@@ -18767,7 +18375,7 @@
       "branch": "IT",
       "category": "SC",
       "seat_type": "Female",
-      "closing": 792
+      "closing": 951
     },
     {
       "collegeShort": "MIT Muzaffarpur",
@@ -18785,48 +18393,6 @@
     },
     {
       "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 128
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "SC",
-      "seat_type": "Female",
-      "closing": 951
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 94
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "SC",
-      "seat_type": "Female",
-      "closing": 543
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 319
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "SC",
-      "seat_type": "Female",
-      "closing": 790
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
       "branch": "IT",
       "category": "RCG",
       "seat_type": "General",
@@ -18838,27 +18404,6 @@
       "category": "RCG",
       "seat_type": "General",
       "closing": 251
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "RCG",
-      "seat_type": "General",
-      "closing": 2096
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "RCG",
-      "seat_type": "General",
-      "closing": 1274
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "RCG",
-      "seat_type": "General",
-      "closing": 5461
     },
     {
       "collegeShort": "MIT Muzaffarpur",
@@ -18890,48 +18435,6 @@
     },
     {
       "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 234
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "EWS",
-      "seat_type": "Female",
-      "closing": 555
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 161
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "EWS",
-      "seat_type": "Female",
-      "closing": 276
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 301
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "EWS",
-      "seat_type": "Female",
-      "closing": 1751
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
       "branch": "IT",
       "category": "EBC",
       "seat_type": "General",
@@ -18960,48 +18463,6 @@
     },
     {
       "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 280
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "EBC",
-      "seat_type": "Female",
-      "closing": 761
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 172
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "EBC",
-      "seat_type": "Female",
-      "closing": 374
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 429
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "EBC",
-      "seat_type": "Female",
-      "closing": 1685
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
       "branch": "IT",
       "category": "DQ",
       "seat_type": "General",
@@ -19013,20 +18474,6 @@
       "category": "DQ",
       "seat_type": "General",
       "closing": 30
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "DQ",
-      "seat_type": "General",
-      "closing": 16
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "DQ",
-      "seat_type": "General",
-      "closing": 24
     },
     {
       "collegeShort": "MIT Muzaffarpur",
@@ -19057,57 +18504,15 @@
       "closing": 122
     },
     {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 416
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electrical",
-      "category": "BC",
-      "seat_type": "Female",
-      "closing": 972
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 246
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Electronics & Communication",
-      "category": "BC",
-      "seat_type": "Female",
-      "closing": 743
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 560
-    },
-    {
-      "collegeShort": "MIT Muzaffarpur",
-      "branch": "Mechanical",
-      "category": "BC",
-      "seat_type": "Female",
-      "closing": 1701
-    },
-    {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "General",
       "closing": 1077
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "Female",
       "closing": 2468
@@ -19142,14 +18547,14 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 3039
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 7261
@@ -19184,14 +18589,14 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "ST",
       "seat_type": "General",
       "closing": 54
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 90
@@ -19212,7 +18617,7 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 60
@@ -19226,14 +18631,14 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SC",
       "seat_type": "General",
       "closing": 310
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SC",
       "seat_type": "Female",
       "closing": 934
@@ -19261,7 +18666,7 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 606
@@ -19275,7 +18680,7 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "RCG",
       "seat_type": "General",
       "closing": 2452
@@ -19296,21 +18701,21 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "RCG",
       "seat_type": "General",
       "closing": 6144
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 327
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 911
@@ -19345,14 +18750,14 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
       "closing": 748
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 2053
@@ -19366,14 +18771,14 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 354
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 817
@@ -19408,14 +18813,14 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 871
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 1693
@@ -19436,14 +18841,14 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "General",
       "closing": 486
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "Female",
       "closing": 1083
@@ -19478,14 +18883,14 @@
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 1328
     },
     {
       "collegeShort": "NCE Chandi",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "Female",
       "closing": 2083
@@ -19898,14 +19303,14 @@
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "General",
       "closing": 6917
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "UR",
       "seat_type": "Female",
       "closing": 10582
@@ -19940,7 +19345,7 @@
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 129
@@ -19982,7 +19387,7 @@
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 903
@@ -20045,7 +19450,7 @@
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EWS",
       "seat_type": "General",
       "closing": 1695
@@ -20101,7 +19506,7 @@
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 1961
@@ -20164,7 +19569,7 @@
     },
     {
       "collegeShort": "RRSDCE Begusarai",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 3096
@@ -20206,14 +19611,28 @@
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 5632
+    },
+    {
+      "collegeShort": "SCE Sasaram",
+      "branch": "Electrical & Electronics",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 9658
+    },
+    {
+      "collegeShort": "SCE Sasaram",
+      "branch": "VLSI Design",
       "category": "UR",
       "seat_type": "General",
       "closing": 6008
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "UR",
       "seat_type": "Female",
       "closing": 10452
@@ -20283,7 +19702,7 @@
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "SC",
       "seat_type": "General",
       "closing": 826
@@ -20339,7 +19758,14 @@
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 1896
+    },
+    {
+      "collegeShort": "SCE Sasaram",
+      "branch": "VLSI Design",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2127
@@ -20388,17 +19814,24 @@
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2497
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 2522
+    },
+    {
+      "collegeShort": "SCE Sasaram",
+      "branch": "VLSI Design",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 2192
     },
     {
       "collegeShort": "SCE Sasaram",
@@ -20444,17 +19877,24 @@
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "General",
       "closing": 3910
     },
     {
       "collegeShort": "SCE Sasaram",
-      "branch": "Electronics & Communication",
+      "branch": "Electrical & Electronics",
       "category": "BC",
       "seat_type": "Female",
       "closing": 3915
+    },
+    {
+      "collegeShort": "SCE Sasaram",
+      "branch": "VLSI Design",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 3604
     },
     {
       "collegeShort": "SCE Sasaram",
@@ -20472,17 +19912,10 @@
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "Computer Science",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 4653
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
       "branch": "IT",
       "category": "UR",
       "seat_type": "General",
-      "closing": 6568
+      "closing": 7675
     },
     {
       "collegeShort": "SIT Sitamarhi",
@@ -20495,43 +19928,29 @@
       "collegeShort": "SIT Sitamarhi",
       "branch": "Computer Science",
       "category": "UR",
+      "seat_type": "General",
+      "closing": 2296
+    },
+    {
+      "collegeShort": "SIT Sitamarhi",
+      "branch": "Computer Science",
+      "category": "UR",
       "seat_type": "Female",
       "closing": 5802
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "General",
       "closing": 2344
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "UR",
       "seat_type": "Female",
       "closing": 5732
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Electrical",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 7407
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Electrical",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 9395
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Mechanical",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 7675
     },
     {
       "collegeShort": "SIT Sitamarhi",
@@ -20549,45 +19968,38 @@
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 105
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "Electrical",
+      "branch": "IT",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 117
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "Computer Science",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 875
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
       "branch": "IT",
       "category": "SC",
       "seat_type": "General",
-      "closing": 948
+      "closing": 966
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "CSE (AI)",
+      "branch": "Computer Science",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 561
+    },
+    {
+      "collegeShort": "SIT Sitamarhi",
+      "branch": "CSE (AI & ML)",
       "category": "SC",
       "seat_type": "General",
       "closing": 772
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Electrical",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 966
     },
     {
       "collegeShort": "SIT Sitamarhi",
@@ -20598,24 +20010,24 @@
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "RCG",
       "seat_type": "General",
       "closing": 6664
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "Computer Science",
+      "branch": "IT",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2144
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "IT",
+      "branch": "Computer Science",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 1974
+      "closing": 734
     },
     {
       "collegeShort": "SIT Sitamarhi",
@@ -20626,45 +20038,31 @@
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 731
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seat_type": "Female",
       "closing": 1349
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "Electrical",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 2023
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Mechanical",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 2035
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Computer Science",
+      "branch": "IT",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2685
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "IT",
+      "branch": "Computer Science",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 2273
+      "closing": 529
     },
     {
       "collegeShort": "SIT Sitamarhi",
@@ -20675,45 +20073,31 @@
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 807
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "EBC",
       "seat_type": "Female",
       "closing": 2240
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "Electrical",
-      "category": "EBC",
+      "branch": "IT",
+      "category": "BC",
       "seat_type": "General",
-      "closing": 2557
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Mechanical",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 2683
+      "closing": 3909
     },
     {
       "collegeShort": "SIT Sitamarhi",
       "branch": "Computer Science",
       "category": "BC",
       "seat_type": "General",
-      "closing": 3903
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "IT",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 3387
+      "closing": 946
     },
     {
       "collegeShort": "SIT Sitamarhi",
@@ -20724,31 +20108,17 @@
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "General",
       "closing": 1047
     },
     {
       "collegeShort": "SIT Sitamarhi",
-      "branch": "CSE (AI)",
+      "branch": "CSE (AI & ML)",
       "category": "BC",
       "seat_type": "Female",
       "closing": 2412
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Electrical",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 3909
-    },
-    {
-      "collegeShort": "SIT Sitamarhi",
-      "branch": "Mechanical",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 3695
     },
     {
       "collegeShort": "SCE Saharsa",
@@ -21480,7 +20850,7 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "UR",
       "seat_type": "General",
       "closing": 6725
@@ -21501,7 +20871,7 @@
     },
     {
       "collegeShort": "GEC Siwan",
-      "branch": "Electronics & Communication",
+      "branch": "VLSI Design",
       "category": "UR",
       "seat_type": "General",
       "closing": 6111
