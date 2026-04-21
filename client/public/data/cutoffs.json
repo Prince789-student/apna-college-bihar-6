@@ -215,14 +215,14 @@
       "branch": "Mechanical",
       "category": "UR",
       "seat_type": "General",
-      "closing": 5310
+      "closing": 7720
     },
     {
       "collegeShort": "BPMCE Madhepura",
       "branch": "Mechanical",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 9138
+      "closing": 9617
     },
     {
       "collegeShort": "BPMCE Madhepura",
@@ -348,14 +348,14 @@
       "branch": "Computer Science",
       "category": "UR",
       "seat_type": "General",
-      "closing": 2462
+      "closing": 3618
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 7162
+      "closing": 7580
     },
     {
       "collegeShort": "GCE Gaya",
@@ -390,14 +390,14 @@
       "branch": "CSE (Cyber Security)",
       "category": "UR",
       "seat_type": "General",
-      "closing": 4880
+      "closing": 7244
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "CSE (Cyber Security)",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 9580
+      "closing": 11727
     },
     {
       "collegeShort": "GCE Gaya",
@@ -885,20 +885,6 @@
     {
       "collegeShort": "GEC Gopalganj",
       "branch": "CSE (AI)",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 11646
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (Cyber Security)",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 6114
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (Cyber Security)",
       "category": "UR",
       "seat_type": "Female",
       "closing": 11646
@@ -2340,10 +2326,10 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (Cyber Security)",
+      "branch": "CSE (AI)",
       "category": "ST",
       "seat_type": "General",
-      "closing": 30
+      "closing": 61
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -2707,7 +2693,7 @@
       "branch": "Computer Science",
       "category": "SMQ",
       "seat_type": "General",
-      "closing": 124
+      "closing": 132
     },
     {
       "collegeShort": "GCE Gaya",
@@ -2824,13 +2810,6 @@
     {
       "collegeShort": "GEC Gopalganj",
       "branch": "CSE (AI)",
-      "category": "SMQ",
-      "seat_type": "General",
-      "closing": 173
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (Cyber Security)",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 173
@@ -3393,7 +3372,14 @@
       "branch": "Chemical Engineering",
       "category": "SC",
       "seat_type": "General",
-      "closing": 1115
+      "closing": 1152
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Mechanical",
+      "category": "SC",
+      "seat_type": "Female",
+      "closing": 1149
     },
     {
       "collegeShort": "DCE Darbhanga",
@@ -3484,7 +3470,7 @@
       "branch": "Computer Science",
       "category": "SC",
       "seat_type": "General",
-      "closing": 363
+      "closing": 525
     },
     {
       "collegeShort": "GCE Gaya",
@@ -3758,13 +3744,6 @@
       "category": "SC",
       "seat_type": "General",
       "closing": 1065
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (Cyber Security)",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 733
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -4695,7 +4674,7 @@
       "branch": "Computer Science",
       "category": "RCG",
       "seat_type": "General",
-      "closing": 1043
+      "closing": 1203
     },
     {
       "collegeShort": "GCE Gaya",
@@ -5360,14 +5339,14 @@
       "branch": "Computer Science",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 723
+      "closing": 1113
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "EWS",
       "seat_type": "Female",
-      "closing": 1440
+      "closing": 1961
     },
     {
       "collegeShort": "GCE Gaya",
@@ -5402,7 +5381,7 @@
       "branch": "CSE (Cyber Security)",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 1550
+      "closing": 1773
     },
     {
       "collegeShort": "GCE Gaya",
@@ -5416,7 +5395,7 @@
       "branch": "Electrical",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 2433
+      "closing": 2562
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -5602,7 +5581,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "Robotics and Automation",
+      "branch": "CSE (AI)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2240
@@ -5809,13 +5788,6 @@
       "category": "EWS",
       "seat_type": "Female",
       "closing": 2336
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (Cyber Security)",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 1695
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -6904,7 +6876,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "Robotics and Automation",
+      "branch": "CSE (AI)",
       "category": "UR",
       "seat_type": "General",
       "closing": 8062
@@ -7257,7 +7229,14 @@
       "branch": "Chemical Engineering",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 2175
+      "closing": 3069
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Mechanical",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 3168
     },
     {
       "collegeShort": "DCE Darbhanga",
@@ -7362,14 +7341,14 @@
       "branch": "Computer Science",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 795
+      "closing": 1109
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "EBC",
       "seat_type": "Female",
-      "closing": 2201
+      "closing": 2661
     },
     {
       "collegeShort": "GCE Gaya",
@@ -7397,7 +7376,7 @@
       "branch": "CSE (Cyber Security)",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 1487
+      "closing": 1860
     },
     {
       "collegeShort": "GCE Gaya",
@@ -7411,7 +7390,7 @@
       "branch": "Electrical",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 2845
+      "closing": 3037
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -7583,7 +7562,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "Robotics and Automation",
+      "branch": "CSE (AI)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 3167
@@ -7790,13 +7769,6 @@
       "category": "EBC",
       "seat_type": "Female",
       "closing": 3212
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (Cyber Security)",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 1874
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -9245,7 +9217,7 @@
       "branch": "Chemical Engineering",
       "category": "BC",
       "seat_type": "General",
-      "closing": 3066
+      "closing": 4535
     },
     {
       "collegeShort": "BPMCE Madhepura",
@@ -9357,21 +9329,21 @@
       "branch": "Computer Science",
       "category": "BC",
       "seat_type": "General",
-      "closing": 1128
+      "closing": 1347
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "BC",
       "seat_type": "Female",
-      "closing": 2449
+      "closing": 3086
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Electronics & Communication",
       "category": "BC",
       "seat_type": "General",
-      "closing": 3750
+      "closing": 4210
     },
     {
       "collegeShort": "GCE Gaya",
@@ -9385,7 +9357,7 @@
       "branch": "Mechanical",
       "category": "BC",
       "seat_type": "General",
-      "closing": 4033
+      "closing": 4522
     },
     {
       "collegeShort": "GCE Gaya",
@@ -9399,7 +9371,7 @@
       "branch": "CSE (Cyber Security)",
       "category": "BC",
       "seat_type": "General",
-      "closing": 2092
+      "closing": 2857
     },
     {
       "collegeShort": "GCE Gaya",
@@ -9413,7 +9385,7 @@
       "branch": "Electrical",
       "category": "BC",
       "seat_type": "General",
-      "closing": 3761
+      "closing": 4230
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -9599,7 +9571,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "Robotics and Automation",
+      "branch": "CSE (AI)",
       "category": "BC",
       "seat_type": "General",
       "closing": 4171
@@ -9820,13 +9792,6 @@
       "category": "BC",
       "seat_type": "Female",
       "closing": 4372
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (Cyber Security)",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 2620
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -11033,13 +10998,6 @@
       "closing": 75
     },
     {
-      "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (AI)",
-      "category": "ST",
-      "seat_type": "General",
-      "closing": 61
-    },
-    {
       "collegeShort": "PCE Purnea",
       "branch": "Civil",
       "category": "ST",
@@ -12194,7 +12152,7 @@
       "branch": "Mechanical",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 1935
+      "closing": 2099
     },
     {
       "collegeShort": "BPMCE Madhepura",
@@ -12250,7 +12208,7 @@
       "branch": "Mechanical",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 2384
+      "closing": 2641
     },
     {
       "collegeShort": "BPMCE Madhepura",
@@ -12328,6 +12286,48 @@
       "category": "UR",
       "seat_type": "Female",
       "closing": 8943
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Mechanical",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 116
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 923
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 1442
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 2643
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "DQ",
+      "seat_type": "General",
+      "closing": 15
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 3497
     },
     {
       "collegeShort": "DCE Darbhanga",
@@ -12838,7 +12838,7 @@
       "branch": "Electronics & Communication",
       "category": "UR",
       "seat_type": "General",
-      "closing": 5957
+      "closing": 7601
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12852,7 +12852,7 @@
       "branch": "Mechanical",
       "category": "UR",
       "seat_type": "General",
-      "closing": 5305
+      "closing": 7528
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12929,7 +12929,7 @@
       "branch": "Computer Science",
       "category": "SC",
       "seat_type": "General",
-      "closing": 708
+      "closing": 783
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12999,7 +12999,7 @@
       "branch": "Computer Science",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 553
+      "closing": 838
     },
     {
       "collegeShort": "GCE Gaya",
@@ -13013,7 +13013,7 @@
       "branch": "Electronics & Communication",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 1735
+      "closing": 2149
     },
     {
       "collegeShort": "GCE Gaya",
@@ -13034,7 +13034,7 @@
       "branch": "Civil",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 2257
+      "closing": 2687
     },
     {
       "collegeShort": "GCE Gaya",
@@ -13048,7 +13048,7 @@
       "branch": "Computer Science",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 705
+      "closing": 860
     },
     {
       "collegeShort": "GCE Gaya",
@@ -13083,7 +13083,7 @@
       "branch": "Civil",
       "category": "BC",
       "seat_type": "General",
-      "closing": 3426
+      "closing": 3981
     },
     {
       "collegeShort": "GCE Gaya",
@@ -13097,21 +13097,21 @@
       "branch": "Computer Science",
       "category": "BC",
       "seat_type": "General",
-      "closing": 977
+      "closing": 1393
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "BC",
       "seat_type": "Female",
-      "closing": 3087
+      "closing": 3880
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Electronics & Communication",
       "category": "BC",
       "seat_type": "General",
-      "closing": 3279
+      "closing": 3533
     },
     {
       "collegeShort": "GCE Gaya",
@@ -13181,7 +13181,7 @@
       "branch": "CSE (Cyber Security)",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 1210
+      "closing": 1575
     },
     {
       "collegeShort": "GCE Gaya",
@@ -13202,7 +13202,7 @@
       "branch": "CSE (Cyber Security)",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 1431
+      "closing": 1712
     },
     {
       "collegeShort": "GCE Gaya",
@@ -13223,7 +13223,7 @@
       "branch": "CSE (Cyber Security)",
       "category": "BC",
       "seat_type": "General",
-      "closing": 1750
+      "closing": 2923
     },
     {
       "collegeShort": "GCE Gaya",
@@ -13969,7 +13969,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "Robotics and Automation",
+      "branch": "CSE (AI)",
       "category": "UR",
       "seat_type": "General",
       "closing": 7810
@@ -14018,7 +14018,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "Robotics and Automation",
+      "branch": "CSE (AI)",
       "category": "SC",
       "seat_type": "General",
       "closing": 656
@@ -14074,7 +14074,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "Robotics and Automation",
+      "branch": "CSE (AI)",
       "category": "EWS",
       "seat_type": "General",
       "closing": 2135
@@ -14130,7 +14130,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "Robotics and Automation",
+      "branch": "CSE (AI)",
       "category": "EBC",
       "seat_type": "General",
       "closing": 2203
@@ -14179,7 +14179,7 @@
     },
     {
       "collegeShort": "GEC Arwal",
-      "branch": "Robotics and Automation",
+      "branch": "CSE (AI)",
       "category": "BC",
       "seat_type": "General",
       "closing": 3941
@@ -15215,20 +15215,6 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (IoT)",
-      "category": "UR",
-      "seat_type": "General",
-      "closing": 5651
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (IoT)",
-      "category": "UR",
-      "seat_type": "Female",
-      "closing": 10665
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
       "branch": "Electrical",
       "category": "UR",
       "seat_type": "Female",
@@ -15250,7 +15236,7 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (IoT)",
+      "branch": "CSE (AI)",
       "category": "SMQ",
       "seat_type": "General",
       "closing": 150
@@ -15268,13 +15254,6 @@
       "category": "SC",
       "seat_type": "General",
       "closing": 880
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (IoT)",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 498
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -15306,13 +15285,6 @@
     },
     {
       "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (IoT)",
-      "category": "EWS",
-      "seat_type": "General",
-      "closing": 1395
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
       "branch": "Electrical",
       "category": "EWS",
       "seat_type": "General",
@@ -15338,13 +15310,6 @@
       "category": "EBC",
       "seat_type": "General",
       "closing": 2095
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (IoT)",
-      "category": "EBC",
-      "seat_type": "General",
-      "closing": 1721
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -15387,13 +15352,6 @@
       "category": "BC",
       "seat_type": "Female",
       "closing": 3362
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (IoT)",
-      "category": "BC",
-      "seat_type": "General",
-      "closing": 2460
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -21514,20 +21472,6 @@
       "closing": 3933
     },
     {
-      "collegeShort": "BPMCE Madhepura",
-      "branch": "Mechanical",
-      "category": "SMQ",
-      "seat_type": "General",
-      "closing": 116
-    },
-    {
-      "collegeShort": "BPMCE Madhepura",
-      "branch": "Chemical Engineering",
-      "category": "SC",
-      "seat_type": "General",
-      "closing": 923
-    },
-    {
       "collegeShort": "GEC Bhojpur",
       "branch": "Electronics & Communication",
       "category": "ST",
@@ -21540,13 +21484,6 @@
       "category": "UR",
       "seat_type": "General",
       "closing": 6725
-    },
-    {
-      "collegeShort": "GEC Gopalganj",
-      "branch": "CSE (AI)",
-      "category": "SMQ",
-      "seat_type": "General",
-      "closing": 150
     },
     {
       "collegeShort": "GEC Nawada",
