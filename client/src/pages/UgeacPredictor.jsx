@@ -286,27 +286,23 @@ function UgeacPredictor() {
     for(let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         
-        // Ghost Watermark - Extremely light and non-intrusive
+        // Ghost Watermark - Extremely light
         doc.setFontSize(28);
         doc.setFont("helvetica", "bold");
-        doc.setTextColor(253, 246, 246); // Ghost Red (Nearly White)
-        
-        // Place in specific safe zones
+        doc.setTextColor(253, 246, 246);
         doc.text("APNA COLLEGE BIHAR OFFICIAL REPORT", 105, 120, { align: 'center', angle: 45 });
         doc.text("APNA COLLEGE BIHAR OFFICIAL REPORT", 105, 220, { align: 'center', angle: 45 });
 
-        // Stylized "ACB" Background Logo
-        doc.setFontSize(70);
-        doc.setTextColor(254, 248, 248); 
-        doc.text("ACB", 105, 160, { align: 'center' });
-
-        // High-Quality Footer
+        // Footer Branding
         doc.setFontSize(8);
-        doc.setTextColor(160, 174, 192); // light slate
-        doc.text("This is an AI-generated analysis based on official 2024-25 data. Verification required from official sources.", 14, 282);
-        doc.text("Copyright © 2025 Apna College Bihar. Official: apnacollegebihar.online", 14, 287);
+        doc.setTextColor(160, 174, 192);
+        doc.text("Verified Analysis by apnacollegebihar.online", 42, 287);
         doc.text(`Page ${i} of ${pageCount}`, 196, 287, { align: 'right' });
         
+        try {
+           doc.addImage('/logo.jpg', 'JPEG', 14, 278, 22, 12); 
+        } catch(e) {}
+
         // Border
         doc.setDrawColor(241, 245, 249);
         doc.setLineWidth(0.1);
@@ -319,25 +315,30 @@ function UgeacPredictor() {
     try {
       const doc = new jsPDF();
       
-      // Header Style
-      doc.setFillColor(30, 41, 59); // slate-800
+      // Header Style (Slate)
+      doc.setFillColor(30, 41, 59);
       doc.rect(0, 0, 210, 48, 'F');
       
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(24);
-      doc.setFont("helvetica", "bold");
-      doc.text("APNA COLLEGE BIHAR", 14, 20);
+      // Add Website Logo to Header
+      try {
+        doc.addImage('/logo.jpg', 'JPEG', 14, 8, 30, 15);
+      } catch (e) {
+        console.warn("Logo load failed:", e);
+      }
       
-      doc.setFontSize(11);
-      doc.setFont("helvetica", "bold");
       doc.setTextColor(255, 255, 255);
-      doc.text("OFFICIAL UGEAC COUNSELLING REPORT 2025", 14, 28);
+      doc.setFontSize(22);
+      doc.setFont("helvetica", "bold");
+      doc.text("APNA COLLEGE BIHAR", 50, 22);
       
-      doc.setFontSize(9);
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "bold");
+      doc.text("OFFICIAL UGEAC COUNSELLING DATA-PACK 2025", 50, 30);
+      
+      doc.setFontSize(8);
       doc.setFont("helvetica", "normal");
       doc.setTextColor(203, 213, 225);
-      doc.text(`Platform: apnacollegebihar.online`, 14, 35);
-      doc.text(`Report ID: ACB-${Math.floor(100000 + Math.random() * 900000)} | Date: ${new Date().toLocaleString()}`, 14, 40);
+      doc.text(`Report ID: ACB-${Math.floor(100000 + Math.random() * 900000)} | Generated at: ${new Date().toLocaleString()}`, 50, 37);
 
       // User Details Box
       doc.setFillColor(248, 250, 252);
@@ -353,7 +354,7 @@ function UgeacPredictor() {
       doc.text(`JEE Main CRL: ${rank || 'N/A'}`, 20, 70);
       doc.text(`Bihar State Rank (UR): #${results.calculatedRank || ugeacInput || 'N/A'}`, 20, 76);
       doc.text(`Category: ${category} | Gender: ${gender}`, 20, 82);
-      doc.text(`Verified Category Rank: #${getEstimatedCategoryRank(results.calculatedRank || ugeacInput, category)}`, 110, 76);
+      doc.text(`Estimated Category Rank: #${getEstimatedCategoryRank(results.calculatedRank || ugeacInput, category)}`, 110, 76);
 
       let finalY = 100;
 
