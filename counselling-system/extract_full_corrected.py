@@ -45,6 +45,9 @@ COLLEGES = [
     ('GOVT. ENGG. COLLEGE OF LAKHISARAI', 'GEC Lakhisarai'),
     ('GOVT. ENGG. COLLEGE, SAMASTIPUR', 'GEC Samastipur'),
     ('SHRI PHANISHWAR NATH RENU ENGG. COLLEGE, ARARIA', 'GEC Araria'),
+    ('DR. C.P. THAKUR INSTITUTE OF', 'CP Thakur Inst.'),
+    ('CIPET:IPT, HAJIPUR', 'CIPET Hajipur'),
+    ('S.G.I.D.T.', 'SGIDT Patna'),
     ('WOMEN\'S INST', 'WIT Darbhanga')
 ]
 
