@@ -281,6 +281,32 @@ function UgeacPredictor() {
     return Math.floor(last.ur + (r - last.air) * 0.008);
   };
 
+  const addBranding = (doc) => {
+    const pageCount = doc.internal.getNumberOfPages();
+    for(let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        
+        // Main Diagonal Watermark
+        doc.setFontSize(60);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(248, 250, 252); // Extremely light (almost invisible)
+        doc.text("APNA COLLEGE BIHAR", 35, 180, { angle: 45 });
+        doc.text("APNA COLLEGE BIHAR", 35, 80, { angle: 45 });
+
+        // Center stylized "logo" watermark
+        doc.setFontSize(100);
+        doc.setTextColor(249, 250, 251); 
+        doc.text("ACB", 105, 150, { align: 'center', opacity: 0.1 });
+
+        // Footer
+        doc.setFontSize(8);
+        doc.setTextColor(148, 163, 184); // light slate
+        doc.text("Copyright © 2025 Apna College Bihar. All rights reserved.", 14, 285);
+        doc.text("Official Portal: apnacollegebihar.online", 14, 290);
+        doc.text(`Page ${i} of ${pageCount}`, 190, 290, { align: 'right' });
+    }
+  };
+
   const downloadResultsPDF = () => {
     console.log("Starting PDF Generation...");
     try {
@@ -400,24 +426,8 @@ function UgeacPredictor() {
         });
       }
 
-      // Footer & Watermark
-      const pageCount = doc.internal.getNumberOfPages();
-      for(let i = 1; i <= pageCount; i++) {
-          doc.setPage(i);
-          
-          // Watermark
-          doc.setFontSize(50);
-          doc.setFont("helvetica", "bold");
-          doc.setTextColor(245, 247, 250);
-          doc.text("APNA COLLEGE BIHAR", 40, 180, { angle: 45 });
-          doc.text("APNA COLLEGE BIHAR", 40, 80, { angle: 45 });
-
-          doc.setFontSize(8);
-          doc.setTextColor(100, 116, 139);
-          doc.text("Copyright © 2025 Apna College Bihar. All rights reserved.", 14, 285);
-          doc.text("Official Portal: apnacollegebihar.online", 14, 290);
-          doc.text(`Page ${i} of ${pageCount}`, 190, 290, { align: 'right' });
-      }
+      // Apply Branding to all pages
+      addBranding(doc);
 
       doc.save(`UGEAC_Analysis_Report.pdf`);
       console.log("PDF Saved Successfully!");
