@@ -400,10 +400,21 @@ function UgeacPredictor() {
       margin: { top: 10 }
     });
 
-    // Footer
+    // Footer & Watermark
     const pageCount = doc.internal.getNumberOfPages();
     for(let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
+        
+        // Watermark Implementation
+        doc.saveGraphicsState();
+        doc.setGState(new doc.GState({ opacity: 0.05 }));
+        doc.setFontSize(50);
+        doc.setFont("helvetica", "bold");
+        doc.setTextColor(30, 41, 59);
+        doc.text("APNA COLLEGE BIHAR", 40, 180, { angle: 45 });
+        doc.text("APNA COLLEGE BIHAR", 40, 80, { angle: 45 });
+        doc.restoreGraphicsState();
+
         doc.setFontSize(8);
         doc.setTextColor(100, 116, 139);
         doc.text("Copyright © 2025 Apna College Bihar. All rights reserved.", 14, 285);
