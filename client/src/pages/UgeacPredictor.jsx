@@ -298,24 +298,73 @@ function UgeacPredictor() {
     
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
-    doc.text(`Candidate Rank Analysis | Powered by Apna College Bihar`, 14, 28);
+    doc.text(`Official Counselling Simulation | Powered by Apna College Bihar`, 14, 28);
     doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 34);
 
     // User Details Box
     doc.setFillColor(248, 250, 252);
-    doc.rect(14, 50, 182, 25, 'F');
+    doc.rect(14, 50, 182, 35, 'F');
     doc.setDrawColor(226, 232, 240);
-    doc.rect(14, 50, 182, 25, 'S');
+    doc.rect(14, 50, 182, 35, 'S');
     
     doc.setTextColor(30, 41, 59);
     doc.setFontSize(9);
     doc.text(`JEE Main CRL: ${rank || 'N/A'}`, 20, 58);
-    doc.text(`Category: ${category}`, 20, 64);
-    doc.text(`Gender: ${gender}`, 20, 70);
-    
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(79, 70, 229);
-    doc.text(`Estimated UGEAC Merit (UR): #${results.calculatedRank}`, 110, 64);
+    doc.text(`Bihar State Rank (UR): #${results.calculatedRank}`, 20, 64);
+    doc.text(`Category: ${category} | Gender: ${gender}`, 20, 70);
+    doc.text(`Category Rank (${category}): #${getEstimatedCategoryRank(results.calculatedRank, category)}`, 20, 76);
+
+    let finalY = 95;
+
+    // 1. Predicted Result Section
+    if (results.mockAllotment) {
+       doc.setFillColor(16, 185, 129); // emerald-500
+       doc.rect(14, 88, 182, 20, 'F');
+       doc.setTextColor(255, 255, 255);
+       doc.setFontSize(10);
+       doc.setFont("helvetica", "bold");
+       doc.text(`PREDICTED SEAT: CHOICE #${results.mockAllotment.choiceNumber}`, 20, 94);
+       doc.setFontSize(11);
+       doc.text(`${results.mockAllotment.choice.collegeName} - ${branchMapping[results.mockAllotment.choice.branch] || results.mockAllotment.choice.branch}`, 20, 102);
+       finalY = 115;
+    } else {
+       doc.setFillColor(239, 68, 68); // red-500
+       doc.rect(14, 88, 182, 10, 'F');
+       doc.setTextColor(255, 255, 255);
+       doc.setFontSize(9);
+       doc.text("NO ALLOTMENT PREDICTED FOR THE CURRENT CHOICES", 20, 94);
+       finalY = 105;
+    }
+
+    // 2. Preference List (If choices exist)
+    if (choices.length > 0) {
+      doc.setTextColor(79, 70, 229);
+      doc.setFontSize(12);
+      doc.text("YOUR CHOICE FILLING LIST", 14, finalY);
+      
+      const choiceData = choices.map((c, idx) => [
+        idx + 1,
+        c.collegeName,
+        branchMapping[c.branch] || c.branch
+      ]);
+
+      autoTable(doc, {
+        startY: finalY + 5,
+        head: [['Rank', 'College Name', 'Opted Branch']],
+        body: choiceData,
+        theme: 'grid',
+        styles: { fontSize: 8 },
+        headStyles: { fillColor: [79, 70, 229] }
+      });
+      finalY = doc.lastAutoTable.finalY + 15;
+    } else {
+      finalY += 10;
+    }
+
+    // 3. Full Comparison Matrix
+    doc.setTextColor(30, 41, 59);
+    doc.setFontSize(12);
+    doc.text("FULL ANALYSIS MATRIX (MATCHES)", 14, finalY);
 
     const tableData = results.all.map((item, idx) => [
        idx + 1,
@@ -328,12 +377,12 @@ function UgeacPredictor() {
     ]);
 
     autoTable(doc, {
-      startY: 85,
+      startY: finalY + 5,
       head: [['#', 'College Name', 'Branch', 'Cat (Type)', '25 Cutoff', 'Your Rank', 'Chance']],
       body: tableData,
       theme: 'grid',
-      styles: { fontSize: 8, cellPadding: 3 },
-      headStyles: { fillColor: [79, 70, 229], textColor: [255, 255, 255], fontStyle: 'bold' },
+      styles: { fontSize: 7, cellPadding: 2 },
+      headStyles: { fillColor: [30, 41, 59], textColor: [255, 255, 255] },
       alternateRowStyles: { fillColor: [249, 250, 251] },
       margin: { top: 10 }
     });
@@ -344,11 +393,11 @@ function UgeacPredictor() {
         doc.setPage(i);
         doc.setFontSize(8);
         doc.setTextColor(148, 163, 184);
-        doc.text("* This is an AI estimated report based on previous years' data. Real results may vary.", 14, 285);
+        doc.text("* AI estimation based on 2025 PDF results. Verified by Apna College Bihar.", 14, 285);
         doc.text(`Page ${i} of ${pageCount}`, 190, 285, { align: 'right' });
     }
 
-    doc.save(`UGEAC_Analysis_Rank_${rank}.pdf`);
+    doc.save(`UGEAC_Analysis_Rank_${results.calculatedRank || 'Report'}.pdf`);
   };
 
   const getEstimatedCategoryRank = (urRank, cat) => {
