@@ -6,5 +6,14 @@
     "java.project.resourceFilters": [
         "client/android"
     ],
-    "java.project.importOnFirstTimeStartup": "disabled"
+    "java.project.importOnFirstTimeStartup": "disabled",
+    "python.defaultInterpreterPath": "${workspaceFolder}/counselling-system/.venv/Scripts/python.exe",
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}/counselling-system/.venv/Lib/site-packages"
+    ],
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingImports": "none",
+        "reportMissingModuleSource": "none"
+    },
+    "pylance.autoIndent": true
 }
