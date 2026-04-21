@@ -593,7 +593,14 @@ function UgeacPredictor() {
 
     const seen = new Map();
 
-    // Strategy: Simple and Clean Merge
+    // Pre-compute O(1) lookup maps to prevent 8-million iteration O(N^2) bottlenecks
+    const map2024 = new Map();
+    ugeacData.data2024.forEach(d => map2024.set(`${d.collegeId}-${d.branch}-${d.category}-${d.seat_type}`, d));
+    
+    const map2025 = new Map();
+    ugeacData.data2025.forEach(d => map2025.set(`${d.collegeId}-${d.branch}-${d.category}-${d.seat_type}`, d));
+
+    // Strategy: Simple and Clean Merge - O(N) processing
     const processSet = (data) => {
       data.forEach(d => {
         // Basic eligibility filters
@@ -614,19 +621,14 @@ function UgeacPredictor() {
         const key = `${d.collegeId}-${d.branch}-${d.category}-${d.seat_type}`;
         
         // If not already in seen, or if this is 2025 data (update)
-        const is2025 = ugeacData.data2025.includes(d);
+        const is2025 = map2025.has(key) && map2025.get(key) === d;
+        
         if (!seen.has(key) || is2025) {
-           const cut24 = ugeacData.data2024.find(c => 
-             c.collegeId === d.collegeId && c.branch === d.branch && 
-             c.category === d.category && c.seat_type === d.seat_type
-           );
-           const cut25 = ugeacData.data2025.find(c => 
-             c.collegeId === d.collegeId && c.branch === d.branch && 
-             c.category === d.category && c.seat_type === d.seat_type
-           );
+           const cut24 = map2024.get(key);
+           const cut25 = map2025.get(key);
 
            const compRank = d.category === 'UR' ? ugeacRank : getEstimatedCategoryRank(ugeacRank, d.category);
-           const latestClosing = (cut25 || cut24).closing;
+           const latestClosing = cut25 ? cut25.closing : (cut24 ? cut24.closing : 99999);
            
            let chance = 'No';
            if (compRank <= latestClosing) chance = 'High';
