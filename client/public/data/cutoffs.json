@@ -225,6 +225,20 @@
       "closing": 9138
     },
     {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 9095
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 8841
+    },
+    {
       "collegeShort": "DCE Darbhanga",
       "branch": "Civil",
       "category": "UR",
@@ -320,35 +334,35 @@
       "branch": "Civil",
       "category": "UR",
       "seat_type": "General",
-      "closing": 3120
+      "closing": 6446
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Civil",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 6779
+      "closing": 12155
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "UR",
       "seat_type": "General",
-      "closing": 709
+      "closing": 2462
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 2061
+      "closing": 7162
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Electronics & Communication",
       "category": "UR",
       "seat_type": "General",
-      "closing": 2396
+      "closing": 6008
     },
     {
       "collegeShort": "GCE Gaya",
@@ -370,6 +384,34 @@
       "category": "UR",
       "seat_type": "Female",
       "closing": 11877
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 4880
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 9580
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 5561
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 12257
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -838,14 +880,28 @@
       "branch": "CSE (AI)",
       "category": "UR",
       "seat_type": "General",
-      "closing": 6137
+      "closing": 7966
     },
     {
       "collegeShort": "GEC Gopalganj",
       "branch": "CSE (AI)",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 10259
+      "closing": 11646
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 6114
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 11646
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -1569,6 +1625,76 @@
       "closing": 8403
     },
     {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 6061
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 9183
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 93
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 425
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 1115
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 2705
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 535
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 1372
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 2344
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 10651
+    },
+    {
       "collegeShort": "NCE Chandi",
       "branch": "CSE (AI)",
       "category": "UR",
@@ -2115,6 +2241,13 @@
       "closing": 80
     },
     {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "ST",
+      "seat_type": "General",
+      "closing": 87
+    },
+    {
       "collegeShort": "DCE Darbhanga",
       "branch": "CSE (Cyber Security)",
       "category": "ST",
@@ -2141,6 +2274,27 @@
       "category": "ST",
       "seat_type": "General",
       "closing": 34
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Civil",
+      "category": "ST",
+      "seat_type": "General",
+      "closing": 73
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "ST",
+      "seat_type": "General",
+      "closing": 56
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical",
+      "category": "ST",
+      "seat_type": "General",
+      "closing": 62
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -2183,6 +2337,13 @@
       "category": "ST",
       "seat_type": "General",
       "closing": 61
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "ST",
+      "seat_type": "General",
+      "closing": 30
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -2288,6 +2449,27 @@
       "category": "ST",
       "seat_type": "General",
       "closing": 39
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "ST",
+      "seat_type": "Female",
+      "closing": 31
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "ST",
+      "seat_type": "General",
+      "closing": 11
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "ST",
+      "seat_type": "General",
+      "closing": 19
     },
     {
       "collegeShort": "NCE Chandi",
@@ -2525,7 +2707,7 @@
       "branch": "Computer Science",
       "category": "SMQ",
       "seat_type": "General",
-      "closing": 14
+      "closing": 124
     },
     {
       "collegeShort": "GCE Gaya",
@@ -2644,7 +2826,14 @@
       "branch": "CSE (AI)",
       "category": "SMQ",
       "seat_type": "General",
-      "closing": 122
+      "closing": 173
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 173
     },
     {
       "collegeShort": "GEC Jamui",
@@ -2792,6 +2981,41 @@
       "category": "SMQ",
       "seat_type": "General",
       "closing": 146
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 40
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 9
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 37
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 18
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 92
     },
     {
       "collegeShort": "NCE Chandi",
@@ -3165,6 +3389,13 @@
       "closing": 1207
     },
     {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 1115
+    },
+    {
       "collegeShort": "DCE Darbhanga",
       "branch": "Civil",
       "category": "SC",
@@ -3239,7 +3470,7 @@
       "branch": "Civil",
       "category": "SC",
       "seat_type": "General",
-      "closing": 430
+      "closing": 1236
     },
     {
       "collegeShort": "GCE Gaya",
@@ -3253,7 +3484,7 @@
       "branch": "Computer Science",
       "category": "SC",
       "seat_type": "General",
-      "closing": 127
+      "closing": 363
     },
     {
       "collegeShort": "GCE Gaya",
@@ -3267,7 +3498,7 @@
       "branch": "Electronics & Communication",
       "category": "SC",
       "seat_type": "General",
-      "closing": 559
+      "closing": 1110
     },
     {
       "collegeShort": "GCE Gaya",
@@ -3282,6 +3513,20 @@
       "category": "SC",
       "seat_type": "General",
       "closing": 740
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 1178
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 1220
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -3513,6 +3758,13 @@
       "category": "SC",
       "seat_type": "General",
       "closing": 1065
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 733
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -3933,6 +4185,76 @@
       "category": "SC",
       "seat_type": "General",
       "closing": 1122
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 1057
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "SC",
+      "seat_type": "Female",
+      "closing": 1041
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 24
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "SC",
+      "seat_type": "Female",
+      "closing": 119
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 138
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "SC",
+      "seat_type": "Female",
+      "closing": 1069
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 174
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "SC",
+      "seat_type": "Female",
+      "closing": 395
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 479
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "SC",
+      "seat_type": "Female",
+      "closing": 300
     },
     {
       "collegeShort": "NCE Chandi",
@@ -4373,7 +4695,7 @@
       "branch": "Computer Science",
       "category": "RCG",
       "seat_type": "General",
-      "closing": 259
+      "closing": 1043
     },
     {
       "collegeShort": "GCE Gaya",
@@ -4577,6 +4899,41 @@
       "category": "RCG",
       "seat_type": "General",
       "closing": 1307
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "RCG",
+      "seat_type": "General",
+      "closing": 1773
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seat_type": "General",
+      "closing": 41
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "RCG",
+      "seat_type": "General",
+      "closing": 317
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "RCG",
+      "seat_type": "General",
+      "closing": 110
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "RCG",
+      "seat_type": "General",
+      "closing": 815
     },
     {
       "collegeShort": "NCE Chandi",
@@ -4880,6 +5237,20 @@
       "closing": 2446
     },
     {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 2600
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "EWS",
+      "seat_type": "Female",
+      "closing": 1892
+    },
+    {
       "collegeShort": "DCE Darbhanga",
       "branch": "Civil",
       "category": "EWS",
@@ -4975,7 +5346,7 @@
       "branch": "Civil",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 942
+      "closing": 2135
     },
     {
       "collegeShort": "GCE Gaya",
@@ -4989,21 +5360,21 @@
       "branch": "Computer Science",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 218
+      "closing": 723
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "EWS",
       "seat_type": "Female",
-      "closing": 547
+      "closing": 1440
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Electronics & Communication",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 710
+      "closing": 2509
     },
     {
       "collegeShort": "GCE Gaya",
@@ -5017,7 +5388,7 @@
       "branch": "Mechanical",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 1345
+      "closing": 2586
     },
     {
       "collegeShort": "GCE Gaya",
@@ -5025,6 +5396,27 @@
       "category": "EWS",
       "seat_type": "Female",
       "closing": 2314
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 1550
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "EWS",
+      "seat_type": "Female",
+      "closing": 2278
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 2433
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -5409,7 +5801,7 @@
       "branch": "CSE (AI)",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 1626
+      "closing": 2045
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -5417,6 +5809,13 @@
       "category": "EWS",
       "seat_type": "Female",
       "closing": 2336
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 1695
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -6019,6 +6418,76 @@
       "category": "EWS",
       "seat_type": "General",
       "closing": 2614
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 2171
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "EWS",
+      "seat_type": "Female",
+      "closing": 2103
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 11
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "EWS",
+      "seat_type": "Female",
+      "closing": 125
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 352
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "EWS",
+      "seat_type": "Female",
+      "closing": 482
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 97
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "EWS",
+      "seat_type": "Female",
+      "closing": 415
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 626
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "EWS",
+      "seat_type": "Female",
+      "closing": 885
     },
     {
       "collegeShort": "NCE Chandi",
@@ -6784,6 +7253,13 @@
       "closing": 3118
     },
     {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 2175
+    },
+    {
       "collegeShort": "DCE Darbhanga",
       "branch": "Civil",
       "category": "EBC",
@@ -6872,7 +7348,7 @@
       "branch": "Civil",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 976
+      "closing": 2922
     },
     {
       "collegeShort": "GCE Gaya",
@@ -6886,21 +7362,21 @@
       "branch": "Computer Science",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 199
+      "closing": 795
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "EBC",
       "seat_type": "Female",
-      "closing": 619
+      "closing": 2201
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Electronics & Communication",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 816
+      "closing": 3024
     },
     {
       "collegeShort": "GCE Gaya",
@@ -6914,7 +7390,28 @@
       "branch": "Mechanical",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 1367
+      "closing": 3227
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 1487
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 2960
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 2845
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -7285,7 +7782,7 @@
       "branch": "CSE (AI)",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 1782
+      "closing": 2360
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -7293,6 +7790,13 @@
       "category": "EBC",
       "seat_type": "Female",
       "closing": 3212
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 1874
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -7911,6 +8415,76 @@
       "closing": 3053
     },
     {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 2156
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 3068
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 33
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 77
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 329
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 1128
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 164
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 414
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 594
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 3183
+    },
+    {
       "collegeShort": "NCE Chandi",
       "branch": "CSE (AI)",
       "category": "EBC",
@@ -8429,6 +9003,27 @@
       "closing": 33
     },
     {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "DQ",
+      "seat_type": "General",
+      "closing": 42
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "DQ",
+      "seat_type": "General",
+      "closing": 3
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "DQ",
+      "seat_type": "General",
+      "closing": 21
+    },
+    {
       "collegeShort": "SCE Sasaram",
       "branch": "Computer Science",
       "category": "DQ",
@@ -8646,6 +9241,20 @@
       "closing": 4235
     },
     {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 3066
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "BC",
+      "seat_type": "Female",
+      "closing": 3507
+    },
+    {
       "collegeShort": "DCE Darbhanga",
       "branch": "Civil",
       "category": "BC",
@@ -8734,7 +9343,7 @@
       "branch": "Civil",
       "category": "BC",
       "seat_type": "General",
-      "closing": 1189
+      "closing": 4220
     },
     {
       "collegeShort": "GCE Gaya",
@@ -8748,21 +9357,21 @@
       "branch": "Computer Science",
       "category": "BC",
       "seat_type": "General",
-      "closing": 292
+      "closing": 1128
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "BC",
       "seat_type": "Female",
-      "closing": 837
+      "closing": 2449
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Electronics & Communication",
       "category": "BC",
       "seat_type": "General",
-      "closing": 968
+      "closing": 3750
     },
     {
       "collegeShort": "GCE Gaya",
@@ -8776,7 +9385,7 @@
       "branch": "Mechanical",
       "category": "BC",
       "seat_type": "General",
-      "closing": 2113
+      "closing": 4033
     },
     {
       "collegeShort": "GCE Gaya",
@@ -8784,6 +9393,27 @@
       "category": "BC",
       "seat_type": "Female",
       "closing": 4016
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 2092
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "BC",
+      "seat_type": "Female",
+      "closing": 4543
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 3761
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -9182,7 +9812,7 @@
       "branch": "CSE (AI)",
       "category": "BC",
       "seat_type": "General",
-      "closing": 2426
+      "closing": 3294
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -9190,6 +9820,13 @@
       "category": "BC",
       "seat_type": "Female",
       "closing": 4372
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (Cyber Security)",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 2620
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -9871,6 +10508,76 @@
       "closing": 4017
     },
     {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 2314
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "BC",
+      "seat_type": "Female",
+      "closing": 3629
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 44
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "BC",
+      "seat_type": "Female",
+      "closing": 85
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 439
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "BC",
+      "seat_type": "Female",
+      "closing": 708
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 196
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "BC",
+      "seat_type": "Female",
+      "closing": 602
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 1044
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "BC",
+      "seat_type": "Female",
+      "closing": 1792
+    },
+    {
       "collegeShort": "NCE Chandi",
       "branch": "CSE (AI)",
       "category": "BC",
@@ -10324,6 +11031,13 @@
       "category": "ST",
       "seat_type": "General",
       "closing": 75
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (AI)",
+      "category": "ST",
+      "seat_type": "General",
+      "closing": 61
     },
     {
       "collegeShort": "PCE Purnea",
@@ -11410,7 +12124,7 @@
       "branch": "Mechanical",
       "category": "SC",
       "seat_type": "General",
-      "closing": 586
+      "closing": 604
     },
     {
       "collegeShort": "BPMCE Madhepura",
@@ -11593,6 +12307,27 @@
       "category": "BC",
       "seat_type": "General",
       "closing": 3702
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 8739
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 9913
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Mechanical",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 8943
     },
     {
       "collegeShort": "DCE Darbhanga",
@@ -12075,49 +12810,49 @@
       "branch": "Civil",
       "category": "UR",
       "seat_type": "General",
-      "closing": 2584
+      "closing": 6271
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Civil",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 8296
+      "closing": 9368
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "UR",
       "seat_type": "General",
-      "closing": 739
+      "closing": 3342
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 1498
+      "closing": 9369
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Electronics & Communication",
       "category": "UR",
       "seat_type": "General",
-      "closing": 2455
+      "closing": 5957
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Electronics & Communication",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 7054
+      "closing": 10617
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Mechanical",
       "category": "UR",
       "seat_type": "General",
-      "closing": 4425
+      "closing": 5305
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12159,7 +12894,7 @@
       "branch": "Computer Science",
       "category": "SMQ",
       "seat_type": "General",
-      "closing": 6
+      "closing": 71
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12194,7 +12929,7 @@
       "branch": "Computer Science",
       "category": "SC",
       "seat_type": "General",
-      "closing": 161
+      "closing": 708
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12236,7 +12971,7 @@
       "branch": "Computer Science",
       "category": "RCG",
       "seat_type": "General",
-      "closing": 1260
+      "closing": 8917
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12250,7 +12985,7 @@
       "branch": "Civil",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 697
+      "closing": 1833
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12264,21 +12999,21 @@
       "branch": "Computer Science",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 208
+      "closing": 553
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "EWS",
       "seat_type": "Female",
-      "closing": 290
+      "closing": 1443
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Electronics & Communication",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 721
+      "closing": 1735
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12299,7 +13034,7 @@
       "branch": "Civil",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 702
+      "closing": 2257
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12313,21 +13048,21 @@
       "branch": "Computer Science",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 162
+      "closing": 705
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "EBC",
       "seat_type": "Female",
-      "closing": 357
+      "closing": 2039
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Electronics & Communication",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 612
+      "closing": 2457
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12341,14 +13076,14 @@
       "branch": "Mechanical",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 1386
+      "closing": 2071
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Civil",
       "category": "BC",
       "seat_type": "General",
-      "closing": 1055
+      "closing": 3426
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12362,21 +13097,21 @@
       "branch": "Computer Science",
       "category": "BC",
       "seat_type": "General",
-      "closing": 333
+      "closing": 977
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Computer Science",
       "category": "BC",
       "seat_type": "Female",
-      "closing": 626
+      "closing": 3087
     },
     {
       "collegeShort": "GCE Gaya",
       "branch": "Electronics & Communication",
       "category": "BC",
       "seat_type": "General",
-      "closing": 1102
+      "closing": 3279
     },
     {
       "collegeShort": "GCE Gaya",
@@ -12390,7 +13125,119 @@
       "branch": "Mechanical",
       "category": "BC",
       "seat_type": "General",
-      "closing": 1766
+      "closing": 3962
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 6905
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 10665
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 4380
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 9524
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical",
+      "category": "ST",
+      "seat_type": "General",
+      "closing": 40
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 143
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 918
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 1210
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "EWS",
+      "seat_type": "Female",
+      "closing": 2032
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 2153
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 1431
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 2574
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 2546
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 1750
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "CSE (Cyber Security)",
+      "category": "BC",
+      "seat_type": "Female",
+      "closing": 3817
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 3475
     },
     {
       "collegeShort": "GEC Sheohar",
@@ -14357,14 +15204,14 @@
       "branch": "CSE (AI)",
       "category": "UR",
       "seat_type": "General",
-      "closing": 5004
+      "closing": 6818
     },
     {
       "collegeShort": "GEC Gopalganj",
       "branch": "CSE (AI)",
       "category": "UR",
       "seat_type": "Female",
-      "closing": 7469
+      "closing": 10665
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -14448,7 +15295,7 @@
       "branch": "CSE (AI)",
       "category": "EWS",
       "seat_type": "General",
-      "closing": 1257
+      "closing": 1819
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -14490,7 +15337,7 @@
       "branch": "CSE (AI)",
       "category": "EBC",
       "seat_type": "General",
-      "closing": 1563
+      "closing": 2095
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -14532,7 +15379,7 @@
       "branch": "CSE (AI)",
       "category": "BC",
       "seat_type": "General",
-      "closing": 2158
+      "closing": 3095
     },
     {
       "collegeShort": "GEC Gopalganj",
@@ -17818,6 +18665,482 @@
       "closing": 3869
     },
     {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 7272
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 10150
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 144
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 279
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 820
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 2046
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 540
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 1629
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "UR",
+      "seat_type": "General",
+      "closing": 1770
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "UR",
+      "seat_type": "Female",
+      "closing": 5606
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "ST",
+      "seat_type": "Female",
+      "closing": 41
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "ST",
+      "seat_type": "General",
+      "closing": 3
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "ST",
+      "seat_type": "General",
+      "closing": 14
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "ST",
+      "seat_type": "General",
+      "closing": 14
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 137
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 5
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 20
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 12
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 19
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 938
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "SC",
+      "seat_type": "Female",
+      "closing": 792
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 39
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "SC",
+      "seat_type": "Female",
+      "closing": 57
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 128
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "SC",
+      "seat_type": "Female",
+      "closing": 951
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 94
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "SC",
+      "seat_type": "Female",
+      "closing": 543
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 319
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "SC",
+      "seat_type": "Female",
+      "closing": 790
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "RCG",
+      "seat_type": "General",
+      "closing": 9908
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seat_type": "General",
+      "closing": 251
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "RCG",
+      "seat_type": "General",
+      "closing": 2096
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "RCG",
+      "seat_type": "General",
+      "closing": 1274
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "RCG",
+      "seat_type": "General",
+      "closing": 5461
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 2105
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "EWS",
+      "seat_type": "Female",
+      "closing": 1863
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 41
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "EWS",
+      "seat_type": "Female",
+      "closing": 79
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 234
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "EWS",
+      "seat_type": "Female",
+      "closing": 555
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 161
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "EWS",
+      "seat_type": "Female",
+      "closing": 276
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "EWS",
+      "seat_type": "General",
+      "closing": 301
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "EWS",
+      "seat_type": "Female",
+      "closing": 1751
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 2343
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 2485
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 27
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 158
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 280
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 761
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 172
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 374
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "EBC",
+      "seat_type": "General",
+      "closing": 429
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "EBC",
+      "seat_type": "Female",
+      "closing": 1685
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "DQ",
+      "seat_type": "General",
+      "closing": 30
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "DQ",
+      "seat_type": "General",
+      "closing": 30
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "DQ",
+      "seat_type": "General",
+      "closing": 16
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "DQ",
+      "seat_type": "General",
+      "closing": 24
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 3700
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "BC",
+      "seat_type": "Female",
+      "closing": 3371
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 77
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "BC",
+      "seat_type": "Female",
+      "closing": 122
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 416
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electrical",
+      "category": "BC",
+      "seat_type": "Female",
+      "closing": 972
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 246
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Electronics & Communication",
+      "category": "BC",
+      "seat_type": "Female",
+      "closing": 743
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "BC",
+      "seat_type": "General",
+      "closing": 560
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Mechanical",
+      "category": "BC",
+      "seat_type": "Female",
+      "closing": 1701
+    },
+    {
       "collegeShort": "NCE Chandi",
       "branch": "CSE (AI)",
       "category": "UR",
@@ -20191,6 +21514,20 @@
       "closing": 3933
     },
     {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Mechanical",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 116
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Chemical Engineering",
+      "category": "SC",
+      "seat_type": "General",
+      "closing": 923
+    },
+    {
       "collegeShort": "GEC Bhojpur",
       "branch": "Electronics & Communication",
       "category": "ST",
@@ -20203,6 +21540,13 @@
       "category": "UR",
       "seat_type": "General",
       "closing": 6725
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (AI)",
+      "category": "SMQ",
+      "seat_type": "General",
+      "closing": 150
     },
     {
       "collegeShort": "GEC Nawada",
