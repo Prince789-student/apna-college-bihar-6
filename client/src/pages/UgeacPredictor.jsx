@@ -405,15 +405,12 @@ function UgeacPredictor() {
     for(let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         
-        // Watermark Implementation
-        doc.saveGraphicsState();
-        doc.setGState(new doc.GState({ opacity: 0.05 }));
+        // Watermark Implementation (Simplified for high compatibility)
         doc.setFontSize(50);
         doc.setFont("helvetica", "bold");
-        doc.setTextColor(30, 41, 59);
+        doc.setTextColor(245, 247, 250); // Very light slate/grey watermark
         doc.text("APNA COLLEGE BIHAR", 40, 180, { angle: 45 });
         doc.text("APNA COLLEGE BIHAR", 40, 80, { angle: 45 });
-        doc.restoreGraphicsState();
 
         doc.setFontSize(8);
         doc.setTextColor(100, 116, 139);
@@ -422,7 +419,12 @@ function UgeacPredictor() {
         doc.text(`Page ${i} of ${pageCount}`, 190, 290, { align: 'right' });
     }
 
-    doc.save(`UGEAC_Analysis_ACB_${results.calculatedRank}.pdf`);
+    try {
+       doc.save(`UGEAC_Analysis_ACB_${results.calculatedRank}.pdf`);
+    } catch (err) {
+       console.error("PDF Download Failure:", err);
+       alert("PDF Download failed. Please try again or check your browser settings.");
+    }
   };
 
   const getEstimatedCategoryRank = (urRank, cat) => {
