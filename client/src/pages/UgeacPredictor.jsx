@@ -20,6 +20,7 @@ function UgeacPredictor() {
   const [selectedCollegeToAdd, setSelectedCollegeToAdd] = useState('All');
   const [choices, setChoices] = useState([]); // Array to hold choice filling preferences
   const [selectedBranchToAdd, setSelectedBranchToAdd] = useState('');
+  const [visibleCount, setVisibleCount] = useState(50);
 
   const standardColleges = useMemo(() => [
     "MIT Muzaffarpur", "BCE Bhagalpur", "GCE Gaya", "MCE Motihari", "DCE Darbhanga",
@@ -702,6 +703,7 @@ function UgeacPredictor() {
       mockAllotment,
       mockDiscussions
     });
+    setVisibleCount(50);
     setHasPredicted(true);
   };
 
@@ -1537,49 +1539,60 @@ function UgeacPredictor() {
                           <th className="px-12 py-8 text-[11px] font-black text-slate-400 uppercase tracking-widest text-right">Action</th>
                        </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100">
-                       {results.all.map((r, i) => (
-                         <tr key={i} className="hover:bg-blue-50/20 transition-all group">
-                            <td className="px-12 py-10">
-                               <p className="text-lg font-[1000] text-slate-800 uppercase tracking-tight">{r.college.name}</p>
-                               <p className="text-[11px] font-bold text-slate-400 uppercase mt-1 italic">{r.college.location}</p>
-                            </td>
-                            <td className="px-12 py-10 text-xs font-black text-slate-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{r.branch}</td>
-                            <td className="px-8 py-10 text-center border-l border-slate-50">
-                               <p className="text-sm font-black text-slate-900">{r.cutoff24}</p>
-                               <p className="text-[9px] font-black text-slate-400 uppercase mt-1 tracking-widest text-center block w-full"><span className="text-blue-500">{r.cat} ({r.seatType === 'Female' ? 'F' : 'Gen'})</span></p>
-                            </td>
-                            <td className="px-8 py-10 flex flex-col items-center border-l border-r border-[#f1f5f9] bg-blue-50/20">
-                               <p className="text-xl font-[1000] text-blue-600 flex items-center justify-center gap-2">{r.cutoff25} <span className="px-2 py-0.5 bg-blue-100 text-[9px] font-black tracking-widest text-blue-500 rounded-lg">{r.cat} ({r.seatType === 'Female' ? 'F' : 'Gen'}) Cutoff</span></p>
-                               <p className="text-[10px] font-black text-blue-400 uppercase mt-1.5 tracking-wider bg-white px-3 py-1 rounded-full shadow-sm border border-blue-100">Your {r.cat} Rank: <span className="font-[1000] text-blue-600">{r.myCompRank}</span></p>
-                            </td>
-                            <td className="px-12 py-10 text-center">
-                               <span className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest ${r.chance === 'High' ? 'bg-emerald-600 text-white' : 'bg-red-500 text-white'} shadow-lg`}>{r.chance}</span>
-                            </td>
-                             <td className="px-12 py-10 text-right space-x-2">
-                                <button 
-                                   onClick={() => {
-                                      const isAdded = choices.find(c => c.collegeId === r.college.id && c.branch === r.branch);
-                                      if (isAdded) {
-                                         removeChoiceByCombo(r.college.id, r.branch);
-                                      } else {
-                                         setChoices([...choices, { collegeId: r.college.id, branch: r.branch, collegeName: r.college.name }]);
-                                      }
-                                   }}
-                                   className={`px-6 py-3 border-2 rounded-2xl text-[10px] font-[1000] uppercase tracking-widest transition-all ${choices.find(c => c.collegeId === r.college.id && c.branch === r.branch) ? 'bg-red-50 border-red-200 text-red-600' : 'bg-emerald-50 border-emerald-200 text-emerald-600 hover:bg-emerald-600 hover:text-white'}`}
-                                >
-                                   {choices.find(c => c.collegeId === r.college.id && c.branch === r.branch) ? <span className="flex items-center gap-1"><Minus size={14}/> Remove</span> : <span className="flex items-center gap-1"><Plus size={14}/> Add</span>}
-                                </button>
-                                <button onClick={() => setSelectedCollege(r.college)} className="px-6 py-3 bg-white border-2 border-slate-200 rounded-2xl text-[10px] font-[1000] text-slate-500 uppercase tracking-widest hover:border-blue-600 hover:text-blue-600 transition-all shadow-md">View Info</button>
+                     <tbody className="divide-y divide-slate-100">
+                        {results.all.slice(0, visibleCount).map((r, i) => (
+                          <tr key={i} className="hover:bg-blue-50/20 transition-all group">
+                             <td className="px-12 py-10">
+                                <p className="text-lg font-[1000] text-slate-800 uppercase tracking-tight">{r.college.name}</p>
+                                <p className="text-[11px] font-bold text-slate-400 uppercase mt-1 italic">{r.college.location}</p>
                              </td>
-                         </tr>
-                       ))}
-                    </tbody>
-                 </table>
-              </div>
-           </div>
+                             <td className="px-12 py-10 text-xs font-black text-slate-500 uppercase tracking-widest group-hover:text-blue-600 transition-colors">{r.branch}</td>
+                             <td className="px-8 py-10 text-center border-l border-slate-50">
+                                <p className="text-sm font-black text-slate-900">{r.cutoff24}</p>
+                                <p className="text-[9px] font-black text-slate-400 uppercase mt-1 tracking-widest text-center block w-full"><span className="text-blue-500">{r.cat} ({r.seatType === 'Female' ? 'F' : 'Gen'})</span></p>
+                             </td>
+                             <td className="px-8 py-10 flex flex-col items-center border-l border-r border-[#f1f5f9] bg-blue-50/20">
+                                <p className="text-xl font-[1000] text-blue-600 flex items-center justify-center gap-2">{r.cutoff25} <span className="px-2 py-0.5 bg-blue-100 text-[9px] font-black tracking-widest text-blue-500 rounded-lg">{r.cat} ({r.seatType === 'Female' ? 'F' : 'Gen'}) Cutoff</span></p>
+                                <p className="text-[10px] font-black text-blue-400 uppercase mt-1.5 tracking-wider bg-white px-3 py-1 rounded-full shadow-sm border border-blue-100">Your {r.cat} Rank: <span className="font-[1000] text-blue-600">{r.myCompRank}</span></p>
+                             </td>
+                             <td className="px-12 py-10 text-center">
+                                <span className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest ${r.chance === 'High' ? 'bg-emerald-600 text-white' : 'bg-red-500 text-white'} shadow-lg`}>{r.chance}</span>
+                             </td>
+                              <td className="px-12 py-10 text-right space-x-2">
+                                 <button 
+                                    onClick={() => {
+                                       const isAdded = choices.find(c => c.collegeId === r.college.id && c.branch === r.branch);
+                                       if (isAdded) {
+                                          removeChoiceByCombo(r.college.id, r.branch);
+                                       } else {
+                                          setChoices([...choices, { collegeId: r.college.id, branch: r.branch, collegeName: r.college.name }]);
+                                       }
+                                    }}
+                                    className={`px-6 py-3 border-2 rounded-2xl text-[10px] font-[1000] uppercase tracking-widest transition-all ${choices.find(c => c.collegeId === r.college.id && c.branch === r.branch) ? 'bg-red-50 border-red-200 text-red-600' : 'bg-emerald-50 border-emerald-200 text-emerald-600 hover:bg-emerald-600 hover:text-white'}`}
+                                 >
+                                    {choices.find(c => c.collegeId === r.college.id && c.branch === r.branch) ? <span className="flex items-center gap-1"><Minus size={14}/> Remove</span> : <span className="flex items-center gap-1"><Plus size={14}/> Add</span>}
+                                 </button>
+                                 <button onClick={() => setSelectedCollege(r.college)} className="px-6 py-3 bg-white border-2 border-slate-200 rounded-2xl text-[10px] font-[1000] text-slate-500 uppercase tracking-widest hover:border-blue-600 hover:text-blue-600 transition-all shadow-md">View Info</button>
+                              </td>
+                          </tr>
+                        ))}
+                     </tbody>
+                  </table>
+               </div>
+               
+               {visibleCount < results.all.length && (
+                  <div className="flex justify-center p-8 bg-[#f8fafc] border-t border-slate-200">
+                     <button 
+                        onClick={() => setVisibleCount(v => v + 50)} 
+                        className="px-10 py-4 bg-white border-2 border-slate-200 text-slate-600 rounded-full font-black text-[10px] uppercase tracking-widest hover:border-blue-600 hover:text-blue-600 transition-all shadow-sm flex items-center justify-center gap-2"
+                     >
+                        <ChevronDown size={16} /> Load More Records (Showing {visibleCount} of {results.all.length})
+                     </button>
+                  </div>
+               )}
+            </div>
         </div>
-      ), [results, choices, category])}
+      ), [results, choices, category, visibleCount])}
 
       {/* COLLEGE CARD MODAL (MATCHING SCREENSHOT) */}
       {selectedCollege && (
