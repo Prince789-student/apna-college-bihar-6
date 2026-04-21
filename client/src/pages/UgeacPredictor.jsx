@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import { colleges } from '../UgeacData';
-import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus, Minus, Layers, Search, Zap, Filter, LayoutGrid } from 'lucide-react';
+import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus, Minus, Layers, Search, Zap, Filter, LayoutGrid, Download } from 'lucide-react';
 
 function UgeacPredictor() {
   const [rank, setRank] = useState('');
@@ -280,6 +282,73 @@ function UgeacPredictor() {
     
     const last = UGEAC_RANK_MAP[UGEAC_RANK_MAP.length - 1];
     return Math.floor(last.ur + (r - last.air) * 0.008);
+  };
+
+  const downloadResultsPDF = () => {
+    const doc = new jsPDF();
+    
+    // Header Style
+    doc.setFillColor(79, 70, 229); // indigo-600
+    doc.rect(0, 0, 210, 45, 'F');
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(22);
+    doc.setFont("helvetica", "bold");
+    doc.text("Bihar UGEAC 2025 Analysis Report", 14, 20);
+    
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    doc.text(`Candidate Rank Analysis | Powered by Apna College Bihar`, 14, 28);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 34);
+
+    // User Details Box
+    doc.setFillColor(248, 250, 252);
+    doc.rect(14, 50, 182, 25, 'F');
+    doc.setDrawColor(226, 232, 240);
+    doc.rect(14, 50, 182, 25, 'S');
+    
+    doc.setTextColor(30, 41, 59);
+    doc.setFontSize(9);
+    doc.text(`JEE Main CRL: ${rank || 'N/A'}`, 20, 58);
+    doc.text(`Category: ${category}`, 20, 64);
+    doc.text(`Gender: ${gender}`, 20, 70);
+    
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(79, 70, 229);
+    doc.text(`Estimated UGEAC Merit (UR): #${results.calculatedRank}`, 110, 64);
+
+    const tableData = results.all.map((item, idx) => [
+       idx + 1,
+       item.college.name,
+       branchMapping[item.branch] || item.branch,
+       `${item.cat} (${item.seatType === 'Female' ? 'F' : 'G'})`,
+       item.cutoff25,
+       item.myCompRank,
+       item.chance
+    ]);
+
+    autoTable(doc, {
+      startY: 85,
+      head: [['#', 'College Name', 'Branch', 'Cat (Type)', '25 Cutoff', 'Your Rank', 'Chance']],
+      body: tableData,
+      theme: 'grid',
+      styles: { fontSize: 8, cellPadding: 3 },
+      headStyles: { fillColor: [79, 70, 229], textColor: [255, 255, 255], fontStyle: 'bold' },
+      alternateRowStyles: { fillColor: [249, 250, 251] },
+      margin: { top: 10 }
+    });
+
+    // Footer
+    const pageCount = doc.internal.getNumberOfPages();
+    for(let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(148, 163, 184);
+        doc.text("* This is an AI estimated report based on previous years' data. Real results may vary.", 14, 285);
+        doc.text(`Page ${i} of ${pageCount}`, 190, 285, { align: 'right' });
+    }
+
+    doc.save(`UGEAC_Analysis_Rank_${rank}.pdf`);
   };
 
   const getEstimatedCategoryRank = (urRank, cat) => {
@@ -1174,7 +1243,16 @@ function UgeacPredictor() {
            <div className="bg-white rounded-[4.5rem] border border-slate-200 shadow-2xl overflow-hidden">
               <div className="p-10 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
                  <h2 className="text-xl font-[1000] text-slate-800 tracking-tight uppercase">Full Comparison Matrix</h2>
-                 <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-100 px-4 py-2 rounded-full">Report Generated</span>
+                 <div className="flex items-center gap-3">
+                    <button 
+                       onClick={downloadResultsPDF}
+                       className="flex items-center gap-2 px-6 py-2.5 bg-slate-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-black hover:scale-105 active:scale-95 transition-all shadow-xl shadow-slate-200"
+                    >
+                       <Download size={14} />
+                       Download PDF Report
+                    </button>
+                    <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-100 px-4 py-2 rounded-full">Report Generated</span>
+                 </div>
               </div>
               <div className="overflow-x-auto">
                  <table className="w-full text-left border-collapse">
