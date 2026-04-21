@@ -1091,54 +1091,136 @@ function UgeacPredictor() {
                   </div>
 
                   {/* Step 1: Target Colleges */}
-                  <div className="bg-slate-50 border border-slate-200 rounded-[2rem] md:rounded-3xl p-6 lg:p-10 space-y-4 shadow-sm">
+                  <div className="bg-slate-50 border border-slate-200 rounded-[2rem] md:rounded-3xl p-6 lg:p-10 space-y-4 shadow-sm relative z-40">
                     <h3 className="text-[11px] md:text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
                       <span className="bg-indigo-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px] md:text-xs shadow-lg">1</span> 
                       Target Institutions
                     </h3>
-                    <p className="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase tracking-widest">Select your dream colleges.</p>
+                    <p className="text-[9px] md:text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">Search and select your dream colleges.</p>
                     
-                    <div className="flex flex-col md:flex-row gap-3 md:gap-4">
-                       <select value={selectedCollegeToAdd} onChange={e => setSelectedCollegeToAdd(e.target.value)} className="flex-1 bg-white border-2 border-slate-200 focus:border-indigo-500 rounded-xl md:rounded-2xl p-3 md:p-4 text-[10px] md:text-[11px] font-[1000] outline-none uppercase appearance-none cursor-pointer shadow-sm">
-                          <option value="All">-- Select College Details --</option>
-                          {sortedColleges.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                       </select>
-                       <button onClick={addTargetCollege} className="md:w-auto w-full px-6 md:px-8 py-3.5 md:py-4 bg-indigo-600 hover:bg-black text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
-                         + Add Selection
-                       </button>
-                       {preferenceBasis === 'college' && selectedCollegeToAdd !== 'All' && (
-                          <button 
-                             onClick={() => {
-                                const cid = parseInt(selectedCollegeToAdd);
+                    <div className="relative">
+                       <div 
+                          onClick={() => setIsFinderCollegeOpen(!isFinderCollegeOpen)}
+                          className="w-full bg-white border-2 border-slate-200 focus-within:border-indigo-500 rounded-xl md:rounded-2xl p-4 flex items-center justify-between cursor-pointer shadow-sm group"
+                       >
+                          <div className="flex flex-col gap-0.5">
+                             <span className="text-[10px] md:text-[11px] font-[1000] text-slate-800 uppercase tracking-tight">
+                                {targetColleges.length === 0 ? "Select Target Institutions" : `${targetColleges.length} Colleges Selected`}
+                             </span>
+                             <span className="text-[8px] md:text-[9px] font-black text-slate-400 uppercase tracking-widest">{targetColleges.length === sortedColleges.length ? "All Institutions Selected" : "Tap to browse colleges"}</span>
+                          </div>
+                          <div className="w-8 h-8 md:w-10 md:h-10 bg-slate-50 rounded-lg md:rounded-xl shadow-sm flex items-center justify-center border border-slate-200 group-hover:border-indigo-200 transition-colors">
+                             <ChevronDown size={16} className={`text-slate-400 transition-transform duration-300 ${isFinderCollegeOpen ? 'rotate-180' : ''}`} />
+                          </div>
+                       </div>
+
+                       {isFinderCollegeOpen && (
+                          <div className="absolute top-[calc(100%+8px)] left-0 right-0 z-50 bg-white border-2 border-slate-200 rounded-2xl md:rounded-3xl shadow-2xl p-3 md:p-4 space-y-3 animate-in fade-in zoom-in-95 duration-200">
+                             <div className="relative">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={14} />
+                                <input 
+                                   type="text" 
+                                   placeholder="Search colleges..." 
+                                   value={finderCollegeSearch}
+                                   onChange={e => setFinderCollegeSearch(e.target.value)}
+                                   className="w-full bg-slate-50 rounded-xl py-2.5 pl-9 pr-4 text-[10px] md:text-[11px] font-black uppercase outline-none border border-transparent focus:border-indigo-100"
+                                />
+                             </div>
+                             <div className="flex gap-2">
+                                <button 
+                                   onClick={() => setTargetColleges(sortedColleges.map(c => c.id))}
+                                   className="flex-1 py-2 bg-indigo-600 text-white rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-slate-900 transition-colors"
+                                >
+                                   Select All
+                                </button>
+                                <button 
+                                   onClick={() => setTargetColleges([])}
+                                   className="flex-1 py-2 bg-slate-100 text-slate-500 rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-colors"
+                                >
+                                   Clear
+                                </button>
+                             </div>
+                             <div className="max-h-[250px] overflow-y-auto custom-scrollbar space-y-1 pr-1">
+                                <div 
+                                   onClick={() => {
+                                      if (targetColleges.length === sortedColleges.length) setTargetColleges([]);
+                                      else setTargetColleges(sortedColleges.map(c => c.id));
+                                   }}
+                                   className={`flex items-center justify-between p-2.5 md:p-3 rounded-xl cursor-pointer transition-all border-2 ${targetColleges.length === sortedColleges.length ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-slate-50 text-slate-800 border-transparent hover:border-indigo-200'}`}
+                                >
+                                   <span className="text-[10px] font-black uppercase tracking-widest">--- ALL {sortedColleges.length} BEU COLLEGES ---</span>
+                                   {targetColleges.length === sortedColleges.length ? <CheckCircle2 size={16} /> : <Plus size={16} />}
+                                </div>
+                                {sortedColleges.filter(c => c.name.toLowerCase().includes(finderCollegeSearch.toLowerCase())).map(c => {
+                                   const isSelected = targetColleges.includes(c.id);
+                                   return (
+                                      <div 
+                                         key={c.id} 
+                                         onClick={() => {
+                                            if (isSelected) setTargetColleges(targetColleges.filter(t => t !== c.id));
+                                            else setTargetColleges([...targetColleges, c.id]);
+                                         }}
+                                         className={`flex items-center justify-between p-2.5 md:p-3 rounded-xl cursor-pointer transition-all ${isSelected ? 'bg-indigo-50 text-indigo-700' : 'hover:bg-slate-50 text-slate-600'}`}
+                                      >
+                                         <span className="text-[9px] md:text-[10px] font-black uppercase tracking-tight line-clamp-1">{c.name}</span>
+                                         {isSelected ? (
+                                            <div className="w-5 h-5 bg-red-100 text-red-600 rounded-lg flex items-center justify-center animate-in zoom-in duration-200"><Minus size={12} strokeWidth={4} /></div>
+                                         ) : (
+                                            <div className="w-5 h-5 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center"><Plus size={12} strokeWidth={4} /></div>
+                                         )}
+                                      </div>
+                                   );
+                                })}
+                             </div>
+                          </div>
+                       )}
+                    </div>
+
+                    {targetColleges.length > 0 && (
+                      <div className="flex flex-col gap-2 pt-4 border-t border-slate-200 mt-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
+                         {targetColleges.map((id, idx) => {
+                            const c = colleges.find(co => co.id === id);
+                            return (
+                               <div key={id} className="group flex items-center justify-between bg-white border border-slate-200 p-2.5 md:p-3 rounded-xl md:rounded-2xl animate-in slide-in-from-left-2 duration-300">
+                                  <div className="flex items-center gap-3 md:gap-4">
+                                     <span className="w-5 h-5 bg-indigo-600 text-white rounded-full flex items-center justify-center text-[8px] md:text-[9px] font-black">{idx + 1}</span>
+                                     <p className="text-[9px] md:text-[10px] font-black text-slate-800 uppercase tracking-tight">{c?.short || c?.name}</p>
+                                  </div>
+                                  <div className="flex items-center gap-1">
+                                     <button disabled={idx === 0} onClick={() => moveTargetCollege(idx, -1)} className="p-1 md:p-1.5 hover:bg-indigo-50 text-indigo-400 disabled:opacity-10 transition-colors"><ChevronUp size={12} md:size={14}/></button>
+                                     <button disabled={idx === targetColleges.length - 1} onClick={() => moveTargetCollege(idx, 1)} className="p-1 md:p-1.5 hover:bg-indigo-50 text-indigo-400 disabled:opacity-10 transition-colors"><ChevronDown size={12} md:size={14}/></button>
+                                     <button onClick={() => setTargetColleges(targetColleges.filter(t => t !== id))} className="p-1.5 bg-red-50 hover:bg-red-100 text-red-500 rounded-full h-6 w-6 md:h-7 md:w-7 flex items-center justify-center transition-all">
+                                        <Minus size={12} md:size={14} strokeWidth={4}/>
+                                     </button>
+                                  </div>
+                               </div>
+                            )
+                         })}
+                      </div>
+                    )}
+                    
+                    {/* Select All Branches utility for College Preference Mode */}
+                    {preferenceBasis === 'college' && targetColleges.length > 0 && (
+                       <button 
+                          onClick={() => {
+                             const newChoices = [...choices];
+                             targetColleges.forEach(cid => {
                                 const cInfo = colleges.find(c => c.id === cid);
                                 const collegeBranches = ugeacData.data2025.filter(d => d.collegeId === cid);
                                 const uniqueBranches = Array.from(new Set(collegeBranches.map(d => d.branch)));
-                                const newChoices = [...choices];
                                 uniqueBranches.forEach(b => {
                                    if (!newChoices.find(c => c.collegeId === cid && c.branch === b)) {
                                       newChoices.push({ collegeId: cid, branch: b, collegeName: cInfo.name });
                                    }
                                 });
-                                setChoices(newChoices);
-                                if (!targetColleges.includes(cid)) setTargetColleges([...targetColleges, cid]);
-                             }}
-                             className="md:w-auto w-full px-6 md:px-8 py-3.5 md:py-4 bg-emerald-600 hover:bg-slate-900 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all"
-                          >
-                             + Select All Branches
-                          </button>
-                       )}
-                    </div>
-
-                    {targetColleges.length > 0 && (
-                      <div className="flex flex-wrap gap-2 pt-4 border-t border-slate-200 mt-4">
-                         {targetColleges.map(id => {
-                            const c = colleges.find(co => co.id === id);
-                            return <div key={id} className="flex items-center gap-2 bg-indigo-100 text-indigo-900 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-200 shadow-sm animate-in zoom-in duration-300">
-                              {c?.short || c?.name}
-                              <button onClick={() => removeTargetCollege(id)} className="text-indigo-500 hover:text-white hover:bg-red-500 bg-white rounded-full w-4 h-4 flex items-center justify-center transition-colors"><Trash2 size={10}/></button>
-                            </div>
-                         })}
-                      </div>
+                             });
+                             setChoices(newChoices);
+                             alert(`All branches for the ${targetColleges.length} selected colleges added to choices!`);
+                          }}
+                          className="w-full mt-4 px-6 md:px-8 py-3.5 md:py-4 bg-emerald-600 hover:bg-slate-900 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all"
+                       >
+                          + Add All Branches for Selected Colleges to List
+                       </button>
                     )}
                   </div>
 
@@ -1153,23 +1235,97 @@ function UgeacPredictor() {
                         </h3>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-relaxed">Choose a branch to add it to <span className="text-indigo-600 font-black">{targetColleges.length} selected colleges</span> at once.</p>
                       </div>
-                      
-                      <div className="flex-1 flex flex-col md:flex-row gap-4 max-w-2xl bg-slate-50 p-3 rounded-[2rem] border border-slate-200">
-                         <select 
-                            value={selectedBranchToAdd} 
-                            onChange={e => setSelectedBranchToAdd(e.target.value)}
-                            className="flex-1 bg-white border-2 border-transparent focus:border-indigo-500 rounded-2xl px-6 py-4 text-xs font-black outline-none uppercase shadow-sm cursor-pointer"
-                         >
-                            <option value="">-- Choose Branch to Add --</option>
-                            {availableBranchesForTarget.map(b => (
-                               <option key={b} value={b}>{branchMapping[b] || b}</option>
-                            ))}
-                         </select>
+                      <div className="flex-1 flex flex-col gap-4 max-w-2xl">
+                         <div className="relative">
+                            <div 
+                               onClick={() => setIsFinderBranchOpen(!isFinderBranchOpen)}
+                               className="w-full bg-white border-2 border-slate-200 focus-within:border-indigo-500 rounded-xl md:rounded-2xl p-4 flex items-center justify-between cursor-pointer shadow-sm group"
+                            >
+                               <div className="flex flex-col gap-0.5">
+                                  <span className="text-[10px] md:text-[11px] font-[1000] text-slate-800 uppercase tracking-tight">
+                                     {targetBranches.length > 0 ? `${targetBranches.length} Branches Selected` : 'Select Focus Branches'}
+                                  </span>
+                                  <span className="text-[8px] md:text-[9px] font-bold text-slate-400 uppercase tracking-widest">{isFinderBranchOpen ? 'Click to close' : 'Click to browse branches'}</span>
+                               </div>
+                               <div className="w-8 h-8 md:w-10 md:h-10 bg-slate-50 rounded-lg md:rounded-xl shadow-sm flex items-center justify-center border border-slate-200 group-hover:border-indigo-200 transition-colors">
+                                  <ChevronDown size={16} className={`text-slate-400 transition-transform duration-300 ${isFinderBranchOpen ? 'rotate-180' : ''}`} />
+                               </div>
+                            </div>
+
+                            {isFinderBranchOpen && (
+                               <div className="absolute top-[calc(100%+8px)] left-0 right-0 z-50 bg-white border-2 border-slate-200 rounded-2xl md:rounded-3xl shadow-2xl p-3 md:p-4 space-y-3 animate-in fade-in zoom-in-95 duration-200">
+                                  <div className="relative">
+                                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={14} />
+                                     <input 
+                                        type="text" 
+                                        placeholder="Search branches..." 
+                                        value={finderBranchSearch}
+                                        onChange={e => setFinderBranchSearch(e.target.value)}
+                                        className="w-full bg-slate-50 rounded-xl py-2.5 pl-9 pr-4 text-[10px] md:text-[11px] font-black uppercase outline-none border border-transparent focus:border-indigo-100"
+                                     />
+                                  </div>
+                                  <div className="flex gap-2">
+                                     <button 
+                                        onClick={() => setTargetBranches(availableBranchesForTarget)}
+                                        className="flex-1 py-2 bg-indigo-600 text-white rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-slate-900 transition-colors"
+                                     >
+                                        Select All
+                                     </button>
+                                     <button 
+                                        onClick={() => setTargetBranches([])}
+                                        className="flex-1 py-2 bg-slate-100 text-slate-500 rounded-lg text-[8px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-colors"
+                                     >
+                                        Clear
+                                     </button>
+                                  </div>
+                                  <div className="max-h-[250px] overflow-y-auto custom-scrollbar space-y-1 pr-1">
+                                     {availableBranchesForTarget.filter(b => (branchMapping[b] || b).toLowerCase().includes(finderBranchSearch.toLowerCase())).map(b => {
+                                        const isSelected = targetBranches.includes(b);
+                                        return (
+                                           <div 
+                                              key={b} 
+                                              onClick={() => {
+                                                 if (isSelected) setTargetBranches(targetBranches.filter(t => t !== b));
+                                                 else setTargetBranches([...targetBranches, b]);
+                                              }}
+                                              className={`flex items-center justify-between p-2.5 md:p-3 rounded-xl cursor-pointer transition-all ${isSelected ? 'bg-indigo-50 text-indigo-700' : 'hover:bg-slate-50 text-slate-600'}`}
+                                           >
+                                              <span className="text-[9px] md:text-[10px] font-black uppercase tracking-tight">{branchMapping[b] || b}</span>
+                                              {isSelected ? (
+                                                 <div className="w-5 h-5 bg-red-100 text-red-600 rounded-lg flex items-center justify-center animate-in zoom-in duration-200"><Minus size={12} strokeWidth={4} /></div>
+                                              ) : (
+                                                 <div className="w-5 h-5 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center"><Plus size={12} strokeWidth={4} /></div>
+                                              )}
+                                           </div>
+                                        );
+                                     })}
+                                  </div>
+                               </div>
+                            )}
+                         </div>
+
                          <button 
-                            onClick={addBranchToAllTargets}
-                            className="px-10 py-5 bg-indigo-600 hover:bg-slate-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-indigo-200 active:scale-95 transition-all flex items-center justify-center gap-2"
+                            onClick={() => {
+                               if (targetBranches.length === 0) return alert("Select at least one branch to add.");
+                               const newChoices = [...choices];
+                               let addedCount = 0;
+                               targetColleges.forEach(cid => {
+                                  const cInfo = colleges.find(c => c.id === cid);
+                                  const collegeBranches = ugeacData.data2025.filter(d => d.collegeId === cid).map(d => d.branch);
+                                  targetBranches.forEach(b => {
+                                     // Only add if college actually offers this branch and it isn't added yet
+                                     if (collegeBranches.includes(b) && !newChoices.find(c => c.collegeId === cid && c.branch === b)) {
+                                        newChoices.push({ collegeId: cid, branch: b, collegeName: cInfo.name });
+                                        addedCount++;
+                                     }
+                                  });
+                               });
+                               setChoices(newChoices);
+                               alert(`Successfully added ${addedCount} combinations to your Priority List!`);
+                            }}
+                            className="w-full py-4 bg-indigo-600 hover:bg-slate-900 text-white rounded-xl md:rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2"
                          >
-                            <Plus size={16}/> Add to All
+                            <Plus size={16}/> Add Selected Combinations to Priority Matrix
                          </button>
                       </div>
                    </div>
