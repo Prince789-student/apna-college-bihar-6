@@ -286,10 +286,10 @@ function UgeacPredictor() {
     for(let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
         
-        // Ultra-Soft Shadow Watermark
+        // Ultra-Soft Light Red Watermark (Soft Pink)
         doc.setFontSize(22);
         doc.setFont("helvetica", "normal");
-        doc.setTextColor(245, 245, 245); // Soft Gray/Slate - Nearly Invisible
+        doc.setTextColor(255, 235, 235); // Light Red / Soft Pink
         
         // Pattern placement in non-critical areas
         for(let y = 100; y < 280; y += 70) {
@@ -416,18 +416,13 @@ function UgeacPredictor() {
         doc.text("COMPREHENSIVE CUTOFF MATRIX (Verified 2025)", 14, finalY);
 
         // Grouping Logic for "Organised Way"
-        // We detect the first row's college and group by it if the next row is the same
         const tableData = [];
-        let currentGroup = null;
-        let groupCount = 0;
+        let seq = 1;
 
-        results.all.forEach((item, idx) => {
-           const collegeName = item.college.name;
-           
-           // If we have a lot of data, we use numbering 1, 2, 3...
+        results.all.forEach((item) => {
            tableData.push([
-              idx + 1,
-              collegeName,
+              seq++,
+              item.college.name,
               branchMapping[item.branch] || item.branch,
               `${item.cat} (${item.seatType === 'Female' ? 'F' : 'G'})`,
               item.cutoff25,
@@ -445,7 +440,7 @@ function UgeacPredictor() {
           headStyles: { fillColor: [30, 41, 59], textColor: [255, 255, 255], fontStyle: 'bold' },
           alternateRowStyles: { fillColor: [249, 250, 251] },
           columnStyles: {
-            0: { cellWidth: 8 },
+            0: { cellWidth: 10 },
             1: { cellWidth: 50 },
             4: { fontStyle: 'bold', textColor: [37, 99, 235] },
             6: { fontStyle: 'bold' }
@@ -464,7 +459,7 @@ function UgeacPredictor() {
       // Apply Branding to all pages
       addBranding(doc);
 
-      doc.save(`UGEAC_Official_Report_2025.pdf`);
+      doc.save(`UGEAC_Analysis_2025.pdf`);
       console.log("PDF Saved Successfully!");
     } catch (err) {
       console.error("Critical PDF Failure:", err);
