@@ -147,23 +147,20 @@ function UgeacPredictor() {
     "CSE (Data Science)": "CSE (Data Science)",
     "CSE (IoT)": "CSE (Internet of Things)",
     "CSE (Cyber Security)": "CSE (Cyber Security)",
-    "CSE (IoT + Cyber Security + Blockchain)": "CSE (IoT/CS/Blockchain)",
     "Aeronautical Engineering": "Aeronautical Engineering",
+    "Mining Engineering": "Mining Engineering",
     "Robotics and Automation": "Robotics & Automation",
     "VLSI Design": "VLSI Design & Technology",
     "Chemical Engineering": "Chemical Engineering",
-    "Mining Engineering": "Mining Engineering",
-    "Fire Technology": "Fire Tech & Safety",
     "3D Animation": "3D Animation & VFX",
+    "Fire Technology": "Fire Technology & Safety",
     "Food Processing": "Food Processing & Tech",
-    "Food Technology": "Food Technology",
+    "Bioinformatics": "Bioinformatics",
+    "Civil + Computer Application": "Civil + Comp. App.",
+    "Agriculture Engineering": "Agriculture Engineering",
     "Leather Technology": "Leather Technology",
-    "Biomedical & Robotics": "Biomedical & Robotics",
-    "Mechatronics": "Mechatronics",
-    "Mechanical (Smart Manufacturing)": "Mechanical (Smart Mfg)",
-    "Electronics & Instrumentation": "Electronics & Instrumentation",
-    "Computer Science (Networks)": "CS (Networks)",
-    "Civil + Computer Application": "Civil + Comp. App."
+    "Silk Technology": "Silk Technology",
+    "Textile Engineering": "Textile Engineering"
   };
 
   // Grouped Branches based on Screenshot structure
