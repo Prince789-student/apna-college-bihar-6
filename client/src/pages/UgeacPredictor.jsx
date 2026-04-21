@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import { colleges } from '../UgeacData';
 import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus, Minus, Layers, Search, Zap, Filter, LayoutGrid, Download } from 'lucide-react';
 
@@ -358,7 +358,7 @@ function UgeacPredictor() {
           branchMapping[c.branch] || c.branch
         ]);
 
-        doc.autoTable({
+        autoTable(doc, {
           startY: finalY + 6,
           head: [['S.No', 'College Name', 'Engineering Branch']],
           body: choiceData,
@@ -388,7 +388,7 @@ function UgeacPredictor() {
            item.chance
         ]);
 
-        doc.autoTable({
+        autoTable(doc, {
           startY: finalY + 6,
           head: [['#', 'College Name', 'Branch', 'Cat (Type)', 'Closing Rank', 'Your Rank', 'Chance']],
           body: tableData,
