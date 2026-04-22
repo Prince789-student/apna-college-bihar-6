@@ -95,7 +95,7 @@ BRANCH_PRIORITY = [
 CAT_MAP = {
     'UR': 'UR', 'E-UR': 'UR', 'BC': 'BC', 'E-BC': 'BC', 
     'EBC': 'EBC', 'E-EBC': 'EBC', 'SC': 'SC', 'ST': 'ST', 
-    'EWS': 'EWS', 'DQ': 'DQ', 'SMQ': 'SMQ'
+    'EWS': 'EWS', 'DQ': 'DQ', 'SMQ': 'SMQ', 'RCG': 'RCG'
 }
 
 def extract():
@@ -123,7 +123,7 @@ def extract():
             
             # Match Ranks using flexible Regex
             # Cat Open Close (Allowing E- prefixes)
-            m = re.search(r'(UR|E-UR|BC|E-BC|EBC|E-EBC|SC|ST|EWS|DQ|SMQ)\s+(\d+)\s+(\d+)', clean_t)
+            m = re.search(r'(UR|E-UR|BC|E-BC|EBC|E-EBC|SC|ST|EWS|DQ|SMQ|RCG)\s+(\d+)\s+(\d+)', clean_t)
             if m:
                 cat_raw, open_r, close_r = m.groups()
                 seat_type = 'Female' if 'FEMALE' in clean_t else 'General'

@@ -264,6 +264,42 @@
     {
       "collegeShort": "BCE Bakhtiyarpur",
       "branch": "Civil",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 4754,
+      "closing": 5212,
+      "year": 2025
+    },
+    {
+      "collegeShort": "BCE Bakhtiyarpur",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 843,
+      "closing": 847,
+      "year": 2025
+    },
+    {
+      "collegeShort": "BCE Bakhtiyarpur",
+      "branch": "CSE (IoT)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 1873,
+      "closing": 2211,
+      "year": 2025
+    },
+    {
+      "collegeShort": "BCE Bakhtiyarpur",
+      "branch": "Electrical & Electronics",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 3563,
+      "closing": 3624,
+      "year": 2025
+    },
+    {
+      "collegeShort": "BCE Bakhtiyarpur",
+      "branch": "Civil",
       "category": "EWS",
       "seatType": "General",
       "opening": 405,
@@ -957,6 +993,51 @@
     {
       "collegeShort": "BCE Bhagalpur",
       "branch": "Civil",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 2863,
+      "closing": 3004,
+      "year": 2025
+    },
+    {
+      "collegeShort": "BCE Bhagalpur",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 298,
+      "closing": 362,
+      "year": 2025
+    },
+    {
+      "collegeShort": "BCE Bhagalpur",
+      "branch": "Electrical",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 2360,
+      "closing": 2407,
+      "year": 2025
+    },
+    {
+      "collegeShort": "BCE Bhagalpur",
+      "branch": "Electronics & Communication",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 1427,
+      "closing": 1546,
+      "year": 2025
+    },
+    {
+      "collegeShort": "BCE Bhagalpur",
+      "branch": "Mechanical",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 8936,
+      "closing": 8936,
+      "year": 2025
+    },
+    {
+      "collegeShort": "BCE Bhagalpur",
+      "branch": "Civil",
       "category": "EWS",
       "seatType": "General",
       "opening": 319,
@@ -1141,6 +1222,15 @@
       "seatType": "General",
       "opening": 128,
       "closing": 128,
+      "year": 2025
+    },
+    {
+      "collegeShort": "BCE Bhagalpur",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 54,
+      "closing": 54,
       "year": 2025
     },
     {
@@ -1609,6 +1699,24 @@
       "seatType": "General",
       "opening": 586,
       "closing": 586,
+      "year": 2025
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 4498,
+      "closing": 4498,
+      "year": 2025
+    },
+    {
+      "collegeShort": "BPMCE Madhepura",
+      "branch": "CSE (AI & ML)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 7595,
+      "closing": 7595,
       "year": 2025
     },
     {
@@ -2352,6 +2460,42 @@
     {
       "collegeShort": "DCE Darbhanga",
       "branch": "Civil",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 6766,
+      "closing": 7798,
+      "year": 2025
+    },
+    {
+      "collegeShort": "DCE Darbhanga",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 898,
+      "closing": 1549,
+      "year": 2025
+    },
+    {
+      "collegeShort": "DCE Darbhanga",
+      "branch": "CSE (Cyber Security)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 2811,
+      "closing": 2811,
+      "year": 2025
+    },
+    {
+      "collegeShort": "DCE Darbhanga",
+      "branch": "Electrical & Electronics",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 5493,
+      "closing": 7633,
+      "year": 2025
+    },
+    {
+      "collegeShort": "DCE Darbhanga",
+      "branch": "Civil",
       "category": "EWS",
       "seatType": "General",
       "opening": 670,
@@ -2775,6 +2919,15 @@
     {
       "collegeShort": "DCE Darbhanga",
       "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 9241,
+      "closing": 9246,
+      "year": 2025
+    },
+    {
+      "collegeShort": "DCE Darbhanga",
+      "branch": "Computer Science",
       "category": "EWS",
       "seatType": "General",
       "opening": 1235,
@@ -3018,6 +3171,33 @@
     {
       "collegeShort": "GCE Gaya",
       "branch": "Civil",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 5346,
+      "closing": 5511,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 1158,
+      "closing": 1260,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical & Electronics",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 4470,
+      "closing": 4627,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Civil",
       "category": "EWS",
       "seatType": "General",
       "opening": 509,
@@ -3157,6 +3337,15 @@
       "seatType": "General",
       "opening": 377,
       "closing": 377,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Electrical & Electronics",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 609,
+      "closing": 609,
       "year": 2025
     },
     {
@@ -3472,6 +3661,15 @@
       "seatType": "General",
       "opening": 808,
       "closing": 918,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GCE Gaya",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 8917,
+      "closing": 8917,
       "year": 2025
     },
     {
@@ -4466,6 +4664,24 @@
     },
     {
       "collegeShort": "GEC Lakhisarai",
+      "branch": "CSE (AI & ML)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 6604,
+      "closing": 6906,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Lakhisarai",
+      "branch": "CSE (Cyber Security)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 8095,
+      "closing": 8095,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Lakhisarai",
       "branch": "Civil",
       "category": "EWS",
       "seatType": "General",
@@ -4934,6 +5150,15 @@
     },
     {
       "collegeShort": "GEC Arwal",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 9102,
+      "closing": 9102,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Arwal",
       "branch": "Civil",
       "category": "EWS",
       "seatType": "General",
@@ -5357,6 +5582,15 @@
     },
     {
       "collegeShort": "GEC Aurangabad",
+      "branch": "CSE (Data Science)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 7885,
+      "closing": 8526,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Aurangabad",
       "branch": "CSE (AI & ML)",
       "category": "EWS",
       "seatType": "General",
@@ -5461,6 +5695,15 @@
       "seatType": "General",
       "opening": 5662,
       "closing": 5662,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Aurangabad",
+      "branch": "CSE (Data Science)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 1205,
+      "closing": 1205,
       "year": 2025
     },
     {
@@ -5785,6 +6028,15 @@
       "seatType": "General",
       "opening": 540,
       "closing": 763,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Banka",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 6661,
+      "closing": 6866,
       "year": 2025
     },
     {
@@ -6239,6 +6491,15 @@
     },
     {
       "collegeShort": "GEC Bhojpur",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 7932,
+      "closing": 8343,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Bhojpur",
       "branch": "Civil",
       "category": "EWS",
       "seatType": "General",
@@ -6316,6 +6577,15 @@
       "seatType": "General",
       "opening": 5660,
       "closing": 5660,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Bhojpur",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 1218,
+      "closing": 1218,
       "year": 2025
     },
     {
@@ -6595,6 +6865,15 @@
       "seatType": "General",
       "opening": 797,
       "closing": 797,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Buxar",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 8792,
+      "closing": 9407,
       "year": 2025
     },
     {
@@ -6955,6 +7234,15 @@
       "seatType": "General",
       "opening": 498,
       "closing": 498,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Gopalganj",
+      "branch": "CSE (AI)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 10449,
+      "closing": 10449,
       "year": 2025
     },
     {
@@ -7675,6 +7963,15 @@
       "seatType": "General",
       "opening": 713,
       "closing": 713,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Jehanabad",
+      "branch": "CSE (Cyber Security)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 9053,
+      "closing": 9053,
       "year": 2025
     },
     {
@@ -8517,6 +8814,15 @@
     {
       "collegeShort": "GEC Madhubani",
       "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 9199,
+      "closing": 9426,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Madhubani",
+      "branch": "Computer Science",
       "category": "EWS",
       "seatType": "General",
       "opening": 861,
@@ -8818,6 +9124,15 @@
       "seatType": "Female",
       "opening": 356,
       "closing": 694,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Nawada",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 6963,
+      "closing": 7021,
       "year": 2025
     },
     {
@@ -9133,6 +9448,15 @@
       "seatType": "General",
       "opening": 278,
       "closing": 890,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Sheikhpura",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 10349,
+      "closing": 10638,
       "year": 2025
     },
     {
@@ -9479,6 +9803,15 @@
     },
     {
       "collegeShort": "GEC Siwan",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 8026,
+      "closing": 8026,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Siwan",
       "branch": "Civil",
       "category": "EWS",
       "seatType": "General",
@@ -9574,6 +9907,15 @@
       "seatType": "General",
       "opening": 6040,
       "closing": 6040,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Siwan",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 1120,
+      "closing": 1120,
       "year": 2025
     },
     {
@@ -9916,6 +10258,33 @@
       "seatType": "General",
       "opening": 921,
       "closing": 921,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Vaishali",
+      "branch": "Civil",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 10497,
+      "closing": 10497,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Vaishali",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 2290,
+      "closing": 2456,
+      "year": 2025
+    },
+    {
+      "collegeShort": "GEC Vaishali",
+      "branch": "CSE (IoT)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 6690,
+      "closing": 7590,
       "year": 2025
     },
     {
@@ -11018,6 +11387,15 @@
     },
     {
       "collegeShort": "KCE Katihar",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 5855,
+      "closing": 6500,
+      "year": 2025
+    },
+    {
+      "collegeShort": "KCE Katihar",
       "branch": "Civil",
       "category": "EWS",
       "seatType": "General",
@@ -11455,6 +11833,33 @@
       "seatType": "General",
       "opening": 706,
       "closing": 832,
+      "year": 2025
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "IT",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 10708,
+      "closing": 10708,
+      "year": 2025
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 3402,
+      "closing": 3628,
+      "year": 2025
+    },
+    {
+      "collegeShort": "KCE Katihar",
+      "branch": "IT",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 9848,
+      "closing": 9848,
       "year": 2025
     },
     {
@@ -11954,6 +12359,33 @@
     },
     {
       "collegeShort": "MCE Motihari",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 2511,
+      "closing": 2630,
+      "year": 2025
+    },
+    {
+      "collegeShort": "MCE Motihari",
+      "branch": "CSE (AI)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 4193,
+      "closing": 4465,
+      "year": 2025
+    },
+    {
+      "collegeShort": "MCE Motihari",
+      "branch": "Electrical & Electronics",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 9917,
+      "closing": 10237,
+      "year": 2025
+    },
+    {
+      "collegeShort": "MCE Motihari",
       "branch": "Civil with Computer Application",
       "category": "EWS",
       "seatType": "General",
@@ -12121,6 +12553,15 @@
       "seatType": "General",
       "opening": 648,
       "closing": 648,
+      "year": 2025
+    },
+    {
+      "collegeShort": "MCE Motihari",
+      "branch": "Electrical & Electronics",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 1518,
+      "closing": 1518,
       "year": 2025
     },
     {
@@ -12783,6 +13224,78 @@
     {
       "collegeShort": "MIT Muzaffarpur",
       "branch": "IT",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 9908,
+      "closing": 9908,
+      "year": 2025
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 5082,
+      "closing": 5082,
+      "year": 2025
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 1528,
+      "closing": 1730,
+      "year": 2025
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 238,
+      "closing": 251,
+      "year": 2025
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 2096,
+      "closing": 2096,
+      "year": 2025
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 1240,
+      "closing": 1274,
+      "year": 2025
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 517,
+      "closing": 519,
+      "year": 2025
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 4592,
+      "closing": 5461,
+      "year": 2025
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
       "category": "EWS",
       "seatType": "General",
       "opening": 883,
@@ -13084,6 +13597,15 @@
       "seatType": "General",
       "opening": 284,
       "closing": 284,
+      "year": 2025
+    },
+    {
+      "collegeShort": "MIT Muzaffarpur",
+      "branch": "IT",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 63,
+      "closing": 63,
       "year": 2025
     },
     {
@@ -13736,6 +14258,42 @@
     },
     {
       "collegeShort": "NCE Chandi",
+      "branch": "CSE (AI & ML)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 2149,
+      "closing": 2452,
+      "year": 2025
+    },
+    {
+      "collegeShort": "NCE Chandi",
+      "branch": "Civil",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 6527,
+      "closing": 6670,
+      "year": 2025
+    },
+    {
+      "collegeShort": "NCE Chandi",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 1247,
+      "closing": 1294,
+      "year": 2025
+    },
+    {
+      "collegeShort": "NCE Chandi",
+      "branch": "Electrical & Electronics",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 5565,
+      "closing": 6144,
+      "year": 2025
+    },
+    {
+      "collegeShort": "NCE Chandi",
       "branch": "Aeronautical Engineering",
       "category": "EWS",
       "seatType": "General",
@@ -14366,6 +14924,24 @@
     },
     {
       "collegeShort": "PCE Purnea",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 5321,
+      "closing": 5330,
+      "year": 2025
+    },
+    {
+      "collegeShort": "PCE Purnea",
+      "branch": "CSE (AI)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 8923,
+      "closing": 8973,
+      "year": 2025
+    },
+    {
+      "collegeShort": "PCE Purnea",
       "branch": "Civil",
       "category": "EWS",
       "seatType": "General",
@@ -14884,6 +15460,24 @@
       "seatType": "General",
       "opening": 578,
       "closing": 903,
+      "year": 2025
+    },
+    {
+      "collegeShort": "RRSDCE Begusarai",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 4065,
+      "closing": 4770,
+      "year": 2025
+    },
+    {
+      "collegeShort": "RRSDCE Begusarai",
+      "branch": "CSE (Data Science)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 6134,
+      "closing": 6927,
       "year": 2025
     },
     {
@@ -15420,6 +16014,24 @@
     {
       "collegeShort": "SCE Sasaram",
       "branch": "Civil",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 10701,
+      "closing": 10701,
+      "year": 2025
+    },
+    {
+      "collegeShort": "SCE Sasaram",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 5744,
+      "closing": 6059,
+      "year": 2025
+    },
+    {
+      "collegeShort": "SCE Sasaram",
+      "branch": "Civil",
       "category": "EWS",
       "seatType": "General",
       "opening": 1104,
@@ -15771,6 +16383,15 @@
     {
       "collegeShort": "SGIDT Patna",
       "branch": "Dairy Tech (Open)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 8393,
+      "closing": 8393,
+      "year": 2025
+    },
+    {
+      "collegeShort": "SGIDT Patna",
+      "branch": "Dairy Tech (Open)",
       "category": "EWS",
       "seatType": "General",
       "opening": 1517,
@@ -15977,6 +16598,24 @@
     },
     {
       "collegeShort": "SIT Sitamarhi",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 4703,
+      "closing": 4920,
+      "year": 2025
+    },
+    {
+      "collegeShort": "SIT Sitamarhi",
+      "branch": "CSE (AI & ML)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 6396,
+      "closing": 6664,
+      "year": 2025
+    },
+    {
+      "collegeShort": "SIT Sitamarhi",
       "branch": "Civil with Computer Application",
       "category": "EWS",
       "seatType": "General",
@@ -16108,6 +16747,15 @@
       "seatType": "General",
       "opening": 406,
       "closing": 406,
+      "year": 2025
+    },
+    {
+      "collegeShort": "SIT Sitamarhi",
+      "branch": "CSE (AI & ML)",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 963,
+      "closing": 963,
       "year": 2025
     },
     {
@@ -16459,6 +17107,15 @@
       "seatType": "General",
       "opening": 454,
       "closing": 503,
+      "year": 2025
+    },
+    {
+      "collegeShort": "SCE Saharsa",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 6939,
+      "closing": 7039,
       "year": 2025
     },
     {
@@ -17098,6 +17755,15 @@
       "seatType": "General",
       "opening": 608,
       "closing": 608,
+      "year": 2025
+    },
+    {
+      "collegeShort": "SCE Supaul",
+      "branch": "Computer Science",
+      "category": "RCG",
+      "seatType": "General",
+      "opening": 7456,
+      "closing": 7456,
       "year": 2025
     },
     {
