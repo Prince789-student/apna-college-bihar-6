@@ -320,9 +320,12 @@ function UgeacPredictor() {
         }
 
         // Professional Footer
+        try {
+            doc.addImage("/logo.jpg", "JPEG", 14, 280, 10, 10);
+        } catch(e) {}
         doc.setFontSize(8);
         doc.setTextColor(160, 174, 192);
-        doc.text("Verified Analysis: apnacollegebihar.online", 42, 287);
+        doc.text("Verified Analysis: apnacollegebihar.online", 28, 287);
         doc.text(`Page ${i} of ${pageCount}`, 196, 287, { align: 'right' });
 
         // Very thin outer margin border
@@ -344,11 +347,16 @@ function UgeacPredictor() {
       doc.setTextColor(255, 255, 255);
       doc.setFontSize(22);
       doc.setFont("helvetica", "bold");
-      doc.text("APNA COLLEGE BIHAR", 14, 22);
+      try {
+          doc.addImage("/logo-512.png", "PNG", 14, 10, 20, 20);
+          doc.text("APNA COLLEGE BIHAR", 40, 22);
+      } catch(e) {
+          doc.text("APNA COLLEGE BIHAR", 14, 22);
+      }
       
       doc.setFontSize(10);
       doc.setFont("helvetica", "bold");
-      doc.text("OFFICIAL UGEAC COUNSELLING DATA-PACK (2024-2025)", 14, 30);
+      doc.text("OFFICIAL UGEAC COUNSELLING DATA-PACK (2024-2025)", 40, 30);
       
       doc.setFontSize(8);
       doc.setFont("helvetica", "normal");
@@ -437,8 +445,8 @@ function UgeacPredictor() {
               item.college.name,
               branchMapping[item.branch] || item.branch,
               `${item.cat} (${item.seatType === 'Female' ? 'F' : 'G'})`,
-              item.cutoff25,
               item.cutoff24,
+              item.cutoff25,
               item.myCompRank,
               item.chance
            ]);
@@ -446,7 +454,7 @@ function UgeacPredictor() {
 
         autoTable(doc, {
           startY: finalY + 6,
-          head: [['#', 'Engineering College', 'Branch Name', 'Cat (Type)', '2025 R2', '2024 R2', 'Your Rank', 'Chance']],
+          head: [['#', 'Engineering College', 'Branch Name', 'Cat (Type)', '2024 R2', '2025 R2', 'Your Rank', 'Chance']],
           body: tableData,
           theme: 'grid',
           styles: { fontSize: 6.5, cellPadding: 2, font: 'helvetica' },
@@ -456,8 +464,8 @@ function UgeacPredictor() {
             0: { cellWidth: 8 },
             1: { cellWidth: 45 },
             2: { cellWidth: 40 },
-            4: { fontStyle: 'bold', textColor: [37, 99, 235] },
-            5: { fontStyle: 'bold', textColor: [107, 114, 128] },
+            4: { fontStyle: 'bold', textColor: [107, 114, 128] },
+            5: { fontStyle: 'bold', textColor: [37, 99, 235] },
             7: { fontStyle: 'bold' }
           },
           didParseCell: (data) => {
