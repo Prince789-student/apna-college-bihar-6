@@ -619,17 +619,17 @@ function UgeacPredictor() {
 
     // Pre-compute O(1) lookup maps to prevent 8-million iteration O(N^2) bottlenecks
     const map2024 = new Map();
-    ugeacData.data2024.forEach(d => map2024.set(`${d.collegeId}-${d.branch}-${d.category}-${d.seat_type}`, d));
+    ugeacData.data2024.forEach(d => map2024.set(`${d.collegeId}-${d.branch}-${d.category}-${d.seatType}`, d));
     
     const map2025 = new Map();
-    ugeacData.data2025.forEach(d => map2025.set(`${d.collegeId}-${d.branch}-${d.category}-${d.seat_type}`, d));
+    ugeacData.data2025.forEach(d => map2025.set(`${d.collegeId}-${d.branch}-${d.category}-${d.seatType}`, d));
 
     // Strategy: Simple and Clean Merge - O(N) processing
     const processSet = (data) => {
       data.forEach(d => {
         // Basic eligibility filters
         if (!eligibleCategories.includes(d.category)) return;
-        if (gender === 'Male' && d.seat_type === 'Female') return;
+        if (gender === 'Male' && d.seatType === 'Female') return;
         
         // Mode-based filters
         if (mode === 'finder') {
@@ -642,7 +642,7 @@ function UgeacPredictor() {
         const collegeInfo = colleges.find(c => c.id === d.collegeId);
         if (!collegeInfo) return;
 
-        const key = `${d.collegeId}-${d.branch}-${d.category}-${d.seat_type}`;
+        const key = `${d.collegeId}-${d.branch}-${d.category}-${d.seatType}`;
         
         // If not already in seen, or if this is 2025 data (update)
         const is2025 = map2025.has(key) && map2025.get(key) === d;
@@ -666,7 +666,7 @@ function UgeacPredictor() {
              cutoff25: cut25 ? cut25.closing : 'N/A', 
              cutoff24: cut24 ? cut24.closing : 'N/A',
              cat: d.category,
-             seatType: d.seat_type,
+             seatType: d.seatType,
              myCompRank: compRank 
            });
         }
