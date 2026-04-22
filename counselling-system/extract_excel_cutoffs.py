@@ -118,87 +118,94 @@ def clean_str(val):
     return re.sub(r'\s+', ' ', str(val)).upper().strip()
 
 def extract():
-    print("Reading UGEAC2025_SCOFF.xlsx...")
-    df = pd.read_excel("UGEAC2025_SCOFF.xlsx")
-    all_data = []
+    print("Reading multiple Excel datasets...")
     
-    for idx, row in df.iterrows():
-        inst_raw = clean_str(row['INSTITUTE'])
-        course_raw = clean_str(row['COURSE'])
-        seat_raw = clean_str(row['SEAT TYPE'])
-        cat_raw = clean_str(row['CATEGORY'])
+    files_to_process = [
+        {"filename": "UGEAC2025_SCOFF.xlsx", "year": 2025},
+        {"filename": "REV_UGEAC2024_SOCRANK.xlsx", "year": 2024}
+    ]
+    
+    final_payload = {"cutoffs2024": [], "cutoffs2025": []}
+    
+    for file_meta in files_to_process:
+        year = file_meta["year"]
+        fname = file_meta["filename"]
+        target_key = f"cutoffs{year}"
         
-        # 1. Map College
-        matched_coll = None
-        for key, val in COLLEGES:
-            if key in inst_raw:
-                matched_coll = val
-                break
+        if not os.path.exists(fname):
+            print(f"File not found: {fname}, skipping.")
+            continue
+            
+        print(f"Processing {fname}...")
+        df = pd.read_excel(fname)
         
-        # 2. Map Branch
-        matched_branch = None
-        for key, val in BRANCH_PRIORITY:
-            if key in course_raw:
-                matched_branch = val
-                break
+        for idx, row in df.iterrows():
+            inst_raw = clean_str(row.get('INSTITUTE'))
+            course_raw = clean_str(row.get('COURSE'))
+            seat_raw = clean_str(row.get('SEAT TYPE'))
+            cat_raw = clean_str(row.get('CATEGORY'))
+            
+            if not inst_raw: continue
+            
+            # 1. Map College
+            matched_coll = None
+            for key, val in COLLEGES:
+                if key in inst_raw:
+                    matched_coll = val
+                    break
+            
+            # 2. Map Branch
+            matched_branch = None
+            for key, val in BRANCH_PRIORITY:
+                if key in course_raw:
+                    matched_branch = val
+                    break
+                    
+            # 3. Map values
+            if not matched_coll or not matched_branch:
+                continue
                 
-        # 3. Map values
-        if not matched_coll or not matched_branch:
-            continue
+            mapped_cat = CAT_MAP.get(cat_raw, 'UR')
+            seat_type = 'Female' if 'FEMALE' in seat_raw else 'General'
             
-        mapped_cat = CAT_MAP.get(cat_raw, 'UR')
-        seat_type = 'Female' if 'FEMALE' in seat_raw else 'General'
-        
-        # Decide between UR ranks and Category Ranks
-        cat_open = row.get('CAT OPENING RANK')
-        cat_close = row.get('CAT CLOSING RANK')
-        ur_open = row.get('UR OPENING RANK')
-        ur_close = row.get('UR CLOSING RANK')
-        
-        use_ur = False
-        if mapped_cat == 'UR' or pd.isna(cat_close):
-            use_ur = True
+            cat_open = row.get('CAT OPENING RANK')
+            cat_close = row.get('CAT CLOSING RANK')
+            ur_open = row.get('UR OPENING RANK')
+            ur_close = row.get('UR CLOSING RANK')
             
-        final_open = ur_open if use_ur else cat_open
-        final_close = ur_close if use_ur else cat_close
-        
-        if pd.isna(final_open) or pd.isna(final_close):
-            continue
+            use_ur = False
+            if mapped_cat == 'UR' or pd.isna(cat_close):
+                use_ur = True
+                
+            final_open = ur_open if use_ur else cat_open
+            final_close = ur_close if use_ur else cat_close
             
-        # Parse numbers safely
-        try:
-            o_rank = int(float(final_open))
-            c_rank = int(float(final_close))
-        except:
-            continue
-            
-        all_data.append({
-            "collegeShort": matched_coll,
-            "branch": matched_branch,
-            "category": mapped_cat,
-            "seatType": seat_type,
-            "opening": o_rank,
-            "closing": c_rank,
-            "year": 2025
-        })
+            if pd.isna(final_open) or pd.isna(final_close):
+                continue
+                
+            try:
+                o_rank = int(float(final_open))
+                c_rank = int(float(final_close))
+            except:
+                continue
+                
+            final_payload[target_key].append({
+                "collegeShort": matched_coll,
+                "branch": matched_branch,
+                "category": mapped_cat,
+                "seatType": seat_type,
+                "opening": o_rank,
+                "closing": c_rank,
+                "year": year
+            })
 
     output_path = "../client/public/data/cutoffs.json"
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     
-    # Check if there's existing 2024 data to preserve
-    final_dict = {"cutoffs2025": all_data}
-    if os.path.exists(output_path):
-        try:
-            with open(output_path, 'r') as f:
-                old_data = json.load(f)
-                if 'cutoffs2024' in old_data:
-                    final_dict['cutoffs2024'] = old_data['cutoffs2024']
-        except: pass
-    
     with open(output_path, "w") as f:
-        json.dump(final_dict, f, indent=2)
+        json.dump(final_payload, f, indent=2)
         
-    print(f"Extraction Successful! Processed {len(all_data)} definitive ranks from the Excel sheet.")
+    print(f"Extraction Successful! Processed 2024 ({len(final_payload['cutoffs2024'])}) and 2025 ({len(final_payload['cutoffs2025'])}).")
 
 if __name__ == "__main__":
     extract()
