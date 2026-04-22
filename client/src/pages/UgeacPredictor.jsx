@@ -348,7 +348,7 @@ function UgeacPredictor() {
       
       doc.setFontSize(10);
       doc.setFont("helvetica", "bold");
-      doc.text("OFFICIAL UGEAC COUNSELLING DATA-PACK 2025", 14, 30);
+      doc.text("OFFICIAL UGEAC COUNSELLING DATA-PACK (2024-2025)", 14, 30);
       
       doc.setFontSize(8);
       doc.setFont("helvetica", "normal");
@@ -422,10 +422,10 @@ function UgeacPredictor() {
 
       // 3. Full Comparison Matrix
       if (results.all && results.all.length > 0) {
-        doc.setTextColor(30, 41, 59);
+          doc.setTextColor(30, 41, 59);
         doc.setFontSize(13);
         doc.setFont("helvetica", "bold");
-        doc.text("COMPREHENSIVE CUTOFF MATRIX (Verified 2025)", 14, finalY);
+        doc.text("OFFICIAL CUTOFF COMPARISON MATRIX (2024-2025)", 14, finalY);
 
         // Grouping Logic for "Organised Way"
         const tableData = [];
@@ -438,6 +438,7 @@ function UgeacPredictor() {
               branchMapping[item.branch] || item.branch,
               `${item.cat} (${item.seatType === 'Female' ? 'F' : 'G'})`,
               item.cutoff25,
+              item.cutoff24,
               item.myCompRank,
               item.chance
            ]);
@@ -445,22 +446,24 @@ function UgeacPredictor() {
 
         autoTable(doc, {
           startY: finalY + 6,
-          head: [['#', 'Engineering College', 'Specialized Branch', 'Cat (Type)', '2025 Cutoff', 'Your Rank', 'Chance']],
+          head: [['#', 'Engineering College', 'Branch Name', 'Cat (Type)', '2025 R2', '2024 R2', 'Your Rank', 'Chance']],
           body: tableData,
           theme: 'grid',
-          styles: { fontSize: 7, cellPadding: 2, font: 'helvetica' },
+          styles: { fontSize: 6.5, cellPadding: 2, font: 'helvetica' },
           headStyles: { fillColor: [30, 41, 59], textColor: [255, 255, 255], fontStyle: 'bold' },
           alternateRowStyles: { fillColor: [249, 250, 251] },
           columnStyles: {
-            0: { cellWidth: 10 },
-            1: { cellWidth: 50 },
+            0: { cellWidth: 8 },
+            1: { cellWidth: 45 },
+            2: { cellWidth: 40 },
             4: { fontStyle: 'bold', textColor: [37, 99, 235] },
-            6: { fontStyle: 'bold' }
+            5: { fontStyle: 'bold', textColor: [107, 114, 128] },
+            7: { fontStyle: 'bold' }
           },
           didParseCell: (data) => {
-            if (data.column.index === 6 && data.cell.text[0] === 'High') {
+            if (data.column.index === 7 && data.cell.text[0] === 'High') {
                data.cell.styles.textColor = [5, 150, 105]; // emerald-600
-            } else if (data.column.index === 6 && data.cell.text[0] === 'No') {
+            } else if (data.column.index === 7 && data.cell.text[0] === 'No') {
                data.cell.styles.textColor = [220, 38, 38]; // red-600
             }
           },
@@ -475,7 +478,7 @@ function UgeacPredictor() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `UGEAC_Analysis_2025.pdf`;
+      a.download = `UGEAC_Analysis_2024_2025.pdf`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
