@@ -106,8 +106,8 @@ BRANCH_PRIORITY = [
 
 CAT_MAP = {
     'UR': 'UR', 'E-UR': 'UR', 'BC': 'BC', 'E-BC': 'BC', 
-    'EBC': 'EBC', 'E-EBC': 'EBC', 'SC': 'SC', 'ST': 'ST', 
-    'EWS': 'EWS', 'DQ': 'DQ', 'SMQ': 'SMQ', 'RCG': 'RCG'
+    'EBC': 'EBC', 'E-EBC': 'EBC', 'SC': 'SC', 'E-SC': 'SC', 'ST': 'ST', 'E-ST': 'ST',
+    'EWS': 'EWS', 'E-EWS': 'EWS', 'DQ': 'DQ', 'SMQ': 'SMQ', 'RCG': 'RCG', 'E-RCG': 'RCG'
 }
 
 def extract():
@@ -142,7 +142,7 @@ def extract():
             
             # Match Ranks using flexible Regex
             # Cat [optional text like (FEMALE)] Open Close
-            m = re.search(r'(UR|E-UR|BC|E-BC|EBC|E-EBC|SC|ST|EWS|DQ|SMQ|RCG)[^\d]*(\d+)\s+(\d+)', clean_t)
+            m = re.search(r'(UR|E-UR|BC|E-BC|EBC|E-EBC|SC|E-SC|ST|E-ST|EWS|E-EWS|DQ|E-DQ|SMQ|E-SMQ|RCG|E-RCG)[^\d]*(\d+)\s+(\d+)', clean_t)
             if m:
                 cat_raw, open_r, close_r = m.groups()
                 seat_type = 'Female' if 'FEMALE' in clean_t else 'General'
