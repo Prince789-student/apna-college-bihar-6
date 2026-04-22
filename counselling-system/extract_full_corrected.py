@@ -102,6 +102,7 @@ def extract():
     reader = pypdf.PdfReader("UGEAC2025_FCOFF.pdf")
     all_data = []
     last_coll = None
+    last_branch = None
     
     for page in reader.pages:
         text = page.extract_text()
@@ -111,7 +112,7 @@ def extract():
             # Normalize spaces for consistent matching
             clean_t = " ".join(t.split()).upper()
             
-            # Find College
+            # Find College (Persisted State, BCECE format prints college name as header)
             matched_key = None
             for key, val in COLLEGES:
                 if key in clean_t: 
@@ -120,25 +121,24 @@ def extract():
                     break
             
             if not last_coll: continue
+
+            # Find Branch (Persisted State, BCECE prints branch as sub-header)
+            for k, v in BRANCH_PRIORITY:
+                if k.upper() in clean_t:
+                    last_branch = v
+                    break
             
             # Match Ranks using flexible Regex
-            # Cat Open Close (Allowing E- prefixes)
-            m = re.search(r'(UR|E-UR|BC|E-BC|EBC|E-EBC|SC|ST|EWS|DQ|SMQ|RCG)\s+(\d+)\s+(\d+)', clean_t)
+            # Cat [optional text like (FEMALE)] Open Close
+            m = re.search(r'(UR|E-UR|BC|E-BC|EBC|E-EBC|SC|ST|EWS|DQ|SMQ|RCG)[^\d]*(\d+)\s+(\d+)', clean_t)
             if m:
                 cat_raw, open_r, close_r = m.groups()
                 seat_type = 'Female' if 'FEMALE' in clean_t else 'General'
                 
-                # Identify Branch
-                branch_found = None
-                for k, v in BRANCH_PRIORITY:
-                    if k.upper() in clean_t:
-                        branch_found = v
-                        break
-                
-                if branch_found:
+                if last_branch:
                     all_data.append({
                         "collegeShort": last_coll,
-                        "branch": branch_found,
+                        "branch": last_branch,
                         "category": CAT_MAP[cat_raw],
                         "seatType": seat_type,
                         "opening": int(open_r),

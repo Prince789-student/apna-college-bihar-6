@@ -36,6 +36,10 @@ export const colleges = [
   { id: 130, name: "Government Engineering College, Bhojpur", short: "GEC Bhojpur", tier: 6, location: "Ara", estd: 2019 },
   { id: 136, name: "Government Engineering College, Sheikhpura", short: "GEC Sheikhpura", tier: 6, location: "Sheikhpura", estd: 2019 },
   { id: 138, name: "Government Engineering College, Lakhisarai", short: "GEC Lakhisarai", tier: 6, location: "Lakhisarai", estd: 2019 },
-  { id: 135, name: "Government Engineering College, Samastipur", short: "GEC Samastipur", tier: 6, location: "Samastipur", estd: 2019 }
+  { id: 135, name: "Government Engineering College, Samastipur", short: "GEC Samastipur", tier: 6, location: "Samastipur", estd: 2019 },
+  { id: 139, name: "DR. C.P. Thakur Institute", short: "CP Thakur Inst.", tier: 6, location: "Patna", estd: 2021 },
+  { id: 140, name: "CIPET:IPT, Bihta, Patna", short: "CIPET Bihta", tier: 3, location: "Bihta", estd: 2020 },
+  { id: 141, name: "S.G.I.D.T. Patna", short: "SGIDT Patna", tier: 4, location: "Patna", estd: 2020 },
+  { id: 142, name: "Women's Institute of Tech, Darbhanga", short: "WIT Darbhanga", tier: 4, location: "Darbhanga", estd: null }
 ];
 // Cutoff data is now served via /public/data/cutoffs.json for max performance and low memory.
