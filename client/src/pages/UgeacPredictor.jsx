@@ -473,15 +473,15 @@ function UgeacPredictor() {
                  
                  <div className="space-y-6">
                     {/* Rank Converter Insight */}
-                    <div className="p-4 bg-slate-950/50 rounded-2xl border border-white/5">
+                    <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
                         <div className="flex items-center justify-between mb-4">
-                           <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">JEE AIR Rank</span>
+                           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">JEE AIR Rank</span>
                            <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Est. UGEAC</span>
                         </div>
                         <div className="flex items-center gap-4">
-                           <input type="number" value={rank} onChange={(e) => setRank(e.target.value)} className="w-1/2 bg-transparent border-b border-slate-800 text-xl font-black text-white outline-none focus:border-indigo-500 transition-colors" placeholder="0" />
-                           <div className="w-px h-8 bg-slate-800"></div>
-                           <div className="w-1/2 text-2xl font-[1000] text-indigo-400 tracking-tighter">#{estimateUgeacRank(parseInt(rank)) || 0}</div>
+                           <input type="number" value={rank} onChange={(e) => setRank(e.target.value)} className="w-1/2 bg-transparent border-b border-slate-200 text-xl font-black text-slate-900 outline-none focus:border-indigo-500 transition-colors" placeholder="0" />
+                           <div className="w-px h-8 bg-slate-200"></div>
+                           <div className="w-1/2 text-2xl font-[1000] text-indigo-600 tracking-tighter">#{estimateUgeacRank(parseInt(rank)) || 0}</div>
                         </div>
                     </div>
 
@@ -519,14 +519,14 @@ function UgeacPredictor() {
                    <div className="space-y-4">
                       <div>
                         <label className="premium-label">Institutes Selection</label>
-                        <button onClick={() => setIsFinderCollegeOpen(true)} className="w-full flex items-center justify-between p-4 bg-slate-950/50 border border-white/5 rounded-2xl text-slate-300 hover:border-indigo-500/30 transition-all group">
+                        <button onClick={() => setIsFinderCollegeOpen(true)} className="w-full flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl text-slate-600 hover:border-indigo-500/30 transition-all group shadow-sm">
                            <span className="text-[10px] font-black uppercase tracking-widest">{targetColleges.length > 0 ? `${targetColleges.length} Selected` : 'All Institutes'}</span>
                            <Building2 size={14} className="group-hover:text-indigo-400 transition-colors" />
                         </button>
                       </div>
                       <div>
                         <label className="premium-label">Branch Filtering</label>
-                        <button onClick={() => setIsFinderBranchOpen(true)} className="w-full flex items-center justify-between p-4 bg-slate-950/50 border border-white/5 rounded-2xl text-slate-300 hover:border-indigo-500/30 transition-all group">
+                        <button onClick={() => setIsFinderBranchOpen(true)} className="w-full flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl text-slate-600 hover:border-indigo-500/30 transition-all group shadow-sm">
                            <span className="text-[10px] font-black uppercase tracking-widest">{targetBranches.length > 0 ? `${targetBranches.length} Selected` : 'All Branches'}</span>
                            <GraduationCap size={14} className="group-hover:text-indigo-400 transition-colors" />
                         </button>
@@ -606,7 +606,7 @@ function UgeacPredictor() {
                                   <span className="text-[9px] font-black text-indigo-200 uppercase tracking-[0.3em] block">Predicted Allotment Found</span>
                                   <span className="bg-white/10 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">{results.mockAllotment.entry.cat} Category</span>
                                </div>
-                               <h3 className="text-xl md:text-3xl font-[1000] text-white uppercase tracking-tighter">{results.mockAllotment.choice.collegeName}</h3>
+                               <h3 className="text-xl md:text-3xl font-[1000] text-slate-900 uppercase tracking-tighter">{results.mockAllotment.choice.collegeName}</h3>
                                <p className="text-indigo-100 font-bold uppercase text-xs tracking-widest mt-1">{branchMapping[results.mockAllotment.choice.branch] || results.mockAllotment.choice.branch}</p>
                             </div>
                             <div className="text-right hidden md:block">
@@ -819,15 +819,15 @@ function UgeacPredictor() {
         <div className="modal-backdrop" onClick={() => setSelectedCollege(null)}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setSelectedCollege(null)}><X size={20} /></button>
-            <h3 className="text-2xl font-[1000] text-white uppercase tracking-tighter mb-2">{selectedCollege.name}</h3>
+            <h3 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter mb-2">{selectedCollege.name}</h3>
             <p className="text-indigo-400 font-black text-[10px] uppercase tracking-[0.3em] mb-8 flex items-center gap-2"><MapPin size={14} /> {selectedCollege.location}</p>
             
             <div className="grid grid-cols-2 gap-4 mb-8">
-               <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
                   <span className="text-slate-500 text-[8px] font-black uppercase tracking-widest block mb-1">Established</span>
                   <span className="text-white font-black text-sm">{selectedCollege.estd || "N/A"}</span>
                </div>
-               <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
                   <span className="text-slate-500 text-[8px] font-black uppercase tracking-widest block mb-1">Tier Rating</span>
                   <span className="text-white font-black text-sm">Tier {selectedCollege.tier}</span>
                </div>
