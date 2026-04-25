@@ -317,8 +317,8 @@ function UgeacPredictor() {
     // Results Table
     autoTable(doc, {
       startY: currentY,
-      head: [['#', 'Institute Name', 'Branch', '2024 CO', '2025 CO', 'Probability']],
-      body: results.all.map((r, i) => [i+1, r.college.name, r.branch, r.cutoff24, r.cutoff25, r.chance]),
+      head: [['#', 'Institute Name', 'Branch', 'Your Rank', '2024 CO', '2025 CO', 'Status']],
+      body: results.all.map((r, i) => [i+1, r.college.name, r.branch, `#${r.myCompRank} (${r.cat})`, r.cutoff24, r.cutoff25, r.chance]),
       theme: 'striped',
       headStyles: { fillColor: [79, 70, 229], fontSize: 8 },
       styles: { fontSize: 7 },
@@ -515,22 +515,32 @@ function UgeacPredictor() {
                       <span className="stats-pill">{choices.length} Choices</span>
                    </div>
                    <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                      {choices.map((ch, idx) => (
-                        <div key={ch.id || idx} className="p-4 bg-slate-900/50 border border-white/5 rounded-2xl group relative overflow-hidden transition-all hover:bg-indigo-500/10 border-l-4 border-l-indigo-500/50">
-                           <div className="flex items-center gap-4">
-                              <div className="flex flex-col gap-1">
-                                 <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, -1); }} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20 p-1 bg-white/5 rounded-lg" disabled={idx === 0} type="button"><ChevronUp size={16}/></button>
-                                 <span className="text-[10px] font-[1000] text-indigo-400 text-center py-1">{idx + 1}</span>
-                                 <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, 1); }} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20 p-1 bg-white/5 rounded-lg" disabled={idx === choices.length - 1} type="button"><ChevronDown size={16}/></button>
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                 <p className="text-[11px] font-black text-white uppercase truncate tracking-tight">{ch.collegeName}</p>
-                                 <p className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest mt-1">{branchMapping[ch.branch] || ch.branch}</p>
-                              </div>
-                              <button onClick={() => removeChoice(idx)} className="p-2.5 bg-rose-500/10 text-rose-500 rounded-xl hover:bg-rose-500 hover:text-white transition-all opacity-0 group-hover:opacity-100"><Trash2 size={14}/></button>
-                           </div>
-                        </div>
-                      ))}
+                     {choices.map((ch, idx) => {
+                       const statusObj = results.mockDiscussions?.find(d => d.choice.id === ch.id);
+                       const status = statusObj ? statusObj.status : 'Pending';
+                       
+                       return (
+                       <div key={ch.id || idx} className={`p-4 bg-slate-900/50 border border-white/5 rounded-2xl group relative overflow-hidden transition-all hover:bg-indigo-500/10 border-l-4 ${status === 'High' ? 'border-l-emerald-500' : status === 'Medium' ? 'border-l-amber-500' : 'border-l-slate-700'}`}>
+                          <div className="flex items-center gap-4">
+                             <div className="flex flex-col gap-1">
+                                <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, -1); }} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20 p-1 bg-white/5 rounded-lg" disabled={idx === 0} type="button"><ChevronUp size={16}/></button>
+                                <span className="text-[10px] font-[1000] text-indigo-400 text-center py-1">{idx + 1}</span>
+                                <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, 1); }} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20 p-1 bg-white/5 rounded-lg" disabled={idx === choices.length - 1} type="button"><ChevronDown size={16}/></button>
+                             </div>
+                             <div className="flex-1 min-w-0">
+                                <p className="text-[11px] font-black text-white uppercase truncate tracking-tight">{ch.collegeName}</p>
+                                <p className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest mt-1">{branchMapping[ch.branch] || ch.branch}</p>
+                                {statusObj && (
+                                  <div className="flex items-center gap-2 mt-2">
+                                     <span className={`text-[7px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest ${status === 'High' ? 'bg-emerald-500/20 text-emerald-400' : status === 'Medium' ? 'bg-amber-500/20 text-amber-400' : 'bg-rose-500/20 text-rose-400'}`}>{status === 'High' ? 'Confirmed' : status === 'Medium' ? 'Probable' : 'No Chance'}</span>
+                                     {statusObj.entry && <span className="text-[7px] text-slate-500 font-bold uppercase">Rank #{statusObj.entry.myCompRank} ({statusObj.entry.cat})</span>}
+                                  </div>
+                                )}
+                             </div>
+                             <button onClick={() => removeChoice(idx)} className="p-2.5 bg-rose-500/10 text-rose-500 rounded-xl hover:bg-rose-500 hover:text-white transition-all opacity-0 group-hover:opacity-100"><Trash2 size={14}/></button>
+                          </div>
+                       </div>
+                     )})}
                       {choices.length === 0 && (
                         <div className="text-center py-10">
                            <div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/5">
@@ -565,7 +575,10 @@ function UgeacPredictor() {
                                <CheckCircle2 size={32} className="text-white" />
                             </div>
                             <div className="flex-1">
-                               <span className="text-[9px] font-black text-indigo-200 uppercase tracking-[0.3em] mb-1 block">Predicted Allotment Found</span>
+                               <div className="flex items-center gap-2 mb-1">
+                                  <span className="text-[9px] font-black text-indigo-200 uppercase tracking-[0.3em] block">Predicted Allotment Found</span>
+                                  <span className="bg-white/10 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">{results.mockAllotment.entry.cat} Category</span>
+                               </div>
                                <h3 className="text-xl md:text-3xl font-[1000] text-white uppercase tracking-tighter">{results.mockAllotment.choice.collegeName}</h3>
                                <p className="text-indigo-100 font-bold uppercase text-xs tracking-widest mt-1">{branchMapping[results.mockAllotment.choice.branch] || results.mockAllotment.choice.branch}</p>
                             </div>
@@ -591,7 +604,7 @@ function UgeacPredictor() {
                     <div className="premium-table-container">
                        <table className="premium-table">
                           <thead>
-                             <tr><th>Institute & Branch</th><th className="text-center">2024 CO</th><th className="text-center">2025 CO</th><th className="text-center">Seats</th><th className="text-center">Success Rate</th>{mode === 'wizard' && <th className="text-center">Add</th>}</tr>
+                             <tr><th>Institute & Branch</th><th className="text-center">Your Rank</th><th className="text-center">2024 CO</th><th className="text-center">2025 CO</th><th className="text-center">Seats</th><th className="text-center">Success Rate</th>{mode === 'wizard' && <th className="text-center">Add</th>}</tr>
                           </thead>
                           <tbody>
                              {results.all.slice(0, visibleCount).map((item, idx) => (
@@ -599,6 +612,12 @@ function UgeacPredictor() {
                                    <td onClick={() => setSelectedCollege(item.college)}>
                                       <div className="college-name">{item.college.name}</div>
                                       <div className="branch-name">{branchMapping[item.branch] || item.branch}</div>
+                                   </td>
+                                   <td className="text-center">
+                                      <div className="flex flex-col items-center">
+                                         <span className="text-[12px] font-black text-indigo-400 font-mono">#{item.myCompRank}</span>
+                                         <span className="text-[7px] text-slate-500 font-bold uppercase">{item.cat} Cat</span>
+                                      </div>
                                    </td>
                                    <td className="text-center">
                                       <span className="text-[11px] font-black text-slate-600 font-mono">{item.cutoff24}</span>
