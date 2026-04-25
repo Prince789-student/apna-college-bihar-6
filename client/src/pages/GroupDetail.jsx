@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
-import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2, Video, Maximize2, Minimize2 } from 'lucide-react';
+import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2, Video, Maximize2, Minimize2, ExternalLink, Settings2, Link2 } from 'lucide-react';
 import { collection, query, where, onSnapshot, doc, updateDoc, arrayRemove, deleteDoc } from 'firebase/firestore';
 
 export default function GroupDetail() {
@@ -14,6 +14,8 @@ export default function GroupDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isMeetingExpanded, setIsMeetingExpanded] = useState(false);
+  const [isSettingLink, setIsSettingLink] = useState(false);
+  const [newLink, setNewLink] = useState('');
 
   useEffect(() => {
     if (!groupId || !user) return;
@@ -89,6 +91,16 @@ export default function GroupDetail() {
     }
   };
 
+  const updateMeetingLink = async () => {
+    if (!isAdmin) return;
+    if (!newLink.trim()) return;
+    try {
+      await updateDoc(doc(db, 'Groups', groupId), { meetingLink: newLink.trim() });
+      setIsSettingLink(false);
+      setNewLink('');
+    } catch (e) { console.error(e); }
+  };
+
   if (loading) return <div className="flex items-center justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
   if (error) return <div className="text-red-500 font-black p-20 text-center uppercase tracking-widest">{error}</div>;
   if (!group || !user) return null;
@@ -141,39 +153,96 @@ export default function GroupDetail() {
         </div>
       </div>
 
-      {/* Virtual Study Collective (Live Meeting) */}
-      <div className={`transition-all duration-500 ease-in-out ${isMeetingExpanded ? 'fixed inset-0 z-[100] p-4 bg-slate-950/95 backdrop-blur-2xl' : 'relative'}`}>
-        <div className={`bg-slate-900 border border-slate-800 rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] relative group ${isMeetingExpanded ? 'h-full w-full' : 'h-[450px] md:h-[600px]'}`}>
-          <div className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between bg-slate-900/40 backdrop-blur-md border-b border-white/5 z-10">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-red-500/20 text-red-500 rounded-xl flex items-center justify-center animate-pulse">
-                <Video size={20} />
+      {/* Live Study Portal (Persistent Meeting Hub) */}
+      <div className="relative group">
+        <div className="bg-slate-900 border border-slate-800 rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] relative overflow-hidden">
+          {/* Decorative Background */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px]"></div>
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-[100px]"></div>
+          
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
+            <div className="space-y-6 flex-1 text-center md:text-left">
+              <div className="inline-flex items-center gap-3 px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-full">
+                <span className="w-2 h-2 bg-red-500 rounded-full animate-ping"></span>
+                <span className="text-[10px] font-black text-red-400 uppercase tracking-[0.2em]">Live Operational Hub</span>
               </div>
-              <div>
-                <p className="text-xs font-black text-white uppercase tracking-widest">Live Collective Hub</p>
-                <div className="flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
-                  <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest">Network Secure • Operational</p>
+              <div className="space-y-2">
+                <h2 className="text-3xl md:text-5xl font-[1000] text-white tracking-tighter uppercase leading-none">Virtual Study Room</h2>
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest max-w-md mx-auto md:mx-0">Connect via Google Meet, Zoom, or Discord. This room is always active for your collective.</p>
+              </div>
+              
+              {group.meetingLink ? (
+                <div className="flex flex-wrap items-center gap-4 justify-center md:justify-start">
+                  <a 
+                    href={group.meetingLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="px-10 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-sm uppercase tracking-widest transition-all shadow-2xl shadow-blue-600/30 active:scale-95 flex items-center gap-3"
+                  >
+                    Enter Meeting <ExternalLink size={18} />
+                  </a>
+                  {isAdmin && (
+                    <button 
+                      onClick={() => { setNewLink(group.meetingLink); setIsSettingLink(true); }}
+                      className="p-5 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white rounded-2xl transition-all border border-white/10"
+                    >
+                      <Settings2 size={20} />
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {isAdmin ? (
+                    <button 
+                      onClick={() => setIsSettingLink(true)}
+                      className="px-10 py-5 bg-white text-slate-900 rounded-2xl font-[1000] text-sm uppercase tracking-widest transition-all shadow-xl active:scale-95 flex items-center gap-3"
+                    >
+                      Setup Meeting Link <Link2 size={18} />
+                    </button>
+                  ) : (
+                    <div className="p-6 bg-white/5 border border-white/10 rounded-2xl">
+                      <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest italic">Waiting for Admin to initialize the meeting link...</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="w-full md:w-auto flex flex-col items-center">
+              <div className="w-32 h-32 md:w-48 md:h-48 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] md:rounded-[3.5rem] flex items-center justify-center shadow-2xl relative overflow-hidden group/icon">
+                 <div className="absolute inset-0 bg-white/10 group-hover/icon:scale-150 transition-transform duration-700"></div>
+                 <Video size={isMeetingExpanded ? 80 : 64} className="text-white relative z-10" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Link Setup Modal */}
+        {isSettingLink && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+            <div className="bg-white rounded-[3rem] p-10 w-full max-w-lg shadow-2xl space-y-8">
+              <div className="text-center space-y-2">
+                <div className="w-16 h-16 bg-blue-600/10 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Link2 size={32} />
+                </div>
+                <h3 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Configure Meeting Hub</h3>
+                <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Paste your Google Meet, Zoom, or Discord link below.</p>
+              </div>
+              <div className="space-y-4">
+                <input 
+                  value={newLink}
+                  onChange={(e) => setNewLink(e.target.value)}
+                  placeholder="https://meet.google.com/xxx-xxxx-xxx"
+                  className="w-full bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-5 text-slate-900 font-bold outline-none transition-all"
+                />
+                <div className="flex gap-4">
+                  <button onClick={() => setIsSettingLink(false)} className="flex-1 py-4 text-slate-400 font-black uppercase text-xs tracking-widest hover:bg-slate-50 rounded-xl transition-all">Cancel</button>
+                  <button onClick={updateMeetingLink} className="flex-1 py-4 bg-slate-900 text-white font-black uppercase text-xs tracking-widest rounded-xl shadow-xl active:scale-95 transition-all">Establish Link</button>
                 </div>
               </div>
             </div>
-            <button 
-              onClick={() => setIsMeetingExpanded(!isMeetingExpanded)}
-              className="p-3 bg-white/5 hover:bg-white/10 text-white rounded-xl transition-all border border-white/10"
-            >
-              {isMeetingExpanded ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
-            </button>
           </div>
-          
-          <div className="w-full h-full">
-            <iframe 
-              src={`https://meet.ffmuc.net/${group.meetingRoomId || group.groupCode}#config.startWithAudioMuted=true&config.startWithVideoMuted=true&interfaceConfig.TOOLBAR_BUTTONS=["microphone","camera","desktop","fullscreen","fivethirtyeight","hangup","chat","settings","raisehand","videoquality","filmstrip","tileview","videobackgroundblur","download","mute-everyone"]`}
-              allow="camera; microphone; fullscreen; display-capture; autoplay" 
-              className="w-full h-full border-0 grayscale-[0.2] hover:grayscale-0 transition-all duration-700"
-              title="Study Meeting"
-            />
-          </div>
-        </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
