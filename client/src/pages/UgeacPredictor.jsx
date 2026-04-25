@@ -869,33 +869,37 @@ function UgeacPredictor() {
                </div>
             </div>
 
-            <div className="space-y-8">
-               <section>
-                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-                     <Info size={14} className="text-indigo-600" /> Institution Profile
-                  </h4>
-                  <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100">
-                     <p className="text-slate-600 text-sm leading-relaxed font-medium">
-                        {selectedCollege.description || `${selectedCollege.name} is a premier government technical institution in ${selectedCollege.location}, Bihar. It is dedicated to providing high-quality engineering education and fostering technical innovation under Bihar Engineering University.`}
-                     </p>
-                  </div>
-               </section>
+            <div className="p-8 bg-slate-50 rounded-3xl border border-slate-100 mb-8">
+               <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <Info size={14} className="text-indigo-600" /> Institution Profile
+               </h4>
+               <p className="text-slate-600 text-sm leading-relaxed font-medium">
+                  {selectedCollege.description || `${selectedCollege.name} is a state-funded engineering institution located in ${selectedCollege.location}, Bihar. Established in ${selectedCollege.estd || "recent years"}, it plays a vital role in providing technical education to students under the Bihar Engineering University (BEU) framework. The campus is equipped with essential academic infrastructure to support B.Tech programs.`}
+               </p>
+            </div>
 
-               {selectedCollege.facilities && (
-               <section>
-                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-                     <Building2 size={14} className="text-indigo-600" /> Key Facilities
-                  </h4>
-                  <div className="grid grid-cols-2 gap-3">
-                     {selectedCollege.facilities.map((f, i) => (
-                        <div key={i} className="flex items-center gap-3 p-3 bg-white border border-slate-100 rounded-xl shadow-sm">
-                           <CheckCircle2 size={14} className="text-emerald-500" />
-                           <span className="text-[10px] font-black text-slate-700 uppercase tracking-tight">{f}</span>
-                        </div>
-                     ))}
-                  </div>
-               </section>
-               )}
+            <section className="mb-8">
+               <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <Building2 size={14} className="text-indigo-600" /> Key Facilities
+               </h4>
+               <div className="grid grid-cols-2 gap-3">
+                  {(selectedCollege.facilities || ["Central Library", "Computer Lab", "Boys Hostel", "Sports Ground", "Wi-Fi Campus"]).map((f, i) => (
+                     <div key={i} className="flex items-center gap-3 p-3 bg-white border border-slate-100 rounded-xl shadow-sm">
+                        <CheckCircle2 size={14} className="text-emerald-500" />
+                        <span className="text-[10px] font-black text-slate-700 uppercase tracking-tight">{f}</span>
+                     </div>
+                  ))}
+               </div>
+            </section>
+
+            <div className="flex flex-col md:flex-row gap-4 pt-4">
+               <a href={selectedCollege.website || `https://www.google.com/search?q=${encodeURIComponent(selectedCollege.name)}`} target="_blank" rel="noreferrer" className="flex-1 flex items-center justify-center gap-3 py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all shadow-xl shadow-indigo-900/20 active:scale-95">
+                  Official Portal <ExternalLink size={16} />
+               </a>
+               <a href={`https://www.google.com/maps/search/${encodeURIComponent(selectedCollege.name + " " + selectedCollege.location)}`} target="_blank" rel="noreferrer" className="flex-1 flex items-center justify-center gap-3 py-5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all border border-white/10 active:scale-95">
+                  Live Campus Map <MapPin size={16} />
+               </a>
+            </div>
 
                {selectedCollege.branches && (
                <section>
