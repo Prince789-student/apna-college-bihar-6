@@ -362,7 +362,7 @@ function UgeacPredictor() {
           <div className="relative w-20 h-20 mb-8">
             <div className="absolute inset-0 border-4 border-indigo-500/20 rounded-full"></div>
             <div className="absolute inset-0 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
-            <ShieldCheck className="absolute inset-0 m-auto text-indigo-400 animate-pulse" size={32} />
+            <ShieldCheck className="absolute inset-0 m-auto text-indigo-600 animate-pulse" size={32} />
           </div>
           <h3 className="text-white font-black uppercase tracking-widest text-sm">Syncing Neural Database</h3>
           <p className="text-slate-500 text-[10px] uppercase tracking-[0.3em] mt-2">UGEAC 2025 Intelligence v2.0</p>
@@ -447,14 +447,14 @@ function UgeacPredictor() {
            <div className="lg:col-span-4 space-y-8">
               {/* Profile & Controls */}
               <section className="glass-panel border-indigo-500/20">
-                 <h2 className="section-title text-indigo-400"><Calculator size={18} /> Candidate Info</h2>
+                 <h2 className="section-title text-indigo-600"><Calculator size={18} /> Candidate Info</h2>
                  
                  <div className="space-y-6">
                     {/* Rank Converter Insight */}
                     <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
                         <div className="flex items-center justify-between mb-4">
                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">JEE AIR Rank</span>
-                           <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Est. UGEAC</span>
+                           <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Est. UGEAC</span>
                         </div>
                         <div className="flex items-center gap-4">
                            <input type="number" value={rank} onChange={(e) => setRank(e.target.value)} className="w-1/2 bg-transparent border-b border-slate-200 text-xl font-black text-slate-900 outline-none focus:border-indigo-500 transition-colors" placeholder="0" />
@@ -508,14 +508,14 @@ function UgeacPredictor() {
                         <label className="premium-label">Institutes Selection</label>
                         <button onClick={() => setIsFinderCollegeOpen(true)} className="w-full flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl text-slate-600 hover:border-indigo-500/30 transition-all group shadow-sm">
                            <span className="text-[10px] font-black uppercase tracking-widest">{targetColleges.length > 0 ? `${targetColleges.length} Selected` : 'All Institutes'}</span>
-                           <Building2 size={14} className="group-hover:text-indigo-400 transition-colors" />
+                           <Building2 size={14} className="group-hover:text-indigo-600 transition-colors" />
                         </button>
                       </div>
                       <div>
                         <label className="premium-label">Branch Filtering</label>
                         <button onClick={() => setIsFinderBranchOpen(true)} className="w-full flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl text-slate-600 hover:border-indigo-500/30 transition-all group shadow-sm">
                            <span className="text-[10px] font-black uppercase tracking-widest">{targetBranches.length > 0 ? `${targetBranches.length} Selected` : 'All Branches'}</span>
-                           <GraduationCap size={14} className="group-hover:text-indigo-400 transition-colors" />
+                           <GraduationCap size={14} className="group-hover:text-indigo-600 transition-colors" />
                         </button>
                       </div>
                    </div>
@@ -534,16 +534,16 @@ function UgeacPredictor() {
                        const status = statusObj ? statusObj.status : 'Pending';
                        
                        return (
-                       <div key={ch.id || idx} className={`p-4 bg-slate-900/50 border border-white/5 rounded-2xl group relative overflow-hidden transition-all hover:bg-indigo-500/10 border-l-4 ${status === 'High' ? 'border-l-emerald-500' : status === 'Medium' ? 'border-l-amber-500' : 'border-l-slate-700'}`}>
+                       <div key={ch.id || idx} className={`p-4 bg-white border border-slate-100 rounded-2xl group relative overflow-hidden transition-all hover:border-indigo-200 shadow-sm border-l-4 ${status === 'High' ? 'border-l-emerald-500' : status === 'Medium' ? 'border-l-amber-500' : 'border-l-slate-700'}`}>
                           <div className="flex items-center gap-4">
                              <div className="flex flex-col gap-1">
-                                <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, -1); }} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20 p-1 bg-white/5 rounded-lg" disabled={idx === 0} type="button"><ChevronUp size={16}/></button>
-                                <span className="text-[10px] font-[1000] text-indigo-400 text-center py-1">{idx + 1}</span>
-                                <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, 1); }} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20 p-1 bg-white/5 rounded-lg" disabled={idx === choices.length - 1} type="button"><ChevronDown size={16}/></button>
+                                <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, -1); }} className="text-slate-600 hover:text-indigo-600 disabled:opacity-20 p-1 bg-slate-50 rounded-lg" disabled={idx === 0} type="button"><ChevronUp size={16}/></button>
+                                <span className="text-[10px] font-[1000] text-indigo-600 text-center py-1">{idx + 1}</span>
+                                <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, 1); }} className="text-slate-600 hover:text-indigo-600 disabled:opacity-20 p-1 bg-slate-50 rounded-lg" disabled={idx === choices.length - 1} type="button"><ChevronDown size={16}/></button>
                              </div>
                              <div className="flex-1 min-w-0">
-                                <p className="text-[11px] font-black text-white uppercase truncate tracking-tight">{ch.collegeName}</p>
-                                <p className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest mt-1">{branchMapping[ch.branch] || ch.branch}</p>
+                                <p className="text-[11px] font-black text-slate-900 uppercase truncate tracking-tight">{ch.collegeName}</p>
+                                <p className="text-[9px] font-extrabold text-indigo-600 uppercase tracking-widest mt-1">{branchMapping[ch.branch] || ch.branch}</p>
                                 {statusObj && (
                                   <div className="flex items-center gap-2 mt-2">
                                      <span className={`text-[7px] font-black px-1.5 py-0.5 rounded uppercase tracking-widest ${status === 'High' ? 'bg-emerald-500/20 text-emerald-400' : status === 'Medium' ? 'bg-amber-500/20 text-amber-400' : 'bg-rose-500/20 text-rose-400'}`}>{status === 'High' ? 'Confirmed' : status === 'Medium' ? 'Probable' : 'No Chance'}</span>
@@ -557,7 +557,7 @@ function UgeacPredictor() {
                      )})}
                       {choices.length === 0 && (
                         <div className="text-center py-10">
-                           <div className="w-12 h-12 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/5">
+                           <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
                               <Plus size={20} className="text-slate-600" />
                            </div>
                            <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Priority List Empty</p>
@@ -572,10 +572,10 @@ function UgeacPredictor() {
            <div className="lg:col-span-8">
               {!hasPredicted && mode !== 'wizard' ? (
                  <div className="empty-state">
-                    <div className="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-indigo-500/20">
-                      <ShieldCheck size={40} className="text-indigo-400" />
+                    <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-6 border border-indigo-100">
+                      <ShieldCheck size={40} className="text-indigo-600" />
                     </div>
-                    <h3 className="text-white">Analysis Ready</h3>
+                    <h3 className="text-slate-900">Analysis Ready</h3>
                     <p>Enter your credentials to evaluate 38+ Bihar Engineering Colleges instantly.</p>
                  </div>
               ) : (
@@ -664,7 +664,7 @@ function UgeacPredictor() {
                                         <button 
                                           onClick={() => addChoice(item.collegeId, item.branch, item.college.name)}
                                           disabled={choices.some(c => c.collegeId === item.collegeId && c.branch === item.branch)}
-                                          className="w-10 h-10 bg-indigo-500/10 text-indigo-400 rounded-xl hover:bg-indigo-500 hover:text-white transition-all disabled:opacity-30 flex items-center justify-center mx-auto"
+                                          className="w-10 h-10 bg-indigo-500/10 text-indigo-600 rounded-xl hover:bg-indigo-500 hover:text-white transition-all disabled:opacity-30 flex items-center justify-center mx-auto"
                                         >
                                           {choices.some(c => c.collegeId === item.collegeId && c.branch === item.branch) ? <CheckCircle2 size={16}/> : <Plus size={16}/>}
                                         </button>
@@ -676,7 +676,7 @@ function UgeacPredictor() {
                        </table>
                     </div>
                     {visibleCount < results.all.length && (
-                      <button onClick={() => setVisibleCount(v => v + 50)} className="w-full p-10 border-2 border-dashed border-white/5 rounded-[2.5rem] text-slate-500 font-black uppercase tracking-[0.4em] text-[10px] hover:border-indigo-500/30 hover:text-indigo-400 transition-all bg-indigo-500/[0.02]">
+                      <button onClick={() => setVisibleCount(v => v + 50)} className="w-full p-10 border-2 border-dashed border-white/5 rounded-[2.5rem] text-slate-500 font-black uppercase tracking-[0.4em] text-[10px] hover:border-indigo-500/30 hover:text-indigo-600 transition-all bg-indigo-500/[0.02]">
                         Sync More Results
                       </button>
                     )}
@@ -689,7 +689,7 @@ function UgeacPredictor() {
         <footer className="mt-32 py-16 border-t border-white/5 text-center">
            <img src="/logo.jpg" alt="Logo" className="w-14 h-14 rounded-full mx-auto mb-8 grayscale opacity-30 hover:opacity-100 transition-opacity" />
            <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Official Admissions Intelligence Report</p>
-           <p className="text-indigo-400 font-black text-xs uppercase tracking-[0.5em] mb-2">APNA COLLEGE BIHAR 2025</p>
+           <p className="text-indigo-600 font-black text-xs uppercase tracking-[0.5em] mb-2">APNA COLLEGE BIHAR 2025</p>
            <p className="text-slate-600 text-[9px] font-black uppercase tracking-widest">www.apnacollegebihar.online</p>
         </footer>
       </>
@@ -715,7 +715,7 @@ function UgeacPredictor() {
             </div>
             {targetColleges.length > 0 && (
               <div className="mb-8 p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
-                 <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4 flex justify-between items-center">
+                 <h4 className="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-4 flex justify-between items-center">
                     <span>Selected Priority</span>
                     <span className="text-[8px] opacity-50">Drag order logic active</span>
                  </h4>
@@ -727,8 +727,8 @@ function UgeacPredictor() {
                         <div key={id} className="flex items-center gap-2 bg-white border border-indigo-200 px-3 py-2 rounded-xl shadow-sm">
                            <span className="text-[10px] font-black text-slate-900 uppercase">{col.name}</span>
                            <div className="flex gap-1 border-l border-white/10 pl-2">
-                              <button onClick={() => moveTargetCollege(idx, -1)} disabled={idx === 0} className="text-indigo-400 disabled:opacity-20 hover:text-white"><ChevronUp size={12}/></button>
-                              <button onClick={() => moveTargetCollege(idx, 1)} disabled={idx === targetColleges.length - 1} className="text-indigo-400 disabled:opacity-20 hover:text-white"><ChevronDown size={12}/></button>
+                              <button onClick={() => moveTargetCollege(idx, -1)} disabled={idx === 0} className="text-indigo-600 disabled:opacity-20 hover:text-white"><ChevronUp size={12}/></button>
+                              <button onClick={() => moveTargetCollege(idx, 1)} disabled={idx === targetColleges.length - 1} className="text-indigo-600 disabled:opacity-20 hover:text-white"><ChevronDown size={12}/></button>
                               <button onClick={() => setTargetColleges(targetColleges.filter(tid => tid !== id))} className="text-rose-400 hover:text-rose-300 ml-1"><X size={12}/></button>
                            </div>
                         </div>
@@ -769,14 +769,14 @@ function UgeacPredictor() {
             </div>
             {targetBranches.length > 0 && (
               <div className="mb-8 p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
-                 <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4">Branch Priority</h4>
+                 <h4 className="text-[10px] font-black text-indigo-600 uppercase tracking-widest mb-4">Branch Priority</h4>
                  <div className="flex flex-wrap gap-2 max-h-[120px] overflow-y-auto pr-2 custom-scrollbar">
                     {targetBranches.map((b, idx) => (
                       <div key={b} className="flex items-center gap-2 bg-white border border-indigo-200 px-3 py-2 rounded-xl shadow-sm">
                          <span className="text-[10px] font-black text-slate-900 uppercase">{branchMapping[b] || b}</span>
                          <div className="flex gap-1 border-l border-white/10 pl-2">
-                            <button onClick={() => moveTargetBranch(idx, -1)} disabled={idx === 0} className="text-indigo-400 disabled:opacity-20 hover:text-white"><ChevronUp size={12}/></button>
-                            <button onClick={() => moveTargetBranch(idx, 1)} disabled={idx === targetBranches.length - 1} className="text-indigo-400 disabled:opacity-20 hover:text-white"><ChevronDown size={12}/></button>
+                            <button onClick={() => moveTargetBranch(idx, -1)} disabled={idx === 0} className="text-indigo-600 disabled:opacity-20 hover:text-white"><ChevronUp size={12}/></button>
+                            <button onClick={() => moveTargetBranch(idx, 1)} disabled={idx === targetBranches.length - 1} className="text-indigo-600 disabled:opacity-20 hover:text-white"><ChevronDown size={12}/></button>
                             <button onClick={() => setTargetBranches(targetBranches.filter(tb => tb !== b))} className="text-rose-400 hover:text-rose-300 ml-1"><X size={12}/></button>
                          </div>
                       </div>
@@ -807,7 +807,7 @@ function UgeacPredictor() {
           <div className="modal-box" onClick={e => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setSelectedCollege(null)}><X size={20} /></button>
             <h3 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter mb-2">{selectedCollege.name}</h3>
-            <p className="text-indigo-400 font-black text-[10px] uppercase tracking-[0.3em] mb-8 flex items-center gap-2"><MapPin size={14} /> {selectedCollege.location}</p>
+            <p className="text-indigo-600 font-black text-[10px] uppercase tracking-[0.3em] mb-8 flex items-center gap-2"><MapPin size={14} /> {selectedCollege.location}</p>
             
             <div className="grid grid-cols-2 gap-4 mb-8">
                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
@@ -821,7 +821,7 @@ function UgeacPredictor() {
             </div>
 
             <div className="p-8 bg-indigo-500/10 rounded-3xl border border-indigo-500/20 mb-8">
-               <h4 className="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-3">Academic Insight</h4>
+               <h4 className="text-[9px] font-black text-indigo-600 uppercase tracking-widest mb-3">Academic Insight</h4>
                <p className="text-slate-300 text-xs leading-relaxed font-medium">{selectedCollege.description || "Leading technical institution in Bihar offering state-of-the-art engineering programs with verified round-wise historical cutoffs."}</p>
             </div>
             <a href={selectedCollege.website} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all shadow-xl shadow-indigo-900/20">Official Portal <ExternalLink size={16} /></a>
