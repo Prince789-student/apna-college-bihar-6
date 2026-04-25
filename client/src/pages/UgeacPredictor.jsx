@@ -16,6 +16,7 @@ function UgeacPredictor() {
   const [targetBranches, setTargetBranches] = useState([]);
   const [choices, setChoices] = useState([]); 
   const [visibleCount, setVisibleCount] = useState(50);
+  const [finderPriority, setFinderPriority] = useState('college'); // college or branch
 
   const [ugeacData, setUgeacData] = useState({ data2024: [], data2025: [], branches: [] });
   const [seatMatrix, setSeatMatrix] = useState([]);
@@ -196,15 +197,28 @@ function UgeacPredictor() {
     const allRes = Array.from(seen.values()).sort((a,b) => {
       const score = (c) => c === 'High' ? 1 : c === 'Medium' ? 2 : c === 'Low' ? 3 : 4;
       
-      // If in finder mode and we have prioritized colleges/branches, respect that order
       if (mode === 'finder') {
-        const cIdxA = targetColleges.indexOf(a.collegeId);
-        const cIdxB = targetColleges.indexOf(b.collegeId);
-        if (cIdxA !== -1 && cIdxB !== -1 && cIdxA !== cIdxB) return cIdxA - cIdxB;
-        
-        const bIdxA = targetBranches.indexOf(a.branch);
-        const bIdxB = targetBranches.indexOf(b.branch);
-        if (bIdxA !== -1 && bIdxB !== -1 && bIdxA !== bIdxB) return bIdxA - bIdxB;
+        if (finderPriority === 'college') {
+          const cIdxA = targetColleges.indexOf(a.collegeId);
+          const cIdxB = targetColleges.indexOf(b.collegeId);
+          if (cIdxA !== -1 && cIdxB !== -1 && cIdxA !== cIdxB) return cIdxA - cIdxB;
+          if (cIdxA !== -1 && cIdxB === -1) return -1;
+          if (cIdxA === -1 && cIdxB !== -1) return 1;
+
+          const bIdxA = targetBranches.indexOf(a.branch);
+          const bIdxB = targetBranches.indexOf(b.branch);
+          if (bIdxA !== -1 && bIdxB !== -1 && bIdxA !== bIdxB) return bIdxA - bIdxB;
+        } else {
+          const bIdxA = targetBranches.indexOf(a.branch);
+          const bIdxB = targetBranches.indexOf(b.branch);
+          if (bIdxA !== -1 && bIdxB !== -1 && bIdxA !== bIdxB) return bIdxA - bIdxB;
+          if (bIdxA !== -1 && bIdxB === -1) return -1;
+          if (bIdxA === -1 && bIdxB !== -1) return 1;
+
+          const cIdxA = targetColleges.indexOf(a.collegeId);
+          const cIdxB = targetColleges.indexOf(b.collegeId);
+          if (cIdxA !== -1 && cIdxB !== -1 && cIdxA !== cIdxB) return cIdxA - cIdxB;
+        }
       }
       
       return score(a.chance) - score(b.chance) || a.college.tier - b.college.tier;
@@ -516,6 +530,15 @@ function UgeacPredictor() {
               {(mode === 'finder' || mode === 'wizard') && (
                 <section className="glass-panel animate-in fade-in">
                    <h2 className="section-title"><Filter size={18} /> Multi-Filters</h2>
+                   
+                   <div className="mb-6">
+                      <label className="premium-label">Result Sorting Priority</label>
+                      <div className="flex bg-slate-100 p-1 rounded-xl gap-1">
+                         <button onClick={() => setFinderPriority('college')} className={`flex-1 py-2 text-[9px] font-black uppercase rounded-lg transition-all ${finderPriority === 'college' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 hover:bg-white'}`}>Prefer College</button>
+                         <button onClick={() => setFinderPriority('branch')} className={`flex-1 py-2 text-[9px] font-black uppercase rounded-lg transition-all ${finderPriority === 'branch' ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-500 hover:bg-white'}`}>Prefer Branch</button>
+                      </div>
+                   </div>
+
                    <div className="space-y-4">
                       <div>
                         <label className="premium-label">Institutes Selection</label>
