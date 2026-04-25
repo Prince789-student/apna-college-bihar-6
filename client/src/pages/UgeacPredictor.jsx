@@ -629,7 +629,7 @@ function UgeacPredictor() {
                                   <span className="text-[9px] font-black text-indigo-200 uppercase tracking-[0.3em] block">Predicted Allotment Found</span>
                                   <span className="bg-white/10 text-white text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest">{results.mockAllotment.entry.cat} Category</span>
                                </div>
-                               <h3 className="text-xl md:text-3xl font-[1000] text-slate-900 uppercase tracking-tighter">{results.mockAllotment.choice.collegeName}</h3>
+                               <h3 className="text-xl md:text-3xl font-[1000] text-white uppercase tracking-tighter">{results.mockAllotment.choice.collegeName}</h3>
                                <p className="text-indigo-100 font-bold uppercase text-xs tracking-widest mt-1">{branchMapping[results.mockAllotment.choice.branch] || results.mockAllotment.choice.branch}</p>
                             </div>
                             <div className="text-right hidden md:block">
@@ -671,17 +671,17 @@ function UgeacPredictor() {
                                       <div className="college-name">{item.college.name}</div>
                                       <div className="branch-name">{branchMapping[item.branch] || item.branch}</div>
                                    </td>
-                                   <td className="text-center py-6">
-                                      <div className="flex flex-col items-center bg-indigo-500/10 border border-indigo-500/20 py-2 px-3 rounded-2xl min-w-[80px]">
-                                         <span className="text-[14px] font-black text-indigo-400 font-mono">#{item.myCompRank}</span>
-                                         <span className="text-[8px] text-slate-400 font-black uppercase tracking-tighter">{item.cat} CAT</span>
+                                   <td className="text-center">
+                                      <div className="rank-badge-box mx-auto">
+                                         <span className="rank">#{item.myCompRank}</span>
+                                         <span className="cat">{item.cat} CAT</span>
                                       </div>
                                    </td>
                                    <td className="text-center">
-                                      <span className="text-[11px] font-black text-slate-600 font-mono">{item.cutoff24}</span>
+                                      <span className="text-[11px] font-black text-slate-900 font-mono">{item.cutoff24}</span>
                                    </td>
                                    <td className="text-center">
-                                      <span className="text-[12px] font-black text-indigo-400 font-mono">{item.cutoff25}</span>
+                                      <span className="text-[13px] font-[1000] text-indigo-700 font-mono">{item.cutoff25}</span>
                                    </td>
                                    <td className="text-center">
                                       <span className="text-[10px] font-black text-slate-400">{item.seats || '—'}</span>
@@ -737,20 +737,20 @@ function UgeacPredictor() {
           <div className="modal-box" onClick={e => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setIsFinderCollegeOpen(false)}><X size={20} /></button>
             <div className="flex items-center justify-between mb-8 pr-12">
-               <h3 className="text-2xl font-[1000] text-white uppercase tracking-tighter">Institutes</h3>
+               <h3 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Institutes</h3>
                <div className="flex gap-2">
-                  <button onClick={() => setTargetColleges(colleges.map(c => c.id))} className="text-[9px] font-black uppercase text-indigo-400 hover:text-white px-3 py-1.5 bg-indigo-500/10 rounded-lg transition-all">Select All</button>
-                  <button onClick={() => setTargetColleges([])} className="text-[9px] font-black uppercase text-rose-400 hover:text-white px-3 py-1.5 bg-rose-500/10 rounded-lg transition-all">Clear</button>
+                  <button onClick={() => setTargetColleges(colleges.map(c => c.id))} className="text-[9px] font-black uppercase text-indigo-600 hover:bg-indigo-600 hover:text-white px-3 py-1.5 bg-indigo-50 rounded-lg transition-all border border-indigo-100">Select All</button>
+                  <button onClick={() => setTargetColleges([])} className="text-[9px] font-black uppercase text-rose-600 hover:bg-rose-600 hover:text-white px-3 py-1.5 bg-rose-50 rounded-lg transition-all border border-rose-100">Clear</button>
                </div>
             </div>
             <div className="mb-6">
                <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
-                  <input type="text" placeholder="Search college name..." className="w-full bg-slate-900 border border-white/5 rounded-2xl p-4 pl-12 text-sm text-white focus:border-indigo-500 outline-none transition-all" value={finderCollegeSearch} onChange={e => setFinderCollegeSearch(e.target.value)} />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+                  <input type="text" placeholder="Search college name..." className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 pl-12 text-sm text-slate-900 focus:border-indigo-500 focus:bg-white outline-none transition-all" value={finderCollegeSearch} onChange={e => setFinderCollegeSearch(e.target.value)} />
                </div>
             </div>
             {targetColleges.length > 0 && (
-              <div className="mb-8 p-4 bg-indigo-500/5 rounded-3xl border border-indigo-500/10">
+              <div className="mb-8 p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
                  <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4 flex justify-between items-center">
                     <span>Selected Priority</span>
                     <span className="text-[8px] opacity-50">Drag order logic active</span>
@@ -760,8 +760,8 @@ function UgeacPredictor() {
                       const col = colleges.find(c => c.id === id);
                       if (!col) return null;
                       return (
-                        <div key={id} className="flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 px-3 py-2 rounded-xl">
-                           <span className="text-[10px] font-black text-white uppercase">{col.name}</span>
+                        <div key={id} className="flex items-center gap-2 bg-white border border-indigo-200 px-3 py-2 rounded-xl shadow-sm">
+                           <span className="text-[10px] font-black text-slate-900 uppercase">{col.name}</span>
                            <div className="flex gap-1 border-l border-white/10 pl-2">
                               <button onClick={() => moveTargetCollege(idx, -1)} disabled={idx === 0} className="text-indigo-400 disabled:opacity-20 hover:text-white"><ChevronUp size={12}/></button>
                               <button onClick={() => moveTargetCollege(idx, 1)} disabled={idx === targetColleges.length - 1} className="text-indigo-400 disabled:opacity-20 hover:text-white"><ChevronDown size={12}/></button>
@@ -776,13 +776,13 @@ function UgeacPredictor() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[40vh] overflow-y-auto pr-4 custom-scrollbar">
               {sortedColleges.filter(c => c.name.toLowerCase().includes(finderCollegeSearch.toLowerCase())).map(c => (
-                <label key={c.id} className={`flex items-center gap-4 p-4 rounded-2xl cursor-pointer border-2 transition-all group ${targetColleges.includes(c.id) ? 'bg-indigo-500/10 border-indigo-500/50' : 'bg-slate-900/50 border-transparent hover:border-white/10'}`}>
+                <label key={c.id} className={`flex items-center gap-4 p-4 rounded-2xl cursor-pointer border-2 transition-all group ${targetColleges.includes(c.id) ? 'bg-indigo-50 border-indigo-500/50' : 'bg-white border-slate-100 hover:border-indigo-200'}`}>
                   <input type="checkbox" className="hidden" checked={targetColleges.includes(c.id)} onChange={(e) => e.target.checked ? setTargetColleges([...targetColleges, c.id]) : setTargetColleges(targetColleges.filter(id => id !== c.id))} />
-                  <div className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all ${targetColleges.includes(c.id) ? 'bg-indigo-500 border-indigo-500' : 'border-slate-700'}`}>
+                  <div className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all ${targetColleges.includes(c.id) ? 'bg-indigo-600 border-indigo-600' : 'border-slate-200'}`}>
                      {targetColleges.includes(c.id) && <CheckCircle2 size={12} className="text-white" />}
                   </div>
                   <div className="flex-1 min-w-0">
-                     <span className="text-white font-black uppercase text-[10px] tracking-tight block truncate">{c.name}</span>
+                     <span className="text-slate-900 font-black uppercase text-[10px] tracking-tight block truncate">{c.name}</span>
                      <span className="text-slate-500 font-bold text-[8px] uppercase tracking-widest">{c.location}</span>
                   </div>
                 </label>
@@ -797,19 +797,19 @@ function UgeacPredictor() {
           <div className="modal-box" onClick={e => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setIsFinderBranchOpen(false)}><X size={20} /></button>
             <div className="flex items-center justify-between mb-8 pr-12">
-               <h3 className="text-2xl font-[1000] text-white uppercase tracking-tighter">Branches</h3>
+               <h3 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Branches</h3>
                <div className="flex gap-2">
-                  <button onClick={() => setTargetBranches(ugeacData.branches)} className="text-[9px] font-black uppercase text-indigo-400 hover:text-white px-3 py-1.5 bg-indigo-500/10 rounded-lg transition-all">Select All</button>
-                  <button onClick={() => setTargetBranches([])} className="text-[9px] font-black uppercase text-rose-400 hover:text-white px-3 py-1.5 bg-rose-500/10 rounded-lg transition-all">Clear</button>
+                  <button onClick={() => setTargetBranches(ugeacData.branches)} className="text-[9px] font-black uppercase text-indigo-600 hover:bg-indigo-600 hover:text-white px-3 py-1.5 bg-indigo-50 rounded-lg transition-all border border-indigo-100">Select All</button>
+                  <button onClick={() => setTargetBranches([])} className="text-[9px] font-black uppercase text-rose-600 hover:bg-rose-600 hover:text-white px-3 py-1.5 bg-rose-50 rounded-lg transition-all border border-rose-100">Clear</button>
                </div>
             </div>
             {targetBranches.length > 0 && (
-              <div className="mb-8 p-4 bg-indigo-500/5 rounded-3xl border border-indigo-500/10">
+              <div className="mb-8 p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
                  <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4">Branch Priority</h4>
                  <div className="flex flex-wrap gap-2 max-h-[120px] overflow-y-auto pr-2 custom-scrollbar">
                     {targetBranches.map((b, idx) => (
-                      <div key={b} className="flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 px-3 py-2 rounded-xl">
-                         <span className="text-[10px] font-black text-white uppercase">{branchMapping[b] || b}</span>
+                      <div key={b} className="flex items-center gap-2 bg-white border border-indigo-200 px-3 py-2 rounded-xl shadow-sm">
+                         <span className="text-[10px] font-black text-slate-900 uppercase">{branchMapping[b] || b}</span>
                          <div className="flex gap-1 border-l border-white/10 pl-2">
                             <button onClick={() => moveTargetBranch(idx, -1)} disabled={idx === 0} className="text-indigo-400 disabled:opacity-20 hover:text-white"><ChevronUp size={12}/></button>
                             <button onClick={() => moveTargetBranch(idx, 1)} disabled={idx === targetBranches.length - 1} className="text-indigo-400 disabled:opacity-20 hover:text-white"><ChevronDown size={12}/></button>
