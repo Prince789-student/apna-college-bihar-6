@@ -201,18 +201,69 @@ function UgeacPredictor() {
     setHasPredicted(true);
   };
 
+  const addChoice = (collegeId, branch) => {
+    if (choices.find(c => c.collegeId === collegeId && c.branch === branch)) return;
+    const col = colleges.find(c => c.id === collegeId);
+    setChoices([...choices, { collegeId, branch, collegeName: col.name }]);
+  };
+
+  const removeChoice = (idx) => {
+    setChoices(choices.filter((_, i) => i !== idx));
+  };
+
+  const moveChoice = (idx, direction) => {
+    const newChoices = [...choices];
+    const target = idx + direction;
+    if (target < 0 || target >= choices.length) return;
+    [newChoices[idx], newChoices[target]] = [newChoices[target], newChoices[idx]];
+    setChoices(newChoices);
+  };
+
   const downloadResultsPDF = () => {
     const doc = new jsPDF();
-    doc.setFillColor(30, 41, 59); doc.rect(0, 0, 210, 48, 'F');
-    doc.setTextColor(255, 255, 255); doc.setFontSize(22); doc.setFont("helvetica", "bold");
-    doc.text("APNA COLLEGE BIHAR", 14, 22); doc.setFontSize(10); doc.text("OFFICIAL UGEAC COUNSELLING REPORT (2024-2025)", 14, 32);
     
+    // Header
+    doc.setFillColor(15, 23, 42); doc.rect(0, 0, 210, 50, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24); doc.setFont("helvetica", "bold");
+    doc.text("APNA COLLEGE BIHAR", 15, 25);
+    doc.setFontSize(10); doc.setFont("helvetica", "normal");
+    doc.text("OFFICIAL UGEAC COUNSELLING ANALYSIS REPORT 2025", 15, 35);
+    
+    // Candidate Info
+    doc.setFillColor(248, 250, 252); doc.rect(15, 60, 180, 25, 'F');
+    doc.setTextColor(30, 41, 59);
+    doc.setFontSize(9); doc.setFont("helvetica", "bold");
+    doc.text(`JEE Rank: ${rank}`, 20, 70);
+    doc.text(`UGEAC Rank: ${results.calculatedRank}`, 70, 70);
+    doc.text(`Category: ${category}`, 120, 70);
+    doc.text(`Gender: ${gender}`, 160, 70);
+
+    // Mock Allotment
+    if (results.mockAllotment) {
+      doc.setTextColor(79, 70, 229);
+      doc.text("PREDICTED ALLOTMENT:", 15, 100);
+      doc.setTextColor(0, 0, 0);
+      doc.setFontSize(11);
+      doc.text(`${results.mockAllotment.choice.collegeName} - ${results.mockAllotment.choice.branch}`, 15, 108);
+      doc.setFontSize(8);
+      doc.text(`Based on Choice #${results.mockAllotment.choiceNumber}`, 15, 114);
+    }
+
+    // Results Table
     autoTable(doc, {
-      startY: 55,
-      head: [['#', 'College', 'Branch', '2024 CO', '2025 CO', 'Chance']],
-      body: results.all.slice(0, 50).map((r, i) => [i+1, r.college.name, r.branch, r.cutoff24, r.cutoff25, r.chance]),
-      theme: 'grid', styles: { fontSize: 7 }
+      startY: results.mockAllotment ? 125 : 100,
+      head: [['#', 'Institute Name', 'Branch', '2024 CO', '2025 CO', 'Status']],
+      body: results.all.slice(0, 40).map((r, i) => [i+1, r.college.name, r.branch, r.cutoff24, r.cutoff25, r.chance]),
+      theme: 'striped',
+      headStyles: { fillColor: [79, 70, 229], fontSize: 8 },
+      styles: { fontSize: 7 }
     });
+
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text("© 2025 APNA COLLEGE BIHAR. This is an AI-generated report for guidance only.", 15, doc.internal.pageSize.height - 10);
+    
     doc.save(`UGEAC_Analysis_2025.pdf`);
   };
 
@@ -282,7 +333,7 @@ function UgeacPredictor() {
                     </div>
                     <button onClick={calculateResults} className="btn-primary group">
                       <Zap size={18} className="group-hover:fill-current transition-all" /> 
-                      Calculate Chances
+                      {mode === 'wizard' ? 'Run Allotment Engine' : 'Calculate Chances'}
                     </button>
                  </div>
               </section>
@@ -298,10 +349,43 @@ function UgeacPredictor() {
                    </div>
                 </section>
               )}
+
+              {mode === 'wizard' && (
+                <section className="glass-panel animate-in fade-in">
+                   <div className="flex items-center justify-between mb-6">
+                      <h2 className="section-title mb-0"><Layers size={18} /> My Preferences</h2>
+                      <span className="stats-pill">{choices.length} Choices</span>
+                   </div>
+                   <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                      {choices.map((ch, idx) => (
+                        <div key={idx} className="p-3 bg-slate-900/50 border border-white/5 rounded-xl group relative">
+                           <div className="flex items-center gap-3">
+                              <span className="text-[10px] font-black text-indigo-400">{idx + 1}</span>
+                              <div className="flex-1 min-w-0">
+                                 <p className="text-[9px] font-black text-white uppercase truncate">{ch.collegeName}</p>
+                                 <p className="text-[8px] font-bold text-slate-500 uppercase">{branchMapping[ch.branch] || ch.branch}</p>
+                              </div>
+                              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                 <button onClick={() => moveChoice(idx, -1)} className="p-1 hover:text-indigo-400"><ChevronUp size={12}/></button>
+                                 <button onClick={() => moveChoice(idx, 1)} className="p-1 hover:text-indigo-400"><ChevronDown size={12}/></button>
+                                 <button onClick={() => removeChoice(idx)} className="p-1 hover:text-rose-400"><Trash2 size={12}/></button>
+                              </div>
+                           </div>
+                        </div>
+                      ))}
+                      {choices.length === 0 && (
+                        <div className="text-center py-8">
+                           <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest">No choices added yet</p>
+                           <p className="text-[8px] text-slate-700 uppercase mt-1">Select from results to add here</p>
+                        </div>
+                      )}
+                   </div>
+                </section>
+              )}
            </div>
 
            <div className="lg:col-span-8">
-              {!hasPredicted ? (
+              {!hasPredicted && mode !== 'wizard' ? (
                  <div className="empty-state">
                     <div className="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-indigo-500/20">
                       <ShieldCheck size={40} className="text-indigo-400" />
@@ -311,6 +395,28 @@ function UgeacPredictor() {
                  </div>
               ) : (
                  <div className="space-y-8 animate-in slide-in-from-bottom">
+                    
+                    {/* Mock Allotment Result Banner */}
+                    {results.mockAllotment && (
+                      <div className="p-8 bg-gradient-to-br from-indigo-600 to-indigo-900 rounded-[2.5rem] border border-white/10 shadow-2xl relative overflow-hidden group">
+                         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
+                         <div className="relative z-10 flex items-center gap-6">
+                            <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20">
+                               <CheckCircle2 size={32} className="text-white" />
+                            </div>
+                            <div className="flex-1">
+                               <span className="text-[9px] font-black text-indigo-200 uppercase tracking-[0.3em] mb-1 block">Predicted Allotment Found</span>
+                               <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter">{results.mockAllotment.choice.collegeName}</h3>
+                               <p className="text-indigo-100 font-bold uppercase text-xs tracking-widest mt-1">{branchMapping[results.mockAllotment.choice.branch] || results.mockAllotment.choice.branch}</p>
+                            </div>
+                            <div className="text-right hidden md:block">
+                               <span className="text-[9px] font-black text-indigo-300 uppercase tracking-widest block mb-1">Choice Number</span>
+                               <span className="text-3xl font-black text-white">#{results.mockAllotment.choiceNumber}</span>
+                            </div>
+                         </div>
+                      </div>
+                    )}
+
                     <div className="results-header">
                        <div className="flex flex-col gap-1">
                           <h2 className="section-title mb-0"><Wifi size={18} className="animate-pulse" /> Analysis Results</h2>
@@ -325,12 +431,12 @@ function UgeacPredictor() {
                     <div className="premium-table-container">
                        <table className="premium-table">
                           <thead>
-                             <tr><th>Institute & Branch</th><th className="text-center">2024 CO</th><th className="text-center">2025 CO</th><th className="text-center">Success Probability</th></tr>
+                             <tr><th>Institute & Branch</th><th className="text-center">2024 CO</th><th className="text-center">2025 CO</th><th className="text-center">Success Probability</th>{mode === 'wizard' && <th className="text-center">Action</th>}</tr>
                           </thead>
                           <tbody>
                              {results.all.slice(0, visibleCount).map((item, idx) => (
-                                <tr key={idx} onClick={() => setSelectedCollege(item.college)}>
-                                   <td>
+                                <tr key={idx}>
+                                   <td onClick={() => setSelectedCollege(item.college)}>
                                       <div className="college-name">{item.college.name}</div>
                                       <div className="branch-name">{branchMapping[item.branch] || item.branch}</div>
                                    </td>
@@ -346,6 +452,17 @@ function UgeacPredictor() {
                                         {item.chance}
                                       </span>
                                    </td>
+                                   {mode === 'wizard' && (
+                                     <td className="text-center">
+                                        <button 
+                                          onClick={() => addChoice(item.college.id, item.branch)}
+                                          disabled={choices.some(c => c.collegeId === item.college.id && c.branch === item.branch)}
+                                          className="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl hover:bg-indigo-500 hover:text-white transition-all disabled:opacity-30 disabled:hover:bg-indigo-500/10 disabled:hover:text-indigo-400"
+                                        >
+                                          {choices.some(c => c.collegeId === item.college.id && c.branch === item.branch) ? <CheckCircle2 size={16}/> : <Plus size={16}/>}
+                                        </button>
+                                     </td>
+                                   )}
                                 </tr>
                              ))}
                           </tbody>
@@ -374,12 +491,15 @@ function UgeacPredictor() {
         <div className="modal-backdrop" onClick={() => setIsFinderCollegeOpen(false)}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setIsFinderCollegeOpen(false)}><X size={20} /></button>
-            <h3 className="text-2xl font-bold text-white mb-6">Select Institutes</h3>
-            <div className="space-y-2 max-h-60 overflow-y-auto pr-2">
+            <h3 className="text-2xl font-[1000] text-white uppercase tracking-tighter mb-8">Select Institutes</h3>
+            <div className="space-y-2 max-h-[60vh] overflow-y-auto pr-4 custom-scrollbar">
               {sortedColleges.map(c => (
-                <label key={c.id} className="flex items-center gap-3 p-3 bg-slate-900/50 rounded-xl cursor-pointer border border-transparent hover:border-indigo-500/30">
-                  <input type="checkbox" className="w-5 h-5 rounded accent-indigo-500" checked={targetColleges.includes(c.id)} onChange={(e) => e.target.checked ? setTargetColleges([...targetColleges, c.id]) : setTargetColleges(targetColleges.filter(id => id !== c.id))} />
-                  <span className="text-slate-200 font-semibold">{c.name}</span>
+                <label key={c.id} className="flex items-center gap-4 p-4 bg-slate-900/50 rounded-2xl cursor-pointer border-2 border-transparent hover:border-indigo-500/30 transition-all group">
+                  <input type="checkbox" className="w-5 h-5 rounded-lg accent-indigo-500 border-white/10 bg-slate-800" checked={targetColleges.includes(c.id)} onChange={(e) => e.target.checked ? setTargetColleges([...targetColleges, c.id]) : setTargetColleges(targetColleges.filter(id => id !== c.id))} />
+                  <div className="flex-1">
+                     <span className="text-white font-black uppercase text-xs tracking-widest block">{c.name}</span>
+                     <span className="text-slate-500 font-bold text-[10px] uppercase tracking-widest">{c.location}</span>
+                  </div>
                 </label>
               ))}
             </div>
@@ -391,13 +511,25 @@ function UgeacPredictor() {
         <div className="modal-backdrop" onClick={() => setSelectedCollege(null)}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setSelectedCollege(null)}><X size={20} /></button>
-            <h3 className="text-2xl font-bold text-white mb-2">{selectedCollege.name}</h3>
-            <p className="text-indigo-400 font-bold mb-6 flex items-center gap-2"><MapPin size={16} /> {selectedCollege.location}</p>
-            <div className="p-6 bg-indigo-500/10 rounded-2xl border border-indigo-500/20 mb-6">
-               <h4 className="text-sm font-bold text-indigo-400 uppercase mb-3">College Insight</h4>
-               <p className="text-slate-300 text-sm leading-relaxed">{selectedCollege.description || "Leading technical institution in Bihar offering state-of-the-art engineering programs."}</p>
+            <h3 className="text-2xl font-[1000] text-white uppercase tracking-tighter mb-2">{selectedCollege.name}</h3>
+            <p className="text-indigo-400 font-black text-[10px] uppercase tracking-[0.3em] mb-8 flex items-center gap-2"><MapPin size={14} /> {selectedCollege.location}</p>
+            
+            <div className="grid grid-cols-2 gap-4 mb-8">
+               <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                  <span className="text-slate-500 text-[8px] font-black uppercase tracking-widest block mb-1">Established</span>
+                  <span className="text-white font-black text-sm">{selectedCollege.estd || "N/A"}</span>
+               </div>
+               <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                  <span className="text-slate-500 text-[8px] font-black uppercase tracking-widest block mb-1">Tier Rating</span>
+                  <span className="text-white font-black text-sm">Tier {selectedCollege.tier}</span>
+               </div>
             </div>
-            <a href={selectedCollege.website} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 py-4 bg-indigo-600 text-white rounded-2xl font-bold text-sm">Visit Website <ExternalLink size={16} /></a>
+
+            <div className="p-8 bg-indigo-500/10 rounded-3xl border border-indigo-500/20 mb-8">
+               <h4 className="text-[9px] font-black text-indigo-400 uppercase tracking-widest mb-3">Academic Insight</h4>
+               <p className="text-slate-300 text-xs leading-relaxed font-medium">{selectedCollege.description || "Leading technical institution in Bihar offering state-of-the-art engineering programs with verified round-wise historical cutoffs."}</p>
+            </div>
+            <a href={selectedCollege.website} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all shadow-xl shadow-indigo-900/20">Official Portal <ExternalLink size={16} /></a>
           </div>
         </div>
       )}
