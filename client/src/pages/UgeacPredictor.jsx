@@ -184,7 +184,8 @@ function UgeacPredictor() {
             cat: d.category, 
             seatType: d.seatType, 
             myCompRank: compRank,
-            seats: availableSeats
+            seats: availableSeats,
+            collegeId: collegeInfo.id
           });
         }
       });
@@ -200,7 +201,7 @@ function UgeacPredictor() {
     // Initial mock allotment (will be synced via useEffect for reordering)
     let mockAllotment = null, mockDiscussions = [];
     choices.forEach((ch, i) => {
-      const entry = allRes.find(r => r.college.id === ch.collegeId && r.branch === ch.branch);
+      const entry = allRes.find(r => r.collegeId === ch.collegeId && r.branch === ch.branch);
       if (entry && (entry.chance === 'High' || entry.chance === 'Medium')) {
         if (!mockAllotment) mockAllotment = { choice: ch, choiceNumber: i + 1, entry };
         mockDiscussions.push({ choiceNumber: i + 1, status: entry.chance, entry, choice: ch });
@@ -213,12 +214,12 @@ function UgeacPredictor() {
     setHasPredicted(true);
   };
 
-  // Sync mock allotment whenever choices or results change to ensure priority order is respected
+  // Sync mock allotment whenever choices or results change
   useEffect(() => {
     if (hasPredicted && results.all.length > 0) {
       let mockAllotment = null, mockDiscussions = [];
       choices.forEach((ch, i) => {
-        const entry = results.all.find(r => r.college.id === ch.collegeId && r.branch === ch.branch);
+        const entry = results.all.find(r => r.collegeId === ch.collegeId && r.branch === ch.branch);
         if (entry && (entry.chance === 'High' || entry.chance === 'Medium')) {
           if (!mockAllotment) mockAllotment = { choice: ch, choiceNumber: i + 1, entry };
           mockDiscussions.push({ choiceNumber: i + 1, status: entry.chance, entry, choice: ch });
@@ -226,16 +227,19 @@ function UgeacPredictor() {
           mockDiscussions.push({ choiceNumber: i + 1, status: 'No Chance', entry: null, choice: ch });
         }
       });
-      
-      // Update results only if allotment changed to avoid unnecessary re-renders
       setResults(prev => ({ ...prev, mockAllotment, mockDiscussions }));
     }
-  }, [choices, hasPredicted]);
+  }, [choices, hasPredicted, results.all]);
 
   const addChoice = (collegeId, branch) => {
     if (choices.find(c => c.collegeId === collegeId && c.branch === branch)) return;
     const col = colleges.find(c => c.id === collegeId);
-    setChoices([...choices, { collegeId, branch, collegeName: col.name }]);
+    setChoices([...choices, { 
+      id: `choice-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      collegeId, 
+      branch, 
+      collegeName: col.name 
+    }]);
   };
 
   const removeChoice = (idx) => {
@@ -243,23 +247,38 @@ function UgeacPredictor() {
   };
 
   const moveChoice = (idx, direction) => {
+    if (idx + direction < 0 || idx + direction >= choices.length) return;
     const newChoices = [...choices];
-    const target = idx + direction;
-    if (target < 0 || target >= choices.length) return;
-    [newChoices[idx], newChoices[target]] = [newChoices[target], newChoices[idx]];
+    const item = newChoices.splice(idx, 1)[0];
+    newChoices.splice(idx + direction, 0, item);
     setChoices(newChoices);
   };
 
-  const downloadResultsPDF = () => {
+  const downloadResultsPDF = async () => {
     const doc = new jsPDF();
     
+    // Load Logo
+    let logoData = null;
+    try {
+      const resp = await fetch('/logo.jpg');
+      const blob = await resp.blob();
+      logoData = await new Promise(r => {
+        const reader = new FileReader();
+        reader.onloadend = () => r(reader.result);
+        reader.readAsDataURL(blob);
+      });
+    } catch(e) {}
+
     // Header
     doc.setFillColor(15, 23, 42); doc.rect(0, 0, 210, 60, 'F');
+    if (logoData) {
+      doc.addImage(logoData, 'JPEG', 15, 12, 12, 12);
+    }
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(26); doc.setFont("helvetica", "bold");
-    doc.text("APNA COLLEGE BIHAR", 15, 25);
-    doc.setFontSize(10); doc.setFont("helvetica", "normal");
-    doc.text("Official Counseling & Admission Support Portal", 15, 35);
+    doc.setFontSize(22); doc.setFont("helvetica", "bold");
+    doc.text("APNA COLLEGE BIHAR", logoData ? 32 : 15, 22);
+    doc.setFontSize(9); doc.setFont("helvetica", "normal");
+    doc.text("Official Counseling & Admission Support Portal", logoData ? 32 : 15, 30);
     doc.text("Visit: www.apnacollegebihar.com", 15, 42);
     doc.setTextColor(129, 140, 248);
     doc.text("High-Precision UGEAC 2025 Analysis Report", 15, 52);
@@ -280,7 +299,7 @@ function UgeacPredictor() {
     doc.setFontSize(10);
     doc.text("Why Apna College Bihar?", 15, currentY);
     doc.setFontSize(8); doc.setFont("helvetica", "normal");
-    doc.text("We provide Bihar's most accurate counseling tools, college reviews, and expert guidance for UGEAC and BCECE students.", 15, currentY + 6);
+    doc.text("We provide Bihar's most accurate counseling tools and verified round-wise historical cutoffs.", 15, currentY + 6);
     currentY += 20;
 
     // Mock Allotment
@@ -306,10 +325,19 @@ function UgeacPredictor() {
       margin: { left: 15, right: 15 }
     });
 
-    // Footer
+    // Watermark & Footer
     const pageCount = doc.internal.getNumberOfPages();
     for(let i = 1; i <= pageCount; i++) {
         doc.setPage(i);
+        
+        // Watermark
+        doc.saveGraphicsState();
+        doc.setGState(new doc.GState({opacity: 0.05}));
+        doc.setFontSize(50);
+        doc.setTextColor(150, 150, 150);
+        doc.text("APNA COLLEGE BIHAR", 105, 150, { align: 'center', angle: 45 });
+        doc.restoreGraphicsState();
+
         doc.setFontSize(8);
         doc.setTextColor(150, 150, 150);
         doc.text("Join our Telegram/WhatsApp for Live Counseling Help", 15, doc.internal.pageSize.height - 15);
@@ -340,10 +368,10 @@ function UgeacPredictor() {
            <div className="header-content">
               <div className="flex justify-center mb-8">
                  <div className="relative group">
-                   <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                   <div className="bg-slate-900/50 p-2 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden floating-icon">
-                      <img src="/logo.jpg" alt="Logo" className="w-20 h-20 rounded-2xl" />
-                   </div>
+                    <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                    <div className="bg-slate-900/50 p-2 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden floating-icon">
+                       <img src="/logo.jpg" alt="Logo" className="w-20 h-20 rounded-2xl" />
+                    </div>
                  </div>
               </div>
               <h1>UGEAC <span className="highlight-text">PREDICTOR</span></h1>
@@ -488,16 +516,16 @@ function UgeacPredictor() {
                    </div>
                    <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
                       {choices.map((ch, idx) => (
-                        <div key={idx} className="p-4 bg-slate-900/50 border border-white/5 rounded-2xl group relative overflow-hidden transition-all hover:bg-indigo-500/10">
+                        <div key={ch.id || idx} className="p-4 bg-slate-900/50 border border-white/5 rounded-2xl group relative overflow-hidden transition-all hover:bg-indigo-500/10 border-l-4 border-l-indigo-500/50">
                            <div className="flex items-center gap-4">
                               <div className="flex flex-col gap-1">
-                                 <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, -1); }} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20 p-1" disabled={idx === 0} type="button"><ChevronUp size={16}/></button>
-                                 <span className="text-[10px] font-[1000] text-indigo-400 text-center">{idx + 1}</span>
-                                 <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, 1); }} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20 p-1" disabled={idx === choices.length - 1} type="button"><ChevronDown size={16}/></button>
+                                 <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, -1); }} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20 p-1 bg-white/5 rounded-lg" disabled={idx === 0} type="button"><ChevronUp size={16}/></button>
+                                 <span className="text-[10px] font-[1000] text-indigo-400 text-center py-1">{idx + 1}</span>
+                                 <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, 1); }} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20 p-1 bg-white/5 rounded-lg" disabled={idx === choices.length - 1} type="button"><ChevronDown size={16}/></button>
                               </div>
                               <div className="flex-1 min-w-0">
-                                 <p className="text-[10px] font-black text-white uppercase truncate tracking-tight">{ch.collegeName}</p>
-                                 <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mt-1">{branchMapping[ch.branch] || ch.branch}</p>
+                                 <p className="text-[11px] font-black text-white uppercase truncate tracking-tight">{ch.collegeName}</p>
+                                 <p className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest mt-1">{branchMapping[ch.branch] || ch.branch}</p>
                               </div>
                               <button onClick={() => removeChoice(idx)} className="p-2.5 bg-rose-500/10 text-rose-500 rounded-xl hover:bg-rose-500 hover:text-white transition-all opacity-0 group-hover:opacity-100"><Trash2 size={14}/></button>
                            </div>
@@ -584,17 +612,20 @@ function UgeacPredictor() {
                                    <td className="text-center">
                                       <span className={`chance-badge chance-${item.chance}`}>
                                         <div className={`w-1.5 h-1.5 rounded-full ${item.chance === 'High' ? 'bg-emerald-400 animate-pulse' : item.chance === 'Medium' ? 'bg-amber-400' : 'bg-rose-400'}`}></div>
-                                        {item.chance}
+                                        <div className="flex flex-col items-center">
+                                            <span>{item.chance}</span>
+                                            <span className="text-[7px] opacity-60 uppercase">{item.cat} Category</span>
+                                         </div>
                                       </span>
                                    </td>
                                    {mode === 'wizard' && (
                                      <td className="text-center">
                                         <button 
-                                          onClick={() => addChoice(item.college.id, item.branch)}
-                                          disabled={choices.some(c => c.collegeId === item.college.id && c.branch === item.branch)}
+                                          onClick={() => addChoice(item.collegeId, item.branch)}
+                                          disabled={choices.some(c => c.collegeId === item.collegeId && c.branch === item.branch)}
                                           className="w-10 h-10 bg-indigo-500/10 text-indigo-400 rounded-xl hover:bg-indigo-500 hover:text-white transition-all disabled:opacity-30 flex items-center justify-center mx-auto"
                                         >
-                                          {choices.some(c => c.collegeId === item.college.id && c.branch === item.branch) ? <CheckCircle2 size={16}/> : <Plus size={16}/>}
+                                          {choices.some(c => c.collegeId === item.collegeId && c.branch === item.branch) ? <CheckCircle2 size={16}/> : <Plus size={16}/>}
                                         </button>
                                      </td>
                                    )}
