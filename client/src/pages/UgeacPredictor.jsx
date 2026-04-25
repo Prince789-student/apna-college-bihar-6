@@ -663,7 +663,6 @@ function UgeacPredictor() {
                                 <th className="text-center">Your Rank</th>
                                 <th className="text-center">2024 CO</th>
                                 <th className="text-center">2025 CO</th>
-                                <th className="text-center">Seats</th>
                                 <th className="text-center">Chance</th>
                                 {mode === 'wizard' && <th className="text-center">Add</th>}
                              </tr>
@@ -688,15 +687,11 @@ function UgeacPredictor() {
                                       <span className="text-[13px] font-[1000] text-indigo-700 font-mono">{item.cutoff25}</span>
                                    </td>
                                    <td className="text-center">
-                                      <span className="text-[10px] font-black text-slate-400">{item.seats || '—'}</span>
-                                   </td>
-                                   <td className="text-center">
                                       <span className={`chance-badge chance-${item.chance} flex flex-col items-center py-2 px-4 rounded-2xl min-w-[110px]`}>
                                         <div className="flex items-center gap-2 mb-1">
                                            <div className={`w-2 h-2 rounded-full ${item.chance === 'High' ? 'bg-emerald-400 animate-pulse' : item.chance === 'Medium' ? 'bg-amber-400' : 'bg-rose-400'}`}></div>
                                            <span className="text-[11px] font-black">{item.chance}</span>
                                         </div>
-                                        <span className="text-[7.5px] opacity-70 uppercase font-bold tracking-tighter">{item.cat} Seat</span>
                                       </span>
                                    </td>
                                    {mode === 'wizard' && (
