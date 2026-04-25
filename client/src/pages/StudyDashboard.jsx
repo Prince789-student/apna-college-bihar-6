@@ -503,8 +503,13 @@ export default function StudyDashboard() {
                         <Users size={10} /> {group.memberCount} Scholars Participating
                       </p>
                     </div>
-                    <button onClick={() => navigate(`/dashboard/study/group/${group.id}`)} className="w-full py-4 bg-slate-900 hover:bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-xl shadow-slate-900/10">
-                      Enter Operational Hub <ArrowRight size={14} />
+                    <button onClick={() => navigate(`/dashboard/study/group/${group.id}`)} className="w-full py-4 bg-slate-900 hover:bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex flex-col items-center justify-center gap-1 shadow-xl shadow-slate-900/10">
+                      <div className="flex items-center gap-2">
+                        Enter Operational Hub <ArrowRight size={14} />
+                      </div>
+                      <span className="text-[7px] text-blue-400 animate-pulse font-black uppercase tracking-widest flex items-center gap-1">
+                        <Video size={8} /> Live Collective Active
+                      </span>
                     </button>
                   </div>
                 </div>

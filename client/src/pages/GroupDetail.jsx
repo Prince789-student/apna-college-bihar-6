@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
-import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2 } from 'lucide-react';
+import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2, Video, Maximize2, Minimize2 } from 'lucide-react';
 import { collection, query, where, onSnapshot, doc, updateDoc, arrayRemove, deleteDoc } from 'firebase/firestore';
 
 export default function GroupDetail() {
@@ -13,6 +13,7 @@ export default function GroupDetail() {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isMeetingExpanded, setIsMeetingExpanded] = useState(false);
 
   useEffect(() => {
     if (!groupId || !user) return;
@@ -134,6 +135,40 @@ export default function GroupDetail() {
                <Trash2 size={12} /> <span className="text-[7px] font-black uppercase tracking-[0.2em]">Decommission</span>
              </button>
            )}
+        </div>
+      </div>
+
+      {/* Virtual Study Collective (Live Meeting) */}
+      <div className={`transition-all duration-500 ease-in-out ${isMeetingExpanded ? 'fixed inset-0 z-[100] p-4 bg-slate-900/90 backdrop-blur-xl' : 'relative'}`}>
+        <div className={`bg-white border border-slate-200 rounded-[2.5rem] overflow-hidden shadow-2xl relative group ${isMeetingExpanded ? 'h-full w-full' : 'h-[400px] md:h-[500px]'}`}>
+          <div className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between bg-white/80 backdrop-blur-md border-b border-slate-200 z-10">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-red-600/10 text-red-500 rounded-lg animate-pulse">
+                <Video size={16} />
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-slate-900 uppercase tracking-tighter">Live Collective Room</p>
+                <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest">Always Active • Secure Connection</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setIsMeetingExpanded(!isMeetingExpanded)}
+                className="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all"
+              >
+                {isMeetingExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+              </button>
+            </div>
+          </div>
+          
+          <div className="w-full h-full pt-16">
+            <iframe 
+              src={`https://meet.jit.si/${group.groupCode}#config.startWithAudioMuted=true&config.startWithVideoMuted=true&interfaceConfig.TOOLBAR_BUTTONS=["microphone","camera","closedcaptions","desktop","fullscreen","fivethirtyeight","hangup","profile","chat","settings","raisehand","videoquality","filmstrip","invite","tileview","videobackgroundblur","download","help","mute-everyone","security"]`}
+              allow="camera; microphone; fullscreen; display-capture; autoplay" 
+              className="w-full h-full border-0"
+              title="Study Meeting"
+            />
+          </div>
         </div>
       </div>
 
