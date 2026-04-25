@@ -575,7 +575,7 @@ export default function StudyDashboard() {
 
       {showCreateGroup && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 p-10 rounded-[3rem] w-full max-w-sm shadow-2xl relative overflow-hidden">
+          <div className="bg-white border border-slate-200 p-6 md:p-10 rounded-[3rem] w-full max-w-sm shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-3xl"></div>
             <div className="relative z-10 space-y-8 text-center">
               <div className="inline-flex p-4 bg-blue-600/10 text-blue-500 rounded-2xl mb-2">
@@ -604,7 +604,7 @@ export default function StudyDashboard() {
 
       {showJoinGroup && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 p-10 rounded-[3rem] w-full max-w-sm shadow-2xl relative overflow-hidden">
+          <div className="bg-white border border-slate-200 p-6 md:p-10 rounded-[3rem] w-full max-w-sm shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 left-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl"></div>
             <div className="relative z-10 space-y-8 text-center">
               <div className="inline-flex p-4 bg-emerald-600/10 text-emerald-500 rounded-2xl mb-2">

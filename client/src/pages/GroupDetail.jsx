@@ -155,7 +155,7 @@ export default function GroupDetail() {
 
       {/* Live Study Portal (Persistent Meeting Hub) */}
       <div className="relative group">
-        <div className="bg-slate-900 border border-slate-800 rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] relative overflow-hidden">
+        <div className="bg-slate-900 border border-slate-800 rounded-[2rem] md:rounded-[3rem] p-6 md:p-12 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] relative overflow-hidden">
           {/* Decorative Background */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px]"></div>
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-indigo-600/10 rounded-full blur-[100px]"></div>
@@ -167,19 +167,19 @@ export default function GroupDetail() {
                 <span className="text-[10px] font-black text-red-400 uppercase tracking-[0.2em]">Live Operational Hub</span>
               </div>
               <div className="space-y-2">
-                <h2 className="text-3xl md:text-5xl font-[1000] text-white tracking-tighter uppercase leading-none">Virtual Study Room</h2>
-                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest max-w-md mx-auto md:mx-0">Connect via Google Meet, Zoom, or Discord. This room is always active for your collective.</p>
+                <h2 className="text-2xl md:text-5xl font-[1000] text-white tracking-tighter uppercase leading-none">Virtual Study Room</h2>
+                <p className="text-slate-400 text-[10px] md:text-xs font-bold uppercase tracking-widest max-w-md mx-auto md:mx-0">Connect via Google Meet, Zoom, or Discord. This room is always active for your collective.</p>
               </div>
               
               {group.meetingLink ? (
-                <div className="flex flex-wrap items-center gap-4 justify-center md:justify-start">
+                <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start">
                   <a 
                     href={group.meetingLink} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="px-10 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-sm uppercase tracking-widest transition-all shadow-2xl shadow-blue-600/30 active:scale-95 flex items-center gap-3"
+                    className="px-6 py-4 md:px-10 md:py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-2xl shadow-blue-600/30 active:scale-95 flex items-center gap-2 md:gap-3"
                   >
-                    Enter Meeting <ExternalLink size={18} />
+                    Enter Meeting <ExternalLink size={16} />
                   </a>
                   {isAdmin && (
                     <button 
