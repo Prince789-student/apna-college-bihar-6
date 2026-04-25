@@ -89,7 +89,7 @@ export default function DashboardLayout() {
            <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
            <div className="min-w-[100px]">
              <span className="text-sm font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE BIHAR</span>
-             <span className="text-[6px] text-slate-500 font-black uppercase tracking-[0.3em] mt-1 block">Official Website</span>
+             <span className="text-[6px] text-slate-500 font-black uppercase tracking-[0.3em] mt-1 block">Bihar Official</span>
            </div>
         </div>
         {!isMobile && (
@@ -109,9 +109,9 @@ export default function DashboardLayout() {
           const isActive = location.pathname === link.path;
           return (
             <Link key={link.name} to={link.path}
-              className={`flex items-center gap-3 p-3.5 md:p-3 rounded-2xl transition-all duration-300 group relative ${isActive ? 'bg-blue-600 text-slate-900 shadow-xl shadow-blue-500/30' : 'text-slate-500 hover:bg-slate-100/50 hover:text-slate-900'}`}>
+              className={`flex items-center gap-3 p-3 md:p-2.5 rounded-2xl transition-all duration-300 group relative ${isActive ? 'bg-blue-600 text-slate-900 shadow-xl shadow-blue-500/30' : 'text-slate-500 hover:bg-slate-100/50 hover:text-slate-900'}`}>
               <div className={`${isActive ? 'scale-110' : 'group-hover:scale-110'} transition-transform shrink-0`}>{link.icon}</div>
-              <span className={`font-black text-[11px] md:text-[9px] uppercase tracking-widest transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+              <span className={`font-black text-[10px] md:text-[9px] uppercase tracking-widest transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                 {link.name}
               </span>
               {isActive && (isSidebarOpen || isMobile) && <div className="absolute right-4 w-1.5 h-1.5 bg-white rounded-full animate-pulse shadow-[0_0_10px_white]" />}
