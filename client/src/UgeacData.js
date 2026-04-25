@@ -1,3 +1,4 @@
+export const colleges = [
   { 
     id: 101, 
     name: "MIT Muzaffarpur", 

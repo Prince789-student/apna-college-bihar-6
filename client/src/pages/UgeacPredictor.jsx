@@ -933,7 +933,6 @@ function UgeacPredictor() {
                   <a href={selectedCollege.website || "#"} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all shadow-xl shadow-indigo-900/20 active:scale-95">
                      Visit Official Website <ExternalLink size={16} />
                   </a>
-               </div>
             </div>
           </div>
         </div>
