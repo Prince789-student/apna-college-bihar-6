@@ -10,6 +10,7 @@ function UgeacPredictor() {
   const [ugeacInput, setUgeacInput] = useState('');
   const [category, setCategory] = useState('UR');
   const [gender, setGender] = useState('Male');
+  const [catInput, setCatInput] = useState('');
   
   const [mode, setMode] = useState('explore'); // explore, finder, wizard, guide
   const [targetColleges, setTargetColleges] = useState([]);
@@ -47,6 +48,10 @@ function UgeacPredictor() {
     "Aeronautical Engineering": "Aeronautical Engineering",
     "Mining Engineering": "Mining Engineering"
   };
+
+  useEffect(() => {
+    if (category === 'UR') setCatInput('');
+  }, [category]);
 
   const normalizedMap = useMemo(() => ({
     "B.C.E. BHAGALPUR": "BCE Bhagalpur",
@@ -160,7 +165,7 @@ function UgeacPredictor() {
         if (!collegeInfo) return;
 
         const ratio = { 'EBC': 0.239, 'BC': 0.388, 'SC': 0.065, 'ST': 0.003, 'EWS': 0.227 }[d.category] || 1;
-        const compRank = d.category === 'UR' ? ugeacRank : Math.floor(ugeacRank * ratio);
+        const compRank = (d.category === category && catInput) ? parseInt(catInput) : (d.category === 'UR' ? ugeacRank : Math.floor(ugeacRank * ratio));
         
         const cut24 = map2024.get(key), cut25 = map2025.get(key);
         const latestClosing = cut25 ? cut25.closing : (cut24 ? cut24.closing : 99999);
@@ -494,18 +499,26 @@ function UgeacPredictor() {
                     <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
                         <div className="flex items-center justify-between mb-4">
                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">JEE AIR Rank</span>
-                           <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Est. UGEAC</span>
+                           <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">{ugeacInput ? 'Manual UGEAC' : 'Est. UGEAC'}</span>
                         </div>
                         <div className="flex items-center gap-4">
                            <input type="number" value={rank} onChange={(e) => setRank(e.target.value)} className="w-1/2 bg-transparent border-b border-slate-200 text-xl font-black text-slate-900 outline-none focus:border-indigo-500 transition-colors" placeholder="0" />
                            <div className="w-px h-8 bg-slate-200"></div>
-                           <div className="w-1/2 text-2xl font-[1000] text-indigo-600 tracking-tighter">#{estimateUgeacRank(parseInt(rank)) || 0}</div>
+                           <div className="w-1/2 text-2xl font-[1000] text-indigo-600 tracking-tighter">#{ugeacInput || estimateUgeacRank(parseInt(rank)) || 0}</div>
                         </div>
                     </div>
 
-                    <div className="input-group">
-                       <label className="premium-label">UGEAC State Rank (Optional)</label>
-                       <input type="number" className="premium-input" placeholder="Direct entry" value={ugeacInput} onChange={(e) => setUgeacInput(e.target.value)} />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       <div className="input-group">
+                          <label className="premium-label">UGEAC State Rank (UR)</label>
+                          <input type="number" className="premium-input" placeholder="Overall Merit" value={ugeacInput} onChange={(e) => setUgeacInput(e.target.value)} />
+                       </div>
+                       {category !== 'UR' && (
+                         <div className="input-group animate-in slide-in-from-top-2">
+                            <label className="premium-label">{category} Category Rank</label>
+                            <input type="number" className="premium-input border-emerald-500/30" placeholder="Optional" value={catInput} onChange={(e) => setCatInput(e.target.value)} />
+                         </div>
+                       )}
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
