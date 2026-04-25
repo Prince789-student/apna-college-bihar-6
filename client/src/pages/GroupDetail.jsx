@@ -167,7 +167,7 @@ export default function GroupDetail() {
           
           <div className="w-full h-full">
             <iframe 
-              src={`https://meet.jit.si/${group.meetingRoomId || group.groupCode}#config.startWithAudioMuted=true&config.startWithVideoMuted=true&interfaceConfig.TOOLBAR_BUTTONS=["microphone","camera","desktop","fullscreen","fivethirtyeight","hangup","chat","settings","raisehand","videoquality","filmstrip","tileview","videobackgroundblur","download","mute-everyone"]`}
+              src={`https://meet.ffmuc.net/${group.meetingRoomId || group.groupCode}#config.startWithAudioMuted=true&config.startWithVideoMuted=true&interfaceConfig.TOOLBAR_BUTTONS=["microphone","camera","desktop","fullscreen","fivethirtyeight","hangup","chat","settings","raisehand","videoquality","filmstrip","tileview","videobackgroundblur","download","mute-everyone"]`}
               allow="camera; microphone; fullscreen; display-capture; autoplay" 
               className="w-full h-full border-0 grayscale-[0.2] hover:grayscale-0 transition-all duration-700"
               title="Study Meeting"
