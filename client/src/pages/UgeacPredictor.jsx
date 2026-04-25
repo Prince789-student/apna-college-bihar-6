@@ -680,26 +680,26 @@ function UgeacPredictor() {
                                 {mode === 'wizard' && <th className="text-center">Add</th>}
                              </tr>
                           </thead>
-                          <tbody>
+                           <tbody>
                              {results.all.slice(0, visibleCount).map((item, idx) => (
                                 <tr key={idx} className="group">
-                                   <td onClick={() => setSelectedCollege(item.college)}>
+                                   <td onClick={() => setSelectedCollege(item.college)} data-label="Institute & Branch">
                                       <div className="college-name">{item.college.name}</div>
                                       <div className="branch-name">{branchMapping[item.branch] || item.branch}</div>
                                    </td>
-                                   <td className="text-center">
+                                   <td className="text-center" data-label="Your Rank">
                                       <div className="rank-badge-box mx-auto">
                                          <span className="rank">#{item.myCompRank}</span>
                                          <span className="cat">{item.cat} CAT</span>
                                       </div>
                                    </td>
-                                   <td className="text-center">
+                                   <td className="text-center" data-label="2024 Cutoff">
                                       <span className="text-[11px] font-black text-slate-900 font-mono">{item.cutoff24}</span>
                                    </td>
-                                   <td className="text-center">
+                                   <td className="text-center" data-label="2025 Cutoff">
                                       <span className="text-[13px] font-[1000] text-indigo-700 font-mono">{item.cutoff25}</span>
                                    </td>
-                                   <td className="text-center">
+                                   <td className="text-center" data-label="Admission Chance">
                                       <span className={`chance-badge chance-${item.chance} flex flex-col items-center py-2 px-4 rounded-2xl min-w-[110px]`}>
                                         <div className="flex items-center gap-2 mb-1">
                                            <div className={`w-2 h-2 rounded-full ${item.chance === 'High' ? 'bg-emerald-400 animate-pulse' : item.chance === 'Medium' ? 'bg-amber-400' : 'bg-rose-400'}`}></div>
@@ -708,7 +708,7 @@ function UgeacPredictor() {
                                       </span>
                                    </td>
                                    {mode === 'wizard' && (
-                                     <td className="text-center">
+                                     <td className="text-center" data-label="Add to Preference">
                                         <button 
                                           onClick={() => addChoice(item.collegeId, item.branch, item.college.name)}
                                           disabled={choices.some(c => c.collegeId === item.collegeId && c.branch === item.branch)}
@@ -720,7 +720,8 @@ function UgeacPredictor() {
                                    )}
                                 </tr>
                              ))}
-                          </tbody>
+                           </tbody>
+>
                        </table>
                     </div>
                     {visibleCount < results.all.length && (

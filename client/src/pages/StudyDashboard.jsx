@@ -261,36 +261,36 @@ export default function StudyDashboard() {
   if (loading) return <div className="flex justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 pb-20">
+    <div className="max-w-5xl mx-auto space-y-4 md:space-y-6 pb-20 px-2 md:px-0">
 
       {/* ── Header: Streak & Start Study ── */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1 flex items-center justify-between bg-white p-5 rounded-[2rem] border border-slate-200/50">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-orange-500/10 rounded-2xl flex items-center justify-center border border-orange-500/20 shrink-0">
-              <Flame size={24} className="text-orange-500" fill="currentColor" />
+      <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
+        <div className="flex-1 flex items-center justify-between bg-white p-4 md:p-5 rounded-[2rem] border border-slate-200/50">
+          <div className="flex items-center gap-3 md:gap-4">
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-500/10 rounded-2xl flex items-center justify-center border border-orange-500/20 shrink-0">
+              <Flame size={20} md:size={24} className="text-orange-500" fill="currentColor" />
             </div>
             <div>
-              <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Daily Streak</p>
-              <p className="text-2xl font-black text-slate-900 leading-none">{userData?.streak || 0} <span className="text-xs font-bold text-slate-500">days</span></p>
-              <p className="text-[9px] mt-0.5 text-slate-600 flex items-center gap-1">
+              <p className="text-[8px] md:text-[9px] text-slate-500 font-bold uppercase tracking-widest">Daily Streak</p>
+              <p className="text-xl md:text-2xl font-black text-slate-900 leading-none">{userData?.streak || 0} <span className="text-[10px] md:text-xs font-bold text-slate-500">days</span></p>
+              <p className="text-[8px] md:text-[9px] mt-0.5 text-slate-600 flex items-center gap-1">
                 {todaySec >= 7200 ? (
                   <>
                     <CheckCircle2 size={10} className="text-emerald-500" />
-                    <span>2 hr complete - streak safe!</span>
+                    <span>2 hr safe!</span>
                   </>
                 ) : (
                   <>
                     <AlertTriangle size={10} className="text-orange-500" />
-                    <span>{Math.floor((7200 - todaySec) / 60)} min aur padho streak ke liye</span>
+                    <span>{Math.floor((7200 - todaySec) / 60)}m padho</span>
                   </>
                 )}
               </p>
             </div>
           </div>
-          <button onClick={() => setShowGoalModal(true)} className="p-2.5 bg-slate-800/50 rounded-xl text-slate-500 hover:text-slate-900 transition-colors"><Settings size={18} /></button>
+          <button onClick={() => setShowGoalModal(true)} className="p-2 bg-slate-100 rounded-xl text-slate-400 hover:text-slate-900 transition-colors"><Settings size={16} /></button>
         </div>
-        <button onClick={() => setTab('timer')} className="flex-1 sm:max-w-[180px] bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black uppercase text-xs tracking-widest shadow-lg flex items-center justify-center gap-2 transition-all p-4">
+        <button onClick={() => setTab('timer')} className="flex-1 sm:max-w-[180px] bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black uppercase text-[10px] md:text-xs tracking-widest shadow-lg flex items-center justify-center gap-2 transition-all p-4">
           <Clock size={16} /> <span>Padhna Shuru</span>
         </button>
       </div>
@@ -312,7 +312,7 @@ export default function StudyDashboard() {
       {/* TAB: FOCUS TIMER */}
       {tab === 'timer' && (
         <div className="space-y-6 animate-in fade-in duration-300">
-          <div className="bg-white p-10 md:p-14 rounded-[3.5rem] border border-slate-200/80 shadow-2xl relative overflow-hidden flex flex-col items-center">
+          <div className="bg-white p-8 md:p-14 rounded-[2.5rem] md:rounded-[3.5rem] border border-slate-200/80 shadow-2xl relative overflow-hidden flex flex-col items-center">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-transparent pointer-events-none"></div>
             <div className="flex flex-col items-center gap-4 mb-8">
               <div className="flex gap-2 p-1 bg-slate-100/80 rounded-2xl border border-slate-200/50">

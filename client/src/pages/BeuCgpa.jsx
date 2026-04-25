@@ -264,8 +264,8 @@ export default function BeuCgpa() {
         </div>
       ) : (
         <div className="bg-white rounded-[2rem] border border-slate-200/50 overflow-hidden">
-          {/* Table Header */}
-          <div className="grid grid-cols-12 gap-2 p-4 border-b border-slate-200 text-[9px] font-black uppercase tracking-widest text-slate-500">
+          {/* Table Header (Hidden on Mobile) */}
+          <div className="hidden md:grid grid-cols-12 gap-2 p-4 border-b border-slate-200 text-[9px] font-black uppercase tracking-widest text-slate-500">
             <div className="col-span-4">Subject</div>
             <div className="col-span-1 text-center">Cr</div>
             <div className="col-span-2 text-center">Marks</div>
@@ -282,44 +282,67 @@ export default function BeuCgpa() {
               const isExpanded = expandedId === sub.id;
               return (
                 <div key={sub.id}>
-                  <div className={`grid grid-cols-12 gap-2 p-4 items-center transition-colors ${calc.grade === 'F' && calc.pct !== null ? 'bg-red-900/10' : ''}`}>
+                  <div className={`flex flex-col md:grid md:grid-cols-12 gap-4 md:gap-2 p-4 items-start md:items-center transition-colors ${calc.grade === 'F' && calc.pct !== null ? 'bg-red-900/10' : ''}`}>
+                    
                     {/* Name + type */}
-                    <div className="col-span-4">
-                      <div className="flex items-center gap-2">
-                        {sub.type === 'theory'
-                          ? <BookOpen size={13} className="text-blue-400 shrink-0"/>
-                          : <FlaskConical size={13} className="text-purple-400 shrink-0"/>}
-                        <div>
-                          <p className="text-xs font-black text-slate-900 leading-none">{sub.name}</p>
-                          <p className="text-[8px] text-slate-500 capitalize">{sub.type} · {sub.credits} cr</p>
+                    <div className="w-full md:col-span-4">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2.5 bg-slate-100 rounded-xl md:bg-transparent md:p-0">
+                          {sub.type === 'theory'
+                            ? <BookOpen size={16} className="text-blue-500 md:w-[13px] md:h-[13px]"/>
+                            : <FlaskConical size={16} className="text-purple-500 md:w-[13px] md:h-[13px]"/>}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm md:text-xs font-black text-slate-900 leading-tight uppercase">{sub.name}</p>
+                          <p className="text-[10px] md:text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">{sub.type} · {sub.credits} Credits</p>
+                        </div>
+                        <div className="md:hidden flex items-center gap-1">
+                           <div className={`text-xl font-black ${calc.color}`}>{calc.grade}</div>
                         </div>
                       </div>
                     </div>
-                    {/* Credits */}
-                    <div className="col-span-1 text-center text-xs font-black text-slate-500">{sub.credits}</div>
-                    {/* Marks */}
-                    <div className="col-span-2 text-center text-xs font-black text-slate-900">
-                      {calc.pct !== null ? `${calc.total}/${calc.maxTotal}` : <span className="text-slate-600">—</span>}
+
+                    {/* Desktop Only Credits */}
+                    <div className="hidden md:block md:col-span-1 text-center text-xs font-black text-slate-500">{sub.credits}</div>
+
+                    {/* Marks & % (Mobile Row) */}
+                    <div className="w-full md:col-span-3 flex md:contents items-center justify-between border-t border-slate-100 pt-3 md:border-0 md:pt-0">
+                        <div className="md:hidden">
+                           <p className="text-[8px] font-black uppercase text-slate-400">Marks Secured</p>
+                           <p className="text-xs font-black text-slate-900">{calc.pct !== null ? `${calc.total}/${calc.maxTotal}` : '—'}</p>
+                        </div>
+                        
+                        <div className="md:col-span-2 text-center text-xs font-black text-slate-900 hidden md:block">
+                          {calc.pct !== null ? `${calc.total}/${calc.maxTotal}` : <span className="text-slate-600">—</span>}
+                        </div>
+
+                        <div className="md:hidden text-right">
+                           <p className="text-[8px] font-black uppercase text-slate-400">Percentage</p>
+                           <p className="text-xs font-black text-slate-900">{calc.pct !== null ? `${calc.pct.toFixed(0)}%` : '—'}</p>
+                        </div>
+
+                        <div className="md:col-span-1 text-center text-xs font-black text-slate-900 hidden md:block">
+                          {calc.pct !== null ? `${calc.pct.toFixed(0)}%` : <span className="text-slate-600">—</span>}
+                        </div>
                     </div>
-                    {/* % */}
-                    <div className="col-span-1 text-center text-xs font-black text-slate-900">
-                      {calc.pct !== null ? `${calc.pct.toFixed(0)}%` : <span className="text-slate-600">—</span>}
-                    </div>
-                    {/* Grade */}
-                    <div className={`col-span-1 text-center text-sm font-black ${calc.color}`}>
+
+                    {/* Grade (Desktop Only) */}
+                    <div className={`hidden md:block md:col-span-1 text-center text-sm font-black ${calc.color}`}>
                       {calc.grade}
                     </div>
-                    {/* GP */}
-                    <div className="col-span-1 text-center text-xs font-black text-slate-700">
+
+                    {/* GP (Desktop Only) */}
+                    <div className="hidden md:block md:col-span-1 text-center text-xs font-black text-slate-700">
                       {calc.pct !== null ? calc.point : '—'}
                     </div>
+
                     {/* Actions */}
-                    <div className="col-span-2 flex items-center justify-center gap-1">
-                      <button onClick={() => openMarks(sub)} className="px-2 py-1 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-slate-900 rounded-lg text-[9px] font-black uppercase tracking-wider transition-all">
-                        Marks
+                    <div className="w-full md:col-span-2 flex items-center gap-2 md:justify-center border-t border-slate-100 pt-3 md:border-0 md:pt-0">
+                      <button onClick={() => openMarks(sub)} className="flex-1 md:flex-none px-6 py-2.5 md:px-2 md:py-1 bg-blue-600 text-white md:bg-blue-600/20 md:text-blue-400 hover:bg-blue-500 hover:text-white rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wider transition-all shadow-lg shadow-blue-900/10 md:shadow-none">
+                        Update Marks
                       </button>
-                      <button onClick={() => deleteSubject(sub.id)} className="p-1.5 text-slate-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-all">
-                        <Trash2 size={12}/>
+                      <button onClick={() => deleteSubject(sub.id)} className="p-3 md:p-1.5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-xl md:rounded-lg transition-all">
+                        <Trash2 size={16} className="md:w-3 md:h-3"/>
                       </button>
                     </div>
                   </div>

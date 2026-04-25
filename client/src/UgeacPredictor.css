@@ -62,6 +62,21 @@ body {
   .main-app-container { padding: 4rem 2rem; }
 }
 
+@media (max-width: 640px) {
+  .main-app-container { padding: 1rem; }
+  .app-header { padding: 2rem 1rem; margin-bottom: 2rem; }
+  .nav-pills { 
+    display: flex; 
+    overflow-x: auto; 
+    width: 100%; 
+    justify-content: flex-start;
+    padding: 0.25rem;
+    scrollbar-width: none;
+  }
+  .nav-pills::-webkit-scrollbar { display: none; }
+  .nav-btn { padding: 0.6rem 1rem; white-space: nowrap; font-size: 0.7rem; }
+}
+
 /* Professional Header */
 .app-header {
   padding: 4rem 2rem;
@@ -253,6 +268,57 @@ body {
   background: #f8faff;
 }
 .premium-table tr:last-child td { border-bottom: none; }
+
+/* Responsive Table / Card System */
+@media (max-width: 768px) {
+  .premium-table thead { display: none; }
+  .premium-table, .premium-table tbody, .premium-table tr, .premium-table td {
+    display: block;
+    width: 100%;
+  }
+  .premium-table tr {
+    margin-bottom: 1.5rem;
+    background: white;
+    border: 1px solid var(--slate-200);
+    border-radius: 1.25rem;
+    padding: 1rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .premium-table td {
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid var(--slate-100);
+    text-align: left !important;
+    background: transparent !important;
+  }
+  .premium-table td:last-child { border-bottom: none; }
+  
+  .premium-table td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: var(--slate-500);
+    margin-bottom: 0.25rem;
+  }
+  
+  .college-name { font-size: 0.95rem; }
+  .branch-name { font-size: 0.7rem; }
+  
+  .rank-badge-box {
+    flex-direction: row;
+    gap: 0.5rem;
+    min-width: auto;
+    padding: 0.3rem 0.7rem;
+  }
+  .rank-badge-box .rank { font-size: 0.8rem; }
+  .rank-badge-box .cat { font-size: 0.7rem; }
+  
+  .chance-badge {
+    width: 100%;
+    justify-content: center;
+  }
+}
 
 .college-name { font-weight: 900; color: var(--slate-900); font-size: 1.05rem; margin-bottom: 0.15rem; }
 .branch-name { font-weight: 800; color: var(--primary); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.02em; }

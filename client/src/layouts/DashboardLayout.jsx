@@ -195,10 +195,10 @@ export default function DashboardLayout() {
                <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
                <div className="flex flex-col">
                  <span className="text-[10px] font-black tracking-tighter uppercase text-slate-900 leading-none">APNA COLLEGE BIHAR</span>
-                 <span className="text-[5px] text-slate-500 font-bold uppercase tracking-[0.2em]">Official Official Website</span>
+                 <span className="text-[5px] text-slate-500 font-bold uppercase tracking-[0.2em]">Official Study Hub</span>
                </div>
             </div>
-            <button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-100/50 border border-slate-200 rounded-xl relative">
+            <button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl relative">
                <Menu size={20} />
                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-blue-600 rounded-full border-2 border-white"></span>
             </button>

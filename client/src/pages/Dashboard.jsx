@@ -92,14 +92,14 @@ export default function Dashboard() {
               <p className="text-[9px] text-slate-400 font-black uppercase tracking-[0.3em] mt-2">Ready to dominate the session?</p>
             </div>
          </div>
-         <div className="relative z-10 flex flex-wrap gap-4">
-            <Link to="/dashboard/calculator" className="px-8 py-4 bg-slate-100 hover:bg-slate-100 text-slate-900 border border-slate-200/80 rounded-[2rem] font-black text-xs uppercase tracking-widest flex items-center gap-3 transition-all active:scale-95 shadow-lg group">
+         <div className="relative z-10 grid grid-cols-2 sm:flex sm:flex-wrap gap-3 md:gap-4 w-full sm:w-auto">
+            <Link to="/dashboard/calculator" className="px-4 py-4 md:px-8 bg-slate-100 hover:bg-slate-100 text-slate-900 border border-slate-200/80 rounded-[2rem] font-black text-[10px] md:text-xs uppercase tracking-widest flex items-center justify-center gap-2 md:gap-3 transition-all active:scale-95 shadow-lg group">
                Sci-Calc <Calculator size={14} className="group-hover:translate-x-1 transition-transform" />
             </Link>
-            <Link to="/dashboard/ugeac-predictor" className="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest flex items-center gap-3 transition-all active:scale-95 shadow-xl shadow-emerald-950/20 group">
-               UGEAC 2025 <Send size={14} />
+            <Link to="/dashboard/ugeac-predictor" className="px-4 py-4 md:px-8 bg-emerald-600 hover:bg-emerald-500 text-white rounded-[2rem] font-black text-[10px] md:text-xs uppercase tracking-widest flex items-center justify-center gap-2 md:gap-3 transition-all active:scale-95 shadow-xl shadow-emerald-950/20 group">
+               UGEAC <Send size={14} />
             </Link>
-            <Link to="/dashboard/notes" className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black text-xs uppercase tracking-widest flex items-center gap-3 transition-all active:scale-95 shadow-xl shadow-blue-950/20 group">
+            <Link to="/dashboard/notes" className="col-span-2 sm:col-span-1 px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black text-[10px] md:text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-blue-950/20 group">
                Vault <BookOpen size={14} />
             </Link>
           </div>
