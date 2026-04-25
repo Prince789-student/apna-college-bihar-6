@@ -197,10 +197,28 @@ function UgeacPredictor() {
       return score(a.chance) - score(b.chance) || a.college.tier - b.college.tier;
     });
 
+    // Initial mock allotment (will be synced via useEffect for reordering)
     let mockAllotment = null, mockDiscussions = [];
-    if (choices.length > 0) {
+    choices.forEach((ch, i) => {
+      const entry = allRes.find(r => r.college.id === ch.collegeId && r.branch === ch.branch);
+      if (entry && (entry.chance === 'High' || entry.chance === 'Medium')) {
+        if (!mockAllotment) mockAllotment = { choice: ch, choiceNumber: i + 1, entry };
+        mockDiscussions.push({ choiceNumber: i + 1, status: entry.chance, entry, choice: ch });
+      } else {
+        mockDiscussions.push({ choiceNumber: i + 1, status: 'No Chance', entry: null, choice: ch });
+      }
+    });
+
+    setResults({ all: allRes, calculatedRank: ugeacRank, mockAllotment, mockDiscussions });
+    setHasPredicted(true);
+  };
+
+  // Sync mock allotment whenever choices or results change to ensure priority order is respected
+  useEffect(() => {
+    if (hasPredicted && results.all.length > 0) {
+      let mockAllotment = null, mockDiscussions = [];
       choices.forEach((ch, i) => {
-        const entry = allRes.find(r => r.college.id === ch.collegeId && r.branch === ch.branch);
+        const entry = results.all.find(r => r.college.id === ch.collegeId && r.branch === ch.branch);
         if (entry && (entry.chance === 'High' || entry.chance === 'Medium')) {
           if (!mockAllotment) mockAllotment = { choice: ch, choiceNumber: i + 1, entry };
           mockDiscussions.push({ choiceNumber: i + 1, status: entry.chance, entry, choice: ch });
@@ -208,11 +226,11 @@ function UgeacPredictor() {
           mockDiscussions.push({ choiceNumber: i + 1, status: 'No Chance', entry: null, choice: ch });
         }
       });
+      
+      // Update results only if allotment changed to avoid unnecessary re-renders
+      setResults(prev => ({ ...prev, mockAllotment, mockDiscussions }));
     }
-
-    setResults({ all: allRes, calculatedRank: ugeacRank, mockAllotment, mockDiscussions });
-    setHasPredicted(true);
-  };
+  }, [choices, hasPredicted]);
 
   const addChoice = (collegeId, branch) => {
     if (choices.find(c => c.collegeId === collegeId && c.branch === branch)) return;
@@ -281,7 +299,7 @@ function UgeacPredictor() {
     autoTable(doc, {
       startY: currentY,
       head: [['#', 'Institute Name', 'Branch', '2024 CO', '2025 CO', 'Probability']],
-      body: results.all.slice(0, 50).map((r, i) => [i+1, r.college.name, r.branch, r.cutoff24, r.cutoff25, r.chance]),
+      body: results.all.map((r, i) => [i+1, r.college.name, r.branch, r.cutoff24, r.cutoff25, r.chance]),
       theme: 'striped',
       headStyles: { fillColor: [79, 70, 229], fontSize: 8 },
       styles: { fontSize: 7 },
@@ -473,9 +491,9 @@ function UgeacPredictor() {
                         <div key={idx} className="p-4 bg-slate-900/50 border border-white/5 rounded-2xl group relative overflow-hidden transition-all hover:bg-indigo-500/10">
                            <div className="flex items-center gap-4">
                               <div className="flex flex-col gap-1">
-                                 <button onClick={() => moveChoice(idx, -1)} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20" disabled={idx === 0}><ChevronUp size={16}/></button>
+                                 <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, -1); }} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20 p-1" disabled={idx === 0} type="button"><ChevronUp size={16}/></button>
                                  <span className="text-[10px] font-[1000] text-indigo-400 text-center">{idx + 1}</span>
-                                 <button onClick={() => moveChoice(idx, 1)} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20" disabled={idx === choices.length - 1}><ChevronDown size={16}/></button>
+                                 <button onClick={(e) => { e.stopPropagation(); moveChoice(idx, 1); }} className="text-slate-600 hover:text-indigo-400 disabled:opacity-20 p-1" disabled={idx === choices.length - 1} type="button"><ChevronDown size={16}/></button>
                               </div>
                               <div className="flex-1 min-w-0">
                                  <p className="text-[10px] font-black text-white uppercase truncate tracking-tight">{ch.collegeName}</p>
