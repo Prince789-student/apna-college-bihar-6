@@ -839,27 +839,85 @@ function UgeacPredictor() {
 
       {selectedCollege && (
         <div className="modal-backdrop" onClick={() => setSelectedCollege(null)}>
-          <div className="modal-box" onClick={e => e.stopPropagation()}>
+          <div className="modal-box max-w-2xl overflow-y-auto max-h-[90vh]" onClick={e => e.stopPropagation()}>
             <button className="modal-close" onClick={() => setSelectedCollege(null)}><X size={20} /></button>
-            <h3 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter mb-2">{selectedCollege.name}</h3>
-            <p className="text-indigo-600 font-black text-[10px] uppercase tracking-[0.3em] mb-8 flex items-center gap-2"><MapPin size={14} /> {selectedCollege.location}</p>
             
-            <div className="grid grid-cols-2 gap-4 mb-8">
-               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                  <span className="text-slate-500 text-[8px] font-black uppercase tracking-widest block mb-1">Established</span>
-                  <span className="text-white font-black text-sm">{selectedCollege.estd || "N/A"}</span>
+            <div className="mb-8">
+               <div className="flex items-center gap-4 mb-4">
+                  <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-xl shadow-indigo-900/20">
+                     {selectedCollege.short.substring(0, 1)}
+                  </div>
+                  <div>
+                     <h3 className="text-3xl font-[1000] text-slate-900 uppercase tracking-tighter leading-tight">{selectedCollege.name}</h3>
+                     <p className="text-indigo-600 font-black text-[10px] uppercase tracking-[0.3em] mt-1 flex items-center gap-2"><MapPin size={14} /> {selectedCollege.location}, Bihar</p>
+                  </div>
                </div>
-               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                  <span className="text-slate-500 text-[8px] font-black uppercase tracking-widest block mb-1">Tier Rating</span>
-                  <span className="text-white font-black text-sm">Tier {selectedCollege.tier}</span>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 group hover:border-indigo-500/30 transition-all">
+                  <span className="text-slate-400 text-[8px] font-black uppercase tracking-widest block mb-1">Established</span>
+                  <span className="text-slate-900 font-[1000] text-sm uppercase">{selectedCollege.estd || "New GEC"}</span>
+               </div>
+               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 group hover:border-indigo-500/30 transition-all">
+                  <span className="text-slate-400 text-[8px] font-black uppercase tracking-widest block mb-1">Institution Tier</span>
+                  <span className="text-indigo-600 font-[1000] text-sm uppercase">Tier {selectedCollege.tier}</span>
+               </div>
+               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 group hover:border-indigo-500/30 transition-all hidden md:block">
+                  <span className="text-slate-400 text-[8px] font-black uppercase tracking-widest block mb-1">Affiliation</span>
+                  <span className="text-slate-900 font-[1000] text-sm uppercase">BEU Patna</span>
                </div>
             </div>
 
-            <div className="p-8 bg-indigo-500/10 rounded-3xl border border-indigo-500/20 mb-8">
-               <h4 className="text-[9px] font-black text-indigo-600 uppercase tracking-widest mb-3">Academic Insight</h4>
-               <p className="text-slate-300 text-xs leading-relaxed font-medium">{selectedCollege.description || "Leading technical institution in Bihar offering state-of-the-art engineering programs with verified round-wise historical cutoffs."}</p>
+            <div className="space-y-8">
+               <section>
+                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                     <Info size={14} className="text-indigo-600" /> Institution Profile
+                  </h4>
+                  <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100">
+                     <p className="text-slate-600 text-sm leading-relaxed font-medium">
+                        {selectedCollege.description || `${selectedCollege.name} is a premier government technical institution in ${selectedCollege.location}, Bihar. It is dedicated to providing high-quality engineering education and fostering technical innovation under Bihar Engineering University.`}
+                     </p>
+                  </div>
+               </section>
+
+               {selectedCollege.facilities && (
+               <section>
+                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                     <Building2 size={14} className="text-indigo-600" /> Key Facilities
+                  </h4>
+                  <div className="grid grid-cols-2 gap-3">
+                     {selectedCollege.facilities.map((f, i) => (
+                        <div key={i} className="flex items-center gap-3 p-3 bg-white border border-slate-100 rounded-xl shadow-sm">
+                           <CheckCircle2 size={14} className="text-emerald-500" />
+                           <span className="text-[10px] font-black text-slate-700 uppercase tracking-tight">{f}</span>
+                        </div>
+                     ))}
+                  </div>
+               </section>
+               )}
+
+               {selectedCollege.branches && (
+               <section>
+                  <h4 className="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                     <GraduationCap size={14} className="text-indigo-600" /> Available Branches
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                     {selectedCollege.branches.map((b, i) => (
+                        <span key={i} className="px-3 py-2 bg-indigo-50 text-indigo-600 rounded-lg text-[9px] font-black uppercase tracking-widest border border-indigo-100">
+                           {b}
+                        </span>
+                     ))}
+                  </div>
+               </section>
+               )}
+
+               <div className="pt-4">
+                  <a href={selectedCollege.website || "#"} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all shadow-xl shadow-indigo-900/20 active:scale-95">
+                     Visit Official Website <ExternalLink size={16} />
+                  </a>
+               </div>
             </div>
-            <a href={selectedCollege.website} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all shadow-xl shadow-indigo-900/20">Official Portal <ExternalLink size={16} /></a>
           </div>
         </div>
       )}
