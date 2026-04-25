@@ -721,7 +721,6 @@ function UgeacPredictor() {
                                 </tr>
                              ))}
                            </tbody>
->
                        </table>
                     </div>
                     {visibleCount < results.all.length && (
