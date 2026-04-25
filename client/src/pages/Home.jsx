@@ -187,7 +187,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Footer ── */
+      {/* ── Footer ── */}
       <footer className="py-20 border-t border-slate-200/50 px-6 md:px-16 bg-[#f8fafc]">
          <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="col-span-1 md:col-span-2 space-y-6">
