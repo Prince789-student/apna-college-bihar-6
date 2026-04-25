@@ -11,13 +11,14 @@ function UgeacPredictor() {
   const [category, setCategory] = useState('UR');
   const [gender, setGender] = useState('Male');
   
-  const [mode, setMode] = useState('explore'); 
+  const [mode, setMode] = useState('explore'); // explore, finder, wizard, guide
   const [targetColleges, setTargetColleges] = useState([]);
   const [targetBranches, setTargetBranches] = useState([]);
   const [choices, setChoices] = useState([]); 
   const [visibleCount, setVisibleCount] = useState(50);
 
   const [ugeacData, setUgeacData] = useState({ data2024: [], data2025: [], branches: [] });
+  const [seatMatrix, setSeatMatrix] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
 
   const [isFinderCollegeOpen, setIsFinderCollegeOpen] = useState(false);
@@ -98,9 +99,10 @@ function UgeacPredictor() {
   }), []);
 
   useEffect(() => {
-    fetch('/data/cutoffs.json')
-      .then(res => res.json())
-      .then(json => {
+    Promise.all([
+      fetch('/data/cutoffs.json').then(res => res.json()),
+      fetch('/data/seat_matrix.json').then(res => res.json()).catch(() => [])
+    ]).then(([json, seats]) => {
         const process = (raw) => raw.map(c => {
           const key = c.collegeShort?.toUpperCase().trim();
           const formalName = normalizedMap[key] || c.collegeShort;
@@ -115,6 +117,7 @@ function UgeacPredictor() {
           data2025: process(raw2025), 
           branches: Array.from(new Set([...raw2024.map(c => c.branch.trim()), ...raw2025.map(c => c.branch.trim())])).sort() 
         });
+        setSeatMatrix(seats);
         setLoadingData(false);
       })
       .catch(err => { console.error(err); setLoadingData(false); });
@@ -169,7 +172,20 @@ function UgeacPredictor() {
         else if (compRank <= latestClosing * 1.25) chance = 'Low';
 
         if (!seen.has(key) || (cut25 && cut25 === d)) {
-          seen.set(key, { college: collegeInfo, branch: d.branch, chance, cutoff25: cut25 ? cut25.closing : 'N/A', cutoff24: cut24 ? cut24.closing : 'N/A', cat: d.category, seatType: d.seatType, myCompRank: compRank });
+          const seatInfo = seatMatrix.find(s => s.college === collegeInfo.name && s.branch === d.branch);
+          const availableSeats = seatInfo ? seatInfo.seats[category === 'UR' ? (gender === 'Female' ? 'F_UR' : 'UR') : category] : 'N/A';
+
+          seen.set(key, { 
+            college: collegeInfo, 
+            branch: d.branch, 
+            chance, 
+            cutoff25: cut25 ? cut25.closing : 'N/A', 
+            cutoff24: cut24 ? cut24.closing : 'N/A', 
+            cat: d.category, 
+            seatType: d.seatType, 
+            myCompRank: compRank,
+            seats: availableSeats
+          });
         }
       });
     };
@@ -316,42 +332,96 @@ function UgeacPredictor() {
               <p>Bihar's most accurate engineering admission AI. Predict your college choices based on historical round-wise cutoffs with 99% precision.</p>
               <div className="nav-pills">
                  <button onClick={() => setMode('explore')} className={`nav-btn ${mode === 'explore' ? 'active' : ''}`}><LayoutGrid size={16} /> Explore</button>
-                 <button onClick={() => setMode('finder')} className={`nav-btn ${mode === 'finder' ? 'active' : ''}`}><Filter size={16} /> Finder</button>
-                 <button onClick={() => setMode('wizard')} className={`nav-btn ${mode === 'wizard' ? 'active' : ''}`}><Zap size={16} /> Wizard</button>
+                 <button onClick={() => setMode('finder')} className={`nav-btn ${mode === 'finder' ? 'active' : ''}`}><Search size={16} /> College Finder</button>
+                 <button onClick={() => setMode('wizard')} className={`nav-btn ${mode === 'wizard' ? 'active' : ''}`}><Zap size={16} /> Choice Wizard</button>
+                 <button onClick={() => setMode('guide')} className={`nav-btn ${mode === 'guide' ? 'active' : ''}`}><BookOpen size={16} /> Guide</button>
               </div>
            </div>
         </header>
-
+        
+        {mode === 'guide' ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in">
+             <div className="glass-panel border-indigo-500/30">
+                <h3 className="section-title"><ShieldCheck /> Documents Required</h3>
+                <ul className="space-y-4 text-sm font-medium text-slate-300">
+                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> UGEAC Rank Card 2024/25</li>
+                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> Part A & B of Application Form</li>
+                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> JEE Main Admit Card & Rank Card</li>
+                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> Class 10 & 12 Marks-sheet & Certificate</li>
+                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> Residence & Category Certificate (Bihar)</li>
+                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> 6 Passport Size Photographs (Original)</li>
+                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> Choice Slip & Allotment Letter (3 copies)</li>
+                </ul>
+             </div>
+             <div className="glass-panel border-indigo-500/30">
+                <h3 className="section-title"><Layers /> Counselling Process</h3>
+                <div className="space-y-6">
+                   {[
+                      { step: "01", title: "Registration", desc: "Pay UGEAC registration fee (approx ₹1200) on BCECEB portal." },
+                      { step: "02", title: "Choice Filling", desc: "Fill your college preferences in decreasing order of priority." },
+                      { step: "03", title: "First Round Allotment", desc: "Check allotted college. If satisfied, download letter & go for DV." },
+                      { step: "04", title: "Document Verification (DV)", desc: "Visit designated nodal center with all original documents." },
+                      { step: "05", title: "Admission/Sliding", desc: "Pay admission fee or opt for 'Auto Upgradation' for Round 2." }
+                   ].map(s => (
+                      <div key={s.step} className="flex gap-4 items-start">
+                         <div className="text-2xl font-black text-indigo-500/50 font-mono leading-none">{s.step}</div>
+                         <div>
+                            <h4 className="text-white font-bold text-sm mb-1">{s.title}</h4>
+                            <p className="text-[11px] text-slate-500 leading-relaxed uppercase font-black">{s.desc}</p>
+                         </div>
+                      </div>
+                   ))}
+                </div>
+             </div>
+             <div className="md:col-span-2 glass-panel border-emerald-500/30 bg-emerald-500/5">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                   <div className="flex items-center gap-6">
+                      <div className="w-16 h-16 bg-emerald-500/20 rounded-2xl flex items-center justify-center border border-emerald-500/20 shadow-inner">
+                         <Send size={32} className="text-emerald-400" />
+                      </div>
+                      <div>
+                         <h3 className="text-xl font-black text-white uppercase tracking-tighter">Live Support Community</h3>
+                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Join 5000+ Bihar Students for Real-time Help</p>
+                      </div>
+                   </div>
+                   <div className="flex gap-4 w-full md:w-auto">
+                      <a href="https://t.me/apnacollegebihar" target="_blank" rel="noreferrer" className="flex-1 md:flex-none px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all text-center">Telegram Group</a>
+                      <a href="https://whatsapp.com/channel/..." target="_blank" rel="noreferrer" className="flex-1 md:flex-none px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all text-center">WhatsApp Channel</a>
+                   </div>
+                </div>
+             </div>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
            <div className="lg:col-span-4 space-y-8">
-              {/* Rank Converter Card */}
-              <section className="glass-panel border-indigo-500/20 bg-indigo-500/5">
-                 <h2 className="section-title text-indigo-400"><Calculator size={18} /> Rank Converter</h2>
-                 <div className="p-4 bg-slate-950/50 rounded-2xl border border-white/5">
-                    <div className="flex items-center justify-between mb-4">
-                       <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">JEE AIR</span>
-                       <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Estimated UGEAC</span>
-                    </div>
-                    <div className="flex items-center gap-4">
-                       <input type="number" value={rank} onChange={(e) => setRank(e.target.value)} className="w-1/2 bg-transparent border-b border-slate-800 text-xl font-black text-white outline-none focus:border-indigo-500 transition-colors" placeholder="0" />
-                       <div className="w-px h-8 bg-slate-800"></div>
-                       <div className="w-1/2 text-2xl font-[1000] text-indigo-400 tracking-tighter">#{estimateUgeacRank(parseInt(rank)) || 0}</div>
-                    </div>
-                 </div>
-              </section>
-
-              <section className="glass-panel">
-                 <h2 className="section-title"><Building2 size={18} /> Candidate Profile</h2>
+              {/* Profile & Controls */}
+              <section className="glass-panel border-indigo-500/20">
+                 <h2 className="section-title text-indigo-400"><Calculator size={18} /> Candidate Info</h2>
+                 
                  <div className="space-y-6">
-                    <div className="input-group">
-                       <label className="premium-label">UGEAC State Rank</label>
-                       <input type="number" className="premium-input" placeholder="Use converter or enter rank" value={ugeacInput} onChange={(e) => setUgeacInput(e.target.value)} />
+                    {/* Rank Converter Insight */}
+                    <div className="p-4 bg-slate-950/50 rounded-2xl border border-white/5">
+                        <div className="flex items-center justify-between mb-4">
+                           <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">JEE AIR Rank</span>
+                           <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Est. UGEAC</span>
+                        </div>
+                        <div className="flex items-center gap-4">
+                           <input type="number" value={rank} onChange={(e) => setRank(e.target.value)} className="w-1/2 bg-transparent border-b border-slate-800 text-xl font-black text-white outline-none focus:border-indigo-500 transition-colors" placeholder="0" />
+                           <div className="w-px h-8 bg-slate-800"></div>
+                           <div className="w-1/2 text-2xl font-[1000] text-indigo-400 tracking-tighter">#{estimateUgeacRank(parseInt(rank)) || 0}</div>
+                        </div>
                     </div>
+
+                    <div className="input-group">
+                       <label className="premium-label">UGEAC State Rank (Optional)</label>
+                       <input type="number" className="premium-input" placeholder="Direct entry" value={ugeacInput} onChange={(e) => setUgeacInput(e.target.value)} />
+                    </div>
+
                     <div className="grid grid-cols-2 gap-4">
                        <div className="input-group">
                           <label className="premium-label">Category</label>
                           <select className="premium-input" value={category} onChange={(e) => setCategory(e.target.value)}>
-                             {['UR', 'EWS', 'BC', 'EBC', 'SC', 'ST'].map(c => <option key={c} value={c}>{c}</option>)}
+                             {['UR', 'EWS', 'BC', 'EBC', 'SC', 'ST', 'RCG', 'DQ', 'SMQ'].map(c => <option key={c} value={c}>{c}</option>)}
                           </select>
                        </div>
                        <div className="input-group">
@@ -362,6 +432,7 @@ function UgeacPredictor() {
                           </select>
                        </div>
                     </div>
+
                     <button onClick={calculateResults} className="btn-primary group">
                       <Zap size={18} className="group-hover:fill-current transition-all" /> 
                       {mode === 'wizard' ? 'Run Allotment Engine' : 'Calculate Chances'}
@@ -474,7 +545,7 @@ function UgeacPredictor() {
                     <div className="premium-table-container">
                        <table className="premium-table">
                           <thead>
-                             <tr><th>Institute & Branch</th><th className="text-center">2024 CO</th><th className="text-center">2025 CO</th><th className="text-center">Success Rate</th>{mode === 'wizard' && <th className="text-center">Add</th>}</tr>
+                             <tr><th>Institute & Branch</th><th className="text-center">2024 CO</th><th className="text-center">2025 CO</th><th className="text-center">Seats</th><th className="text-center">Success Rate</th>{mode === 'wizard' && <th className="text-center">Add</th>}</tr>
                           </thead>
                           <tbody>
                              {results.all.slice(0, visibleCount).map((item, idx) => (
@@ -488,6 +559,9 @@ function UgeacPredictor() {
                                    </td>
                                    <td className="text-center">
                                       <span className="text-[12px] font-black text-indigo-400 font-mono">{item.cutoff25}</span>
+                                   </td>
+                                   <td className="text-center">
+                                      <span className="text-[10px] font-black text-slate-400">{item.seats || '—'}</span>
                                    </td>
                                    <td className="text-center">
                                       <span className={`chance-badge chance-${item.chance}`}>
@@ -520,6 +594,7 @@ function UgeacPredictor() {
               )}
            </div>
         </div>
+        )}
 
         <footer className="mt-32 py-16 border-t border-white/5 text-center">
            <img src="/logo.jpg" alt="Logo" className="w-14 h-14 rounded-full mx-auto mb-8 grayscale opacity-30 hover:opacity-100 transition-opacity" />
