@@ -291,10 +291,12 @@ body::before {
 }
 
 .premium-table-container {
-  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 80vh;
   border-radius: 2rem;
   background: rgba(2, 6, 23, 0.4);
   border: 1px solid var(--glass-border);
+  position: relative;
 }
 
 .premium-table {
@@ -312,8 +314,11 @@ body::before {
   text-transform: uppercase;
   letter-spacing: 0.15em;
   color: var(--slate-500);
-  background: rgba(15, 23, 42, 0.5);
+  background: #0f172a;
   border-bottom: 1px solid var(--glass-border);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
 .premium-table td {

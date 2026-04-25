@@ -513,7 +513,7 @@ function UgeacPredictor() {
                  </div>
               </section>
 
-              {mode === 'finder' && (
+              {(mode === 'finder' || mode === 'wizard') && (
                 <section className="glass-panel animate-in fade-in">
                    <h2 className="section-title"><Filter size={18} /> Multi-Filters</h2>
                    <div className="space-y-4">
@@ -727,9 +727,12 @@ function UgeacPredictor() {
                </div>
             </div>
             {targetColleges.length > 0 && (
-              <div className="mb-8">
-                 <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4">Selected Priority</h4>
-                 <div className="flex flex-wrap gap-2">
+              <div className="mb-8 p-4 bg-indigo-500/5 rounded-3xl border border-indigo-500/10">
+                 <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4 flex justify-between items-center">
+                    <span>Selected Priority</span>
+                    <span className="text-[8px] opacity-50">Drag order logic active</span>
+                 </h4>
+                 <div className="flex flex-wrap gap-2 max-h-[160px] overflow-y-auto pr-2 custom-scrollbar">
                     {targetColleges.map((id, idx) => {
                       const col = colleges.find(c => c.id === id);
                       if (!col) return null;
@@ -778,9 +781,9 @@ function UgeacPredictor() {
                </div>
             </div>
             {targetBranches.length > 0 && (
-              <div className="mb-8">
+              <div className="mb-8 p-4 bg-indigo-500/5 rounded-3xl border border-indigo-500/10">
                  <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4">Branch Priority</h4>
-                 <div className="flex flex-wrap gap-2">
+                 <div className="flex flex-wrap gap-2 max-h-[120px] overflow-y-auto pr-2 custom-scrollbar">
                     {targetBranches.map((b, idx) => (
                       <div key={b} className="flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 px-3 py-2 rounded-xl">
                          <span className="text-[10px] font-black text-white uppercase">{branchMapping[b] || b}</span>
