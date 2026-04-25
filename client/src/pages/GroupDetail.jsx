@@ -103,69 +103,73 @@ export default function GroupDetail() {
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
       
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-10">
-        <div className="space-y-4">
-           <button onClick={() => navigate('/dashboard/study')} className="flex items-center space-x-2 text-slate-500 hover:text-slate-900 transition-colors group">
-              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-              <span className="text-[10px] font-black uppercase tracking-[0.3em]">Return to Network</span>
+      {/* Premium Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-slate-100">
+        <div className="space-y-4 flex-1">
+           <button onClick={() => navigate('/dashboard/study')} className="flex items-center space-x-2 text-slate-400 hover:text-blue-600 transition-colors group">
+              <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+              <span className="text-[10px] font-black uppercase tracking-widest">Back to Network</span>
            </button>
-           <div>
-              <h1 className="text-4xl font-black text-slate-900 tracking-tighter uppercase leading-none">{group.groupName}</h1>
-              <div className="flex items-center space-x-4 mt-4">
-                 <div className="flex items-center space-x-2 bg-blue-600/10 text-blue-400 px-3 py-1 rounded-full border border-blue-500/20 shadow-md">
+           <div className="space-y-2">
+              <h1 className="text-3xl md:text-5xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">{group.groupName}</h1>
+              <div className="flex flex-wrap items-center gap-3">
+                 <div className="flex items-center gap-2 bg-slate-100 text-slate-500 px-3 py-1.5 rounded-xl border border-slate-200">
                     <Calendar size={12} />
-                    <span className="text-[9px] font-black tracking-widest uppercase italic">Est. {new Date(group.createdAt).toLocaleDateString()}</span>
+                    <span className="text-[9px] font-black uppercase tracking-widest">{new Date(group.createdAt).toLocaleDateString()}</span>
                  </div>
-                 <div className="flex items-center space-x-2 bg-emerald-600/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20 shadow-md">
+                 <div className="flex items-center gap-2 bg-blue-600/10 text-blue-600 px-3 py-1.5 rounded-xl border border-blue-500/20">
                     <Hash size={12} />
-                    <span className="text-[11px] font-black tracking-widest">ID: {group.groupCode}</span>
+                    <span className="text-[10px] font-black tracking-widest uppercase">ID: {group.groupCode}</span>
                  </div>
               </div>
            </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center p-6 bg-white border border-slate-300/50 rounded-3xl shadow-2xl relative group overflow-hidden min-w-[200px]">
-           <div className="absolute top-0 right-0 w-12 h-12 bg-blue-500/10 rounded-full blur-xl animate-pulse"></div>
-           <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1 italic">Synchronization</p>
-           <span className="text-3xl font-black text-slate-900">{group.memberCount} / {group.maxMembers}</span>
-           <p className="text-[8px] text-slate-600 font-black uppercase tracking-widest mt-1">Scholars Active</p>
-           {isAdmin && (
-             <button onClick={deleteGroup} className="mt-4 flex items-center gap-2 hover:text-red-500 transition-colors">
-               <Trash2 size={12} /> <span className="text-[7px] font-black uppercase tracking-[0.2em]">Decommission</span>
-             </button>
-           )}
+        <div className="flex items-center gap-4">
+          <div className="hidden md:block text-right">
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Scholar Density</p>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-black text-slate-900">{group.memberCount}</span>
+              <span className="text-xs text-slate-400 font-bold uppercase">/ {group.maxMembers}</span>
+            </div>
+          </div>
+          {isAdmin && (
+            <button onClick={deleteGroup} className="p-4 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-2xl transition-all border border-red-100">
+              <Trash2 size={18} />
+            </button>
+          )}
         </div>
       </div>
 
       {/* Virtual Study Collective (Live Meeting) */}
-      <div className={`transition-all duration-500 ease-in-out ${isMeetingExpanded ? 'fixed inset-0 z-[100] p-4 bg-slate-900/90 backdrop-blur-xl' : 'relative'}`}>
-        <div className={`bg-white border border-slate-200 rounded-[2.5rem] overflow-hidden shadow-2xl relative group ${isMeetingExpanded ? 'h-full w-full' : 'h-[400px] md:h-[500px]'}`}>
-          <div className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between bg-white/80 backdrop-blur-md border-b border-slate-200 z-10">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-red-600/10 text-red-500 rounded-lg animate-pulse">
-                <Video size={16} />
+      <div className={`transition-all duration-500 ease-in-out ${isMeetingExpanded ? 'fixed inset-0 z-[100] p-4 bg-slate-950/95 backdrop-blur-2xl' : 'relative'}`}>
+        <div className={`bg-slate-900 border border-slate-800 rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] relative group ${isMeetingExpanded ? 'h-full w-full' : 'h-[450px] md:h-[600px]'}`}>
+          <div className="absolute top-0 left-0 right-0 p-4 flex items-center justify-between bg-slate-900/40 backdrop-blur-md border-b border-white/5 z-10">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-red-500/20 text-red-500 rounded-xl flex items-center justify-center animate-pulse">
+                <Video size={20} />
               </div>
               <div>
-                <p className="text-[10px] font-black text-slate-900 uppercase tracking-tighter">Live Collective Room</p>
-                <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest">Always Active • Secure Connection</p>
+                <p className="text-xs font-black text-white uppercase tracking-widest">Live Collective Hub</p>
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+                  <p className="text-[8px] text-slate-400 font-black uppercase tracking-widest">Network Secure • Operational</p>
+                </div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => setIsMeetingExpanded(!isMeetingExpanded)}
-                className="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all"
-              >
-                {isMeetingExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-              </button>
-            </div>
+            <button 
+              onClick={() => setIsMeetingExpanded(!isMeetingExpanded)}
+              className="p-3 bg-white/5 hover:bg-white/10 text-white rounded-xl transition-all border border-white/10"
+            >
+              {isMeetingExpanded ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+            </button>
           </div>
           
-          <div className="w-full h-full pt-16">
+          <div className="w-full h-full">
             <iframe 
-              src={`https://meet.jit.si/${group.groupCode}#config.startWithAudioMuted=true&config.startWithVideoMuted=true&interfaceConfig.TOOLBAR_BUTTONS=["microphone","camera","closedcaptions","desktop","fullscreen","fivethirtyeight","hangup","profile","chat","settings","raisehand","videoquality","filmstrip","invite","tileview","videobackgroundblur","download","help","mute-everyone","security"]`}
+              src={`https://meet.jit.si/${group.groupCode}#config.startWithAudioMuted=true&config.startWithVideoMuted=true&interfaceConfig.TOOLBAR_BUTTONS=["microphone","camera","desktop","fullscreen","fivethirtyeight","hangup","chat","settings","raisehand","videoquality","filmstrip","tileview","videobackgroundblur","download","mute-everyone"]`}
               allow="camera; microphone; fullscreen; display-capture; autoplay" 
-              className="w-full h-full border-0"
+              className="w-full h-full border-0 grayscale-[0.2] hover:grayscale-0 transition-all duration-700"
               title="Study Meeting"
             />
           </div>
