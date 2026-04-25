@@ -43,11 +43,14 @@ export default function Home() {
            </div>
            
            <h1 className="text-4xl md:text-7xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.9] md:leading-[0.8] mb-6">
-                   Bihar's Digital <br/>
-                   <span className="text-blue-500">Study Engine</span>
+                   Bihar Engineering <br/>
+                   <span className="text-blue-500">Counselling Hub</span>
                 </h1>
-                <p className="text-slate-500 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mb-8 md:mb-12 max-w-xl mx-auto">
-                   Apna College Bihar - Engineering Notes · CGPA · Networking
+                <p className="text-slate-500 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mb-2 max-w-xl mx-auto">
+                   UGEAC 2025 College Predictor · Bihar B.Tech Cutoff · BEU Notes · BCECE
+                </p>
+                <p className="text-slate-400 text-xs font-medium mb-8 max-w-2xl mx-auto leading-relaxed">
+                   Bihar ke engineering students ke liye — UGEAC 2025 rank se college predict karo, BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya ka cutoff dekho, aur free BEU semester notes download karo.
                 </p>
 
            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 px-4 w-full">
@@ -92,13 +95,13 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
            {[
-             { title: "UGEAC COUNSELLING", ic: <Send className="text-emerald-500"/>, d: "Official 2025 data-driven college recommendation engine for Bihar.", link: "/dashboard/ugeac-predictor" },
-             { title: "Smart Notes Hub", ic: <BookOpen className="text-blue-500"/>, d: "Access handwritten & verified notes for all BEU semesters in one tap.", link: "/dashboard/notes" },
-             { title: "Bihar Grade Engine", ic: <Calculator className="text-emerald-500"/>, d: "Accurate BEU SGPA/CGPA calculators with Hostinger-level speed.", link: "/dashboard/cgpa" },
-             { title: "Deep Focus Protocol", ic: <Timer className="text-orange-500"/>, d: "Integrated Pomodoro & Stopwatch to track your daily study grind.", link: "/dashboard/study" },
-             { title: "Scholars Network", ic: <Users className="text-purple-500"/>, d: "Join peer groups and discuss previous year question papers.", link: "/dashboard/study" },
-             { title: "Secure Authentication", ic: <Shield className="text-indigo-500"/>, d: "Military grade Google auth to keep your data protected.", link: "/login" },
-             { title: "Scientific Edge", ic: <Globe className="text-pink-500"/>, d: "Professional grade calculators for complex engineering problems.", link: "/dashboard/calculator" }
+             { title: "UGEAC 2025 College Predictor", ic: <Send className="text-emerald-500"/>, d: "Bihar Engineering Counselling 2025 — Apna UGEAC rank enter karo aur jaano ki BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya, DCE Darbhanga mein milega seat ya nahi. 2024-2025 real cutoff data.", link: "/dashboard/ugeac-predictor" },
+             { title: "BEU Notes & PYQ Hub", ic: <BookOpen className="text-blue-500"/>, d: "Bihar Engineering University (BEU) ke sabhi semesters ke liye free handwritten notes, previous year question papers (PYQ) aur study material.", link: "/dashboard/notes" },
+             { title: "SGPA / CGPA Calculator", ic: <Calculator className="text-emerald-500"/>, d: "BEU ke grading system ke anusaar accurate SGPA aur CGPA calculate karo. Bihar ke engineering students ke liye specially designed.", link: "/dashboard/cgpa" },
+             { title: "Study Timer & Focus", ic: <Timer className="text-orange-500"/>, d: "Pomodoro technique aur Stopwatch se apna padhai ka waqt track karo. Bihar engineering exam preparation ke liye best tool.", link: "/dashboard/study" },
+             { title: "Student Study Groups", ic: <Users className="text-purple-500"/>, d: "Bihar engineering students ke study groups join karo. PYQ discuss karo, doubts pucho, aur UGEAC counselling tips share karo.", link: "/dashboard/study" },
+             { title: "Secure & Free Platform", ic: <Shield className="text-indigo-500"/>, d: "Bihar ke engineering students ke liye bilkul free platform. Google login se secure account banao aur saari features access karo.", link: "/login" },
+             { title: "Scientific Calculator", ic: <Globe className="text-pink-500"/>, d: "Advanced scientific calculator for Bihar B.Tech students. Complex engineering calculations ke liye professional grade tool.", link: "/dashboard/calculator" }
            ].map((f, i) => (
              <Link key={i} to={f.link} className="group p-8 bg-white border border-slate-200/80 rounded-[3rem] hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left">
                 <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mb-8 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform">
@@ -159,7 +162,32 @@ export default function Home() {
          </div>
       </section>
 
-      {/* ── Footer ── */}
+      {/* ── SEO Content Section ── */}
+      <section className="py-16 px-6 md:px-16 container mx-auto">
+        <div className="bg-slate-50 border border-slate-200/80 rounded-[3rem] p-10 md:p-14">
+          <h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter mb-6">Bihar Engineering Counselling 2025 — Complete Guide</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-slate-600 text-sm leading-relaxed">
+            <div>
+              <h3 className="font-black text-slate-900 uppercase tracking-tight mb-3">UGEAC 2025 College Predictor</h3>
+              <p>Bihar mein B.Tech admission ke liye <strong>UGEAC (Unified Guidance Engineering Admission Counselling)</strong> process hota hai. Apna College Bihar ka <strong>UGEAC 2025 College Predictor</strong> tool use karke aap apne JEE Mains rank se pata kar sakte ho ki aapko <strong>BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya, DCE Darbhanga, MCE Motihari, LNJPIT Chapra</strong> mein seat milne ki kitni sambhavna hai.</p>
+            </div>
+            <div>
+              <h3 className="font-black text-slate-900 uppercase tracking-tight mb-3">Bihar B.Tech Cutoff Ranks 2024-2025</h3>
+              <p>Hamara predictor tool <strong>UGEAC 2024 aur 2025 ke actual official cutoff data</strong> par based hai. Sabhi categories ke liye cutoff available hai — <strong>UR, EBC, BC, SC, ST, EWS, RCG</strong>. Apni category select karo aur exact cutoff dekho.</p>
+            </div>
+            <div>
+              <h3 className="font-black text-slate-900 uppercase tracking-tight mb-3">Free BEU Notes & Study Material</h3>
+              <p><strong>Bihar Engineering University (BEU) aur AKU</strong> ke students ke liye sabhi semesters ke free notes available hain. <strong>Semester 1 se 8</strong> tak ke notes, previous year questions (PYQ), aur study material organize karke rakha gaya hai.</p>
+            </div>
+            <div>
+              <h3 className="font-black text-slate-900 uppercase tracking-tight mb-3">Bihar Ke Top Engineering Colleges</h3>
+              <p>Bihar ke top government engineering colleges: <strong>BCE Bhagalpur (B.C.E.), MIT Muzaffarpur, GCE Gaya, DCE Darbhanga, MCE Motihari, LNJPIT Chapra, NCE Chandi, KCE Katihar, SCE Sasaram, PCE Purnea</strong> — sabhi ka cutoff aur details hamare platform par available hai.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Footer ── */
       <footer className="py-20 border-t border-slate-200/50 px-6 md:px-16 bg-[#f8fafc]">
          <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="col-span-1 md:col-span-2 space-y-6">
