@@ -150,6 +150,46 @@ function UgeacPredictor() {
     const map2025 = new Map();
     ugeacData.data2025.forEach(d => map2025.set(`${d.collegeId}-${d.branch}-${d.category}-${d.seatType}`, d));
 
+    const processSet = (data) => {
+      data.forEach(d => {
+        if (!eligibleCategories.includes(d.category)) return;
+        if (gender === 'Male' && d.seatType === 'Female') return;
+
+        const key = `${d.collegeId}-${d.branch}-${d.category}-${d.seatType}`;
+        const collegeInfo = colleges.find(c => c.id === d.collegeId);
+        if (!collegeInfo) return;
+
+        const ratio = { 'EBC': 0.239, 'BC': 0.388, 'SC': 0.065, 'ST': 0.003, 'EWS': 0.227 }[d.category] || 1;
+        const compRank = d.category === 'UR' ? ugeacRank : Math.floor(ugeacRank * ratio);
+        
+        const cut24 = map2024.get(key), cut25 = map2025.get(key);
+        const latestClosing = cut25 ? cut25.closing : (cut24 ? cut24.closing : 99999);
+        
+        let chance = 'No';
+        if (compRank <= latestClosing) chance = 'High';
+        else if (compRank <= latestClosing * 1.1) chance = 'Medium';
+        else if (compRank <= latestClosing * 1.25) chance = 'Low';
+
+        if (!seen.has(key) || (cut25 && cut25 === d)) {
+          const seatInfo = seatMatrix.find(s => s.college === collegeInfo.name && s.branch === d.branch);
+          const availableSeats = seatInfo ? seatInfo.seats[category === 'UR' ? (gender === 'Female' ? 'F_UR' : 'UR') : category] : 'N/A';
+
+          seen.set(key, { 
+            college: collegeInfo, 
+            branch: d.branch, 
+            chance, 
+            cutoff25: cut25 ? cut25.closing : 'N/A', 
+            cutoff24: cut24 ? cut24.closing : 'N/A', 
+            cat: d.category, 
+            seatType: d.seatType, 
+            myCompRank: compRank,
+            seats: availableSeats,
+            collegeId: collegeInfo.id
+          });
+        }
+      });
+    };
+
     processSet(ugeacData.data2024); processSet(ugeacData.data2025);
 
     const fullRes = Array.from(seen.values());
