@@ -28,8 +28,8 @@ export default function AdminPanel() {
   const [loading, setLoading] = useState(true);
 
   // ── UPLOAD STATE ──
-  const [uploading, setUploading] = useState(false);
   const [docForm, setDocForm] = useState({ title: '', subject: '', category: 'NOTES', file: null });
+  const [newGroup, setNewGroup] = useState({ name: '', description: '', code: '' });
 
   // Access Control
   const isSuper = user?.role === ROLES.SUPER_ADMIN;
@@ -109,6 +109,25 @@ export default function AdminPanel() {
     if(!window.confirm('Permanent delete?')) return;
     await deleteDoc(doc(db, 'documents', id));
     flash('Document Deleted');
+  };
+
+  const handleCreateGroup = async (e) => {
+    e.preventDefault();
+    if (!newGroup.name || !newGroup.code) { flash('Name and Code are required', 'err'); return; }
+    
+    try {
+      await addDoc(collection(db, 'groups'), {
+        ...newGroup,
+        memberCount: 0,
+        members: [],
+        createdAt: serverTimestamp(),
+        createdBy: user.email
+      });
+      flash('Official Study Hub Created! 🚀');
+      setNewGroup({ name: '', description: '', code: '' });
+    } catch (err) {
+      flash('Creation failed: ' + err.message, 'err');
+    }
   };
 
   const postAnn = async (e) => {
@@ -490,9 +509,38 @@ export default function AdminPanel() {
 
       {/* ── GROUPS TAB ── */}
       {tab==='groups' && (
-        <div className="bg-white rounded-[3.5rem] border border-slate-200/80 p-8 shadow-2xl animate-in fade-in duration-500">
-           <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest mb-8">Network Hub Monitoring</h2>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="space-y-8 animate-in fade-in duration-500">
+           {/* Create Group Form */}
+           <div className="bg-white rounded-[3.5rem] border border-slate-200/80 p-10 shadow-xl overflow-hidden relative">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/5 rounded-full blur-3xl pointer-events-none"></div>
+              <h2 className="text-xl font-[1000] text-slate-900 uppercase tracking-tighter mb-8 flex items-center gap-3">
+                 <div className="p-2 bg-indigo-600/10 text-indigo-600 rounded-xl"><UserPlus size={20}/></div>
+                 Initialize Official Study Hub
+              </h2>
+              <form onSubmit={handleCreateGroup} className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                 <div className="space-y-2">
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">Hub Name</p>
+                    <input value={newGroup.name} onChange={e=>setNewGroup({...newGroup, name: e.target.value})} placeholder="e.g. CSE - SEM 1" className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none border-2 border-transparent focus:border-indigo-500" />
+                 </div>
+                 <div className="space-y-2">
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">Join Code</p>
+                    <input value={newGroup.code} onChange={e=>setNewGroup({...newGroup, code: e.target.value})} placeholder="e.g. BIHAR25" className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-indigo-600 outline-none border-2 border-transparent focus:border-indigo-500" />
+                 </div>
+                 <div className="space-y-2 lg:col-span-1">
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">Description</p>
+                    <input value={newGroup.description} onChange={e=>setNewGroup({...newGroup, description: e.target.value})} placeholder="Group purpose..." className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none border-2 border-transparent focus:border-indigo-500" />
+                 </div>
+                 <div className="flex items-end">
+                    <button type="submit" className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-indigo-950/20 transition-all active:scale-95">
+                       Create Hub
+                    </button>
+                 </div>
+              </form>
+           </div>
+
+           <div className="bg-white rounded-[3.5rem] border border-slate-200/80 p-8 shadow-2xl">
+              <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest mb-8">Network Hub Monitoring ({groups.length})</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {groups.map(g => (
                 <div key={g.id} className="p-6 bg-slate-50 rounded-[2.5rem] border border-slate-300/30">
                    <div className="flex justify-between items-start mb-6">
