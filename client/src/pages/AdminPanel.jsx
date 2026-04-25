@@ -158,7 +158,9 @@ export default function AdminPanel() {
         title,
         subject: subject || 'GENERAL',
         category,
-        fileUrl: finalUrl,
+        fileUrl: category === 'FOLDER' ? '' : finalUrl,
+        type: category === 'FOLDER' ? 'folder' : 'file',
+        parentId: 'root', // Admin uploads to root by default, can be moved later if needed
         verified: true,
         createdAt: serverTimestamp()
       });
@@ -398,6 +400,7 @@ export default function AdminPanel() {
                   <select onChange={e=>setDocForm({...docForm, category:e.target.value})} className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none">
                     <option value="NOTES">Notes</option>
                     <option value="PYQ">PYQ</option>
+                    <option value="FOLDER">FOLDER</option>
                   </select>
 
                   <button disabled={uploading} className="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-3xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-indigo-950/20 group">

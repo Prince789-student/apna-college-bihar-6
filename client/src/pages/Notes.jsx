@@ -28,6 +28,9 @@ export default function Notes() {
     callback();
   };
 
+  const [currentFolder, setCurrentFolder] = useState(null); // null = root
+  const [navHistory, setNavHistory] = useState([]);
+
   useEffect(() => {
     const q = query(collection(db, 'documents'), orderBy('createdAt', 'desc'));
     const unsub = onSnapshot(q, (snap) => {
@@ -37,11 +40,39 @@ export default function Notes() {
     return unsub;
   }, []);
 
-  const filtered = docs.filter(d => 
-    (cat === 'ALL' || d.category === cat) &&
-    (sem === 'ALL' || d.semester === sem) &&
-    (d.title?.toLowerCase().includes(search.toLowerCase()) || d.subject?.toLowerCase().includes(search.toLowerCase()))
-  );
+  const navigateTo = (folder) => {
+    if (!folder) {
+      setCurrentFolder(null);
+      setNavHistory([]);
+    } else {
+      setNavHistory(prev => [...prev, currentFolder].filter(Boolean));
+      setCurrentFolder(folder);
+    }
+  };
+
+  const goBack = () => {
+    const prev = navHistory.pop();
+    setCurrentFolder(prev || null);
+    setNavHistory([...navHistory]);
+  };
+
+  // Filter logic:
+  // 1. If searching, show all matches regardless of folder
+  // 2. Otherwise, only show items where parentId === currentFolder.id (or root)
+  const filtered = docs.filter(d => {
+    const matchesSearch = !search || 
+      d.title?.toLowerCase().includes(search.toLowerCase()) || 
+      d.subject?.toLowerCase().includes(search.toLowerCase());
+    
+    if (search) return matchesSearch;
+
+    const matchesCat = cat === 'ALL' || d.category === cat;
+    const matchesSem = sem === 'ALL' || d.semester === sem;
+    const isRootItem = !d.parentId || d.parentId === 'root';
+    const matchesFolder = currentFolder ? d.parentId === currentFolder.id : isRootItem;
+
+    return matchesCat && matchesSem && matchesFolder;
+  });
 
   const handleUpload = async (e) => {
     e.preventDefault();
@@ -51,10 +82,9 @@ export default function Notes() {
     try {
       let finalUrl = uploadData.externalUrl;
 
-      // Handle File Upload if present
       if (uploadData.file) {
-        if (uploadData.file.size > 5 * 1024 * 1024) {
-          alert('Bhai, file 5MB se badi hai. Drive link use karein!');
+        if (uploadData.file.size > 10 * 1024 * 1024) {
+          alert('Bhai, file 10MB se badi hai. Drive link use karein!');
           setUploading(false);
           return;
         }
@@ -64,7 +94,7 @@ export default function Notes() {
         finalUrl = await getDownloadURL(snapshot.ref);
       }
 
-      if (!finalUrl) { 
+      if (!finalUrl && uploadData.category !== 'FOLDER') { 
         alert('Bhai, ya toh file chun lo ya Drive link daalo!'); 
         setUploading(false); 
         return; 
@@ -72,21 +102,23 @@ export default function Notes() {
 
       await addDoc(collection(db, 'documents'), {
         title: uploadData.title,
-        subject: uploadData.subject.toUpperCase(),
+        subject: uploadData.subject.toUpperCase() || 'GENERAL',
         category: uploadData.category,
         semester: uploadData.semester,
-        fileUrl: finalUrl,
+        fileUrl: finalUrl || '',
+        parentId: currentFolder?.id || 'root',
+        type: uploadData.category === 'FOLDER' ? 'folder' : 'file',
         createdAt: new Date().toISOString(),
-        verified: false,
+        verified: uploadData.category === 'FOLDER' ? true : false, // Folders are instantly verified
         uploadedBy: user?.email || 'Guest'
       });
 
       setShowUpload(false);
       setUploadData({ title: '', subject: '', category: 'NOTES', semester: '1', file: null, externalUrl: '' });
-      alert('Success! Admin verify hone ke baad library mein dikhega.');
+      alert(uploadData.category === 'FOLDER' ? 'Folder created!' : 'Success! Admin verify hone ke baad library mein dikhega.');
     } catch(err) { 
       console.error(err); 
-      alert('Upload fail ho gaya: ' + err.message);
+      alert('Action fail ho gaya: ' + err.message);
     } finally { 
       setUploading(false); 
     }
@@ -99,14 +131,42 @@ export default function Notes() {
       <div className="bg-white p-6 md:p-12 rounded-[2.5rem] md:rounded-[4rem] border border-slate-200/80 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="relative z-10 space-y-8">
-           <div className="flex items-center gap-4">
-              <div className="p-4 bg-indigo-600/20 text-indigo-400 rounded-3xl">
-                <BookOpen size={36} />
+           <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="p-4 bg-indigo-600/20 text-indigo-400 rounded-3xl">
+                  <BookOpen size={36} />
+                </div>
+                <div>
+                  <h1 className="text-4xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Knowledge Hub</h1>
+                  <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.3em] mt-3">Hierarchical Notes Repository</p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-4xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Knowledge Hub</h1>
-                <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.3em] mt-3">Curated Notes & Prev Year Papers</p>
-              </div>
+              {currentFolder && (
+                <button onClick={goBack} className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2">
+                  <ArrowRight size={14} className="rotate-180" /> Back to Parent
+                </button>
+              )}
+           </div>
+
+           {/* Breadcrumbs */}
+           <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2">
+              <button onClick={() => navigateTo(null)} className={`text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${!currentFolder ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:bg-slate-100'}`}>Home</button>
+              {navHistory.map((h, i) => (
+                <React.Fragment key={h.id}>
+                  <span className="text-slate-300">/</span>
+                  <button onClick={() => {
+                    const newHist = navHistory.slice(0, i);
+                    setNavHistory(newHist);
+                    setCurrentFolder(h);
+                  }} className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-indigo-600 whitespace-nowrap">{h.title}</button>
+                </React.Fragment>
+              ))}
+              {currentFolder && (
+                <>
+                  <span className="text-slate-300">/</span>
+                  <span className="text-[9px] font-black uppercase tracking-widest text-indigo-600 whitespace-nowrap">{currentFolder.title}</span>
+                </>
+              )}
            </div>
 
            <div className="flex flex-col md:flex-row gap-4">
@@ -120,7 +180,7 @@ export default function Notes() {
                   <div className="flex gap-2 p-1.5 bg-slate-100 rounded-[2rem] border border-slate-200/50">
                      {['ALL','NOTES','PYQ'].map(c => (
                        <button key={c} onClick={()=>setCat(c)}
-                         className={`px-6 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all ${cat===c?'bg-indigo-600 text-slate-900 shadow-xl':'text-slate-500 hover:text-slate-900'}`}>
+                         className={`px-6 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all ${cat===c?'bg-indigo-600 text-white shadow-xl':'text-slate-500 hover:text-slate-900'}`}>
                          {c}
                        </button>
                      ))}
@@ -142,61 +202,78 @@ export default function Notes() {
           <div className="col-span-full py-20 text-center"><p className="text-slate-500 font-black uppercase tracking-widest animate-pulse">Establishing Connection to Database...</p></div>
         ) : filtered.length === 0 ? (
           <div className="col-span-full py-20 text-center bg-slate-100/10 rounded-[4rem] border border-dashed border-slate-200">
-            <p className="text-slate-600 font-bold uppercase tracking-widest text-sm">No documents found matching your query.</p>
+            <p className="text-slate-600 font-bold uppercase tracking-widest text-sm">No documents found in this directory.</p>
           </div>
         ) : (
           filtered.map((d, idx) => (
             <React.Fragment key={d.id}>
-              <div className="bg-white rounded-[2.5rem] md:rounded-[3.5rem] border border-slate-200/80 p-6 md:p-8 hover:border-indigo-500/30 transition-all group relative overflow-hidden flex flex-col items-center">
-                 <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-indigo-600/5 rounded-full blur-[50px] pointer-events-none group-hover:bg-indigo-600/10 transition-all"></div>
-                 
-                 <div className="w-16 h-16 bg-red-600/10 text-red-500 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <FileDigit size={32} />
-                 </div>
-  
-                 <div className="text-center space-y-2 mb-8">
-                    <div className="flex items-center justify-center gap-2">
-                      <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border ${d.category==='NOTES'?'bg-blue-600/10 text-blue-400 border-blue-500/20':'bg-amber-600/10 text-amber-400 border-amber-500/20'}`}>
-                        {d.category}
-                      </span>
-                      {d.semester && (
-                        <span className="text-[8px] font-black bg-slate-800 text-slate-500 px-2 py-0.5 rounded-full uppercase tracking-widest border border-slate-300/50">
-                          Sem {d.semester}
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight leading-[1.1] truncate max-w-[200px]">{d.title}</h3>
-                    <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest flex items-center justify-center gap-2">
-                       <Bookmark size={10} className="text-indigo-500" /> {d.subject}
-                    </p>
-                 </div>
-  
-                  <div className="mt-auto w-full flex items-center gap-2 pt-6 border-t border-slate-200/50">
-                     <button 
-                       onClick={() => handleAction(d.fileUrl, () => window.open(d.fileUrl, '_blank'))}
-                       className="flex-1 flex items-center justify-center gap-2 py-4 bg-slate-100 hover:bg-slate-100 text-slate-900 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all">
-                       <Eye size={12} /> View
-                     </button>
-                     <button 
-                       onClick={() => handleAction(d.fileUrl, () => {
-                         const link = document.createElement('a');
-                         link.href = d.fileUrl;
-                         link.download = d.title || 'document'; // Suggest a filename
-                         document.body.appendChild(link);
-                         link.click();
-                         document.body.removeChild(link);
-                       })}
-                       className="p-4 bg-indigo-600/10 hover:bg-indigo-600 text-indigo-400 hover:text-slate-900 rounded-2xl transition-all border border-indigo-500/20">
-                       <Download size={14} />
-                     </button>
-                     <button onClick={() => handleAction(d.fileUrl, () => {
-                       const text = `Hey! Check out this document on ACB Portal: ${d.title} - ${d.fileUrl}`;
-                       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-                     }, 'Bhai, ye link broken hai.')} className="p-4 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-400 hover:text-slate-900 rounded-2xl transition-all border border-emerald-500/20">
-                       <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.653a11.734 11.734 0 005.682 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                     </button>
+              {d.type === 'folder' ? (
+                /* FOLDER CARD */
+                <button onClick={() => navigateTo(d)} className="bg-white rounded-[2.5rem] border border-slate-200 p-8 hover:border-indigo-500/30 transition-all group relative overflow-hidden flex flex-col items-start text-left">
+                  <div className="w-16 h-16 bg-amber-600/10 text-amber-500 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <Filter size={32} />
                   </div>
-              </div>
+                  <div className="space-y-1">
+                    <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight leading-none">{d.title}</h3>
+                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">{docs.filter(x => x.parentId === d.id).length} Items Inside</p>
+                  </div>
+                  <div className="mt-8 flex items-center gap-2 text-[9px] font-black text-indigo-600 uppercase tracking-widest group-hover:gap-3 transition-all">
+                    Open Folder <ArrowRight size={12} />
+                  </div>
+                </button>
+              ) : (
+                /* FILE CARD */
+                <div className="bg-white rounded-[2.5rem] md:rounded-[3.5rem] border border-slate-200/80 p-6 md:p-8 hover:border-indigo-500/30 transition-all group relative overflow-hidden flex flex-col items-center">
+                  <div className="absolute top-0 right-0 w-[150px] h-[150px] bg-indigo-600/5 rounded-full blur-[50px] pointer-events-none group-hover:bg-indigo-600/10 transition-all"></div>
+                  
+                  <div className="w-16 h-16 bg-indigo-600/10 text-indigo-500 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                      <FileDigit size={32} />
+                  </div>
+    
+                  <div className="text-center space-y-2 mb-8">
+                      <div className="flex items-center justify-center gap-2">
+                        <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border ${d.category==='NOTES'?'bg-blue-600/10 text-blue-400 border-blue-500/20':'bg-amber-600/10 text-amber-400 border-amber-500/20'}`}>
+                          {d.category}
+                        </span>
+                        {d.semester && (
+                          <span className="text-[8px] font-black bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full uppercase tracking-widest border border-slate-200">
+                            Sem {d.semester}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight leading-[1.1] truncate max-w-[200px]">{d.title}</h3>
+                      <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest flex items-center justify-center gap-2">
+                        <Bookmark size={10} className="text-indigo-500" /> {d.subject}
+                      </p>
+                  </div>
+    
+                    <div className="mt-auto w-full flex items-center gap-2 pt-6 border-t border-slate-200/50">
+                      <button 
+                        onClick={() => handleAction(d.fileUrl, () => window.open(d.fileUrl, '_blank'))}
+                        className="flex-1 flex items-center justify-center gap-2 py-4 bg-slate-50 hover:bg-slate-100 text-slate-900 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all">
+                        <Eye size={12} /> View
+                      </button>
+                      <button 
+                        onClick={() => handleAction(d.fileUrl, () => {
+                          const link = document.createElement('a');
+                          link.href = d.fileUrl;
+                          link.download = d.title || 'document';
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        })}
+                        className="p-4 bg-indigo-600/10 hover:bg-indigo-600 text-indigo-500 hover:text-white rounded-2xl transition-all border border-indigo-500/20">
+                        <Download size={14} />
+                      </button>
+                      <button onClick={() => handleAction(d.fileUrl, () => {
+                        const text = `Hey! Check out this document on ACB Portal: ${d.title} - ${d.fileUrl}`;
+                        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+                      }, 'Bhai, ye link broken hai.')} className="p-4 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-500 hover:text-white rounded-2xl transition-all border border-emerald-500/20">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.653a11.734 11.734 0 005.682 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                      </button>
+                    </div>
+                </div>
+              )}
               {idx % 4 === 3 && (
                 <div className="col-span-1">
                    <PremiumAds type="INLINE" />
@@ -240,7 +317,7 @@ export default function Notes() {
                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Category</p>
                      <select value={uploadData.category} onChange={e=>setUploadData({...uploadData, category: e.target.value})} className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 text-slate-900 text-xs outline-none appearance-none">
                        <option value="NOTES">NOTES</option>
-                       <option value="PYQ">PYQ</option>
+                       <option value="PYQ">PYQ</option><option value="FOLDER">FOLDER</option>
                      </select>
                    </div>
                    <div className="space-y-2">
