@@ -305,12 +305,12 @@ export default function ScientificCalc() {
     if(ins) app(ins);
   };
   const btnColor=([label,sl,val,sv,sp])=>{
-    if(sp==='eq') return 'bg-blue-600 hover:bg-blue-500 text-slate-900 shadow-blue-900/30 shadow-lg';
-    if(sp==='ac') return 'bg-red-600/80 hover:bg-red-600 text-slate-900';
-    if(sp==='del') return 'bg-orange-600/80 hover:bg-orange-600 text-slate-900';
-    if(['×','÷','+'].includes(label)||label==='-') return 'bg-slate-600 hover:bg-slate-500 text-slate-900';
-    if(!isNaN(label)||label==='.') return 'bg-slate-700 hover:bg-slate-600 text-slate-900';
-    return 'bg-slate-800 hover:bg-slate-200 text-slate-200';
+    if(sp==='eq') return 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl shadow-indigo-600/20';
+    if(sp==='ac') return 'bg-rose-600 hover:bg-rose-700 text-white shadow-lg shadow-rose-600/10';
+    if(sp==='del') return 'bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-600/10';
+    if(['×','÷','+'].includes(label)||label==='-') return 'bg-slate-100 hover:bg-slate-200 text-slate-600';
+    if(!isNaN(label)||label==='.') return 'bg-white border border-slate-200 hover:bg-slate-50 text-slate-900 shadow-sm';
+    return 'bg-slate-50 hover:bg-slate-100 text-slate-500';
   };
 
   // EQN
@@ -335,46 +335,46 @@ export default function ScientificCalc() {
 
   return (
     <div className="w-full max-w-2xl mx-auto px-2 md:px-4 pb-20">
-      <div className="bg-[#0a0a0f] rounded-3xl md:rounded-[2.5rem] border border-slate-200 shadow-2xl overflow-hidden">
+      <div className="bg-white rounded-3xl md:rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden">
 
         {/* Top bar */}
-        <div className="flex items-center justify-between px-5 pt-5 pb-3">
+        <div className="flex items-center justify-between px-5 pt-5 pb-3 bg-slate-50/50 border-bottom border-slate-100">
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Casio fx-991</span>
-            <span className="text-[9px] px-2 py-0.5 bg-blue-600/20 text-blue-400 rounded-full font-bold">{isDeg?'DEG':'RAD'}</span>
-            {mem.M!==0&&<span className="text-[9px] px-2 py-0.5 bg-amber-600/20 text-amber-400 rounded-full font-bold">M={fmtNum(mem.M)}</span>}
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Casio fx-991</span>
+            <span className="text-[9px] px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full font-black uppercase tracking-tighter">{isDeg?'DEG':'RAD'}</span>
+            {mem.M!==0&&<span className="text-[9px] px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-black uppercase tracking-tighter">M={fmtNum(mem.M)}</span>}
           </div>
-          <button onClick={()=>setShowHist(!showHist)} className="p-2 text-slate-500 hover:text-slate-900 transition-colors"><Clock size={16}/></button>
+          <button onClick={()=>setShowHist(!showHist)} className="p-2 text-slate-400 hover:text-slate-900 transition-colors"><Clock size={16}/></button>
         </div>
 
         {/* Mode tabs */}
-        <div className="flex gap-1 mx-4 mb-1">
+        <div className="flex gap-1 mx-4 mb-2 p-1 bg-slate-100 rounded-2xl">
           {MODES.map(m=>(
             <button key={m} onClick={()=>{setMode(m);ac();}}
-              className={`flex-1 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${mode===m?'bg-slate-700 text-slate-900':'text-slate-600 hover:text-slate-500'}`}>
+              className={`flex-1 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${mode===m?'bg-white text-indigo-600 shadow-sm':'text-slate-500 hover:text-slate-700'}`}>
               {m}
             </button>
           ))}
         </div>
 
         {/* Display */}
-        <div className="mx-4 mb-3 bg-[#0d1117] rounded-2xl border border-slate-200 p-4 min-h-[90px] relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/5 to-transparent pointer-events-none"/>
+        <div className="mx-4 mb-3 bg-[#f8fafc] rounded-2xl border border-slate-200 p-4 min-h-[100px] relative overflow-hidden shadow-inner">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent pointer-events-none"/>
           {showHist ? (
-            <div className="space-y-1 max-h-[80px] overflow-y-auto">
-              {history.length===0?<p className="text-slate-600 text-xs">No history yet</p>:
+            <div className="space-y-1 max-h-[80px] overflow-y-auto custom-scrollbar">
+              {history.length===0?<p className="text-slate-400 text-xs font-bold text-center py-4 uppercase tracking-widest">No history yet</p>:
                 history.map((h,i)=>(
                   <button key={i} onClick={()=>{setExpr(h.result);setShowHist(false);}}
-                    className="w-full text-left text-[10px] hover:bg-slate-100 rounded px-1 py-0.5">
-                    <span className="text-slate-500">{h.expr}</span>
-                    <span className="text-blue-400 ml-2">= {h.result}</span>
+                    className="w-full text-left text-[10px] hover:bg-white rounded-lg px-2 py-1.5 transition-colors border border-transparent hover:border-slate-100">
+                    <span className="text-slate-400 font-medium">{h.expr}</span>
+                    <span className="text-indigo-600 font-black ml-2">= {h.result}</span>
                   </button>
                 ))}
             </div>
           ):(
             <>
-              <p className="text-slate-500 text-sm font-mono min-h-[22px] break-all">{expr||'0'}</p>
-              <p className={`text-right text-2xl font-black font-mono mt-1 break-all ${hasErr?'text-red-400':result?'text-slate-900':'text-slate-600'}`}>
+              <p className="text-slate-400 text-sm font-mono min-h-[22px] break-all leading-relaxed">{expr||'0'}</p>
+              <p className={`text-right text-3xl font-[1000] font-mono mt-1 break-all ${hasErr?'text-rose-500':result?'text-slate-900':'text-slate-300'}`}>
                 {result||(expr?'…':'0')}
               </p>
             </>
@@ -386,15 +386,15 @@ export default function ScientificCalc() {
           <div className="px-3 pb-5 space-y-2">
             <div className="flex gap-1.5 mb-1">
               <button onClick={()=>setIsShift(s=>!s)}
-                className={`flex-1 py-2.5 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${isShift?'bg-orange-500 text-slate-900':'bg-slate-800 text-slate-500'}`}>
+                className={`flex-1 py-2.5 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${isShift?'bg-amber-500 text-white shadow-lg shadow-amber-500/20':'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}>
                 SHIFT
               </button>
               <button onClick={()=>setIsDeg(d=>!d)}
-                className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-200 text-slate-500 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all">
+                className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all">
                 {isDeg?'→ RAD':'→ DEG'}
               </button>
               <button onClick={()=>setMem(m=>({...m,M:0}))}
-                className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-200 text-slate-500 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all">
+                className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all">
                 CLR M
               </button>
             </div>
@@ -426,7 +426,7 @@ export default function ScientificCalc() {
               <div className="flex gap-2">
                 {[1,2,3,4,5,6].map(d=>(
                   <button key={d} onClick={()=>changeDeg(d)}
-                    className={`flex-1 py-2.5 rounded-xl font-black text-sm transition-all ${eqDeg===d?'bg-blue-600 text-slate-900':'bg-slate-800 text-slate-500 hover:bg-slate-200'}`}>
+                    className={`flex-1 py-2.5 rounded-xl font-black text-sm transition-all ${eqDeg===d?'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20':'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}>
                     {d}
                   </button>
                 ))}
@@ -452,17 +452,17 @@ export default function ScientificCalc() {
               })}
             </div>
             <button onClick={solveEqn}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black transition-all">
+              className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black transition-all shadow-lg shadow-indigo-600/20">
               Solve ({eqDeg} root{eqDeg>1?'s':''})
             </button>
             {roots&&(
               <div className="bg-slate-100/60 p-4 rounded-2xl border border-slate-200 space-y-2">
                 <p className="text-[9px] text-slate-500 uppercase tracking-widest">Roots ({roots.length})</p>
                 {roots.map((r,i)=>(
-                  <div key={i} className="flex justify-between items-center p-2 rounded-xl bg-slate-100/80">
-                    <span className="text-[10px] font-bold text-slate-500 w-8">x{i+1}</span>
-                    <span className={`font-black text-sm flex-1 text-right ${r.isReal?'text-slate-900':'text-blue-400'}`}>{r.display}</span>
-                    {!r.isReal&&<span className="text-[8px] text-slate-600 font-bold ml-2">complex</span>}
+                  <div key={i} className="flex justify-between items-center p-2.5 rounded-xl bg-white border border-slate-100 shadow-sm">
+                    <span className="text-[10px] font-black text-indigo-400 w-8">x{i+1}</span>
+                    <span className={`font-[1000] text-sm flex-1 text-right ${r.isReal?'text-slate-900':'text-indigo-600'}`}>{r.display}</span>
+                    {!r.isReal&&<span className="text-[8px] text-slate-400 font-black uppercase ml-2 tracking-tighter">complex</span>}
                   </div>
                 ))}
               </div>
@@ -479,7 +479,7 @@ export default function ScientificCalc() {
                 placeholder="e.g. 10, 20, 30, 15, 25"
                 className="w-full bg-slate-100 border border-slate-300 rounded-xl p-3 text-slate-900 font-mono text-sm outline-none focus:border-blue-500 resize-none"/>
             </div>
-            <button onClick={computeStats} className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black">Calculate</button>
+            <button onClick={computeStats} className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-black shadow-lg shadow-indigo-600/20">Calculate Stats</button>
             {statRes&&(
               <div className="space-y-2">
                 {[['Count (n)',statRes.n],['Sum (Σx)',fmtNum(statRes.sum)],['Mean (x̄)',fmtNum(statRes.mean)],
@@ -500,24 +500,24 @@ export default function ScientificCalc() {
           <div className="px-4 pb-6 space-y-5">
             <div className="flex gap-2">
               <button onClick={()=>{setActiveM('A'); setMRes(null);}}
-                className={`flex-1 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${activeM==='A'?'bg-blue-600 text-slate-900':'bg-slate-800 text-slate-500'}`}>Edit Matrix A</button>
+                className={`flex-1 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${activeM==='A'?'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20':'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}>Edit Matrix A</button>
               <button onClick={()=>{setActiveM('B'); setMRes(null);}}
-                className={`flex-1 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${activeM==='B'?'bg-blue-600 text-slate-900':'bg-slate-800 text-slate-500'}`}>Edit Matrix B</button>
+                className={`flex-1 py-2 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all ${activeM==='B'?'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20':'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}>Edit Matrix B</button>
             </div>
 
-            <div className="flex items-center gap-2 bg-slate-100/50 p-3 rounded-2xl border border-slate-200/50">
-               <p className="text-[9px] font-black text-slate-500 uppercase mr-2">Dimensions (R x C)</p>
+            <div className="flex items-center gap-2 bg-indigo-50/50 p-3 rounded-2xl border border-indigo-100">
+               <p className="text-[9px] font-black text-indigo-600 uppercase mr-2">Dimensions (R x C)</p>
                {activeM==='A' ? (
                  <>
-                   <input type="number" min={1} max={5} value={rowsA} onChange={e=>{const v=parseInt(e.target.value)||1; setRowsA(v); setMA(Array(v*colsA).fill(0));}} className="w-10 bg-slate-800 text-white text-center rounded p-1 text-[10px]"/>
+                   <input type="number" min={1} max={5} value={rowsA} onChange={e=>{const v=parseInt(e.target.value)||1; setRowsA(v); setMA(Array(v*colsA).fill(0));}} className="w-10 bg-white border border-slate-200 text-slate-900 text-center rounded p-1 text-[10px]"/>
                    <span className="text-slate-600">×</span>
-                   <input type="number" min={1} max={5} value={colsA} onChange={e=>{const v=parseInt(e.target.value)||1; setColsA(v); setMA(Array(rowsA*v).fill(0));}} className="w-10 bg-slate-800 text-white text-center rounded p-1 text-[10px]"/>
+                   <input type="number" min={1} max={5} value={colsA} onChange={e=>{const v=parseInt(e.target.value)||1; setColsA(v); setMA(Array(rowsA*v).fill(0));}} className="w-10 bg-white border border-slate-200 text-slate-900 text-center rounded p-1 text-[10px]"/>
                  </>
                ) : (
                  <>
-                   <input type="number" min={1} max={5} value={rowsB} onChange={e=>{const v=parseInt(e.target.value)||1; setRowsB(v); setMB(Array(v*colsB).fill(0));}} className="w-10 bg-slate-800 text-white text-center rounded p-1 text-[10px]"/>
+                   <input type="number" min={1} max={5} value={rowsB} onChange={e=>{const v=parseInt(e.target.value)||1; setRowsB(v); setMB(Array(v*colsB).fill(0));}} className="w-10 bg-white border border-slate-200 text-slate-900 text-center rounded p-1 text-[10px]"/>
                    <span className="text-slate-600">×</span>
-                   <input type="number" min={1} max={5} value={colsB} onChange={e=>{const v=parseInt(e.target.value)||1; setColsB(v); setMB(Array(rowsB*v).fill(0));}} className="w-10 bg-slate-800 text-white text-center rounded p-1 text-[10px]"/>
+                   <input type="number" min={1} max={5} value={colsB} onChange={e=>{const v=parseInt(e.target.value)||1; setColsB(v); setMB(Array(rowsB*v).fill(0));}} className="w-10 bg-white border border-slate-200 text-slate-900 text-center rounded p-1 text-[10px]"/>
                  </>
                )}
             </div>
@@ -532,13 +532,13 @@ export default function ScientificCalc() {
             </div>
 
             <div className="grid grid-cols-4 gap-2">
-              <button onClick={()=>matOp('add')} className="py-2.5 bg-slate-800 hover:bg-slate-200 text-white rounded-xl font-black text-[10px] uppercase">A + B</button>
-              <button onClick={()=>matOp('sub')} className="py-2.5 bg-slate-800 hover:bg-slate-200 text-white rounded-xl font-black text-[10px] uppercase">A - B</button>
-              <button onClick={()=>matOp('mul')} className="py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-black text-[10px] uppercase">A × B</button>
-              <button onClick={()=>{setMA(Array(rowsA*colsA).fill(0));setMB(Array(rowsB*colsB).fill(0));setMRes(null);}} className="py-2.5 bg-red-600/20 text-red-500 hover:bg-red-600 hover:text-slate-900 rounded-xl font-black text-[10px] uppercase transition-all">Reset</button>
-              <button onClick={()=>matOp('tr')}  className="py-2.5 bg-slate-800 hover:bg-slate-200 text-white rounded-xl font-black text-[10px] uppercase">Trans(A)</button>
-              <button onClick={()=>matOp('det')} className="py-2.5 bg-slate-800 hover:bg-slate-200 text-white rounded-xl font-black text-[10px] uppercase">Det(A)</button>
-              <button onClick={()=>matOp('inv')} className="py-2.5 bg-slate-800 hover:bg-slate-200 text-white rounded-xl font-black text-[10px] uppercase">Inv(A)</button>
+              <button onClick={()=>matOp('add')} className="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-black text-[10px] uppercase">A + B</button>
+              <button onClick={()=>matOp('sub')} className="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-black text-[10px] uppercase">A - B</button>
+              <button onClick={()=>matOp('mul')} className="py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-black text-[10px] uppercase shadow-lg shadow-indigo-600/10">A × B</button>
+              <button onClick={()=>{setMA(Array(rowsA*colsA).fill(0));setMB(Array(rowsB*colsB).fill(0));setMRes(null);}} className="py-2.5 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white rounded-xl font-black text-[10px] uppercase transition-all shadow-sm">Reset</button>
+              <button onClick={()=>matOp('tr')}  className="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-black text-[10px] uppercase">Trans(A)</button>
+              <button onClick={()=>matOp('det')} className="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-black text-[10px] uppercase">Det(A)</button>
+              <button onClick={()=>matOp('inv')} className="py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-black text-[10px] uppercase">Inv(A)</button>
             </div>
 
             {mRes !== null && (
@@ -556,7 +556,7 @@ export default function ScientificCalc() {
                 {Array.isArray(mRes) ? (
                   <div className="grid gap-2" style={{gridTemplateColumns: `repeat(${resDim.c}, 1fr)`}}>
                     {mRes.map((v, i) => (
-                      <div key={i} className="bg-slate-950 border border-slate-200 p-2 rounded-lg text-center text-slate-900 font-black text-[11px]">
+                      <div key={i} className="bg-slate-50 border border-slate-100 p-2 rounded-lg text-center text-slate-900 font-black text-[11px] shadow-sm">
                         {Number.isInteger(v) ? v : v.toFixed(2)}
                       </div>
                     ))}

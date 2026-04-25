@@ -827,13 +827,13 @@ function UgeacPredictor() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[40vh] overflow-y-auto pr-4 custom-scrollbar">
               {ugeacData.branches.map(b => (
-                <label key={b} className={`flex items-center gap-4 p-4 rounded-2xl cursor-pointer border-2 transition-all group ${targetBranches.includes(b) ? 'bg-indigo-500/10 border-indigo-500/50' : 'bg-slate-900/50 border-transparent hover:border-white/10'}`}>
+                <label key={b} className={`flex items-center gap-4 p-4 rounded-2xl cursor-pointer border-2 transition-all group ${targetBranches.includes(b) ? 'bg-indigo-50 border-indigo-500/50' : 'bg-white border-slate-100 hover:border-indigo-200'}`}>
                   <input type="checkbox" className="hidden" checked={targetBranches.includes(b)} onChange={(e) => e.target.checked ? setTargetBranches([...targetBranches, b]) : setTargetBranches(targetBranches.filter(id => id !== b))} />
-                  <div className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all ${targetBranches.includes(b) ? 'bg-indigo-500 border-indigo-500' : 'border-slate-700'}`}>
+                  <div className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all ${targetBranches.includes(b) ? 'bg-indigo-600 border-indigo-600' : 'border-slate-200'}`}>
                      {targetBranches.includes(b) && <CheckCircle2 size={12} className="text-white" />}
                   </div>
                   <div className="flex-1 min-w-0">
-                     <span className="text-white font-black uppercase text-[10px] tracking-tight block truncate">{branchMapping[b] || b}</span>
+                     <span className="text-slate-900 font-black uppercase text-[10px] tracking-tight block truncate">{branchMapping[b] || b}</span>
                   </div>
                 </label>
               ))}
