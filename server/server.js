@@ -58,4 +58,20 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server on port ${PORT}`));
+app.listen(PORT, () => {
+    console.log(`🚀 Server on port ${PORT}`);
+    
+    // Keep-Alive Logic for Render Free Tier
+    const APP_URL = process.env.APP_URL || 'https://apnacollegebihar.online';
+    if (APP_URL) {
+        console.log(`📡 Starting Keep-Alive Pinger for: ${APP_URL}`);
+        setInterval(() => {
+            const https = require('https');
+            https.get(`${APP_URL}/_health`, (res) => {
+                console.log(`💓 Keep-Alive Ping Sent: ${res.statusCode}`);
+            }).on('error', (err) => {
+                console.error('💔 Keep-Alive Error:', err.message);
+            });
+        }, 14 * 60 * 1000); // Ping every 14 minutes
+    }
+});
