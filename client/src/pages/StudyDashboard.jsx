@@ -10,7 +10,7 @@ import {
   Clock, Plus, Flame, Target, BookOpen, Youtube,
   Calendar, BarChart3, Settings, Trash2, Trophy,
   Users, Hash, ArrowRight, ClipboardList, CalendarDays,
-  CheckCircle2, Circle, Save, Shield, Zap, Award, Timer, ChevronRight, AlertTriangle, Copy, Link2
+  CheckCircle2, Circle, Save, Shield, Zap, Award, Timer, ChevronRight, AlertTriangle, Copy, Link2, Video
 } from 'lucide-react';
 import PremiumAds from '../components/PremiumAds';
 import { startFocusSession, stopFocusSession, getInstalledApps, checkAccessibility, openSettings } from '../services/AppBlocker';
