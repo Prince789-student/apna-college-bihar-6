@@ -150,84 +150,47 @@ function UgeacPredictor() {
     const map2025 = new Map();
     ugeacData.data2025.forEach(d => map2025.set(`${d.collegeId}-${d.branch}-${d.category}-${d.seatType}`, d));
 
-    const processSet = (data) => {
-      data.forEach(d => {
-        if (!eligibleCategories.includes(d.category)) return;
-        if (gender === 'Male' && d.seatType === 'Female') return;
-        if (targetColleges.length > 0 && !targetColleges.includes(d.collegeId)) return;
-        if (mode === 'finder' && targetBranches.length > 0 && !targetBranches.includes(d.branch)) return;
-
-        const key = `${d.collegeId}-${d.branch}-${d.category}-${d.seatType}`;
-        const collegeInfo = colleges.find(c => c.id === d.collegeId);
-        if (!collegeInfo) return;
-
-        const ratio = { 'EBC': 0.239, 'BC': 0.388, 'SC': 0.065, 'ST': 0.003, 'EWS': 0.227 }[d.category] || 1;
-        const compRank = d.category === 'UR' ? ugeacRank : Math.floor(ugeacRank * ratio);
-        
-        const cut24 = map2024.get(key), cut25 = map2025.get(key);
-        const latestClosing = cut25 ? cut25.closing : (cut24 ? cut24.closing : 99999);
-        
-        let chance = 'No';
-        if (compRank <= latestClosing) chance = 'High';
-        else if (compRank <= latestClosing * 1.1) chance = 'Medium';
-        else if (compRank <= latestClosing * 1.25) chance = 'Low';
-
-        if (!seen.has(key) || (cut25 && cut25 === d)) {
-          const seatInfo = seatMatrix.find(s => s.college === collegeInfo.name && s.branch === d.branch);
-          const availableSeats = seatInfo ? seatInfo.seats[category === 'UR' ? (gender === 'Female' ? 'F_UR' : 'UR') : category] : 'N/A';
-
-          seen.set(key, { 
-            college: collegeInfo, 
-            branch: d.branch, 
-            chance, 
-            cutoff25: cut25 ? cut25.closing : 'N/A', 
-            cutoff24: cut24 ? cut24.closing : 'N/A', 
-            cat: d.category, 
-            seatType: d.seatType, 
-            myCompRank: compRank,
-            seats: availableSeats,
-            collegeId: collegeInfo.id
-          });
-        }
-      });
-    };
-
     processSet(ugeacData.data2024); processSet(ugeacData.data2025);
 
-    const allRes = Array.from(seen.values()).sort((a,b) => {
+    const fullRes = Array.from(seen.values());
+    
+    // Visual Filter
+    const filteredRes = fullRes.filter(d => {
+      if (targetColleges.length > 0 && !targetColleges.includes(d.collegeId)) return false;
+      if (targetBranches.length > 0 && !targetBranches.includes(d.branch)) return false;
+      return true;
+    }).sort((a,b) => {
       const score = (c) => c === 'High' ? 1 : c === 'Medium' ? 2 : c === 'Low' ? 3 : 4;
       
-      if (mode === 'finder') {
-        if (finderPriority === 'college') {
-          const cIdxA = targetColleges.indexOf(a.collegeId);
-          const cIdxB = targetColleges.indexOf(b.collegeId);
-          if (cIdxA !== -1 && cIdxB !== -1 && cIdxA !== cIdxB) return cIdxA - cIdxB;
-          if (cIdxA !== -1 && cIdxB === -1) return -1;
-          if (cIdxA === -1 && cIdxB !== -1) return 1;
+      if (finderPriority === 'college') {
+        const cIdxA = targetColleges.indexOf(a.collegeId);
+        const cIdxB = targetColleges.indexOf(b.collegeId);
+        if (cIdxA !== -1 && cIdxB !== -1 && cIdxA !== cIdxB) return cIdxA - cIdxB;
+        if (cIdxA !== -1 && cIdxB === -1) return -1;
+        if (cIdxA === -1 && cIdxB !== -1) return 1;
 
-          const bIdxA = targetBranches.indexOf(a.branch);
-          const bIdxB = targetBranches.indexOf(b.branch);
-          if (bIdxA !== -1 && bIdxB !== -1 && bIdxA !== bIdxB) return bIdxA - bIdxB;
-        } else {
-          const bIdxA = targetBranches.indexOf(a.branch);
-          const bIdxB = targetBranches.indexOf(b.branch);
-          if (bIdxA !== -1 && bIdxB !== -1 && bIdxA !== bIdxB) return bIdxA - bIdxB;
-          if (bIdxA !== -1 && bIdxB === -1) return -1;
-          if (bIdxA === -1 && bIdxB !== -1) return 1;
+        const bIdxA = targetBranches.indexOf(a.branch);
+        const bIdxB = targetBranches.indexOf(b.branch);
+        if (bIdxA !== -1 && bIdxB !== -1 && bIdxA !== bIdxB) return bIdxA - bIdxB;
+      } else {
+        const bIdxA = targetBranches.indexOf(a.branch);
+        const bIdxB = targetBranches.indexOf(b.branch);
+        if (bIdxA !== -1 && bIdxB !== -1 && bIdxA !== bIdxB) return bIdxA - bIdxB;
+        if (bIdxA !== -1 && bIdxB === -1) return -1;
+        if (bIdxA === -1 && bIdxB !== -1) return 1;
 
-          const cIdxA = targetColleges.indexOf(a.collegeId);
-          const cIdxB = targetColleges.indexOf(b.collegeId);
-          if (cIdxA !== -1 && cIdxB !== -1 && cIdxA !== cIdxB) return cIdxA - cIdxB;
-        }
+        const cIdxA = targetColleges.indexOf(a.collegeId);
+        const cIdxB = targetColleges.indexOf(b.collegeId);
+        if (cIdxA !== -1 && cIdxB !== -1 && cIdxA !== cIdxB) return cIdxA - cIdxB;
       }
       
       return score(a.chance) - score(b.chance) || a.college.tier - b.college.tier;
     });
 
-    // Initial mock allotment (will be synced via useEffect for reordering)
+    // Mock Allotment logic always uses FULL results so choices remain stable
     let mockAllotment = null, mockDiscussions = [];
     choices.forEach((ch, i) => {
-      const entry = allRes.find(r => r.collegeId === ch.collegeId && r.branch === ch.branch);
+      const entry = fullRes.find(r => r.collegeId === ch.collegeId && r.branch === ch.branch);
       if (entry && (entry.chance === 'High' || entry.chance === 'Medium')) {
         if (!mockAllotment) mockAllotment = { choice: ch, choiceNumber: i + 1, entry };
         mockDiscussions.push({ choiceNumber: i + 1, status: entry.chance, entry, choice: ch });
@@ -236,16 +199,17 @@ function UgeacPredictor() {
       }
     });
 
-    setResults({ all: allRes, calculatedRank: ugeacRank, mockAllotment, mockDiscussions });
+    setResults({ all: filteredRes, full: fullRes, calculatedRank: ugeacRank, mockAllotment, mockDiscussions });
     setHasPredicted(true);
   };
 
+
   // Sync mock allotment whenever choices or results change
   useEffect(() => {
-    if (hasPredicted && results.all.length > 0) {
+    if (hasPredicted && results.full && results.full.length > 0) {
       let mockAllotment = null, mockDiscussions = [];
       choices.forEach((ch, i) => {
-        const entry = results.all.find(r => r.collegeId === ch.collegeId && r.branch === ch.branch);
+        const entry = results.full.find(r => r.collegeId === ch.collegeId && r.branch === ch.branch);
         if (entry && (entry.chance === 'High' || entry.chance === 'Medium')) {
           if (!mockAllotment) mockAllotment = { choice: ch, choiceNumber: i + 1, entry };
           mockDiscussions.push({ choiceNumber: i + 1, status: entry.chance, entry, choice: ch });
@@ -255,7 +219,7 @@ function UgeacPredictor() {
       });
       setResults(prev => ({ ...prev, mockAllotment, mockDiscussions }));
     }
-  }, [choices, hasPredicted, results.all]);
+  }, [choices, hasPredicted, results.full]);
 
   const addChoice = (collegeId, branch, collegeName) => {
     if (choices.find(c => c.collegeId === collegeId && c.branch === branch)) return;
