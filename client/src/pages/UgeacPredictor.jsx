@@ -279,7 +279,7 @@ function UgeacPredictor() {
     doc.text("APNA COLLEGE BIHAR", logoData ? 32 : 15, 22);
     doc.setFontSize(9); doc.setFont("helvetica", "normal");
     doc.text("Official Counseling & Admission Support Portal", logoData ? 32 : 15, 30);
-    doc.text("Visit: www.apnacollegebihar.com", 15, 42);
+    doc.text("Visit: www.apnacollegebihar.online", 15, 42);
     doc.setTextColor(129, 140, 248);
     doc.text("High-Precision UGEAC 2025 Analysis Report", 15, 52);
     
@@ -648,7 +648,8 @@ function UgeacPredictor() {
         <footer className="mt-32 py-16 border-t border-white/5 text-center">
            <img src="/logo.jpg" alt="Logo" className="w-14 h-14 rounded-full mx-auto mb-8 grayscale opacity-30 hover:opacity-100 transition-opacity" />
            <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Official Admissions Intelligence Report</p>
-           <p className="text-indigo-400 font-black text-xs uppercase tracking-[0.5em]">APNA COLLEGE BIHAR 2025</p>
+           <p className="text-indigo-400 font-black text-xs uppercase tracking-[0.5em] mb-2">APNA COLLEGE BIHAR 2025</p>
+           <p className="text-slate-600 text-[9px] font-black uppercase tracking-widest">www.apnacollegebihar.online</p>
         </footer>
       </>
       )}
