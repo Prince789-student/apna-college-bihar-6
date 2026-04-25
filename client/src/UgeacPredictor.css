@@ -215,8 +215,10 @@ body {
   background: white;
   border: 1px solid var(--slate-200);
   border-radius: 1.5rem;
-  overflow: hidden;
+  overflow-y: auto;
+  max-height: 75vh;
   box-shadow: var(--shadow-md);
+  position: relative;
 }
 
 .premium-table {
@@ -233,6 +235,9 @@ body {
   color: var(--slate-900);
   text-transform: uppercase;
   border-bottom: 2px solid var(--slate-200);
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
 .premium-table td {
