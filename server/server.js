@@ -22,7 +22,11 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: '*', // For development, we allow all. In production, user can restrict to vercel.app
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use((req, res, next) => {
     res.setHeader('Content-Security-Policy', "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; font-src * data:;");
     next();
