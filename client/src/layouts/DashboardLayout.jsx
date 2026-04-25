@@ -300,7 +300,13 @@ export default function DashboardLayout() {
                       >
                         {isUpdating ? 'Authenticating...' : 'Secure Access'}
                       </button>
-                      <p className="text-[8px] text-slate-700 font-bold uppercase tracking-widest">Verification will be synced with your Casio ID</p>
+
+                      <div className="flex justify-center gap-6 pt-2">
+                        <button type="button" onClick={handleLogout} className="text-[9px] font-black uppercase tracking-widest text-red-500 hover:text-red-600 transition-colors">Terminate Hub</button>
+                        <button type="button" onClick={() => window.history.back()} className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors">Go Back</button>
+                      </div>
+                      
+                      <p className="text-[8px] text-slate-700 font-bold uppercase tracking-widest mt-4">Verification will be synced with your Casio ID</p>
                    </form>
                 </div>
              </div>

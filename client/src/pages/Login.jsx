@@ -10,6 +10,15 @@ export default function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
+
+  // Neural Auto-Redirect: If user is already logged in, push to dashboard
+  useEffect(() => {
+    if (user && !loading) {
+      const lastPath = localStorage.getItem('lastPath');
+      navigate(lastPath || '/dashboard/study', { replace: true });
+    }
+  }, [user, loading, navigate]);
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -97,6 +106,12 @@ export default function Login() {
 
           <div className="mt-8 text-center text-slate-600 text-[10px] font-bold">
             Don't have an account? <Link to="/signup" className="text-blue-500 hover:underline">Admission Open / Sign Up</Link>
+          </div>
+
+          <div className="mt-8 pt-8 border-t border-slate-100 flex justify-center">
+            <Link to="/" className="text-slate-400 hover:text-slate-900 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all">
+              <ChevronRight size={14} className="rotate-180" /> Back to Home
+            </Link>
           </div>
         </div>
       </div>

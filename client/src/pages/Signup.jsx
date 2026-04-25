@@ -58,6 +58,12 @@ export default function Signup() {
           <div className="mt-10 text-center text-slate-600 text-[10px] font-bold">
             Already registered? <Link to="/login" className="text-orange-500 hover:underline">Log in now</Link>
           </div>
+
+          <div className="mt-8 pt-8 border-t border-slate-100 flex justify-center">
+            <button onClick={() => navigate('/')} className="text-slate-400 hover:text-slate-900 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 transition-all">
+              <BookOpen size={14} className="rotate-180" /> Back to Home
+            </button>
+          </div>
         </div>
       </div>
     </div>

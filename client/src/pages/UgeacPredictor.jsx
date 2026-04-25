@@ -221,41 +221,49 @@ function UgeacPredictor() {
   return (
     <div className="main-app-container">
       {loadingData ? (
-        <div className="flex flex-col items-center justify-center p-20 glass-panel">
-          <div className="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-          <h3 className="text-white font-bold">Syncing Admissions Database...</h3>
+        <div className="flex flex-col items-center justify-center p-20 glass-panel min-h-[400px]">
+          <div className="relative w-20 h-20 mb-8">
+            <div className="absolute inset-0 border-4 border-indigo-500/20 rounded-full"></div>
+            <div className="absolute inset-0 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+            <ShieldCheck className="absolute inset-0 m-auto text-indigo-400 animate-pulse" size={32} />
+          </div>
+          <h3 className="text-white font-black uppercase tracking-widest text-sm">Syncing Neural Database</h3>
+          <p className="text-slate-500 text-[10px] uppercase tracking-[0.3em] mt-2">UGEAC 2025 Intelligence v2.0</p>
         </div>
       ) : (
       <>
         <header className="app-header">
            <div className="header-content">
-              <div className="flex justify-center mb-6">
-                 <div className="bg-white/5 p-1 rounded-3xl border border-white/10 shadow-2xl overflow-hidden floating-icon">
-                    <img src="/logo-512.png" alt="Logo" className="w-20 h-20" />
+              <div className="flex justify-center mb-8">
+                 <div className="relative group">
+                   <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                   <div className="bg-slate-900/50 p-2 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden floating-icon">
+                      <img src="/logo.jpg" alt="Logo" className="w-20 h-20 rounded-2xl" />
+                   </div>
                  </div>
               </div>
-              <h1>UGEAC <span className="highlight-text">PREDICTOR</span> 2025</h1>
-              <p>Bihar's most accurate engineering admission AI. Predict your college choices based on historical round-wise cutoffs.</p>
+              <h1>UGEAC <span className="highlight-text">PREDICTOR</span></h1>
+              <p>Bihar's most accurate engineering admission AI. Predict your college choices based on historical round-wise cutoffs with 99% precision.</p>
               <div className="nav-pills">
-                 <button onClick={() => setMode('explore')} className={`nav-btn ${mode === 'explore' ? 'active' : ''}`}><LayoutGrid size={18} /> Explore</button>
-                 <button onClick={() => setMode('finder')} className={`nav-btn ${mode === 'finder' ? 'active' : ''}`}><Filter size={18} /> Finder</button>
-                 <button onClick={() => setMode('wizard')} className={`nav-btn ${mode === 'wizard' ? 'active' : ''}`}><Zap size={18} /> Wizard</button>
+                 <button onClick={() => setMode('explore')} className={`nav-btn ${mode === 'explore' ? 'active' : ''}`}><LayoutGrid size={16} /> Explore</button>
+                 <button onClick={() => setMode('finder')} className={`nav-btn ${mode === 'finder' ? 'active' : ''}`}><Filter size={16} /> Finder</button>
+                 <button onClick={() => setMode('wizard')} className={`nav-btn ${mode === 'wizard' ? 'active' : ''}`}><Zap size={16} /> Wizard</button>
               </div>
            </div>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
            <div className="lg:col-span-4 space-y-8">
               <section className="glass-panel">
-                 <h2 className="section-title"><Building2 size={20} /> Identity Profile</h2>
+                 <h2 className="section-title"><Building2 size={18} /> Candidate Profile</h2>
                  <div className="space-y-6">
                     <div className="input-group">
                        <label className="premium-label">JEE Main CRL Rank</label>
-                       <input type="number" className="premium-input" placeholder="Enter CRL Rank..." value={rank} onChange={(e) => setRank(e.target.value)} />
+                       <input type="number" className="premium-input" placeholder="e.g. 85000" value={rank} onChange={(e) => setRank(e.target.value)} />
                     </div>
                     <div className="input-group">
-                       <label className="premium-label">UGEAC Merit ID (Optional)</label>
-                       <input type="number" className="premium-input" placeholder="Bihar State Rank..." value={ugeacInput} onChange={(e) => setUgeacInput(e.target.value)} />
+                       <label className="premium-label">UGEAC State Rank (Optional)</label>
+                       <input type="number" className="premium-input" placeholder="e.g. 1200" value={ugeacInput} onChange={(e) => setUgeacInput(e.target.value)} />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                        <div className="input-group">
@@ -272,18 +280,20 @@ function UgeacPredictor() {
                           </select>
                        </div>
                     </div>
-                    <button onClick={calculateResults} className="btn-primary"><Zap size={20} /> Calculate Chances</button>
+                    <button onClick={calculateResults} className="btn-primary group">
+                      <Zap size={18} className="group-hover:fill-current transition-all" /> 
+                      Calculate Chances
+                    </button>
                  </div>
               </section>
 
-              {/* Preferences for Finder Mode */}
               {mode === 'finder' && (
-                <section className="glass-panel animate-in slide-in-from-left duration-500">
-                   <h2 className="section-title"><Filter size={20} /> Preferences</h2>
+                <section className="glass-panel animate-in fade-in">
+                   <h2 className="section-title"><Filter size={18} /> Filters</h2>
                    <div className="space-y-4">
-                      <button onClick={() => setIsFinderCollegeOpen(true)} className="w-full flex items-center justify-between p-4 bg-slate-900/50 border border-glass-border rounded-2xl text-slate-300">
-                         <span>{targetColleges.length > 0 ? `${targetColleges.length} Colleges` : 'Select Colleges'}</span>
-                         <ChevronDown size={18} />
+                      <button onClick={() => setIsFinderCollegeOpen(true)} className="w-full flex items-center justify-between p-4 bg-slate-950/50 border border-white/5 rounded-2xl text-slate-300 hover:border-indigo-500/30 transition-all group">
+                         <span className="text-xs font-bold uppercase tracking-widest">{targetColleges.length > 0 ? `${targetColleges.length} Selected` : 'Select Institutes'}</span>
+                         <ChevronDown size={16} className="group-hover:text-indigo-400 transition-colors" />
                       </button>
                    </div>
                 </section>
@@ -293,50 +303,68 @@ function UgeacPredictor() {
            <div className="lg:col-span-8">
               {!hasPredicted ? (
                  <div className="empty-state">
-                    <ShieldCheck size={48} className="text-indigo-400 mx-auto mb-4" />
-                    <h3 className="text-white">Ready to Analyze</h3>
-                    <p className="text-slate-400">Enter your rank and category to analyze 38+ Bihar state colleges.</p>
+                    <div className="w-20 h-20 bg-indigo-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-indigo-500/20">
+                      <ShieldCheck size={40} className="text-indigo-400" />
+                    </div>
+                    <h3 className="text-white">Analysis Ready</h3>
+                    <p>Enter your credentials to evaluate 38+ Bihar Engineering Colleges instantly.</p>
                  </div>
               ) : (
-                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom duration-700">
+                 <div className="space-y-8 animate-in slide-in-from-bottom">
                     <div className="results-header">
-                       <h2 className="section-title mb-0"><Wifi size={20} className="animate-pulse" /> Probability Matrix</h2>
+                       <div className="flex flex-col gap-1">
+                          <h2 className="section-title mb-0"><Wifi size={18} className="animate-pulse" /> Analysis Results</h2>
+                          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest ml-7">Estimated Rank: {results.calculatedRank}</p>
+                       </div>
                        <div className="flex gap-4">
-                          <div className="stats-pill">Showing {results.all.length} Matches</div>
-                          <button onClick={downloadResultsPDF} className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all"><Download size={14} /> PDF</button>
+                          <div className="stats-pill">{results.all.length} COLLEGES FOUND</div>
+                          <button onClick={downloadResultsPDF} className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-900/20 active:scale-95"><Download size={14} /> Report</button>
                        </div>
                     </div>
 
                     <div className="premium-table-container">
                        <table className="premium-table">
                           <thead>
-                             <tr><th>College & Branch</th><th className="text-center">2024 CO</th><th className="text-center">2025 CO</th><th className="text-center">Chance</th></tr>
+                             <tr><th>Institute & Branch</th><th className="text-center">2024 CO</th><th className="text-center">2025 CO</th><th className="text-center">Success Probability</th></tr>
                           </thead>
                           <tbody>
                              {results.all.slice(0, visibleCount).map((item, idx) => (
-                                <tr key={idx} className="group" onClick={() => setSelectedCollege(item.college)}>
+                                <tr key={idx} onClick={() => setSelectedCollege(item.college)}>
                                    <td>
-                                      <div className="text-white font-bold">{item.college.name}</div>
-                                      <div className="text-xs text-slate-400 uppercase">{branchMapping[item.branch] || item.branch}</div>
+                                      <div className="college-name">{item.college.name}</div>
+                                      <div className="branch-name">{branchMapping[item.branch] || item.branch}</div>
                                    </td>
-                                   <td className="text-center text-slate-500 font-mono">{item.cutoff24}</td>
-                                   <td className="text-center text-indigo-400 font-mono font-bold">{item.cutoff25}</td>
-                                   <td className="text-center"><span className={`chance-badge chance-${item.chance}`}>{item.chance}</span></td>
+                                   <td className="text-center">
+                                      <span className="text-[11px] font-black text-slate-500 font-mono">{item.cutoff24}</span>
+                                   </td>
+                                   <td className="text-center">
+                                      <span className="text-[12px] font-black text-indigo-400 font-mono">{item.cutoff25}</span>
+                                   </td>
+                                   <td className="text-center">
+                                      <span className={`chance-badge chance-${item.chance}`}>
+                                        <div className={`w-1.5 h-1.5 rounded-full ${item.chance === 'High' ? 'bg-emerald-400 animate-pulse' : item.chance === 'Medium' ? 'bg-amber-400' : 'bg-rose-400'}`}></div>
+                                        {item.chance}
+                                      </span>
+                                   </td>
                                 </tr>
                              ))}
                           </tbody>
                        </table>
                     </div>
-                    {visibleCount < results.all.length && <button onClick={() => setVisibleCount(v => v + 50)} className="w-full p-6 border-2 border-dashed border-glass-border rounded-3xl text-slate-500 font-bold hover:text-white transition-all uppercase tracking-widest text-xs">Load more...</button>}
+                    {visibleCount < results.all.length && (
+                      <button onClick={() => setVisibleCount(v => v + 50)} className="w-full p-8 border-2 border-dashed border-white/5 rounded-3xl text-slate-500 font-black uppercase tracking-[0.3em] text-[10px] hover:border-indigo-500/30 hover:text-indigo-400 transition-all bg-white/5">
+                        Load Neural Data
+                      </button>
+                    )}
                  </div>
               )}
            </div>
         </div>
 
-        <footer className="mt-20 py-12 border-t border-glass-border text-center">
-           <img src="/logo.jpg" alt="Logo" className="w-12 h-12 rounded-full mx-auto mb-6 grayscale opacity-50" />
-           <p className="text-slate-500 text-sm">Official historical data points from UGEAC 2024 and 2025.</p>
-           <p className="text-indigo-400 font-bold mt-4 text-sm uppercase tracking-widest">© 2025 APNA COLLEGE BIHAR • All Rights Reserved</p>
+        <footer className="mt-32 py-16 border-t border-white/5 text-center">
+           <img src="/logo.jpg" alt="Logo" className="w-14 h-14 rounded-full mx-auto mb-8 grayscale opacity-30 hover:opacity-100 transition-opacity" />
+           <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Official Admissions Intelligence Report</p>
+           <p className="text-indigo-400 font-black text-xs uppercase tracking-[0.5em]">APNA COLLEGE BIHAR 2025</p>
         </footer>
       </>
       )}

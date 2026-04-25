@@ -74,13 +74,13 @@ function App() {
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route path="calculator" element={<ScientificCalc />} />
             <Route path="cgpa" element={<BeuCgpa />} />
+            <Route path="ugeac-predictor" element={<UgeacPredictor />} />
             <Route element={<ProtectedRoute />}>
               <Route index element={<StudyDashboard />} />
               <Route path="notes" element={<Notes />} />
               <Route path="notes/personal" element={<PersonalManager />} />
               <Route path="study" element={<StudyDashboard />} />
               <Route path="timer" element={<StudyDashboard />} />
-              <Route path="ugeac-predictor" element={<UgeacPredictor />} />
               <Route path="study/group/:groupId" element={<GroupDetail />} />
               <Route path="timetable" element={<Timetable />} />
               <Route element={<AdminRoute />}>

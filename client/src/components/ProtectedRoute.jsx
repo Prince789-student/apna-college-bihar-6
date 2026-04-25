@@ -10,7 +10,11 @@ const ProtectedRoute = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (loading) return <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center"><div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div></div>;
-  if (!user) return <Navigate to="/login" />;
+  if (!user) {
+    // Save current path before redirecting
+    localStorage.setItem('lastPath', window.location.pathname);
+    return <Navigate to="/login" replace />;
+  }
 
   const needsPhone = !user?.phone || user?.phone?.trim() === "";
 
@@ -32,8 +36,8 @@ const ProtectedRoute = () => {
   if (needsPhone) {
     return (
       <div className="fixed inset-0 z-[9999] bg-[#f8fafc]/90 backdrop-blur-md flex items-center justify-center p-4">
-        <div className="bg-[#0b101c] border border-blue-600/30 p-8 md:p-12 rounded-[2.5rem] shadow-2xl max-w-[450px] w-full relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/20 blur-[50px] rounded-full"></div>
+        <div className="bg-white border border-slate-200/50 p-8 md:p-12 rounded-[2.5rem] shadow-2xl max-w-[450px] w-full relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 blur-[50px] rounded-full"></div>
           <div className="relative z-10 flex flex-col items-center">
             <div className="p-4 bg-blue-600/10 rounded-full border border-blue-500/20 mb-6">
               <ShieldCheck className="text-blue-500 w-10 h-10" />
@@ -50,6 +54,13 @@ const ProtectedRoute = () => {
                 {isSubmitting ? "Updating..." : "Save & Continue"}
               </button>
             </form>
+
+            <button 
+              onClick={() => window.history.back()} 
+              className="mt-6 text-slate-400 hover:text-slate-600 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-colors"
+            >
+              <Phone size={12} className="rotate-180" /> Cancel & Go Back
+            </button>
           </div>
         </div>
       </div>
