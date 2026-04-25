@@ -195,6 +195,18 @@ function UgeacPredictor() {
 
     const allRes = Array.from(seen.values()).sort((a,b) => {
       const score = (c) => c === 'High' ? 1 : c === 'Medium' ? 2 : c === 'Low' ? 3 : 4;
+      
+      // If in finder mode and we have prioritized colleges/branches, respect that order
+      if (mode === 'finder') {
+        const cIdxA = targetColleges.indexOf(a.collegeId);
+        const cIdxB = targetColleges.indexOf(b.collegeId);
+        if (cIdxA !== -1 && cIdxB !== -1 && cIdxA !== cIdxB) return cIdxA - cIdxB;
+        
+        const bIdxA = targetBranches.indexOf(a.branch);
+        const bIdxB = targetBranches.indexOf(b.branch);
+        if (bIdxA !== -1 && bIdxB !== -1 && bIdxA !== bIdxB) return bIdxA - bIdxB;
+      }
+      
       return score(a.chance) - score(b.chance) || a.college.tier - b.college.tier;
     });
 
@@ -231,15 +243,30 @@ function UgeacPredictor() {
     }
   }, [choices, hasPredicted, results.all]);
 
-  const addChoice = (collegeId, branch) => {
+  const addChoice = (collegeId, branch, collegeName) => {
     if (choices.find(c => c.collegeId === collegeId && c.branch === branch)) return;
-    const col = colleges.find(c => c.id === collegeId);
     setChoices([...choices, { 
       id: `choice-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       collegeId, 
       branch, 
-      collegeName: col.name 
+      collegeName: collegeName 
     }]);
+  };
+
+  const moveTargetCollege = (idx, direction) => {
+    if (idx + direction < 0 || idx + direction >= targetColleges.length) return;
+    const newTargets = [...targetColleges];
+    const item = newTargets.splice(idx, 1)[0];
+    newTargets.splice(idx + direction, 0, item);
+    setTargetColleges(newTargets);
+  };
+
+  const moveTargetBranch = (idx, direction) => {
+    if (idx + direction < 0 || idx + direction >= targetBranches.length) return;
+    const newTargets = [...targetBranches];
+    const item = newTargets.splice(idx, 1)[0];
+    newTargets.splice(idx + direction, 0, item);
+    setTargetBranches(newTargets);
   };
 
   const removeChoice = (idx) => {
@@ -640,7 +667,7 @@ function UgeacPredictor() {
                                    {mode === 'wizard' && (
                                      <td className="text-center">
                                         <button 
-                                          onClick={() => addChoice(item.collegeId, item.branch)}
+                                          onClick={() => addChoice(item.collegeId, item.branch, item.college.name)}
                                           disabled={choices.some(c => c.collegeId === item.collegeId && c.branch === item.branch)}
                                           className="w-10 h-10 bg-indigo-500/10 text-indigo-400 rounded-xl hover:bg-indigo-500 hover:text-white transition-all disabled:opacity-30 flex items-center justify-center mx-auto"
                                         >
@@ -691,7 +718,29 @@ function UgeacPredictor() {
                   <input type="text" placeholder="Search college name..." className="w-full bg-slate-900 border border-white/5 rounded-2xl p-4 pl-12 text-sm text-white focus:border-indigo-500 outline-none transition-all" value={finderCollegeSearch} onChange={e => setFinderCollegeSearch(e.target.value)} />
                </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-4 custom-scrollbar">
+            {targetColleges.length > 0 && (
+              <div className="mb-8">
+                 <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4">Selected Priority</h4>
+                 <div className="flex flex-wrap gap-2">
+                    {targetColleges.map((id, idx) => {
+                      const col = colleges.find(c => c.id === id);
+                      if (!col) return null;
+                      return (
+                        <div key={id} className="flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 px-3 py-2 rounded-xl">
+                           <span className="text-[10px] font-black text-white uppercase">{col.name}</span>
+                           <div className="flex gap-1 border-l border-white/10 pl-2">
+                              <button onClick={() => moveTargetCollege(idx, -1)} disabled={idx === 0} className="text-indigo-400 disabled:opacity-20 hover:text-white"><ChevronUp size={12}/></button>
+                              <button onClick={() => moveTargetCollege(idx, 1)} disabled={idx === targetColleges.length - 1} className="text-indigo-400 disabled:opacity-20 hover:text-white"><ChevronDown size={12}/></button>
+                              <button onClick={() => setTargetColleges(targetColleges.filter(tid => tid !== id))} className="text-rose-400 hover:text-rose-300 ml-1"><X size={12}/></button>
+                           </div>
+                        </div>
+                      )
+                    })}
+                 </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[40vh] overflow-y-auto pr-4 custom-scrollbar">
               {sortedColleges.filter(c => c.name.toLowerCase().includes(finderCollegeSearch.toLowerCase())).map(c => (
                 <label key={c.id} className={`flex items-center gap-4 p-4 rounded-2xl cursor-pointer border-2 transition-all group ${targetColleges.includes(c.id) ? 'bg-indigo-500/10 border-indigo-500/50' : 'bg-slate-900/50 border-transparent hover:border-white/10'}`}>
                   <input type="checkbox" className="hidden" checked={targetColleges.includes(c.id)} onChange={(e) => e.target.checked ? setTargetColleges([...targetColleges, c.id]) : setTargetColleges(targetColleges.filter(id => id !== c.id))} />
@@ -720,7 +769,25 @@ function UgeacPredictor() {
                   <button onClick={() => setTargetBranches([])} className="text-[9px] font-black uppercase text-rose-400 hover:text-white px-3 py-1.5 bg-rose-500/10 rounded-lg transition-all">Clear</button>
                </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-4 custom-scrollbar">
+            {targetBranches.length > 0 && (
+              <div className="mb-8">
+                 <h4 className="text-[10px] font-black text-indigo-400 uppercase tracking-widest mb-4">Branch Priority</h4>
+                 <div className="flex flex-wrap gap-2">
+                    {targetBranches.map((b, idx) => (
+                      <div key={b} className="flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/30 px-3 py-2 rounded-xl">
+                         <span className="text-[10px] font-black text-white uppercase">{branchMapping[b] || b}</span>
+                         <div className="flex gap-1 border-l border-white/10 pl-2">
+                            <button onClick={() => moveTargetBranch(idx, -1)} disabled={idx === 0} className="text-indigo-400 disabled:opacity-20 hover:text-white"><ChevronUp size={12}/></button>
+                            <button onClick={() => moveTargetBranch(idx, 1)} disabled={idx === targetBranches.length - 1} className="text-indigo-400 disabled:opacity-20 hover:text-white"><ChevronDown size={12}/></button>
+                            <button onClick={() => setTargetBranches(targetBranches.filter(tb => tb !== b))} className="text-rose-400 hover:text-rose-300 ml-1"><X size={12}/></button>
+                         </div>
+                      </div>
+                    ))}
+                 </div>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[40vh] overflow-y-auto pr-4 custom-scrollbar">
               {ugeacData.branches.map(b => (
                 <label key={b} className={`flex items-center gap-4 p-4 rounded-2xl cursor-pointer border-2 transition-all group ${targetBranches.includes(b) ? 'bg-indigo-500/10 border-indigo-500/50' : 'bg-slate-900/50 border-transparent hover:border-white/10'}`}>
                   <input type="checkbox" className="hidden" checked={targetBranches.includes(b)} onChange={(e) => e.target.checked ? setTargetBranches([...targetBranches, b]) : setTargetBranches(targetBranches.filter(id => id !== b))} />
