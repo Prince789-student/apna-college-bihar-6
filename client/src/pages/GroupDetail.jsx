@@ -92,7 +92,6 @@ export default function GroupDetail() {
   };
 
   const updateMeetingLink = async () => {
-    if (!isAdmin) return;
     if (!newLink.trim()) return;
     try {
       await updateDoc(doc(db, 'groups', groupId), { meetingLink: newLink.trim() });
@@ -100,6 +99,10 @@ export default function GroupDetail() {
       setNewLink('');
     } catch (e) { console.error(e); }
   };
+
+  // Auto-Link Logic: If no link set, use a persistent host-less Jitsi room
+  const activeMeetingLink = group?.meetingLink || `https://meet.jit.si/ACB_HUB_${group?.groupCode}`;
+
 
 
   if (loading) return <div className="flex items-center justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
@@ -172,41 +175,26 @@ export default function GroupDetail() {
                 <p className="text-slate-400 text-[10px] md:text-xs font-bold uppercase tracking-widest max-w-md mx-auto md:mx-0">Connect via Google Meet, Zoom, or Discord. This room is always active for your collective.</p>
               </div>
               
-              {group.meetingLink ? (
-                <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start">
-                  <a 
-                    href={group.meetingLink.startsWith('http') ? group.meetingLink : `https://${group.meetingLink}`} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="px-6 py-4 md:px-10 md:py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-2xl shadow-blue-600/30 active:scale-95 flex items-center gap-2 md:gap-3"
-                  >
-                    Enter Meeting <ExternalLink size={16} />
-                  </a>
-                  {isAdmin && (
-                    <button 
-                      onClick={() => { setNewLink(group.meetingLink); setIsSettingLink(true); }}
-                      className="p-5 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white rounded-2xl transition-all border border-white/10"
-                    >
-                      <Settings2 size={20} />
-                    </button>
-                  )}
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {isAdmin ? (
-                    <button 
-                      onClick={() => setIsSettingLink(true)}
-                      className="px-10 py-5 bg-white text-slate-900 rounded-2xl font-[1000] text-sm uppercase tracking-widest transition-all shadow-xl active:scale-95 flex items-center gap-3"
-                    >
-                      Setup Meeting Link <Link2 size={18} />
-                    </button>
-                  ) : (
-                    <div className="p-6 bg-white/5 border border-white/10 rounded-2xl">
-                      <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest italic">Waiting for Admin to initialize the meeting link...</p>
-                    </div>
-                  )}
-                </div>
-              )}
+              <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start">
+                <a 
+                  href={activeMeetingLink.startsWith('http') ? activeMeetingLink : `https://${activeMeetingLink}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="px-6 py-4 md:px-10 md:py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-2xl shadow-blue-600/30 active:scale-95 flex items-center gap-2 md:gap-3"
+                >
+                  Enter Meeting <ExternalLink size={16} />
+                </a>
+                
+                <button 
+                  onClick={() => { setNewLink(group.meetingLink || ''); setIsSettingLink(true); }}
+                  className="p-5 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white rounded-2xl transition-all border border-white/10 flex items-center gap-2"
+                  title="Override with custom link (Google Meet etc.)"
+                >
+                  <Settings2 size={20} />
+                  <span className="text-[10px] font-black uppercase hidden md:inline">Custom Link</span>
+                </button>
+              </div>
+
             </div>
 
             <div className="w-full md:w-auto flex flex-col items-center">
