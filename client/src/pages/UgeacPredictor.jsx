@@ -690,7 +690,7 @@ function UgeacPredictor() {
                                    <td className="text-center" data-label="Your Rank">
                                       <div className="rank-badge-box mx-auto">
                                          <span className="rank">#{item.myCompRank}</span>
-                                         <span className="cat">{item.cat} CAT</span>
+                                         <span className="cat">{item.cat} {item.seatType === 'Female' ? '(F)' : 'CAT'}</span>
                                       </div>
                                    </td>
                                    <td className="text-center" data-label="2024 Cutoff">

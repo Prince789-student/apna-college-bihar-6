@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   BookOpen, Calculator, Timer, Users, 
   ArrowRight, CheckCircle, GraduationCap, 
   Globe, Shield, Zap, Flame, Send, Youtube
 } from 'lucide-react';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase';
 
 export default function Home() {
+  const [stats, setStats] = useState({ users: 5000, docs: 100, groups: 24 });
+
+  useEffect(() => {
+    const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
+      setStats(s => ({ ...s, users: snap.size > 0 ? snap.size : 5000 }));
+    });
+    const unsubDocs = onSnapshot(collection(db, 'documents'), (snap) => {
+      setStats(s => ({ ...s, docs: snap.size > 0 ? snap.size : 100 }));
+    });
+    const unsubGroups = onSnapshot(collection(db, 'groups'), (snap) => {
+      setStats(s => ({ ...s, groups: snap.size > 0 ? snap.size : 24 }));
+    });
+    return () => { unsubUsers(); unsubDocs(); unsubGroups(); };
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center p-4 font-['Inter'] relative overflow-hidden">
 
@@ -64,16 +81,16 @@ export default function Home() {
 
            <div className="pt-16 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 items-center opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
               <div className="flex flex-col items-center">
-                 <span className="text-3xl font-[1000] text-slate-900">5K+</span>
-                 <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Academics</span>
+                 <span className="text-3xl font-[1000] text-slate-900">{stats.users}+</span>
+                 <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Scholars</span>
               </div>
               <div className="flex flex-col items-center">
-                 <span className="text-3xl font-[1000] text-slate-900">100+</span>
-                 <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">PYQ Papers</span>
+                 <span className="text-3xl font-[1000] text-slate-900">{stats.docs}+</span>
+                 <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">PYQ & Notes</span>
               </div>
               <div className="flex flex-col items-center">
-                 <span className="text-3xl font-[1000] text-slate-900">24/7</span>
-                 <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Focus Hub</span>
+                 <span className="text-3xl font-[1000] text-slate-900">{stats.groups}</span>
+                 <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Active Hubs</span>
               </div>
               <div className="flex flex-col items-center">
                  <span className="text-3xl font-[1000] text-slate-900">FREE</span>
