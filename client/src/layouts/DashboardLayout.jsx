@@ -27,13 +27,8 @@ export default function DashboardLayout() {
   const [phone, setPhone] = useState('');
   const [isPhoneModalOpen, setPhoneModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const { timerActive, timerTime } = useStudy();
 
-  const fmtTimer = (s) => {
-    const m = Math.floor((s % 3600) / 60);
-    const sec = s % 60;
-    return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
-  };
+  // Safe Platform Detection
 
   // Safe Platform Detection
   const isAppMode = (() => {
@@ -90,6 +85,21 @@ export default function DashboardLayout() {
     catch (err) { console.error('Logout failed', err); }
   };
 
+  const TimerBadge = () => {
+    const { timerActive, timerTime } = useStudy();
+    if (!timerActive) return null;
+    
+    const m = Math.floor((timerTime % 3600) / 60);
+    const sec = timerTime % 60;
+    const display = `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+
+    return (
+      <div className="ml-auto flex items-center gap-2 bg-blue-600 text-white px-2 py-0.5 rounded-full animate-pulse shadow-[0_0_10px_rgba(37,99,235,0.5)]">
+        <span className="text-[8px] font-[1000] tracking-tighter tabular-nums">{display}</span>
+      </div>
+    );
+  };
+
   const SidebarContent = ({ isMobile = false }) => (
     <>
       <div className={`p-3 md:p-4 flex items-center justify-between ${!isSidebarOpen && !isMobile ? 'justify-center' : ''}`}>
@@ -122,11 +132,7 @@ export default function DashboardLayout() {
               <span className={`font-black text-[10px] md:text-[9px] uppercase tracking-widest transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                 {link.name}
               </span>
-              {link.name === 'Study Protocol' && timerActive && (
-                <div className="ml-auto flex items-center gap-2 bg-blue-600 text-white px-2 py-0.5 rounded-full animate-pulse shadow-[0_0_10px_rgba(37,99,235,0.5)]">
-                  <span className="text-[8px] font-[1000] tracking-tighter tabular-nums">{fmtTimer(timerTime)}</span>
-                </div>
-              )}
+              {link.name === 'Study Protocol' && <TimerBadge />}
               {isActive && (isSidebarOpen || isMobile) && !timerActive && <div className="absolute right-4 w-1.5 h-1.5 bg-white rounded-full animate-pulse shadow-[0_0_10px_white]" />}
             </Link>
           );
