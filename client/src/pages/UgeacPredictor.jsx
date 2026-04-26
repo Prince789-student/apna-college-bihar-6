@@ -311,46 +311,63 @@ function UgeacPredictor() {
     let logoData = null;
     try {
       const resp = await fetch('/logo.jpg');
-      const blob = await resp.blob();
-      logoData = await new Promise(r => {
-        const reader = new FileReader();
-        reader.onloadend = () => r(reader.result);
-        reader.readAsDataURL(blob);
-      });
-    } catch(e) {}
-
-    // Header
-    doc.setFillColor(15, 23, 42); doc.rect(0, 0, 210, 60, 'F');
-    if (logoData) {
-      doc.addImage(logoData, 'JPEG', 15, 12, 12, 12);
+      if (resp.ok) {
+        const blob = await resp.blob();
+        logoData = await new Promise(r => {
+          const reader = new FileReader();
+          reader.onloadend = () => r(reader.result);
+          reader.readAsDataURL(blob);
+        });
+      }
+    } catch(e) {
+      console.warn("Logo load failed", e);
     }
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(22); doc.setFont("helvetica", "bold");
-    doc.text("APNA COLLEGE BIHAR", logoData ? 32 : 15, 22);
-    doc.setFontSize(9); doc.setFont("helvetica", "normal");
-    doc.text("Official Counseling & Admission Support Portal", logoData ? 32 : 15, 30);
-    doc.text("Visit: www.apnacollegebihar.online", 15, 42);
-    doc.setTextColor(129, 140, 248);
-    doc.text("High-Precision UGEAC 2025 Analysis Report", 15, 52);
+
+    const drawHeader = (doc) => {
+      doc.setFillColor(15, 23, 42); doc.rect(0, 0, 210, 30, 'F');
+      if (logoData) {
+        try { doc.addImage(logoData, 'JPEG', 15, 8, 14, 14); } catch(e) {}
+      }
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(16); doc.setFont("helvetica", "bold");
+      doc.text("APNA COLLEGE BIHAR", logoData ? 34 : 15, 15);
+      doc.setFontSize(8); doc.setFont("helvetica", "normal");
+      doc.text("Official Counseling & Admission Support Portal | www.apnacollegebihar.online", logoData ? 34 : 15, 22);
+    };
+
+    // --- PAGE 1 ---
+    drawHeader(doc);
     
     // Candidate Info
-    doc.setFillColor(248, 250, 252); doc.rect(15, 70, 180, 25, 'F');
+    doc.setFillColor(248, 250, 252); doc.rect(15, 40, 180, 25, 'F');
     doc.setTextColor(30, 41, 59);
     doc.setFontSize(9); doc.setFont("helvetica", "bold");
-    doc.text(`JEE Rank: ${rank || 'N/A'}`, 20, 80);
-    doc.text(`UGEAC Rank: ${results.calculatedRank}`, 70, 80);
-    doc.text(`Category: ${category}`, 120, 80);
-    doc.text(`Gender: ${gender}`, 160, 80);
-
-    let currentY = 105;
+    doc.text(`JEE Rank: ${rank || 'N/A'}`, 20, 50);
+    doc.text(`UGEAC Rank: ${results.calculatedRank}`, 70, 50);
+    doc.text(`Category: ${category}`, 120, 50);
+    doc.text(`Gender: ${gender}`, 160, 50);
 
     // Platform Intro
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(14); doc.setFont("helvetica", "bold");
+    doc.text("About Apna College Bihar", 15, 80);
+    
+    doc.setFontSize(10); doc.setFont("helvetica", "normal");
     doc.setTextColor(50, 50, 50);
-    doc.setFontSize(10);
-    doc.text("Why Apna College Bihar?", 15, currentY);
-    doc.setFontSize(8); doc.setFont("helvetica", "normal");
-    doc.text("We provide Bihar's most accurate counseling tools and verified round-wise historical cutoffs.", 15, currentY + 6);
-    currentY += 20;
+    const aboutText = "Welcome to Apna College Bihar, the state's most trusted and data-driven admission counseling platform. " +
+    "Our mission is to help Bihar's engineering aspirants make informed decisions by providing high-precision UGEAC " +
+    "counseling tools, verified historical cutoff data, and real-time admission guidance. \n\n" +
+    "Through our platform, students can:\n" +
+    "- Predict college allotments with our proprietary algorithms based on multi-year cutoff trends.\n" +
+    "- Access Official Notes, PYQs, and Semester guidance for BEU.\n" +
+    "- Network with other scholars via the Study Network and track focus hours in the Study Protocol.\n" +
+    "- Receive 24/7 expert support during the complex UGEAC choice-filling process.\n\n" +
+    "Disclaimer: This report provides probability-based predictions using past data. Final allotments depend on the official BCECEB counseling process.";
+    
+    const splitText = doc.splitTextToSize(aboutText, 180);
+    doc.text(splitText, 15, 90);
+
+    let currentY = 90 + (splitText.length * 5) + 10;
 
     // Mock Allotment
     if (results.mockAllotment) {
@@ -361,18 +378,22 @@ function UgeacPredictor() {
       doc.setTextColor(0, 0, 0);
       doc.setFontSize(12);
       doc.text(`${results.mockAllotment.choice.collegeName} - ${results.mockAllotment.choice.branch}`, 20, currentY + 16);
-      currentY += 30;
     }
 
-    // Results Table
+    // --- PAGE 2+ (Results Table) ---
+    doc.addPage();
+    
     autoTable(doc, {
-      startY: currentY,
+      startY: 40,
       head: [['#', 'Institute Name', 'Branch', 'Your Rank', '2024 CO', '2025 CO', 'Status']],
       body: results.all.map((r, i) => [i+1, r.college.name, r.branch, `#${r.myCompRank} (${r.cat}${r.seatType === 'Female' ? ' F' : ''})`, r.cutoff24, r.cutoff25, r.chance]),
       theme: 'striped',
       headStyles: { fillColor: [79, 70, 229], fontSize: 8 },
       styles: { fontSize: 7 },
-      margin: { left: 15, right: 15 }
+      margin: { left: 15, right: 15, top: 40 },
+      didDrawPage: (data) => {
+        drawHeader(doc);
+      }
     });
 
     // Watermark & Footer
@@ -391,7 +412,7 @@ function UgeacPredictor() {
         doc.setFontSize(8);
         doc.setTextColor(150, 150, 150);
         doc.text("Join our Telegram/WhatsApp for Live Counseling Help", 15, doc.internal.pageSize.height - 15);
-        doc.text("© 2025 APNA COLLEGE BIHAR. This AI report is for guidance only.", 15, doc.internal.pageSize.height - 10);
+        doc.text("© 2026 APNA COLLEGE BIHAR.", 15, doc.internal.pageSize.height - 10);
         doc.text(`Page ${i} of ${pageCount}`, 180, doc.internal.pageSize.height - 10);
     }
     
