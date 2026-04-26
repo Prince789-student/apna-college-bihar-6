@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   doc, getDoc, collection, query, where, getDocs,
@@ -8,9 +8,9 @@ import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import { useStudy } from '../context/StudyContext';
 import {
-  Clock, Plus, Flame, Target, BookOpen,
-  Calendar, BarChart3, Settings, Trash2, Trophy,
-  Users, ArrowRight, ClipboardList,
+  Clock, Plus, Flame, Target,
+  BarChart3, Settings, Trash2, Trophy,
+  ArrowRight, ClipboardList,
   CheckCircle2, Circle, Shield, Timer, AlertTriangle
 } from 'lucide-react';
 
@@ -46,7 +46,8 @@ export default function StudyDashboard() {
     timerTime, setTimerTime,
     timerSubject, setTimerSubject,
     customMinutes, setCustomMinutes,
-    timerMode, setTimerMode
+    timerMode, setTimerMode,
+    saveGlobalSession
   } = useStudy();
 
   // Data State
@@ -57,7 +58,7 @@ export default function StudyDashboard() {
   const [sessionCount, setSessionCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // Modals & Forms
+  // Modals
   const [goals, setGoals] = useState({ daily: 0, weekly: 0, monthly: 0 });
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [showSubjectModal, setShowSubjectModal] = useState(false);
@@ -76,8 +77,8 @@ export default function StudyDashboard() {
         const yesterdayStr = new Date(Date.now() - 86400000).toISOString().split('T')[0];
         const sDate = d.streakDate || d.lastStudyDate || '';
         if (d.streak > 0 && sDate !== todayStr && sDate !== yesterdayStr) {
+          await updateDoc(doc(db, 'users', user.uid), { streak: 0 });
           d.streak = 0;
-          updateDoc(doc(db, 'users', user.uid), { streak: 0 }).catch(console.error);
         }
         setUserData(d);
         setGoals({ daily: d?.dailyGoal || 0, weekly: d?.weeklyGoal || 0, monthly: d?.monthlyGoal || 0 });
@@ -90,51 +91,13 @@ export default function StudyDashboard() {
       setSessionCount(sessSnap.size);
       const thirtyDaysAgo = new Date(); thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
       const cutoff = thirtyDaysAgo.toISOString().split('T')[0];
-      setSessions(sessSnap.docs.map(d => ({ ...d.data() })).filter(s => s.date >= cutoff));
+      const sessData = sessSnap.docs.map(d => ({ ...d.data() }));
+      setSessions(sessData.filter(s => s.date >= cutoff));
 
       const taskSnap = await getDocs(query(collection(db, 'Tasks'), where('userId', '==', user.uid), where('date', '==', todayStr)));
       setTasks(taskSnap.docs.map(d => ({ id: d.id, ...d.data() })));
     } catch (e) { console.error(e); } finally { setLoading(false); }
   };
-
-  const saveTimerSession = async (manualTime = null) => {
-    const timeToSave = manualTime || (timerMode === 'STOPWATCH' ? timerTime : (customMinutes * 60 - timerTime));
-    if (timeToSave < 1) {
-      setTimerActive(false);
-      setTimerTime(timerMode === 'STOPWATCH' ? 0 : customMinutes * 60);
-      return;
-    }
-    try {
-      await addDoc(collection(db, 'StudySessions'), {
-        userId: user.uid,
-        userName: user.name || 'Scholar',
-        subject: timerSubject,
-        duration: timeToSave,
-        date: todayStr,
-        createdAt: new Date().toISOString()
-      });
-      const todaySec = sessions.filter(s => s.date === todayStr).reduce((a, s) => a + s.duration, 0) + timeToSave;
-      let newStreak = userData?.streak || 0;
-      let streakDate = userData?.streakDate || '';
-      const yesterdayStr = new Date(Date.now() - 86400000).toISOString().split('T')[0];
-      if (todaySec >= 7200 && streakDate !== todayStr) {
-        if (streakDate === yesterdayStr) newStreak += 1; else newStreak = 1;
-        streakDate = todayStr;
-      }
-      await updateDoc(doc(db, 'users', user.uid), { streak: newStreak, streakDate: streakDate, lastStudyDate: todayStr, totalStudyTime: (userData?.totalStudyTime || 0) + timeToSave, isStudying: false });
-      setTimerActive(false);
-      setTimerTime(timerMode === 'STOPWATCH' ? 0 : customMinutes * 60);
-      fetchAll();
-    } catch (e) { console.error(e); }
-  };
-
-  // Check if countdown finished globally
-  useEffect(() => {
-    if (timerMode === 'COUNTDOWN' && timerTime === 0 && timerActive) {
-      saveTimerSession(customMinutes * 60);
-      alert('Focus session complete!');
-    }
-  }, [timerTime, timerActive, timerMode]);
 
   const fmtTimer = (s) => {
     const h = Math.floor(s / 3600);
@@ -148,6 +111,7 @@ export default function StudyDashboard() {
   const weeklySec = sessions.filter(s => last7.includes(s.date)).reduce((a, s) => a + s.duration, 0);
   const curM = new Date().getMonth(), curY = new Date().getFullYear();
   const monthlySec = sessions.filter(s => { const d = new Date(s.date); return d.getMonth() === curM && d.getFullYear() === curY; }).reduce((a, s) => a + s.duration, 0);
+  
   const heatmap = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(); d.setDate(d.getDate() - (6 - i));
     const dStr = d.toISOString().split('T')[0];
@@ -163,38 +127,38 @@ export default function StudyDashboard() {
   const toggleTask = async (task) => { await updateDoc(doc(db, 'Tasks', task.id), { done: !task.done }); fetchAll(); };
   const delTask = async (id) => { await deleteDoc(doc(db, 'Tasks', id)); fetchAll(); };
 
+  const handleStopAndSave = async () => {
+    await saveGlobalSession();
+    fetchAll();
+  };
+
   if (loading) return <div className="flex justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
 
   return (
     <div className="max-w-5xl mx-auto space-y-4 md:space-y-6 pb-20 px-2 md:px-0">
       <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
-        <div className="flex-1 flex items-center justify-between bg-white p-4 md:p-5 rounded-[2rem] border border-slate-200/50">
+        <div className="flex-1 flex items-center justify-between bg-white p-4 md:p-5 rounded-[2rem] border border-slate-200/50 shadow-sm">
           <div className="flex items-center gap-3 md:gap-4">
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-500/10 rounded-2xl flex items-center justify-center border border-orange-500/20 shrink-0">
-              <Flame size={20} className="text-orange-500" fill="currentColor" />
-            </div>
+            <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-500/10 rounded-2xl flex items-center justify-center border border-orange-500/20 shrink-0"><Flame size={20} className="text-orange-500" fill="currentColor" /></div>
             <div>
-              <p className="text-[8px] md:text-[9px] text-slate-500 font-bold uppercase tracking-widest">Daily Streak</p>
-              <p className="text-xl md:text-2xl font-black text-slate-900 leading-none">{userData?.streak || 0} <span className="text-[10px] md:text-xs font-bold text-slate-500">days</span></p>
-              <p className="text-[8px] md:text-[9px] mt-0.5 text-slate-600 flex items-center gap-1">
-                {todaySec >= 7200 ? <><CheckCircle2 size={10} className="text-emerald-500" /> 2 hr safe!</> : <><AlertTriangle size={10} className="text-orange-500" /> {Math.floor((7200 - todaySec) / 60)}m padho</>}
-              </p>
+              <p className="text-[8px] md:text-[9px] text-slate-500 font-bold uppercase tracking-widest leading-none mb-1">Streak</p>
+              <p className="text-xl md:text-2xl font-black text-slate-900 leading-none">{userData?.streak || 0} <span className="text-[10px] md:text-xs font-bold text-slate-500">Days</span></p>
             </div>
           </div>
           <button onClick={() => setShowGoalModal(true)} className="p-2 bg-slate-100 rounded-xl text-slate-400 hover:text-slate-900 transition-colors"><Settings size={16} /></button>
         </div>
         <button onClick={() => setTab('timer')} className="flex-1 sm:max-w-[180px] bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black uppercase text-[10px] md:text-xs tracking-widest shadow-lg flex items-center justify-center gap-2 transition-all p-4">
-          <Clock size={16} /> <span>Padhna Shuru</span>
+          <Clock size={16} /> <span>Focus Zone</span>
         </button>
       </div>
 
       <div className="flex gap-2 bg-white/60 backdrop-blur-md p-2 rounded-[2rem] border border-slate-200 shadow-sm overflow-x-auto no-scrollbar">
         {TABS.map(t => {
-          if (t.id === 'admin' && user?.email !== 'prince86944@gmail.com' && user?.role !== 'SUPER_ADMIN') return null;
+          if (t.id === 'admin' && user?.role !== 'SUPER_ADMIN') return null;
           const isActive = tab === t.id;
           return (
             <button key={t.id} onClick={() => t.id === 'admin' ? navigate('/dashboard/admin') : setTab(t.id)}
-              className={`flex-1 min-w-fit flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border-2 ${isActive ? 'bg-slate-900 text-white border-slate-900 shadow-xl' : 'bg-white text-slate-600 border-transparent hover:border-slate-200 hover:text-slate-900 shadow-sm'}`}>
+              className={`flex-1 min-w-fit flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all border-2 ${isActive ? 'bg-slate-900 text-white border-slate-900 shadow-xl' : 'bg-white text-slate-600 border-transparent hover:border-slate-200 hover:text-slate-900 shadow-sm'}`}>
               {t.icon} {t.label}
             </button>
           );
@@ -225,7 +189,7 @@ export default function StudyDashboard() {
                       <div className="p-3 bg-blue-600/10 text-blue-500 rounded-2xl"><Timer size={20} /></div>
                       <div className="flex-1">
                         <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Duration (Min)</p>
-                        <input type="number" min="1" max="600" value={customMinutes} onChange={e => { const v = Math.min(600, Math.max(1, parseInt(e.target.value) || 1)); setCustomMinutes(v); setTimerTime(v * 60); }} className="w-20 bg-transparent text-slate-900 text-3xl font-black outline-none border-b-2 border-slate-200 focus:border-blue-500" />
+                        <input type="number" min="1" max="600" value={customMinutes} onChange={e => { const v = Math.min(600, Math.max(1, parseInt(e.target.value) || 1)); setCustomMinutes(v); }} className="w-20 bg-transparent text-slate-900 text-3xl font-black outline-none border-b-2 border-slate-200 focus:border-blue-500" />
                       </div>
                     </div>
                   )}
@@ -234,7 +198,7 @@ export default function StudyDashboard() {
               ) : (
                 <div className="flex gap-4 w-full">
                   <button onClick={() => setTimerActive(false)} className="flex-1 py-5 bg-orange-600 hover:bg-orange-500 text-white rounded-3xl font-[1000] text-xs uppercase tracking-widest transition-all shadow-xl">Pause</button>
-                  <button onClick={() => saveTimerSession()} className="flex-1 py-5 bg-red-600 hover:bg-red-500 text-white rounded-[2rem] font-[1000] text-xs uppercase tracking-widest transition-all shadow-xl">Stop & Save</button>
+                  <button onClick={handleStopAndSave} className="flex-1 py-5 bg-red-600 hover:bg-red-500 text-white rounded-[2rem] font-[1000] text-xs uppercase tracking-widest transition-all shadow-xl">Stop & Save</button>
                 </div>
               )}
             </div>
@@ -247,18 +211,18 @@ export default function StudyDashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
               { label: 'Today', sec: todaySec, goal: goals.daily, color: 'bg-blue-500' },
-              { label: 'Weekly', sec: weeklySec, goal: weeklySec >= (goals.weekly * 3600) ? 'bg-emerald-500' : 'bg-blue-500' }, // Simple logic
-              { label: 'Monthly', sec: monthlySec, goal: monthlySec >= (goals.monthly * 3600) ? 'bg-indigo-500' : 'bg-blue-500' },
+              { label: 'Weekly', sec: weeklySec, goal: goals.weekly, color: 'bg-emerald-500' },
+              { label: 'Monthly', sec: monthlySec, goal: goals.monthly, color: 'bg-indigo-500' },
             ].map(({ label, sec, goal, color }) => (
-              <div key={label} className="bg-white p-5 rounded-2xl border border-slate-200/50 space-y-2">
+              <div key={label} className="bg-white p-5 rounded-2xl border border-slate-200/50 space-y-2 shadow-sm">
                 <div className="flex items-center justify-between"><span className="text-[9px] font-black uppercase tracking-widest text-slate-500">{label}</span><span className="text-[9px] font-bold text-slate-500">{getProgress(sec, goal)}%</span></div>
                 <p className="text-xl font-black text-slate-900">{formatDuration(sec)}</p>
                 <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden"><div className={`h-full ${color} rounded-full transition-all duration-1000`} style={{ width: `${getProgress(sec, goal)}%` }}></div></div>
               </div>
             ))}
           </div>
-          <div className="bg-white p-6 rounded-[2rem] border border-slate-200/50">
-            <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-6 flex items-center gap-2"><Calendar size={11} /> 7-Day Activity</p>
+          <div className="bg-white p-6 rounded-[2rem] border border-slate-200/50 shadow-sm">
+            <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-6 flex items-center gap-2"><Calendar size={11} /> 7-Day Efficiency</p>
             <div className="flex items-end justify-between gap-2 h-20">
               {heatmap.map(d => (
                 <div key={d.dStr} className="flex flex-col items-center gap-1 flex-1">
@@ -273,14 +237,14 @@ export default function StudyDashboard() {
 
       {tab === 'todo' && (
         <div className="space-y-4 animate-in fade-in duration-200">
-          <div className="bg-white p-6 rounded-[2rem] border border-slate-200/50">
-            <h3 className="text-lg font-black text-slate-900 mb-6 uppercase tracking-tighter flex items-center gap-2"><ClipboardList size={20} className="text-blue-500" /> Study Plan</h3>
+          <div className="bg-white p-6 rounded-[2rem] border border-slate-200/50 shadow-sm">
+            <h3 className="text-lg font-black text-slate-900 mb-6 uppercase tracking-tighter flex items-center gap-2"><ClipboardList size={20} className="text-blue-500" /> Operational Tasks</h3>
             <div className="flex flex-col md:flex-row gap-3 mb-6 bg-slate-50 p-4 rounded-3xl border border-slate-200">
-              <input value={newTask} onChange={e => setNewTask(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Task..." className="flex-[2] bg-white border border-slate-200 rounded-2xl px-5 py-3.5 text-sm outline-none focus:border-blue-500 font-bold" />
-              <button onClick={addTask} className="px-6 py-3.5 bg-slate-900 text-white rounded-2xl hover:bg-black transition-all"><Plus size={18} /></button>
+              <input value={newTask} onChange={e => setNewTask(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="New protocol mission..." className="flex-[2] bg-white border border-slate-200 rounded-2xl px-5 py-3.5 text-sm outline-none focus:border-blue-500 font-bold" />
+              <button onClick={addTask} className="px-6 py-3.5 bg-slate-900 text-white rounded-2xl hover:bg-black transition-all shadow-lg active:scale-95"><Plus size={18} /></button>
             </div>
             <div className="space-y-2">
-              {tasks.map(task => (
+              {tasks.length === 0 ? <p className="text-center py-10 text-[10px] font-black text-slate-400 uppercase tracking-widest">No active tasks</p> : tasks.map(task => (
                 <div key={task.id} className={`flex items-center gap-3 p-4 rounded-2xl border transition-all ${task.done ? 'bg-emerald-50 border-emerald-100' : 'bg-slate-50 border-slate-100'}`}>
                   <button onClick={() => toggleTask(task)}>{task.done ? <CheckCircle2 size={18} className="text-emerald-500" /> : <Circle size={18} className="text-slate-400" />}</button>
                   <div className="flex-1"><p className={`text-sm font-bold ${task.done ? 'line-through text-slate-400' : 'text-slate-900'}`}>{task.text}</p></div>
@@ -297,10 +261,10 @@ export default function StudyDashboard() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             {[
               { label: 'Streak', val: `${userData?.streak || 0} Days`, color: 'text-orange-500' },
-              { label: 'Total', val: formatDuration(userData?.totalStudyTime || 0).split(' ')[0] + ' HR', color: 'text-blue-500' },
+              { label: 'Total Focus', val: formatDuration(userData?.totalStudyTime || 0), color: 'text-blue-500' },
               { label: 'Sessions', val: sessionCount, color: 'text-emerald-500' },
             ].map(({ label, val, color }) => (
-              <div key={label} className="bg-white p-5 rounded-2xl border border-slate-200/50 text-center">
+              <div key={label} className="bg-white p-5 rounded-2xl border border-slate-200/50 text-center shadow-sm">
                 <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">{label}</p>
                 <p className={`text-xl font-black ${color}`}>{val}</p>
               </div>
@@ -312,7 +276,7 @@ export default function StudyDashboard() {
       {showGoalModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
           <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-sm shadow-2xl">
-            <p className="text-xl font-black uppercase mb-6 text-center">Set Goals</p>
+            <p className="text-xl font-black uppercase mb-6 text-center">Set Targets</p>
             <div className="space-y-4">
               {['daily', 'weekly', 'monthly'].map(t => (
                 <div key={t} className="space-y-1">
@@ -323,21 +287,7 @@ export default function StudyDashboard() {
             </div>
             <div className="flex gap-3 mt-8">
               <button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-400 hover:bg-slate-50" onClick={() => setShowGoalModal(false)}>Cancel</button>
-              <button className="flex-1 bg-blue-600 hover:bg-blue-500 p-4 rounded-xl font-black text-[10px] uppercase text-white shadow-lg" onClick={saveGoals}>Save</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showSubjectModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-sm shadow-2xl">
-            <p className="text-xl font-black uppercase mb-1">New Subject</p>
-            <p className="text-[10px] text-slate-500 mb-8 uppercase tracking-widest">{subjects.length}/10 subjects used</p>
-            <input maxLength={20} placeholder="MATHEMATICS..." className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-slate-900 font-black uppercase mb-6 outline-none focus:border-blue-500" value={newSubject} onChange={e => setNewSubject(e.target.value)} onKeyDown={e => e.key === 'Enter' && addSubject()} autoFocus />
-            <div className="flex gap-3">
-              <button className="flex-1 p-4 rounded-xl font-black text-[10px] uppercase text-slate-400 hover:bg-slate-50" onClick={() => { setShowSubjectModal(false); setNewSubject(''); }}>Cancel</button>
-              <button disabled={subjects.length >= 10 || !newSubject.trim()} className="flex-1 p-4 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 rounded-xl font-black text-[10px] uppercase text-white shadow-lg" onClick={addSubject}>Add</button>
+              <button className="flex-1 bg-blue-600 hover:bg-blue-500 p-4 rounded-xl font-black text-[10px] uppercase text-white shadow-lg" onClick={saveGoals}>Save Protocol</button>
             </div>
           </div>
         </div>

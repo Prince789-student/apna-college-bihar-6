@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { db } from '../firebase';
-import { doc, updateDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, updateDoc, addDoc, collection, getDoc } from 'firebase/firestore';
 import { useAuth } from './AuthContext';
 
 const StudyContext = createContext(null);
@@ -18,23 +18,65 @@ export function StudyProvider({ children }) {
   const [timerMode, setTimerMode] = useState('COUNTDOWN');
   const timerRef = useRef(null);
 
-  // Sync isStudying status to Firestore
+  // Reset timer when mode or custom minutes change (and not active)
+  useEffect(() => {
+    if (!timerActive) {
+      if (timerMode === 'COUNTDOWN') {
+        setTimerTime(customMinutes * 60);
+      } else {
+        setTimerTime(0);
+      }
+    }
+  }, [timerMode, customMinutes, timerActive]);
+
+  const saveGlobalSession = async (manualTime = null) => {
+    if (!user) return;
+    const timeToSave = manualTime || (timerMode === 'STOPWATCH' ? timerTime : (customMinutes * 60 - timerTime));
+    
+    if (timeToSave < 5) { // Minimum 5 seconds to save
+      setTimerActive(false);
+      return;
+    }
+
+    try {
+      const todayStr = new Date().toISOString().split('T')[0];
+      
+      // 1. Add session record
+      await addDoc(collection(db, 'StudySessions'), {
+        userId: user.uid,
+        userName: user.name || 'Scholar',
+        subject: timerSubject,
+        duration: timeToSave,
+        date: todayStr,
+        createdAt: new Date().toISOString()
+      });
+
+      // 2. Update user stats (Streak, Total Time)
+      const userRef = doc(db, 'users', user.uid);
+      const uSnap = await getDoc(userRef);
+      if (uSnap.exists()) {
+        const userData = uSnap.data();
+        const totalStudyTime = (userData.totalStudyTime || 0) + timeToSave;
+        
+        // Basic streak logic (Simplified for global context)
+        // In a real app, you'd calculate this more precisely with session history
+        await updateDoc(userRef, {
+          totalStudyTime,
+          lastStudyDate: todayStr,
+          isStudying: false
+        });
+      }
+
+      setTimerActive(false);
+    } catch (e) {
+      console.error("Global Save Error:", e);
+    }
+  };
+
+  // Sync isStudying status
   useEffect(() => {
     if (!user) return;
-    const syncStatus = async () => {
-      try {
-        await updateDoc(doc(db, 'users', user.uid), { isStudying: timerActive });
-      } catch (e) { console.error("Status Sync Error:", e); }
-    };
-    syncStatus();
-
-    // Safety: Set false on window close, but NOT on component unmount (since provider stays alive)
-    const handleUnload = () => {
-      const uRef = doc(db, 'users', user.uid);
-      updateDoc(uRef, { isStudying: false }).catch(() => {});
-    };
-    window.addEventListener('beforeunload', handleUnload);
-    return () => window.removeEventListener('beforeunload', handleUnload);
+    updateDoc(doc(db, 'users', user.uid), { isStudying: timerActive }).catch(() => {});
   }, [timerActive, user]);
 
   // Global Timer Tick
@@ -45,8 +87,7 @@ export function StudyProvider({ children }) {
           if (timerMode === 'COUNTDOWN') {
             if (t <= 1) {
               clearInterval(timerRef.current);
-              setTimerActive(false);
-              // In a real app, you might trigger a sound or notification here
+              saveGlobalSession(customMinutes * 60); // Auto-save full session
               return 0;
             }
             return t - 1;
@@ -59,7 +100,7 @@ export function StudyProvider({ children }) {
       clearInterval(timerRef.current);
     }
     return () => clearInterval(timerRef.current);
-  }, [timerActive, timerMode]);
+  }, [timerActive, timerMode, user]); // Added user to dependencies
 
   const value = {
     timerActive,
@@ -71,7 +112,8 @@ export function StudyProvider({ children }) {
     customMinutes,
     setCustomMinutes,
     timerMode,
-    setTimerMode
+    setTimerMode,
+    saveGlobalSession
   };
 
   return (
