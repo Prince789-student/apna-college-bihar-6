@@ -27,6 +27,7 @@ export default function DashboardLayout() {
   const [phone, setPhone] = useState('');
   const [isPhoneModalOpen, setPhoneModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const { timerActive } = useStudy();
 
   // Safe Platform Detection
 
@@ -35,6 +36,15 @@ export default function DashboardLayout() {
     try { return localStorage.getItem('isAppMode') === 'true'; }
     catch { return false; }
   })();
+
+  // Focus Lock Logic: Keep user in study environment if timer is active
+  useEffect(() => {
+    const isStudyPath = location.pathname.startsWith('/dashboard/study') || location.pathname.startsWith('/dashboard/groups');
+    if (timerActive && !isStudyPath) {
+      // Redirect back to study protocol if they try to leave while timer is running
+      navigate('/dashboard/study');
+    }
+  }, [location.pathname, timerActive, navigate]);
 
   // Neural Persistence Layer: Save deep state for session restoration
   useEffect(() => {
