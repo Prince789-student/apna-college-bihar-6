@@ -13,13 +13,13 @@ export default function Home() {
 
   useEffect(() => {
     const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
-      setStats(s => ({ ...s, users: snap.size > 0 ? snap.size : 5000 }));
+      setStats(s => ({ ...s, users: snap.size }));
     });
     const unsubDocs = onSnapshot(collection(db, 'documents'), (snap) => {
-      setStats(s => ({ ...s, docs: snap.size > 0 ? snap.size : 100 }));
+      setStats(s => ({ ...s, docs: snap.size }));
     });
     const unsubGroups = onSnapshot(collection(db, 'groups'), (snap) => {
-      setStats(s => ({ ...s, groups: snap.size > 0 ? snap.size : 24 }));
+      setStats(s => ({ ...s, groups: snap.size }));
     });
     return () => { unsubUsers(); unsubDocs(); unsubGroups(); };
   }, []);
@@ -81,11 +81,11 @@ export default function Home() {
 
            <div className="pt-16 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 items-center opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
               <div className="flex flex-col items-center">
-                 <span className="text-3xl font-[1000] text-slate-900">{stats.users}+</span>
+                 <span className="text-3xl font-[1000] text-slate-900">{stats.users}</span>
                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Scholars</span>
               </div>
               <div className="flex flex-col items-center">
-                 <span className="text-3xl font-[1000] text-slate-900">{stats.docs}+</span>
+                 <span className="text-3xl font-[1000] text-slate-900">{stats.docs}</span>
                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">PYQ & Notes</span>
               </div>
               <div className="flex flex-col items-center">
