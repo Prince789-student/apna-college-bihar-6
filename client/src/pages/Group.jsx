@@ -10,14 +10,19 @@ import {
   collection, query, where, getDocs, addDoc, 
   onSnapshot, doc, getDoc, updateDoc,
   arrayUnion, arrayRemove, serverTimestamp, setDoc,
-  increment, limit, orderBy
+  increment, limit, orderBy, deleteDoc
 } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+
 
 const genCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();
 
 export default function Group() {
   const { user, updateProfileData } = useAuth();
+  const navigate = useNavigate();
   const [groups, setGroups] = useState([]);
+
+
   const [myGroups, setMyGroups] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -28,6 +33,7 @@ export default function Group() {
   useEffect(() => {
     if (!user) return;
     const q = query(collection(db, 'groups'), orderBy('createdAt', 'desc'), limit(50));
+
     const unsub = onSnapshot(q, (snap) => {
       const g = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       setGroups(g);
@@ -61,6 +67,7 @@ export default function Group() {
         createdAt: serverTimestamp()
       };
       await addDoc(collection(db, 'groups'), newGroup);
+
       
       // Update rate limit in user profile
       await updateProfileData({
@@ -79,6 +86,7 @@ export default function Group() {
     if (!joinCode.trim()) return;
     try {
       const q = query(collection(db, 'groups'), where('code', '==', joinCode.toUpperCase()));
+
       const snap = await getDocs(q);
       
       if (snap.empty) {
@@ -100,9 +108,11 @@ export default function Group() {
       }
 
       await updateDoc(doc(db, 'groups', gDoc.id), {
+
         members: arrayUnion(user.uid),
         memberCount: increment(1)
       });
+
       setCreateMsg({ type: 'ok', text: 'Joined successfully!' });
       setJoinCode('');
     } catch (e) {
@@ -186,7 +196,13 @@ export default function Group() {
                    }} className="flex items-center gap-2 text-[10px] font-black text-blue-500 uppercase hover:text-blue-400 transition-all">
                      <Copy size={12}/> Code: {g.code}
                    </button>
-                   <button className="px-4 py-2 bg-slate-100 hover:bg-slate-100 text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Enter Hub</button>
+                   <button 
+                     onClick={() => navigate(`/dashboard/groups/${g.id}`)}
+                     className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-900/20"
+                   >
+                     Enter Hub
+                   </button>
+
                 </div>
               </div>
             ))}

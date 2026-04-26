@@ -167,7 +167,7 @@ export default function StudyDashboard() {
       const cutoff = thirtyDaysAgo.toISOString().split('T')[0];
       setSessions(sessSnap.docs.map(d => ({ ...d.data() })).filter(s => s.date >= cutoff));
 
-      const grpSnap = await getDocs(query(collection(db, 'Groups'), where('members', 'array-contains', user.uid)));
+      const grpSnap = await getDocs(query(collection(db, 'groups'), where('members', 'array-contains', user.uid)));
       setGroups(grpSnap.docs.map(d => ({ id: d.id, ...d.data() })));
 
       const taskSnap = await getDocs(query(collection(db, 'Tasks'), where('userId', '==', user.uid), where('date', '==', todayStr)));
@@ -255,8 +255,9 @@ export default function StudyDashboard() {
   const addTask = async () => { if (!newTask.trim() || !taskSub.trim()) return; await addDoc(collection(db, 'Tasks'), { userId: user.uid, text: newTask.trim(), subject: taskSub.trim().toUpperCase(), done: false, date: todayStr, createdAt: new Date().toISOString() }); setNewTask(''); setTaskSub(''); fetchAll(); };
   const toggleTask = async (task) => { await updateDoc(doc(db, 'Tasks', task.id), { done: !task.done }); fetchAll(); };
   const delTask = async (id) => { await deleteDoc(doc(db, 'Tasks', id)); fetchAll(); };
-  const createGroup = async () => { if (!newGroupName.trim()) return; setGroupLoading(true); try { const roomId = `ACB_HUB_${Math.random().toString(36).substring(2, 15)}_${Date.now()}`; await addDoc(collection(db, 'Groups'), { groupName: newGroupName.trim().toUpperCase(), groupCode: Math.random().toString(36).substring(2, 8).toUpperCase(), meetingRoomId: roomId, createdBy: user.uid, adminId: user.uid, members: [user.uid], memberCount: 1, createdAt: new Date().toISOString() }); setNewGroupName(''); setShowCreateGroup(false); fetchAll(); } catch (e) { console.error(e); } finally { setGroupLoading(false); } };
-  const joinGroup = async () => { if (!joinCode.trim()) return; setGroupLoading(true); try { const snp = await getDocs(query(collection(db, 'Groups'), where('groupCode', '==', joinCode.toUpperCase()))); if (snp.empty) { alert('Invalid code!'); return; } const gDoc = snp.docs[0]; const gd = gDoc.data(); if (gd.members.includes(user.uid)) { alert('Already member!'); return; } await updateDoc(doc(db, 'Groups', gDoc.id), { members: [...gd.members, user.uid], memberCount: gd.memberCount + 1 }); setJoinCode(''); setShowJoinGroup(false); fetchAll(); } catch (e) { console.error(e); } finally { setGroupLoading(false); } };
+  const createGroup = async () => { if (!newGroupName.trim()) return; setGroupLoading(true); try { const roomId = `ACB_HUB_${Math.random().toString(36).substring(2, 15)}_${Date.now()}`; await addDoc(collection(db, 'groups'), { groupName: newGroupName.trim().toUpperCase(), groupCode: Math.random().toString(36).substring(2, 8).toUpperCase(), meetingRoomId: roomId, createdBy: user.uid, adminId: user.uid, members: [user.uid], memberCount: 1, createdAt: new Date().toISOString() }); setNewGroupName(''); setShowCreateGroup(false); fetchAll(); } catch (e) { console.error(e); } finally { setGroupLoading(false); } };
+  const joinGroup = async () => { if (!joinCode.trim()) return; setGroupLoading(true); try { const snp = await getDocs(query(collection(db, 'groups'), where('groupCode', '==', joinCode.toUpperCase()))); if (snp.empty) { alert('Invalid code!'); return; } const gDoc = snp.docs[0]; const gd = gDoc.data(); if (gd.members.includes(user.uid)) { alert('Already member!'); return; } await updateDoc(doc(db, 'groups', gDoc.id), { members: [...gd.members, user.uid], memberCount: gd.memberCount + 1 }); setJoinCode(''); setShowJoinGroup(false); fetchAll(); } catch (e) { console.error(e); } finally { setGroupLoading(false); } };
+
 
   if (loading) return <div className="flex justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
 
@@ -503,10 +504,11 @@ export default function StudyDashboard() {
                         <Users size={10} /> {group.memberCount} Scholars Participating
                       </p>
                     </div>
-                    <button onClick={() => navigate(`/dashboard/study/group/${group.id}`)} className="w-full py-4 bg-slate-900 hover:bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex flex-col items-center justify-center gap-1 shadow-xl shadow-slate-900/10">
+                    <button onClick={() => navigate(`/dashboard/groups/${group.id}`)} className="w-full py-4 bg-slate-900 hover:bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all flex flex-col items-center justify-center gap-1 shadow-xl shadow-slate-900/10">
                       <div className="flex items-center gap-2">
                         Enter Operational Hub <ArrowRight size={14} />
                       </div>
+
                       <span className="text-[7px] text-blue-400 animate-pulse font-black uppercase tracking-widest flex items-center gap-1">
                         <Video size={8} /> Live Collective Active
                       </span>

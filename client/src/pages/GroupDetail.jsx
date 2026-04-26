@@ -21,7 +21,7 @@ export default function GroupDetail() {
     if (!groupId || !user) return;
 
     // Real-time Group Sync
-    const unsubGroup = onSnapshot(doc(db, 'Groups', groupId), (docSnap) => {
+    const unsubGroup = onSnapshot(doc(db, 'groups', groupId), (docSnap) => {
       if (!docSnap.exists()) {
         setError('Study Collective not found in decentralized database');
         setLoading(false);
@@ -66,7 +66,7 @@ export default function GroupDetail() {
     if (!window.confirm('Strike this student from the operational network?')) return;
 
     try {
-      await updateDoc(doc(db, 'Groups', groupId), {
+      await updateDoc(doc(db, 'groups', groupId), {
         members: arrayRemove(targetId),
         memberCount: group.memberCount - 1
       });
@@ -78,7 +78,7 @@ export default function GroupDetail() {
     if (!window.confirm('CRITICAL: This will permanently decommission this Hub and disconnect all scholars. Proceed?')) return;
     
     try {
-      await deleteDoc(doc(db, 'Groups', groupId));
+      await deleteDoc(doc(db, 'groups', groupId));
       navigate('/dashboard/study');
     } catch (e) { console.error(e); }
   };
@@ -87,7 +87,7 @@ export default function GroupDetail() {
     if (!isAdmin) return;
     const g = window.prompt('Set collective network goal (Total Hours):', group.dailyGoal || '10');
     if (g) {
-      await updateDoc(doc(db, 'Groups', groupId), { dailyGoal: Number(g) });
+      await updateDoc(doc(db, 'groups', groupId), { dailyGoal: Number(g) });
     }
   };
 
@@ -95,11 +95,12 @@ export default function GroupDetail() {
     if (!isAdmin) return;
     if (!newLink.trim()) return;
     try {
-      await updateDoc(doc(db, 'Groups', groupId), { meetingLink: newLink.trim() });
+      await updateDoc(doc(db, 'groups', groupId), { meetingLink: newLink.trim() });
       setIsSettingLink(false);
       setNewLink('');
     } catch (e) { console.error(e); }
   };
+
 
   if (loading) return <div className="flex items-center justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
   if (error) return <div className="text-red-500 font-black p-20 text-center uppercase tracking-widest">{error}</div>;

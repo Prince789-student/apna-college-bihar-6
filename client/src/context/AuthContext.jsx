@@ -13,7 +13,7 @@ import {
 import { auth, db, googleProvider } from "../firebase";
 import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 
-const AuthContext = createContext();
+export const AuthContext = createContext(null);
 
 export function useAuth() {
   return useContext(AuthContext);
@@ -25,6 +25,7 @@ export function AuthProvider({ children }) {
 
   // Profile Roles: 'STUDENT', 'ADMIN', 'SUPER_ADMIN'
   const ROLES = { STUDENT: 'STUDENT', ADMIN: 'ADMIN', SUPER_ADMIN: 'SUPER_ADMIN' };
+
 
   // Sync profile logic
   const syncProfile = async (u) => {
