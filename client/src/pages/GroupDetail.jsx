@@ -215,7 +215,7 @@ export default function GroupDetail() {
               {/* Overlay if iframe fails or needs help */}
               <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-black/60 backdrop-blur-md p-4 rounded-[2rem] border border-white/10">
                 <p className="text-[10px] text-white/70 font-black uppercase tracking-widest">Problem viewing?</p>
-                <a href={group.meetingLink} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-blue-600 text-white rounded-xl text-[9px] font-black uppercase flex items-center gap-2">External View <ExternalLink size={12} /></a>
+                <a href={group.meetingLink.startsWith('http') ? group.meetingLink : `https://${group.meetingLink}`} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-blue-600 text-white rounded-xl text-[9px] font-black uppercase flex items-center gap-2">External View <ExternalLink size={12} /></a>
               </div>
             </div>
           </div>

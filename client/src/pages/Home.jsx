@@ -126,7 +126,7 @@ export default function Home() {
                     </div>
                  </div>
                  <p className="text-xs italic text-slate-500">
-                    "Hamara manna hai ki resource ki kami kisi bhi student ke sapno ke beech nahi aani chahiye. Isiliye Apna College Bihar hamesha free rahega."
+                    "Hamara manna hai ki resource ki kami kisi bhi student ke sapno ke beech nahi aani chahiye."
                  </p>
               </div>
            </div>
@@ -155,11 +155,7 @@ export default function Home() {
                          </div>
                        ))}
                     </div>
-                    <div className="pt-4">
-                       <Link to="/about" className="text-xs font-black text-blue-600 hover:text-blue-500 uppercase tracking-widest flex items-center gap-2 group/link">
-                          Read Full Documentation <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
-                       </Link>
-                    </div>
+
                  </div>
               </div>
            </div>
