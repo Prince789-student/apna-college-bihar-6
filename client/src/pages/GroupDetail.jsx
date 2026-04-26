@@ -102,20 +102,27 @@ export default function GroupDetail() {
     } catch (e) { console.error(e); }
   };
 
-  const sendNudge = async () => {
-    if (!selectedMember || !user) return;
+  const copyInviteLink = () => {
+    const link = window.location.href;
+    navigator.clipboard.writeText(link);
+    alert('Group Invite Link copied to clipboard! Share it with friends.');
+  };
+
+  const sendNudge = async (targetMember = null) => {
+    const memberToNudge = targetMember || selectedMember;
+    if (!memberToNudge || !user) return;
     try {
       await addDoc(collection(db, 'nudges'), {
-        toUserId: selectedMember.id,
+        toUserId: memberToNudge.id,
         fromUserName: user.displayName || 'A Scholar',
         timestamp: serverTimestamp(),
         groupId: groupId
       });
-      alert(`Nudge sent to ${selectedMember.name}!`);
+      alert(`Nudge sent to ${memberToNudge.name}!`);
     } catch (e) {
       console.error("Nudge failed", e);
     }
-    setSelectedMember(null);
+    if (!targetMember) setSelectedMember(null);
   };
 
 
@@ -158,6 +165,10 @@ export default function GroupDetail() {
                     <Hash size={12} />
                     <span className="text-[10px] font-black tracking-widest uppercase">ID: {group.groupCode}</span>
                  </div>
+                 <button onClick={copyInviteLink} className="flex items-center gap-2 bg-emerald-50 text-emerald-600 px-3 py-1.5 rounded-xl border border-emerald-500/20 hover:bg-emerald-500 hover:text-white transition-colors cursor-pointer group/link">
+                    <Link2 size={12} />
+                    <span className="text-[10px] font-black tracking-widest uppercase">Share Hub Link</span>
+                 </button>
               </div>
            </div>
         </div>
@@ -296,7 +307,7 @@ export default function GroupDetail() {
                            <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-orange-500 border-2 border-white rounded-full animate-pulse shadow-[0_0_10px_rgba(249,115,22,0.8)]"></div>
                          )}
                          {!isStudying && (
-                           <button onClick={(e) => { e.stopPropagation(); alert('Nudge feature coming soon!'); }} className="absolute -bottom-2 -right-2 w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center text-amber-500 hover:bg-amber-50 hover:text-amber-600 transition-all opacity-0 group-hover:opacity-100 shadow-sm" title="Nudge to Study">
+                           <button onClick={(e) => { e.stopPropagation(); sendNudge(member); }} className="absolute -bottom-2 -right-2 w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center text-amber-500 hover:bg-amber-50 hover:text-amber-600 transition-all opacity-0 group-hover:opacity-100 shadow-sm" title="Nudge to Study">
                              <BellRing size={14} />
                            </button>
                          )}
