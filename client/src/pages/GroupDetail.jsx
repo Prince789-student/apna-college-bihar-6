@@ -60,8 +60,15 @@ export default function GroupDetail() {
   };
 
   const updateMeetingLink = async () => {
-    if (!newLink.trim()) return;
-    try { await updateDoc(doc(db, 'groups', groupId), { meetingLink: newLink.trim() }); setIsSettingLink(false); setNewLink(''); } catch (e) { console.error(e); }
+    if (!newLink.trim() || !isAdmin) return;
+    try { 
+      await updateDoc(doc(db, 'groups', groupId), { 
+        meetingLink: newLink.trim(),
+        linkUpdatedAt: serverTimestamp()
+      }); 
+      setIsSettingLink(false); 
+      setNewLink(''); 
+    } catch (e) { console.error(e); }
   };
 
   const formatHHMMSS = (totalSeconds) => {
@@ -119,7 +126,12 @@ export default function GroupDetail() {
            <div className="space-y-2">
               <h1 className="text-3xl md:text-5xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">{group.name}</h1>
               <div className="flex flex-wrap items-center gap-3">
-                 <div className="flex items-center gap-2 bg-slate-100 text-slate-500 px-3 py-1.5 rounded-xl border border-slate-200"><Calendar size={12} /><span className="text-[9px] font-black uppercase tracking-widest">{new Date(group.createdAt).toLocaleDateString()}</span></div>
+                  <div className="flex items-center gap-2 bg-slate-100 text-slate-500 px-3 py-1.5 rounded-xl border border-slate-200">
+                    <Calendar size={12} />
+                    <span className="text-[9px] font-black uppercase tracking-widest">
+                      {group.createdAt?.toDate ? group.createdAt.toDate().toLocaleDateString() : new Date(group.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
                  <div className="flex items-center gap-2 bg-blue-600/10 text-blue-600 px-3 py-1.5 rounded-xl border border-blue-500/20"><Hash size={12} /><span className="text-[10px] font-black tracking-widest uppercase">ID: {group.code}</span></div>
               </div>
            </div>
@@ -150,11 +162,30 @@ export default function GroupDetail() {
               </div>
               <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start">
                 {group.meetingLink ? (
-                  <button onClick={() => setIsMeetingOpen(true)} className="px-6 py-4 md:px-10 md:py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-2xl shadow-blue-600/30 active:scale-95 flex items-center gap-2 md:gap-3">
-                    Infiltrate Hub Portal <Video size={16} />
-                  </button>
+                  <>
+                    <button onClick={() => setIsMeetingOpen(true)} className="px-6 py-4 md:px-10 md:py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-2xl shadow-blue-600/30 active:scale-95 flex items-center gap-2 md:gap-3">
+                      Infiltrate Hub Portal <Video size={16} />
+                    </button>
+                    {isAdmin && (() => {
+                      const lastUpdate = group.linkUpdatedAt?.toDate ? group.linkUpdatedAt.toDate() : (group.linkUpdatedAt ? new Date(group.linkUpdatedAt) : null);
+                      const isRecent = !lastUpdate || (new Date() - lastUpdate < 3600000);
+                      return isRecent ? (
+                        <button onClick={() => setIsSettingLink(true)} className="p-4 bg-white/10 hover:bg-white/20 text-white rounded-2xl transition-all border border-white/10 flex items-center gap-2">
+                          <Settings2 size={16} /> <span className="text-[10px] font-black uppercase">Change</span>
+                        </button>
+                      ) : null;
+                    })()}
+                  </>
                 ) : (
-                  <button onClick={() => setIsSettingLink(true)} className="px-8 py-5 bg-white text-slate-900 rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-xl active:scale-95 flex items-center justify-center gap-3"><Link2 size={18} className="text-blue-600" /> Establish Link</button>
+                  isAdmin ? (
+                    <button onClick={() => setIsSettingLink(true)} className="px-8 py-5 bg-white text-slate-900 rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-xl active:scale-95 flex items-center justify-center gap-3">
+                      <Link2 size={18} className="text-blue-600" /> Establish Link
+                    </button>
+                  ) : (
+                    <div className="px-8 py-4 bg-white/5 border border-white/10 rounded-2xl text-slate-500 font-black text-[10px] uppercase tracking-widest">
+                      Link Not Established
+                    </div>
+                  )
                 )}
               </div>
             </div>

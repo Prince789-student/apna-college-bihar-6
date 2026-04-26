@@ -77,8 +77,12 @@ export function StudyProvider({ children }) {
       const uSnap = await getDoc(userRef);
       if (uSnap.exists()) {
         const userData = uSnap.data();
+        const isNewDay = userData.lastStudyDate !== todayStr;
+        const newTodayTime = isNewDay ? timeToSave : (userData.todayStudyTime || 0) + timeToSave;
+        
         await updateDoc(userRef, { 
-          totalStudyTime: (userData.totalStudyTime || 0) + timeToSave, 
+          totalStudyTime: (userData.totalStudyTime || 0) + timeToSave,
+          todayStudyTime: newTodayTime,
           lastStudyDate: todayStr, 
           isStudying: false 
         });

@@ -89,35 +89,53 @@ export default function StudyDashboard() {
   }, [user, todayStr]);
 
   const stats = useMemo(() => {
-    const today = sessions.filter(s => s.date === todayStr).reduce((a, s) => a + (Number(s.duration) || 0), 0);
+    let activeSec = 0;
+    if (timerActive) {
+      activeSec = timerMode === 'COUNTDOWN' ? (customMinutes * 60 + customSeconds - timerTime) : timerTime;
+    }
+
+    const today = sessions.filter(s => s.date === todayStr).reduce((a, s) => a + (Number(s.duration) || 0), 0) + activeSec;
     const last7 = Array.from({ length: 7 }, (_, i) => {
       const d = new Date(); d.setDate(d.getDate() - i);
       return d.toLocaleDateString('en-CA');
     });
-    const weekly = sessions.filter(s => last7.includes(s.date)).reduce((a, s) => a + (Number(s.duration) || 0), 0);
+    const weekly = sessions.filter(s => last7.includes(s.date)).reduce((a, s) => a + (Number(s.duration) || 0), 0) + activeSec;
     const curM = new Date().getMonth(), curY = new Date().getFullYear();
     const monthly = sessions.filter(s => {
       const d = new Date(s.date);
       return d.getMonth() === curM && d.getFullYear() === curY;
-    }).reduce((a, s) => a + (Number(s.duration) || 0), 0);
+    }).reduce((a, s) => a + (Number(s.duration) || 0), 0) + activeSec;
 
     const heatmap = Array.from({ length: 7 }, (_, i) => {
       const d = new Date(); d.setDate(d.getDate() - (6 - i));
       const dStr = d.toLocaleDateString('en-CA');
+      let daySec = sessions.filter(s => s.date === dStr).reduce((a, s) => a + (Number(s.duration) || 0), 0);
+      if (dStr === todayStr) daySec += activeSec;
       return { 
         day: d.toLocaleDateString('en-US', { weekday: 'short' }), 
-        sec: sessions.filter(s => s.date === dStr).reduce((a, s) => a + (Number(s.duration) || 0), 0), 
+        sec: daySec, 
         isToday: dStr === todayStr 
       };
     });
 
+    const subjectNames = subjects.map(s => s.subjectName);
     const subjectBreakdown = subjects.map(sub => ({
       name: sub.subjectName,
-      sec: sessions.filter(s => s.subject === sub.subjectName).reduce((a, s) => a + (Number(s.duration) || 0), 0)
-    })).filter(s => s.sec > 0).sort((a, b) => b.sec - a.sec);
+      sec: sessions.filter(s => s.subject === sub.subjectName).reduce((a, s) => a + (Number(s.duration) || 0), 0) + (timerSubject === sub.subjectName ? activeSec : 0)
+    })).filter(s => s.sec > 0);
+
+    const otherSec = sessions
+      .filter(s => !subjectNames.includes(s.subject))
+      .reduce((a, s) => a + (Number(s.duration) || 0), 0) + (timerSubject === 'OTHERS' ? activeSec : 0);
+    
+    if (otherSec > 0) {
+      subjectBreakdown.push({ name: 'Others', sec: otherSec });
+    }
+
+    subjectBreakdown.sort((a, b) => b.sec - a.sec);
 
     return { today, weekly, monthly, heatmap, subjectBreakdown };
-  }, [sessions, subjects, todayStr]);
+  }, [sessions, subjects, todayStr, timerActive, timerTime, timerMode, customMinutes, customSeconds, timerSubject]);
 
   const getProgress = (sec, g) => (!g || g <= 0) ? 0 : Math.min(100, (sec / (g * 3600)) * 100).toFixed(0);
 
