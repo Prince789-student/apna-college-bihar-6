@@ -6,6 +6,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
+import { useStudy } from '../context/StudyContext';
 import {
   Clock, Plus, Flame, Target, BookOpen,
   Calendar, BarChart3, Settings, Trash2, Trophy,
@@ -39,6 +40,15 @@ export default function StudyDashboard() {
   const [tab, setTab] = useState(location.state?.tab || 'timer');
   const todayStr = new Date().toISOString().split('T')[0];
 
+  // Use Global Study Context
+  const {
+    timerActive, setTimerActive,
+    timerTime, setTimerTime,
+    timerSubject, setTimerSubject,
+    customMinutes, setCustomMinutes,
+    timerMode, setTimerMode
+  } = useStudy();
+
   // Data State
   const [userData, setUserData] = useState(null);
   const [subjects, setSubjects] = useState([]);
@@ -55,64 +65,7 @@ export default function StudyDashboard() {
   const [newTask, setNewTask] = useState('');
   const [taskSub, setTaskSub] = useState('');
 
-  // Timer State
-  const [timerActive, setTimerActive] = useState(false);
-  const [timerTime, setTimerTime] = useState(1500);
-  const [timerSubject, setTimerSubject] = useState('OTHERS');
-  const [customMinutes, setCustomMinutes] = useState(25);
-  const [timerMode, setTimerMode] = useState('COUNTDOWN');
-  const timerRef = useRef(null);
-
-  useEffect(() => {
-    if (!timerActive) {
-      setTimerTime(timerMode === 'STOPWATCH' ? 0 : customMinutes * 60);
-    }
-  }, [timerMode, customMinutes]);
-
   useEffect(() => { if (user) fetchAll(); }, [user]);
-
-  useEffect(() => {
-    if (timerActive) {
-      timerRef.current = setInterval(() => {
-        setTimerTime(t => {
-          if (timerMode === 'COUNTDOWN') {
-            if (t <= 1) {
-              clearInterval(timerRef.current);
-              setTimerActive(false);
-              completeCountdown();
-              return 0;
-            }
-            return t - 1;
-          } else {
-            return t + 1;
-          }
-        });
-      }, 1000);
-    } else {
-      clearInterval(timerRef.current);
-    }
-    return () => clearInterval(timerRef.current);
-  }, [timerActive, timerMode]);
-
-  useEffect(() => {
-    if (!user) return;
-    const syncStatus = async () => {
-      try {
-        await updateDoc(doc(db, 'users', user.uid), { isStudying: timerActive });
-      } catch (e) { console.error(e); }
-    };
-    syncStatus();
-    
-    const handleUnload = () => {
-      const uRef = doc(db, 'users', user.uid);
-      updateDoc(uRef, { isStudying: false }).catch(() => {});
-    };
-    window.addEventListener('beforeunload', handleUnload);
-    return () => {
-      window.removeEventListener('beforeunload', handleUnload);
-      updateDoc(doc(db, 'users', user.uid), { isStudying: false }).catch(() => {});
-    };
-  }, [timerActive, user]);
 
   const fetchAll = async () => {
     setLoading(true);
@@ -175,7 +128,13 @@ export default function StudyDashboard() {
     } catch (e) { console.error(e); }
   };
 
-  const completeCountdown = () => { saveTimerSession(customMinutes * 60); alert('Focus session complete!'); };
+  // Check if countdown finished globally
+  useEffect(() => {
+    if (timerMode === 'COUNTDOWN' && timerTime === 0 && timerActive) {
+      saveTimerSession(customMinutes * 60);
+      alert('Focus session complete!');
+    }
+  }, [timerTime, timerActive, timerMode]);
 
   const fmtTimer = (s) => {
     const h = Math.floor(s / 3600);
@@ -288,8 +247,8 @@ export default function StudyDashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {[
               { label: 'Today', sec: todaySec, goal: goals.daily, color: 'bg-blue-500' },
-              { label: 'Weekly', sec: weeklySec, goal: goals.weekly, color: 'bg-emerald-500' },
-              { label: 'Monthly', sec: monthlySec, goal: goals.monthly, color: 'bg-indigo-500' },
+              { label: 'Weekly', sec: weeklySec, goal: weeklySec >= (goals.weekly * 3600) ? 'bg-emerald-500' : 'bg-blue-500' }, // Simple logic
+              { label: 'Monthly', sec: monthlySec, goal: monthlySec >= (goals.monthly * 3600) ? 'bg-indigo-500' : 'bg-blue-500' },
             ].map(({ label, sec, goal, color }) => (
               <div key={label} className="bg-white p-5 rounded-2xl border border-slate-200/50 space-y-2">
                 <div className="flex items-center justify-between"><span className="text-[9px] font-black uppercase tracking-widest text-slate-500">{label}</span><span className="text-[9px] font-bold text-slate-500">{getProgress(sec, goal)}%</span></div>
@@ -352,7 +311,7 @@ export default function StudyDashboard() {
 
       {showGoalModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
+          <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-sm shadow-2xl">
             <p className="text-xl font-black uppercase mb-6 text-center">Set Goals</p>
             <div className="space-y-4">
               {['daily', 'weekly', 'monthly'].map(t => (
@@ -372,7 +331,7 @@ export default function StudyDashboard() {
 
       {showSubjectModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4">
-          <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-w-sm shadow-2xl">
+          <div className="bg-white border border-slate-200 p-8 rounded-[2.5rem] w-full max-sm shadow-2xl">
             <p className="text-xl font-black uppercase mb-1">New Subject</p>
             <p className="text-[10px] text-slate-500 mb-8 uppercase tracking-widest">{subjects.length}/10 subjects used</p>
             <input maxLength={20} placeholder="MATHEMATICS..." className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-slate-900 font-black uppercase mb-6 outline-none focus:border-blue-500" value={newSubject} onChange={e => setNewSubject(e.target.value)} onKeyDown={e => e.key === 'Enter' && addSubject()} autoFocus />

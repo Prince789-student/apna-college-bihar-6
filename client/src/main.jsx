@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
+import { StudyProvider } from './context/StudyContext'
 
 console.log("[DEBUG] Imports done. Ready to mount...");
 
@@ -18,9 +19,11 @@ if (!rootEl) {
     root.render(
       <React.StrictMode>
         <AuthProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+          <StudyProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </StudyProvider>
         </AuthProvider>
       </React.StrictMode>
     );
