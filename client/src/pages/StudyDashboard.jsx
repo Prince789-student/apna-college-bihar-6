@@ -56,6 +56,7 @@ export default function StudyDashboard() {
   const [goals, setGoals] = useState({ daily: 2, weekly: 14, monthly: 60 });
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [newTask, setNewTask] = useState('');
+  const [newTaskSubject, setNewTaskSubject] = useState('OTHERS');
 
   useEffect(() => {
     if (!user) return;
@@ -143,10 +144,11 @@ export default function StudyDashboard() {
     if (!newTask.trim()) return;
     await addDoc(collection(db, 'Tasks'), { 
       userId: user.uid, text: newTask.trim(), 
-      subject: 'OTHERS', done: false, 
+      subject: newTaskSubject, done: false, 
       date: todayStr, createdAt: new Date().toISOString() 
     });
     setNewTask('');
+    setNewTaskSubject('OTHERS');
   };
 
   if (loading) return <div className="flex justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
@@ -300,9 +302,16 @@ export default function StudyDashboard() {
           <div className="space-y-6 animate-in fade-in duration-500">
             <div className="bg-white p-10 rounded-[3rem] border border-slate-200/60 shadow-sm space-y-10">
               <div className="flex flex-col md:flex-row gap-4 items-end bg-slate-50 p-8 rounded-[2.5rem]">
-                <div className="flex-1 w-full space-y-2">
+                <div className="flex-[2] w-full space-y-2">
                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Mission Objective</p>
                    <input value={newTask} onChange={e => setNewTask(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Define task goal..." className="w-full bg-white rounded-2xl px-6 py-5 text-sm font-bold outline-none shadow-sm" />
+                </div>
+                <div className="flex-1 w-full space-y-2">
+                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Mission Subject</p>
+                   <select value={newTaskSubject} onChange={e => setNewTaskSubject(e.target.value)} className="w-full bg-white rounded-2xl px-6 py-5 text-xs font-black uppercase tracking-widest outline-none shadow-sm">
+                     <option value="OTHERS">SELECT SUBJECT</option>
+                     {subjects.map(s => <option key={s.id} value={s.subjectName}>{s.subjectName}</option>)}
+                   </select>
                 </div>
                 <button onClick={addTask} className="w-full md:w-24 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center hover:bg-black transition-all shadow-2xl active:scale-95"><Plus size={28} /></button>
               </div>
@@ -310,7 +319,12 @@ export default function StudyDashboard() {
                 {tasks.map(task => (
                   <div key={task.id} className={`flex items-center gap-5 p-6 rounded-[2rem] border-2 transition-all ${task.done ? 'bg-emerald-50/50 border-emerald-100' : 'bg-white border-slate-50 hover:border-slate-200 shadow-lg'}`}>
                     <button onClick={async () => await updateDoc(doc(db, 'Tasks', task.id), { done: !task.done })} className={`w-7 h-7 rounded-xl flex items-center justify-center transition-all ${task.done ? 'bg-emerald-500 text-white' : 'border-2 border-slate-200 text-transparent'}`}><CheckCircle2 size={18} /></button>
-                    <div className="flex-1"><p className={`text-sm font-[1000] tracking-tight ${task.done ? 'text-slate-400 line-through' : 'text-slate-900'}`}>{task.text}</p></div>
+                    <div className="flex-1 space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest ${task.done ? 'bg-slate-200 text-slate-400' : 'bg-blue-100 text-blue-600'}`}>{task.subject || 'OTHERS'}</span>
+                      </div>
+                      <p className={`text-sm font-[1000] tracking-tight ${task.done ? 'text-slate-400 line-through' : 'text-slate-900'}`}>{task.text}</p>
+                    </div>
                     <button onClick={async () => await deleteDoc(doc(db, 'Tasks', task.id))} className="text-slate-200 hover:text-red-500 p-2"><Trash2 size={18} /></button>
                   </div>
                 ))}
