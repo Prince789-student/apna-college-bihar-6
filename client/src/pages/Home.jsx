@@ -79,7 +79,7 @@ export default function Home() {
               </Link>
            </div>
 
-           <div className="pt-16 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 items-center opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
+           <div className="pt-16 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 items-center opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
               <div className="flex flex-col items-center">
                  <span className="text-3xl font-[1000] text-slate-900">{stats.users}</span>
                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Scholars</span>
@@ -91,10 +91,6 @@ export default function Home() {
               <div className="flex flex-col items-center">
                  <span className="text-3xl font-[1000] text-slate-900">{stats.groups}</span>
                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Active Hubs</span>
-              </div>
-              <div className="flex flex-col items-center">
-                 <span className="text-3xl font-[1000] text-slate-900">FREE</span>
-                 <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Forever</span>
               </div>
            </div>
         </div>
