@@ -12,7 +12,6 @@ export function useStudy() {
 export function StudyProvider({ children }) {
   const { user } = useAuth();
   
-  // Cross-tab synchronization using LocalStorage
   const getInitialState = (key, defaultVal) => {
     try {
       const saved = localStorage.getItem(key);
@@ -24,11 +23,11 @@ export function StudyProvider({ children }) {
   const [timerTime, setTimerTime] = useState(1500);
   const [timerSubject, setTimerSubject] = useState('OTHERS');
   const [customMinutes, setCustomMinutes] = useState(25);
+  const [customSeconds, setCustomSeconds] = useState(0);
   const [timerMode, setTimerMode] = useState('COUNTDOWN');
   const [focusBroken, _setFocusBroken] = useState(() => getInitialState('focusBroken', false));
   const timerRef = useRef(null);
 
-  // Wrapper setters to sync with localStorage
   const setTimerActive = (val) => {
     _setTimerActive(val);
     localStorage.setItem('timerActive', JSON.stringify(val));
@@ -39,7 +38,6 @@ export function StudyProvider({ children }) {
     localStorage.setItem('focusBroken', JSON.stringify(val));
   };
 
-  // Listen for storage changes from other tabs
   useEffect(() => {
     const handleStorageChange = (e) => {
       if (e.key === 'timerActive') _setTimerActive(JSON.parse(e.newValue));
@@ -49,17 +47,20 @@ export function StudyProvider({ children }) {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // Reset timer logic
+  // Reset timer logic: Supports custom minutes AND seconds
   useEffect(() => {
     if (!timerActive) {
-      if (timerMode === 'COUNTDOWN') setTimerTime(customMinutes * 60);
-      else setTimerTime(0);
+      if (timerMode === 'COUNTDOWN') {
+        setTimerTime(customMinutes * 60 + customSeconds);
+      } else {
+        setTimerTime(0);
+      }
     }
-  }, [timerMode, customMinutes, timerActive]);
+  }, [timerMode, customMinutes, customSeconds, timerActive]);
 
   const saveGlobalSession = async (manualTime = null) => {
     if (!user) return;
-    const timeToSave = manualTime || (timerMode === 'STOPWATCH' ? timerTime : (customMinutes * 60 - timerTime));
+    const timeToSave = manualTime || (timerMode === 'STOPWATCH' ? timerTime : (customMinutes * 60 + customSeconds - timerTime));
     if (timeToSave < 5) { setTimerActive(false); return; }
 
     try {
@@ -76,19 +77,21 @@ export function StudyProvider({ children }) {
       const uSnap = await getDoc(userRef);
       if (uSnap.exists()) {
         const userData = uSnap.data();
-        await updateDoc(userRef, { totalStudyTime: (userData.totalStudyTime || 0) + timeToSave, lastStudyDate: todayStr, isStudying: false });
+        await updateDoc(userRef, { 
+          totalStudyTime: (userData.totalStudyTime || 0) + timeToSave, 
+          lastStudyDate: todayStr, 
+          isStudying: false 
+        });
       }
       setTimerActive(false);
     } catch (e) { console.error("Global Save Error:", e); }
   };
 
-  // Sync isStudying status
   useEffect(() => {
     if (!user) return;
     updateDoc(doc(db, 'users', user.uid), { isStudying: timerActive }).catch(() => {});
   }, [timerActive, user]);
 
-  // Anti-Distraction: Detect tab switching
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'hidden' && timerActive) {
@@ -100,7 +103,6 @@ export function StudyProvider({ children }) {
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, [timerActive]);
 
-  // Global Timer Tick
   useEffect(() => {
     if (timerActive) {
       timerRef.current = setInterval(() => {
@@ -108,7 +110,7 @@ export function StudyProvider({ children }) {
           if (timerMode === 'COUNTDOWN') {
             if (t <= 1) {
               clearInterval(timerRef.current);
-              saveGlobalSession(customMinutes * 60);
+              saveGlobalSession(customMinutes * 60 + customSeconds);
               return 0;
             }
             return t - 1;
@@ -121,7 +123,7 @@ export function StudyProvider({ children }) {
       clearInterval(timerRef.current);
     }
     return () => clearInterval(timerRef.current);
-  }, [timerActive, timerMode, user, customMinutes]);
+  }, [timerActive, timerMode, user, customMinutes, customSeconds]);
 
   const value = {
     timerActive,
@@ -132,6 +134,8 @@ export function StudyProvider({ children }) {
     setTimerSubject,
     customMinutes,
     setCustomMinutes,
+    customSeconds,
+    setCustomSeconds,
     timerMode,
     setTimerMode,
     saveGlobalSession,

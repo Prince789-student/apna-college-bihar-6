@@ -35,13 +35,14 @@ export default function StudyDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
   const [tab, setTab] = useState(location.state?.tab || 'timer');
-  const todayStr = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+  const todayStr = new Date().toLocaleDateString('en-CA');
 
   const {
     timerActive, setTimerActive,
     timerTime, setTimerTime,
     timerSubject, setTimerSubject,
     customMinutes, setCustomMinutes,
+    customSeconds, setCustomSeconds,
     timerMode, setTimerMode,
     saveGlobalSession
   } = useStudy();
@@ -86,16 +87,13 @@ export default function StudyDashboard() {
     return () => { unsubSess(); unsubTask(); };
   }, [user, todayStr]);
 
-  // Optimized Calculations
   const stats = useMemo(() => {
     const today = sessions.filter(s => s.date === todayStr).reduce((a, s) => a + (Number(s.duration) || 0), 0);
-    
     const last7 = Array.from({ length: 7 }, (_, i) => {
       const d = new Date(); d.setDate(d.getDate() - i);
       return d.toLocaleDateString('en-CA');
     });
     const weekly = sessions.filter(s => last7.includes(s.date)).reduce((a, s) => a + (Number(s.duration) || 0), 0);
-    
     const curM = new Date().getMonth(), curY = new Date().getFullYear();
     const monthly = sessions.filter(s => {
       const d = new Date(s.date);
@@ -122,12 +120,22 @@ export default function StudyDashboard() {
 
   const getProgress = (sec, g) => (!g || g <= 0) ? 0 : Math.min(100, (sec / (g * 3600)) * 100).toFixed(0);
 
+  const addTask = async () => {
+    if (!newTask.trim()) return;
+    await addDoc(collection(db, 'Tasks'), { 
+      userId: user.uid, text: newTask.trim(), 
+      subject: 'OTHERS', done: false, 
+      date: todayStr, createdAt: new Date().toISOString() 
+    });
+    setNewTask('');
+  };
+
   if (loading) return <div className="flex justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
 
   return (
     <div className="max-w-5xl mx-auto space-y-6 pb-20 px-2 md:px-0">
       
-      {/* Header Stat Cards */}
+      {/* Top Header Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white p-6 rounded-[2rem] border border-slate-200/60 shadow-sm flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -147,7 +155,7 @@ export default function StudyDashboard() {
         </div>
       </div>
 
-      {/* Tab Switcher */}
+      {/* Navigation Tabs */}
       <div className="flex gap-2 bg-white/80 backdrop-blur-md p-2 rounded-[2.5rem] border border-slate-200 shadow-sm">
         {TABS.map(t => (
           <button key={t.id} onClick={() => setTab(t.id)}
@@ -157,7 +165,7 @@ export default function StudyDashboard() {
         ))}
       </div>
 
-      {/* Main Container */}
+      {/* Active Tab Content */}
       <div className="min-h-[500px]">
         {tab === 'timer' && (
           <div className="space-y-6 animate-in fade-in duration-500">
@@ -189,14 +197,24 @@ export default function StudyDashboard() {
                 {!timerActive ? (
                   <div className="space-y-8">
                     {timerMode === 'COUNTDOWN' && (
-                      <div className="bg-slate-50/80 p-8 rounded-[2rem] border border-slate-200/50 flex flex-col items-center gap-4">
-                        <div className="flex justify-between w-full"><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Focus Target</p><p className="text-xl font-black text-slate-900">{customMinutes} Min</p></div>
-                        <input type="range" min="5" max="120" step="5" value={customMinutes} onChange={e => setCustomMinutes(parseInt(e.target.value))} className="w-full accent-blue-600" />
+                      <div className="bg-slate-50/80 p-8 rounded-[2rem] border border-slate-200/50">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 text-center">Set Focus Duration</p>
+                        <div className="flex items-center justify-center gap-6">
+                           <div className="flex flex-col items-center">
+                              <input type="number" min="0" max="599" value={customMinutes} onChange={e => setCustomMinutes(Math.max(0, parseInt(e.target.value) || 0))} className="w-24 bg-white border-2 border-slate-200 rounded-2xl p-4 text-center font-black text-3xl outline-none focus:border-blue-500" />
+                              <span className="text-[9px] font-black text-slate-400 uppercase mt-2">Min</span>
+                           </div>
+                           <span className="text-3xl font-black text-slate-300">:</span>
+                           <div className="flex flex-col items-center">
+                              <input type="number" min="0" max="59" value={customSeconds} onChange={e => setCustomSeconds(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))} className="w-24 bg-white border-2 border-slate-200 rounded-2xl p-4 text-center font-black text-3xl outline-none focus:border-blue-500" />
+                              <span className="text-[9px] font-black text-slate-400 uppercase mt-2">Sec</span>
+                           </div>
+                        </div>
                       </div>
                     )}
                     <div className="text-center space-y-4">
                       <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest flex items-center justify-center gap-3"><Shield size={14} /> Focus Shield Active</p>
-                      <button onClick={() => setTimerActive(true)} className="w-full py-7 bg-blue-600 hover:bg-blue-500 text-white rounded-[2.5rem] font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">Start Focus Session <ArrowRight size={22} /></button>
+                      <button onClick={() => setTimerActive(true)} className="w-full py-7 bg-blue-600 hover:bg-blue-500 text-white rounded-[2.5rem] font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">Start Focus <ArrowRight size={22} /></button>
                     </div>
                   </div>
                 ) : (
@@ -212,7 +230,6 @@ export default function StudyDashboard() {
 
         {tab === 'overview' && (
           <div className="space-y-8 animate-in fade-in duration-500">
-            {/* Progress Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
                 { label: 'Today Progress', sec: stats.today, goal: goals.daily, color: 'from-blue-600 to-indigo-600' },
@@ -227,7 +244,6 @@ export default function StudyDashboard() {
               ))}
             </div>
 
-            {/* Visual Analytics */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="bg-white p-10 rounded-[3rem] border border-slate-200/60 shadow-sm space-y-10">
                 <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 flex items-center gap-3"><Calendar size={20} className="text-blue-500" /> Operational History</h3>
@@ -252,7 +268,7 @@ export default function StudyDashboard() {
                   ) : stats.subjectBreakdown.map(sub => (
                     <div key={sub.name} className="space-y-2">
                       <div className="flex justify-between items-center"><span className="text-[10px] font-black uppercase tracking-widest text-slate-700">{sub.name}</span><span className="text-[10px] font-black text-slate-400">{formatDuration(sub.sec)}</span></div>
-                      <div className="w-full h-2 bg-slate-50 rounded-full overflow-hidden"><div className="h-full bg-slate-900 rounded-full" style={{ width: `${(sub.sec / stats.today) * 100}%` }}></div></div>
+                      <div className="w-full h-2 bg-slate-50 rounded-full overflow-hidden"><div className="h-full bg-slate-900 rounded-full transition-all duration-1000" style={{ width: `${(sub.sec / (stats.today || 1)) * 100}%` }}></div></div>
                     </div>
                   ))}
                 </div>
@@ -288,7 +304,7 @@ export default function StudyDashboard() {
       {/* Goal Modal */}
       {showGoalModal && (
         <div className="fixed inset-0 z-[500] flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-md">
-          <div className="bg-white rounded-[4rem] p-12 w-full max-w-sm shadow-2xl space-y-10 animate-in zoom-in-95">
+          <div className="bg-white rounded-[4rem] p-12 w-full max-sm shadow-2xl space-y-10 animate-in zoom-in-95">
              <div className="text-center space-y-3"><div className="w-16 h-16 bg-blue-600/10 text-blue-600 rounded-[1.5rem] flex items-center justify-center mx-auto"><Settings size={32} /></div><h3 className="text-3xl font-[1000] text-slate-900 uppercase tracking-tighter">Strategic Goals</h3></div>
              <div className="space-y-6">
                 {['daily', 'weekly', 'monthly'].map(t => (
@@ -298,7 +314,7 @@ export default function StudyDashboard() {
                   </div>
                 ))}
              </div>
-             <button onClick={saveGoals} className="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl">Update Strategy</button>
+             <button onClick={() => { updateDoc(doc(db, 'users', user.uid), { dailyGoal: Number(goals.daily), weeklyGoal: Number(goals.weekly), monthlyGoal: Number(goals.monthly) }); setShowGoalModal(false); }} className="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl">Update Strategy</button>
           </div>
         </div>
       )}
