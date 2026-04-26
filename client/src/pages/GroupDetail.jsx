@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
-import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2, Video, Maximize2, Minimize2, ExternalLink, Settings2, Link2, Lock, Monitor, BellRing } from 'lucide-react';
+import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2, Video, Maximize2, Minimize2, ExternalLink, Settings2, Link2, Lock, Monitor, BellRing, X, Activity, MoreVertical, BarChart2 } from 'lucide-react';
 import { collection, query, where, onSnapshot, doc, updateDoc, arrayRemove, deleteDoc } from 'firebase/firestore';
 
 export default function GroupDetail() {
@@ -16,6 +16,7 @@ export default function GroupDetail() {
   const [isMeetingExpanded, setIsMeetingExpanded] = useState(false);
   const [isSettingLink, setIsSettingLink] = useState(false);
   const [newLink, setNewLink] = useState('');
+  const [selectedMember, setSelectedMember] = useState(null);
 
   useEffect(() => {
     if (!groupId || !user) return;
@@ -264,7 +265,7 @@ export default function GroupDetail() {
                   const studyTime = formatHHMMSS(member.todayStudyTime);
                   
                   return (
-                    <div key={member.id} className={`relative flex flex-col items-center justify-center p-6 md:p-8 rounded-[2rem] border-2 transition-all cursor-pointer group hover:scale-105 ${isStudying ? 'bg-orange-50 border-orange-200 hover:border-orange-400 shadow-xl shadow-orange-500/10' : 'bg-white border-slate-200/80 hover:border-slate-300'}`}>
+                    <div key={member.id} onClick={() => setSelectedMember(member)} className={`relative flex flex-col items-center justify-center p-6 md:p-8 rounded-[2rem] border-2 transition-all cursor-pointer group hover:scale-105 ${isStudying ? 'bg-orange-50 border-orange-200 hover:border-orange-400 shadow-xl shadow-orange-500/10' : 'bg-white border-slate-200/80 hover:border-slate-300'}`}>
                        
                        <div className={`absolute top-4 left-4 text-[10px] font-black italic tracking-widest ${index < 3 ? 'text-amber-500' : 'text-slate-400'}`}>
                           #{index + 1}
@@ -378,6 +379,74 @@ export default function GroupDetail() {
            </div>
         </div>
       </div>
+
+      {/* YPT Style Bottom Sheet Modal */}
+      {selectedMember && (
+        <div className="fixed inset-0 z-[300] flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm transition-all" onClick={() => setSelectedMember(null)}>
+          <div 
+            className="w-full md:w-[400px] bg-white rounded-t-[3rem] md:rounded-[3rem] p-8 shadow-2xl relative animate-in slide-in-from-bottom-full md:slide-in-from-bottom-10"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-4">
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${selectedMember.isStudying ? 'bg-orange-500/10 text-orange-500' : 'bg-slate-100 text-slate-400'}`}>
+                  <Monitor size={28} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-[1000] text-slate-900 tracking-tighter uppercase">{selectedMember.name}</h3>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                    {(selectedMember.id === group.adminId || selectedMember.id === group.members?.[0]) ? 'Architect' : 'Verified Scholar'}
+                  </p>
+                </div>
+              </div>
+              <button onClick={() => setSelectedMember(null)} className="p-2 bg-slate-100 text-slate-400 hover:text-slate-900 hover:bg-slate-200 rounded-xl transition-all">
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Stats Box */}
+            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 mb-8 space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Today's Focus</span>
+                  <span className="text-3xl font-[1000] text-slate-900 tracking-tighter">
+                    {formatHHMMSS(selectedMember.todayStudyTime)}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Status</span>
+                  <span className={`text-sm font-black uppercase tracking-widest ${selectedMember.isStudying ? 'text-orange-500' : 'text-slate-400'}`}>
+                    {selectedMember.isStudying ? 'Studying' : 'Resting'}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4 border-t border-slate-200 pt-6">
+                 <div>
+                   <span className="block text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Start Time</span>
+                   <span className="text-xs font-black text-slate-700">--:-- AM</span>
+                 </div>
+                 <div>
+                   <span className="block text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Max Focus</span>
+                   <span className="text-xs font-black text-slate-700">{formatHHMMSS(selectedMember.todayStudyTime)}</span>
+                 </div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex gap-4">
+              <button onClick={() => { setSelectedMember(null); alert('Nudge sent! (Phase 3 backend sync pending)'); }} className="flex-1 flex items-center justify-center gap-2 py-4 bg-orange-50 text-orange-600 hover:bg-orange-500 hover:text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all">
+                <BellRing size={16} /> Nudge
+              </button>
+              <button onClick={() => { setSelectedMember(null); alert('Full Insights Dashboard coming in Phase 3!'); }} className="flex-1 flex items-center justify-center gap-2 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/20 active:scale-95">
+                <BarChart2 size={16} /> Insights
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
