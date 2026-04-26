@@ -79,12 +79,12 @@ export default function GroupDetail() {
   };
 
   const MemberCard = ({ member, index }) => {
-    const { timerActive, timerTime, timerMode, customMinutes } = useStudy();
+    const { timerActive, timerTime, timerMode, customMinutes, customSeconds } = useStudy();
     const isMe = member.id === user.uid;
     const isStudying = member.isStudying;
     let displayTimeSec = member.todayStudyTime || 0;
     if (isMe && timerActive) {
-      const elapsed = timerMode === 'COUNTDOWN' ? (customMinutes * 60 - timerTime) : timerTime;
+      const elapsed = timerMode === 'COUNTDOWN' ? (customMinutes * 60 + customSeconds - timerTime) : timerTime;
       displayTimeSec += elapsed;
     }
     const studyTimeStr = formatHHMMSS(displayTimeSec);
