@@ -100,6 +100,72 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Platform Initiative (Detailed Info) ── */}
+      <section className="py-20 px-6 md:px-16 container mx-auto relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+           <div className="space-y-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600/10 border border-indigo-500/20 rounded-full text-indigo-400">
+                 <Shield size={14} fill="currentColor"/>
+                 <span className="text-[10px] font-black uppercase tracking-widest">Our Official Mission</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-[1000] tracking-tighter uppercase text-slate-900 leading-[0.9]">
+                 Empowering Bihar's <br/> <span className="text-blue-500">Next Generation</span> <br/> of Engineers.
+              </h2>
+              <div className="space-y-6 text-slate-600 text-sm leading-relaxed font-medium">
+                 <p>
+                    <strong>Apna College Bihar (ACB)</strong> Bihar ka ekmatra dedicated academic portal hai jo vishesh roop se <strong>Bihar Engineering University (BEU)</strong> ke students aur engineering aspirants ke liye banaya gaya hai. Hamara uddeshya har student ko sahi resources aur guidance dena hai.
+                 </p>
+                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm">
+                       <h4 className="text-xs font-black text-slate-900 uppercase mb-2">UGEAC Support</h4>
+                       <p className="text-[11px]">JEE Mains ke baad Bihar ke colleges mein admission ke liye sabse accurate predictor aur cutoff data.</p>
+                    </div>
+                    <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm">
+                       <h4 className="text-xs font-black text-slate-900 uppercase mb-2">Academic Excellence</h4>
+                       <p className="text-[11px]">Free Handwritten Notes, PYQs aur BEU Semester results tracking ek hi platform par.</p>
+                    </div>
+                 </div>
+                 <p className="text-xs italic text-slate-500">
+                    "Hamara manna hai ki resource ki kami kisi bhi student ke sapno ke beech nahi aani chahiye. Isiliye Apna College Bihar hamesha free rahega."
+                 </p>
+              </div>
+           </div>
+           <div className="relative group">
+              <div className="absolute inset-0 bg-blue-600/20 rounded-[4rem] blur-3xl group-hover:scale-110 transition-transform duration-700 opacity-50"></div>
+              <div className="relative bg-white border border-slate-200 p-8 md:p-12 rounded-[4rem] shadow-2xl">
+                 <div className="space-y-8">
+                    <div className="flex items-center gap-6">
+                       <div className="p-4 bg-blue-600/10 text-blue-500 rounded-3xl"><GraduationCap size={32}/></div>
+                       <div>
+                          <p className="text-2xl font-[1000] text-slate-900 tracking-tighter uppercase">Official Hub</p>
+                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Authorized by Student Community</p>
+                       </div>
+                    </div>
+                    <div className="space-y-4">
+                       {[
+                         "Verified BEU Semester Notes (Civil, CS, ME, EE, ECE)",
+                         "Previous 5 Years Question Papers (PYQs)",
+                         "Real-time UGEAC Counselling Updates",
+                         "Student Networking & Collaborative Learning",
+                         "Advanced GPA/CGPA Analysis Tools"
+                       ].map((item, idx) => (
+                         <div key={idx} className="flex items-center gap-3">
+                            <CheckCircle size={16} className="text-emerald-500 shrink-0" />
+                            <span className="text-[11px] font-bold text-slate-700 uppercase tracking-tight">{item}</span>
+                         </div>
+                       ))}
+                    </div>
+                    <div className="pt-4">
+                       <Link to="/about" className="text-xs font-black text-blue-600 hover:text-blue-500 uppercase tracking-widest flex items-center gap-2 group/link">
+                          Read Full Documentation <ArrowRight size={14} className="group-hover/link:translate-x-1 transition-transform" />
+                       </Link>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+      </section>
+
       {/* ── Feature Grid ── */}
       <section id="features" className="py-20 md:py-32 px-6 md:px-16 container mx-auto">
         <div className="flex flex-col md:flex-row items-end justify-between gap-6 mb-16">

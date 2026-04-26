@@ -31,6 +31,8 @@ export default function AdminPanel() {
   // ── UPLOAD STATE ──
   const [docForm, setDocForm] = useState({ title: '', subject: '', category: 'NOTES', file: null });
   const [newGroup, setNewGroup] = useState({ name: '', description: '', code: '' });
+  const [currentFolder, setCurrentFolder] = useState(null);
+  const [navHistory, setNavHistory] = useState([]);
 
   // Access Control
   const isSuper = user?.role === ROLES.SUPER_ADMIN;
@@ -131,6 +133,22 @@ export default function AdminPanel() {
     }
   };
 
+  const navigateTo = (folder) => {
+    if (!folder) {
+      setCurrentFolder(null);
+      setNavHistory([]);
+    } else {
+      setNavHistory(prev => [...prev, currentFolder].filter(Boolean));
+      setCurrentFolder(folder);
+    }
+  };
+
+  const goBack = () => {
+    const prev = navHistory.pop();
+    setCurrentFolder(prev || null);
+    setNavHistory([...navHistory]);
+  };
+
   const postAnn = async (e) => {
     e.preventDefault();
     if(!newAnn.content) return;
@@ -180,7 +198,7 @@ export default function AdminPanel() {
         category,
         fileUrl: category === 'FOLDER' ? '' : finalUrl,
         type: category === 'FOLDER' ? 'folder' : 'file',
-        parentId: 'root', // Admin uploads to root by default, can be moved later if needed
+        parentId: currentFolder?.id || 'root',
         verified: true,
         createdAt: serverTimestamp()
       });
@@ -417,7 +435,7 @@ export default function AdminPanel() {
                     </label>
                   </div>
 
-                  <select onChange={e=>setDocForm({...docForm, category:e.target.value})} className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none">
+                  <select value={docForm.category} onChange={e=>setDocForm({...docForm, category:e.target.value})} className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none">
                     <option value="NOTES">Notes</option>
                     <option value="PYQ">PYQ</option>
                     <option value="FOLDER">FOLDER</option>
@@ -431,6 +449,67 @@ export default function AdminPanel() {
            </div>
 
            <div className="lg:col-span-8 space-y-8">
+              {/* Repo Explorer */}
+              <div className="bg-white p-8 rounded-[3.5rem] border border-slate-200/80 shadow-2xl">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+                  <div>
+                    <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest">Repository Explorer</h2>
+                    {/* Breadcrumbs */}
+                    <div className="flex items-center gap-2 mt-4 overflow-x-auto no-scrollbar">
+                      <button onClick={() => navigateTo(null)} className={`text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${!currentFolder ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:bg-slate-100'}`}>Root</button>
+                      {navHistory.map((h, i) => (
+                        <React.Fragment key={h.id}>
+                          <span className="text-slate-300">/</span>
+                          <button onClick={() => {
+                            const newHist = navHistory.slice(0, i);
+                            setNavHistory(newHist);
+                            setCurrentFolder(h);
+                          }} className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-indigo-600 whitespace-nowrap">{h.title}</button>
+                        </React.Fragment>
+                      ))}
+                      {currentFolder && (
+                        <>
+                          <span className="text-slate-300">/</span>
+                          <span className="text-[9px] font-black uppercase tracking-widest text-indigo-600 whitespace-nowrap">{currentFolder.title}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  {currentFolder && (
+                    <button onClick={goBack} className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">
+                      Back
+                    </button>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {docs.filter(d => d.verified && (currentFolder ? d.parentId === currentFolder.id : (!d.parentId || d.parentId === 'root'))).map(d => (
+                    <div key={d.id} className={`p-5 rounded-3xl border border-slate-200/50 hover:border-indigo-500/20 transition-all flex justify-between items-center group ${d.type==='folder'?'bg-amber-50/50':'bg-slate-100/40'}`}>
+                        <div className="flex items-center gap-4 min-w-0 pr-2 cursor-pointer flex-1" onClick={() => d.type === 'folder' && navigateTo(d)}>
+                           <div className={`p-2 rounded-xl ${d.type==='folder'?'bg-amber-600/10 text-amber-600':'bg-indigo-600/10 text-indigo-600'}`}>
+                              {d.type==='folder' ? <BookOpen size={16}/> : <FileText size={16}/>}
+                           </div>
+                           <div className="min-w-0">
+                              <p className="text-[12px] font-black text-slate-900 uppercase truncate">{d.title}</p>
+                              <p className="text-[8px] font-bold text-slate-600 uppercase tracking-widest mt-1">{d.subject} · {d.category}</p>
+                           </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                           {d.type !== 'folder' && (
+                             <button onClick={() => window.open(d.fileUrl, '_blank')} className="p-2 bg-indigo-600/10 text-indigo-500 rounded-xl opacity-0 group-hover:opacity-100 transition-all"><Eye size={14}/></button>
+                           )}
+                           <button onClick={()=>deleteDocItem(d.id)} className="p-2 bg-red-600/10 text-red-500 rounded-xl opacity-0 group-hover:opacity-100 transition-all"><Trash2 size={14}/></button>
+                        </div>
+                    </div>
+                  ))}
+                  {docs.filter(d => d.verified && (currentFolder ? d.parentId === currentFolder.id : (!d.parentId || d.parentId === 'root'))).length === 0 && (
+                    <div className="col-span-full py-10 text-center">
+                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Empty Directory</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Approval Queue */}
               <div className="bg-slate-50/80 p-8 rounded-[3.5rem] border border-slate-300/30">
                 <div className="flex items-center gap-3 mb-8">
@@ -439,11 +518,11 @@ export default function AdminPanel() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {docs.filter(d => !d.verified).map(d => (
-                      <div key={d.id} className="bg-[#f8fafc] p-5 rounded-[2.2rem] border border-slate-200/50 group">
+                      <div key={d.id} className="bg-white p-5 rounded-[2.2rem] border border-slate-200/50 group shadow-sm">
                           <p className="text-[11px] font-black text-slate-900 uppercase truncate mb-1">{d.title}</p>
                           <p className="text-[8px] text-slate-500 font-bold uppercase mb-4">{d.subject} · {d.category}</p>
                           <div className="flex gap-2">
-                            <a href={d.fileUrl} target="_blank" rel="noreferrer" className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-200 text-white rounded-xl text-[8px] font-black uppercase text-center">Preview</a>
+                            <a href={d.fileUrl} target="_blank" rel="noreferrer" className="flex-1 py-2.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-[8px] font-black uppercase text-center">Preview</a>
                             <button onClick={()=>approveDoc(d.id)} className="px-3 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl"><UserCheck size={12}/></button>
                             <button onClick={()=>deleteDocItem(d.id)} className="px-3 py-2.5 bg-red-600/10 text-red-400 hover:bg-red-600 rounded-xl"><Trash2 size={12}/></button>
                           </div>
@@ -451,25 +530,11 @@ export default function AdminPanel() {
                     ))}
                 </div>
               </div>
-
-              {/* Repo Explorer */}
-              <div className="bg-white p-8 rounded-[3.5rem] border border-slate-200/80">
-                <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest mb-8">Active Repository ({docs.filter(d=>d.verified).length})</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {docs.filter(d=>d.verified).map(d => (
-                    <div key={d.id} className="bg-slate-100/40 p-5 rounded-3xl border border-slate-200/50 hover:border-indigo-500/20 transition-all flex justify-between items-center group">
-                        <div className="min-w-0 pr-2">
-                          <p className="text-[12px] font-black text-slate-900 uppercase truncate">{d.title}</p>
-                          <p className="text-[8px] font-bold text-slate-600 uppercase tracking-widest mt-1">{d.subject} · {d.category}</p>
-                        </div>
-                        <button onClick={()=>deleteDocItem(d.id)} className="p-2.5 bg-red-600/10 text-red-500 rounded-xl opacity-0 group-hover:opacity-100 transition-all"><Trash2 size={14}/></button>
-                    </div>
-                  ))}
-                </div>
-              </div>
            </div>
         </div>
       )}
+
+      {/* ── BROADCASTS TAB ── */}
       {tab==='broadcasts' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
            <div className="lg:col-span-4 bg-white p-10 rounded-[3.5rem] border border-slate-200/80">
@@ -552,7 +617,7 @@ export default function AdminPanel() {
                    <div className="mt-6 p-4 bg-slate-100/50 rounded-2xl border border-slate-200/50 flex justify-between items-center">
                       <div>
                          <p className="text-[9px] font-black text-slate-500 uppercase">Load Density</p>
-                         <p className="text-sm font-black text-slate-900">{g.memberCount}/150</p>
+                         <p className="text-sm font-black text-slate-900">{g.memberCount}/70</p>
                       </div>
                       <div className="text-right">
                          <p className="text-[9px] font-black text-slate-500 uppercase">Code</p>
