@@ -81,8 +81,9 @@ export default function PremiumAds({ type = 'BANNER' }) {
 
   // Render logic based on type
   if (type === 'SIDEBAR') {
+    const finalLink = current.link.startsWith('/') || current.link.startsWith('http') ? current.link : `https://${current.link}`;
     return (
-      <a href={current.link} target="_blank" rel="noopener noreferrer" 
+      <a href={finalLink} target="_blank" rel="noopener noreferrer" 
          className={`block p-4 bg-gradient-to-br ${current.col || 'from-slate-800 to-slate-900'} border ${current.border || 'border-slate-300/50'} rounded-2xl group transition-all hover:scale-[1.02] relative overflow-hidden`}>
          <div className="flex items-center gap-3 mb-3">
             <div className="p-2 bg-slate-100 rounded-lg group-hover:scale-110 transition-transform">
@@ -100,8 +101,9 @@ export default function PremiumAds({ type = 'BANNER' }) {
   }
 
   if (type === 'BANNER') {
+    const finalLink = current.link.startsWith('/') || current.link.startsWith('http') ? current.link : `https://${current.link}`;
     return (
-      <a href={current.link} target="_blank" rel="noopener noreferrer" 
+      <a href={finalLink} target="_blank" rel="noopener noreferrer" 
          className={`w-full bg-gradient-to-r ${current.col || 'from-[#0d121f] to-[#162035]'} border ${current.border || 'border-slate-200/80'} rounded-[2.5rem] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 group transition-all relative overflow-hidden hover:border-blue-500/20`}>
          
          {/* Visual Backdrop */}
@@ -129,7 +131,8 @@ export default function PremiumAds({ type = 'BANNER' }) {
   }
 
   return (
-    <a href={current.link} target="_blank" rel="noopener noreferrer" 
+    <a href={current.link.startsWith('/') || current.link.startsWith('http') ? current.link : `https://${current.link}`} 
+       target="_blank" rel="noopener noreferrer" 
        className={`p-4 bg-slate-100/30 border border-slate-200/80 rounded-xl flex items-center justify-between gap-4 group hover:border-slate-300 transition-all`}>
        <div className="flex items-center gap-4">
           <div className="p-3 bg-slate-800 border border-slate-300 rounded-xl group-hover:scale-110 transition-transform">
@@ -144,3 +147,4 @@ export default function PremiumAds({ type = 'BANNER' }) {
     </a>
   );
 }
+

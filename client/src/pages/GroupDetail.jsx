@@ -174,7 +174,7 @@ export default function GroupDetail() {
               {group.meetingLink ? (
                 <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start">
                   <a 
-                    href={group.meetingLink} 
+                    href={group.meetingLink.startsWith('http') ? group.meetingLink : `https://${group.meetingLink}`} 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="px-6 py-4 md:px-10 md:py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-2xl shadow-blue-600/30 active:scale-95 flex items-center gap-2 md:gap-3"
