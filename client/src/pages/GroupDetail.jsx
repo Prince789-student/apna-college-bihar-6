@@ -100,9 +100,6 @@ export default function GroupDetail() {
     } catch (e) { console.error(e); }
   };
 
-  // Auto-Link Logic: If no link set, use a persistent host-less Jitsi room
-  const activeMeetingLink = group?.meetingLink || `https://meet.jit.si/ACB_HUB_${group?.groupCode}`;
-
 
 
   if (loading) return <div className="flex items-center justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
@@ -176,24 +173,45 @@ export default function GroupDetail() {
               </div>
               
               <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start">
-                <a 
-                  href={activeMeetingLink.startsWith('http') ? activeMeetingLink : `https://${activeMeetingLink}`} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="px-6 py-4 md:px-10 md:py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-2xl shadow-blue-600/30 active:scale-95 flex items-center gap-2 md:gap-3"
-                >
-                  Enter Meeting <ExternalLink size={16} />
-                </a>
-                
-                <button 
-                  onClick={() => { setNewLink(group.meetingLink || ''); setIsSettingLink(true); }}
-                  className="p-5 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white rounded-2xl transition-all border border-white/10 flex items-center gap-2"
-                  title="Override with custom link (Google Meet etc.)"
-                >
-                  <Settings2 size={20} />
-                  <span className="text-[10px] font-black uppercase hidden md:inline">Custom Link</span>
-                </button>
+                {group.meetingLink ? (
+                  <>
+                    <a 
+                      href={group.meetingLink.startsWith('http') ? group.meetingLink : `https://${group.meetingLink}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="px-6 py-4 md:px-10 md:py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-2xl shadow-blue-600/30 active:scale-95 flex items-center gap-2 md:gap-3"
+                    >
+                      Enter Google Meet <ExternalLink size={16} />
+                    </a>
+                    <button 
+                      onClick={() => { setNewLink(group.meetingLink); setIsSettingLink(true); }}
+                      className="p-5 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white rounded-2xl transition-all border border-white/10 flex items-center gap-2"
+                    >
+                      <Settings2 size={20} />
+                      <span className="text-[10px] font-black uppercase hidden md:inline">Change Hub</span>
+                    </button>
+                  </>
+                ) : (
+                  <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                    <button 
+                      onClick={() => { 
+                        window.open('https://meet.google.com/new', '_blank');
+                        setIsSettingLink(true);
+                      }}
+                      className="px-8 py-5 bg-white text-slate-900 rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-xl active:scale-95 flex items-center justify-center gap-3"
+                    >
+                      <Video size={18} className="text-blue-600" /> Initialize Hub (New Meet)
+                    </button>
+                    <button 
+                      onClick={() => setIsSettingLink(true)}
+                      className="px-8 py-5 bg-white/5 hover:bg-white/10 text-white border border-white/20 rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3"
+                    >
+                      <Link2 size={18} /> Link Existing Meet
+                    </button>
+                  </div>
+                )}
               </div>
+
 
             </div>
 
