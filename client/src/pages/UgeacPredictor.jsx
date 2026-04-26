@@ -368,7 +368,7 @@ function UgeacPredictor() {
     autoTable(doc, {
       startY: currentY,
       head: [['#', 'Institute Name', 'Branch', 'Your Rank', '2024 CO', '2025 CO', 'Status']],
-      body: results.all.map((r, i) => [i+1, r.college.name, r.branch, `#${r.myCompRank} (${r.cat})`, r.cutoff24, r.cutoff25, r.chance]),
+      body: results.all.map((r, i) => [i+1, r.college.name, r.branch, `#${r.myCompRank} (${r.cat}${r.seatType === 'Female' ? ' F' : ''})`, r.cutoff24, r.cutoff25, r.chance]),
       theme: 'striped',
       headStyles: { fillColor: [79, 70, 229], fontSize: 8 },
       styles: { fontSize: 7 },
