@@ -32,11 +32,11 @@ app.use((req, res, next) => {
     next();
 });
 
-// 1. Database Connection
-mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/edu-platform', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log('✅ DB Connected')).catch(err => console.log('❌ DB Error: ', err.message));
+// 1. Database Connection (Disabled since using Firebase)
+// mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/edu-platform', {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true
+// }).then(() => console.log('✅ DB Connected')).catch(err => console.log('❌ DB Error: ', err.message));
 
 // 2. Static File Serving (Crucial for Render)
 // This looks for the "public" folder right next to server.js
@@ -62,7 +62,7 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Server on port ${PORT}`);
     
     // Keep-Alive Logic for Render Free Tier
