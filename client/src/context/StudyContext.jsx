@@ -97,14 +97,32 @@ export function StudyProvider({ children }) {
   }, [timerActive, user]);
 
   useEffect(() => {
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden' && timerActive) {
+    const handleViolation = () => {
+      if (timerActive) {
         setTimerActive(false);
         setFocusBroken(true);
       }
     };
+    
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') handleViolation();
+    };
+
+    const handleBlur = () => {
+      // Small timeout to allow switching between our own tabs
+      setTimeout(() => {
+        if (!document.hasFocus() && timerActive) {
+          handleViolation();
+        }
+      }, 100);
+    };
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('blur', handleBlur);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('blur', handleBlur);
+    };
   }, [timerActive]);
 
   useEffect(() => {

@@ -117,19 +117,7 @@ export default function DashboardLayout() {
         {/* Verification Modal */}
         {isPhoneModalOpen && <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-slate-50/80 backdrop-blur-xl"><div className="w-full max-w-md bg-white border border-slate-200 rounded-[3rem] p-10 text-center space-y-8 shadow-2xl relative overflow-hidden"><div className="inline-flex p-5 bg-blue-600/20 text-blue-500 rounded-3xl"><Shield size={32} /></div><h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Security Update</h2><form onSubmit={handlePhoneSubmit} className="space-y-6"><div className="flex gap-2"><div className="bg-slate-100 px-4 py-4 rounded-2xl text-xs font-black">+91</div><input type="tel" maxLength={10} value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} placeholder="9XXXXXXXXX" className="flex-1 bg-slate-100 rounded-2xl p-4 text-sm font-black outline-none" /></div><button type="submit" className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest transition-all">Secure Access</button></form></div></div>}
 
-        {/* Focus Shield Warning */}
-        {focusBroken && (
-          <div className="fixed inset-0 z-[600] flex items-center justify-center p-6 bg-slate-950/95 backdrop-blur-3xl animate-in fade-in duration-500">
-            <div className="w-full max-w-lg text-center space-y-8">
-              <div className="w-24 h-24 bg-red-600/20 text-red-500 rounded-[2rem] flex items-center justify-center mx-auto animate-bounce"><AlertTriangle size={48} /></div>
-              <div className="space-y-3">
-                <h2 className="text-4xl font-[1000] text-white tracking-tighter uppercase leading-none">Focus Violated</h2>
-                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest leading-relaxed">Detecting unauthorized activity (YouTube/WhatsApp). <br/>Concentration is mandatory for your academic protocol.</p>
-              </div>
-              <button onClick={() => setFocusBroken(false)} className="w-full py-6 bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-[1000] text-sm uppercase tracking-widest shadow-2xl transition-all">I Commit to Focus</button>
-            </div>
-          </div>
-        )}
+
 
         <FloatingTimer />
       </main>
