@@ -3,7 +3,8 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, Book, Calculator, Timer, 
   User, LogOut, Medal, X, Bell, Shield, 
-  ChevronLeft, Menu, Users, GraduationCap, Send, Youtube
+  ChevronLeft, Menu, Users, GraduationCap, Send, Youtube,
+  Maximize2, ArrowRight
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { db } from '../firebase';
@@ -29,30 +30,16 @@ export default function DashboardLayout() {
   const [isUpdating, setIsUpdating] = useState(false);
   const { timerActive } = useStudy();
 
-  // Safe Platform Detection
-
-  // Safe Platform Detection
-  const isAppMode = (() => {
-    try { return localStorage.getItem('isAppMode') === 'true'; }
-    catch { return false; }
-  })();
-
-  // Focus Lock Logic: Keep user in study environment if timer is active
-  useEffect(() => {
-    const isStudyPath = location.pathname.startsWith('/dashboard/study') || location.pathname.startsWith('/dashboard/groups');
-    if (timerActive && !isStudyPath) {
-      // Redirect back to study protocol if they try to leave while timer is running
-      navigate('/dashboard/study');
-    }
-  }, [location.pathname, timerActive, navigate]);
-
   // Neural Persistence Layer: Save deep state for session restoration
   useEffect(() => {
     setMobileMenuOpen(false);
+    const isAppMode = localStorage.getItem('isAppMode') === 'true';
     if (isAppMode && !location.pathname.includes('/login')) {
       localStorage.setItem('lastPath', location.pathname);
     }
-  }, [location.pathname, isAppMode]);
+  }, [location.pathname]);
+
+  const isAppMode = localStorage.getItem('isAppMode') === 'true';
 
   // Mandatory Phone Check
   useEffect(() => {
@@ -62,8 +49,6 @@ export default function DashboardLayout() {
       setPhoneModalOpen(false);
     }
   }, [user]);
-
-
 
   const handlePhoneSubmit = async (e) => {
     e.preventDefault();
@@ -95,17 +80,58 @@ export default function DashboardLayout() {
     catch (err) { console.error('Logout failed', err); }
   };
 
-  const TimerBadge = () => {
+  // ── Floating Timer Component ──
+  const FloatingTimer = () => {
     const { timerActive, timerTime } = useStudy();
-    if (!timerActive) return null;
+    const [isMinimized, setIsMinimized] = useState(false);
     
+    // Don't show on the main study page itself
+    if (!timerActive || location.pathname === '/dashboard/study') return null;
+
     const m = Math.floor((timerTime % 3600) / 60);
     const sec = timerTime % 60;
     const display = `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
 
     return (
+      <div className={`fixed bottom-24 right-6 md:bottom-10 md:right-10 z-[100] transition-all duration-500 transform ${isMinimized ? 'translate-x-[70%]' : ''}`}>
+        <div className="bg-slate-900 border border-slate-700 p-1.5 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.4)] flex items-center gap-4 group">
+          <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center animate-pulse shadow-[0_0_20px_rgba(37,99,235,0.5)]">
+            <Timer size={20} className="text-white" />
+          </div>
+          
+          <div className={`flex items-center gap-4 pr-6 ${isMinimized ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
+            <div>
+              <p className="text-[8px] font-black text-blue-400 uppercase tracking-widest leading-none mb-1">Active Session</p>
+              <p className="text-xl font-black text-white tabular-nums leading-none tracking-tighter">{display}</p>
+            </div>
+            
+            <button 
+              onClick={() => navigate('/dashboard/study')}
+              className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-white text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-2"
+            >
+              Resume <ArrowRight size={10} />
+            </button>
+          </div>
+
+          <button 
+            onClick={() => setIsMinimized(!isMinimized)}
+            className="p-2 text-slate-500 hover:text-white transition-colors"
+          >
+            {isMinimized ? <ChevronLeft size={16} /> : <X size={16} />}
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const TimerBadge = () => {
+    const { timerActive, timerTime } = useStudy();
+    if (!timerActive) return null;
+    const m = Math.floor((timerTime % 3600) / 60);
+    const s = timerTime % 60;
+    return (
       <div className="ml-auto flex items-center gap-2 bg-blue-600 text-white px-2 py-0.5 rounded-full animate-pulse shadow-[0_0_10px_rgba(37,99,235,0.5)]">
-        <span className="text-[8px] font-[1000] tracking-tighter tabular-nums">{display}</span>
+        <span className="text-[8px] font-[1000] tracking-tighter tabular-nums">{m.toString().padStart(2, '0')}:{s.toString().padStart(2, '0')}</span>
       </div>
     );
   };
@@ -147,13 +173,7 @@ export default function DashboardLayout() {
             </Link>
           );
         })}
-
-        {/* Sidebar Mini Ad */}
-        {(isSidebarOpen || isMobile) && (
-          <div className="pt-6 px-2">
-             <PremiumAds type="SIDEBAR" />
-          </div>
-        )}
+        {(isSidebarOpen || isMobile) && <div className="pt-6 px-2"><PremiumAds type="SIDEBAR" /></div>}
       </nav>
 
       <div className="p-6 md:p-8 border-t border-slate-200/50 mt-auto">
@@ -161,9 +181,7 @@ export default function DashboardLayout() {
            (isSidebarOpen || isMobile) ? (
              <div className="space-y-4">
                 <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-[2rem] border border-slate-300/30">
-                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center font-[1000] text-slate-900 shadow-lg shrink-0">
-                      {user?.name?.[0]?.toUpperCase()}
-                   </div>
+                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-700 flex items-center justify-center font-[1000] text-slate-900 shadow-lg shrink-0">{user?.name?.[0]?.toUpperCase()}</div>
                    <div className="flex-1 min-w-0 text-left">
                       <p className="text-[10px] font-black text-slate-900 uppercase tracking-tighter truncate">{user?.name || 'Scholar'}</p>
                       <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">{user?.role || 'Verified'}</p>
@@ -174,20 +192,11 @@ export default function DashboardLayout() {
                 </button>
              </div>
            ) : (
-             <button onClick={handleLogout} className="w-full flex items-center justify-center p-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-slate-900 rounded-[1.5rem] border border-red-500/20 transition-all">
-                <LogOut size={18} />
-             </button>
+             <button onClick={handleLogout} className="w-full flex items-center justify-center p-4 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-slate-900 rounded-[1.5rem] border border-red-500/20 transition-all"><LogOut size={18} /></button>
            )
          ) : (
            <div className="space-y-3">
-             <Link to="/login" className={`w-full flex items-center justify-center gap-3 p-4 bg-blue-600 hover:bg-blue-500 text-slate-900 rounded-[1.5rem] font-black text-[10px] md:text-[9px] uppercase tracking-widest transition-all shadow-lg shadow-blue-900/20 ${!isSidebarOpen && !isMobile ? 'px-0' : ''}`}>
-               <User size={16} /> {(isSidebarOpen || isMobile) && <span>Student Login</span>}
-             </Link>
-             {(isSidebarOpen || isMobile) && (
-               <Link to="/signup" className="w-full flex items-center justify-center gap-3 p-4 bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 rounded-[1.5rem] font-black text-[10px] md:text-[9px] uppercase tracking-widest transition-all">
-                 Join Community
-               </Link>
-             )}
+             <Link to="/login" className={`w-full flex items-center justify-center gap-3 p-4 bg-blue-600 hover:bg-blue-500 text-slate-900 rounded-[1.5rem] font-black text-[10px] md:text-[9px] uppercase tracking-widest transition-all shadow-lg shadow-blue-900/20`}><User size={16} /> {(isSidebarOpen || isMobile) && <span>Student Login</span>}</Link>
            </div>
          )}
       </div>
@@ -196,15 +205,12 @@ export default function DashboardLayout() {
 
   return (
     <div className="flex h-full bg-white overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30">
-      
-      {/* ── Desktop Sidebar ── */}
       {!isAppMode && (
         <aside className={`hidden md:flex flex-col bg-white border-r border-slate-200/80 transition-all duration-500 shadow-2xl relative z-40 ${isSidebarOpen ? 'w-64' : 'w-20'}`}>
           <SidebarContent />
         </aside>
       )}
 
-      {/* ── Mobile Drawer ── */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[100] md:hidden">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} />
@@ -214,10 +220,7 @@ export default function DashboardLayout() {
         </div>
       )}
 
-      {/* ── Main Display ── */}
       <main className="flex-1 flex flex-col min-h-0 h-full bg-white relative overflow-hidden">
-        
-        {/* Mobile Navbar Header */}
         {!isAppMode && (
           <div className="md:hidden flex items-center justify-between px-5 py-3 bg-white border-b border-slate-200/80 sticky top-0 z-30">
             <div className="flex items-center gap-2">
@@ -227,121 +230,61 @@ export default function DashboardLayout() {
                  <span className="text-[5px] text-slate-500 font-bold uppercase tracking-[0.2em]">Official Study Hub</span>
                </div>
             </div>
-            <button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl relative">
-               <Menu size={20} />
-               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-blue-600 rounded-full border-2 border-white"></span>
-            </button>
+            <button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-xl relative"><Menu size={20} /><span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-blue-600 rounded-full border-2 border-white"></span></button>
           </div>
         )}
 
-        {/* Scrollable Area */}
         <div className={`flex-1 overflow-y-auto min-h-0 custom-scrollbar relative z-10 pb-32 ${isAppMode ? 'p-3' : 'p-4 md:p-6 lg:p-8'}`}>
-           <div className="min-h-[80vh]">
-             <Outlet />
-           </div>
-
-           {/* ── Dashboard Footer (SEO & Legal) ── */}
-            {!isAppMode && (
-              <footer className="mt-10 py-12 border-t border-slate-200/30 flex flex-col items-center justify-center gap-8 opacity-70 hover:opacity-100 transition-opacity">
-                <div className="flex flex-col items-center gap-1.5">
-                  <p className="text-[11px] font-[1000] uppercase tracking-[0.4em] text-slate-900">Apna College Bihar</p>
-                  <p className="text-[9px] font-bold uppercase tracking-widest text-slate-500">© 2026 Official Study Engine</p>
+           <div className="min-h-[80vh]"><Outlet /></div>
+           {!isAppMode && (
+             <footer className="mt-10 py-12 border-t border-slate-200/30 flex flex-col items-center justify-center gap-8 opacity-70 hover:opacity-100 transition-opacity">
+               <div className="flex flex-col items-center gap-1.5"><p className="text-[11px] font-[1000] uppercase tracking-[0.4em] text-slate-900">Apna College Bihar</p><p className="text-[9px] font-bold uppercase tracking-widest text-slate-500">© 2026 Official Study Engine</p></div>
+               <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 px-6">
+                 <Link to="/about" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-blue-400 transition-colors">About Us</Link>
+                 <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-emerald-400 transition-colors">Contact Us</Link>
+                 <Link to="/privacy" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-orange-400 transition-colors">Privacy Policy</Link>
+               </div>
+                <div className="flex items-center gap-6">
+                   <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="p-3 bg-red-600/10 text-red-500 hover:bg-red-600 rounded-xl border border-red-500/10"><Youtube size={16} /></a>
+                   <div className="flex items-center gap-2"><div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]"></div><span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">Secure & Operational</span></div>
                 </div>
-                <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 px-6">
-                  <Link to="/about" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-blue-400 transition-colors">About Us</Link>
-                  <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-emerald-400 transition-colors">Contact Us</Link>
-                  <Link to="/privacy" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-orange-400 transition-colors">Privacy Policy</Link>
-                </div>
-                 <div className="flex items-center gap-6">
-                    <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="p-3 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-slate-900 rounded-xl transition-all border border-red-500/10 scale-110 md:scale-100">
-                      <Youtube size={16} />
-                    </a>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]"></div>
-                      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">Secure & Operational</span>
-                    </div>
-                 </div>
-              </footer>
-            )}
+             </footer>
+           )}
         </div>
 
-        {/* ── App-Mode Bottom Navigation ── */}
         {isAppMode && (
           <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-2xl border-t border-slate-200/80 px-2 py-3 flex justify-around items-center z-50 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
-                <Link key={link.name} to={link.path} 
-                  className={`flex flex-col items-center gap-1.5 transition-all duration-300 ${isActive ? 'text-blue-600 scale-110' : 'text-slate-400'}`}>
-                  {React.cloneElement(link.icon, { size: 20 })}
-                  <span className="text-[9px] font-black uppercase tracking-tighter">{link.name.split(' ')[0]}</span>
-                  {isActive && <div className="w-1.5 h-1.5 bg-blue-600 rounded-full" />}
-                </Link>
+                <Link key={link.name} to={link.path} className={`flex flex-col items-center gap-1.5 transition-all duration-300 ${isActive ? 'text-blue-600 scale-110' : 'text-slate-400'}`}>{React.cloneElement(link.icon, { size: 20 })}<span className="text-[9px] font-black uppercase tracking-tighter">{link.name.split(' ')[0]}</span>{isActive && <div className="w-1.5 h-1.5 bg-blue-600 rounded-full" />}</Link>
               );
             })}
-            <button onClick={handleLogout} className="flex flex-col items-center gap-1.5 text-slate-400">
-               <LogOut size={20} />
-               <span className="text-[9px] font-black uppercase tracking-tighter">Exit</span>
-            </button>
+            <button onClick={handleLogout} className="flex flex-col items-center gap-1.5 text-slate-400"><LogOut size={20} /><span className="text-[9px] font-black uppercase tracking-tighter">Exit</span></button>
           </div>
         )}
 
-        {/* Global Blur Orbs */}
+        <FloatingTimer />
+
         <div className="fixed top-[-20%] right-[-10%] w-[1000px] h-[1000px] bg-blue-600/5 rounded-full blur-[200px] pointer-events-none -z-10"></div>
         <div className="fixed bottom-[-10%] left-[-10%] w-[800px] h-[800px] bg-indigo-600/5 rounded-full blur-[150px] pointer-events-none -z-10"></div>
 
-        {/* ── Verification Modal (MANDATORY) ── */}
         {isPhoneModalOpen && (
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-[#f8fafc]/80 backdrop-blur-xl">
              <div className="w-full max-w-md bg-white border border-slate-200/80 rounded-[3rem] p-10 md:p-14 shadow-2xl animate-in zoom-in-95 duration-300 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-40 h-40 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
-                
                 <div className="relative z-10 space-y-8 text-center">
-                   <div className="inline-flex p-5 bg-blue-600/20 text-blue-400 rounded-3xl mb-2">
-                      <Shield size={32} />
-                   </div>
-                   <div className="space-y-3">
-                      <h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Security Update</h2>
-                      <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">Please link your active mobile number to access your academic records.</p>
-                   </div>
-
+                   <div className="inline-flex p-5 bg-blue-600/20 text-blue-400 rounded-3xl mb-2"><Shield size={32} /></div>
+                   <div className="space-y-3"><h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Security Update</h2><p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest leading-relaxed">Please link your mobile number to proceed.</p></div>
                    <form onSubmit={handlePhoneSubmit} className="space-y-6">
-                      <div className="space-y-2 text-left">
-                        <p className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] ml-2">Phone Number</p>
-                        <div className="flex gap-2">
-                          <div className="bg-slate-100 px-4 py-4 rounded-2xl flex items-center justify-center text-xs font-black text-slate-500">+91</div>
-                          <input 
-                            type="tel" 
-                            required 
-                            maxLength={10}
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
-                            placeholder="9XXXXXXXXX" 
-                            className="flex-1 bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-4 text-slate-900 text-sm font-black outline-none transition-all placeholder:text-slate-700" 
-                          />
-                        </div>
-                      </div>
-
-                      <button 
-                        type="submit" 
-                        disabled={isUpdating || phone.length < 10}
-                        className="w-full py-5 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95"
-                      >
-                        {isUpdating ? 'Authenticating...' : 'Secure Access'}
-                      </button>
-
-                      <div className="flex justify-center gap-6 pt-2">
-                        <button type="button" onClick={handleLogout} className="text-[9px] font-black uppercase tracking-widest text-red-500 hover:text-red-600 transition-colors">Terminate Hub</button>
-                        <button type="button" onClick={() => window.history.back()} className="text-[9px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors">Go Back</button>
-                      </div>
-                      
-                      <p className="text-[8px] text-slate-700 font-bold uppercase tracking-widest mt-4">Verification will be synced with your Casio ID</p>
+                      <div className="space-y-2 text-left"><p className="text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] ml-2">Phone Number</p><div className="flex gap-2"><div className="bg-slate-100 px-4 py-4 rounded-2xl flex items-center justify-center text-xs font-black text-slate-500">+91</div><input type="tel" required maxLength={10} value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} placeholder="9XXXXXXXXX" className="flex-1 bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-4 text-slate-900 text-sm font-black outline-none transition-all placeholder:text-slate-700" /></div></div>
+                      <button type="submit" disabled={isUpdating || phone.length < 10} className="w-full py-5 bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95">{isUpdating ? 'Authenticating...' : 'Secure Access'}</button>
+                      <div className="flex justify-center gap-6 pt-2"><button type="button" onClick={handleLogout} className="text-[9px] font-black uppercase tracking-widest text-red-500 hover:text-red-600 transition-colors">Terminate Hub</button></div>
                    </form>
                 </div>
              </div>
           </div>
         )}
-
       </main>
     </div>
   );
