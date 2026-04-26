@@ -53,8 +53,9 @@ export default function Group() {
     const today = new Date().toDateString();
     let count = user.lastGroupCreateDate === today ? (user.groupsCreatedToday || 0) : 0;
 
-    if (count >= 5) {
-      setCreateMsg({ type: 'err', text: 'Daily limit (5 groups) reached!' });
+    const isManager = user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN';
+    if (!isManager && count >= 5) {
+      setCreateMsg({ type: 'err', text: 'Daily limit (5 groups) reached! Admins have no limit.' });
       return;
     }
 
@@ -129,7 +130,10 @@ export default function Group() {
   };
 
   // UI helpers
-  const filtered = groups.filter(g => g.name?.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filtered = groups.filter(g => 
+    g.name?.toLowerCase().includes(searchTerm.toLowerCase()) && 
+    !g.members?.includes(user?.uid)
+  );
 
   return (
     <div className="max-w-6xl mx-auto pb-24 space-y-8 animate-in fade-in slide-in-from-bottom-5 duration-700">
