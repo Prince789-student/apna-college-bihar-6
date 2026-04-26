@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
-import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2, Video, Maximize2, Minimize2, ExternalLink, Settings2, Link2, Lock } from 'lucide-react';
+import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2, Video, Maximize2, Minimize2, ExternalLink, Settings2, Link2, Lock, Monitor, BellRing } from 'lucide-react';
 import { collection, query, where, onSnapshot, doc, updateDoc, arrayRemove, deleteDoc } from 'firebase/firestore';
 
 export default function GroupDetail() {
@@ -112,6 +112,12 @@ export default function GroupDetail() {
   const progress = Math.min(100, (Number(totalHrs) / goalHrs) * 100);
 
   const formatMins = (totalSeconds) => Math.floor((totalSeconds || 0) / 60);
+  const formatHHMMSS = (totalSeconds) => {
+    const hrs = Math.floor((totalSeconds || 0) / 3600);
+    const mins = Math.floor(((totalSeconds || 0) % 3600) / 60);
+    const secs = (totalSeconds || 0) % 60;
+    return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
@@ -249,54 +255,61 @@ export default function GroupDetail() {
               <h2 className="text-xl font-black text-slate-900 uppercase tracking-tighter italic">Daily Leaderboard Rank</h2>
            </div>
 
-           <div className="space-y-4">
+           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {members.length === 0 ? (
-                <div className="p-12 text-center text-slate-500 uppercase tracking-widest font-black text-xs italic">No data synced yet</div>
+                <div className="col-span-full p-12 text-center text-slate-500 uppercase tracking-widest font-black text-xs italic">No data synced yet</div>
               ) : (
-                members.map((member, index) => (
-                  <div key={member.id} className={`flex items-center justify-between p-6 rounded-[2rem] transition-all relative group shadow-2xl ${index === 0 ? 'bg-gradient-to-r from-blue-600/20 to-indigo-600/10 border-2 border-blue-500/30' : 'bg-white border border-slate-200/80 hover:border-slate-300'}`}>
-                     {index === 0 && <div className="absolute -top-3 -right-3 w-10 h-10 bg-amber-500 rounded-full shadow-lg shadow-amber-500/20 flex items-center justify-center border-2 border-[#0d121f] z-10 animate-bounce cursor-default"><Trophy size={16} fill="white" className="text-slate-900" /></div>}
-                     
-                     <div className="flex items-center space-x-6">
-                        <div className={`w-12 h-12 flex items-center justify-center rounded-2xl text-lg font-black italic shadow-lg ${index < 3 ? 'bg-blue-600 text-slate-900' : 'bg-slate-800 text-slate-500'}`}>
-                           #{index + 1}
-                        </div>
-                        <div>
-                           <div className="flex items-center space-x-3">
-                              <span className="font-black text-slate-900 text-lg tracking-tighter uppercase">{member.name}</span>
-                              {(member.id === group.adminId || member.id === group.members?.[0]) && (
-                                <span className="flex items-center gap-1 bg-amber-500/10 text-amber-600 text-[8px] font-black uppercase px-2 py-0.5 rounded-full border border-amber-500/20 tracking-widest">
-                                  <Shield size={8} fill="currentColor" /> Architect
-                                </span>
-                              )}
-                              {member.id === user.uid && <span className="bg-slate-800 text-slate-500 text-[8px] font-black uppercase px-2 py-0.5 rounded-full tracking-widest">YOU</span>}
-                              {member.isStudying && (
-                                <span className="flex items-center gap-1.5 px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
-                                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
-                                  <span className="text-[8px] font-black uppercase tracking-widest text-emerald-500">Studying Now</span>
-                                </span>
-                              )}
-                           </div>
-                           <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Verified Scholar</p>
-                        </div>
-                     </div>
-                     <div className="flex items-center gap-6">
-                        <div className="text-right">
-                           <div className="text-2xl font-black text-emerald-500 drop-shadow-lg">
-                              {(member.todayStudyTime / 3600).toFixed(1)} <span className="text-[8px] text-slate-500">HRS</span>
-                           </div>
-                           <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest italic opacity-60">
-                             Today: {formatMins(member.todayStudyTime)} MIN
-                           </p>
-                        </div>
-                        {isAdmin && member.id !== user.uid && (
-                          <button onClick={() => removeMember(member.id)} className="p-3 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all lg:opacity-0 group-hover:opacity-100">
-                            <Trash2 size={16} />
-                          </button>
-                        )}
-                     </div>
-                  </div>
-                ))
+                members.map((member, index) => {
+                  const isStudying = member.isStudying;
+                  const studyTime = formatHHMMSS(member.todayStudyTime);
+                  
+                  return (
+                    <div key={member.id} className={`relative flex flex-col items-center justify-center p-6 md:p-8 rounded-[2rem] border-2 transition-all cursor-pointer group hover:scale-105 ${isStudying ? 'bg-orange-50 border-orange-200 hover:border-orange-400 shadow-xl shadow-orange-500/10' : 'bg-white border-slate-200/80 hover:border-slate-300'}`}>
+                       
+                       <div className={`absolute top-4 left-4 text-[10px] font-black italic tracking-widest ${index < 3 ? 'text-amber-500' : 'text-slate-400'}`}>
+                          #{index + 1}
+                       </div>
+                       
+                       <div className="relative mb-4">
+                         <div className={`w-16 h-16 md:w-20 md:h-20 rounded-[2rem] flex items-center justify-center transition-colors ${isStudying ? 'bg-orange-500/10 text-orange-500' : 'bg-slate-100 text-slate-300'}`}>
+                           <Monitor size={32} strokeWidth={isStudying ? 2.5 : 1.5} />
+                         </div>
+                         {isStudying && (
+                           <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-orange-500 border-2 border-white rounded-full animate-pulse shadow-[0_0_10px_rgba(249,115,22,0.8)]"></div>
+                         )}
+                         {!isStudying && (
+                           <button onClick={(e) => { e.stopPropagation(); alert('Nudge feature coming soon!'); }} className="absolute -bottom-2 -right-2 w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center text-amber-500 hover:bg-amber-50 hover:text-amber-600 transition-all opacity-0 group-hover:opacity-100 shadow-sm" title="Nudge to Study">
+                             <BellRing size={14} />
+                           </button>
+                         )}
+                       </div>
+
+                       <span className="font-[1000] text-slate-900 text-xs md:text-sm tracking-tight uppercase truncate w-full text-center mb-1">
+                         {member.name}
+                       </span>
+
+                       {isStudying ? (
+                         <div className="text-orange-600 font-[1000] text-sm md:text-base tracking-widest mt-1">
+                           {studyTime}
+                         </div>
+                       ) : (
+                         <div className="text-slate-400 font-bold text-[10px] uppercase tracking-widest mt-1">
+                           {studyTime}
+                         </div>
+                       )}
+
+                       <div className="absolute top-4 right-4 flex items-center gap-2">
+                         {(member.id === group.adminId || member.id === group.members?.[0]) && <Shield size={12} className="text-blue-500" />}
+                         {isAdmin && member.id !== user.uid && (
+                           <button onClick={(e) => { e.stopPropagation(); removeMember(member.id); }} className="text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
+                             <Trash2 size={12} />
+                           </button>
+                         )}
+                       </div>
+
+                    </div>
+                  );
+                })
               )}
            </div>
         </div>
