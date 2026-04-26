@@ -124,7 +124,7 @@ export default function AdminPanel() {
         memberCount: 0,
         members: [],
         createdAt: serverTimestamp(),
-        createdBy: user.email
+        createdBy: user.uid
       });
       flash('Official Study Hub Created! 🚀');
       setNewGroup({ name: '', description: '', code: '' });

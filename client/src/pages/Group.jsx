@@ -250,13 +250,12 @@ export default function Group() {
                             <p className="text-[9px] font-bold text-slate-600">{g.memberCount} Mems</p>
                          </div>
                       </div>
-                      <button onClick={()=>createGroup(g.name)} className="p-2 text-slate-500 hover:text-slate-900 transition-colors"><LogIn size={14}/></button>
+                      <button onClick={() => { setJoinCode(g.code); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="p-2 text-slate-500 hover:text-slate-900 transition-colors" title="Copy Code to Join"><LogIn size={14}/></button>
                    </div>
                  ))}
               </div>
            </div>
         </div>
-      </div>
     </div>
 
       {/* Create Group Modal */}
@@ -285,3 +284,5 @@ export default function Group() {
         </div>
       )}
     </div>
+  );
+}

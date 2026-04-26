@@ -40,15 +40,14 @@ export default function GroupDetail() {
 
     // Real-time Members Sync (Status + Stats)
     const unsubUsers = onSnapshot(query(collection(db, 'users'), where('uid', '!=', '0')), (uSnap) => {
-       // Note: We'll filter members client-side to keep it simple with existing structure
-       // or we could use another query if member list is HUGE, but here 10-20 is fine.
+       // Filter members client-side to avoid 'in' query issues with empty arrays
     });
 
     return () => unsubGroup();
   }, [groupId, user]);
 
   useEffect(() => {
-    if (!group) return;
+    if (!group || !group.members || group.members.length === 0) return;
     
     // Listen to changes in specific members of this group
     const unsubMembers = onSnapshot(query(collection(db, 'users'), where('uid', 'in', group.members)), (snap) => {
@@ -60,7 +59,7 @@ export default function GroupDetail() {
     return () => unsubMembers();
   }, [group?.members]);
 
-  const isAdmin = (group?.adminId || group?.members?.[0]) === user?.uid;
+  const isAdmin = (group?.createdBy || group?.members?.[0]) === user?.uid;
 
   const removeMember = async (targetId) => {
     if (!isAdmin) return;
@@ -155,7 +154,7 @@ export default function GroupDetail() {
               <span className="text-[10px] font-black uppercase tracking-widest">Back to Network</span>
            </button>
            <div className="space-y-2">
-              <h1 className="text-3xl md:text-5xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">{group.groupName}</h1>
+              <h1 className="text-3xl md:text-5xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">{group.name}</h1>
               <div className="flex flex-wrap items-center gap-3">
                  <div className="flex items-center gap-2 bg-slate-100 text-slate-500 px-3 py-1.5 rounded-xl border border-slate-200">
                     <Calendar size={12} />
@@ -163,7 +162,7 @@ export default function GroupDetail() {
                  </div>
                  <div className="flex items-center gap-2 bg-blue-600/10 text-blue-600 px-3 py-1.5 rounded-xl border border-blue-500/20">
                     <Hash size={12} />
-                    <span className="text-[10px] font-black tracking-widest uppercase">ID: {group.groupCode}</span>
+                    <span className="text-[10px] font-black tracking-widest uppercase">ID: {group.code}</span>
                  </div>
                  <button onClick={copyInviteLink} className="flex items-center gap-2 bg-emerald-50 text-emerald-600 px-3 py-1.5 rounded-xl border border-emerald-500/20 hover:bg-emerald-500 hover:text-white transition-colors cursor-pointer group/link">
                     <Link2 size={12} />
