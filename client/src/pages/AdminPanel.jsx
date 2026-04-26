@@ -545,7 +545,7 @@ export default function AdminPanel() {
               {groups.map(g => (
                 <div key={g.id} className="p-6 bg-slate-50 rounded-[2.5rem] border border-slate-300/30">
                    <div className="flex justify-between items-start mb-6">
-                      <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-xl font-black text-slate-900">{g.name[0]}</div>
+                      <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-xl font-black text-slate-900">{g.name?.[0]?.toUpperCase() || 'G'}</div>
                       <button onClick={()=>deleteGroup(g.id)} className="p-2 text-slate-600 hover:text-red-500"><Trash2 size={20}/></button>
                    </div>
                    <p className="text-lg font-[1000] text-slate-900 uppercase tracking-tighter truncate">{g.name}</p>
