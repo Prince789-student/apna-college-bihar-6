@@ -451,12 +451,17 @@ export default function GroupDetail() {
                       <div key={day} className="text-center text-[9px] font-black uppercase text-slate-400 tracking-widest mb-2">{day}</div>
                     ))}
                     {[0, 1, 2, 3, 4, 5, 6].map(i => {
-                       const intensity = [10, 80, 40, 100, 20, 60, 90][i];
-                       const hrs = (intensity / 10).toFixed(1);
+                       const todayIdx = (new Date().getDay() + 6) % 7; // Convert Sun=0 to 6, Mon=1 to 0
+                       const isToday = i === todayIdx;
+                       const hrsNum = isToday ? ((selectedMember.todayStudyTime || 0) / 3600) : 0;
+                       const hrs = hrsNum.toFixed(1);
+                       const intensity = isToday ? Math.min(100, (hrsNum / 8) * 100) : 0;
+                       
                        return (
-                         <div key={i} className="aspect-square rounded-[1rem] flex flex-col items-center justify-center bg-orange-50 relative overflow-hidden group shadow-sm border border-orange-100">
+                         <div key={i} className="aspect-square rounded-[1rem] flex flex-col items-center justify-center bg-slate-50 relative overflow-hidden group shadow-sm border border-slate-200/50">
                            <div className="absolute inset-0 bg-gradient-to-tr from-orange-500 to-amber-400 transition-all" style={{ opacity: intensity / 100 }}></div>
-                           <span className={`relative z-10 text-[10px] font-black ${intensity > 50 ? 'text-white' : 'text-orange-900'}`}>{hrs}</span>
+                           <span className={`relative z-10 text-[10px] font-black ${intensity > 40 ? 'text-white' : 'text-slate-400'}`}>{hrs}</span>
+                           {isToday && <div className="absolute bottom-1 w-1 h-1 rounded-full bg-orange-600"></div>}
                          </div>
                        )
                     })}
@@ -464,13 +469,13 @@ export default function GroupDetail() {
 
                  {/* Donut Chart Block */}
                  <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 flex items-center gap-6">
-                    <div className="w-20 h-20 rounded-full border-[6px] border-orange-500 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(249,115,22,0.3)]">
-                       <span className="text-sm font-black text-slate-900">100%</span>
+                    <div className={`w-20 h-20 rounded-full border-[6px] flex items-center justify-center shrink-0 ${selectedMember.todayStudyTime > 0 ? 'border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.3)]' : 'border-slate-200'}`}>
+                       <span className="text-sm font-black text-slate-900">{selectedMember.todayStudyTime > 0 ? '100%' : '0%'}</span>
                     </div>
                     <div>
                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-900 mb-1">Study Distribution</h4>
                        <p className="text-[10px] font-bold text-slate-500 tracking-widest uppercase flex items-center gap-2">
-                         <span className="w-2 h-2 bg-orange-500 rounded-full"></span> Self Study
+                         <span className={`w-2 h-2 rounded-full ${selectedMember.todayStudyTime > 0 ? 'bg-orange-500' : 'bg-slate-300'}`}></span> Self Study
                        </p>
                     </div>
                  </div>
