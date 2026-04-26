@@ -294,9 +294,14 @@ export default function Notes({ isPersonal = false }) {
               <p className="text-[10px] text-slate-500 font-bold uppercase mt-1">Files verified by ACB Admin Audit Team</p>
             </div>
          </div>
-         <button onClick={()=>setShowUpload(true)} className="px-8 py-4 bg-white text-black rounded-[2rem] font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all flex items-center gap-3">
-           Upload Own Notes <ArrowRight size={14} />
-         </button>
+         <div className="flex flex-wrap gap-4">
+           <button onClick={() => { setUploadData({ ...uploadData, category: 'FOLDER' }); setShowUpload(true); }} className="px-8 py-4 bg-amber-500/10 text-amber-600 border border-amber-500/20 rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-amber-500 hover:text-white transition-all flex items-center gap-3">
+             <Filter size={14} /> New Folder
+           </button>
+           <button onClick={() => { setUploadData({ ...uploadData, category: 'NOTES' }); setShowUpload(true); }} className="px-8 py-4 bg-white text-black rounded-[2rem] font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all flex items-center gap-3 border border-slate-200">
+             Upload Own Notes <ArrowRight size={14} />
+           </button>
+         </div>
 
          {showUpload && (
            <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">

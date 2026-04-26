@@ -40,7 +40,6 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/ugeac-predictor" element={<UgeacPredictor />} />
             <Route path="/dashboard/notes" element={<Notes />} />
-            <Route path="/dashboard/notes/personal" element={<Notes isPersonal={true} />} />
             <Route path="/dashboard/cgpa" element={<BeuCgpa />} />
             <Route path="/dashboard/study" element={<StudyDashboard />} />
             <Route path="/dashboard/calculator" element={<ScientificCalc />} />

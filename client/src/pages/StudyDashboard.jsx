@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   doc, getDoc, collection, query, where, getDocs,
   updateDoc, addDoc, deleteDoc
@@ -38,7 +38,8 @@ const TABS = [
 export default function StudyDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [tab, setTab] = useState('timer');
+  const location = useLocation();
+  const [tab, setTab] = useState(location.state?.tab || 'timer');
   const todayStr = new Date().toISOString().split('T')[0];
 
   // Data State
@@ -276,7 +277,7 @@ export default function StudyDashboard() {
         <div className="flex-1 flex items-center justify-between bg-white p-4 md:p-5 rounded-[2rem] border border-slate-200/50">
           <div className="flex items-center gap-3 md:gap-4">
             <div className="w-10 h-10 md:w-12 md:h-12 bg-orange-500/10 rounded-2xl flex items-center justify-center border border-orange-500/20 shrink-0">
-              <Flame size={20} md:size={24} className="text-orange-500" fill="currentColor" />
+              <Flame size={20} className="text-orange-500" fill="currentColor" />
             </div>
             <div>
               <p className="text-[8px] md:text-[9px] text-slate-500 font-bold uppercase tracking-widest">Daily Streak</p>
