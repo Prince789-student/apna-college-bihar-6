@@ -193,7 +193,14 @@ export default function StudyDashboard() {
                       </div>
                     </div>
                   )}
-                  <button onClick={() => setTimerActive(true)} className="w-full py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-3xl font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">Start Focus <ArrowRight size={18} /></button>
+                  <div className="text-center space-y-3 w-full">
+                    <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest flex items-center justify-center gap-2">
+                      <Shield size={12} /> Focus Shield Active: No Tab Switching
+                    </p>
+                    <button onClick={() => setTimerActive(true)} className="w-full py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-3xl font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">
+                      Start Focus <ArrowRight size={18} />
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <div className="flex gap-4 w-full">

@@ -16,6 +16,7 @@ export function StudyProvider({ children }) {
   const [timerSubject, setTimerSubject] = useState('OTHERS');
   const [customMinutes, setCustomMinutes] = useState(25);
   const [timerMode, setTimerMode] = useState('COUNTDOWN');
+  const [focusBroken, setFocusBroken] = useState(false);
   const timerRef = useRef(null);
 
   // Reset timer when mode or custom minutes change (and not active)
@@ -79,6 +80,18 @@ export function StudyProvider({ children }) {
     updateDoc(doc(db, 'users', user.uid), { isStudying: timerActive }).catch(() => {});
   }, [timerActive, user]);
 
+  // Anti-Distraction: Detect tab switching
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden' && timerActive) {
+        setTimerActive(false);
+        setFocusBroken(true);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [timerActive]);
+
   // Global Timer Tick
   useEffect(() => {
     if (timerActive) {
@@ -113,7 +126,9 @@ export function StudyProvider({ children }) {
     setCustomMinutes,
     timerMode,
     setTimerMode,
-    saveGlobalSession
+    saveGlobalSession,
+    focusBroken,
+    setFocusBroken
   };
 
   return (
