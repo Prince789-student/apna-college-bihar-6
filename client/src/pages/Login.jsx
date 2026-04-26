@@ -77,35 +77,15 @@ export default function Login() {
             </div>
           )}
 
-          <form onSubmit={handleEmailLogin} className="space-y-4">
-            <div className="relative group">
-              <Mail className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500" size={18} />
-              <input type="email" name="email" placeholder="EMAIL ADDRESS" value={formData.email} onChange={handleChange} className="w-full bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-[1.5rem] p-5 pl-16 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-600" required />
-            </div>
-            <div className="relative group">
-              <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500" size={18} />
-              <input type="password" name="password" placeholder="PASSWORD" value={formData.password} onChange={handleChange} className="w-full bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-[1.5rem] p-5 pl-16 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-600" required />
-            </div>
-
-            <button type="submit" disabled={loading} className="w-full text-white font-[1000] py-5 rounded-[1.8rem] shadow-xl transition-all active:scale-95 text-xs uppercase tracking-widest bg-blue-600 hover:bg-blue-500">
-              {loading ? 'Processing...' : 'Secure Login'}
+          <div className="space-y-6">
+            <button onClick={handleGoogleLogin} disabled={loading} className="w-full bg-white text-slate-950 font-[1000] py-5 rounded-[1.8rem] shadow-xl hover:bg-slate-50 transition-all flex items-center justify-center space-x-4 active:scale-95 text-xs border border-slate-200">
+              <Chrome className="text-blue-600 w-6 h-6" />
+              <span>{loading ? 'PROCESSING...' : 'LOGIN WITH GOOGLE'}</span>
             </button>
-          </form>
 
-          {/* Fixed Social Area */}
-          <div className="flex items-center my-10 px-4 opacity-30">
-            <div className="flex-grow border-t border-slate-300"></div>
-            <span className="mx-6 text-slate-500 text-[8px] font-black uppercase tracking-[0.5em]">Other Access</span>
-            <div className="flex-grow border-t border-slate-300"></div>
-          </div>
-
-          <button onClick={handleGoogleLogin} className="w-full bg-white text-slate-950 font-black py-5 rounded-[1.8rem] shadow-xl hover:bg-slate-100 transition-all flex items-center justify-center space-x-4 active:scale-95 text-xs border border-slate-200">
-            <Chrome className="text-blue-600 w-6 h-6" />
-            <span>LOGIN WITH GOOGLE</span>
-          </button>
-
-          <div className="mt-8 text-center text-slate-600 text-[10px] font-bold">
-            Don't have an account? <Link to="/signup" className="text-blue-500 hover:underline">Admission Open / Sign Up</Link>
+            <div className="text-center text-slate-600 text-[10px] font-bold pt-4">
+              Don't have an account? <Link to="/signup" className="text-blue-500 hover:underline">Admission Open / Sign Up</Link>
+            </div>
           </div>
 
           <div className="mt-8 pt-8 border-t border-slate-100 flex justify-center">
