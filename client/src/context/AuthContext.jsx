@@ -35,9 +35,9 @@ export function AuthProvider({ children }) {
       
       // FOUNDER AUTO-PROMOTION LOGIC
       const isFounder = u.email === 'prince86944@gmail.com';
-      const needsPhone = !user?.phone || user?.phone?.trim() === "";
       
       if (userDoc.exists()) {
+
         const userData = userDoc.data();
         if (isFounder && userData.role !== ROLES.SUPER_ADMIN) {
            await updateDoc(docRef, { role: ROLES.SUPER_ADMIN });

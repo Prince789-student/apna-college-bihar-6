@@ -10,8 +10,9 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '../context/AuthContext';
 import PremiumAds from '../components/PremiumAds';
 
-export default function Notes() {
+export default function Notes({ isPersonal = false }) {
   const { user } = useAuth();
+
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');

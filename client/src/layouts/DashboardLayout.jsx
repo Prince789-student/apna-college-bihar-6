@@ -20,7 +20,7 @@ const ANN_STYLE = {
 export default function DashboardLayout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout, ROLES } = useAuth();
+  const { user, logout, ROLES, updateProfileData } = useAuth();
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [phone, setPhone] = useState('');
@@ -50,7 +50,7 @@ export default function DashboardLayout() {
     }
   }, [user]);
 
-  const { updateProfileData } = useAuth();
+
 
   const handlePhoneSubmit = async (e) => {
     e.preventDefault();
