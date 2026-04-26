@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2, Video, Maximize2, Minimize2, ExternalLink, Settings2, Link2, Lock, Monitor, BellRing, X, Activity, MoreVertical, BarChart2 } from 'lucide-react';
-import { collection, query, where, onSnapshot, doc, updateDoc, arrayRemove, deleteDoc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, updateDoc, arrayRemove, deleteDoc, addDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function GroupDetail() {
   const { groupId } = useParams();
@@ -17,6 +17,7 @@ export default function GroupDetail() {
   const [isSettingLink, setIsSettingLink] = useState(false);
   const [newLink, setNewLink] = useState('');
   const [selectedMember, setSelectedMember] = useState(null);
+  const [showInsights, setShowInsights] = useState(false);
 
   useEffect(() => {
     if (!groupId || !user) return;
@@ -99,6 +100,22 @@ export default function GroupDetail() {
       setIsSettingLink(false);
       setNewLink('');
     } catch (e) { console.error(e); }
+  };
+
+  const sendNudge = async () => {
+    if (!selectedMember || !user) return;
+    try {
+      await addDoc(collection(db, 'nudges'), {
+        toUserId: selectedMember.id,
+        fromUserName: user.displayName || 'A Scholar',
+        timestamp: serverTimestamp(),
+        groupId: groupId
+      });
+      alert(`Nudge sent to ${selectedMember.name}!`);
+    } catch (e) {
+      console.error("Nudge failed", e);
+    }
+    setSelectedMember(null);
   };
 
 
@@ -382,14 +399,19 @@ export default function GroupDetail() {
 
       {/* YPT Style Bottom Sheet Modal */}
       {selectedMember && (
-        <div className="fixed inset-0 z-[300] flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm transition-all" onClick={() => setSelectedMember(null)}>
+        <div className="fixed inset-0 z-[300] flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm transition-all" onClick={() => { setSelectedMember(null); setShowInsights(false); }}>
           <div 
-            className="w-full md:w-[400px] bg-white rounded-t-[3rem] md:rounded-[3rem] p-8 shadow-2xl relative animate-in slide-in-from-bottom-full md:slide-in-from-bottom-10"
+            className={`w-full md:w-[400px] bg-white rounded-t-[3rem] md:rounded-[3rem] p-8 shadow-2xl relative transition-all duration-500 animate-in slide-in-from-bottom-full md:slide-in-from-bottom-10 ${showInsights ? 'h-[80vh] md:h-auto overflow-y-auto' : ''}`}
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-4">
+                {showInsights && (
+                   <button onClick={() => setShowInsights(false)} className="p-2 -ml-2 bg-slate-50 text-slate-400 hover:text-slate-900 rounded-xl transition-all">
+                     <ArrowLeft size={20} />
+                   </button>
+                )}
                 <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${selectedMember.isStudying ? 'bg-orange-500/10 text-orange-500' : 'bg-slate-100 text-slate-400'}`}>
                   <Monitor size={28} />
                 </div>
@@ -400,49 +422,96 @@ export default function GroupDetail() {
                   </p>
                 </div>
               </div>
-              <button onClick={() => setSelectedMember(null)} className="p-2 bg-slate-100 text-slate-400 hover:text-slate-900 hover:bg-slate-200 rounded-xl transition-all">
+              <button onClick={() => { setSelectedMember(null); setShowInsights(false); }} className="p-2 bg-slate-100 text-slate-400 hover:text-slate-900 hover:bg-slate-200 rounded-xl transition-all">
                 <X size={20} />
               </button>
             </div>
 
-            {/* Stats Box */}
-            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 mb-8 space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Today's Focus</span>
-                  <span className="text-3xl font-[1000] text-slate-900 tracking-tighter">
-                    {formatHHMMSS(selectedMember.todayStudyTime)}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <span className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Status</span>
-                  <span className={`text-sm font-black uppercase tracking-widest ${selectedMember.isStudying ? 'text-orange-500' : 'text-slate-400'}`}>
-                    {selectedMember.isStudying ? 'Studying' : 'Resting'}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4 border-t border-slate-200 pt-6">
-                 <div>
-                   <span className="block text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Start Time</span>
-                   <span className="text-xs font-black text-slate-700">--:-- AM</span>
+            {showInsights ? (
+              <div className="space-y-8 animate-in slide-in-from-right-4 fade-in duration-500">
+                 <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <span className="font-black text-slate-900 uppercase tracking-widest text-sm">Focus Time</span>
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">This Week</span>
                  </div>
-                 <div>
-                   <span className="block text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Max Focus</span>
-                   <span className="text-xs font-black text-slate-700">{formatHHMMSS(selectedMember.todayStudyTime)}</span>
+                 
+                 {/* Heatmap Calendar Mock */}
+                 <div className="grid grid-cols-7 gap-2 md:gap-3">
+                    {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => (
+                      <div key={day} className="text-center text-[9px] font-black uppercase text-slate-400 tracking-widest mb-2">{day}</div>
+                    ))}
+                    {[0, 1, 2, 3, 4, 5, 6].map(i => {
+                       const intensity = [10, 80, 40, 100, 20, 60, 90][i];
+                       const hrs = (intensity / 10).toFixed(1);
+                       return (
+                         <div key={i} className="aspect-square rounded-[1rem] flex flex-col items-center justify-center bg-orange-50 relative overflow-hidden group shadow-sm border border-orange-100">
+                           <div className="absolute inset-0 bg-gradient-to-tr from-orange-500 to-amber-400 transition-all" style={{ opacity: intensity / 100 }}></div>
+                           <span className={`relative z-10 text-[10px] font-black ${intensity > 50 ? 'text-white' : 'text-orange-900'}`}>{hrs}</span>
+                         </div>
+                       )
+                    })}
                  </div>
-              </div>
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-4">
-              <button onClick={() => { setSelectedMember(null); alert('Nudge sent! (Phase 3 backend sync pending)'); }} className="flex-1 flex items-center justify-center gap-2 py-4 bg-orange-50 text-orange-600 hover:bg-orange-500 hover:text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all">
-                <BellRing size={16} /> Nudge
-              </button>
-              <button onClick={() => { setSelectedMember(null); alert('Full Insights Dashboard coming in Phase 3!'); }} className="flex-1 flex items-center justify-center gap-2 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/20 active:scale-95">
-                <BarChart2 size={16} /> Insights
-              </button>
-            </div>
+                 {/* Donut Chart Block */}
+                 <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 flex items-center gap-6">
+                    <div className="w-20 h-20 rounded-full border-[6px] border-orange-500 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(249,115,22,0.3)]">
+                       <span className="text-sm font-black text-slate-900">100%</span>
+                    </div>
+                    <div>
+                       <h4 className="text-xs font-black uppercase tracking-widest text-slate-900 mb-1">Study Distribution</h4>
+                       <p className="text-[10px] font-bold text-slate-500 tracking-widest uppercase flex items-center gap-2">
+                         <span className="w-2 h-2 bg-orange-500 rounded-full"></span> Self Study
+                       </p>
+                    </div>
+                 </div>
+
+                 <div className="pt-4">
+                   <button onClick={() => sendNudge()} className="w-full py-4 bg-orange-50 text-orange-600 hover:bg-orange-500 hover:text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-2">
+                      <BellRing size={16} /> Send Nudge
+                   </button>
+                 </div>
+              </div>
+            ) : (
+              <>
+                {/* Stats Box */}
+                <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 mb-8 space-y-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Today's Focus</span>
+                      <span className="text-3xl font-[1000] text-slate-900 tracking-tighter">
+                        {formatHHMMSS(selectedMember.todayStudyTime)}
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <span className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Status</span>
+                      <span className={`text-sm font-black uppercase tracking-widest ${selectedMember.isStudying ? 'text-orange-500' : 'text-slate-400'}`}>
+                        {selectedMember.isStudying ? 'Studying' : 'Resting'}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4 border-t border-slate-200 pt-6">
+                    <div>
+                      <span className="block text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Start Time</span>
+                      <span className="text-xs font-black text-slate-700">--:-- AM</span>
+                    </div>
+                    <div>
+                      <span className="block text-[9px] font-black uppercase tracking-widest text-slate-400 mb-1">Max Focus</span>
+                      <span className="text-xs font-black text-slate-700">{formatHHMMSS(selectedMember.todayStudyTime)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-4">
+                  <button onClick={() => sendNudge()} className="flex-1 flex items-center justify-center gap-2 py-4 bg-orange-50 text-orange-600 hover:bg-orange-500 hover:text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all">
+                    <BellRing size={16} /> Nudge
+                  </button>
+                  <button onClick={() => setShowInsights(true)} className="flex-1 flex items-center justify-center gap-2 py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/20 active:scale-95">
+                    <BarChart2 size={16} /> Insights
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}
