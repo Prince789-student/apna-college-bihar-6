@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
-import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2, Video, Maximize2, Minimize2, ExternalLink, Settings2, Link2 } from 'lucide-react';
+import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2, Video, Maximize2, Minimize2, ExternalLink, Settings2, Link2, Lock } from 'lucide-react';
 import { collection, query, where, onSnapshot, doc, updateDoc, arrayRemove, deleteDoc } from 'firebase/firestore';
 
 export default function GroupDetail() {
@@ -183,13 +183,10 @@ export default function GroupDetail() {
                     >
                       Enter Google Meet <ExternalLink size={16} />
                     </a>
-                    <button 
-                      onClick={() => { setNewLink(group.meetingLink); setIsSettingLink(true); }}
-                      className="p-5 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white rounded-2xl transition-all border border-white/10 flex items-center gap-2"
-                    >
-                      <Settings2 size={20} />
-                      <span className="text-[10px] font-black uppercase hidden md:inline">Change Hub</span>
-                    </button>
+                    <div className="p-5 bg-white/5 text-slate-500 rounded-2xl border border-white/5 flex items-center gap-2 cursor-not-allowed" title="Link cannot be changed once set">
+                      <Lock size={20} />
+                      <span className="text-[10px] font-black uppercase hidden md:inline">Link Locked</span>
+                    </div>
                   </>
                 ) : (
                   <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
