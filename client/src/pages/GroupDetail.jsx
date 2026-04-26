@@ -191,19 +191,10 @@ export default function GroupDetail() {
                 ) : (
                   <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                     <button 
-                      onClick={() => { 
-                        window.open('https://meet.google.com/new', '_blank');
-                        setIsSettingLink(true);
-                      }}
+                      onClick={() => setIsSettingLink(true)}
                       className="px-8 py-5 bg-white text-slate-900 rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all shadow-xl active:scale-95 flex items-center justify-center gap-3"
                     >
-                      <Video size={18} className="text-blue-600" /> Initialize Hub (New Meet)
-                    </button>
-                    <button 
-                      onClick={() => setIsSettingLink(true)}
-                      className="px-8 py-5 bg-white/5 hover:bg-white/10 text-white border border-white/20 rounded-2xl font-[1000] text-[10px] md:text-sm uppercase tracking-widest transition-all flex items-center justify-center gap-3"
-                    >
-                      <Link2 size={18} /> Link Existing Meet
+                      <Link2 size={18} className="text-blue-600" /> Attach Meeting Link
                     </button>
                   </div>
                 )}
