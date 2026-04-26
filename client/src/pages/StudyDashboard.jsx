@@ -73,6 +73,13 @@ export default function StudyDashboard() {
   const [timerMode, setTimerMode] = useState('COUNTDOWN');
   const timerRef = useRef(null);
 
+  // Reset timer when mode changes
+  useEffect(() => {
+    if (!timerActive) {
+      setTimerTime(timerMode === 'STOPWATCH' ? 0 : customMinutes * 60);
+    }
+  }, [timerMode, customMinutes]);
+
   // App Blocker
   const [installedApps, setInstalledApps] = useState([]);
   const [allowedApps, setAllowedApps] = useState([]);

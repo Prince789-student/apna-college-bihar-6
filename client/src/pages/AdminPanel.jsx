@@ -26,6 +26,7 @@ export default function AdminPanel() {
   const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '', useAdSense: false });
   const [msg, setMsg] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
 
   // ── UPLOAD STATE ──
   const [docForm, setDocForm] = useState({ title: '', subject: '', category: 'NOTES', file: null });

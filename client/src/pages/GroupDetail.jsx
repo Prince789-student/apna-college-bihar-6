@@ -119,7 +119,7 @@ export default function GroupDetail() {
       {/* Premium Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-slate-100">
         <div className="space-y-4 flex-1">
-           <button onClick={() => navigate('/dashboard/study')} className="flex items-center space-x-2 text-slate-400 hover:text-blue-600 transition-colors group">
+           <button onClick={() => navigate(-1)} className="flex items-center space-x-2 text-slate-400 hover:text-blue-600 transition-colors group">
               <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
               <span className="text-[10px] font-black uppercase tracking-widest">Back to Network</span>
            </button>
