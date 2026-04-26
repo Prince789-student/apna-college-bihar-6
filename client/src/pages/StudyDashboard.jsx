@@ -30,7 +30,6 @@ const TABS = [
   { id: 'timer', label: 'Focus Timer', icon: <Clock size={15} /> },
   { id: 'overview', label: 'Overview', icon: <BarChart3 size={15} /> },
   { id: 'todo', label: 'Aaj ka Plan', icon: <ClipboardList size={15} /> },
-  { id: 'group', label: 'Study Network', icon: <Users size={15} /> },
   { id: 'achievements', label: 'Achievements', icon: <Trophy size={15} /> },
   { id: 'admin', label: 'Admin Ops', icon: <Shield size={15} className="text-red-500" /> },
 ];

@@ -69,6 +69,7 @@ export default function DashboardLayout() {
   const isAdmin = user?.email === 'prince86944@gmail.com' || user?.role === ROLES.SUPER_ADMIN; 
   const navLinks = [
     { name: 'Study Protocol', path: '/dashboard/study', icon: <Timer size={22} className="text-blue-500" /> },
+    { name: 'Study Network', path: '/dashboard/groups', icon: <Users size={20} className="text-orange-500" /> },
     { name: 'Notes & PYQ', path: '/dashboard/notes', icon: <Book size={20} /> },
     { name: 'Scientific Calc', path: '/dashboard/calculator', icon: <Calculator size={20} /> },
     { name: 'BEU CGPA', path: '/dashboard/cgpa', icon: <GraduationCap size={20} /> },
