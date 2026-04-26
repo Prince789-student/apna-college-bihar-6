@@ -28,6 +28,8 @@ export default function Group() {
   const [searchTerm, setSearchTerm] = useState('');
   const [joinCode, setJoinCode] = useState('');
   const [createMsg, setCreateMsg] = useState(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [newGroupData, setNewGroupData] = useState({ name: '', description: '' });
 
   // Fetch groups
   useEffect(() => {
@@ -44,7 +46,9 @@ export default function Group() {
   }, [user]);
 
   // Create Group (Rate limited: 5/day)
-  const createGroup = async (name) => {
+  const createGroup = async (e) => {
+    e.preventDefault();
+    const { name, description } = newGroupData;
     if (!name.trim()) return;
     const today = new Date().toDateString();
     let count = user.lastGroupCreateDate === today ? (user.groupsCreatedToday || 0) : 0;
@@ -58,12 +62,13 @@ export default function Group() {
       const code = genCode();
       const newGroup = {
         name,
+        description: description || 'No description provided.',
         code,
         createdBy: user.uid,
         creatorName: user?.displayName || user?.name || 'Scholar',
         members: [user?.uid],
         memberCount: 1,
-        maxMembers: 150,
+        maxMembers: 70,
         createdAt: serverTimestamp()
       };
       await addDoc(collection(db, 'groups'), newGroup);
@@ -75,6 +80,8 @@ export default function Group() {
         lastGroupCreateDate: today
       });
       setCreateMsg({ type: 'ok', text: `Group "${name}" created! Code: ${code}` });
+      setShowCreateModal(false);
+      setNewGroupData({ name: '', description: '' });
     } catch (e) {
       setCreateMsg({ type: 'err', text: 'Creation failed.' });
     }
@@ -102,8 +109,8 @@ export default function Group() {
         return;
       }
 
-      if (gData.memberCount >= (gData.maxMembers || 150)) {
-        setCreateMsg({ type: 'err', text: 'Group is full (max 150)!' });
+      if (gData.memberCount >= (gData.maxMembers || 70)) {
+        setCreateMsg({ type: 'err', text: 'Group is full (max 70)!' });
         return;
       }
 
@@ -147,10 +154,7 @@ export default function Group() {
                 placeholder="Find a group..."
                 className="w-full bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-3 pl-12 text-slate-900 text-[13px] font-bold outline-none transition-all placeholder:text-slate-600" />
             </div>
-            <button key="create" onClick={() => {
-              const n = prompt('Enter Group Name:');
-              if (n) createGroup(n);
-            }} className="p-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl shadow-lg transition-transform active:scale-95">
+            <button key="create" onClick={() => setShowCreateModal(true)} className="p-3 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl shadow-lg transition-transform active:scale-95">
               <Plus size={18} />
             </button>
           </div>
@@ -181,7 +185,7 @@ export default function Group() {
                   </div>
                   <div className="flex items-center gap-1 text-[10px] font-black text-slate-500 bg-slate-100/50 px-2 py-1 rounded-full uppercase tracking-widest">
                     <Users size={10} />
-                    {g.memberCount}/150
+                    {g.memberCount}/70
                   </div>
                 </div>
                 <h3 className="text-lg font-black text-slate-900 group-hover:text-blue-400 transition-colors uppercase truncate">{g.name}</h3>
@@ -254,5 +258,30 @@ export default function Group() {
         </div>
       </div>
     </div>
-  );
-}
+
+      {/* Create Group Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
+          <div className="bg-white w-full max-w-lg rounded-[3rem] border border-slate-200 p-10 space-y-8 animate-in zoom-in-95 duration-300">
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Initialize Study Hub</h2>
+              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-900"><Plus size={24} className="rotate-45" /></button>
+            </div>
+            <form onSubmit={createGroup} className="space-y-6">
+              <div className="space-y-2">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">Hub Name</p>
+                <input required value={newGroupData.name} onChange={e => setNewGroupData({ ...newGroupData, name: e.target.value })} placeholder="e.g. CSE Finals Group" className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 text-slate-900 text-xs font-bold outline-none focus:border-blue-500" />
+              </div>
+              <div className="space-y-2">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">Description / Motto</p>
+                <textarea required value={newGroupData.description} onChange={e => setNewGroupData({ ...newGroupData, description: e.target.value })} placeholder="What is this hub about?" rows={3} className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 text-slate-900 text-xs font-bold outline-none focus:border-blue-500 resize-none" />
+              </div>
+              <div className="flex items-center gap-4 pt-4">
+                <button type="button" onClick={() => setShowCreateModal(false)} className="flex-1 py-4 bg-slate-100 text-slate-500 rounded-2xl font-black text-xs uppercase tracking-widest">Cancel</button>
+                <button type="submit" className="flex-1 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-blue-950/20">Create Now</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
