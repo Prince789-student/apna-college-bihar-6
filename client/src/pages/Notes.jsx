@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { 
   BookOpen, Search, Download, Eye, 
-  Filter, FileDigit, CalendarDays, BookMarked,
-  ArrowRight, ShieldCheck, Bookmark
+  Folder, FileDigit, CalendarDays, BookMarked,
+  ArrowRight, ShieldCheck, Bookmark, FolderPlus, FolderOpen
 } from 'lucide-react';
 import { db, storage } from '../firebase';
 import { collection, query, orderBy, onSnapshot, where, addDoc } from 'firebase/firestore';
@@ -212,14 +212,14 @@ export default function Notes({ isPersonal = false }) {
                 /* FOLDER CARD */
                 <button onClick={() => navigateTo(d)} className="bg-white rounded-[2.5rem] border border-slate-200 p-8 hover:border-indigo-500/30 transition-all group relative overflow-hidden flex flex-col items-start text-left">
                   <div className="w-16 h-16 bg-amber-600/10 text-amber-500 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <Filter size={32} />
+                    <FolderOpen size={32} />
                   </div>
                   <div className="space-y-1">
                     <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight leading-none">{d.title}</h3>
                     <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">{docs.filter(x => x.parentId === d.id).length} Items Inside</p>
                   </div>
                   <div className="mt-8 flex items-center gap-2 text-[9px] font-black text-indigo-600 uppercase tracking-widest group-hover:gap-3 transition-all">
-                    Open Folder <ArrowRight size={12} />
+                    Open Hub <ArrowRight size={12} />
                   </div>
                 </button>
               ) : (
@@ -296,7 +296,7 @@ export default function Notes({ isPersonal = false }) {
          </div>
          <div className="flex flex-wrap gap-4">
            <button onClick={() => { setUploadData({ ...uploadData, category: 'FOLDER' }); setShowUpload(true); }} className="px-8 py-4 bg-amber-500/10 text-amber-600 border border-amber-500/20 rounded-[2rem] font-black text-xs uppercase tracking-widest hover:bg-amber-500 hover:text-white transition-all flex items-center gap-3">
-             <Filter size={14} /> New Folder
+             <FolderPlus size={14} /> Create Directory
            </button>
            <button onClick={() => { setUploadData({ ...uploadData, category: 'NOTES' }); setShowUpload(true); }} className="px-8 py-4 bg-white text-black rounded-[2rem] font-black text-xs uppercase tracking-widest hover:scale-105 active:scale-95 transition-all flex items-center gap-3 border border-slate-200">
              Upload Own Notes <ArrowRight size={14} />
@@ -306,7 +306,9 @@ export default function Notes({ isPersonal = false }) {
          {showUpload && (
            <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
              <div className="bg-white w-full max-w-xl rounded-[3rem] border border-slate-200 p-10 space-y-8 animate-in zoom-in-95 duration-300">
-               <h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Share Knowledge</h2>
+               <h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">
+                 {uploadData.category === 'FOLDER' ? 'Create New Directory' : 'Share Knowledge'}
+               </h2>
                <form onSubmit={handleUpload} className="space-y-6">
                  <div className="grid grid-cols-2 gap-4">
                    <div className="space-y-2">
