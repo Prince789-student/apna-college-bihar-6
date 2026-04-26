@@ -37,7 +37,7 @@ export default function Group() {
     const unsub = onSnapshot(q, (snap) => {
       const g = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       setGroups(g);
-      setMyGroups(g.filter(x => x.members.includes(user.uid)));
+      setMyGroups(g.filter(x => x.members?.includes(user?.uid)));
       setLoading(false);
     });
     return unsub;
@@ -60,8 +60,8 @@ export default function Group() {
         name,
         code,
         createdBy: user.uid,
-        creatorName: user.name,
-        members: [user.uid],
+        creatorName: user?.displayName || user?.name || 'Scholar',
+        members: [user?.uid],
         memberCount: 1,
         maxMembers: 150,
         createdAt: serverTimestamp()
@@ -122,7 +122,7 @@ export default function Group() {
   };
 
   // UI helpers
-  const filtered = groups.filter(g => g.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filtered = groups.filter(g => g.name?.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <div className="max-w-6xl mx-auto pb-24 space-y-8 animate-in fade-in slide-in-from-bottom-5 duration-700">
@@ -177,7 +177,7 @@ export default function Group() {
               <div key={g.id} className="bg-white p-6 rounded-[2.5rem] border border-slate-200/80 hover:border-blue-500/30 transition-all group">
                 <div className="flex justify-between items-start mb-4">
                   <div className="w-12 h-12 bg-blue-600/10 rounded-2xl flex items-center justify-center text-blue-400 font-black text-xl">
-                    {g.name[0].toUpperCase()}
+                    {g.name?.[0]?.toUpperCase() || 'G'}
                   </div>
                   <div className="flex items-center gap-1 text-[10px] font-black text-slate-500 bg-slate-100/50 px-2 py-1 rounded-full uppercase tracking-widest">
                     <Users size={10} />
@@ -239,7 +239,7 @@ export default function Group() {
                    <div key={g.id} className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                          <div className="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center font-black text-[10px] text-white">
-                           {g.name[0]}
+                           {g.name?.[0]?.toUpperCase() || 'G'}
                          </div>
                          <div>
                             <p className="text-[11px] font-black text-slate-900 uppercase">{g.name}</p>
