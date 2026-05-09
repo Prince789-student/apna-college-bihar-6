@@ -28,6 +28,7 @@ export default function Dashboard() {
     if (!user) return;
 
     const checkPWA = () => {
+      console.log("[PWA] Checking for deferredPrompt. Found:", !!window.deferredPrompt);
       if (window.deferredPrompt) {
         setDeferredPrompt(window.deferredPrompt);
         setShowInstall(true);

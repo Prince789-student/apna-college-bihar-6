@@ -20,6 +20,7 @@
 
       // Handle PWA Install Prompt
       window.addEventListener('beforeinstallprompt', (e) => {
+         console.log("[PWA] beforeinstallprompt event fired!");
          e.preventDefault();
          window.deferredPrompt = e;
          // Notify components that the PWA is ready to be installed
