@@ -10,11 +10,21 @@
    <script>
       // Hard-Reload if stale 'Portal' title detected
       if (document.title.includes('Portal')) { window.location.reload(true); }
+
+      // Register Service Worker for PWA
       if ('serviceWorker' in navigator) {
-         navigator.serviceWorker.getRegistrations().then(regs => {
-            for (let reg of regs) { if (reg.active) reg.unregister(); }
+         window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').catch(err => console.error("SW error:", err));
          });
       }
+
+      // Handle PWA Install Prompt
+      window.addEventListener('beforeinstallprompt', (e) => {
+         e.preventDefault();
+         window.deferredPrompt = e;
+         // Notify components that the PWA is ready to be installed
+         window.dispatchEvent(new Event('pwa-ready'));
+      });
    </script>
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <meta name="theme-color" content="#0d121f" />
