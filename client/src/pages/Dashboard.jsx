@@ -57,12 +57,24 @@ export default function Dashboard() {
   const fmt = (s) => `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`;
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      setShowInstall(false);
-      setDeferredPrompt(null);
+    console.log("[PWA] Install button clicked. deferredPrompt:", window.deferredPrompt);
+    if (!window.deferredPrompt) {
+      console.warn("[PWA] No deferredPrompt found.");
+      return;
+    }
+    
+    try {
+      console.log("[PWA] Triggering prompt...");
+      window.deferredPrompt.prompt();
+      const { outcome } = await window.deferredPrompt.userChoice;
+      console.log("[PWA] Install outcome:", outcome);
+      if (outcome === 'accepted') {
+        setShowInstall(false);
+        window.deferredPrompt = null;
+        setDeferredPrompt(null);
+      }
+    } catch (err) {
+      console.error("[PWA] Install error:", err);
     }
   };
 
