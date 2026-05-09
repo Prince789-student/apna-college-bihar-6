@@ -1,5 +1,5 @@
 {
-  "appId": "com.apnacollege.bihar",
+  "appId": "com.apnacollegebihar.online",
   "appName": "Apna College Bihar",
-  "webDir": "dist"
+  "webDir": "../server/public"
 }
