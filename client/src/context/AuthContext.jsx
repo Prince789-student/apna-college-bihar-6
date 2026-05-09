@@ -8,10 +8,13 @@ import {
   signInWithRedirect,
   getRedirectResult,
   RecaptchaVerifier, 
-  signInWithPhoneNumber 
+  signInWithPhoneNumber,
+  signInWithCredential,
+  GoogleAuthProvider
 } from "firebase/auth";
 import { auth, db, googleProvider } from "../firebase";
 import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 
 export const AuthContext = createContext(null);
 
@@ -88,16 +91,18 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  // 3. Google Signup/Login (Mobile Stable)
+  // 3. Google Signup/Login (Mobile Stable & Native)
   async function googleLogin() {
     try {
-      // If we are on a native mobile app (Capacitor), Popups don't work reliably.
-      // We force Redirect mode for a much smoother experience.
       const isNative = window.location.hostname === 'localhost' || window.Capacitor;
       
       if (isNative) {
-        console.log("Native environment detected, using Redirect Login...");
-        return await signInWithRedirect(auth, googleProvider);
+        console.log("Native environment detected, using Native Google Sign-In Plugin...");
+        const result = await FirebaseAuthentication.signInWithGoogle();
+        const credential = GoogleAuthProvider.credential(result.credential?.idToken);
+        const res = await signInWithCredential(auth, credential);
+        await syncProfile(res.user);
+        return res.user;
       }
 
       // On normal desktop/mobile browsers, Popups are fine.
@@ -106,7 +111,7 @@ export function AuthProvider({ children }) {
       return res.user;
     } catch (err) {
       console.warn("Auth flow interrupted or failed:", err);
-      // Fallback for all environments
+      // Fallback for web environments
       return await signInWithRedirect(auth, googleProvider);
     }
   }

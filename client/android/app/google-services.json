@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "818059891079",
+    "project_id": "apna-college-bihar",
+    "storage_bucket": "apna-college-bihar.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:818059891079:android:8c3066ba48bebf1de80322",
+        "android_client_info": {
+          "package_name": "com.apnacollegebihar.online"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "818059891079-kh6vpef04bkov0ic1ajk7a5g100oaejt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA77bDjk9-RUwjnuVT7082KszRrvmwPk3s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "818059891079-kh6vpef04bkov0ic1ajk7a5g100oaejt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
