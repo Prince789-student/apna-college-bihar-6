@@ -91,14 +91,23 @@ export function AuthProvider({ children }) {
   // 3. Google Signup/Login (Mobile Stable)
   async function googleLogin() {
     try {
-      // Revert to PopUp as primary for stability; only if popup fails or is specifically rejected should we fallback.
+      // If we are on a native mobile app (Capacitor), Popups don't work reliably.
+      // We force Redirect mode for a much smoother experience.
+      const isNative = window.location.hostname === 'localhost' || window.Capacitor;
+      
+      if (isNative) {
+        console.log("Native environment detected, using Redirect Login...");
+        return await signInWithRedirect(auth, googleProvider);
+      }
+
+      // On normal desktop/mobile browsers, Popups are fine.
       const res = await signInWithPopup(auth, googleProvider);
       await syncProfile(res.user);
       return res.user;
     } catch (err) {
-      console.warn("Popup blocked or failed, attempting redirect...", err);
-      // Fallback for browsers that strictly block popups (WebViews etc)
-      return signInWithRedirect(auth, googleProvider);
+      console.warn("Auth flow interrupted or failed:", err);
+      // Fallback for all environments
+      return await signInWithRedirect(auth, googleProvider);
     }
   }
 
