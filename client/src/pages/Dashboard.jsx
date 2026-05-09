@@ -82,16 +82,21 @@ export default function Dashboard() {
   return (
     <div className="max-w-7xl mx-auto pb-12 space-y-8 lg:space-y-10 animate-in fade-in duration-700">
       
-      {/* Install App Banner (PWA Only) */}
-      {showInstall && (
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 md:p-6 rounded-[2.5rem] flex items-center justify-between shadow-2xl relative overflow-hidden group mb-6">
-           <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
-           <p className="text-white font-black text-xs md:text-sm uppercase tracking-widest pl-4 relative z-10">Get the best experience in app mode!</p>
-           <button onClick={handleInstallClick} className="relative z-10 px-8 py-3 bg-white text-blue-600 hover:bg-blue-50 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
-             Install App
-           </button>
-        </div>
-      )}
+      {/* App Install & APK Download Banner */}
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 md:p-6 rounded-[2.5rem] flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xl relative overflow-hidden group mb-6">
+         <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+         <p className="text-white font-black text-xs md:text-sm uppercase tracking-widest sm:pl-4 relative z-10 text-center sm:text-left">Get the Native App (App Blocker)</p>
+         <div className="flex flex-wrap justify-center sm:justify-end items-center gap-3 relative z-10">
+           {showInstall && (
+             <button onClick={handleInstallClick} className="px-6 py-3 bg-white/10 border border-white/20 text-white hover:bg-white/20 rounded-2xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all">
+               Lite App
+             </button>
+           )}
+           <a href="/ApnaCollegeBihar.apk" download="ApnaCollegeBihar.apk" className="px-6 py-3 bg-white text-blue-600 hover:bg-blue-50 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center gap-2">
+             Download APK
+           </a>
+         </div>
+      </div>
 
       {/* Greetings Hub */}
       <div className="bg-white p-6 md:p-8 rounded-[3rem] border border-slate-200/80 shadow-2xl relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-6">
