@@ -3,6 +3,7 @@
   "short_name": "ACB",
   "description": "Bihar's Digital Study Engine - Notes & PYQ.",
   "start_url": "/dashboard",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#02040a",
   "theme_color": "#0d121f",
