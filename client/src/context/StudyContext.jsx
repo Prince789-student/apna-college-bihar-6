@@ -80,10 +80,28 @@ export function StudyProvider({ children }) {
         const isNewDay = userData.lastStudyDate !== todayStr;
         const newTodayTime = isNewDay ? timeToSave : (userData.todayStudyTime || 0) + timeToSave;
         
+        const y = new Date(); y.setDate(y.getDate() - 1);
+        const yStr = y.toLocaleDateString('en-CA');
+        
+        let streak = userData.streak || 0;
+        let streakDate = userData.streakDate || '';
+        
+        if (streakDate !== todayStr && streakDate !== yStr) {
+          streak = 0;
+        }
+        
+        if (newTodayTime >= 7200 && streakDate !== todayStr) {
+          if (streakDate === yStr) streak += 1;
+          else streak = 1;
+          streakDate = todayStr;
+        }
+        
         await updateDoc(userRef, { 
           totalStudyTime: (userData.totalStudyTime || 0) + timeToSave,
           todayStudyTime: newTodayTime,
-          lastStudyDate: todayStr, 
+          lastStudyDate: todayStr,
+          streak,
+          streakDate,
           isStudying: false 
         });
       }
