@@ -84,10 +84,10 @@ export default function Dashboard() {
       
       {/* Install App Banner (PWA Only) */}
       {showInstall && (
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 md:p-6 rounded-[2.5rem] flex items-center justify-between shadow-2xl relative overflow-hidden group">
-           <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-           <p className="text-slate-900 font-black text-xs md:text-sm uppercase tracking-widest pl-4">Get the best experience in app mode!</p>
-           <button onClick={handleInstallClick} className="px-8 py-3 bg-white text-blue-600 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 md:p-6 rounded-[2.5rem] flex items-center justify-between shadow-2xl relative overflow-hidden group mb-6">
+           <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+           <p className="text-white font-black text-xs md:text-sm uppercase tracking-widest pl-4 relative z-10">Get the best experience in app mode!</p>
+           <button onClick={handleInstallClick} className="relative z-10 px-8 py-3 bg-white text-blue-600 hover:bg-blue-50 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all">
              Install App
            </button>
         </div>
