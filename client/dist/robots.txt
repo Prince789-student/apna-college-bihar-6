@@ -1,10 +1,8 @@
 User-agent: *
 Allow: /
-Allow: /dashboard
-Allow: /dashboard/study
-Allow: /dashboard/notes
-Allow: /dashboard/calculator
-Allow: /dashboard/cgpa
 
-# Sitemaps
-Sitemap: https://apnacollegebihar.online/sitemap.xml
+# Sitemap Location
+Sitemap: https://www.apnacollegebihar.online/sitemap.xml
+
+# Crawl Delay (polite crawling)
+Crawl-delay: 5
