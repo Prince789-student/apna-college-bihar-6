@@ -98,11 +98,16 @@ export function AuthProvider({ children }) {
       
       if (isNative) {
         console.log("Native environment detected, using Native Google Sign-In Plugin...");
-        const result = await FirebaseAuthentication.signInWithGoogle();
-        const credential = GoogleAuthProvider.credential(result.credential?.idToken);
-        const res = await signInWithCredential(auth, credential);
-        await syncProfile(res.user);
-        return res.user;
+        try {
+          const result = await FirebaseAuthentication.signInWithGoogle();
+          const credential = GoogleAuthProvider.credential(result.credential?.idToken);
+          const res = await signInWithCredential(auth, credential);
+          await syncProfile(res.user);
+          return res.user;
+        } catch (nativeErr) {
+          alert("Native Login Error: " + (nativeErr.message || JSON.stringify(nativeErr)));
+          throw nativeErr;
+        }
       }
 
       // On normal desktop/mobile browsers, Popups are fine.
@@ -111,8 +116,10 @@ export function AuthProvider({ children }) {
       return res.user;
     } catch (err) {
       console.warn("Auth flow interrupted or failed:", err);
-      // Fallback for web environments
-      return await signInWithRedirect(auth, googleProvider);
+      if (window.location.hostname !== 'localhost' && !window.Capacitor) {
+         // Only fallback to redirect on actual web browsers
+         return await signInWithRedirect(auth, googleProvider);
+      }
     }
   }
 
