@@ -5,7 +5,7 @@ node_modules/
 dist/
 build/
 .env
-*.apk
+# *.apk removed to allow hosting APK on GitHub
 apnacollegebihar-hostinger.zip
 firebase-debug.log*
 .DS_Store
