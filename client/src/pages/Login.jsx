@@ -69,7 +69,7 @@ export default function Login() {
               APNA COLLEGE<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-200 to-amber-500">BIHAR</span>
             </h1>
-            <p className="text-[8px] font-black text-slate-400 mt-2 tracking-[0.3em] opacity-50">STABLE BUILD V2.5</p>
+            <p className="text-[8px] font-black text-slate-400 mt-2 tracking-[0.3em] opacity-50">STABLE BUILD V3.0</p>
           </div>
 
           {error && (
