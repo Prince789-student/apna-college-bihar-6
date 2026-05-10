@@ -13,7 +13,7 @@ export default function Signup() {
     try {
       setLoading(true);
       await googleLogin();
-      navigate('/dashboard');
+      navigate('/');
     } catch (err) {
       setError(err.message);
     } finally {

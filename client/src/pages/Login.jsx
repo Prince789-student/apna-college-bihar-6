@@ -16,7 +16,8 @@ export default function Login() {
   useEffect(() => {
     if (user && !loading) {
       const lastPath = localStorage.getItem('lastPath');
-      navigate(lastPath || '/dashboard/study', { replace: true });
+      // If we were on a specific page, go back there, otherwise go to the main Hub (/)
+      navigate(lastPath || '/', { replace: true });
     }
   }, [user, loading, navigate]);
 
@@ -27,7 +28,7 @@ export default function Login() {
       setLoading(true);
       await googleLogin();
       const lastPath = localStorage.getItem('lastPath');
-      navigate(lastPath || '/dashboard');
+      navigate(lastPath || '/');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -42,7 +43,7 @@ export default function Login() {
     try {
       await login(formData.email, formData.password);
       const lastPath = localStorage.getItem('lastPath');
-      navigate(lastPath || '/dashboard');
+      navigate(lastPath || '/');
     } catch (err) {
       setError(err.message);
     } finally {
