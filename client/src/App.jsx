@@ -28,6 +28,8 @@ import Achievements from './pages/Achievements';
 import Group from './pages/Group';
 import GroupDetail from './pages/GroupDetail';
 
+import AppHub from './pages/AppHub';
+
 function App() {
   const { focusBroken, setFocusBroken } = useStudy();
   const { user, loading } = useAuth();
@@ -41,7 +43,6 @@ function App() {
     );
   }
 
-
   return (
     <>
       <Toaster position="top-right" />
@@ -49,7 +50,7 @@ function App() {
         {/* Public Routes */}
         <Route path="/" element={
           isNative ? (
-            user ? <Navigate to="/dashboard/study" replace /> : <Navigate to="/login" replace />
+            <AppHub />
           ) : (
             <Home />
           )
