@@ -65,8 +65,24 @@ export default function StudyDashboard() {
 
   const isNative = Capacitor.isNativePlatform();
 
+  const [isAccessibilityEnabled, setIsAccessibilityEnabled] = useState(true);
+
+  const checkAccessibility = async () => {
+    if (!isNative) return;
+    try {
+      const { enabled } = await Capacitor.Plugins.AppList.isAccessibilityServiceEnabled();
+      setIsAccessibilityEnabled(enabled);
+    } catch (err) { console.error(err); }
+  };
+
   useEffect(() => {
-    if (isNative) fetchApps();
+    if (isNative) {
+      fetchApps();
+      checkAccessibility();
+      // Check again every 5 seconds while on this page
+      const interval = setInterval(checkAccessibility, 5000);
+      return () => clearInterval(interval);
+    }
   }, [isNative]);
 
   useEffect(() => {
@@ -200,6 +216,17 @@ export default function StudyDashboard() {
           <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Today's Focus</p><p className="text-2xl font-black text-slate-900 leading-none">{formatDuration(stats.today)}</p></div>
         </div>
       </div>
+
+      {isNative && !isAccessibilityEnabled && (
+        <div className="bg-red-500/10 border border-red-500/30 p-6 rounded-[3rem] flex flex-col md:flex-row items-center gap-6 animate-pulse">
+           <div className="w-12 h-12 bg-red-600 text-white rounded-2xl flex items-center justify-center shadow-lg"><AlertTriangle size={24} /></div>
+           <div className="flex-1 text-center md:text-left">
+             <p className="text-sm font-black text-red-600 uppercase tracking-widest leading-none mb-1">Iron Focus Disabled</p>
+             <p className="text-[10px] font-bold text-red-500/80 uppercase tracking-wider">App Blocker permission chalu nahi hai. Settings &gt; Accessibility me "ACB Blocker" on karein.</p>
+           </div>
+           <button onClick={() => alert('Steps:\n1. Open Settings\n2. Accessibility\n3. Downloaded Apps / Installed Services\n4. Enable "ACB Blocker"')} className="px-6 py-3 bg-red-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl whitespace-nowrap">Setup Now</button>
+        </div>
+      )}
 
       {/* Main Tab Container */}
       <div className="min-h-[500px]">

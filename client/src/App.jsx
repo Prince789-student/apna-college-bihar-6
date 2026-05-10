@@ -32,8 +32,23 @@ import AppHub from './pages/AppHub';
 
 function App() {
   const { focusBroken, setFocusBroken } = useStudy();
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const [loading, setLoading] = useState(true);
   const isNative = Capacitor.isNativePlatform();
+
+  useEffect(() => {
+    // Safety timeout: Never stay loading more than 5 seconds
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+
+    if (!authLoading) {
+      setLoading(false);
+      clearTimeout(timer);
+    }
+
+    return () => clearTimeout(timer);
+  }, [authLoading]);
 
   if (loading) {
     return (

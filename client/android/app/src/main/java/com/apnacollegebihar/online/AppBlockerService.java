@@ -70,12 +70,14 @@ public class AppBlockerService extends AccessibilityService {
 
                 // Baaki sab Block!
                 performGlobalAction(GLOBAL_ACTION_HOME);
-                Toast.makeText(this, "IRON FOCUS: Abhi abhi padhai ka time hai!", Toast.LENGTH_SHORT).show();
                 
-                // Bring App back to front
-                Intent startMain = new Intent(this, MainActivity.class);
-                startMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(startMain);
+                // Only bring to front if we are not already there
+                if (!packageName.equals("com.apnacollegebihar.online")) {
+                    Intent startMain = new Intent(this, MainActivity.class);
+                    startMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(startMain);
+                    Toast.makeText(this, "IRON FOCUS: Focus Zone me wapas jaiye!", Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
