@@ -15,6 +15,7 @@ import {
 import { auth, db, googleProvider } from "../firebase";
 import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+import { Capacitor } from '@capacitor/core';
 
 export const AuthContext = createContext(null);
 
@@ -93,7 +94,7 @@ export function AuthProvider({ children }) {
 
   // 3. Google Signup/Login (Mobile Stable & Native)
   async function googleLogin() {
-    const isNative = window.location.hostname === 'localhost' || window.Capacitor;
+    const isNative = Capacitor.isNativePlatform();
       
     if (isNative) {
       console.log("Native environment detected, using Native Google Sign-In Plugin...");
