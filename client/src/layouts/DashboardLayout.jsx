@@ -81,7 +81,7 @@ export default function DashboardLayout() {
   const SidebarContent = ({ isMobile = false }) => (
     <>
       <div className={`p-3 md:p-4 flex items-center justify-between ${!isSidebarOpen && !isMobile ? 'justify-center' : ''}`}>
-        <div className={`flex items-center gap-2 transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}><img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" /><div className="min-w-[100px]"><span className="text-sm font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE BIHAR</span><span className="text-[6px] text-slate-500 font-black uppercase tracking-[0.3em] mt-1 block">Bihar Official</span></div></div>
+        <div className={`flex items-center gap-2 transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}><img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" /><div className="min-w-[100px]"><span className="text-sm font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">ACB</span><span className="text-[6px] text-slate-500 font-black uppercase tracking-[0.3em] mt-1 block">Bihar Official</span></div></div>
         {!isMobile && <button onClick={()=>setSidebarOpen(!isSidebarOpen)} className="p-2.5 bg-slate-100/50 rounded-xl transition-all ml-2"><Menu size={18} /></button>}
         {isMobile && <button onClick={()=>setMobileMenuOpen(false)} className="p-2 text-slate-500"><X size={24} /></button>}
       </div>

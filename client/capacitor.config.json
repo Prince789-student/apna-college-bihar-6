@@ -1,6 +1,6 @@
 {
   "appId": "com.apnacollegebihar.online",
-  "appName": "Apna College Bihar",
+  "appName": "ACB",
   "webDir": "dist",
   "plugins": {
     "FirebaseAuthentication": {

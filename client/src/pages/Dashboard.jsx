@@ -14,6 +14,8 @@ import {
 } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import PremiumAds from '../components/PremiumAds';
+import { Capacitor } from '@capacitor/core';
+import { Preferences } from '@capacitor/preferences';
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -92,7 +94,7 @@ export default function Dashboard() {
                Lite App
              </button>
            )}
-           <a href="https://github.com/Prince789-student/apna-college-bihar-6/raw/refs/heads/main/server/public/ApnaCollegeBihar-v6.apk" download="ApnaCollegeBihar-v6.apk" className="px-6 py-3 bg-white text-blue-600 hover:bg-blue-50 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center gap-2">
+           <a href="https://github.com/Prince789-student/apna-college-bihar-6/raw/refs/heads/main/server/public/ACB-v7.apk" download="ACB-v7.apk" className="px-6 py-3 bg-white text-blue-600 hover:bg-blue-50 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center gap-2">
              Download APK
            </a>
          </div>
@@ -138,6 +140,26 @@ export default function Dashboard() {
              Enter Protocol
           </Link>
       </div>
+
+      {/* App Blocker Config (Native Only) */}
+      {Capacitor.isNativePlatform() && (
+        <div className="bg-slate-900 p-8 rounded-[3rem] border border-slate-800 shadow-3xl relative overflow-hidden">
+           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[80px] pointer-events-none"></div>
+           <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
+              <div className="space-y-3 text-center md:text-left">
+                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/20 border border-blue-500/30 rounded-full text-blue-400 text-[8px] font-black uppercase tracking-widest">Experimental Feature</div>
+                 <h2 className="text-3xl font-[1000] text-white tracking-tighter uppercase leading-none">Iron Focus Blocker</h2>
+                 <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest leading-relaxed">Blocks Instagram, Games & YouTube during study sessions. <br/> Requires Accessibility Permission.</p>
+              </div>
+              <button 
+                onClick={() => alert("Iron Focus Active! App blocker will trigger when you start a study timer. \n\nIMPORTANT: Make sure 'ACB Focus Mode' is ON in your phone's Accessibility Settings.")}
+                className="w-full md:w-auto px-10 py-5 bg-white text-slate-900 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl active:scale-95 transition-all"
+              >
+                Activate Blocker
+              </button>
+           </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         

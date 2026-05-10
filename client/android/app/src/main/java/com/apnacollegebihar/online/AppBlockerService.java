@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class AppBlockerService extends AccessibilityService {
 
-    private static final String PREFS_NAME = "AppBlockerPrefs";
+    private static final String PREFS_NAME = "CapacitorStorage";
     private static final String KEY_IS_ACTIVE = "isBlockerActive";
     private static final String KEY_COUNTDOWN_END = "countdownEndTime";
     private static final String KEY_ALLOWED_PACKAGES = "allowedPackages";
@@ -24,7 +24,7 @@ public class AppBlockerService extends AccessibilityService {
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
         info.notificationTimeout = 100;
         this.setServiceInfo(info);
-        Toast.makeText(this, "Apna College Bihar Blocker Started!", Toast.LENGTH_LONG).show();
+        // Silently start, no toast to avoid annoyance
     }
 
     @Override
@@ -34,8 +34,16 @@ public class AppBlockerService extends AccessibilityService {
             String packageName = event.getPackageName().toString();
             
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            boolean isActive = prefs.getBoolean(KEY_IS_ACTIVE, false);
-            long endTime = prefs.getLong(KEY_COUNTDOWN_END, 0);
+            
+            // Capacitor stores everything as Strings
+            String activeStr = prefs.getString(KEY_IS_ACTIVE, "false");
+            boolean isActive = "true".equals(activeStr);
+            
+            String endTimeStr = prefs.getString(KEY_COUNTDOWN_END, "0");
+            long endTime = 0;
+            try {
+                endTime = Long.parseLong(endTimeStr);
+            } catch (Exception e) {}
             
             // Hardcore Logic: Agar timer chalu hai, toh check karo!
             boolean isCountdownRunning = (System.currentTimeMillis() < endTime);

@@ -75,24 +75,28 @@ function App() {
       {/* Global Focus Shield Overlay */}
       {focusBroken && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-6 bg-slate-950/98 backdrop-blur-3xl animate-in fade-in duration-500">
-          <div className="w-full max-w-lg text-center space-y-10">
-            <div className="w-28 h-28 bg-red-600/20 text-red-500 rounded-[2.5rem] flex items-center justify-center mx-auto animate-pulse shadow-[0_0_50px_rgba(220,38,38,0.3)]">
-              <AlertTriangle size={56} />
+          <div className="w-full max-w-lg text-center space-y-12">
+            <div className="relative">
+               <div className="absolute inset-0 bg-blue-600/20 blur-[60px] animate-pulse"></div>
+               <div className="w-32 h-32 bg-slate-900 border-2 border-blue-500/50 text-blue-500 rounded-[2.5rem] flex items-center justify-center mx-auto relative z-10 animate-bounce shadow-[0_0_50px_rgba(37,99,235,0.3)]">
+                 <Shield size={64} className="animate-pulse" />
+               </div>
             </div>
             <div className="space-y-4">
-              <h2 className="text-5xl font-[1000] text-white tracking-tighter uppercase leading-none">Focus Violated</h2>
-              <p className="text-slate-400 text-sm font-bold uppercase tracking-[0.2em] leading-relaxed max-w-sm mx-auto">
-                Detecting unauthorized activity. <br/>
-                <span className="text-red-500/80">Concentration is mandatory</span> <br/>
-                for your academic protocol.
+              <h2 className="text-6xl font-[1000] text-white tracking-tighter uppercase leading-none">Iron Focus</h2>
+              <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.4em] leading-relaxed max-w-sm mx-auto">
+                <span className="text-blue-500">Distraction Detected.</span> <br/>
+                Protocol is currently locked. <br/>
+                Return to your academic targets.
               </p>
             </div>
             <button 
               onClick={() => setFocusBroken(false)} 
-              className="w-full py-7 bg-blue-600 hover:bg-blue-500 text-white rounded-[2.5rem] font-[1000] text-sm uppercase tracking-widest shadow-[0_20px_50px_rgba(37,99,235,0.4)] active:scale-95 transition-all"
+              className="w-full py-8 bg-blue-600 hover:bg-blue-500 text-white rounded-[2.5rem] font-black text-xs uppercase tracking-[0.3em] shadow-[0_25px_60px_rgba(37,99,235,0.4)] active:scale-95 transition-all border border-blue-400/30"
             >
-              I Commit to Focus
+              Resume Protocol
             </button>
+            <p className="text-slate-600 text-[8px] font-bold uppercase tracking-widest">Biometric bypass disabled · Session integrity verified</p>
           </div>
         </div>
       )}

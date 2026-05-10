@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useEffect, useRef } from 'r
 import { db } from '../firebase';
 import { doc, updateDoc, addDoc, collection, getDoc } from 'firebase/firestore';
 import { useAuth } from './AuthContext';
+import { Preferences } from '@capacitor/preferences';
+import { Capacitor } from '@capacitor/core';
 
 const StudyContext = createContext(null);
 
@@ -31,6 +33,18 @@ export function StudyProvider({ children }) {
   const setTimerActive = (val) => {
     _setTimerActive(val);
     localStorage.setItem('timerActive', JSON.stringify(val));
+    
+    // Native Blocker Integration
+    if (Capacitor.isNativePlatform()) {
+      if (val) {
+        const endTime = Date.now() + (timerTime * 1000);
+        Preferences.set({ key: 'isBlockerActive', value: 'true' });
+        Preferences.set({ key: 'countdownEndTime', value: String(endTime) });
+      } else {
+        Preferences.set({ key: 'isBlockerActive', value: 'false' });
+        Preferences.set({ key: 'countdownEndTime', value: '0' });
+      }
+    }
   };
 
   const setFocusBroken = (val) => {
