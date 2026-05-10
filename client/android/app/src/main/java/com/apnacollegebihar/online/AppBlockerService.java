@@ -33,8 +33,11 @@ public class AppBlockerService extends AccessibilityService {
             String packageName = event.getPackageName().toString();
             String myPackage = this.getPackageName();
             
+            // Debug Toast (Will show on every app switch)
+            // Toast.makeText(this, "Detect: " + packageName, Toast.LENGTH_SHORT).show();
+            
             // Check multiple potential preference files
-            String[] prefFiles = {"CapacitorStorage", "com.getcapacitor.android.plugins.preferences.Preferences", "AppBlockerPrefs", "bridge"};
+            String[] prefFiles = {"CapacitorStorage", "com.getcapacitor.android.plugins.preferences.Preferences", "AppBlockerPrefs", "bridge", "CapacitorStorage"};
             boolean isActive = false;
             long endTime = 0;
             String allowedStr = "";
@@ -79,19 +82,20 @@ public class AppBlockerService extends AccessibilityService {
                     }
                 }
 
-                // System & Essential Apps (including Google Services/Launcher)
+                // System & Essential Apps
                 if (packageName.equals(myPackage) || 
                     packageName.equals("com.android.phone") || 
                     packageName.equals("com.android.server.telecom") ||
                     packageName.equals("com.android.systemui") ||
                     packageName.contains("launcher") ||
                     packageName.contains("trebuchet") ||
+                    packageName.contains("settings") ||
                     isWhitelisted) {
                     return; 
                 }
 
                 // Block everything else!
-                // Instead of just going home, bring our app back to the front
+                Toast.makeText(this, "BLOCKING: " + packageName, Toast.LENGTH_SHORT).show();
                 Intent launchIntent = getPackageManager().getLaunchIntentForPackage(myPackage);
                 if (launchIntent != null) {
                     launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
