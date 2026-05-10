@@ -9,21 +9,6 @@ import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 
 export default function Home() {
-  const [stats, setStats] = useState({ users: 5000, docs: 100, groups: 24 });
-
-  useEffect(() => {
-    const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
-      setStats(s => ({ ...s, users: snap.size }));
-    });
-    const unsubDocs = onSnapshot(collection(db, 'documents'), (snap) => {
-      setStats(s => ({ ...s, docs: snap.size }));
-    });
-    const unsubGroups = onSnapshot(collection(db, 'groups'), (snap) => {
-      setStats(s => ({ ...s, groups: snap.size }));
-    });
-    return () => { unsubUsers(); unsubDocs(); unsubGroups(); };
-  }, []);
-
   return (
     <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center p-4 font-['Inter'] relative overflow-hidden">
 
@@ -82,24 +67,7 @@ export default function Home() {
               </Link>
            </div>
 
-           <div className="pt-16 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 items-center opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
-              <div className="flex flex-col items-center">
-                 <span className="text-3xl font-[1000] text-slate-900">{stats.users}</span>
-                 <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Scholars</span>
-              </div>
-              <div className="flex flex-col items-center">
-                 <span className="text-3xl font-[1000] text-slate-900">{stats.docs}</span>
-                 <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">PYQ & Notes</span>
-              </div>
-              <div className="flex flex-col items-center">
-                 <span className="text-3xl font-[1000] text-slate-900">{stats.groups}</span>
-                 <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Active Hubs</span>
-              </div>
-              <div className="flex flex-col items-center">
-                 <span className="text-3xl font-[1000] text-slate-900">FREE</span>
-                 <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">NOW</span>
-              </div>
-           </div>
+
         </div>
       </section>
 

@@ -40,7 +40,7 @@ function App() {
         {/* Public Routes */}
         <Route path="/" element={
           isNative ? (
-            user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
+            user ? <Navigate to="/dashboard/study" replace /> : <Navigate to="/login" replace />
           ) : (
             <Home />
           )
