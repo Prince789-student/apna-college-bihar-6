@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Shield } from 'lucide-react';
 import { useStudy } from './context/StudyContext';
 import { useAuth } from './context/AuthContext';
 import { Capacitor } from '@capacitor/core';
