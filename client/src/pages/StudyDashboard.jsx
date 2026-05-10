@@ -13,7 +13,7 @@ import {
   LayoutDashboard, Settings, Trash2, Trophy,
   ArrowRight, ClipboardList,
   CheckCircle2, Shield, Timer, AlertTriangle,
-  BookOpen, Activity, Calendar, Users
+  BookOpen, Activity, Calendar, Users, Search, X
 } from 'lucide-react';
 
 // ── Helpers ──
@@ -46,7 +46,9 @@ export default function StudyDashboard() {
     customMinutes, setCustomMinutes,
     customSeconds, setCustomSeconds,
     timerMode, setTimerMode,
-    saveGlobalSession
+    saveGlobalSession,
+    allowedPackages, setAllowedPackages,
+    installedApps, fetchApps
   } = useStudy();
 
   const [userData, setUserData] = useState(null);
@@ -56,8 +58,16 @@ export default function StudyDashboard() {
   const [loading, setLoading] = useState(true);
   const [goals, setGoals] = useState({ daily: 2, weekly: 14, monthly: 60 });
   const [showGoalModal, setShowGoalModal] = useState(false);
+  const [showWhitelist, setShowWhitelist] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [newTask, setNewTask] = useState('');
   const [newTaskSubject, setNewTaskSubject] = useState('OTHERS');
+
+  const isNative = Capacitor.isNativePlatform();
+
+  useEffect(() => {
+    if (isNative) fetchApps();
+  }, [isNative]);
 
   useEffect(() => {
     if (!user) return;
@@ -89,6 +99,20 @@ export default function StudyDashboard() {
     });
     return () => { unsubSess(); unsubTask(); };
   }, [user, todayStr]);
+
+  const toggleApp = (pkg) => {
+    const list = allowedPackages.split(',').filter(Boolean);
+    if (list.includes(pkg)) {
+      setAllowedPackages(list.filter(p => p !== pkg).join(','));
+    } else {
+      setAllowedPackages([...list, pkg].join(','));
+    }
+  };
+
+  const filteredApps = installedApps.filter(app => 
+    app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    app.packageName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const stats = useMemo(() => {
     let activeSec = 0;
@@ -237,20 +261,22 @@ export default function StudyDashboard() {
                     <div className="text-center space-y-4">
                       <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest flex items-center justify-center gap-3">
                         <Shield size={14} /> 
-                        {Capacitor.isNativePlatform() ? `Blocking Active (${allowedPackages.split(',').filter(Boolean).length} Whitelisted)` : 'Focus Shield Active'}
+                        {isNative ? `Iron Focus: ${allowedPackages.split(',').filter(Boolean).length} Apps Allowed` : 'Focus Shield Active'}
                       </p>
-                      <div className="flex gap-4">
-                        <button onClick={() => setTimerActive(true)} className="flex-[2] py-7 bg-blue-600 hover:bg-blue-500 text-white rounded-[2.5rem] font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">Initialize <ArrowRight size={22} /></button>
-                        {Capacitor.isNativePlatform() && (
-                          <button onClick={() => navigate('/dashboard', { state: { openWhitelist: true } })} className="flex-1 py-7 bg-slate-900 text-white rounded-[2.5rem] font-[1000] text-[10px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all">Whitelist</button>
+                      <div className="flex flex-col sm:flex-row gap-4 w-full">
+                        <button onClick={() => setTimerActive(true)} className="flex-[2] py-7 bg-blue-600 hover:bg-blue-500 text-white rounded-[2.5rem] font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">Initialize Focus <ArrowRight size={22} /></button>
+                        {isNative && (
+                          <button onClick={() => setShowWhitelist(true)} className="flex-1 py-7 bg-slate-900 text-white rounded-[2.5rem] font-[1000] text-[10px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-2">
+                             <Settings size={14} /> Whitelist
+                          </button>
                         )}
                       </div>
                     </div>
                   </div>
                 ) : (
                   <div className="flex gap-4">
-                    <button onClick={() => setTimerActive(false)} className="flex-1 py-7 bg-white text-slate-400 rounded-[2.5rem] font-[1000] text-[10px] uppercase tracking-widest border-2 border-slate-100 transition-all">Pause</button>
-                    <button onClick={() => saveGlobalSession()} className="flex-1 py-7 bg-red-600 text-white rounded-[2.5rem] font-[1000] text-[10px] uppercase tracking-widest shadow-2xl transition-all">Abort & Save</button>
+                    <button onClick={() => setTimerActive(false)} className="flex-1 py-7 bg-white text-slate-400 rounded-[2.5rem] font-[1000] text-[10px] uppercase tracking-widest border-2 border-slate-100 transition-all">Pause Session</button>
+                    <button onClick={() => saveGlobalSession()} className="flex-1 py-7 bg-red-600 text-white rounded-[2.5rem] font-[1000] text-[10px] uppercase tracking-widest shadow-2xl transition-all">Abort & Sync</button>
                   </div>
                 )}
               </div>
@@ -342,6 +368,65 @@ export default function StudyDashboard() {
           </div>
         )}
       </div>
+
+      {/* ── Whitelist Modal ── */}
+      {showWhitelist && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-xl animate-in fade-in duration-300">
+           <div className="w-full max-w-2xl bg-white rounded-[3.5rem] shadow-3xl flex flex-col max-h-[85vh] overflow-hidden">
+              <div className="p-8 md:p-10 border-b border-slate-100 flex items-center justify-between">
+                 <div>
+                    <h2 className="text-2xl font-[1000] text-slate-900 tracking-tighter uppercase">Iron Focus Configuration</h2>
+                    <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-2">Whitelist essential apps to bypass the lock</p>
+                 </div>
+                 <button onClick={() => setShowWhitelist(false)} className="p-4 bg-slate-100 hover:bg-slate-200 rounded-2xl text-slate-500 transition-all"><X size={20}/></button>
+              </div>
+
+              <div className="px-10 py-6 border-b border-slate-100">
+                 <div className="relative group">
+                    <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                    <input 
+                      type="text" 
+                      placeholder="Search Apps..." 
+                      className="w-full pl-16 pr-8 py-5 bg-slate-50 border-2 border-transparent focus:border-blue-500/30 focus:bg-white rounded-[1.5rem] text-sm font-bold outline-none transition-all"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                 </div>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-6 md:p-10 space-y-3 custom-scrollbar">
+                 {filteredApps.map(app => {
+                   const isSelected = allowedPackages.includes(app.packageName);
+                   return (
+                     <div 
+                       key={app.packageName} 
+                       onClick={() => toggleApp(app.packageName)}
+                       className={`flex items-center justify-between p-5 rounded-[1.5rem] cursor-pointer transition-all border-2 ${isSelected ? 'bg-blue-50 border-blue-200' : 'bg-slate-50/50 border-transparent hover:bg-slate-50'}`}
+                     >
+                        <div className="flex items-center gap-4">
+                           <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-[1000] text-lg ${isSelected ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>{app.name[0]}</div>
+                           <div>
+                              <p className="text-sm font-[1000] text-slate-900 uppercase tracking-tight leading-none">{app.name}</p>
+                              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-2 truncate max-w-[200px]">{app.packageName}</p>
+                           </div>
+                        </div>
+                        {isSelected && <CheckCircle2 size={24} className="text-blue-600" />}
+                     </div>
+                   );
+                 })}
+              </div>
+
+              <div className="p-8 bg-slate-50/50 border-t border-slate-100">
+                 <button 
+                   onClick={() => setShowWhitelist(false)}
+                   className="w-full py-5 bg-slate-900 text-white rounded-[1.5rem] font-black text-xs uppercase tracking-[0.2em] shadow-xl transition-all active:scale-95"
+                 >
+                   Apply Changes
+                 </button>
+              </div>
+           </div>
+        </div>
+      )}
 
       {/* Goal Modal */}
       {showGoalModal && (
