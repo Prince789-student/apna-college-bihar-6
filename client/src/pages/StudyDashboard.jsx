@@ -349,13 +349,15 @@ export default function StudyDashboard() {
               )}
             </div>
           </div>
+        )}
 
-      {/* ─── SECTION 2: DASHBOARD ─── */}
-        <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden">
-          <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
-            <div className="w-9 h-9 bg-indigo-500 text-white rounded-xl flex items-center justify-center"><LayoutDashboard size={18} /></div>
-            <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Dashboard</h2>
-          </div>
+        {/* ─── TAB: DASHBOARD ─── */}
+        {tab === 'overview' && (
+          <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden">
+            <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
+              <div className="w-9 h-9 bg-indigo-500 text-white rounded-xl flex items-center justify-center"><LayoutDashboard size={18} /></div>
+              <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Dashboard</h2>
+            </div>
           <div className="p-4 space-y-4">
             {/* Stats Row */}
             <div className="grid grid-cols-3 gap-3">
@@ -404,14 +406,16 @@ export default function StudyDashboard() {
             )}
           </div>
         </div>
+      )}
 
-        {/* ─── SECTION 3: STUDY PLAN ─── */}
-        <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden">
-          <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
-            <div className="w-9 h-9 bg-purple-500 text-white rounded-xl flex items-center justify-center"><ClipboardList size={18} /></div>
-            <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Study Plan</h2>
-            <span className="ml-auto text-[8px] font-black bg-slate-100 text-slate-500 px-3 py-1 rounded-full uppercase">{tasks.filter(t => t.done).length}/{tasks.length} Done</span>
-          </div>
+        {/* ─── TAB: STUDY PLAN ─── */}
+        {tab === 'todo' && (
+          <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden">
+            <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
+              <div className="w-9 h-9 bg-purple-500 text-white rounded-xl flex items-center justify-center"><ClipboardList size={18} /></div>
+              <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Study Plan</h2>
+              <span className="ml-auto text-[8px] font-black bg-slate-100 text-slate-500 px-3 py-1 rounded-full uppercase">{tasks.filter(t => t.done).length}/{tasks.length} Done</span>
+            </div>
           <div className="p-4 space-y-4">
             {/* Add Task */}
             <div className="flex gap-2">
@@ -441,13 +445,15 @@ export default function StudyDashboard() {
             )}
           </div>
         </div>
+      )}
 
-        {/* ─── SECTION 4: STUDY NETWORK ─── */}
-        <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden">
-          <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
-            <div className="w-9 h-9 bg-orange-500 text-white rounded-xl flex items-center justify-center"><Users size={18} /></div>
-            <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Study Network</h2>
-          </div>
+        {/* ─── TAB: STUDY NETWORK ─── */}
+        {tab === 'network' && (
+          <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden">
+            <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
+              <div className="w-9 h-9 bg-orange-500 text-white rounded-xl flex items-center justify-center"><Users size={18} /></div>
+              <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Study Network</h2>
+            </div>
           <div className="p-4">
             <button onClick={() => navigate('/dashboard/groups')} className="w-full flex items-center justify-between p-5 bg-slate-900 text-white rounded-2xl active:scale-95 transition-all">
               <div className="flex items-center gap-3"><Users size={20} className="text-orange-400" /><div><p className="text-xs font-black uppercase tracking-widest">Study Groups</p><p className="text-[9px] text-slate-400 mt-0.5">Join or create a group</p></div></div>
@@ -467,6 +473,7 @@ export default function StudyDashboard() {
             </div>
           </div>
         </div>
+      )}
 
 
         {/* ── Whitelist Modal ── */}
@@ -557,5 +564,6 @@ export default function StudyDashboard() {
           </div>
         )}
       </div>
-      );
+    </div>
+  );
 }
