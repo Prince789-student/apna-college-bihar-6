@@ -19,10 +19,10 @@ import java.util.Set;
 
 @CapacitorPlugin(name = "AppBlocker")
 public class AppBlockerPlugin extends Plugin {
-    private static final String PREFS_NAME = "AppBlockerPrefs";
-    private static final String KEY_IS_ACTIVE = "isBlockerActive";
-    private static final String KEY_COUNTDOWN_END = "countdownEndTime";
-    private static final String KEY_ALLOWED_PACKAGES = "allowedPackages";
+    private static final String PREFS_NAME = "CapacitorStorage";
+    private static final String KEY_IS_ACTIVE = "_cap_isBlockerActive";
+    private static final String KEY_COUNTDOWN_END = "_cap_countdownEndTime";
+    private static final String KEY_ALLOWED_PACKAGES = "_cap_allowedPackages";
 
     @PluginMethod
     public void getInstalledApps(PluginCall call) {

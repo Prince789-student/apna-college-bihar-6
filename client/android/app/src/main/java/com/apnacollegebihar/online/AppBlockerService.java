@@ -12,9 +12,9 @@ import java.util.Set;
 public class AppBlockerService extends AccessibilityService {
 
     private static final String PREFS_NAME = "CapacitorStorage";
-    private static final String KEY_IS_ACTIVE = "isBlockerActive";
-    private static final String KEY_COUNTDOWN_END = "countdownEndTime";
-    private static final String KEY_ALLOWED_PACKAGES = "allowedPackages";
+    private static final String KEY_IS_ACTIVE = "_cap_isBlockerActive";
+    private static final String KEY_COUNTDOWN_END = "_cap_countdownEndTime";
+    private static final String KEY_ALLOWED_PACKAGES = "_cap_allowedPackages";
 
     @Override
     protected void onServiceConnected() {
@@ -35,29 +35,40 @@ public class AppBlockerService extends AccessibilityService {
             
             SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             
-            // Capacitor stores everything as Strings, sometimes with _cap_ prefix
-            String activeStr = prefs.getString(KEY_IS_ACTIVE, prefs.getString("_cap_" + KEY_IS_ACTIVE, "false"));
+            // Unified keys starting with _cap_ (as set by Capacitor)
+            String activeStr = prefs.getString(KEY_IS_ACTIVE, "false");
             boolean isActive = "true".equals(activeStr);
             
-            String endTimeStr = prefs.getString(KEY_COUNTDOWN_END, prefs.getString("_cap_" + KEY_COUNTDOWN_END, "0"));
+            String endTimeStr = prefs.getString(KEY_COUNTDOWN_END, "0");
             long endTime = 0;
             try {
                 endTime = Long.parseLong(endTimeStr);
             } catch (Exception e) {}
             
-            // Hardcore Logic: Agar timer chalu hai, toh check karo!
             boolean isCountdownRunning = (System.currentTimeMillis() < endTime);
             
             if (isActive || isCountdownRunning) {
-                String allowedStr = prefs.getString(KEY_ALLOWED_PACKAGES, prefs.getString("_cap_" + KEY_ALLOWED_PACKAGES, ""));
-                
-                // Humesha Allowed (System & Essential)
+                String allowedStr = prefs.getString(KEY_ALLOWED_PACKAGES, "");
+
+                // Enhanced Whitelist Check
+                boolean isWhitelisted = false;
+                if (allowedStr != null && !allowedStr.isEmpty()) {
+                    String[] allowedApps = allowedStr.split(",");
+                    for (String pkg : allowedApps) {
+                        if (packageName.equals(pkg.trim())) {
+                            isWhitelisted = true;
+                            break;
+                        }
+                    }
+                }
+
                 if (packageName.equals("com.apnacollegebihar.online") || 
                     packageName.equals("com.android.phone") || 
                     packageName.equals("com.android.server.telecom") ||
                     packageName.equals("com.android.mms") ||
                     packageName.equals("com.google.android.apps.messaging") ||
-                    allowedStr.contains(packageName)) {
+                    packageName.equals("com.android.dialer") ||
+                    isWhitelisted) {
                     return; // Sab sahi hai, aage badho!
                 }
 
