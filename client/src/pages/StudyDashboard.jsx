@@ -195,34 +195,62 @@ export default function StudyDashboard() {
   if (loading) return <div className="flex justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 pb-24 px-3 md:px-0">
+    <div className="max-w-2xl mx-auto pb-24 px-3 md:px-0">
 
       {/* ACB Study Zone Header */}
-      <div className="flex items-center gap-3 pt-2 pb-1">
+      <div className="flex items-center gap-3 pt-4 pb-3">
         <img src="/logo.jpg" alt="ACB" className="w-10 h-10 rounded-xl" />
         <div>
           <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.3em]">Apna College Bihar</p>
           <h1 className="text-lg font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Study Zone</h1>
         </div>
+        {timerActive && (
+          <span className="ml-auto text-[8px] font-black bg-blue-600 text-white px-3 py-1 rounded-full uppercase animate-pulse">
+            Focus Active
+          </span>
+        )}
+      </div>
+
+      {/* ── STICKY 4-TAB BAR ── */}
+      <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-lg pb-3 pt-1">
+        <div className="grid grid-cols-4 gap-1.5 bg-slate-100 p-1.5 rounded-2xl">
+          {[
+            { id: 'timer',    label: 'Focus',     icon: <Clock size={16} /> },
+            { id: 'overview', label: 'Dashboard', icon: <LayoutDashboard size={16} /> },
+            { id: 'todo',     label: 'Plan',      icon: <ClipboardList size={16} /> },
+            { id: 'network',  label: 'Network',   icon: <Users size={16} /> },
+          ].map(t => (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className={`flex flex-col items-center gap-1 py-2.5 px-1 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${
+                tab === t.id
+                  ? 'bg-white text-slate-900 shadow-md'
+                  : 'text-slate-400 hover:text-slate-600'
+              }`}
+            >
+              <span className={tab === t.id ? 'text-blue-600' : ''}>{t.icon}</span>
+              {t.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Accessibility Warning */}
       {isNative && !isAccessibilityEnabled && (
-        <div className="bg-red-500/10 border border-red-500/30 p-5 rounded-3xl flex items-center gap-4">
-          <div className="w-10 h-10 bg-red-600 text-white rounded-xl flex items-center justify-center flex-shrink-0"><AlertTriangle size={20} /></div>
+        <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-2xl flex items-center gap-3 mb-4">
+          <AlertTriangle size={18} className="text-red-600 flex-shrink-0" />
           <div className="flex-1">
-            <p className="text-xs font-black text-red-600 uppercase tracking-widest leading-none mb-1">Iron Focus Disabled</p>
-            <p className="text-[9px] font-bold text-red-500/80">Settings → Accessibility → Enable "ACB Blocker"</p>
+            <p className="text-[9px] font-black text-red-600 uppercase">Iron Focus Disabled — Go to Settings → Accessibility → Enable "ACB Blocker"</p>
           </div>
-          <button onClick={() => alert('Settings → Accessibility → Installed Services → Enable "ACB Blocker"')} className="px-4 py-2 bg-red-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest whitespace-nowrap">Setup</button>
+          <button onClick={() => alert('Settings → Accessibility → Installed Services → Enable "ACB Blocker"')} className="px-3 py-1.5 bg-red-600 text-white rounded-xl text-[8px] font-black uppercase whitespace-nowrap">Fix</button>
         </div>
       )}
 
-      {/* ─── SECTION 1: FOCUS ZONE ─── */}
-      <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden">
-        <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
-          <div className="w-9 h-9 bg-blue-600 text-white rounded-xl flex items-center justify-center"><Clock size={18} /></div>
-          <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Focus Zone</h2>
+      <div className="space-y-6 mt-2">
+
+      {/* ─── TAB: FOCUS ZONE ─── */}
+      {tab === 'timer' && (
           <span className={`ml-auto text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${timerActive ? 'bg-blue-600 text-white animate-pulse' : 'bg-slate-100 text-slate-400'}`}>{timerActive ? 'ACTIVE' : 'STANDBY'}</span>
         </div>
         <div className="p-6 flex flex-col items-center gap-6">
