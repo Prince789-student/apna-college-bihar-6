@@ -57,10 +57,27 @@ export default function AppHub() {
             <LogIn size={14} /> Login / Sign Up
           </Link>
         ) : (
-          <div className="flex items-center gap-2">
-            <Link to="/dashboard/study" className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all border border-slate-700">
+          <div className="relative">
+            <button 
+              onClick={() => setShowProfileMenu(!showProfileMenu)}
+              className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all border border-slate-700"
+            >
               <User size={14} /> Profile
-            </Link>
+            </button>
+            {showProfileMenu && (
+              <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl z-[100] animate-in fade-in zoom-in duration-200">
+                <div className="p-3 border-b border-slate-800">
+                  <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Student Hub</p>
+                  <p className="text-[10px] font-bold text-white truncate">{user.email}</p>
+                </div>
+                <button 
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-3 p-4 text-red-500 hover:bg-red-500/10 transition-all rounded-b-2xl text-[10px] font-black uppercase tracking-widest"
+                >
+                  <LogIn size={14} className="rotate-180" /> Logout Session
+                </button>
+              </div>
+            )}
           </div>
         )}
       </header>
