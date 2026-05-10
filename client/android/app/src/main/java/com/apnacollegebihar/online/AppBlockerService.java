@@ -49,7 +49,7 @@ public class AppBlockerService extends AccessibilityService {
             boolean isCountdownRunning = (System.currentTimeMillis() < endTime);
             
             if (isActive || isCountdownRunning) {
-                Set<String> allowed = prefs.getStringSet(KEY_ALLOWED_PACKAGES, new HashSet<String>());
+                String allowedStr = prefs.getString(KEY_ALLOWED_PACKAGES, "");
                 
                 // Humesha Allowed (System & Essential)
                 if (packageName.equals("com.apnacollegebihar.online") || 
@@ -57,7 +57,7 @@ public class AppBlockerService extends AccessibilityService {
                     packageName.equals("com.android.server.telecom") ||
                     packageName.equals("com.android.mms") ||
                     packageName.equals("com.google.android.apps.messaging") ||
-                    allowed.contains(packageName)) {
+                    allowedStr.contains(packageName)) {
                     return; // Sab sahi hai, aage badho!
                 }
 

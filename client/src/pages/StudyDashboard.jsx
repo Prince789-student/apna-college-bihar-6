@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { Capacitor } from '@capacitor/core';
 import {
   doc, getDoc, collection, query, where, getDocs,
   updateDoc, addDoc, deleteDoc, onSnapshot
@@ -234,8 +235,16 @@ export default function StudyDashboard() {
                       </div>
                     )}
                     <div className="text-center space-y-4">
-                      <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest flex items-center justify-center gap-3"><Shield size={14} /> Focus Shield Active</p>
-                      <button onClick={() => setTimerActive(true)} className="w-full py-7 bg-blue-600 hover:bg-blue-500 text-white rounded-[2.5rem] font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">Initialize Focus <ArrowRight size={22} /></button>
+                      <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest flex items-center justify-center gap-3">
+                        <Shield size={14} /> 
+                        {Capacitor.isNativePlatform() ? `Blocking Active (${allowedPackages.split(',').filter(Boolean).length} Whitelisted)` : 'Focus Shield Active'}
+                      </p>
+                      <div className="flex gap-4">
+                        <button onClick={() => setTimerActive(true)} className="flex-[2] py-7 bg-blue-600 hover:bg-blue-500 text-white rounded-[2.5rem] font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">Initialize <ArrowRight size={22} /></button>
+                        {Capacitor.isNativePlatform() && (
+                          <button onClick={() => navigate('/dashboard', { state: { openWhitelist: true } })} className="flex-1 py-7 bg-slate-900 text-white rounded-[2.5rem] font-[1000] text-[10px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all">Whitelist</button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ) : (

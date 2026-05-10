@@ -28,7 +28,28 @@ export function StudyProvider({ children }) {
   const [customSeconds, setCustomSeconds] = useState(0);
   const [timerMode, setTimerMode] = useState('COUNTDOWN');
   const [focusBroken, _setFocusBroken] = useState(() => getInitialState('focusBroken', false));
+  const [allowedPackages, _setAllowedPackages] = useState(() => getInitialState('allowedPackages', ''));
+  const [installedApps, setInstalledApps] = useState([]);
   const timerRef = useRef(null);
+
+  const fetchApps = async () => {
+    if (!Capacitor.isNativePlatform()) return;
+    try {
+      const { AppList } = window.Capacitor.Plugins;
+      if (AppList) {
+        const { apps } = await AppList.getInstalledApps();
+        setInstalledApps(apps.sort((a, b) => a.name.localeCompare(b.name)));
+      }
+    } catch (err) { console.error("Fetch Apps Error:", err); }
+  };
+
+  const setAllowedPackages = (val) => {
+    _setAllowedPackages(val);
+    localStorage.setItem('allowedPackages', JSON.stringify(val));
+    if (Capacitor.isNativePlatform()) {
+      Preferences.set({ key: 'allowedPackages', value: val });
+    }
+  };
 
   const setTimerActive = (val) => {
     _setTimerActive(val);
@@ -37,9 +58,15 @@ export function StudyProvider({ children }) {
     // Native Blocker Integration
     if (Capacitor.isNativePlatform()) {
       if (val) {
-        const endTime = Date.now() + (timerTime * 1000);
         Preferences.set({ key: 'isBlockerActive', value: 'true' });
-        Preferences.set({ key: 'countdownEndTime', value: String(endTime) });
+        if (timerMode === 'COUNTDOWN') {
+          const endTime = Date.now() + (timerTime * 1000);
+          Preferences.set({ key: 'countdownEndTime', value: String(endTime) });
+        } else {
+          // In Stopwatch, we don't have a fixed end time, so we just set it very far in the future
+          // or just rely on isBlockerActive: true
+          Preferences.set({ key: 'countdownEndTime', value: '0' });
+        }
       } else {
         Preferences.set({ key: 'isBlockerActive', value: 'false' });
         Preferences.set({ key: 'countdownEndTime', value: '0' });
@@ -194,7 +221,11 @@ export function StudyProvider({ children }) {
     setTimerMode,
     saveGlobalSession,
     focusBroken,
-    setFocusBroken
+    setFocusBroken,
+    allowedPackages,
+    setAllowedPackages,
+    installedApps,
+    fetchApps
   };
 
   return (
