@@ -66,23 +66,25 @@ export default function StudyDashboard() {
 
   const isNative = Capacitor.isNativePlatform();
 
-  const [isAccessibilityEnabled, setIsAccessibilityEnabled] = useState(false); // START AS FALSE TO ENSURE CHECK
+  const [isAccessibilityEnabled, setIsAccessibilityEnabled] = useState(false);
+  const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
 
-  const checkAccessibility = async () => {
+  const checkPermissions = async () => {
     if (!isNative) return;
     try {
       const { enabled } = await Capacitor.Plugins.AppBlocker.isAccessibilityServiceEnabled();
-      console.log("Accessibility Status:", enabled);
       setIsAccessibilityEnabled(enabled);
-    } catch (err) { console.error("Accessibility Check Failed:", err); }
+      
+      const { granted } = await Capacitor.Plugins.AppBlocker.checkOverlayPermission();
+      setIsOverlayEnabled(granted);
+    } catch (err) { console.error("Permission Check Failed:", err); }
   };
 
   useEffect(() => {
     if (isNative) {
       fetchApps();
-      checkAccessibility();
-      // Check again every 5 seconds while on this page
-      const interval = setInterval(checkAccessibility, 5000);
+      checkPermissions();
+      const interval = setInterval(checkPermissions, 5000);
       return () => clearInterval(interval);
     }
   }, [isNative]);
@@ -237,27 +239,37 @@ export default function StudyDashboard() {
         </div>
       </div>
 
-      {/* ── Proactive Accessibility Check ── */}
-      {isNative && !isAccessibilityEnabled && (
+      {/* ── Proactive Permission Check ── */}
+      {isNative && (!isAccessibilityEnabled || !isOverlayEnabled) && (
         <div className="fixed inset-0 z-[2000] bg-slate-950/95 backdrop-blur-2xl flex items-center justify-center p-8 animate-in fade-in duration-500">
           <div className="w-full max-w-sm bg-white rounded-[3.5rem] p-10 text-center space-y-8 shadow-3xl">
             <div className="w-20 h-20 bg-red-600/10 text-red-600 rounded-[2rem] flex items-center justify-center mx-auto animate-pulse">
               <Shield size={40} />
             </div>
             <div className="space-y-3">
-              <h2 className="text-2xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Iron Focus <br /> Requires Permission</h2>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">To block distractions and keep you focused, you must enable the "ACB Blocker" service.</p>
+              <h2 className="text-2xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Iron Focus <br /> Requires Permissions</h2>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">To block distractions, you must enable two permissions.</p>
             </div>
             <div className="space-y-4">
-              <button
-                onClick={openAccessibilitySettings}
-                className="w-full py-5 bg-blue-600 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl shadow-blue-600/20 active:scale-95 transition-all"
-              >
-                Grant Permission
-              </button>
+              {!isAccessibilityEnabled && (
+                <button
+                  onClick={openAccessibilitySettings}
+                  className="w-full py-5 bg-blue-600 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl shadow-blue-600/20 active:scale-95 transition-all"
+                >
+                  1. Accessibility Service
+                </button>
+              )}
+              {!isOverlayEnabled && (
+                <button
+                  onClick={() => Capacitor.Plugins.AppBlocker.requestOverlayPermission()}
+                  className="w-full py-5 bg-indigo-600 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl shadow-indigo-600/20 active:scale-95 transition-all"
+                >
+                  2. Display Over Apps
+                </button>
+              )}
               <div className="p-4 bg-slate-50 rounded-2xl text-left space-y-2">
-                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">How to enable:</p>
-                <p className="text-[9px] font-bold text-slate-600">1. Click "Grant Permission"<br />2. Find <span className="text-blue-600">ACB Blocker</span> in "Downloaded/Installed Services"<br />3. Turn it <span className="text-blue-600">ON</span></p>
+                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Why these?</p>
+                <p className="text-[9px] font-bold text-slate-600">Accessibility is needed to detect apps, and "Display Over Apps" is needed to pull you back to Study Zone.</p>
               </div>
             </div>
           </div>

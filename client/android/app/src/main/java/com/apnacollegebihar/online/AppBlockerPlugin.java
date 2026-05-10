@@ -184,6 +184,28 @@ public class AppBlockerPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void checkOverlayPermission(PluginCall call) {
+        boolean hasPermission = true;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            hasPermission = Settings.canDrawOverlays(getContext());
+        }
+        JSObject ret = new JSObject();
+        ret.put("granted", hasPermission);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void requestOverlayPermission(PluginCall call) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    android.net.Uri.parse("package:" + getContext().getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getContext().startActivity(intent);
+        }
+        call.resolve();
+    }
+
+    @PluginMethod
     public void checkAccessibility(PluginCall call) {
         // Redundant with isAccessibilityServiceEnabled, but keeping for compatibility
         isAccessibilityServiceEnabled(call);
