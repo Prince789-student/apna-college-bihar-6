@@ -35,13 +35,19 @@ export function StudyProvider({ children }) {
   const fetchApps = async () => {
     if (!Capacitor.isNativePlatform()) return;
     try {
-      const { AppList } = window.Capacitor.Plugins;
+      const AppList = Capacitor.Plugins.AppList;
       if (AppList) {
         const { apps } = await AppList.getInstalledApps();
         setInstalledApps(apps.sort((a, b) => a.name.localeCompare(b.name)));
       }
     } catch (err) { console.error("Fetch Apps Error:", err); }
   };
+
+  useEffect(() => {
+    if (Capacitor.isNativePlatform()) {
+      fetchApps();
+    }
+  }, []);
 
   const setAllowedPackages = (val) => {
     _setAllowedPackages(val);

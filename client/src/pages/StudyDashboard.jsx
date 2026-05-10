@@ -395,6 +395,17 @@ export default function StudyDashboard() {
               </div>
 
               <div className="flex-1 overflow-y-auto p-6 md:p-10 space-y-3 custom-scrollbar">
+                 {isNative && installedApps.length === 0 && (
+                   <div className="text-center py-10 space-y-4">
+                     <p className="text-xs font-bold text-slate-500 uppercase tracking-widest animate-pulse">Fetching installed apps...</p>
+                     <button onClick={fetchApps} className="text-[10px] font-black text-blue-600 uppercase tracking-widest border border-blue-600 px-4 py-2 rounded-xl hover:bg-blue-50">Retry Fetch</button>
+                   </div>
+                 )}
+                 {filteredApps.length === 0 && installedApps.length > 0 && (
+                   <div className="text-center py-10">
+                     <p className="text-xs font-bold text-slate-500 uppercase tracking-widest">No apps match your search.</p>
+                   </div>
+                 )}
                  {filteredApps.map(app => {
                    const isSelected = (allowedPackages || '').includes(app.packageName);
                    return (
