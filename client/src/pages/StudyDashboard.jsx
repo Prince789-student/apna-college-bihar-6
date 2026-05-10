@@ -268,9 +268,13 @@ export default function StudyDashboard() {
 
       {/* ─── TAB: FOCUS ZONE ─── */}
       {tab === 'timer' && (
-          <span className={`ml-auto text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${timerActive ? 'bg-blue-600 text-white animate-pulse' : 'bg-slate-100 text-slate-400'}`}>{timerActive ? 'ACTIVE' : 'STANDBY'}</span>
-        </div>
-        <div className="p-6 flex flex-col items-center gap-6">
+        <div className="bg-white rounded-[3rem] border border-slate-200/60 shadow-sm overflow-hidden animate-in slide-in-from-bottom-4 duration-500">
+          <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
+            <div className="w-9 h-9 bg-blue-600/10 text-blue-600 rounded-xl flex items-center justify-center"><Clock size={18} /></div>
+            <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Focus Zone</h2>
+            <span className={`ml-auto text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${timerActive ? 'bg-blue-600 text-white animate-pulse' : 'bg-slate-100 text-slate-400'}`}>{timerActive ? 'ACTIVE' : 'STANDBY'}</span>
+          </div>
+          <div className="p-6 flex flex-col items-center gap-6">
           {/* Mode + Subject */}
           <div className="flex gap-2 w-full">
             {['COUNTDOWN', 'STOPWATCH'].map(m => (
@@ -343,9 +347,10 @@ export default function StudyDashboard() {
               <button onClick={() => setTimerActive(false)} className="flex-1 py-5 bg-slate-100 text-slate-500 rounded-2xl font-[1000] text-[9px] uppercase tracking-widest transition-all">Pause</button>
               <button onClick={() => saveGlobalSession()} className="flex-1 py-5 bg-red-600 text-white rounded-2xl font-[1000] text-[9px] uppercase tracking-widest shadow-xl transition-all">Stop & Save</button>
             </div>
+            </div>
           )}
         </div>
-      </div>
+      )}
 
       {/* ─── SECTION 2: DASHBOARD ─── */}
       <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden">

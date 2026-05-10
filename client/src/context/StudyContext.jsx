@@ -243,6 +243,7 @@ export function StudyProvider({ children }) {
     setFocusBroken,
     allowedPackages,
     setAllowedPackages,
+    installedApps,
     fetchApps,
     launchApp: async (pkg) => {
       if (!Capacitor.isNativePlatform()) return;
