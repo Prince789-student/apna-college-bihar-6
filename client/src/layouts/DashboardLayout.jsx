@@ -11,8 +11,10 @@ import { db } from '../firebase';
 import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 import PremiumAds from '../components/PremiumAds';
 import { useStudy } from '../context/StudyContext';
+import { Capacitor } from '@capacitor/core';
 
 export default function DashboardLayout() {
+  const isNative = Capacitor.isNativePlatform();
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout, ROLES, updateProfileData } = useAuth();
@@ -108,7 +110,22 @@ export default function DashboardLayout() {
       {!isAppMode && <aside className={`hidden md:flex flex-col bg-white border-r border-slate-200/80 transition-all duration-500 shadow-2xl relative z-40 ${isSidebarOpen ? 'w-64' : 'w-20'}`}><SidebarContent /></aside>}
       {isMobileMenuOpen && <div className="fixed inset-0 z-[100] md:hidden"><div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} /><aside className="absolute top-0 left-0 h-full w-[85%] max-w-[320px] bg-white shadow-2xl flex flex-col"><SidebarContent isMobile /></aside></div>}
       <main className="flex-1 flex flex-col min-h-0 h-full bg-white relative overflow-hidden">
-        {!isAppMode && <div className="md:hidden flex items-center justify-between px-5 py-3 bg-white border-b border-slate-200/80 sticky top-0 z-30"><div className="flex items-center gap-2"><img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" /><span className="text-[10px] font-black tracking-tighter uppercase text-slate-900 leading-none">APNA COLLEGE BIHAR</span></div><button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-100 border border-slate-200 rounded-xl relative"><Menu size={20} /></button></div>}
+        {!isAppMode && (
+          <div className="md:hidden flex items-center justify-between px-5 py-3 bg-white border-b border-slate-200/80 sticky top-0 z-30">
+            <div className="flex items-center gap-2">
+              {isNative && location.pathname !== '/dashboard/study' && (
+                <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-slate-500 hover:text-slate-900 transition-all">
+                  <ChevronLeft size={24} />
+                </button>
+              )}
+              <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
+              <span className="text-[10px] font-black tracking-tighter uppercase text-slate-900 leading-none">APNA COLLEGE BIHAR</span>
+            </div>
+            <button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-100 border border-slate-200 rounded-xl relative">
+              <Menu size={20} />
+            </button>
+          </div>
+        )}
         <div className={`flex-1 overflow-y-auto min-h-0 custom-scrollbar relative z-10 pb-32 ${isAppMode ? 'p-3' : 'p-4 md:p-6 lg:p-8'}`}>
            <div className="min-h-[80vh]"><Outlet /></div>
            {!isAppMode && <footer className="mt-10 py-12 border-t border-slate-200/30 flex flex-col items-center justify-center gap-8 opacity-70"><div className="flex flex-col items-center gap-1.5"><p className="text-[11px] font-[1000] uppercase tracking-[0.4em] text-slate-900">Apna College Bihar</p><p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">© 2026 Official Study Engine</p></div><div className="flex flex-wrap items-center justify-center gap-x-8 px-6"><Link to="/about" className="text-[10px] font-black uppercase text-slate-500">About Us</Link><Link to="/contact" className="text-[10px] font-black uppercase text-slate-500">Contact Us</Link></div><div className="flex items-center gap-2"><div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]"></div><span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">Secure & Operational</span></div></footer>}
