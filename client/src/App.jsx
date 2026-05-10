@@ -3,6 +3,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AlertTriangle } from 'lucide-react';
 import { useStudy } from './context/StudyContext';
+import { useAuth } from './context/AuthContext';
+import { Capacitor } from '@capacitor/core';
 
 // Layouts
 import DashboardLayout from './layouts/DashboardLayout';
@@ -28,13 +30,21 @@ import GroupDetail from './pages/GroupDetail';
 
 function App() {
   const { focusBroken, setFocusBroken } = useStudy();
+  const { user, loading } = useAuth();
+  const isNative = Capacitor.isNativePlatform();
 
   return (
     <>
       <Toaster position="top-right" />
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={
+          isNative ? (
+            user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
+          ) : (
+            <Home />
+          )
+        } />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
