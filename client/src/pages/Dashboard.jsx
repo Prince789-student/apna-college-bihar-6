@@ -101,7 +101,7 @@ export default function Dashboard() {
               </div>
            </div>
            <div className="flex flex-wrap justify-center sm:justify-end items-center gap-3 relative z-10 w-full sm:w-auto">
-             <a href="https://github.com/Prince789-student/apna-college-bihar-6/raw/refs/heads/main/server/public/ACB-v7.apk" className="w-full sm:w-auto px-8 py-4 bg-white text-blue-600 hover:bg-blue-50 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all text-center">
+             <a href="https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/server/public/ACB-v7.apk" className="w-full sm:w-auto px-8 py-4 bg-white text-blue-600 hover:bg-blue-50 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all text-center">
                Download APK
              </a>
            </div>
