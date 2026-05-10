@@ -13,13 +13,13 @@ export default function Home() {
 
   useEffect(() => {
     const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
-      setStats(s => ({ ...s, users: snap.size + 1200 })); // Adding base for "sahin sahin" feel if requested
+      setStats(s => ({ ...s, users: snap.size })); 
     });
     const unsubDocs = onSnapshot(collection(db, 'documents'), (snap) => {
-      setStats(s => ({ ...s, docs: snap.size + 50 }));
+      setStats(s => ({ ...s, docs: snap.size }));
     });
     const unsubGroups = onSnapshot(collection(db, 'groups'), (snap) => {
-      setStats(s => ({ ...s, groups: snap.size + 12 }));
+      setStats(s => ({ ...s, groups: snap.size }));
     });
     return () => { unsubUsers(); unsubDocs(); unsubGroups(); };
   }, []);
