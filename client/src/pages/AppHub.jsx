@@ -2,8 +2,8 @@ import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { 
   FileText, Book, GraduationCap, Bell, 
-  UserCheck, Calculator, Calendar, Plus, 
-  Send, MessageCircle, LogIn, User
+  Calculator, Send, MessageCircle, LogIn, 
+  User, Timer, Users, Globe
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Capacitor } from '@capacitor/core';
@@ -13,15 +13,15 @@ export default function AppHub() {
   const navigate = useNavigate();
 
   const features = [
-    { name: 'PYQs', icon: <FileText size={32} />, path: '/dashboard/notes', color: 'text-blue-500' },
-    { name: 'Syllabus', icon: <Book size={32} />, path: '/dashboard/notes', color: 'text-indigo-500' },
-    { name: 'Results', icon: <GraduationCap size={32} />, path: 'https://results.beu.ac.in', external: true, color: 'text-emerald-500' },
-    { name: 'BEU Notice', icon: <Bell size={32} />, path: '/dashboard/groups', color: 'text-orange-500' },
-    { name: 'Attendance', icon: <UserCheck size={32} />, path: '/dashboard/study', color: 'text-cyan-500' },
-    { name: 'SGPA CalC', icon: <Calculator size={32} />, path: '/dashboard/cgpa', color: 'text-purple-500' },
-    { name: 'Time Table', icon: <Calendar size={32} />, path: '/dashboard/notes', color: 'text-rose-500' },
-    { name: 'Extras', icon: <Plus size={32} />, path: '/dashboard/notes', color: 'text-slate-500' },
-    { name: 'Calendar', icon: <Calendar size={32} />, path: 'https://beu.ac.in/Calendar.aspx', external: true, color: 'text-amber-500' },
+    { name: 'Study Zone', icon: <Timer size={32} />, path: '/dashboard/study', color: 'text-blue-500' },
+    { name: 'Knowledge Hub', icon: <Book size={32} />, path: '/dashboard/notes', color: 'text-indigo-500' },
+    { name: 'UGEAC Predictor', icon: <Send size={32} />, path: '/dashboard/ugeac-predictor', color: 'text-emerald-500' },
+    { name: 'Study Network', icon: <Users size={32} />, path: '/dashboard/groups', color: 'text-orange-500' },
+    { name: 'CGPA Calculator', icon: <GraduationCap size={32} />, path: '/dashboard/cgpa', color: 'text-cyan-500' },
+    { name: 'Syllabus Hub', icon: <FileText size={32} />, path: '/dashboard/notes', color: 'text-purple-500' },
+    { name: 'Scientific Calc', icon: <Calculator size={32} />, path: '/dashboard/calculator', color: 'text-rose-500' },
+    { name: 'BEU Results', icon: <Globe size={32} />, path: 'https://results.beu.ac.in', external: true, color: 'text-slate-400' },
+    { name: 'Official Notices', icon: <Bell size={32} />, path: 'https://t.me/apnacollegebihar', external: true, color: 'text-amber-500' },
   ];
 
   const handleFeatureClick = (f) => {
