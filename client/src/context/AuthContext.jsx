@@ -100,13 +100,22 @@ export function AuthProvider({ children }) {
       console.log("Native environment detected, using Native Google Sign-In Plugin...");
       try {
         const result = await FirebaseAuthentication.signInWithGoogle();
-        const credential = GoogleAuthProvider.credential(result.credential?.idToken);
-        const res = await signInWithCredential(auth, credential);
-        await syncProfile(res.user);
-        return res.user;
+        if (result.credential?.idToken) {
+          const credential = GoogleAuthProvider.credential(result.credential.idToken);
+          const res = await signInWithCredential(auth, credential);
+          await syncProfile(res.user);
+          return res.user;
+        } else {
+          throw new Error("No ID Token received from Google");
+        }
       } catch (nativeErr) {
-        alert("Native Login Error: " + (nativeErr.message || JSON.stringify(nativeErr)));
-        return null; // STOP here. Do not fallback to web redirect.
+        console.error("Native Login Error:", nativeErr);
+        if (nativeErr.message?.includes("cancel")) {
+          // User cancelled, do nothing
+        } else {
+          alert("Login Failed: Please ensure you have a Google account signed in on your device and try again.");
+        }
+        return null;
       }
     } else {
       // On normal desktop/mobile browsers, Popups are fine.
