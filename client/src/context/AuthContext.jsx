@@ -93,32 +93,29 @@ export function AuthProvider({ children }) {
 
   // 3. Google Signup/Login (Mobile Stable & Native)
   async function googleLogin() {
-    try {
-      const isNative = window.location.hostname === 'localhost' || window.Capacitor;
+    const isNative = window.location.hostname === 'localhost' || window.Capacitor;
       
-      if (isNative) {
-        console.log("Native environment detected, using Native Google Sign-In Plugin...");
-        try {
-          const result = await FirebaseAuthentication.signInWithGoogle();
-          const credential = GoogleAuthProvider.credential(result.credential?.idToken);
-          const res = await signInWithCredential(auth, credential);
-          await syncProfile(res.user);
-          return res.user;
-        } catch (nativeErr) {
-          alert("Native Login Error: " + (nativeErr.message || JSON.stringify(nativeErr)));
-          throw nativeErr;
-        }
+    if (isNative) {
+      console.log("Native environment detected, using Native Google Sign-In Plugin...");
+      try {
+        const result = await FirebaseAuthentication.signInWithGoogle();
+        const credential = GoogleAuthProvider.credential(result.credential?.idToken);
+        const res = await signInWithCredential(auth, credential);
+        await syncProfile(res.user);
+        return res.user;
+      } catch (nativeErr) {
+        alert("Native Login Error: " + (nativeErr.message || JSON.stringify(nativeErr)));
+        return null; // STOP here. Do not fallback to web redirect.
       }
-
+    } else {
       // On normal desktop/mobile browsers, Popups are fine.
-      const res = await signInWithPopup(auth, googleProvider);
-      await syncProfile(res.user);
-      return res.user;
-    } catch (err) {
-      console.warn("Auth flow interrupted or failed:", err);
-      if (window.location.hostname !== 'localhost' && !window.Capacitor) {
-         // Only fallback to redirect on actual web browsers
-         return await signInWithRedirect(auth, googleProvider);
+      try {
+        const res = await signInWithPopup(auth, googleProvider);
+        await syncProfile(res.user);
+        return res.user;
+      } catch (err) {
+        console.warn("Auth flow interrupted or failed:", err);
+        return await signInWithRedirect(auth, googleProvider);
       }
     }
   }
