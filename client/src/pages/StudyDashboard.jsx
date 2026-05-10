@@ -237,14 +237,30 @@ export default function StudyDashboard() {
         </div>
       </div>
 
-      {/* Accessibility Warning */}
+      {/* ── Proactive Accessibility Check ── */}
       {isNative && !isAccessibilityEnabled && (
-        <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-2xl flex items-center gap-3 mb-4">
-          <AlertTriangle size={18} className="text-red-600 flex-shrink-0" />
-          <div className="flex-1">
-            <p className="text-[9px] font-black text-red-600 uppercase">Iron Focus Disabled — Go to Settings → Accessibility → Enable "ACB Blocker"</p>
+        <div className="fixed inset-0 z-[2000] bg-slate-950/95 backdrop-blur-2xl flex items-center justify-center p-8 animate-in fade-in duration-500">
+          <div className="w-full max-w-sm bg-white rounded-[3.5rem] p-10 text-center space-y-8 shadow-3xl">
+            <div className="w-20 h-20 bg-red-600/10 text-red-600 rounded-[2rem] flex items-center justify-center mx-auto animate-pulse">
+              <Shield size={40} />
+            </div>
+            <div className="space-y-3">
+              <h2 className="text-2xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Iron Focus <br/> Requires Permission</h2>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-relaxed">To block distractions and keep you focused, you must enable the "ACB Blocker" service.</p>
+            </div>
+            <div className="space-y-4">
+              <button 
+                onClick={openAccessibilitySettings}
+                className="w-full py-5 bg-blue-600 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl shadow-blue-600/20 active:scale-95 transition-all"
+              >
+                Grant Permission
+              </button>
+              <div className="p-4 bg-slate-50 rounded-2xl text-left space-y-2">
+                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">How to enable:</p>
+                <p className="text-[9px] font-bold text-slate-600">1. Click "Grant Permission"<br/>2. Find <span className="text-blue-600">ACB Blocker</span> in "Downloaded/Installed Services"<br/>3. Turn it <span className="text-blue-600">ON</span></p>
+              </div>
+            </div>
           </div>
-          <button onClick={openAccessibilitySettings} className="px-3 py-1.5 bg-red-600 text-white rounded-xl text-[8px] font-black uppercase whitespace-nowrap">Fix Now</button>
         </div>
       )}
 
@@ -292,6 +308,10 @@ export default function StudyDashboard() {
           {!timerActive ? (
             <div className="flex gap-3 w-full">
               <button onClick={() => {
+                if (isNative && !isAccessibilityEnabled) {
+                  openAccessibilitySettings();
+                  return;
+                }
                 setTimerActive(true);
                 // Auto-launch the first whitelisted app if available
                 const firstApp = (allowedPackages || '').split(',').filter(Boolean)[0];
