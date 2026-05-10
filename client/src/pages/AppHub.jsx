@@ -9,8 +9,19 @@ import { useAuth } from '../context/AuthContext';
 import { Capacitor } from '@capacitor/core';
 
 export default function AppHub() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [showProfileMenu, setShowProfileMenu] = React.useState(false);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setShowProfileMenu(false);
+      navigate('/');
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  };
 
   const features = [
     { name: 'Study Zone', icon: <Timer size={32} />, path: '/dashboard/study', color: 'text-blue-500' },
