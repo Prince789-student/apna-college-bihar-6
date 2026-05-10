@@ -94,35 +94,56 @@ public class AppBlockerPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void checkAccessibility(PluginCall call) {
+    public void launchApp(PluginCall call) {
+        String packageName = call.getString("packageName");
+        if (packageName == null) {
+            call.reject("Must provide 'packageName'");
+            return;
+        }
+        Intent launchIntent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
+        if (launchIntent != null) {
+            getContext().startActivity(launchIntent);
+            call.resolve();
+        } else {
+            call.reject("App not found or not launchable");
+        }
+    }
+
+    @PluginMethod
+    public void isAccessibilityServiceEnabled(PluginCall call) {
         boolean isEnabled = false;
-        int accessibilityEnabled = 0;
-        final String service = getContext().getPackageName() + "/" + AppBlockerService.class.getCanonicalName();
+        String service = getContext().getPackageName() + "/" + AppBlockerService.class.getCanonicalName();
         try {
-            accessibilityEnabled = Settings.Secure.getInt(
+            int accessibilityEnabled = Settings.Secure.getInt(
                 getContext().getContentResolver(),
                 Settings.Secure.ACCESSIBILITY_ENABLED);
-        } catch (Settings.SettingNotFoundException e) {}
-
-        TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
-
-        if (accessibilityEnabled == 1) {
-            String settingValue = Settings.Secure.getString(
-                getContext().getContentResolver(),
-                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
-            if (settingValue != null) {
-                mStringColonSplitter.setString(settingValue);
-                while (mStringColonSplitter.hasNext()) {
-                    String accessibilityService = mStringColonSplitter.next();
-                    if (accessibilityService.equalsIgnoreCase(service)) {
-                        isEnabled = true;
+            
+            if (accessibilityEnabled == 1) {
+                String settingValue = Settings.Secure.getString(
+                    getContext().getContentResolver(),
+                    Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+                if (settingValue != null) {
+                    TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
+                    mStringColonSplitter.setString(settingValue);
+                    while (mStringColonSplitter.hasNext()) {
+                        String accessibilityService = mStringColonSplitter.next();
+                        if (accessibilityService.equalsIgnoreCase(service)) {
+                            isEnabled = true;
+                            break;
+                        }
                     }
                 }
             }
-        }
+        } catch (Exception e) {}
 
         JSObject ret = new JSObject();
         ret.put("enabled", isEnabled);
         call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void checkAccessibility(PluginCall call) {
+        // Redundant with isAccessibilityServiceEnabled, but keeping for compatibility
+        isAccessibilityServiceEnabled(call);
     }
 }

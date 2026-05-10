@@ -48,7 +48,8 @@ export default function StudyDashboard() {
     timerMode, setTimerMode,
     saveGlobalSession,
     allowedPackages, setAllowedPackages,
-    installedApps, fetchApps
+    installedApps, fetchApps,
+    launchApp, openAccessibilitySettings
   } = useStudy();
 
   const [userData, setUserData] = useState(null);
@@ -70,7 +71,7 @@ export default function StudyDashboard() {
   const checkAccessibility = async () => {
     if (!isNative) return;
     try {
-      const { enabled } = await Capacitor.Plugins.AppList.isAccessibilityServiceEnabled();
+      const { enabled } = await Capacitor.Plugins.AppBlocker.isAccessibilityServiceEnabled();
       setIsAccessibilityEnabled(enabled);
     } catch (err) { console.error(err); }
   };
@@ -243,7 +244,7 @@ export default function StudyDashboard() {
           <div className="flex-1">
             <p className="text-[9px] font-black text-red-600 uppercase">Iron Focus Disabled — Go to Settings → Accessibility → Enable "ACB Blocker"</p>
           </div>
-          <button onClick={() => alert('Settings → Accessibility → Installed Services → Enable "ACB Blocker"')} className="px-3 py-1.5 bg-red-600 text-white rounded-xl text-[8px] font-black uppercase whitespace-nowrap">Fix</button>
+          <button onClick={openAccessibilitySettings} className="px-3 py-1.5 bg-red-600 text-white rounded-xl text-[8px] font-black uppercase whitespace-nowrap">Fix Now</button>
         </div>
       )}
 
@@ -290,7 +291,14 @@ export default function StudyDashboard() {
           {/* Control Buttons */}
           {!timerActive ? (
             <div className="flex gap-3 w-full">
-              <button onClick={() => setTimerActive(true)} className="flex-[2] py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2">
+              <button onClick={() => {
+                setTimerActive(true);
+                // Auto-launch the first whitelisted app if available
+                const firstApp = (allowedPackages || '').split(',').filter(Boolean)[0];
+                if (firstApp) {
+                  setTimeout(() => launchApp(firstApp), 1000);
+                }
+              }} className="flex-[2] py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2">
                 <Shield size={16} /> Start Focus
               </button>
               {isNative && (

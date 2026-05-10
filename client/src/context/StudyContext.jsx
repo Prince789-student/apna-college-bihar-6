@@ -35,9 +35,9 @@ export function StudyProvider({ children }) {
   const fetchApps = async () => {
     if (!Capacitor.isNativePlatform()) return;
     try {
-      const AppList = Capacitor.Plugins.AppList;
-      if (AppList) {
-        const { apps } = await AppList.getInstalledApps();
+      const AppBlocker = Capacitor.Plugins.AppBlocker;
+      if (AppBlocker) {
+        const { apps } = await AppBlocker.getInstalledApps();
         setInstalledApps(apps.sort((a, b) => a.name.localeCompare(b.name)));
       }
     } catch (err) { console.error("Fetch Apps Error:", err); }
@@ -243,8 +243,19 @@ export function StudyProvider({ children }) {
     setFocusBroken,
     allowedPackages,
     setAllowedPackages,
-    installedApps,
-    fetchApps
+    fetchApps,
+    launchApp: async (pkg) => {
+      if (!Capacitor.isNativePlatform()) return;
+      try {
+        await Capacitor.Plugins.AppBlocker.launchApp({ packageName: pkg });
+      } catch (e) { console.error(e); }
+    },
+    openAccessibilitySettings: async () => {
+      if (!Capacitor.isNativePlatform()) return;
+      try {
+        await Capacitor.Plugins.AppBlocker.openAccessibilitySettings();
+      } catch (e) { console.error(e); }
+    }
   };
 
   return (
