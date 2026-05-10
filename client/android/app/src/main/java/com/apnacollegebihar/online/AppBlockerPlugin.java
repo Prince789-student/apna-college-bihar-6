@@ -89,6 +89,7 @@ public class AppBlockerPlugin extends Plugin {
     @PluginMethod
     public void openAccessibilitySettings(PluginCall call) {
         Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         getContext().startActivity(intent);
         call.resolve();
     }
