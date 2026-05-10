@@ -164,8 +164,13 @@ export function StudyProvider({ children }) {
   useEffect(() => {
     const handleViolation = () => {
       if (timerActive) {
-        setTimerActive(false);
-        setFocusBroken(true);
+        // If it's a stopwatch, we can pause/stop it.
+        // If it's a countdown, we DON'T stop it automatically because we want 
+        // the native blocker to handle it and keep the user in the app.
+        if (timerMode === 'STOPWATCH') {
+          setTimerActive(false);
+          setFocusBroken(true);
+        }
       }
     };
     
@@ -174,7 +179,6 @@ export function StudyProvider({ children }) {
     };
 
     const handleBlur = () => {
-      // Small timeout to allow switching between our own tabs
       setTimeout(() => {
         if (!document.hasFocus() && timerActive) {
           handleViolation();
@@ -182,13 +186,22 @@ export function StudyProvider({ children }) {
       }, 100);
     };
 
+    const handleBeforeUnload = (e) => {
+      if (timerActive) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('blur', handleBlur);
+    window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('blur', handleBlur);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [timerActive]);
+  }, [timerActive, timerMode]);
 
   useEffect(() => {
     if (timerActive) {

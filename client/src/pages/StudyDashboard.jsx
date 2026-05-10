@@ -299,6 +299,17 @@ export default function StudyDashboard() {
                 </button>
               )}
             </div>
+          ) : timerMode === 'COUNTDOWN' ? (
+            <div className="w-full space-y-3">
+              <div className="w-full py-5 bg-orange-50 border-2 border-orange-200 text-orange-600 rounded-2xl flex flex-col items-center justify-center gap-1 animate-pulse">
+                <div className="flex items-center gap-2">
+                  <Shield size={18} className="animate-bounce" />
+                  <span className="font-[1000] text-[10px] uppercase tracking-widest">Iron Focus Locked</span>
+                </div>
+                <p className="text-[8px] font-black uppercase opacity-70">App is locked until timer ends</p>
+              </div>
+              <p className="text-center text-[8px] font-black text-slate-400 uppercase tracking-[0.2em]">Exit blocked by strict mode</p>
+            </div>
           ) : (
             <div className="flex gap-3 w-full">
               <button onClick={() => setTimerActive(false)} className="flex-1 py-5 bg-slate-100 text-slate-500 rounded-2xl font-[1000] text-[9px] uppercase tracking-widest transition-all">Pause</button>
