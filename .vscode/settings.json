@@ -4,6 +4,10 @@
     ],
     "java.configuration.runtimes": [],
     "java.autobuild.enabled": false,
+    "java.import.exclusions": [
+        "**/node_modules/**",
+        "**/.git/**"
+    ],
     "files.exclude": {
         "**/.git": true,
         "**/.DS_Store": true,
