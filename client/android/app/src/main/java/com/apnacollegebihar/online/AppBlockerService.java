@@ -35,29 +35,42 @@ public class AppBlockerService extends AccessibilityService {
             String myPackage = this.getPackageName();
             
             // Check multiple potential preference files
-            String[] prefFiles = {"CapacitorStorage", "com.getcapacitor.android.plugins.preferences.Preferences", "AppBlockerPrefs"};
+            String[] prefFiles = {"CapacitorStorage", "com.getcapacitor.android.plugins.preferences.Preferences", "AppBlockerPrefs", "bridge"};
             boolean isActive = false;
             long endTime = 0;
             String allowedStr = "";
 
             for (String prefFile : prefFiles) {
-                SharedPreferences prefs = getSharedPreferences(prefFile, MODE_PRIVATE);
-                
-                // Check both prefixed and non-prefixed keys
-                String activeStr = prefs.getString("_cap_isBlockerActive", prefs.getString("isBlockerActive", "false"));
-                if ("true".equals(activeStr)) isActive = true;
-                
-                String timeStr = prefs.getString("_cap_countdownEndTime", prefs.getString("countdownEndTime", "0"));
                 try {
-                    long t = Long.parseLong(timeStr);
-                    if (t > endTime) endTime = t;
+                    SharedPreferences prefs = getSharedPreferences(prefFile, MODE_PRIVATE);
+                    
+                    // Check both prefixed and non-prefixed keys
+                    String activeStr = prefs.getString("_cap_isBlockerActive", prefs.getString("isBlockerActive", "false"));
+                    if ("true".equals(activeStr) || prefs.getBoolean("isBlockerActive", false) || prefs.getBoolean("_cap_isBlockerActive", false)) {
+                        isActive = true;
+                    }
+                    
+                    // Check countdown end time
+                    String timeStr = prefs.getString("_cap_countdownEndTime", prefs.getString("countdownEndTime", "0"));
+                    try {
+                        long t = Long.parseLong(timeStr);
+                        if (t > endTime) endTime = t;
+                    } catch (Exception e) {
+                        // Maybe it's stored as long
+                        long t = prefs.getLong("_cap_countdownEndTime", prefs.getLong("countdownEndTime", 0));
+                        if (t > endTime) endTime = t;
+                    }
+                    
+                    // Check allowed packages
+                    String allowed = prefs.getString("_cap_allowedPackages", prefs.getString("allowedPackages", ""));
+                    if (allowed != null && !allowed.isEmpty()) {
+                        if (allowedStr.isEmpty()) allowedStr = allowed;
+                        else allowedStr += "," + allowed;
+                    }
                 } catch (Exception e) {}
-                
-                String allowed = prefs.getString("_cap_allowedPackages", prefs.getString("allowedPackages", ""));
-                if (allowed != null && !allowed.isEmpty()) allowedStr = allowed;
             }
 
-            boolean isCountdownRunning = (System.currentTimeMillis() < endTime);
+            boolean isCountdownRunning = (endTime > 0 && System.currentTimeMillis() < endTime);
             
             if (isActive || isCountdownRunning) {
                 // Enhanced Whitelist Check

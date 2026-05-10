@@ -54,6 +54,9 @@ export function StudyProvider({ children }) {
     localStorage.setItem('allowedPackages', JSON.stringify(val));
     if (Capacitor.isNativePlatform()) {
       Preferences.set({ key: 'allowedPackages', value: val });
+      try {
+        Capacitor.Plugins.AppBlocker.setAllowedPackages({ packages: val });
+      } catch (e) {}
     }
   };
 
@@ -63,19 +66,27 @@ export function StudyProvider({ children }) {
     
     // Native Blocker Integration
     if (Capacitor.isNativePlatform()) {
+      try {
+        Capacitor.Plugins.AppBlocker.setBlockerActive({ active: val });
+      } catch (e) {}
+
       if (val) {
         Preferences.set({ key: 'isBlockerActive', value: 'true' });
         if (timerMode === 'COUNTDOWN') {
           const endTime = Date.now() + (timerTime * 1000);
           Preferences.set({ key: 'countdownEndTime', value: String(endTime) });
+          try {
+            Capacitor.Plugins.AppBlocker.startCountdown({ minutes: Math.ceil(timerTime / 60) });
+          } catch (e) {}
         } else {
-          // In Stopwatch, we don't have a fixed end time, so we just set it very far in the future
-          // or just rely on isBlockerActive: true
           Preferences.set({ key: 'countdownEndTime', value: '0' });
         }
       } else {
         Preferences.set({ key: 'isBlockerActive', value: 'false' });
         Preferences.set({ key: 'countdownEndTime', value: '0' });
+        try {
+          Capacitor.Plugins.AppBlocker.stopBlocker();
+        } catch (e) {}
       }
     }
   };

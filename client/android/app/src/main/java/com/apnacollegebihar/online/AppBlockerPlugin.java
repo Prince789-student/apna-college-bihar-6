@@ -142,6 +142,44 @@ public class AppBlockerPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void setBlockerActive(PluginCall call) {
+        Boolean active = call.getBoolean("active");
+        if (active == null) {
+            call.reject("Must provide 'active' boolean");
+            return;
+        }
+
+        SharedPreferences prefs = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(KEY_IS_ACTIVE, active ? "true" : "false");
+        
+        // Also set a non-prefixed version just in case
+        editor.putString("isBlockerActive", active ? "true" : "false");
+        
+        editor.apply();
+        call.resolve();
+    }
+
+    @PluginMethod
+    public void setAllowedPackages(PluginCall call) {
+        String packages = call.getString("packages");
+        if (packages == null) {
+            call.reject("Must provide 'packages' string");
+            return;
+        }
+
+        SharedPreferences prefs = getContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(KEY_ALLOWED_PACKAGES, packages);
+        
+        // Also set a non-prefixed version just in case
+        editor.putString("allowedPackages", packages);
+        
+        editor.apply();
+        call.resolve();
+    }
+
+    @PluginMethod
     public void checkAccessibility(PluginCall call) {
         // Redundant with isAccessibilityServiceEnabled, but keeping for compatibility
         isAccessibilityServiceEnabled(call);
