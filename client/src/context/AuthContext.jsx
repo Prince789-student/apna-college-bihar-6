@@ -97,15 +97,27 @@ export function AuthProvider({ children }) {
     const isNative = Capacitor.isNativePlatform();
       
     if (isNative) {
-      // MASTER PLAN v3.0: Skip native plugin completely if it's causing issues.
-      // Web Redirect is 100% reliable as long as Firebase Console is set up.
-      console.log("DEBUG [v3.0]: Skipping native plugin, using direct Web Redirect...");
+      console.log("DEBUG: Using Native Google Login for mobile stability...");
       try {
-        await signInWithRedirect(auth, googleProvider);
-        return null;
+        const result = await FirebaseAuthentication.signInWithGoogle();
+        if (result.credential && result.credential.idToken) {
+          const credential = GoogleAuthProvider.credential(result.credential.idToken);
+          const res = await signInWithCredential(auth, credential);
+          await syncProfile(res.user);
+          return res.user;
+        } else {
+          throw new Error("Native login did not return a valid credential.");
+        }
       } catch (err) {
-        console.error("DEBUG [v3.0]: Web Redirect Failed:", err);
-        return null;
+        console.error("DEBUG: Native Google Login Failed, attempting web fallback...", err);
+        // Fallback to Popup/Redirect only if native fails and user is okay with Chrome
+        try {
+          await signInWithRedirect(auth, googleProvider);
+          return null;
+        } catch (redirectErr) {
+          console.error("DEBUG: All login methods failed:", redirectErr);
+          throw redirectErr;
+        }
       }
     } else {
       // On normal desktop/mobile browsers, Popups are fine.
