@@ -195,196 +195,209 @@ export default function StudyDashboard() {
   if (loading) return <div className="flex justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 pb-20 px-2 md:px-0">
-      
-      {/* Header Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white p-6 rounded-[2rem] border border-slate-200/60 shadow-sm flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-orange-500/10 text-orange-500 rounded-2xl flex items-center justify-center border border-orange-500/10"><Flame size={24} fill="currentColor" /></div>
-            <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Current Streak</p><p className="text-2xl font-black text-slate-900 leading-none">{userData?.streak || 0} <span className="text-xs text-slate-500 font-bold">Days</span></p></div>
-          </div>
-          <button onClick={() => setShowGoalModal(true)} className="p-2 bg-slate-50 text-slate-400 hover:text-slate-900 rounded-xl"><Settings size={18} /></button>
-        </div>
-        <div className="bg-slate-900 p-6 rounded-[2rem] border border-slate-800 shadow-xl flex items-center gap-4 group cursor-pointer" onClick={() => setTab('timer')}>
-           <div className="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"><Clock size={24} /></div>
-           <div className="flex-1"><p className="text-[10px] font-black text-blue-400 uppercase tracking-widest leading-none mb-1">Focus Protocol</p><p className="text-xl font-black text-white leading-none">Initialize Zone</p></div>
-           <ArrowRight size={20} className="text-slate-600 group-hover:translate-x-1 transition-all" />
-        </div>
-        <div className="bg-white p-6 rounded-[2rem] border border-slate-200/60 shadow-sm flex items-center gap-4">
-          <div className="w-12 h-12 bg-emerald-500/10 text-emerald-600 rounded-2xl flex items-center justify-center border border-emerald-500/10"><Activity size={24} /></div>
-          <div><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Today's Focus</p><p className="text-2xl font-black text-slate-900 leading-none">{formatDuration(stats.today)}</p></div>
+    <div className="max-w-2xl mx-auto space-y-6 pb-24 px-3 md:px-0">
+
+      {/* ACB Study Zone Header */}
+      <div className="flex items-center gap-3 pt-2 pb-1">
+        <img src="/logo.jpg" alt="ACB" className="w-10 h-10 rounded-xl" />
+        <div>
+          <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.3em]">Apna College Bihar</p>
+          <h1 className="text-lg font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Study Zone</h1>
         </div>
       </div>
 
+      {/* Accessibility Warning */}
       {isNative && !isAccessibilityEnabled && (
-        <div className="bg-red-500/10 border border-red-500/30 p-6 rounded-[3rem] flex flex-col md:flex-row items-center gap-6 animate-pulse">
-           <div className="w-12 h-12 bg-red-600 text-white rounded-2xl flex items-center justify-center shadow-lg"><AlertTriangle size={24} /></div>
-           <div className="flex-1 text-center md:text-left">
-             <p className="text-sm font-black text-red-600 uppercase tracking-widest leading-none mb-1">Iron Focus Disabled</p>
-             <p className="text-[10px] font-bold text-red-500/80 uppercase tracking-wider">App Blocker permission chalu nahi hai. Settings &gt; Accessibility me "ACB Blocker" on karein.</p>
-           </div>
-           <button onClick={() => alert('Steps:\n1. Open Settings\n2. Accessibility\n3. Downloaded Apps / Installed Services\n4. Enable "ACB Blocker"')} className="px-6 py-3 bg-red-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl whitespace-nowrap">Setup Now</button>
+        <div className="bg-red-500/10 border border-red-500/30 p-5 rounded-3xl flex items-center gap-4">
+          <div className="w-10 h-10 bg-red-600 text-white rounded-xl flex items-center justify-center flex-shrink-0"><AlertTriangle size={20} /></div>
+          <div className="flex-1">
+            <p className="text-xs font-black text-red-600 uppercase tracking-widest leading-none mb-1">Iron Focus Disabled</p>
+            <p className="text-[9px] font-bold text-red-500/80">Settings → Accessibility → Enable "ACB Blocker"</p>
+          </div>
+          <button onClick={() => alert('Settings → Accessibility → Installed Services → Enable "ACB Blocker"')} className="px-4 py-2 bg-red-600 text-white rounded-xl text-[9px] font-black uppercase tracking-widest whitespace-nowrap">Setup</button>
         </div>
       )}
 
-      {/* Main Tab Container */}
-      <div className="min-h-[500px]">
-        {tab === 'timer' && (
-          <div className="space-y-6 animate-in fade-in duration-500">
-            <div className="bg-white p-12 md:p-24 rounded-[3.5rem] md:rounded-[5rem] border border-slate-200/80 shadow-2xl relative overflow-hidden flex flex-col items-center">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent pointer-events-none"></div>
-              
-              <div className="flex flex-col items-center gap-6 mb-12">
-                <div className="flex gap-2 p-1.5 bg-slate-100/80 rounded-2xl border border-slate-200/50">
-                  {['COUNTDOWN', 'STOPWATCH'].map(m => (
-                    <button key={m} onClick={() => !timerActive && setTimerMode(m)} className={`px-6 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${timerMode === m ? 'bg-blue-600 text-white shadow-lg' : 'text-slate-500 hover:text-slate-900'}`}>{m}</button>
-                  ))}
-                </div>
-                <div className="flex items-center gap-3 px-6 py-3 bg-slate-100/50 rounded-2xl border border-slate-200/50">
-                   <BookOpen size={16} className="text-blue-500" />
-                   <select value={timerSubject} onChange={e => setTimerSubject(e.target.value)} disabled={timerActive} className="bg-transparent text-[10px] font-black uppercase tracking-widest text-slate-900 outline-none">
-                     <option value="OTHERS">SELECT SUBJECT</option>
-                     {subjects.map(s => <option key={s.id} value={s.subjectName}>{s.subjectName}</option>)}
-                   </select>
-                </div>
+      {/* ─── SECTION 1: FOCUS ZONE ─── */}
+      <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden">
+        <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
+          <div className="w-9 h-9 bg-blue-600 text-white rounded-xl flex items-center justify-center"><Clock size={18} /></div>
+          <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Focus Zone</h2>
+          <span className={`ml-auto text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${timerActive ? 'bg-blue-600 text-white animate-pulse' : 'bg-slate-100 text-slate-400'}`}>{timerActive ? 'ACTIVE' : 'STANDBY'}</span>
+        </div>
+        <div className="p-6 flex flex-col items-center gap-6">
+          {/* Mode + Subject */}
+          <div className="flex gap-2 w-full">
+            {['COUNTDOWN', 'STOPWATCH'].map(m => (
+              <button key={m} onClick={() => !timerActive && setTimerMode(m)} className={`flex-1 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${timerMode === m ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-100 text-slate-500'}`}>{m}</button>
+            ))}
+          </div>
+          <div className="flex items-center gap-2 w-full px-4 py-3 bg-slate-50 rounded-2xl border border-slate-200/50">
+            <BookOpen size={14} className="text-blue-500" />
+            <select value={timerSubject} onChange={e => setTimerSubject(e.target.value)} disabled={timerActive} className="bg-transparent text-[10px] font-black uppercase tracking-widest text-slate-900 outline-none flex-1">
+              <option value="OTHERS">SELECT SUBJECT</option>
+              {subjects.map(s => <option key={s.id} value={s.subjectName}>{s.subjectName}</option>)}
+            </select>
+          </div>
+          {/* Timer Display */}
+          <h2 className="text-7xl font-[1000] text-slate-900 tracking-tighter tabular-nums leading-none">
+            {Math.floor(timerTime / 3600) > 0 ? `${Math.floor(timerTime / 3600).toString().padStart(2, '0')}:` : ''}
+            {Math.floor((timerTime % 3600) / 60).toString().padStart(2, '0')}:
+            {(timerTime % 60).toString().padStart(2, '0')}
+          </h2>
+          {/* Duration Picker */}
+          {!timerActive && timerMode === 'COUNTDOWN' && (
+            <div className="flex items-center justify-center gap-4 bg-slate-50 p-5 rounded-2xl w-full">
+              <div className="flex flex-col items-center gap-1">
+                <input type="number" min="0" max="599" value={customMinutes} onChange={e => setCustomMinutes(Math.max(0, parseInt(e.target.value) || 0))} className="w-20 bg-white border-2 border-slate-200 rounded-xl p-3 text-center font-black text-2xl outline-none focus:border-blue-500" />
+                <span className="text-[9px] font-black text-slate-400 uppercase">Min</span>
               </div>
-
-              <h1 className="text-8xl md:text-[10rem] font-[1000] text-slate-900 tracking-tighter tabular-nums leading-none">
-                {Math.floor(timerTime / 3600) > 0 ? `${Math.floor(timerTime / 3600).toString().padStart(2, '0')}:` : ''}
-                {Math.floor((timerTime % 3600) / 60).toString().padStart(2, '0')}:
-                {(timerTime % 60).toString().padStart(2, '0')}
-              </h1>
-              
-              <div className="mt-16 w-full max-w-md space-y-8">
-                {!timerActive ? (
-                  <div className="space-y-8">
-                    {timerMode === 'COUNTDOWN' && (
-                      <div className="bg-slate-50/80 p-8 rounded-[2rem] border border-slate-200/50">
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 text-center">Focus Duration</p>
-                        <div className="flex items-center justify-center gap-6">
-                           <div className="flex flex-col items-center">
-                              <input type="number" min="0" max="599" value={customMinutes} onChange={e => setCustomMinutes(Math.max(0, parseInt(e.target.value) || 0))} className="w-24 bg-white border-2 border-slate-200 rounded-2xl p-4 text-center font-black text-3xl outline-none focus:border-blue-500" />
-                              <span className="text-[9px] font-black text-slate-400 uppercase mt-2">Min</span>
-                           </div>
-                           <span className="text-3xl font-black text-slate-300">:</span>
-                           <div className="flex flex-col items-center">
-                              <input type="number" min="0" max="59" value={customSeconds} onChange={e => setCustomSeconds(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))} className="w-24 bg-white border-2 border-slate-200 rounded-2xl p-4 text-center font-black text-3xl outline-none focus:border-blue-500" />
-                              <span className="text-[9px] font-black text-slate-400 uppercase mt-2">Sec</span>
-                           </div>
-                        </div>
-                      </div>
-                    )}
-                    <div className="text-center space-y-4">
-                      <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest flex items-center justify-center gap-3">
-                        <Shield size={14} /> 
-                        {isNative ? `Iron Focus: ${(allowedPackages || '').split(',').filter(Boolean).length} Apps Allowed` : 'Focus Shield Active'}
-                      </p>
-                      <div className="flex flex-col sm:flex-row gap-4 w-full">
-                        <button onClick={() => setTimerActive(true)} className="flex-[2] py-7 bg-blue-600 hover:bg-blue-500 text-white rounded-[2.5rem] font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">Initialize Focus <ArrowRight size={22} /></button>
-                        {isNative && (
-                          <button onClick={() => setShowWhitelist(true)} className="flex-1 py-7 bg-slate-900 text-white rounded-[2.5rem] font-[1000] text-[10px] uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-2">
-                             <Settings size={14} /> Whitelist
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex gap-4">
-                    <button onClick={() => setTimerActive(false)} className="flex-1 py-7 bg-white text-slate-400 rounded-[2.5rem] font-[1000] text-[10px] uppercase tracking-widest border-2 border-slate-100 transition-all">Pause Session</button>
-                    <button onClick={() => saveGlobalSession()} className="flex-1 py-7 bg-red-600 text-white rounded-[2.5rem] font-[1000] text-[10px] uppercase tracking-widest shadow-2xl transition-all">Abort & Sync</button>
-                  </div>
-                )}
+              <span className="text-2xl font-black text-slate-300 mb-4">:</span>
+              <div className="flex flex-col items-center gap-1">
+                <input type="number" min="0" max="59" value={customSeconds} onChange={e => setCustomSeconds(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))} className="w-20 bg-white border-2 border-slate-200 rounded-xl p-3 text-center font-black text-2xl outline-none focus:border-blue-500" />
+                <span className="text-[9px] font-black text-slate-400 uppercase">Sec</span>
               </div>
             </div>
-          </div>
-        )}
+          )}
+          {/* Control Buttons */}
+          {!timerActive ? (
+            <div className="flex gap-3 w-full">
+              <button onClick={() => setTimerActive(true)} className="flex-[2] py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2">
+                <Shield size={16} /> Start Focus
+              </button>
+              {isNative && (
+                <button onClick={() => setShowWhitelist(true)} className="flex-1 py-5 bg-slate-900 text-white rounded-2xl font-[1000] text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-1">
+                  <Settings size={14} /> Apps
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="flex gap-3 w-full">
+              <button onClick={() => setTimerActive(false)} className="flex-1 py-5 bg-slate-100 text-slate-500 rounded-2xl font-[1000] text-[9px] uppercase tracking-widest transition-all">Pause</button>
+              <button onClick={() => saveGlobalSession()} className="flex-1 py-5 bg-red-600 text-white rounded-2xl font-[1000] text-[9px] uppercase tracking-widest shadow-xl transition-all">Stop & Save</button>
+            </div>
+          )}
+        </div>
+      </div>
 
-        {tab === 'overview' && (
-          <div className="space-y-8 animate-in fade-in duration-500">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                { label: 'Today Progress', sec: stats.today, goal: goals.daily, color: 'from-blue-600 to-indigo-600' },
-                { label: 'Weekly Protocol', sec: stats.weekly, goal: goals.weekly, color: 'from-emerald-500 to-teal-500' },
-                { label: 'Monthly Strategic', sec: stats.monthly, goal: goals.monthly, color: 'from-orange-500 to-amber-500' },
-              ].map(({ label, sec, goal, color }) => (
-                <div key={label} className="bg-white p-8 rounded-[2.5rem] border border-slate-200/60 shadow-sm space-y-6">
-                  <div className="flex justify-between items-center"><span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{label}</span><span className="text-xs font-black text-slate-900">{getProgress(sec, goal)}%</span></div>
-                  <p className="text-4xl font-[1000] text-slate-900 tracking-tighter">{formatDuration(sec)}</p>
-                  <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden"><div className={`h-full bg-gradient-to-r ${color} rounded-full transition-all duration-1000`} style={{ width: `${getProgress(sec, goal)}%` }}></div></div>
+      {/* ─── SECTION 2: DASHBOARD ─── */}
+      <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden">
+        <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
+          <div className="w-9 h-9 bg-indigo-500 text-white rounded-xl flex items-center justify-center"><LayoutDashboard size={18} /></div>
+          <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Dashboard</h2>
+        </div>
+        <div className="p-4 space-y-4">
+          {/* Stats Row */}
+          <div className="grid grid-cols-3 gap-3">
+            {[
+              { label: 'Today', sec: stats.today, goal: goals.daily, color: 'text-blue-600', bg: 'bg-blue-50' },
+              { label: 'This Week', sec: stats.weekly, goal: goals.weekly, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+              { label: 'This Month', sec: stats.monthly, goal: goals.monthly, color: 'text-orange-600', bg: 'bg-orange-50' },
+            ].map(({ label, sec, goal, color, bg }) => (
+              <div key={label} className={`${bg} p-4 rounded-2xl`}>
+                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-2">{label}</p>
+                <p className={`text-lg font-[1000] ${color} leading-none`}>{formatDuration(sec)}</p>
+                <div className="w-full h-1.5 bg-white/70 rounded-full mt-2 overflow-hidden">
+                  <div className={`h-full ${color.replace('text', 'bg')} rounded-full`} style={{ width: `${getProgress(sec, goal)}%` }}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Stats Summary */}
+          <div className="flex items-center justify-between px-4 py-3 bg-slate-50 rounded-2xl">
+            <div className="flex items-center gap-2"><Flame size={16} className="text-orange-500" /><span className="text-xs font-black text-slate-700">{userData?.streak || 0} Day Streak</span></div>
+            <button onClick={() => setShowGoalModal(true)} className="flex items-center gap-1.5 text-[9px] font-black text-slate-400 uppercase tracking-widest"><Settings size={13} /> Goals</button>
+          </div>
+          {/* Heatmap */}
+          <div className="flex items-end justify-between gap-2 h-20 px-2">
+            {stats.heatmap.map((d, i) => {
+              const maxH = Math.max(1, ...stats.heatmap.map(x => x.sec));
+              return (
+                <div key={i} className="flex flex-col items-center gap-1.5 flex-1">
+                  <div className={`w-full rounded-lg transition-all ${d.isToday ? 'bg-blue-600' : d.sec > 0 ? 'bg-slate-300' : 'bg-slate-100'}`} style={{ height: `${Math.max(8, (d.sec / maxH) * 56)}px` }}></div>
+                  <span className={`text-[8px] font-black uppercase ${d.isToday ? 'text-blue-600' : 'text-slate-300'}`}>{d.day}</span>
+                </div>
+              );
+            })}
+          </div>
+          {/* Subject Breakdown */}
+          {stats.subjectBreakdown.length > 0 && (
+            <div className="space-y-3 pt-2">
+              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-2">Subject Focus</p>
+              {stats.subjectBreakdown.map(sub => (
+                <div key={sub.name} className="space-y-1.5 px-2">
+                  <div className="flex justify-between"><span className="text-[10px] font-black text-slate-700 uppercase tracking-wide">{sub.name}</span><span className="text-[10px] font-black text-slate-400">{formatDuration(sub.sec)}</span></div>
+                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-slate-800 rounded-full" style={{ width: `${(sub.sec / Math.max(1, stats.today)) * 100}%` }}></div></div>
                 </div>
               ))}
             </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              <div className="bg-white p-10 rounded-[3rem] border border-slate-200/60 shadow-sm space-y-10">
-                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 flex items-center gap-3"><Calendar size={20} className="text-blue-500" /> Operational History</h3>
-                <div className="flex items-end justify-between gap-4 h-40">
-                  {stats.heatmap.map((d, i) => {
-                    const maxH = Math.max(1, ...stats.heatmap.map(x => x.sec));
-                    return (
-                      <div key={i} className="flex flex-col items-center gap-3 flex-1 group relative">
-                        <div className={`w-full rounded-t-2xl transition-all duration-700 ${d.isToday ? 'bg-blue-600 shadow-xl' : d.sec > 0 ? 'bg-slate-200' : 'bg-slate-50'}`} style={{ height: `${Math.max(8, (d.sec / maxH) * 100)}%` }}></div>
-                        <span className={`text-[10px] font-black uppercase tracking-widest ${d.isToday ? 'text-blue-600' : 'text-slate-400'}`}>{d.day}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="bg-white p-10 rounded-[3rem] border border-slate-200/60 shadow-sm space-y-8">
-                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 flex items-center gap-3"><Activity size={20} className="text-orange-500" /> Focus Distribution</h3>
-                <div className="space-y-6">
-                  {stats.subjectBreakdown.length === 0 ? (
-                    <div className="text-center py-16 flex flex-col items-center gap-4 text-slate-300"><BookOpen size={40} /><p className="text-[10px] font-black uppercase tracking-widest">Awaiting Mission Data</p></div>
-                  ) : stats.subjectBreakdown.map(sub => (
-                    <div key={sub.name} className="space-y-2">
-                      <div className="flex justify-between items-center"><span className="text-[10px] font-black uppercase tracking-widest text-slate-700">{sub.name}</span><span className="text-[10px] font-black text-slate-400">{formatDuration(sub.sec)}</span></div>
-                      <div className="w-full h-2 bg-slate-50 rounded-full overflow-hidden"><div className="h-full bg-slate-900 rounded-full transition-all duration-1000" style={{ width: `${(sub.sec / Math.max(1, stats.today)) * 100}%` }}></div></div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {tab === 'todo' && (
-          <div className="space-y-6 animate-in fade-in duration-500">
-            <div className="bg-white p-10 rounded-[3rem] border border-slate-200/60 shadow-sm space-y-10">
-              <div className="flex flex-col md:flex-row gap-4 items-end bg-slate-50 p-8 rounded-[2.5rem]">
-                <div className="flex-[2] w-full space-y-2">
-                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Mission Objective</p>
-                   <input value={newTask} onChange={e => setNewTask(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Define task goal..." className="w-full bg-white rounded-2xl px-6 py-5 text-sm font-bold outline-none shadow-sm" />
-                </div>
-                <div className="flex-1 w-full space-y-2">
-                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Mission Subject</p>
-                   <select value={newTaskSubject} onChange={e => setNewTaskSubject(e.target.value)} className="w-full bg-white rounded-2xl px-6 py-5 text-xs font-black uppercase tracking-widest outline-none shadow-sm">
-                     <option value="OTHERS">SELECT SUBJECT</option>
-                     {subjects.map(s => <option key={s.id} value={s.subjectName}>{s.subjectName}</option>)}
-                   </select>
-                </div>
-                <button onClick={addTask} className="w-full md:w-24 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center hover:bg-black transition-all shadow-2xl active:scale-95"><Plus size={28} /></button>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {tasks.map(task => (
-                  <div key={task.id} className={`flex items-center gap-5 p-6 rounded-[2rem] border-2 transition-all ${task.done ? 'bg-emerald-50/50 border-emerald-100' : 'bg-white border-slate-50 hover:border-slate-200 shadow-lg'}`}>
-                    <button onClick={async () => await updateDoc(doc(db, 'Tasks', task.id), { done: !task.done })} className={`w-7 h-7 rounded-xl flex items-center justify-center transition-all ${task.done ? 'bg-emerald-500 text-white' : 'border-2 border-slate-200 text-transparent'}`}><CheckCircle2 size={18} /></button>
-                    <div className="flex-1 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest ${task.done ? 'bg-slate-200 text-slate-400' : 'bg-blue-100 text-blue-600'}`}>{task.subject || 'OTHERS'}</span>
-                      </div>
-                      <p className={`text-sm font-[1000] tracking-tight ${task.done ? 'text-slate-400 line-through' : 'text-slate-900'}`}>{task.text}</p>
-                    </div>
-                    <button onClick={async () => await deleteDoc(doc(db, 'Tasks', task.id))} className="text-slate-200 hover:text-red-500 p-2"><Trash2 size={18} /></button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
+
+      {/* ─── SECTION 3: STUDY PLAN ─── */}
+      <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden">
+        <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
+          <div className="w-9 h-9 bg-purple-500 text-white rounded-xl flex items-center justify-center"><ClipboardList size={18} /></div>
+          <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Study Plan</h2>
+          <span className="ml-auto text-[8px] font-black bg-slate-100 text-slate-500 px-3 py-1 rounded-full uppercase">{tasks.filter(t => t.done).length}/{tasks.length} Done</span>
+        </div>
+        <div className="p-4 space-y-4">
+          {/* Add Task */}
+          <div className="flex gap-2">
+            <input value={newTask} onChange={e => setNewTask(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Add a task..." className="flex-1 bg-slate-50 rounded-xl px-4 py-3 text-sm font-bold outline-none border border-slate-200 focus:border-blue-400" />
+            <select value={newTaskSubject} onChange={e => setNewTaskSubject(e.target.value)} className="bg-slate-50 rounded-xl px-3 py-3 text-[9px] font-black uppercase outline-none border border-slate-200 max-w-[90px]">
+              <option value="OTHERS">Subject</option>
+              {subjects.map(s => <option key={s.id} value={s.subjectName}>{s.subjectName}</option>)}
+            </select>
+            <button onClick={addTask} className="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center active:scale-95 transition-all"><Plus size={22} /></button>
+          </div>
+          {/* Task List */}
+          {tasks.length === 0 ? (
+            <div className="text-center py-8 text-slate-300"><ClipboardList size={32} className="mx-auto mb-2" /><p className="text-[10px] font-black uppercase tracking-widest">No tasks yet</p></div>
+          ) : (
+            <div className="space-y-2">
+              {tasks.map(task => (
+                <div key={task.id} className={`flex items-center gap-3 p-4 rounded-2xl border transition-all ${task.done ? 'bg-emerald-50 border-emerald-100' : 'bg-slate-50 border-slate-100'}`}>
+                  <button onClick={async () => await updateDoc(doc(db, 'Tasks', task.id), { done: !task.done })} className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${task.done ? 'bg-emerald-500 text-white' : 'border-2 border-slate-300'}`}><CheckCircle2 size={14} /></button>
+                  <div className="flex-1 min-w-0">
+                    <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase ${task.done ? 'bg-slate-200 text-slate-400' : 'bg-blue-100 text-blue-600'}`}>{task.subject || 'OTHERS'}</span>
+                    <p className={`text-sm font-bold mt-0.5 ${task.done ? 'text-slate-400 line-through' : 'text-slate-900'}`}>{task.text}</p>
+                  </div>
+                  <button onClick={async () => await deleteDoc(doc(db, 'Tasks', task.id))} className="text-slate-200 hover:text-red-500 p-1 flex-shrink-0"><Trash2 size={16} /></button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ─── SECTION 4: STUDY NETWORK ─── */}
+      <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden">
+        <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
+          <div className="w-9 h-9 bg-orange-500 text-white rounded-xl flex items-center justify-center"><Users size={18} /></div>
+          <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Study Network</h2>
+        </div>
+        <div className="p-4">
+          <button onClick={() => navigate('/dashboard/groups')} className="w-full flex items-center justify-between p-5 bg-slate-900 text-white rounded-2xl active:scale-95 transition-all">
+            <div className="flex items-center gap-3"><Users size={20} className="text-orange-400" /><div><p className="text-xs font-black uppercase tracking-widest">Study Groups</p><p className="text-[9px] text-slate-400 mt-0.5">Join or create a group</p></div></div>
+            <ArrowRight size={18} className="text-slate-500" />
+          </button>
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            <div className="bg-slate-50 p-4 rounded-2xl text-center">
+              <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Streak</p>
+              <p className="text-2xl font-[1000] text-slate-900 mt-1">{userData?.streak || 0}</p>
+              <p className="text-[8px] text-slate-400">days</p>
+            </div>
+            <div className="bg-slate-50 p-4 rounded-2xl text-center">
+              <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Total Focus</p>
+              <p className="text-2xl font-[1000] text-slate-900 mt-1">{formatDuration(stats.weekly)}</p>
+              <p className="text-[8px] text-slate-400">this week</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
 
       {/* ── Whitelist Modal ── */}
       {showWhitelist && (
