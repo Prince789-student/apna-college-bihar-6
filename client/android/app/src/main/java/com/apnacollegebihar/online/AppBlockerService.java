@@ -32,24 +32,34 @@ public class AppBlockerService extends AccessibilityService {
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             if (event.getPackageName() == null) return;
             String packageName = event.getPackageName().toString();
+            String myPackage = this.getPackageName();
             
-            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-            
-            // Unified keys starting with _cap_ (as set by Capacitor)
-            String activeStr = prefs.getString(KEY_IS_ACTIVE, "false");
-            boolean isActive = "true".equals(activeStr);
-            
-            String endTimeStr = prefs.getString(KEY_COUNTDOWN_END, "0");
+            // Check multiple potential preference files
+            String[] prefFiles = {"CapacitorStorage", "com.getcapacitor.android.plugins.preferences.Preferences", "AppBlockerPrefs"};
+            boolean isActive = false;
             long endTime = 0;
-            try {
-                endTime = Long.parseLong(endTimeStr);
-            } catch (Exception e) {}
-            
+            String allowedStr = "";
+
+            for (String prefFile : prefFiles) {
+                SharedPreferences prefs = getSharedPreferences(prefFile, MODE_PRIVATE);
+                
+                // Check both prefixed and non-prefixed keys
+                String activeStr = prefs.getString("_cap_isBlockerActive", prefs.getString("isBlockerActive", "false"));
+                if ("true".equals(activeStr)) isActive = true;
+                
+                String timeStr = prefs.getString("_cap_countdownEndTime", prefs.getString("countdownEndTime", "0"));
+                try {
+                    long t = Long.parseLong(timeStr);
+                    if (t > endTime) endTime = t;
+                } catch (Exception e) {}
+                
+                String allowed = prefs.getString("_cap_allowedPackages", prefs.getString("allowedPackages", ""));
+                if (allowed != null && !allowed.isEmpty()) allowedStr = allowed;
+            }
+
             boolean isCountdownRunning = (System.currentTimeMillis() < endTime);
             
             if (isActive || isCountdownRunning) {
-                String allowedStr = prefs.getString(KEY_ALLOWED_PACKAGES, "");
-
                 // Enhanced Whitelist Check
                 boolean isWhitelisted = false;
                 if (allowedStr != null && !allowedStr.isEmpty()) {
@@ -62,32 +72,29 @@ public class AppBlockerService extends AccessibilityService {
                     }
                 }
 
-                if (packageName.equals("com.apnacollegebihar.online") || 
+                // System & Essential Apps
+                if (packageName.equals(myPackage) || 
                     packageName.equals("com.android.phone") || 
                     packageName.equals("com.android.server.telecom") ||
                     packageName.equals("com.android.mms") ||
                     packageName.equals("com.google.android.apps.messaging") ||
                     packageName.equals("com.android.dialer") ||
+                    packageName.equals("com.android.systemui") ||
                     isWhitelisted) {
-                    return; // Sab sahi hai, aage badho!
+                    return; 
                 }
 
-                // Agar Settings kholne ki koshish kari (Strict Mode)
-                if (packageName.equals("com.android.settings") && isCountdownRunning) {
-                    performGlobalAction(GLOBAL_ACTION_HOME);
-                    Toast.makeText(this, "STRICT MODE: Setting block hain!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                // Baaki sab Block!
+                // Block everything else!
                 performGlobalAction(GLOBAL_ACTION_HOME);
                 
-                // Only bring to front if we are not already there
-                if (!packageName.equals("com.apnacollegebihar.online")) {
+                // Show warning and bring back our app
+                if (!packageName.equals(myPackage)) {
                     Intent startMain = new Intent(this, MainActivity.class);
                     startMain.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(startMain);
-                    Toast.makeText(this, "IRON FOCUS: Focus Zone me wapas jaiye!", Toast.LENGTH_SHORT).show();
+                    try {
+                        startActivity(startMain);
+                        Toast.makeText(this, "IRON FOCUS: Study par dhyan de! (Blocked: " + packageName + ")", Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {}
                 }
             }
         }
