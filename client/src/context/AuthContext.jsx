@@ -109,13 +109,17 @@ export function AuthProvider({ children }) {
           throw new Error("No ID Token received from Google");
         }
       } catch (nativeErr) {
-        console.error("Native Login Error:", nativeErr);
-        if (nativeErr.message?.includes("cancel")) {
-          // User cancelled, do nothing
-        } else {
-          alert("Login Failed: Please ensure you have a Google account signed in on your device and try again.");
+        console.error("Native Login Error, falling back to Web:", nativeErr);
+        // Fallback to standard web popup if native fails (common for SHA-1 issues)
+        try {
+          const res = await signInWithPopup(auth, googleProvider);
+          await syncProfile(res.user);
+          return res.user;
+        } catch (webErr) {
+          console.error("Web Fallback Failed:", webErr);
+          alert("Login Failed: Please ensure you have a Google account signed in or try manual login.");
+          return null;
         }
-        return null;
       }
     } else {
       // On normal desktop/mobile browsers, Popups are fine.
