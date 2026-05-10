@@ -101,7 +101,7 @@ export default function StudyDashboard() {
   }, [user, todayStr]);
 
   const toggleApp = (pkg) => {
-    const list = allowedPackages.split(',').filter(Boolean);
+    const list = (allowedPackages || '').split(',').filter(Boolean);
     if (list.includes(pkg)) {
       setAllowedPackages(list.filter(p => p !== pkg).join(','));
     } else {
@@ -261,7 +261,7 @@ export default function StudyDashboard() {
                     <div className="text-center space-y-4">
                       <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest flex items-center justify-center gap-3">
                         <Shield size={14} /> 
-                        {isNative ? `Iron Focus: ${allowedPackages.split(',').filter(Boolean).length} Apps Allowed` : 'Focus Shield Active'}
+                        {isNative ? `Iron Focus: ${(allowedPackages || '').split(',').filter(Boolean).length} Apps Allowed` : 'Focus Shield Active'}
                       </p>
                       <div className="flex flex-col sm:flex-row gap-4 w-full">
                         <button onClick={() => setTimerActive(true)} className="flex-[2] py-7 bg-blue-600 hover:bg-blue-500 text-white rounded-[2.5rem] font-[1000] text-sm uppercase tracking-widest shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-3">Initialize Focus <ArrowRight size={22} /></button>
@@ -396,7 +396,7 @@ export default function StudyDashboard() {
 
               <div className="flex-1 overflow-y-auto p-6 md:p-10 space-y-3 custom-scrollbar">
                  {filteredApps.map(app => {
-                   const isSelected = allowedPackages.includes(app.packageName);
+                   const isSelected = (allowedPackages || '').includes(app.packageName);
                    return (
                      <div 
                        key={app.packageName} 
