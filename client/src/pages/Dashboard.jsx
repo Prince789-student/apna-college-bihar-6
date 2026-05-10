@@ -92,7 +92,7 @@ export default function Dashboard() {
                Lite App
              </button>
            )}
-           <a href="/ApnaCollegeBihar-v4.apk" download="ApnaCollegeBihar-v4.apk" className="px-6 py-3 bg-white text-blue-600 hover:bg-blue-50 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center gap-2">
+           <a href="https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/server/public/ApnaCollegeBihar-v4.apk" download="ApnaCollegeBihar-v4.apk" className="px-6 py-3 bg-white text-blue-600 hover:bg-blue-50 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center gap-2">
              Download APK
            </a>
          </div>
