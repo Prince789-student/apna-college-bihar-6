@@ -110,14 +110,22 @@ export default function DashboardLayout() {
       {!isAppMode && <aside className={`hidden md:flex flex-col bg-white border-r border-slate-200/80 transition-all duration-500 shadow-2xl relative z-40 ${isSidebarOpen ? 'w-64' : 'w-20'}`}><SidebarContent /></aside>}
       {isMobileMenuOpen && <div className="fixed inset-0 z-[100] md:hidden"><div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} /><aside className="absolute top-0 left-0 h-full w-[85%] max-w-[320px] bg-white shadow-2xl flex flex-col"><SidebarContent isMobile /></aside></div>}
       <main className="flex-1 flex flex-col min-h-0 h-full bg-white relative overflow-hidden">
-        {!isAppMode && (
+        {/* Minimal Native Header */}
+        {isNative && (
+          <div className="md:hidden flex items-center px-5 py-4 bg-white border-b border-slate-100 sticky top-0 z-[100]">
+            <button onClick={() => navigate(-1)} className="p-2 -ml-3 text-slate-900 active:scale-95 transition-all">
+              <ChevronLeft size={28} />
+            </button>
+            <div className="ml-2">
+              <p className="text-[10px] font-black text-slate-900 uppercase tracking-tighter leading-none">Back to</p>
+              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-0.5">App Hub Grid</p>
+            </div>
+          </div>
+        )}
+
+        {!isNative && !isAppMode && (
           <div className="md:hidden flex items-center justify-between px-5 py-3 bg-white border-b border-slate-200/80 sticky top-0 z-30">
             <div className="flex items-center gap-2">
-              {isNative && location.pathname !== '/dashboard/study' && (
-                <button onClick={() => navigate(-1)} className="p-2 -ml-2 text-slate-500 hover:text-slate-900 transition-all">
-                  <ChevronLeft size={24} />
-                </button>
-              )}
               <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
               <span className="text-[10px] font-black tracking-tighter uppercase text-slate-900 leading-none">APNA COLLEGE BIHAR</span>
             </div>
@@ -126,39 +134,40 @@ export default function DashboardLayout() {
             </button>
           </div>
         )}
-        <div className={`flex-1 overflow-y-auto min-h-0 custom-scrollbar relative z-10 pb-32 ${isAppMode ? 'p-3' : 'p-4 md:p-6 lg:p-8'}`}>
-           <div className="min-h-[80vh]"><Outlet /></div>
-           {!isAppMode && <footer className="mt-10 py-12 border-t border-slate-200/30 flex flex-col items-center justify-center gap-8 opacity-70"><div className="flex flex-col items-center gap-1.5"><p className="text-[11px] font-[1000] uppercase tracking-[0.4em] text-slate-900">Apna College Bihar</p><p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">© 2026 Official Study Engine</p></div><div className="flex flex-wrap items-center justify-center gap-x-8 px-6"><Link to="/about" className="text-[10px] font-black uppercase text-slate-500">About Us</Link><Link to="/contact" className="text-[10px] font-black uppercase text-slate-500">Contact Us</Link></div><div className="flex items-center gap-2"><div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]"></div><span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">Secure & Operational</span></div></footer>}
+
+        <div className={`flex-1 overflow-y-auto min-h-0 custom-scrollbar relative z-10 pb-32 ${isAppMode || isNative ? 'p-3' : 'p-4 md:p-6 lg:p-8'}`}>
+            <div className="min-h-[80vh]"><Outlet /></div>
+            {!isAppMode && !isNative && <footer className="mt-10 py-12 border-t border-slate-200/30 flex flex-col items-center justify-center gap-8 opacity-70"><div className="flex flex-col items-center gap-1.5"><p className="text-[11px] font-[1000] uppercase tracking-[0.4em] text-slate-900">Apna College Bihar</p><p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">© 2026 Official Study Engine</p></div><div className="flex flex-wrap items-center justify-center gap-x-8 px-6"><Link to="/about" className="text-[10px] font-black uppercase text-slate-500">About Us</Link><Link to="/contact" className="text-[10px] font-black uppercase text-slate-500">Contact Us</Link></div><div className="flex items-center gap-2"><div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]"></div><span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-600">Secure & Operational</span></div></footer>}
         </div>
         
         {/* Verification Modal */}
         {isPhoneModalOpen && <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-slate-50/80 backdrop-blur-xl"><div className="w-full max-w-md bg-white border border-slate-200 rounded-[3rem] p-10 text-center space-y-8 shadow-2xl relative overflow-hidden"><div className="inline-flex p-5 bg-blue-600/20 text-blue-500 rounded-3xl"><Shield size={32} /></div><h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Security Update</h2><form onSubmit={handlePhoneSubmit} className="space-y-6"><div className="flex gap-2"><div className="bg-slate-100 px-4 py-4 rounded-2xl text-xs font-black">+91</div><input type="tel" maxLength={10} value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} placeholder="9XXXXXXXXX" className="flex-1 bg-slate-100 rounded-2xl p-4 text-sm font-black outline-none" /></div><button type="submit" className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest transition-all">Secure Access</button></form></div></div>}
 
-
-
         <FloatingTimer />
 
-        {/* Global Dashboard Bottom Navigation (Mobile & App Mode) */}
-        <div className="md:hidden fixed bottom-0 left-0 right-0 z-[150] bg-white/95 backdrop-blur-xl border-t border-slate-200 p-2 shadow-[0_-15px_30px_-10px_rgba(0,0,0,0.1)]">
-           <div className="flex gap-1">
-              <button onClick={() => navigate('/dashboard/study')} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-2xl transition-all ${location.pathname === '/dashboard/study' ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
-                 <Timer size={18} />
-                 <span className="text-[7px] font-black uppercase mt-1">Focus</span>
-              </button>
-              <button onClick={() => navigate('/dashboard')} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-2xl transition-all ${location.pathname === '/dashboard' ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
-                 <LayoutDashboard size={18} />
-                 <span className="text-[7px] font-black uppercase mt-1">Dash</span>
-              </button>
-              <button onClick={() => navigate('/dashboard/notes')} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-2xl transition-all ${location.pathname === '/dashboard/notes' ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
-                 <Book size={18} />
-                 <span className="text-[7px] font-black uppercase mt-1">Notes</span>
-              </button>
-              <button onClick={() => navigate('/dashboard/groups')} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-2xl transition-all ${location.pathname === '/dashboard/groups' ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
-                 <Users size={18} />
-                 <span className="text-[7px] font-black uppercase mt-1">Network</span>
-              </button>
-           </div>
-        </div>
+        {/* Global Dashboard Bottom Navigation (Only for Web/Non-Native) */}
+        {!isNative && (
+          <div className="md:hidden fixed bottom-0 left-0 right-0 z-[150] bg-white/95 backdrop-blur-xl border-t border-slate-200 p-2 shadow-[0_-15px_30px_-10px_rgba(0,0,0,0.1)]">
+            <div className="flex gap-1">
+                <button onClick={() => navigate('/dashboard/study')} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-2xl transition-all ${location.pathname === '/dashboard/study' ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
+                    <Timer size={18} />
+                    <span className="text-[7px] font-black uppercase mt-1">Focus</span>
+                </button>
+                <button onClick={() => navigate('/dashboard')} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-2xl transition-all ${location.pathname === '/dashboard' ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
+                    <LayoutDashboard size={18} />
+                    <span className="text-[7px] font-black uppercase mt-1">Dash</span>
+                </button>
+                <button onClick={() => navigate('/dashboard/notes')} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-2xl transition-all ${location.pathname === '/dashboard/notes' ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
+                    <Book size={18} />
+                    <span className="text-[7px] font-black uppercase mt-1">Notes</span>
+                </button>
+                <button onClick={() => navigate('/dashboard/groups')} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-2xl transition-all ${location.pathname === '/dashboard/groups' ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
+                    <Users size={18} />
+                    <span className="text-[7px] font-black uppercase mt-1">Network</span>
+                </button>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
