@@ -15,5 +15,5 @@ git add .
 git commit -m "auto-commit: automated code backup"
 git push
 echo [%time%] Done. Waiting for 10 minutes...
-timeout /t 600 /nobreak > NUL
+ping -n 601 127.0.0.1 > nul
 goto loop
