@@ -66,14 +66,15 @@ export default function StudyDashboard() {
 
   const isNative = Capacitor.isNativePlatform();
 
-  const [isAccessibilityEnabled, setIsAccessibilityEnabled] = useState(true);
+  const [isAccessibilityEnabled, setIsAccessibilityEnabled] = useState(false); // START AS FALSE TO ENSURE CHECK
 
   const checkAccessibility = async () => {
     if (!isNative) return;
     try {
       const { enabled } = await Capacitor.Plugins.AppBlocker.isAccessibilityServiceEnabled();
+      console.log("Accessibility Status:", enabled);
       setIsAccessibilityEnabled(enabled);
-    } catch (err) { console.error(err); }
+    } catch (err) { console.error("Accessibility Check Failed:", err); }
   };
 
   useEffect(() => {

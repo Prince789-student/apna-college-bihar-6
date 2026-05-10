@@ -26,22 +26,31 @@ public class AppBlockerPlugin extends Plugin {
 
     @PluginMethod
     public void getInstalledApps(PluginCall call) {
-        PackageManager pm = getContext().getPackageManager();
-        List<ApplicationInfo> apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-        JSArray retApps = new JSArray();
+        try {
+            PackageManager pm = getContext().getPackageManager();
+            // Get all installed applications
+            List<ApplicationInfo> apps = pm.getInstalledApplications(PackageManager.GET_META_DATA);
+            JSArray retApps = new JSArray();
 
-        for (ApplicationInfo app : apps) {
-            if ((app.flags & ApplicationInfo.FLAG_SYSTEM) == 0) { // Filter out system apps
-                JSObject info = new JSObject();
-                info.put("name", pm.getApplicationLabel(app).toString());
-                info.put("packageName", app.packageName);
-                retApps.put(info);
+            for (ApplicationInfo app : apps) {
+                // Filter: Non-system apps OR apps with a launcher intent
+                boolean isSystem = (app.flags & ApplicationInfo.FLAG_SYSTEM) != 0;
+                boolean hasLauncher = pm.getLaunchIntentForPackage(app.packageName) != null;
+                
+                if (hasLauncher && !app.packageName.equals(getContext().getPackageName())) {
+                    JSObject info = new JSObject();
+                    info.put("name", pm.getApplicationLabel(app).toString());
+                    info.put("packageName", app.packageName);
+                    retApps.put(info);
+                }
             }
-        }
 
-        JSObject ret = new JSObject();
-        ret.put("apps", retApps);
-        call.resolve(ret);
+            JSObject ret = new JSObject();
+            ret.put("apps", retApps);
+            call.resolve(ret);
+        } catch (Exception e) {
+            call.reject("Error fetching apps: " + e.getMessage());
+        }
     }
 
     @PluginMethod
@@ -113,29 +122,34 @@ public class AppBlockerPlugin extends Plugin {
     @PluginMethod
     public void isAccessibilityServiceEnabled(PluginCall call) {
         boolean isEnabled = false;
-        String service = getContext().getPackageName() + "/" + AppBlockerService.class.getCanonicalName();
+        String pkgName = getContext().getPackageName();
+        String serviceName = AppBlockerService.class.getName(); // Full class name
+        String servicePath = pkgName + "/" + serviceName;
+        String altServicePath = pkgName + "/.AppBlockerService";
+
         try {
             int accessibilityEnabled = Settings.Secure.getInt(
                 getContext().getContentResolver(),
-                Settings.Secure.ACCESSIBILITY_ENABLED);
+                Settings.Secure.ACCESSIBILITY_ENABLED, 0);
             
             if (accessibilityEnabled == 1) {
                 String settingValue = Settings.Secure.getString(
                     getContext().getContentResolver(),
                     Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
                 if (settingValue != null) {
-                    TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
-                    mStringColonSplitter.setString(settingValue);
-                    while (mStringColonSplitter.hasNext()) {
-                        String accessibilityService = mStringColonSplitter.next();
-                        if (accessibilityService.equalsIgnoreCase(service)) {
+                    String[] services = settingValue.split(":");
+                    for (String s : services) {
+                        if (s.equalsIgnoreCase(servicePath) || s.equalsIgnoreCase(altServicePath) || s.contains(serviceName)) {
                             isEnabled = true;
                             break;
                         }
                     }
                 }
             }
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            // Fallback: Check if service is actually running? 
+            // Better to just report false on error
+        }
 
         JSObject ret = new JSObject();
         ret.put("enabled", isEnabled);
