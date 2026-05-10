@@ -1,8 +1,0 @@
-User-agent: *
-Allow: /
-
-# Sitemap Location
-Sitemap: https://www.apnacollegebihar.online/sitemap.xml
-
-# Crawl Delay (polite crawling)
-Crawl-delay: 5
