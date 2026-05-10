@@ -201,19 +201,6 @@ export default function StudyDashboard() {
         </div>
       </div>
 
-      {/* Tab Switcher - Now Mobile Bottom Sticky & Desktop Sticky */}
-      <div className="fixed bottom-0 left-0 right-0 z-[50] md:relative md:bottom-auto bg-white/95 backdrop-blur-xl border-t md:border border-slate-200 md:rounded-[2.5rem] p-3 md:p-2 shadow-[0_-20px_40px_-15px_rgba(0,0,0,0.05)] md:shadow-sm">
-        <div className="max-w-5xl mx-auto flex gap-2 overflow-x-auto no-scrollbar">
-          {TABS.map(t => (
-            <button key={t.id} onClick={() => t.id === 'network' ? navigate('/dashboard/groups') : setTab(t.id)}
-              className={`flex-1 flex flex-col md:flex-row min-w-fit items-center justify-center gap-1 md:gap-3 px-4 py-3 md:px-8 md:py-4 rounded-2xl md:rounded-[1.5rem] transition-all ${tab === t.id ? 'bg-slate-900 text-white shadow-2xl scale-[1.02]' : 'text-slate-500 hover:bg-slate-100'}`}>
-              <span className={`${tab === t.id ? 'scale-110' : ''} transition-transform`}>{t.icon}</span>
-              <span className="text-[8px] md:text-[10px] font-black uppercase tracking-widest whitespace-nowrap">{t.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Main Tab Container */}
       <div className="min-h-[500px]">
         {tab === 'timer' && (

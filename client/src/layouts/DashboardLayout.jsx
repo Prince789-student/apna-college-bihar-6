@@ -120,6 +120,28 @@ export default function DashboardLayout() {
 
 
         <FloatingTimer />
+
+        {/* Global Dashboard Bottom Navigation (Mobile & App Mode) */}
+        <div className="md:hidden fixed bottom-0 left-0 right-0 z-[150] bg-white/95 backdrop-blur-xl border-t border-slate-200 p-2 shadow-[0_-15px_30px_-10px_rgba(0,0,0,0.1)]">
+           <div className="flex gap-1">
+              <button onClick={() => navigate('/dashboard/study')} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-2xl transition-all ${location.pathname === '/dashboard/study' ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
+                 <Timer size={18} />
+                 <span className="text-[7px] font-black uppercase mt-1">Focus</span>
+              </button>
+              <button onClick={() => navigate('/dashboard')} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-2xl transition-all ${location.pathname === '/dashboard' ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
+                 <LayoutDashboard size={18} />
+                 <span className="text-[7px] font-black uppercase mt-1">Dash</span>
+              </button>
+              <button onClick={() => navigate('/dashboard/notes')} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-2xl transition-all ${location.pathname === '/dashboard/notes' ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
+                 <Book size={18} />
+                 <span className="text-[7px] font-black uppercase mt-1">Notes</span>
+              </button>
+              <button onClick={() => navigate('/dashboard/groups')} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-2xl transition-all ${location.pathname === '/dashboard/groups' ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
+                 <Users size={18} />
+                 <span className="text-[7px] font-black uppercase mt-1">Network</span>
+              </button>
+           </div>
+        </div>
       </main>
     </div>
   );
