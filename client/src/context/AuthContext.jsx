@@ -109,15 +109,14 @@ export function AuthProvider({ children }) {
           throw new Error("No ID Token received from Google");
         }
       } catch (nativeErr) {
-        console.error("Native Login Error, falling back to Web:", nativeErr);
-        // Fallback to standard web popup if native fails (common for SHA-1 issues)
+        console.warn("Native Sign-In failed, falling back to Web Redirect:", nativeErr);
+        // Fallback to standard web redirect if native fails (common for SHA-1 issues)
+        // Redirect is much more reliable on mobile devices than Popup
         try {
-          const res = await signInWithPopup(auth, googleProvider);
-          await syncProfile(res.user);
-          return res.user;
+          await signInWithRedirect(auth, googleProvider);
+          return null; // The page will redirect and reload
         } catch (webErr) {
           console.error("Web Fallback Failed:", webErr);
-          alert("Login Failed: Please ensure you have a Google account signed in or try manual login.");
           return null;
         }
       }
@@ -129,7 +128,13 @@ export function AuthProvider({ children }) {
         return res.user;
       } catch (err) {
         console.warn("Auth flow interrupted or failed:", err);
-        return await signInWithRedirect(auth, googleProvider);
+        try {
+          await signInWithRedirect(auth, googleProvider);
+          return null;
+        } catch (redirectErr) {
+          console.error("Redirect Fallback Failed:", redirectErr);
+          return null;
+        }
       }
     }
   }
