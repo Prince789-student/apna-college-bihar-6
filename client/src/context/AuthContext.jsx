@@ -99,24 +99,29 @@ export function AuthProvider({ children }) {
     if (isNative) {
       console.log("Native environment detected, using Native Google Sign-In Plugin...");
       try {
+        console.log("DEBUG [v2.5]: Calling Native Google Sign-In Plugin...");
         const result = await FirebaseAuthentication.signInWithGoogle();
+        console.log("DEBUG [v2.5]: Native Plugin Result:", result);
+        
         if (result.credential?.idToken) {
           const credential = GoogleAuthProvider.credential(result.credential.idToken);
           const res = await signInWithCredential(auth, credential);
           await syncProfile(res.user);
           return res.user;
         } else {
-          throw new Error("No ID Token received from Google");
+          console.warn("DEBUG [v2.5]: No ID Token, falling back to Web Redirect...");
+          await signInWithRedirect(auth, googleProvider);
+          return null;
         }
       } catch (nativeErr) {
-        console.warn("Native Sign-In failed, falling back to Web Redirect:", nativeErr);
-        // Fallback to standard web redirect if native fails (common for SHA-1 issues)
-        // Redirect is much more reliable on mobile devices than Popup
+        console.warn("DEBUG [v2.5]: Native Sign-In Exception:", nativeErr);
+        // ABSOLUTELY NO ALERTS HERE.
         try {
+          console.log("DEBUG [v2.5]: Triggering Web Redirect Fallback...");
           await signInWithRedirect(auth, googleProvider);
-          return null; // The page will redirect and reload
+          return null; 
         } catch (webErr) {
-          console.error("Web Fallback Failed:", webErr);
+          console.error("DEBUG [v2.5]: Web Fallback Failed:", webErr);
           return null;
         }
       }
