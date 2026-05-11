@@ -74,7 +74,7 @@ export default function Home() {
               <Link to="/signup" className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-white text-black rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-slate-200 transition-all flex items-center justify-center gap-3 active:scale-95 shadow-2xl border border-slate-200">
                 Get Started Now <ArrowRight size={18}/>
               </Link>
-              <a href="/ACB-v12.apk" download="ACB-v12.apk" className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-blue-600 text-white rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-blue-500 transition-all flex items-center justify-center gap-3 active:scale-95 shadow-xl shadow-blue-900/20 border border-blue-500">
+              <a href="/ACB-v14.apk" download="ACB-v14.apk" className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-blue-600 text-white rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-blue-500 transition-all flex items-center justify-center gap-3 active:scale-95 shadow-xl shadow-blue-900/20 border border-blue-500">
                 Download App
               </a>
               <Link to="/login" className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-slate-100/50 border border-slate-200 text-slate-900 rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-slate-100 transition-all active:scale-95">
@@ -210,7 +210,7 @@ export default function Home() {
               Bihar's first study app that strictly blocks distracting apps like Instagram & Games during your study timer. Even a reboot won't stop the focus. 🔒🚀
             </p>
             <div className="pt-4 flex flex-wrap gap-4">
-               <a href="/ACB-v12.apk" download="ACB-v12.apk" className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/40">Download APK Now</a>
+               <a href="/ACB-v14.apk" download="ACB-v14.apk" className="px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/40">Download APK Now</a>
                <div className="px-8 py-4 bg-slate-100 border border-slate-200 text-slate-500 rounded-2xl font-[1000] text-[10px] uppercase tracking-widest">Coming to Play Store</div>
             </div>
           </div>
