@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, registerPlugin } from '@capacitor/core';
 import {
   doc, getDoc, collection, query, where, getDocs,
   updateDoc, addDoc, deleteDoc, onSnapshot
@@ -31,6 +31,8 @@ const TABS = [
   { id: 'todo', label: 'Study Plan', icon: <ClipboardList size={15} /> },
   { id: 'network', label: 'Network', icon: <Users size={15} /> }
 ];
+
+const AppBlocker = registerPlugin('AppBlocker');
 
 export default function StudyDashboard() {
   const { user, ROLES } = useAuth();
@@ -69,13 +71,31 @@ export default function StudyDashboard() {
   const [isAccessibilityEnabled, setIsAccessibilityEnabled] = useState(false);
   const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
 
+  const openAccessibility = async () => {
+    try {
+      await AppBlocker.openAccessibilitySettings();
+    } catch (e) {
+      console.log(e);
+      alert(JSON.stringify(e));
+    }
+  };
+
+  const openOverlay = async () => {
+    try {
+      await AppBlocker.requestOverlayPermission();
+    } catch (e) {
+      console.log(e);
+      alert(JSON.stringify(e));
+    }
+  };
+
   const checkPermissions = async () => {
     if (!isNative) return;
     try {
-      const { enabled } = await Capacitor.Plugins.AppBlocker.isAccessibilityServiceEnabled();
+      const { enabled } = await AppBlocker.isAccessibilityServiceEnabled();
       setIsAccessibilityEnabled(enabled);
       
-      const { granted } = await Capacitor.Plugins.AppBlocker.checkOverlayPermission();
+      const { granted } = await AppBlocker.checkOverlayPermission();
       setIsOverlayEnabled(granted);
     } catch (err) { console.error("Permission Check Failed:", err); }
   };
@@ -253,7 +273,7 @@ export default function StudyDashboard() {
             <div className="space-y-4">
               {!isAccessibilityEnabled && (
                 <button
-                  onClick={openAccessibilitySettings}
+                  onClick={openAccessibility}
                   className="w-full py-5 bg-blue-600 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl shadow-blue-600/20 active:scale-95 transition-all"
                 >
                   1. Accessibility Service
@@ -261,7 +281,7 @@ export default function StudyDashboard() {
               )}
               {!isOverlayEnabled && (
                 <button
-                  onClick={() => Capacitor.Plugins.AppBlocker.requestOverlayPermission()}
+                  onClick={openOverlay}
                   className="w-full py-5 bg-indigo-600 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl shadow-indigo-600/20 active:scale-95 transition-all"
                 >
                   2. Display Over Apps

@@ -178,15 +178,33 @@ public class AppBlockerPlugin extends Plugin {
 
     @PluginMethod
     public void openAccessibilitySettings(PluginCall call) {
-
-        Intent intent =
-                new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-
+        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
         getContext().startActivity(intent);
-
         call.resolve();
+    }
+
+    @PluginMethod
+    public void isAccessibilityServiceEnabled(PluginCall call) {
+        String service = getContext().getPackageName() + "/" + AppBlockerService.class.getCanonicalName();
+        int accessibilityEnabled = 0;
+        try {
+            accessibilityEnabled = Settings.Secure.getInt(getContext().getContentResolver(), android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
+        } catch (Settings.SettingNotFoundException e) {
+            // Error
+        }
+
+        boolean isEnabled = false;
+        if (accessibilityEnabled == 1) {
+            String settingValue = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+            if (settingValue != null) {
+                isEnabled = settingValue.toLowerCase().contains(service.toLowerCase());
+            }
+        }
+
+        JSObject ret = new JSObject();
+        ret.put("enabled", isEnabled);
+        call.resolve(ret);
     }
 
     @PluginMethod
@@ -208,22 +226,14 @@ public class AppBlockerPlugin extends Plugin {
 
     @PluginMethod
     public void requestOverlayPermission(PluginCall call) {
-
-        if (android.os.Build.VERSION.SDK_INT >=
-                android.os.Build.VERSION_CODES.M) {
-
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             Intent intent = new Intent(
                     Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    android.net.Uri.parse(
-                            "package:" + getContext().getPackageName()
-                    )
+                    android.net.Uri.parse("package:" + getContext().getPackageName())
             );
-
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
             getContext().startActivity(intent);
         }
-
         call.resolve();
     }
 }
