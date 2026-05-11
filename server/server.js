@@ -32,6 +32,24 @@ app.use((req, res, next) => {
     next();
 });
 
+// 2.0 FORCE APK DOWNLOAD ROUTE (At the very top)
+app.get('/download', (req, res) => {
+    const apkPath = path.join(__dirname, 'public', 'ACB-debug.apk');
+    console.log('Force download triggered for:', apkPath);
+    if (fs.existsSync(apkPath)) {
+        res.attachment('ApnaCollegeBihar_Latest.apk');
+        return res.sendFile(apkPath);
+    } else {
+        // Try root fallback
+        const rootPath = path.join(process.cwd(), 'ACB-debug.apk');
+        if (fs.existsSync(rootPath)) {
+            res.attachment('ApnaCollegeBihar_Latest.apk');
+            return res.sendFile(rootPath);
+        }
+        res.status(404).send('APK File not found on server storage.');
+    }
+});
+
 // 1. Database Connection (Disabled since using Firebase)
 // mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/edu-platform', {
 //     useNewUrlParser: true,
@@ -50,50 +68,6 @@ app.use('/api/tasks', require('./routes/taskRoutes'));
 
 // 4. Health Check
 app.get('/_health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
-
-// 4.5 Dedicated APK Download Route with fallback paths
-app.get('/download', (req, res) => {
-    const possiblePaths = [
-        path.join(__dirname, 'public', 'ACB-debug.apk'),
-        path.join(process.cwd(), 'server', 'public', 'ACB-debug.apk'),
-        path.join(process.cwd(), 'ACB-debug.apk'),
-        path.join(__dirname, '..', 'ACB-debug.apk'),
-        path.join(__dirname, 'public', 'ACB.apk'),
-        path.join(process.cwd(), 'ACB.apk')
-    ];
-
-    console.log('Download request received. Checking paths for Debug APK...');
-    
-    for (const p of possiblePaths) {
-        if (fs.existsSync(p)) {
-            console.log(`✅ Found APK at: ${p}`);
-            return res.download(p, 'ApnaCollegeBihar_Debug.apk');
-        }
-    }
-
-    console.error('❌ APK not found in any path');
-    res.status(404).json({ 
-        error: 'APK File not found on server', 
-        attemptedPaths: possiblePaths 
-    });
-});
-
-// DEBUG: List files to find where the APK is
-app.get('/api/debug-files', (req, res) => {
-    try {
-        const publicFiles = fs.readdirSync(publicPath);
-        const rootFiles = fs.readdirSync(process.cwd());
-        res.json({ 
-            publicFiles, 
-            rootFiles,
-            publicPath,
-            cwd: process.cwd(),
-            __dirname
-        });
-    } catch (e) {
-        res.json({ error: e.message });
-    }
-});
 
 // 5. Catch-all for SPA (Always returns index.html)
 app.get('*', (req, res) => {
