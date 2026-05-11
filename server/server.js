@@ -51,14 +51,29 @@ app.use('/api/tasks', require('./routes/taskRoutes'));
 // 4. Health Check
 app.get('/_health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
 
-// 4.5 Dedicated APK Download Route
+// 4.5 Dedicated APK Download Route with fallback paths
 app.get('/download', (req, res) => {
-    const apkPath = path.join(publicPath, 'ACB.apk');
-    if (fs.existsSync(apkPath)) {
-        res.download(apkPath, 'ApnaCollegeBihar.apk');
-    } else {
-        res.status(404).send('APK File not found on server.');
+    const possiblePaths = [
+        path.join(__dirname, 'public', 'ACB.apk'),
+        path.join(process.cwd(), 'server', 'public', 'ACB.apk'),
+        path.join(process.cwd(), 'ACB.apk'),
+        path.join(__dirname, '..', 'ACB.apk')
+    ];
+
+    console.log('Download request received. Checking paths...');
+    
+    for (const p of possiblePaths) {
+        if (fs.existsSync(p)) {
+            console.log(`✅ Found APK at: ${p}`);
+            return res.download(p, 'ApnaCollegeBihar.apk');
+        }
     }
+
+    console.error('❌ APK not found in any path');
+    res.status(404).json({ 
+        error: 'APK File not found on server', 
+        attemptedPaths: possiblePaths 
+    });
 });
 
 // 5. Catch-all for SPA (Always returns index.html)
