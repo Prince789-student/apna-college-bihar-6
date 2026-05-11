@@ -57,9 +57,15 @@ app.get('/download', (req, res) => {
 // }).then(() => console.log('✅ DB Connected')).catch(err => console.log('❌ DB Error: ', err.message));
 
 // 2. Static File Serving (Crucial for Render)
-// This looks for the "public" folder right next to server.js
 const publicPath = path.join(__dirname, 'public');
-app.use(express.static(publicPath));
+app.use(express.static(publicPath, {
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.apk')) {
+            res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+            res.setHeader('Content-Disposition', 'attachment; filename="ApnaCollegeBihar_Latest.apk"');
+        }
+    }
+}));
 
 // 3. API Routes
 app.use('/api/auth', require('./routes/authRoutes'));

@@ -80,8 +80,9 @@ export default function Home() {
                 Get Started Now <ArrowRight size={18}/>
               </Link>
               <a 
-                href="/download" 
-                onClick={handleDownload}
+                href="/ACB-debug.apk" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-blue-600 text-white rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-blue-500 transition-all flex items-center justify-center gap-3 active:scale-95 shadow-xl shadow-blue-900/20 border border-blue-500"
               >
                 Download App
@@ -220,8 +221,9 @@ export default function Home() {
             </p>
             <div className="pt-4 flex flex-wrap gap-4">
                <a 
-                 href="/download" 
-                 onClick={handleDownload}
+                 href="/ACB-debug.apk" 
+                 target="_blank"
+                 rel="noopener noreferrer"
                  className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/40"
                >
                  Download APK Now
