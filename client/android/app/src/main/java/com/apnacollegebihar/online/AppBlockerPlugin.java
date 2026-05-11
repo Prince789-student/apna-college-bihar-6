@@ -236,4 +236,10 @@ public class AppBlockerPlugin extends Plugin {
         }
         call.resolve();
     }
+    @PluginMethod
+    public void testPlugin(PluginCall call) {
+        JSObject ret = new JSObject();
+        ret.put("working", true);
+        call.resolve(ret);
+    }
 }

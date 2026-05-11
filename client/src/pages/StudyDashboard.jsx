@@ -73,10 +73,14 @@ export default function StudyDashboard() {
 
   const openAccessibility = async () => {
     try {
+      // Test the plugin first
+      const test = await AppBlocker.testPlugin();
+      console.log("Plugin Test:", test);
+      
       await AppBlocker.openAccessibilitySettings();
     } catch (e) {
-      console.log(e);
-      alert(JSON.stringify(e));
+      console.log("Plugin Error:", e);
+      alert("AppBlocker Plugin Error: " + JSON.stringify(e));
     }
   };
 
