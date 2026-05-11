@@ -47,14 +47,12 @@ export function StudyProvider({ children }) {
     if (Capacitor.isNativePlatform()) {
       fetchApps();
       
-      // Explicitly reset native blocker on mount to prevent auto-start bugs
       try {
         Capacitor.Plugins.AppBlocker.stopBlocker();
         Preferences.set({ key: 'isBlockerActive', value: 'false' });
         Preferences.set({ key: 'countdownEndTime', value: '0' });
       } catch (e) {}
     }
-    // Clear persistence on fresh load to respect user's "no auto-start" preference
     localStorage.setItem('timerActive', 'false');
     localStorage.setItem('focusBroken', 'false');
   }, []);
@@ -65,7 +63,11 @@ export function StudyProvider({ children }) {
     if (Capacitor.isNativePlatform()) {
       Preferences.set({ key: 'allowedPackages', value: val });
       try {
-        Capacitor.Plugins.AppBlocker.setAllowedPackages({ packages: val });
+        const pkgArray = (val || '').split(',').filter(Boolean);
+        if (!pkgArray.includes('com.apnacollegebihar.online')) {
+            pkgArray.push('com.apnacollegebihar.online');
+        }
+        Capacitor.Plugins.AppBlocker.setAllowedPackages({ packages: pkgArray });
       } catch (e) {}
     }
   };
@@ -74,40 +76,34 @@ export function StudyProvider({ children }) {
     _setTimerActive(val);
     localStorage.setItem('timerActive', JSON.stringify(val));
     
-    // Native Blocker Integration
     if (Capacitor.isNativePlatform()) {
       try {
-        // Ensure allowed packages are sent again just before starting
         if (val) {
-          Capacitor.Plugins.AppBlocker.setAllowedPackages({ packages: allowedPackages || '' });
-        }
-        
-        Capacitor.Plugins.AppBlocker.setBlockerActive({ active: val });
-      } catch (e) {
-        console.error("Native Blocker Error:", e);
-      }
-
-      if (val) {
-        Preferences.set({ key: 'isBlockerActive', value: 'true' });
-        if (timerMode === 'COUNTDOWN') {
-          const endTime = Date.now() + (timerTime * 1000);
-          Preferences.set({ key: 'countdownEndTime', value: String(endTime) });
-          try {
-            // Also pass allowedPackages here in case the plugin expects it
+          Capacitor.Plugins.AppBlocker.setBlockerActive({ active: true });
+          
+          if (timerMode === 'COUNTDOWN') {
             Capacitor.Plugins.AppBlocker.startCountdown({ 
-              minutes: Math.ceil(timerTime / 60),
-              allowedPackages: allowedPackages || ''
+              minutes: Math.ceil(timerTime / 60)
             });
-          } catch (e) {}
+            
+            const endTime = Date.now() + (timerTime * 1000);
+            Preferences.set({ key: 'countdownEndTime', value: String(endTime) });
+          }
+
+          const pkgArray = (allowedPackages || '').split(',').filter(Boolean);
+          if (!pkgArray.includes('com.apnacollegebihar.online')) {
+            pkgArray.push('com.apnacollegebihar.online');
+          }
+          Capacitor.Plugins.AppBlocker.setAllowedPackages({ packages: pkgArray });
+          
+          Preferences.set({ key: 'isBlockerActive', value: 'true' });
         } else {
+          Capacitor.Plugins.AppBlocker.stopBlocker();
+          Preferences.set({ key: 'isBlockerActive', value: 'false' });
           Preferences.set({ key: 'countdownEndTime', value: '0' });
         }
-      } else {
-        Preferences.set({ key: 'isBlockerActive', value: 'false' });
-        Preferences.set({ key: 'countdownEndTime', value: '0' });
-        try {
-          Capacitor.Plugins.AppBlocker.stopBlocker();
-        } catch (e) {}
+      } catch (e) {
+        console.error("Native Blocker Error:", e);
       }
     }
   };
@@ -126,7 +122,6 @@ export function StudyProvider({ children }) {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // Reset timer logic: Supports custom minutes AND seconds
   useEffect(() => {
     if (!timerActive) {
       if (timerMode === 'COUNTDOWN') {
@@ -196,9 +191,6 @@ export function StudyProvider({ children }) {
   useEffect(() => {
     const handleViolation = () => {
       if (timerActive) {
-        // If it's a stopwatch, we can pause/stop it.
-        // If it's a countdown, we DON'T stop it automatically because we want 
-        // the native blocker to handle it and keep the user in the app.
         if (timerMode === 'STOPWATCH') {
           setTimerActive(false);
           setFocusBroken(true);
