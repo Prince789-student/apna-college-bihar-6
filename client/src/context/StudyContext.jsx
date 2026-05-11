@@ -21,13 +21,13 @@ export function StudyProvider({ children }) {
     } catch { return defaultVal; }
   };
 
-  const [timerActive, _setTimerActive] = useState(() => getInitialState('timerActive', false));
+  const [timerActive, _setTimerActive] = useState(false);
   const [timerTime, setTimerTime] = useState(1500);
   const [timerSubject, setTimerSubject] = useState('OTHERS');
   const [customMinutes, setCustomMinutes] = useState(25);
   const [customSeconds, setCustomSeconds] = useState(0);
   const [timerMode, setTimerMode] = useState('COUNTDOWN');
-  const [focusBroken, _setFocusBroken] = useState(() => getInitialState('focusBroken', false));
+  const [focusBroken, _setFocusBroken] = useState(false);
   const [allowedPackages, _setAllowedPackages] = useState(() => getInitialState('allowedPackages', ''));
   const [installedApps, setInstalledApps] = useState([]);
   const timerRef = useRef(null);
@@ -46,7 +46,17 @@ export function StudyProvider({ children }) {
   useEffect(() => {
     if (Capacitor.isNativePlatform()) {
       fetchApps();
+      
+      // Explicitly reset native blocker on mount to prevent auto-start bugs
+      try {
+        Capacitor.Plugins.AppBlocker.stopBlocker();
+        Preferences.set({ key: 'isBlockerActive', value: 'false' });
+        Preferences.set({ key: 'countdownEndTime', value: '0' });
+      } catch (e) {}
     }
+    // Clear persistence on fresh load to respect user's "no auto-start" preference
+    localStorage.setItem('timerActive', 'false');
+    localStorage.setItem('focusBroken', 'false');
   }, []);
 
   const setAllowedPackages = (val) => {
@@ -67,8 +77,15 @@ export function StudyProvider({ children }) {
     // Native Blocker Integration
     if (Capacitor.isNativePlatform()) {
       try {
+        // Ensure allowed packages are sent again just before starting
+        if (val) {
+          Capacitor.Plugins.AppBlocker.setAllowedPackages({ packages: allowedPackages || '' });
+        }
+        
         Capacitor.Plugins.AppBlocker.setBlockerActive({ active: val });
-      } catch (e) {}
+      } catch (e) {
+        console.error("Native Blocker Error:", e);
+      }
 
       if (val) {
         Preferences.set({ key: 'isBlockerActive', value: 'true' });
@@ -76,7 +93,11 @@ export function StudyProvider({ children }) {
           const endTime = Date.now() + (timerTime * 1000);
           Preferences.set({ key: 'countdownEndTime', value: String(endTime) });
           try {
-            Capacitor.Plugins.AppBlocker.startCountdown({ minutes: Math.ceil(timerTime / 60) });
+            // Also pass allowedPackages here in case the plugin expects it
+            Capacitor.Plugins.AppBlocker.startCountdown({ 
+              minutes: Math.ceil(timerTime / 60),
+              allowedPackages: allowedPackages || ''
+            });
           } catch (e) {}
         } else {
           Preferences.set({ key: 'countdownEndTime', value: '0' });
