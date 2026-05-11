@@ -51,6 +51,16 @@ app.use('/api/tasks', require('./routes/taskRoutes'));
 // 4. Health Check
 app.get('/_health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
 
+// 4.5 Dedicated APK Download Route
+app.get('/download', (req, res) => {
+    const apkPath = path.join(publicPath, 'ACB.apk');
+    if (fs.existsSync(apkPath)) {
+        res.download(apkPath, 'ApnaCollegeBihar.apk');
+    } else {
+        res.status(404).send('APK File not found on server.');
+    }
+});
+
 // 5. Catch-all for SPA (Always returns index.html)
 app.get('*', (req, res) => {
     const indexPath = path.join(publicPath, 'index.html');
