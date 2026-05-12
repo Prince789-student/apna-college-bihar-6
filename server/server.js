@@ -10,8 +10,25 @@ const rateLimit = require('express-rate-limit');
 
 const app = express();
 
-// 1. Max Output Performance: Gzip Compression
-app.use(compression());
+// TEST ROUTE - ABSOLUTE TOP PRIORITY
+app.get('/test-server', (req, res) => res.send('SERVER_LOGIC_V101_ACTIVE'));
+
+// 2.0 FORCE APK DOWNLOAD ROUTE
+app.get('/api/apk-download-v3', (req, res) => {
+    const paths = [
+        path.join(__dirname, 'public', 'ACB-debug.apk'),
+        path.join(process.cwd(), 'ACB-debug.apk'),
+        path.join(process.cwd(), 'server', 'public', 'ACB-debug.apk')
+    ];
+    let foundPath = paths.find(p => fs.existsSync(p));
+    if (foundPath) {
+        res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+        res.setHeader('Content-Disposition', 'attachment; filename="ApnaCollegeBihar_v3.apk"');
+        return res.sendFile(foundPath);
+    } else {
+        res.status(404).send('APK File not found. Paths checked: ' + paths.join(', '));
+    }
+});
 
 // 2. Load Control: Prevent server crash from too many requests
 const limiter = rateLimit({
@@ -30,45 +47,6 @@ app.use(cors({
 app.use((req, res, next) => {
     res.setHeader('Content-Security-Policy', "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; font-src * data:;");
     next();
-});
-
-// 2.0 FORCE APK DOWNLOAD ROUTE
-app.get('/api/apk-download', (req, res) => {
-    const paths = [
-        path.join(__dirname, 'public', 'ACB-debug.apk'),
-        path.join(process.cwd(), 'ACB-debug.apk'),
-        path.join(process.cwd(), 'server', 'public', 'ACB-debug.apk'),
-        path.join(__dirname, '..', 'ACB-debug.apk')
-    ];
-
-    let foundPath = paths.find(p => fs.existsSync(p));
-
-    if (foundPath) {
-        console.log('✅ Serving APK from:', foundPath);
-        res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-        res.setHeader('Content-Disposition', 'attachment; filename="ApnaCollegeBihar_v3.apk"');
-        return res.sendFile(foundPath);
-    } else {
-        console.error('❌ APK not found in any of these paths:', paths);
-        res.status(404).send({
-            error: 'APK File not found',
-            checkedPaths: paths,
-            cwd: process.cwd(),
-            dirname: __dirname
-        });
-    }
-});
-
-// DEBUG ROUTE: List files
-app.get('/api/debug-files', (req, res) => {
-    try {
-        const rootFiles = fs.readdirSync(process.cwd());
-        const serverFiles = fs.readdirSync(__dirname);
-        const publicFiles = fs.existsSync(path.join(__dirname, 'public')) ? fs.readdirSync(path.join(__dirname, 'public')) : 'public folder missing';
-        res.json({ rootFiles, serverFiles, publicFiles });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
 });
 
 // 1. Database Connection (Disabled since using Firebase)
