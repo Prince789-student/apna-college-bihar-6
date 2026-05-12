@@ -26,7 +26,12 @@ function syncBuild() {
     try {
         console.log('Syncing build assets...');
         if (fs.existsSync(destDir)) {
-            fs.rmSync(destDir, { recursive: true, force: true });
+            // Delete everything EXCEPT .apk files to preserve the mobile builds
+            fs.readdirSync(destDir).forEach(file => {
+                if (!file.endsWith('.apk')) {
+                    fs.rmSync(path.join(destDir, file), { recursive: true, force: true });
+                }
+            });
         }
         fs.mkdirSync(destDir, { recursive: true });
         copyRecursiveSync(srcDir, destDir);
