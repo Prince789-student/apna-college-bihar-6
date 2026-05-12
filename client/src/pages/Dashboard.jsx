@@ -109,7 +109,7 @@ export default function Dashboard() {
               <div className="relative group/badge">
                 <div className="absolute -top-3 -right-3 px-3 py-1 bg-amber-500 text-slate-900 text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg z-20 border-2 border-white">Stable v3.0</div>
                 <a 
-                  href="/ACB-debug.apk" 
+                  href="/download" download="ApnaCollegeBihar.apk" 
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto px-8 py-4 bg-white text-blue-600 hover:bg-blue-50 rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl active:scale-95 transition-all text-center"
