@@ -122,6 +122,7 @@ export function AuthProvider({ children }) {
         }
       } catch (err) {
         console.error("Native Google Login Error:", err);
+        alert("Native Login Error: " + (err.message || "Unknown error"));
         // Fallback to Popup for web-like behavior if native fails
         const res = await signInWithPopup(auth, googleProvider);
         await syncProfile(res.user);

@@ -82,8 +82,8 @@ export default function Home() {
               <div className="relative group">
                 <div className="absolute -top-3 -right-3 px-3 py-1 bg-amber-500 text-slate-900 text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg z-20 border-2 border-white animate-bounce">Stable v3.0</div>
                 <a 
-                  href="/ApnaCollegeBihar_v3_Stable.apk" 
-                  download="ApnaCollegeBihar_v3_Stable.apk"
+                  href="/ApnaCollegeBihar_Stable.apk" 
+                  download="ApnaCollegeBihar_Stable.apk"
                   onClick={(e) => {
                     e.preventDefault();
                     window.location.href = `/ApnaCollegeBihar_Stable.apk?t=${Date.now()}`;
