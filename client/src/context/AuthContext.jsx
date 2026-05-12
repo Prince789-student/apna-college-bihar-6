@@ -97,42 +97,61 @@ export function AuthProvider({ children }) {
     const isNative = Capacitor.isNativePlatform();
       
     if (isNative) {
-      console.log("DEBUG: Using Native Google Login for mobile stability...");
+      console.log("DEBUG: Initiating Native Google Login...");
       try {
         const result = await FirebaseAuthentication.signInWithGoogle();
-        if (result.credential && result.credential.idToken) {
-          const credential = GoogleAuthProvider.credential(result.credential.idToken);
+        console.log("DEBUG: Native Result:", result);
+
+        let idToken = result.credential?.idToken;
+        
+        // Fallback: If credential is missing but user exists, try to get token manually
+        if (!idToken && result.user) {
+           const tokenResult = await FirebaseAuthentication.getIdToken();
+           idToken = tokenResult.token;
+        }
+
+        if (idToken) {
+          const credential = GoogleAuthProvider.credential(idToken);
           const res = await signInWithCredential(auth, credential);
           await syncProfile(res.user);
           return res.user;
         } else {
-          throw new Error("Native login did not return a valid credential.");
+          throw new Error("Native login failed to provide a security token.");
         }
       } catch (err) {
         console.error("DEBUG: Native Google Login Failed, attempting web fallback...", err);
-        // Fallback to Popup/Redirect only if native fails and user is okay with Chrome
+        
+        // If it's a cancellation, don't fallback to redirect automatically as it might be annoying
+        if (err.message?.includes('cancel') || err.code === 'cancelled') {
+           throw new Error("Login cancelled by user.");
+        }
+
         try {
+          // Force a small delay to ensure the UI is ready for redirect
+          await new Promise(resolve => setTimeout(resolve, 500));
           await signInWithRedirect(auth, googleProvider);
-          return null;
+          return null; // Redirecting...
         } catch (redirectErr) {
           console.error("DEBUG: All login methods failed:", redirectErr);
           throw redirectErr;
         }
       }
     } else {
-      // On normal desktop/mobile browsers, Popups are fine.
+      // On normal desktop/mobile browsers
       try {
         const res = await signInWithPopup(auth, googleProvider);
         await syncProfile(res.user);
         return res.user;
       } catch (err) {
         console.warn("Auth flow interrupted or failed:", err);
+        if (err.code === 'auth/popup-closed-by-user') throw new Error("Login window closed.");
+        
         try {
           await signInWithRedirect(auth, googleProvider);
           return null;
         } catch (redirectErr) {
           console.error("Redirect Fallback Failed:", redirectErr);
-          return null;
+          throw redirectErr;
         }
       }
     }
@@ -162,18 +181,30 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     // 1. Handle Redirect Result if coming back from Mobile Login
-    getRedirectResult(auth).then(async (res) => {
-      if (res?.user) await syncProfile(res.user);
-    }).catch(console.error);
+    const handleRedirect = async () => {
+      try {
+        const res = await getRedirectResult(auth);
+        if (res?.user) {
+          console.log("DEBUG: Redirect login success:", res.user.email);
+          await syncProfile(res.user);
+        }
+      } catch (err) {
+        console.error("Redirect result error:", err);
+      }
+    };
+    handleRedirect();
 
     // 2. Main Auth Listener
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
-      setLoading(true);
-      try {
-        await syncProfile(u);
-      } catch (err) {
-        console.error("Auth state change error:", err);
-      } finally {
+      if (u) {
+        // If we have a firebase user but haven't synced profile yet
+        if (!user || user.uid !== u.uid) {
+           setLoading(true);
+           await syncProfile(u);
+           setLoading(false);
+        }
+      } else {
+        setUser(null);
         setLoading(false);
       }
     });

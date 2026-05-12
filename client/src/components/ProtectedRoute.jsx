@@ -5,7 +5,7 @@ import { Phone, ShieldCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 const ProtectedRoute = () => {
-  const { user, loading, updateProfileData } = useAuth();
+  const { user, loading, updateProfileData, logout } = useAuth();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -60,6 +60,13 @@ const ProtectedRoute = () => {
               className="mt-6 text-slate-400 hover:text-slate-600 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-colors"
             >
               <Phone size={12} className="rotate-180" /> Cancel & Go Back
+            </button>
+
+            <button 
+              onClick={() => logout()} 
+              className="mt-4 text-red-400 hover:text-red-500 text-[8px] font-black uppercase tracking-widest transition-colors"
+            >
+              Sign out from this account
             </button>
           </div>
         </div>

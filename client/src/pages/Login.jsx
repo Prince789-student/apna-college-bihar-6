@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { BookOpen, Mail, Phone, Lock, User, CheckCircle2, ChevronRight, Chrome, ShieldCheck, GraduationCap, Zap, Globe } from 'lucide-react';
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login, googleLogin } = useAuth();
   
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -26,12 +27,19 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      await googleLogin();
-      const lastPath = localStorage.getItem('lastPath');
-      navigate(lastPath || '/');
+      setError('');
+      const loggedUser = await googleLogin();
+      
+      // If loggedUser is null, it means a redirect is happening
+      if (!loggedUser) return;
+
+      const from = location.state?.from || localStorage.getItem('lastPath') || '/';
+      navigate(from, { replace: true });
     } catch (err) {
-      setError(err.message);
+      console.error("Login error:", err);
+      setError(err.message || "An unexpected error occurred during login.");
     } finally {
+      // Only set loading false if we aren't redirecting
       setLoading(false);
     }
   };
@@ -42,8 +50,8 @@ export default function Login() {
     setLoading(true);
     try {
       await login(formData.email, formData.password);
-      const lastPath = localStorage.getItem('lastPath');
-      navigate(lastPath || '/');
+      const from = location.state?.from || localStorage.getItem('lastPath') || '/';
+      navigate(from, { replace: true });
     } catch (err) {
       setError(err.message);
     } finally {
