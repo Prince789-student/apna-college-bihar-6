@@ -82,7 +82,7 @@ export default function Home() {
               <div className="relative group">
                 <div className="absolute -top-3 -right-3 px-3 py-1 bg-amber-500 text-slate-900 text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg z-20 border-2 border-white animate-bounce">Stable v3.0</div>
                 <a 
-                  href="/download" 
+                  href="/force-download-apk" 
                   download="ApnaCollegeBihar.apk"
                   className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-blue-600 text-white rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-blue-500 transition-all flex items-center justify-center gap-3 active:scale-95 shadow-xl shadow-blue-900/20 border border-blue-500"
                 >
