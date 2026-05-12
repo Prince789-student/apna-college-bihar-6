@@ -4,7 +4,8 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signOut, 
-  signInWithPopup, 
+  signInWithRedirect,
+  getRedirectResult,
   RecaptchaVerifier, 
   signInWithPhoneNumber,
   signInWithCredential,
@@ -104,36 +105,11 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  // 3. Google Signup/Login
+  // 3. Google Login — Opens Chrome browser for account selection
   async function googleLogin() {
-    const isNative = Capacitor.isNativePlatform();
-    
-    if (isNative) {
-      // NATIVE APP FLOW
-      try {
-        const result = await FirebaseAuthentication.signInWithGoogle();
-        if (result.credential && result.credential.idToken) {
-          const credential = GoogleAuthProvider.credential(result.credential.idToken);
-          const res = await signInWithCredential(auth, credential);
-          await syncProfile(res.user);
-          return res.user;
-        } else {
-          throw new Error("No ID Token received from Native Google Login");
-        }
-      } catch (err) {
-        console.error("Native Google Login Error:", err);
-        alert("Native Login Error: " + (err.message || "Unknown error"));
-        // Fallback to Popup for web-like behavior if native fails
-        const res = await signInWithPopup(auth, googleProvider);
-        await syncProfile(res.user);
-        return res.user;
-      }
-    } else {
-      // WEB BROWSER FLOW
-      const res = await signInWithPopup(auth, googleProvider);
-      await syncProfile(res.user);
-      return res.user;
-    }
+    // signInWithRedirect opens Google in Chrome browser (most stable on Android)
+    await signInWithRedirect(auth, googleProvider);
+    // Result is handled in the useEffect below via getRedirectResult
   }
 
   // 4. Phone OTP Setup
@@ -159,6 +135,15 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
+    // Handle redirect result first (Google login redirect flow)
+    getRedirectResult(auth).then(async (result) => {
+      if (result && result.user) {
+        await syncProfile(result.user);
+      }
+    }).catch(err => {
+      console.error("Redirect result error:", err);
+    });
+
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
       setLoading(true);
       try {
