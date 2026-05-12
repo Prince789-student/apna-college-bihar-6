@@ -4,8 +4,7 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signOut, 
-  signInWithRedirect,
-  getRedirectResult,
+  signInWithPopup,
   RecaptchaVerifier, 
   signInWithPhoneNumber,
   signInWithCredential,
@@ -105,11 +104,27 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  // 3. Google Login — Opens Chrome browser for account selection
+  // 3. Google Login — Bottom sheet on native app, popup on web
   async function googleLogin() {
-    // signInWithRedirect opens Google in Chrome browser (most stable on Android)
-    await signInWithRedirect(auth, googleProvider);
-    // Result is handled in the useEffect below via getRedirectResult
+    const isNative = Capacitor.isNativePlatform();
+    
+    if (isNative) {
+      // NATIVE: Shows Google account picker as bottom sheet inside the app
+      const result = await FirebaseAuthentication.signInWithGoogle();
+      if (result?.credential?.idToken) {
+        const credential = GoogleAuthProvider.credential(result.credential.idToken);
+        const res = await signInWithCredential(auth, credential);
+        await syncProfile(res.user);
+        return res.user;
+      } else {
+        throw new Error('Google Sign-In failed: No ID token received');
+      }
+    } else {
+      // WEB: Shows popup
+      const res = await signInWithPopup(auth, googleProvider);
+      await syncProfile(res.user);
+      return res.user;
+    }
   }
 
   // 4. Phone OTP Setup
@@ -135,15 +150,6 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    // Handle redirect result first (Google login redirect flow)
-    getRedirectResult(auth).then(async (result) => {
-      if (result && result.user) {
-        await syncProfile(result.user);
-      }
-    }).catch(err => {
-      console.error("Redirect result error:", err);
-    });
-
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
       setLoading(true);
       try {
