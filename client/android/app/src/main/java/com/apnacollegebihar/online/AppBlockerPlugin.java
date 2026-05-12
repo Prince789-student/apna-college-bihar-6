@@ -185,7 +185,7 @@ public class AppBlockerPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void isAccessibilityServiceEnabled(PluginCall call) {
+    public void checkAccessibility(PluginCall call) {
         String service = getContext().getPackageName() + "/" + AppBlockerService.class.getCanonicalName();
         int accessibilityEnabled = 0;
         try {

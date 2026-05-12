@@ -4,107 +4,77 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
-
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
 
-// 1. Max Output Performance: Gzip Compression
-app.use(compression());
-
-// 1.5 FORCE APK DOWNLOAD ROUTE (Must be before any other middleware)
-app.get('/*.apk', (req, res, next) => {
-    const filePath = path.join(__dirname, 'public', req.path);
-    if (fs.existsSync(filePath)) {
-        res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-        res.setHeader('Content-Disposition', `attachment; filename="${path.basename(filePath)}"`);
-        return res.sendFile(filePath);
-    }
-    next();
-});
-
-// 2. Load Control: Prevent server crash from too many requests
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
-  message: "Too many requests from this IP, please try again after 15 minutes"
-});
-app.use('/api/', limiter);
-
-// 2.5 DEDICATED APK DOWNLOAD ROUTE
+// 1. ABSOLUTE PRIORITY: APK DOWNLOAD ROUTE
+// This must be BEFORE any other middleware to avoid SPA interception
 app.get('/api/download-apk', (req, res) => {
     const apkPath = path.join(__dirname, 'downloads', 'ACB.apk');
     if (fs.existsSync(apkPath)) {
-        console.log("Serving APK from dedicated downloads folder...");
-        res.download(apkPath, 'ApnaCollegeBihar_Stable.apk');
+        res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+        res.setHeader('Content-Disposition', 'attachment; filename="ApnaCollegeBihar_Stable.apk"');
+        return res.sendFile(apkPath);
     } else {
-        console.error("APK NOT FOUND AT:", apkPath);
         res.status(404).send("APK file not found on server.");
     }
 });
 
+// 2. Middleware
+app.use(compression());
 app.use(express.json());
 app.use(cors({
-  origin: '*', // For development, we allow all. In production, user can restrict to vercel.app
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.use((req, res, next) => {
-    res.setHeader('Content-Security-Policy', "default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval'; style-src * 'unsafe-inline'; font-src * data:;");
-    next();
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: "Too many requests, please try again later."
 });
+app.use('/api/', limiter);
 
-// 1. Database Connection (Disabled since using Firebase)
-// mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/edu-platform', {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true
-// }).then(() => console.log('✅ DB Connected')).catch(err => console.log('❌ DB Error: ', err.message));
-
-// 2. Static File Serving (Crucial for Render)
+// 3. Static Files
 const publicPath = path.join(__dirname, 'public');
-app.use(express.static(publicPath, {
-    setHeaders: (res, filePath) => {
-        if (filePath.endsWith('.apk')) {
-            res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-            res.setHeader('Content-Disposition', 'attachment; filename="ApnaCollegeBihar_Latest.apk"');
-        }
-    }
-}));
+app.use(express.static(publicPath));
 
-// 3. API Routes
+// 4. API Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/documents', require('./routes/documentRoutes'));
 app.use('/api/tasks', require('./routes/taskRoutes'));
 
-// 4. Health Check
-app.get('/_health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
+// 5. Health Check & Debug
+app.get('/_health', (req, res) => res.json({ status: 'ok', serverTime: new Date() }));
+app.get('/_debug', (req, res) => {
+    const downloadsExist = fs.existsSync(path.join(__dirname, 'downloads'));
+    const apkExists = fs.existsSync(path.join(__dirname, 'downloads', 'ACB.apk'));
+    res.json({ downloadsExist, apkExists, dirname: __dirname });
+});
 
-// 5. Catch-all for SPA (Always returns index.html)
+// 6. SPA Catch-all
 app.get('*', (req, res) => {
     const indexPath = path.join(publicPath, 'index.html');
     if (fs.existsSync(indexPath)) {
         res.sendFile(indexPath);
     } else {
-        res.status(404).send(`Frontend not found in server/public. Looking at: ${indexPath}`);
+        res.status(404).send("Frontend assets missing.");
     }
 });
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => {
-    console.log(`🚀 Server on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
     
-    // Keep-Alive Logic for Render Free Tier
-    const APP_URL = process.env.APP_URL || 'https://apnacollegebihar.online';
+    // Render Keep-Alive
+    const APP_URL = process.env.APP_URL;
     if (APP_URL) {
-        console.log(`📡 Starting Keep-Alive Pinger for: ${APP_URL}`);
         setInterval(() => {
             const https = require('https');
-            https.get(`${APP_URL}/_health`, (res) => {
-                console.log(`💓 Keep-Alive Ping Sent: ${res.statusCode}`);
-            }).on('error', (err) => {
-                console.error('💔 Keep-Alive Error:', err.message);
-            });
-        }, 14 * 60 * 1000); // Ping every 14 minutes
+            https.get(`${APP_URL}/_health`, (res) => {}).on('error', (err) => {});
+        }, 14 * 60 * 1000);
     }
 });
