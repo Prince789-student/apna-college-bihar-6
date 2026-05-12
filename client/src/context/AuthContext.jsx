@@ -104,13 +104,35 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  // 3. Google Login — signInWithPopup works on both web and native Android
+  // 3. Google Login — Native bottom sheet on Android, popup on Web
   async function googleLogin() {
-    // On Android Capacitor, this uses Chrome Custom Tab (appears as bottom sheet)
-    // No SHA-1 config needed, works out of the box
-    const res = await signInWithPopup(auth, googleProvider);
-    await syncProfile(res.user);
-    return res.user;
+    const isNative = Capacitor.isNativePlatform();
+    
+    if (isNative) {
+      try {
+        // NATIVE: Shows the account picker as a bottom sheet overlay inside the app
+        const result = await FirebaseAuthentication.signInWithGoogle();
+        if (result?.credential?.idToken) {
+          const credential = GoogleAuthProvider.credential(result.credential.idToken);
+          const res = await signInWithCredential(auth, credential);
+          await syncProfile(res.user);
+          return res.user;
+        } else {
+          throw new Error('Native Google Login failed: No credentials received');
+        }
+      } catch (err) {
+        console.error("Native Google Login Error:", err);
+        // Fallback to browser-based popup if native fails (safe-guard)
+        const res = await signInWithPopup(auth, googleProvider);
+        await syncProfile(res.user);
+        return res.user;
+      }
+    } else {
+      // WEB: Standard popup
+      const res = await signInWithPopup(auth, googleProvider);
+      await syncProfile(res.user);
+      return res.user;
+    }
   }
 
   // 4. Phone OTP Setup

@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "818059891079-7779e5unvl6qvcs1ilofa699qr1j6kr4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.apnacollegebihar.online",
+            "certificate_hash": "9c440b2299579f30919f92ae1286c9ae5d8ff85e"
+          }
+        },
+        {
+          "client_id": "818059891079-ljpm56pno1jb84ju0k41sffgt0g9ppbv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.apnacollegebihar.online",
+            "certificate_hash": "ab86da0ed7e37afc87468e27b2d44a8bbc8d2a0a"
+          }
+        },
+        {
           "client_id": "818059891079-kh6vpef04bkov0ic1ajk7a5g100oaejt.apps.googleusercontent.com",
           "client_type": 3
         }
