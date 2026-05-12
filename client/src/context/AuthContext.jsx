@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState, useRef } from "react";
 import { 
   onAuthStateChanged, 
   signInWithEmailAndPassword, 
@@ -26,6 +26,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const isSyncing = useRef(false);
 
   // Profile Roles: 'STUDENT', 'ADMIN', 'SUPER_ADMIN'
   const ROLES = { STUDENT: 'STUDENT', ADMIN: 'ADMIN', SUPER_ADMIN: 'SUPER_ADMIN' };
@@ -184,9 +185,11 @@ export function AuthProvider({ children }) {
     const handleRedirect = async () => {
       try {
         const res = await getRedirectResult(auth);
-        if (res?.user) {
+        if (res?.user && !isSyncing.current) {
           console.log("DEBUG: Redirect login success:", res.user.email);
+          isSyncing.current = true;
           await syncProfile(res.user);
+          isSyncing.current = false;
         }
       } catch (err) {
         console.error("Redirect result error:", err);
@@ -197,11 +200,22 @@ export function AuthProvider({ children }) {
     // 2. Main Auth Listener
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
       if (u) {
-        // If we have a firebase user but haven't synced profile yet
-        if (!user || user.uid !== u.uid) {
-           setLoading(true);
-           await syncProfile(u);
-           setLoading(false);
+        // If we are already syncing, don't trigger again
+        if (isSyncing.current) return;
+
+        setLoading(prev => {
+          if (!prev) return false; 
+          return true;
+        });
+
+        try {
+          isSyncing.current = true;
+          await syncProfile(u);
+        } catch (err) {
+          console.error("Auth sync error:", err);
+        } finally {
+          isSyncing.current = false;
+          setLoading(false);
         }
       } else {
         setUser(null);
@@ -209,7 +223,7 @@ export function AuthProvider({ children }) {
       }
     });
     return unsubscribe;
-  }, []);
+  }, []); // Keep empty to run only once, but logic inside is now safer
 
   const value = {
     user,

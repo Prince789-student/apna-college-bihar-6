@@ -16,9 +16,12 @@ export default function Login() {
   // Neural Auto-Redirect: If user is already logged in, push to dashboard
   useEffect(() => {
     if (user && !loading) {
-      const lastPath = localStorage.getItem('lastPath');
-      // If we were on a specific page, go back there, otherwise go to the main Hub (/)
-      navigate(lastPath || '/', { replace: true });
+      let lastPath = localStorage.getItem('lastPath');
+      // Critical fix: Never redirect back to login page
+      if (!lastPath || lastPath === '/login' || lastPath === '/signup') {
+        lastPath = '/';
+      }
+      navigate(lastPath, { replace: true });
     }
   }, [user, loading, navigate]);
 
