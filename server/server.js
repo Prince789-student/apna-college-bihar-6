@@ -10,25 +10,8 @@ const rateLimit = require('express-rate-limit');
 
 const app = express();
 
-// TEST ROUTE - ABSOLUTE TOP PRIORITY
-app.get('/test-server', (req, res) => res.send('SERVER_LOGIC_V101_ACTIVE'));
-
-// 2.0 FORCE APK DOWNLOAD ROUTE
-app.get('/api/apk-download-v3', (req, res) => {
-    const paths = [
-        path.join(__dirname, 'public', 'ACB-debug.apk'),
-        path.join(process.cwd(), 'ACB-debug.apk'),
-        path.join(process.cwd(), 'server', 'public', 'ACB-debug.apk')
-    ];
-    let foundPath = paths.find(p => fs.existsSync(p));
-    if (foundPath) {
-        res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-        res.setHeader('Content-Disposition', 'attachment; filename="ApnaCollegeBihar_v3.apk"');
-        return res.sendFile(foundPath);
-    } else {
-        res.status(404).send('APK File not found. Paths checked: ' + paths.join(', '));
-    }
-});
+// 1. Max Output Performance: Gzip Compression
+app.use(compression());
 
 // 2. Load Control: Prevent server crash from too many requests
 const limiter = rateLimit({
