@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 });
 
 // 2.0 FORCE APK DOWNLOAD ROUTE
-app.get('/force-download-apk', (req, res) => {
+app.get('/api/apk-download', (req, res) => {
     const paths = [
         path.join(__dirname, 'public', 'ACB-debug.apk'),
         path.join(process.cwd(), 'ACB-debug.apk'),
@@ -46,11 +46,28 @@ app.get('/force-download-apk', (req, res) => {
     if (foundPath) {
         console.log('✅ Serving APK from:', foundPath);
         res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-        res.setHeader('Content-Disposition', 'attachment; filename="ApnaCollegeBihar_Latest.apk"');
+        res.setHeader('Content-Disposition', 'attachment; filename="ApnaCollegeBihar_v3.apk"');
         return res.sendFile(foundPath);
     } else {
         console.error('❌ APK not found in any of these paths:', paths);
-        res.status(404).send('APK File not found. Contact Support.');
+        res.status(404).send({
+            error: 'APK File not found',
+            checkedPaths: paths,
+            cwd: process.cwd(),
+            dirname: __dirname
+        });
+    }
+});
+
+// DEBUG ROUTE: List files
+app.get('/api/debug-files', (req, res) => {
+    try {
+        const rootFiles = fs.readdirSync(process.cwd());
+        const serverFiles = fs.readdirSync(__dirname);
+        const publicFiles = fs.existsSync(path.join(__dirname, 'public')) ? fs.readdirSync(path.join(__dirname, 'public')) : 'public folder missing';
+        res.json({ rootFiles, serverFiles, publicFiles });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 });
 
