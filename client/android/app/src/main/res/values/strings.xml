@@ -6,4 +6,5 @@
     <string name="custom_url_scheme">com.apnacollegebihar.online</string>
     <string name="accessibility_service_label">ACB Focus Mode</string>
     <string name="accessibility_service_description">Ye service study timer ke waqt baki apps ko block karti hai.</string>
+    <string name="default_web_client_id">818059891079-kh6vpef04bkov0ic1ajk7a5g100oaejt.apps.googleusercontent.com</string>
 </resources>
