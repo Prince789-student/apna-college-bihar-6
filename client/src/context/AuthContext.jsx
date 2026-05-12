@@ -95,34 +95,13 @@ export function AuthProvider({ children }) {
 
   // 3. Google Signup/Login (Mobile Stable & Native)
   async function googleLogin() {
-    const isNative = Capacitor.isNativePlatform();
-      
-    if (isNative) {
-      try {
-        const result = await FirebaseAuthentication.signInWithGoogle();
-        const idToken = result.credential?.idToken;
-
-        if (idToken) {
-          const credential = GoogleAuthProvider.credential(idToken);
-          const res = await signInWithCredential(auth, credential);
-          await syncProfile(res.user);
-          return res.user;
-        } else {
-          throw new Error("No token received from Google.");
-        }
-      } catch (err) {
-        console.error("Native Login Error:", err);
-        throw err;
-      }
-    } else {
-      try {
-        const res = await signInWithPopup(auth, googleProvider);
-        await syncProfile(res.user);
-        return res.user;
-      } catch (err) {
-        console.error("Popup Login Error:", err);
-        throw err;
-      }
+    try {
+      const res = await signInWithPopup(auth, googleProvider);
+      await syncProfile(res.user);
+      return res.user;
+    } catch (err) {
+      console.error("Google Login Error:", err);
+      throw err;
     }
   }
 
