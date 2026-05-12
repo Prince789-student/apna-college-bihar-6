@@ -120,10 +120,7 @@ export function AuthProvider({ children }) {
         await syncProfile(res.user);
         return res.user;
       } catch (err) {
-        // Fallback for browsers that block popups
-        if (err.code === 'auth/popup-blocked') {
-          return signInWithRedirect(auth, googleProvider);
-        }
+        console.error("Popup Login Error:", err);
         throw err;
       }
     }
