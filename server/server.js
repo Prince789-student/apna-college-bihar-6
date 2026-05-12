@@ -13,6 +13,17 @@ const app = express();
 // 1. Max Output Performance: Gzip Compression
 app.use(compression());
 
+// 1.5 FORCE APK DOWNLOAD ROUTE (Must be before any other middleware)
+app.get('/*.apk', (req, res, next) => {
+    const filePath = path.join(__dirname, 'public', req.path);
+    if (fs.existsSync(filePath)) {
+        res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+        res.setHeader('Content-Disposition', `attachment; filename="${path.basename(filePath)}"`);
+        return res.sendFile(filePath);
+    }
+    next();
+});
+
 // 2. Load Control: Prevent server crash from too many requests
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

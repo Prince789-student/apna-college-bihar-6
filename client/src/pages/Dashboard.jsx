@@ -40,7 +40,7 @@ export default function Dashboard() {
 
   const handleDownload = (e) => {
     e.preventDefault();
-    window.location.href = '/ApnaCollegeBihar_v3_Stable.apk';
+    window.location.href = `/ApnaCollegeBihar_v3_Stable.apk?t=${Date.now()}`;
   };
 
   useEffect(() => {
