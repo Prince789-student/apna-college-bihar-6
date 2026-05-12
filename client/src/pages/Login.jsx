@@ -5,20 +5,18 @@ import { BookOpen, Mail, Phone, Lock, User, CheckCircle2, ChevronRight, Chrome, 
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login, googleLogin } = useAuth();
+  const { login, googleLogin, user, loading: authLoading } = useAuth();
   
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { user } = useAuth();
-
-  // Auto-Redirect if logged in
+  // Auto-Redirect if already logged in — wait for auth to finish loading first
   useEffect(() => {
-    if (user && !loading) {
+    if (!authLoading && user) {
       navigate('/', { replace: true });
     }
-  }, [user, loading, navigate]);
+  }, [user, authLoading, navigate]);
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleGoogleLogin = async () => {
