@@ -98,18 +98,9 @@ export function AuthProvider({ children }) {
     const isNative = Capacitor.isNativePlatform();
       
     if (isNative) {
-      console.log("DEBUG: Initiating Native Google Login...");
       try {
         const result = await FirebaseAuthentication.signInWithGoogle();
-        console.log("DEBUG: Native Result:", result);
-
-        let idToken = result.credential?.idToken;
-        
-        // Fallback: If credential is missing but user exists, try to get token manually
-        if (!idToken && result.user) {
-           const tokenResult = await FirebaseAuthentication.getIdToken();
-           idToken = tokenResult.token;
-        }
+        const idToken = result.credential?.idToken;
 
         if (idToken) {
           const credential = GoogleAuthProvider.credential(idToken);
@@ -117,43 +108,23 @@ export function AuthProvider({ children }) {
           await syncProfile(res.user);
           return res.user;
         } else {
-          throw new Error("Native login failed to provide a security token.");
+          throw new Error("No token received from Google.");
         }
       } catch (err) {
-        console.error("DEBUG: Native Google Login Failed, attempting web fallback...", err);
-        
-        // If it's a cancellation, don't fallback to redirect automatically as it might be annoying
-        if (err.message?.includes('cancel') || err.code === 'cancelled') {
-           throw new Error("Login cancelled by user.");
-        }
-
-        try {
-          // Force a small delay to ensure the UI is ready for redirect
-          await new Promise(resolve => setTimeout(resolve, 500));
-          await signInWithRedirect(auth, googleProvider);
-          return null; // Redirecting...
-        } catch (redirectErr) {
-          console.error("DEBUG: All login methods failed:", redirectErr);
-          throw redirectErr;
-        }
+        console.error("Native Login Error:", err);
+        throw err;
       }
     } else {
-      // On normal desktop/mobile browsers
       try {
         const res = await signInWithPopup(auth, googleProvider);
         await syncProfile(res.user);
         return res.user;
       } catch (err) {
-        console.warn("Auth flow interrupted or failed:", err);
-        if (err.code === 'auth/popup-closed-by-user') throw new Error("Login window closed.");
-        
-        try {
-          await signInWithRedirect(auth, googleProvider);
-          return null;
-        } catch (redirectErr) {
-          console.error("Redirect Fallback Failed:", redirectErr);
-          throw redirectErr;
+        // Fallback for browsers that block popups
+        if (err.code === 'auth/popup-blocked') {
+          return signInWithRedirect(auth, googleProvider);
         }
+        throw err;
       }
     }
   }
