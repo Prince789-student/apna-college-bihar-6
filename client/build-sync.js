@@ -26,9 +26,9 @@ function syncBuild() {
     try {
         console.log('Syncing build assets...');
         if (fs.existsSync(destDir)) {
-            // Delete everything EXCEPT .apk files to preserve the mobile builds
+            // Delete everything EXCEPT .apk, .htaccess, and _redirects
             fs.readdirSync(destDir).forEach(file => {
-                if (!file.endsWith('.apk')) {
+                if (!file.endsWith('.apk') && file !== '.htaccess' && file !== '_redirects') {
                     fs.rmSync(path.join(destDir, file), { recursive: true, force: true });
                 }
             });

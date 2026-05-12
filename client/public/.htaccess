@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # 1. Force Download for APK files
+  RewriteRule ^(.*\.apk)$ - [L]
+  
+  # 2. SPA Routing: If the file or directory exists, serve it
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  
+  # 3. Otherwise, serve index.html
+  RewriteRule ^ index.html [L]
+</IfModule>
