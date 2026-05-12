@@ -181,49 +181,27 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    // 1. Handle Redirect Result if coming back from Mobile Login
-    const handleRedirect = async () => {
-      try {
-        const res = await getRedirectResult(auth);
-        if (res?.user && !isSyncing.current) {
-          console.log("DEBUG: Redirect login success:", res.user.email);
-          isSyncing.current = true;
-          await syncProfile(res.user);
-          isSyncing.current = false;
-        }
-      } catch (err) {
-        console.error("Redirect result error:", err);
+    // 1. Handle Redirect Result (Mobile Fallback)
+    getRedirectResult(auth).then(async (res) => {
+      if (res?.user) {
+        await syncProfile(res.user);
       }
-    };
-    handleRedirect();
+    }).catch(console.error);
 
     // 2. Main Auth Listener
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
-      if (u) {
-        // If we are already syncing, don't trigger again
-        if (isSyncing.current) return;
-
-        setLoading(prev => {
-          if (!prev) return false; 
-          return true;
-        });
-
-        try {
-          isSyncing.current = true;
+      try {
+        if (u) {
           await syncProfile(u);
-        } catch (err) {
-          console.error("Auth sync error:", err);
-        } finally {
-          isSyncing.current = false;
-          setLoading(false);
+        } else {
+          setUser(null);
         }
-      } else {
-        setUser(null);
+      } finally {
         setLoading(false);
       }
     });
     return unsubscribe;
-  }, []); // Keep empty to run only once, but logic inside is now safer
+  }, []);
 
   const value = {
     user,
