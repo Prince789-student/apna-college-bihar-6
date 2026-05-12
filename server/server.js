@@ -32,6 +32,18 @@ const limiter = rateLimit({
 });
 app.use('/api/', limiter);
 
+// 2.5 DEDICATED APK DOWNLOAD ROUTE
+app.get('/api/download-apk', (req, res) => {
+    const apkPath = path.join(__dirname, 'downloads', 'ACB.apk');
+    if (fs.existsSync(apkPath)) {
+        console.log("Serving APK from dedicated downloads folder...");
+        res.download(apkPath, 'ApnaCollegeBihar_Stable.apk');
+    } else {
+        console.error("APK NOT FOUND AT:", apkPath);
+        res.status(404).send("APK file not found on server.");
+    }
+});
+
 app.use(express.json());
 app.use(cors({
   origin: '*', // For development, we allow all. In production, user can restrict to vercel.app
