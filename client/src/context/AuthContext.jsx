@@ -1,23 +1,17 @@
-import React, { createContext, useContext, useEffect, useState, useRef } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { 
   onAuthStateChanged, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   signOut, 
   signInWithPopup, 
-  signInWithRedirect,
-  getRedirectResult,
   RecaptchaVerifier, 
-  signInWithPhoneNumber,
-  signInWithCredential,
-  GoogleAuthProvider
+  signInWithPhoneNumber 
 } from "firebase/auth";
 import { auth, db, googleProvider } from "../firebase";
 import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
-import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
-import { Capacitor } from '@capacitor/core';
 
-export const AuthContext = createContext(null);
+const AuthContext = createContext();
 
 export function useAuth() {
   return useContext(AuthContext);
@@ -26,11 +20,9 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const isSyncing = useRef(false);
 
   // Profile Roles: 'STUDENT', 'ADMIN', 'SUPER_ADMIN'
   const ROLES = { STUDENT: 'STUDENT', ADMIN: 'ADMIN', SUPER_ADMIN: 'SUPER_ADMIN' };
-
 
   // Sync profile logic
   const syncProfile = async (u) => {
@@ -43,7 +35,6 @@ export function AuthProvider({ children }) {
       const isFounder = u.email === 'prince86944@gmail.com';
       
       if (userDoc.exists()) {
-
         const userData = userDoc.data();
         if (isFounder && userData.role !== ROLES.SUPER_ADMIN) {
            await updateDoc(docRef, { role: ROLES.SUPER_ADMIN });
@@ -93,16 +84,11 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  // 3. Google Signup/Login (Mobile Stable & Native)
+  // 3. Google Signup/Login
   async function googleLogin() {
-    try {
-      const res = await signInWithPopup(auth, googleProvider);
-      await syncProfile(res.user);
-      return res.user;
-    } catch (err) {
-      console.error("Google Login Error:", err);
-      throw err;
-    }
+    const res = await signInWithPopup(auth, googleProvider);
+    await syncProfile(res.user);
+    return res.user;
   }
 
   // 4. Phone OTP Setup
@@ -128,21 +114,12 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    // 1. Handle Redirect Result (Mobile Fallback)
-    getRedirectResult(auth).then(async (res) => {
-      if (res?.user) {
-        await syncProfile(res.user);
-      }
-    }).catch(console.error);
-
-    // 2. Main Auth Listener
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
+      setLoading(true);
       try {
-        if (u) {
-          await syncProfile(u);
-        } else {
-          setUser(null);
-        }
+        await syncProfile(u);
+      } catch (err) {
+        console.error("Auth state change error:", err);
       } finally {
         setLoading(false);
       }
