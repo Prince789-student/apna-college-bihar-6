@@ -74,25 +74,13 @@ export default function Home() {
                     <div className="fixed inset-0 z-[1900]" onClick={() => setShowProfileMenu(false)}></div>
                     <div className="absolute right-0 mt-3 w-64 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-[2rem] shadow-2xl p-2 z-[2000] animate-in fade-in zoom-in-95 duration-200 origin-top-right">
                        <div className="px-5 py-6 border-b border-slate-100 mb-2 text-center">
+                       <div className="px-5 py-6 border-b border-slate-100 mb-2 text-center">
                           <div className="w-16 h-16 rounded-2xl overflow-hidden mb-4 mx-auto border border-slate-100 shadow-lg">
-                             <img src="/logo_acb.png?v=3?v=2" alt="ACB" className="w-full h-full object-cover" />
+                             <img src="/logo_acb.png?v=4" alt="ACB" className="w-full h-full object-cover" />
                           </div>
                           <p className="text-[8px] font-black text-blue-600 uppercase tracking-widest leading-none mb-1">ACB Official Account</p>
                           <p className="text-[10px] font-bold text-slate-900 truncate">{user.email}</p>
                        </div>
-                       
-                       <div className="space-y-1">
-                          <Link 
-                            to="/dashboard" 
-                            onClick={() => setShowProfileMenu(false)}
-                            className="flex items-center gap-3 w-full p-3 hover:bg-slate-50 text-slate-700 rounded-2xl transition-all group"
-                          >
-                             <div className="p-2 bg-slate-100 group-hover:bg-blue-600/10 group-hover:text-blue-600 rounded-xl transition-colors">
-                               <LayoutDashboard size={14} />
-                             </div>
-                             <span className="text-[10px] font-black uppercase tracking-widest">Dashboard</span>
-                          </Link>
-
                           <button 
                             onClick={() => logout()}
                             className="flex items-center gap-3 w-full p-3 hover:bg-red-50 text-slate-500 hover:text-red-600 rounded-2xl transition-all group"
