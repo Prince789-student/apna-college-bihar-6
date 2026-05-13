@@ -13,7 +13,13 @@ export default function Signup() {
   // Auto-Redirect if already logged in
   React.useEffect(() => {
     if (!authLoading && user) {
-      navigate('/', { replace: true });
+      const lastPath = localStorage.getItem('lastPath');
+      if (lastPath) {
+        localStorage.removeItem('lastPath');
+        navigate(lastPath, { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     }
   }, [user, authLoading, navigate]);
 
@@ -22,8 +28,15 @@ export default function Signup() {
       setLoading(true);
       setError('');
       await googleLogin();
-      toast.success('Successfully registered with Google!');
-      navigate('/');
+      toast.success('Account created successfully!');
+      
+      const lastPath = localStorage.getItem('lastPath');
+      if (lastPath) {
+        localStorage.removeItem('lastPath');
+        navigate(lastPath);
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       setError(err.message || 'Google signup failed.');
       toast.error('Google signup failed.');
