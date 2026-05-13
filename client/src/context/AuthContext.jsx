@@ -118,45 +118,30 @@ export function AuthProvider({ children }) {
     
     if (isNative) {
       try {
-        // NATIVE: Shows the account picker as a bottom sheet overlay inside the app
         const result = await FirebaseAuthentication.signInWithGoogle();
         if (result?.credential?.idToken) {
           const credential = GoogleAuthProvider.credential(result.credential.idToken);
           const res = await signInWithCredential(auth, credential);
           await syncProfile(res.user);
           return res.user;
-        } else {
-          throw new Error('Native Google Login failed: No credentials received');
         }
+        throw new Error('Native Google Login failed');
       } catch (err) {
         console.error("Native Google Login Error:", err);
-        // Fallback to browser-based popup if native fails (safe-guard)
         const res = await signInWithPopup(auth, googleProvider);
         await syncProfile(res.user);
         return res.user;
       }
     } else {
       try {
-        // Detect mobile browser to avoid popup issues
-        const isMobileBrowser = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
-        if (isMobileBrowser) {
-          console.log("[AUTH] Mobile browser detected, using Redirect flow...");
-          return await signInWithRedirect(auth, googleProvider);
-        }
-
-        // WEB: Standard popup for desktop
+        // ALWAYS try Popup first. It's much more stable for state management.
         const res = await signInWithPopup(auth, googleProvider);
         await syncProfile(res.user);
         return res.user;
       } catch (err) {
-        console.error("Google Login Error:", err);
-        // Fallback to redirect if popup fails or is blocked
-        if (err.code === 'auth/popup-blocked' || err.code === 'auth/cancelled-popup-request') {
-          console.log("[AUTH] Popup blocked, falling back to Redirect...");
-          return await signInWithRedirect(auth, googleProvider);
-        }
-        throw err;
+        console.warn("Popup failed or blocked, falling back to Redirect...", err);
+        // Fallback to redirect only if popup is blocked or fails
+        return await signInWithRedirect(auth, googleProvider);
       }
     }
   }
@@ -185,11 +170,17 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
-      setLoading(true);
+      // Don't set loading to true if we already have a user and it's just a refresh
+      if (!user) setLoading(true);
+      
       try {
-        await syncProfile(u);
+        if (u) {
+          await syncProfile(u);
+        } else {
+          setUser(null);
+        }
       } catch (err) {
-        console.error("Auth state change error:", err);
+        console.error("Auth sync error:", err);
       } finally {
         setLoading(false);
       }
