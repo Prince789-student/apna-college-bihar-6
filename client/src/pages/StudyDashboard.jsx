@@ -39,6 +39,8 @@ export default function StudyDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
   const [tab, setTab] = useState(location.state?.tab || 'timer');
+  const queryParams = new URLSearchParams(location.search);
+  const isStandalone = queryParams.get('standalone') === 'true';
   const todayStr = new Date().toLocaleDateString('en-CA');
 
   const {
@@ -227,7 +229,7 @@ export default function StudyDashboard() {
 
       {/* ACB Study Zone Header */}
       <div className="flex items-center gap-3 pt-4 pb-3">
-        <img src="/logo-acb.png?v=99?v=99" alt="ACB" className="w-10 h-10 rounded-xl" />
+        <img src="/logo-acb.png?v=99" alt="ACB" className="w-10 h-10 rounded-xl" />
         <div>
           <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.3em]">Apna College Bihar</p>
           <h1 className="text-lg font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Study Zone</h1>
@@ -492,7 +494,7 @@ export default function StudyDashboard() {
               <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Study Network</h2>
             </div>
           <div className="p-4">
-            <button onClick={() => navigate('/dashboard/groups')} className="w-full flex items-center justify-between p-5 bg-slate-900 text-white rounded-2xl active:scale-95 transition-all">
+            <button onClick={() => navigate('/dashboard/groups' + (isStandalone ? '?standalone=true' : ''), { state: { from: 'study-network' } })} className="w-full flex items-center justify-between p-5 bg-slate-900 text-white rounded-2xl active:scale-95 transition-all">
               <div className="flex items-center gap-3"><Users size={20} className="text-orange-400" /><div><p className="text-xs font-black uppercase tracking-widest">Study Groups</p><p className="text-[9px] text-slate-400 mt-0.5">Join or create a group</p></div></div>
               <ArrowRight size={18} className="text-slate-500" />
             </button>

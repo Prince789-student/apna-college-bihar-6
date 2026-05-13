@@ -85,7 +85,7 @@ export default function DashboardLayout() {
   const SidebarContent = ({ isMobile = false }) => (
     <>
       <div className={`p-3 md:p-4 flex items-center justify-between ${!isSidebarOpen && !isMobile ? 'justify-center' : ''}`}>
-        <div className={`flex items-center gap-2 transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}><img src="/logo-acb.png?v=99?v=99" alt="Logo" className="w-8 h-8 rounded-lg" /><div className="min-w-[100px]"><span className="text-sm font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">ACB</span><span className="text-[6px] text-slate-500 font-black uppercase tracking-[0.3em] mt-1 block">Bihar Official</span></div></div>
+        <div className={`flex items-center gap-2 transition-all duration-300 ${(isSidebarOpen || isMobile) ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}><img src="/logo-acb.png?v=99" alt="Logo" className="w-8 h-8 rounded-lg" /><div className="min-w-[100px]"><span className="text-sm font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">ACB</span><span className="text-[6px] text-slate-500 font-black uppercase tracking-[0.3em] mt-1 block">Bihar Official</span></div></div>
         {!isMobile && <button onClick={()=>setSidebarOpen(!isSidebarOpen)} className="p-2.5 bg-slate-100/50 rounded-xl transition-all ml-2"><Menu size={18} /></button>}
         {isMobile && <button onClick={()=>setMobileMenuOpen(false)} className="p-2 text-slate-500"><X size={24} /></button>}
       </div>
@@ -115,14 +115,25 @@ export default function DashboardLayout() {
         {/* Standalone Back Button */}
         {isStandalone && (
           <div className="flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-[100]">
-             <button onClick={() => navigate('/')} className="flex items-center gap-2 text-slate-900 hover:text-blue-600 transition-colors group">
+             <button 
+                onClick={() => {
+                  if (location.state?.from === 'study-network') {
+                    navigate('/dashboard/study?standalone=true', { state: { tab: 'network' } });
+                  } else {
+                    navigate('/');
+                  }
+                }} 
+                className="flex items-center gap-2 text-slate-900 hover:text-blue-600 transition-colors group"
+             >
                 <div className="p-2 bg-slate-100 group-hover:bg-blue-600/10 rounded-xl transition-all">
                    <ChevronLeft size={20} />
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-widest">Back to Home</span>
+                <span className="text-[10px] font-black uppercase tracking-widest">
+                  {location.state?.from === 'study-network' ? 'Back to Network' : 'Back to Home'}
+                </span>
              </button>
              <div className="flex items-center gap-3">
-                <img src="/logo-acb.png?v=99?v=99" alt="Logo" className="w-8 h-8 rounded-lg" />
+                <img src="/logo-acb.png?v=99" alt="Logo" className="w-8 h-8 rounded-lg" />
                 <span className="text-[10px] font-[1000] tracking-tighter uppercase text-slate-900">ACB Hub</span>
              </div>
           </div>
@@ -143,7 +154,7 @@ export default function DashboardLayout() {
         {!isNative && !isAppMode && (
           <div className="md:hidden flex items-center justify-between px-5 py-3 bg-white border-b border-slate-200/80 sticky top-0 z-30">
             <div className="flex items-center gap-2">
-              <img src="/logo-acb.png?v=99?v=99" alt="Logo" className="w-8 h-8 rounded-lg" />
+              <img src="/logo-acb.png?v=99" alt="Logo" className="w-8 h-8 rounded-lg" />
               <span className="text-[10px] font-black tracking-tighter uppercase text-slate-900 leading-none">APNA COLLEGE BIHAR</span>
             </div>
             <button onClick={() => setMobileMenuOpen(true)} className="p-2.5 bg-slate-100 border border-slate-200 rounded-xl relative">
