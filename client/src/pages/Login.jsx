@@ -1,32 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Chrome, Lock, Mail, ShieldCheck, ArrowRight, BookOpen } from 'lucide-react';
+import { Chrome, ShieldCheck, ArrowRight, BookOpen, Sparkles } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
 export default function Login() {
   const navigate = useNavigate();
-  const { login, googleLogin, user, loading: authLoading } = useAuth();
-
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const { googleLogin, user, loading: authLoading } = useAuth();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Auto-Redirect if already logged in — wait for auth to finish
+  // Auto-Redirect if already logged in
   useEffect(() => {
     if (!authLoading && user) {
       navigate('/', { replace: true });
     }
   }, [user, authLoading, navigate]);
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
-
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
       setError('');
       await googleLogin();
-      toast.success('Welcome back!');
+      toast.success('Welcome back to the Hub!');
       navigate('/');
     } catch (err) {
       setError(err.message || 'Google login failed. Please try again.');
@@ -36,121 +32,64 @@ export default function Login() {
     }
   };
 
-  const handleEmailLogin = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      await login(formData.email, formData.password);
-      toast.success('Successfully logged in!');
-      navigate('/');
-    } catch (err) {
-      console.error(err);
-      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-        setError('Invalid email or password.');
-      } else {
-        setError('Login failed. Please check your connection.');
-      }
-      toast.error('Login failed.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="min-h-screen bg-[#0a0f1d] flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Glows */}
+      {/* Background Animated Elements */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#1e3a5f_0%,_#0a0f1d_70%)] pointer-events-none" />
       <div className="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-blue-600/10 rounded-full blur-[120px] animate-pulse"></div>
 
       <div className="w-full max-w-[420px] relative z-10">
-        {/* Card */}
-        <div className="bg-[#111827]/90 border border-slate-700/50 rounded-[2.5rem] p-8 md:p-10 shadow-2xl backdrop-blur-sm">
-
-          {/* Logo & Title */}
-          <div className="flex flex-col items-center mb-10">
-            <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-2xl mb-5 border-2 border-slate-600/50">
-              <img src="/logo.jpg" alt="ACB Logo" className="w-full h-full object-cover" />
+        <div className="bg-[#111827]/90 border border-slate-700/50 rounded-[3rem] p-10 md:p-12 shadow-2xl backdrop-blur-xl text-center">
+          
+          {/* Header */}
+          <div className="flex flex-col items-center mb-12">
+            <div className="w-24 h-24 rounded-[2rem] overflow-hidden shadow-2xl mb-8 border-2 border-slate-600/50 p-1 bg-white/5">
+              <img src="/logo.jpg" alt="Logo" className="w-full h-full object-cover rounded-[1.8rem]" />
             </div>
-            <h1 className="text-2xl font-[1000] text-white tracking-tighter uppercase text-center leading-tight">
-              APNA COLLEGE<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-400">BIHAR</span>
+            <h1 className="text-3xl font-[1000] text-white tracking-tighter uppercase leading-none">
+              APNA COLLEGE<br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">BIHAR</span>
             </h1>
-            <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] mt-3">Portal Authentication</p>
+            <div className="mt-4 flex items-center gap-2 px-4 py-1.5 bg-amber-600/10 border border-amber-500/20 rounded-full text-amber-400">
+               <Sparkles size={12} fill="currentColor" />
+               <span className="text-[9px] font-black uppercase tracking-[0.2em]">Secure Authentication</span>
+            </div>
           </div>
 
-          {/* Error */}
           {error && (
-            <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-2xl mb-6 text-[11px] font-bold text-center flex items-center justify-center gap-2 animate-shake">
-              <ShieldCheck size={14} />
+            <div className="bg-red-500/10 border border-red-500/30 text-red-400 p-4 rounded-2xl mb-8 text-[11px] font-bold text-center flex items-center justify-center gap-3 animate-shake">
+              <ShieldCheck size={16} />
               <span>{error}</span>
             </div>
           )}
 
-          {/* Email/Password Form */}
-          <form onSubmit={handleEmailLogin} className="space-y-3 mb-6">
-            <div className="relative group">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors" size={16} />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email Address"
-                value={formData.email}
-                onChange={handleChange}
-                className="w-full bg-[#1c2636] border border-slate-700/50 focus:border-blue-500/60 rounded-2xl py-4 pl-12 pr-4 text-white text-sm font-medium outline-none transition-all placeholder:text-slate-600"
-                required
-              />
-            </div>
-            <div className="relative group">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors" size={16} />
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                className="w-full bg-[#1c2636] border border-slate-700/50 focus:border-blue-500/60 rounded-2xl py-4 pl-12 pr-4 text-white text-sm font-medium outline-none transition-all placeholder:text-slate-600"
-                required
-              />
-            </div>
+          {/* Core Action */}
+          <div className="space-y-6">
             <button
-              type="submit"
+              onClick={handleGoogleLogin}
               disabled={loading}
-              className="w-full py-4 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-[1000] rounded-2xl text-[11px] uppercase tracking-widest shadow-lg shadow-blue-900/30 transition-all disabled:opacity-60 flex items-center justify-center gap-2"
+              className="w-full flex items-center justify-center gap-4 py-6 bg-white hover:bg-slate-100 active:scale-95 text-slate-900 font-[1000] rounded-[2rem] text-sm uppercase tracking-widest shadow-2xl transition-all disabled:opacity-60 group"
             >
-              {loading ? 'Validating...' : 'Secure Access'}
-              {!loading && <ArrowRight size={14} />}
+              <Chrome className="text-blue-600 group-hover:rotate-12 transition-transform" size={24} />
+              {loading ? 'Verifying...' : 'Login with Google'}
+              {!loading && <ArrowRight size={18} className="opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all" />}
             </button>
-          </form>
-
-          {/* Divider */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className="flex-1 h-px bg-slate-700/60" />
-            <span className="text-slate-600 text-[9px] font-black uppercase tracking-widest">Social Gateway</span>
-            <div className="flex-1 h-px bg-slate-700/60" />
+            
+            <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest leading-relaxed">
+              Authenticated via <br/> Google Cloud Identity
+            </p>
           </div>
 
-          {/* Google Login */}
-          <button
-            onClick={handleGoogleLogin}
-            disabled={loading}
-            className="w-full flex items-center justify-center gap-3 py-4 bg-white hover:bg-slate-100 active:scale-95 text-slate-900 font-black rounded-2xl text-[10px] uppercase tracking-widest shadow-lg transition-all disabled:opacity-60"
-          >
-            <Chrome className="text-blue-600" size={18} />
-            Login with Google
-          </button>
+          <div className="mt-12 pt-10 border-t border-slate-800/50">
+            <p className="text-slate-500 text-[11px] font-bold mb-6">
+              Don't have an account?{' '}
+              <Link to="/signup" className="text-orange-400 hover:text-orange-300 underline underline-offset-4 decoration-2">
+                Create with Google
+              </Link>
+            </p>
 
-          {/* Signup link */}
-          <p className="text-center text-slate-500 text-[11px] font-bold mt-8">
-            Don't have an account?{' '}
-            <Link to="/signup" className="text-orange-400 hover:text-orange-300 underline underline-offset-4">
-              Apply for Admission
-            </Link>
-          </p>
-
-          <div className="mt-8 pt-8 border-t border-slate-800/50 flex justify-center">
-            <Link to="/" className="text-slate-600 hover:text-slate-300 text-[9px] font-black uppercase tracking-[0.3em] flex items-center gap-2 transition-all">
-              <BookOpen size={14} /> Back to Home
+            <Link to="/" className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-300 text-[9px] font-black uppercase tracking-[0.3em] transition-all group">
+              <BookOpen size={14} className="group-hover:-translate-x-1 transition-transform" /> Back to Home
             </Link>
           </div>
         </div>
