@@ -29,7 +29,9 @@ export default function DashboardLayout() {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  const isAppMode = localStorage.getItem('isAppMode') === 'true';
+  const queryParams = new URLSearchParams(location.search);
+  const isStandalone = queryParams.get('standalone') === 'true';
+  const isAppMode = localStorage.getItem('isAppMode') === 'true' || isStandalone;
 
   useEffect(() => {
     if (user && !user.phone) setPhoneModalOpen(true);
@@ -108,8 +110,23 @@ export default function DashboardLayout() {
   return (
     <div className="flex h-full bg-white overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30">
       {!isAppMode && <aside className={`hidden md:flex flex-col bg-white border-r border-slate-200/80 transition-all duration-500 shadow-2xl relative z-40 ${isSidebarOpen ? 'w-64' : 'w-20'}`}><SidebarContent /></aside>}
-      {isMobileMenuOpen && <div className="fixed inset-0 z-[100] md:hidden"><div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} /><aside className="absolute top-0 left-0 h-full w-[85%] max-w-[320px] bg-white shadow-2xl flex flex-col"><SidebarContent isMobile /></aside></div>}
+      {isMobileMenuOpen && !isStandalone && <div className="fixed inset-0 z-[100] md:hidden"><div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} /><aside className="absolute top-0 left-0 h-full w-[85%] max-w-[320px] bg-white shadow-2xl flex flex-col"><SidebarContent isMobile /></aside></div>}
       <main className="flex-1 flex flex-col min-h-0 h-full bg-white relative overflow-hidden">
+        {/* Standalone Back Button */}
+        {isStandalone && (
+          <div className="flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-[100]">
+             <button onClick={() => navigate('/')} className="flex items-center gap-2 text-slate-900 hover:text-blue-600 transition-colors group">
+                <div className="p-2 bg-slate-100 group-hover:bg-blue-600/10 rounded-xl transition-all">
+                   <ChevronLeft size={20} />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-widest">Back to Home</span>
+             </button>
+             <div className="flex items-center gap-3">
+                <img src="/logo.jpg" alt="Logo" className="w-8 h-8 rounded-lg" />
+                <span className="text-[10px] font-[1000] tracking-tighter uppercase text-slate-900">ACB Hub</span>
+             </div>
+          </div>
+        )}
         {/* Minimal Native Header */}
         {isNative && (
           <div className="md:hidden flex items-center px-5 py-4 bg-white border-b border-slate-100 sticky top-0 z-[100]">
@@ -146,7 +163,7 @@ export default function DashboardLayout() {
         <FloatingTimer />
 
         {/* Global Dashboard Bottom Navigation (Only for Web/Non-Native) */}
-        {!isNative && (
+        {!isNative && !isStandalone && (
           <div className="md:hidden fixed bottom-0 left-0 right-0 z-[150] bg-white/95 backdrop-blur-xl border-t border-slate-200 p-2 shadow-[0_-15px_30px_-10px_rgba(0,0,0,0.1)]">
             <div className="flex gap-1">
                 <button onClick={() => navigate('/dashboard/study')} className={`flex-1 flex flex-col items-center justify-center py-2 rounded-2xl transition-all ${location.pathname === '/dashboard/study' ? 'bg-slate-900 text-white' : 'text-slate-500'}`}>
