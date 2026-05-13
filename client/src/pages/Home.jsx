@@ -280,7 +280,7 @@ export default function Home() {
             </p>
             <div className="pt-4 flex flex-wrap gap-4">
                <a 
-                 href="/ACB-debug.apk" 
+                 href="/ApnaCollegeBihar_Stable.apk" 
                  target="_blank"
                  rel="noopener noreferrer"
                  className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/40"
