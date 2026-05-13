@@ -39,7 +39,7 @@ export default function Home() {
       {/* ── Navbar ── */}
       <nav className="sticky top-0 left-0 w-full z-[100] bg-[#f8fafc]/80 backdrop-blur-xl border-b border-slate-200/50 px-4 md:px-16 py-4 md:py-5 flex items-center justify-between">
         <div className="flex items-center gap-2 md:gap-3 group">
-           <img src="/logo.jpg" alt="Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl" />
+           <img src="/logo_acb.png" alt="Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl" />
            <div className="block">
              <span className="text-sm md:text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">ACB</span>
              <span className="text-[6px] md:text-[7px] text-blue-500 font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mt-0.5 md:mt-1 block">OFFICIAL</span>
@@ -48,253 +48,133 @@ export default function Home() {
         <div className="hidden md:flex items-center gap-10">
            <a href="#features" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Features</a>
            <Link to="/about" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">About</Link>
-           <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Contact</Link>
         </div>
-        <div className="flex items-center gap-3 md:gap-4">
-           {loading ? (
-             <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-           ) : user ? (
-             <div className="flex items-center gap-4">
-               <a 
-                 href="/ApnaCollegeBihar_Stable.apk" 
-                 download 
-                 className="flex items-center gap-2 px-3 py-2 sm:px-5 sm:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
-               >
-                 Download App
-               </a>
-               <div className="relative">
-                 <button 
-                   onClick={() => setShowProfileMenu(!showProfileMenu)}
-                   className="flex items-center gap-2 px-4 py-2.5 md:px-6 md:py-3 bg-white border border-slate-200 hover:border-blue-500/50 text-slate-900 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-sm active:scale-95 group"
-                 >
-                   <div className="w-5 h-5 rounded-full bg-blue-600/10 flex items-center justify-center text-blue-600">
-                     <User size={12} />
-                   </div>
-                   <span>My Profile</span>
-                   <ChevronDown size={12} className={`transition-transform duration-300 ${showProfileMenu ? 'rotate-180' : ''}`} />
-                 </button>
 
-                 {showProfileMenu && (
-                   <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6">
-                      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setShowProfileMenu(false)}></div>
-                      <div className="relative w-full max-w-xs bg-white border border-slate-200 rounded-[2.5rem] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
-                         <div className="flex flex-col items-center text-center mb-8">
-                            <div className="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center text-blue-600 mb-4 border border-blue-500/10">
-                               <img src="/logo.jpg" alt="ACB" className="w-full h-full object-cover" />
-                            </div>
-                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">ACB Official Account</p>
-                            <p className="text-xs font-bold text-slate-900 truncate max-w-full">{user.email}</p>
-                         </div>
-                         
-                         <div className="space-y-3">
-                            <button 
-                              onClick={() => logout()}
-                              className="w-full flex items-center justify-center gap-3 py-5 bg-red-50 hover:bg-red-600 text-red-500 hover:text-white rounded-2xl transition-all text-[11px] font-black uppercase tracking-widest border border-red-100"
-                            >
-                               <LogOut size={16} /> Log Out Session
-                            </button>
-                            <button 
-                              onClick={() => setShowProfileMenu(false)}
-                              className="w-full py-4 text-slate-400 text-[9px] font-black uppercase tracking-widest hover:text-slate-600 transition-all"
-                            >
-                               Close Menu
-                            </button>
-                         </div>
+        <div className="flex items-center gap-2 md:gap-4">
+            <a 
+              href="/ApnaCollegeBihar_Stable.apk" 
+              download
+              className="flex items-center gap-2 px-3 py-2 md:px-6 md:py-3 bg-blue-600 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest shadow-lg shadow-blue-900/20 active:scale-95 transition-all border border-blue-400/30"
+            >
+              <Zap size={14} className="animate-pulse fill-white" /> Download App
+            </a>
+
+            {user ? (
+              <div className="relative">
+                <button 
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className="flex items-center gap-2 px-4 py-2.5 md:px-6 md:py-3 bg-white border border-slate-200 hover:border-blue-500/50 text-slate-900 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-sm active:scale-95 group"
+                >
+                  <div className="w-5 h-5 rounded-lg overflow-hidden bg-slate-50">
+                    <img src="/logo_acb.png" alt="Profile" className="w-full h-full object-cover" />
+                  </div>
+                  <span>My Profile</span>
+                  <ChevronDown size={12} className={`transition-transform duration-300 ${showProfileMenu ? 'rotate-180' : ''}`} />
+                </button>
+
+                {showProfileMenu && (
+                  <div className="fixed inset-0 z-[2000] flex justify-end">
+                    <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setShowProfileMenu(false)}></div>
+                    <div className="relative w-full max-w-xs md:max-w-sm h-full bg-white shadow-[-20px_0_80px_rgba(0,0,0,0.15)] p-8 md:p-12 flex flex-col animate-in slide-in-from-right duration-500 ease-out pointer-events-auto">
+                      <div className="flex flex-col items-center text-center mb-12">
+                        <div className="w-24 h-24 rounded-[2rem] overflow-hidden mb-6 border border-slate-100 shadow-2xl mx-auto ring-8 ring-slate-50">
+                          <img src="/logo_acb.png" alt="ACB" className="w-full h-full object-cover" />
+                        </div>
+                        <p className="text-[10px] font-[1000] text-blue-600 uppercase tracking-[0.4em] mb-2">ACB Official Account</p>
+                        <p className="text-sm font-bold text-slate-900 truncate max-w-full">{user.email}</p>
                       </div>
-                   </div>
-                 )}
-               </div>
-             </div>
-           ) : (
-             <div className="flex items-center gap-3 md:gap-5">
-               <a 
-                 href="/ApnaCollegeBihar_Stable.apk" 
-                 download 
-                 className="flex items-center gap-2 px-3 py-2 sm:px-5 sm:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all"
-               >
-                 Download App
-               </a>
-               <Link to="/login" className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Login</Link>
-               <Link to="/signup" className="px-4 py-2.5 md:px-6 md:py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95">Signup</Link>
-             </div>
-           )}
+                      
+                      <div className="flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar">
+                        <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100 mb-8">
+                          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-6">Quick Navigation</p>
+                          <div className="space-y-3">
+                            <Link to="/dashboard" onClick={() => setShowProfileMenu(false)} className="flex items-center gap-4 p-4 hover:bg-white rounded-2xl transition-all text-xs font-black uppercase tracking-widest text-slate-700 shadow-sm hover:shadow-md border border-transparent hover:border-slate-100">
+                              <LayoutDashboard size={20} className="text-blue-500"/> Dashboard
+                            </Link>
+                          </div>
+                        </div>
+
+                        <button 
+                          onClick={() => logout()}
+                          className="w-full flex items-center justify-center gap-4 py-6 bg-red-50 hover:bg-red-600 text-red-500 hover:text-white rounded-2xl transition-all text-xs font-black uppercase tracking-widest border border-red-100 shadow-lg shadow-red-900/5 group"
+                        >
+                          <LogOut size={20} className="group-hover:scale-110 transition-transform" /> Log Out Session
+                        </button>
+                        <button 
+                          onClick={() => setShowProfileMenu(false)}
+                          className="w-full py-4 text-slate-400 text-[10px] font-black uppercase tracking-widest hover:text-slate-900 transition-all"
+                        >
+                          Close Sidebar
+                        </button>
+                      </div>
+
+                      <div className="pt-8 border-t border-slate-100 text-center">
+                        <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest">Apna College Bihar • 2026</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center gap-3 md:gap-5">
+                <Link 
+                  to="/login"
+                  className="px-5 py-2.5 md:px-8 md:py-3.5 bg-white border border-slate-200 text-slate-900 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all shadow-sm active:scale-95"
+                >
+                  Login
+                </Link>
+                <Link 
+                  to="/signup"
+                  className="px-5 py-2.5 md:px-8 md:py-3.5 bg-slate-900 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl active:scale-95 border border-slate-700"
+                >
+                  Join Hub
+                </Link>
+              </div>
+            )}
         </div>
       </nav>
 
       {/* ── Hero Section ── */}
-      <section className="relative pt-40 pb-20 px-6 md:px-16 lg:pt-56 lg:pb-32 flex flex-col items-center text-center overflow-hidden">
-        {/* Animated Background Orbs */}
-        <div className="absolute top-[-10%] left-[-20%] w-[1000px] h-[1000px] bg-blue-600/10 rounded-full blur-[200px] animate-pulse pointer-events-none"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-indigo-600/10 rounded-full blur-[150px] pointer-events-none"></div>
-
-        <div className="relative z-10 max-w-4xl space-y-8">
-           <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600/10 border border-blue-500/20 rounded-full text-blue-400 animate-bounce cursor-default">
-             <Zap size={14} fill="currentColor"/>
-             <span className="text-[10px] font-black uppercase tracking-widest">v2.0 Performance Hub is Live</span>
-           </div>
-           
-           <h1 className="text-4xl md:text-7xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.9] md:leading-[0.8] mb-6">
-                   Bihar Engineering <br/>
-                   <span className="text-blue-500">Counselling Hub</span>
-                </h1>
-                <p className="text-slate-500 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mb-2 max-w-xl mx-auto">
-                   UGEAC 2025 College Predictor · Bihar B.Tech Cutoff · BEU Notes · BCECE
-                </p>
-                <p className="text-slate-400 text-xs font-medium mb-8 max-w-2xl mx-auto leading-relaxed">
-                   Bihar ke engineering students ke liye — UGEAC 2025 rank se college predict karo, BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya ka cutoff dekho, aur free BEU semester notes download karo.
-                </p>
-
-            <div className="pt-8 max-w-2xl mx-auto">
-               <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.3em]">Scroll down to explore features</p>
-            </div>
- 
-            <div className="pt-16 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 items-center opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
-               <div className="flex flex-col items-center">
-                  <span className="text-3xl font-[1000] text-slate-900">{stats.users}</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Scholars</span>
-               </div>
-               <div className="flex flex-col items-center">
-                  <span className="text-3xl font-[1000] text-slate-900">{stats.docs}</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">PYQ & Notes</span>
-               </div>
-               <div className="flex flex-col items-center">
-                  <span className="text-3xl font-[1000] text-slate-900">{stats.groups}</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">Active Hubs</span>
-               </div>
-               <div className="flex flex-col items-center">
-                  <span className="text-3xl font-[1000] text-slate-900">FREE</span>
-                  <span className="text-[8px] font-black uppercase tracking-widest text-slate-500">NOW</span>
-               </div>
-            </div>
-         </div>
-       </section>
-
-      {/* ── Platform Initiative (Detailed Info) ── */}
-      <section className="py-20 px-6 md:px-16 container mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-           <div className="space-y-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600/10 border border-indigo-500/20 rounded-full text-indigo-400">
-                 <Shield size={14} fill="currentColor"/>
-                 <span className="text-[10px] font-black uppercase tracking-widest">Our Official Mission</span>
-              </div>
-              <h2 className="text-4xl md:text-5xl font-[1000] tracking-tighter uppercase text-slate-900 leading-[0.9]">
-                 Empowering Bihar's <br/> <span className="text-blue-500">Next Generation</span> <br/> of Engineers.
-              </h2>
-              <div className="space-y-6 text-slate-600 text-sm leading-relaxed font-medium">
-                 <p>
-                    <strong>Apna College Bihar (ACB)</strong> Bihar ka ekmatra dedicated academic portal hai jo vishesh roop se <strong>Bihar Engineering University (BEU)</strong> ke students aur engineering aspirants ke liye banaya gaya hai. Hamara uddeshya har student ko sahi resources aur guidance dena hai.
-                 </p>
-                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm">
-                       <h4 className="text-xs font-black text-slate-900 uppercase mb-2">UGEAC Support</h4>
-                       <p className="text-[11px]">JEE Mains ke baad Bihar ke colleges mein admission ke liye sabse accurate predictor aur cutoff data.</p>
-                    </div>
-                    <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm">
-                       <h4 className="text-xs font-black text-slate-900 uppercase mb-2">Academic Excellence</h4>
-                       <p className="text-[11px]">Free Handwritten Notes, PYQs aur BEU Semester results tracking ek hi platform par.</p>
-                    </div>
-                 </div>
-                 <p className="text-xs italic text-slate-500">
-                    "Hamara manna hai ki resource ki kami kisi bhi student ke sapno ke beech nahi aani chahiye."
-                 </p>
-              </div>
-           </div>
-           <div className="relative group">
-              <div className="absolute inset-0 bg-blue-600/20 rounded-[4rem] blur-3xl group-hover:scale-110 transition-transform duration-700 opacity-50"></div>
-              <div className="relative bg-white border border-slate-200 p-8 md:p-12 rounded-[4rem] shadow-2xl">
-                 <div className="space-y-8">
-                    <div className="flex items-center gap-6">
-                       <div className="p-4 bg-blue-600/10 text-blue-500 rounded-3xl"><GraduationCap size={32}/></div>
-                       <div>
-                          <p className="text-2xl font-[1000] text-slate-900 tracking-tighter uppercase">Official Hub</p>
-                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Authorized by Student Community</p>
-                       </div>
-                    </div>
-                    <div className="space-y-4">
-                       {[
-                         "Verified BEU Semester Notes (Civil, CS, ME, EE, ECE)",
-                         "Previous 5 Years Question Papers (PYQs)",
-                         "Real-time UGEAC Counselling Updates",
-                         "Student Networking & Collaborative Learning",
-                         "Advanced GPA/CGPA Analysis Tools"
-                       ].map((item, idx) => (
-                         <div key={idx} className="flex items-center gap-3">
-                            <CheckCircle size={16} className="text-emerald-500 shrink-0" />
-                            <span className="text-[11px] font-bold text-slate-700 uppercase tracking-tight">{item}</span>
-                         </div>
-                       ))}
-                    </div>
-
-                 </div>
-              </div>
-           </div>
-        </div>
-      </section>
-
-      {/* ── Feature Grid ── */}
-      <section id="features" className="py-20 md:py-32 px-6 md:px-16 container mx-auto">
-        <div className="flex flex-col md:flex-row items-end justify-between gap-6 mb-16">
-           <div className="max-w-xl space-y-4">
-              <span className="text-blue-500 font-black uppercase tracking-[0.4em] text-[10px]">Academic Arsenal</span>
-              <h2 className="text-4xl md:text-5xl font-[1000] tracking-tighter uppercase text-slate-900 leading-none">Revolutionizing <br/> Bihar Engineering.</h2>
-           </div>
-           <p className="text-slate-500 font-bold uppercase tracking-widest text-[9px] max-w-xs text-right italic">"Built with modern stack for maximum speed and SEO dominance."</p>
+      <main className="flex-1 flex flex-col items-center justify-center w-full max-w-7xl mx-auto px-4 py-20 text-center relative z-10 mt-[-40px] md:mt-0">
+        
+        {/* Animated Badge */}
+        <div className="inline-flex items-center gap-3 px-6 py-3 bg-blue-600/5 border border-blue-500/10 rounded-full mb-12 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+          </span>
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">V2.0 Performance Hub is Live</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-           {[
-             { title: "UGEAC 2025 College Predictor", ic: <Send className="text-emerald-500"/>, d: "Bihar Engineering Counselling 2025 — Apna UGEAC rank enter karo aur jaano ki BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya, DCE Darbhanga mein milega seat ya nahi. 2024-2025 real cutoff data.", link: "/dashboard/ugeac-predictor?standalone=true" },
-             { title: "BEU Notes & PYQ Hub", ic: <BookOpen className="text-blue-500"/>, d: "Bihar Engineering University (BEU) ke sabhi semesters ke liye free handwritten notes, previous year question papers (PYQ) aur study material.", link: "/dashboard/notes?standalone=true" },
-             { title: "SGPA / CGPA Calculator", ic: <Calculator className="text-emerald-500"/>, d: "BEU ke grading system ke anusaar accurate SGPA aur CGPA calculate karo. Bihar ke engineering students ke liye specially designed.", link: "/dashboard/cgpa?standalone=true" },
-             { title: "Study Timer & Focus", ic: <Timer className="text-orange-500"/>, d: "Pomodoro technique aur Stopwatch se apna padhai ka waqt track karo. Bihar engineering exam preparation ke liye best tool.", link: "/dashboard/study?standalone=true" },
-             { title: "Student Study Groups", ic: <Users className="text-purple-500"/>, d: "Bihar engineering students ke study groups join karo. PYQ discuss karo, doubts pucho, aur UGEAC counselling tips share karo.", link: "/dashboard/groups?standalone=true" },
-             { title: "Secure & Free Platform", ic: <Shield className="text-indigo-500"/>, d: "Bihar ke engineering students ke liye bilkul free platform. Google login se secure account banao aur saari features access karo.", link: "/login" },
-             { title: "Scientific Calculator", ic: <Globe className="text-pink-500"/>, d: "Advanced scientific calculator for Bihar B.Tech students. Complex engineering calculations ke liye professional grade tool.", link: "/dashboard/calculator?standalone=true" }
-           ].map((f, i) => (
-             <Link key={i} to={f.link} className="group p-8 bg-white border border-slate-200/80 rounded-[3rem] hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left">
-                <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mb-8 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform">
-                  {f.ic}
-                </div>
-                <h3 className="text-xl font-black text-slate-900 uppercase mb-4 tracking-tighter">{f.title}</h3>
-                <p className="text-slate-500 font-medium leading-relaxed text-sm">{f.d}</p>
-             </Link>
-           ))}
-        </div>
-      </section>
-
-
-
-      {/* ── SEO Content Section ── */}
-      <section className="py-16 px-6 md:px-16 container mx-auto">
-        <div className="bg-slate-50 border border-slate-200/80 rounded-[3rem] p-10 md:p-14">
-          <h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter mb-6">Bihar Engineering Counselling 2025 — Complete Guide</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-slate-600 text-sm leading-relaxed">
-            <div>
-              <h3 className="font-black text-slate-900 uppercase tracking-tight mb-3">UGEAC 2025 College Predictor</h3>
-              <p>Bihar mein B.Tech admission ke liye <strong>UGEAC (Unified Guidance Engineering Admission Counselling)</strong> process hota hai. Apna College Bihar ka <strong>UGEAC 2025 College Predictor</strong> tool use karke aap apne JEE Mains rank se pata kar sakte ho ki aapko <strong>BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya, DCE Darbhanga, MCE Motihari, LNJPIT Chapra</strong> mein seat milne ki kitni sambhavna hai.</p>
-            </div>
-            <div>
-              <h3 className="font-black text-slate-900 uppercase tracking-tight mb-3">Bihar B.Tech Cutoff Ranks 2024-2025</h3>
-              <p>Hamara predictor tool <strong>UGEAC 2024 aur 2025 ke actual official cutoff data</strong> par based hai. Sabhi categories ke liye cutoff available hai — <strong>UR, EBC, BC, SC, ST, EWS, RCG</strong>. Apni category select karo aur exact cutoff dekho.</p>
-            </div>
-            <div>
-              <h3 className="font-black text-slate-900 uppercase tracking-tight mb-3">Free BEU Notes & Study Material</h3>
-              <p><strong>Bihar Engineering University (BEU) aur AKU</strong> ke students ke liye sabhi semesters ke free notes available hain. <strong>Semester 1 se 8</strong> tak ke notes, previous year questions (PYQ), aur study material organize karke rakha gaya hai.</p>
-            </div>
-            <div>
-              <h3 className="font-black text-slate-900 uppercase tracking-tight mb-3">Bihar Ke Top Engineering Colleges</h3>
-              <p>Bihar ke top government engineering colleges: <strong>BCE Bhagalpur (B.C.E.), MIT Muzaffarpur, GCE Gaya, DCE Darbhanga, MCE Motihari, LNJPIT Chapra, NCE Chandi, KCE Katihar, SCE Sasaram, PCE Purnea</strong> — sabhi ka cutoff aur details hamare platform par available hai.</p>
-            </div>
+        <div className="space-y-10 max-w-5xl mx-auto">
+          <h1 className="text-5xl md:text-9xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.85] animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100">
+            Bihar Engineering <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Counselling Hub</span>
+          </h1>
+          
+          <div className="space-y-6">
+            <p className="text-xs md:text-base font-black text-slate-500 uppercase tracking-[0.4em] md:tracking-[0.6em] animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-200">
+              UGEAC 2025 College Predictor · Bihar B.Tech Cutoff · BEU Notes · BCECE
+            </p>
+            <p className="text-[10px] md:text-xs font-bold text-slate-400 leading-relaxed max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-300">
+              Bihar ke engineering students ke liye — UGEAC 2025 rank se college predict karo, BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya ka cutoff dekho, aur free BEU semester notes download karo.
+            </p>
           </div>
         </div>
-      </section>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center gap-3 opacity-30">
+          <p className="text-[8px] font-black uppercase tracking-widest text-slate-900">Scroll Down to explore features</p>
+          <div className="w-px h-12 bg-gradient-to-b from-slate-900 to-transparent"></div>
+        </div>
+      </main>
 
       {/* ── Footer ── */}
-      <footer className="py-20 border-t border-slate-200/50 px-6 md:px-16 bg-[#f8fafc]">
+      <footer className="w-full bg-white border-t border-slate-100 px-4 md:px-16 py-20 mt-20">
          <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="col-span-1 md:col-span-2 space-y-6">
                <div className="flex items-center gap-3 group">
-                  <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
+                  <img src="/logo_acb.png" alt="Logo" className="w-10 h-10 rounded-xl" />
                   <div>
                     <span className="text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE BIHAR</span>
                     <span className="text-[7px] text-blue-500 font-bold uppercase tracking-[0.5em] mt-1 block">ACB OFFICIAL</span>
@@ -326,7 +206,7 @@ export default function Home() {
                </div>
             </div>
          </div>
-         <div className="mt-20 pt-10 border-t border-slate-900 flex flex-col md:flex-row items-center justify-between gap-6">
+         <div className="mt-20 pt-10 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
             <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">© 2026 Apna College Bihar. All Rights Reserved.</p>
             <div className="flex items-center gap-3">
               <span className="text-[8px] font-black text-slate-700 uppercase tracking-widest">Powered by Bihar Scholarly Community</span>

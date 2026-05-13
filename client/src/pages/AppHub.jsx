@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { 
   FileText, Book, GraduationCap, Bell, 
   Calculator, Send, MessageCircle, LogIn, 
-  User, Timer, Users, Globe
+  User, Timer, Users, Globe, LayoutDashboard, LogOut
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Capacitor } from '@capacitor/core';
@@ -56,7 +56,7 @@ export default function AppHub() {
       {/* Header */}
       <header className="relative z-[100] px-6 py-8 flex items-center justify-between">
         <div className="flex items-center gap-3">
-           <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
+           <img src="/logo_acb.png" alt="Logo" className="w-10 h-10 rounded-xl" />
            <div>
              <h1 className="text-sm font-[1000] tracking-tighter uppercase leading-none">BIHAR ENGINEERING UNIVERSITY</h1>
              <p className="text-[6px] text-slate-500 font-black uppercase tracking-[0.4em] mt-1">Official Student Engine</p>
@@ -73,38 +73,51 @@ export default function AppHub() {
               onClick={() => setShowProfileMenu(true)}
               className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all border border-slate-700"
             >
-              <User size={14} /> Profile
+              <div className="w-4 h-4 rounded-md overflow-hidden bg-white/10">
+                <img src="/logo_acb.png" alt="Profile" className="w-full h-full object-cover" />
+              </div>
+              Profile
             </button>
             
-            {/* Mobile-Friendly Profile Modal */}
+            {/* Right Side Sidebar Drawer */}
             {showProfileMenu && (
-              <div className="fixed inset-0 z-[2000] flex items-center justify-center p-6">
-                <div className="absolute inset-0 bg-[#0a0f1d]/90 backdrop-blur-xl" onClick={() => setShowProfileMenu(false)}></div>
-                <div className="relative w-full max-w-xs bg-slate-900 border border-slate-800 rounded-[2.5rem] shadow-2xl p-8 pointer-events-auto">
-                  <div className="flex flex-col items-center text-center mb-8">
-                    <div className="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center text-blue-500 mb-4 border border-blue-500/20">
-                      <img src="/logo.jpg" alt="ACB" className="w-full h-full object-cover" />
+              <div className="fixed inset-0 z-[2000] flex justify-end">
+                <div className="absolute inset-0 bg-[#0a0f1d]/90 backdrop-blur-xl animate-in fade-in duration-300" onClick={() => setShowProfileMenu(false)}></div>
+                <div className="relative w-full max-w-xs h-full bg-slate-900 shadow-[-20px_0_80px_rgba(0,0,0,0.5)] p-10 flex flex-col animate-in slide-in-from-right duration-500 ease-out pointer-events-auto border-l border-slate-800">
+                  <div className="flex flex-col items-center text-center mb-12">
+                    <div className="w-24 h-24 rounded-[2rem] overflow-hidden mb-6 border border-slate-700 shadow-2xl mx-auto ring-8 ring-slate-800/50">
+                      <img src="/logo_acb.png" alt="ACB" className="w-full h-full object-cover" />
                     </div>
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">ACB Official Account</p>
-                    <p className="text-xs font-bold text-white truncate max-w-full">{user.email}</p>
+                    <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] mb-2">ACB Official Account</p>
+                    <p className="text-sm font-bold text-white truncate max-w-full">{user.email}</p>
                   </div>
                   
-                  <div className="space-y-4">
+                  <div className="flex-1 space-y-4">
+                    <div className="p-6 bg-slate-800/50 rounded-3xl border border-slate-700 mb-8">
+                       <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-6">Quick Navigation</p>
+                       <div className="space-y-3">
+                          <Link to="/dashboard" onClick={() => setShowProfileMenu(false)} className="flex items-center gap-4 p-4 hover:bg-slate-800 rounded-2xl transition-all text-xs font-black uppercase tracking-widest text-slate-300 border border-transparent hover:border-slate-700">
+                             <LayoutDashboard size={20} className="text-blue-500"/> Dashboard
+                          </Link>
+                       </div>
+                    </div>
+
                     <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleLogout();
-                      }}
-                      className="w-full flex items-center justify-center gap-3 py-6 bg-red-600 text-white rounded-2xl transition-all text-xs font-black uppercase tracking-widest shadow-xl shadow-red-900/20"
+                      onClick={() => handleLogout()}
+                      className="w-full flex items-center justify-center gap-4 py-6 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white rounded-2xl transition-all text-xs font-black uppercase tracking-widest border border-red-500/20 shadow-xl shadow-red-900/10 group"
                     >
-                      <LogIn size={16} className="rotate-180" /> Logout Session
+                      <LogOut size={20} className="group-hover:scale-110 transition-transform" /> Log Out Session
                     </button>
                     <button 
                       onClick={() => setShowProfileMenu(false)}
-                      className="w-full py-4 text-slate-500 text-[9px] font-black uppercase tracking-widest hover:text-white"
+                      className="w-full py-4 text-slate-500 text-[10px] font-black uppercase tracking-widest hover:text-white transition-all"
                     >
-                      Cancel
+                      Close Sidebar
                     </button>
+                  </div>
+
+                  <div className="pt-8 border-t border-slate-800 text-center">
+                    <p className="text-[8px] text-slate-600 font-bold uppercase tracking-widest">Apna College Bihar • 2026</p>
                   </div>
                 </div>
               </div>
@@ -144,7 +157,7 @@ export default function AppHub() {
       </main>
 
       {/* App Footer Info */}
-      <footer className="relative z-10 p-6 text-center">
+      <footer className="relative z-10 p-6 text-center border-t border-slate-800/50">
          <p className="text-[8px] text-slate-600 font-black uppercase tracking-[0.2em]">Designed for Excellence • ACB 2026</p>
       </footer>
     </div>
