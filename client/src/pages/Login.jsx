@@ -13,7 +13,13 @@ export default function Login() {
   // Auto-Redirect if already logged in
   useEffect(() => {
     if (!authLoading && user) {
-      navigate('/', { replace: true });
+      const lastPath = localStorage.getItem('lastPath');
+      if (lastPath) {
+        localStorage.removeItem('lastPath');
+        navigate(lastPath, { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     }
   }, [user, authLoading, navigate]);
 
@@ -23,7 +29,14 @@ export default function Login() {
       setError('');
       await googleLogin();
       toast.success('Welcome back to the Hub!');
-      navigate('/');
+      
+      const lastPath = localStorage.getItem('lastPath');
+      if (lastPath) {
+        localStorage.removeItem('lastPath');
+        navigate(lastPath);
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       setError(err.message || 'Google login failed. Please try again.');
       toast.error('Google login failed.');
