@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Chrome, ShieldCheck, ArrowRight, BookOpen, Sparkles } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { Capacitor } from '@capacitor/core';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -101,9 +102,11 @@ export default function Signup() {
               </Link>
             </p>
 
-            <Link to="/" className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-300 text-[9px] font-black uppercase tracking-[0.3em] transition-all group">
-              <BookOpen size={14} className="group-hover:-translate-x-1 transition-transform" /> Back to Campus
-            </Link>
+            {!Capacitor.isNative && (
+              <Link to="/" className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-300 text-[9px] font-black uppercase tracking-[0.3em] transition-all group">
+                <BookOpen size={14} className="group-hover:-translate-x-1 transition-transform" /> Back to Campus
+              </Link>
+            )}
           </div>
         </div>
       </div>

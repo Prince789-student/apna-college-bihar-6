@@ -54,7 +54,7 @@ export default function AppHub() {
       <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"></div>
 
       {/* Header */}
-      <header className="relative z-10 px-6 py-8 flex items-center justify-between">
+      <header className="relative z-[100] px-6 py-8 flex items-center justify-between">
         <div className="flex items-center gap-3">
            <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
            <div>
@@ -78,9 +78,9 @@ export default function AppHub() {
             
             {/* Mobile-Friendly Profile Modal */}
             {showProfileMenu && (
-              <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6">
-                <div className="absolute inset-0 bg-[#0a0f1d]/80 backdrop-blur-md" onClick={() => setShowProfileMenu(false)}></div>
-                <div className="relative w-full max-w-xs bg-slate-900 border border-slate-800 rounded-[2.5rem] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
+              <div className="fixed inset-0 z-[2000] flex items-center justify-center p-6">
+                <div className="absolute inset-0 bg-[#0a0f1d]/90 backdrop-blur-xl" onClick={() => setShowProfileMenu(false)}></div>
+                <div className="relative w-full max-w-xs bg-slate-900 border border-slate-800 rounded-[2.5rem] shadow-2xl p-8 pointer-events-auto">
                   <div className="flex flex-col items-center text-center mb-8">
                     <div className="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center text-blue-500 mb-4 border border-blue-500/20">
                       <User size={32} />
@@ -89,18 +89,21 @@ export default function AppHub() {
                     <p className="text-xs font-bold text-white truncate max-w-full">{user.email}</p>
                   </div>
                   
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <button 
-                      onClick={handleLogout}
-                      className="w-full flex items-center justify-center gap-3 py-5 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white rounded-2xl transition-all text-[11px] font-black uppercase tracking-widest border border-red-500/20"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleLogout();
+                      }}
+                      className="w-full flex items-center justify-center gap-3 py-6 bg-red-600 text-white rounded-2xl transition-all text-xs font-black uppercase tracking-widest shadow-xl shadow-red-900/20"
                     >
                       <LogIn size={16} className="rotate-180" /> Logout Session
                     </button>
                     <button 
                       onClick={() => setShowProfileMenu(false)}
-                      className="w-full py-4 text-slate-500 text-[9px] font-black uppercase tracking-widest hover:text-white transition-all"
+                      className="w-full py-4 text-slate-500 text-[9px] font-black uppercase tracking-widest hover:text-white"
                     >
-                      Close Menu
+                      Cancel
                     </button>
                   </div>
                 </div>
