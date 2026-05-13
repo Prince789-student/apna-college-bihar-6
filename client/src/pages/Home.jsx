@@ -67,20 +67,32 @@ export default function Home() {
                </button>
 
                {showProfileMenu && (
-                 <div className="absolute right-0 mt-3 w-56 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-3xl shadow-2xl p-2 z-[1000] animate-in fade-in zoom-in-95 duration-200 origin-top-right">
-                    <div className="px-4 py-3 border-b border-slate-100 mb-2">
-                       <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Scholar Profile</p>
-                       <p className="text-[10px] font-bold text-slate-900 truncate">{user.email}</p>
-                    </div>
-                    <button 
-                      onClick={() => logout()}
-                      className="flex items-center gap-3 w-full p-3 hover:bg-red-50 text-slate-500 hover:text-red-600 rounded-2xl transition-all group"
-                    >
-                       <div className="p-2 bg-slate-100 group-hover:bg-red-600/10 rounded-lg transition-colors">
-                         <LogOut size={14} />
+                 <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6">
+                    <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setShowProfileMenu(false)}></div>
+                    <div className="relative w-full max-w-xs bg-white border border-slate-200 rounded-[2.5rem] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
+                       <div className="flex flex-col items-center text-center mb-8">
+                          <div className="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center text-blue-600 mb-4 border border-blue-500/10">
+                             <User size={32} />
+                          </div>
+                          <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Scholar Hub Account</p>
+                          <p className="text-xs font-bold text-slate-900 truncate max-w-full">{user.email}</p>
                        </div>
-                       <span className="text-[10px] font-black uppercase tracking-widest">Log Out Session</span>
-                    </button>
+                       
+                       <div className="space-y-3">
+                          <button 
+                            onClick={() => logout()}
+                            className="w-full flex items-center justify-center gap-3 py-5 bg-red-50 hover:bg-red-600 text-red-500 hover:text-white rounded-2xl transition-all text-[11px] font-black uppercase tracking-widest border border-red-100"
+                          >
+                             <LogOut size={16} /> Log Out Session
+                          </button>
+                          <button 
+                            onClick={() => setShowProfileMenu(false)}
+                            className="w-full py-4 text-slate-400 text-[9px] font-black uppercase tracking-widest hover:text-slate-600 transition-all"
+                          >
+                             Close Menu
+                          </button>
+                       </div>
+                    </div>
                  </div>
                )}
              </div>

@@ -65,28 +65,45 @@ export default function AppHub() {
         
         {!user ? (
           <Link to="/login" className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-blue-900/20 active:scale-95 transition-all">
-            <LogIn size={14} /> Login / Sign Up
+            <LogIn size={14} /> Login
           </Link>
         ) : (
           <div className="relative">
             <button 
-              onClick={() => setShowProfileMenu(!showProfileMenu)}
+              onClick={() => setShowProfileMenu(true)}
               className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all border border-slate-700"
             >
               <User size={14} /> Profile
             </button>
+            
+            {/* Mobile-Friendly Profile Modal */}
             {showProfileMenu && (
-              <div className="absolute right-0 mt-2 w-48 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl z-[100] animate-in fade-in zoom-in duration-200">
-                <div className="p-3 border-b border-slate-800">
-                  <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Student Hub</p>
-                  <p className="text-[10px] font-bold text-white truncate">{user.email}</p>
+              <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6">
+                <div className="absolute inset-0 bg-[#0a0f1d]/80 backdrop-blur-md" onClick={() => setShowProfileMenu(false)}></div>
+                <div className="relative w-full max-w-xs bg-slate-900 border border-slate-800 rounded-[2.5rem] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="flex flex-col items-center text-center mb-8">
+                    <div className="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center text-blue-500 mb-4 border border-blue-500/20">
+                      <User size={32} />
+                    </div>
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Scholar Hub Account</p>
+                    <p className="text-xs font-bold text-white truncate max-w-full">{user.email}</p>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <button 
+                      onClick={handleLogout}
+                      className="w-full flex items-center justify-center gap-3 py-5 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white rounded-2xl transition-all text-[11px] font-black uppercase tracking-widest border border-red-500/20"
+                    >
+                      <LogIn size={16} className="rotate-180" /> Logout Session
+                    </button>
+                    <button 
+                      onClick={() => setShowProfileMenu(false)}
+                      className="w-full py-4 text-slate-500 text-[9px] font-black uppercase tracking-widest hover:text-white transition-all"
+                    >
+                      Close Menu
+                    </button>
+                  </div>
                 </div>
-                <button 
-                  onClick={handleLogout}
-                  className="w-full flex items-center gap-3 p-4 text-red-500 hover:bg-red-500/10 transition-all rounded-b-2xl text-[10px] font-black uppercase tracking-widest"
-                >
-                  <LogIn size={14} className="rotate-180" /> Logout Session
-                </button>
               </div>
             )}
           </div>
