@@ -34,7 +34,7 @@ export default function Home() {
       {/* ── Navbar ── */}
       <nav className="sticky top-0 left-0 w-full z-[100] bg-[#f8fafc]/80 backdrop-blur-xl border-b border-slate-200/50 px-4 md:px-16 py-4 md:py-5 flex items-center justify-between">
         <div className="flex items-center gap-2 md:gap-3 group">
-           <img src="/logo-acb.png?v=99?v=99" alt="Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl" />
+           <img src="/logo-acb.png?v=99" alt="Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl" />
            <div className="block">
              <span className="text-sm md:text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">ACB</span>
              <span className="text-[6px] md:text-[7px] text-blue-500 font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mt-0.5 md:mt-1 block">OFFICIAL</span>
@@ -53,7 +53,7 @@ export default function Home() {
                <a 
                  href="/ApnaCollegeBihar_Stable.apk" 
                  download 
-                 className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
+                 className="flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
                >
                  Download App
                </a>
@@ -63,7 +63,7 @@ export default function Home() {
                    className="flex items-center gap-2 px-4 py-2.5 md:px-6 md:py-3 bg-white border border-slate-200 hover:border-blue-500/50 text-slate-900 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-sm active:scale-95 group"
                  >
                    <div className="w-5 h-5 rounded-lg overflow-hidden bg-slate-50">
-                     <img src="/logo-acb.png?v=99?v=99" alt="Profile" className="w-full h-full object-cover" />
+                     <img src="/logo-acb.png?v=99" alt="Profile" className="w-full h-full object-cover" />
                    </div>
                    <span>My Profile</span>
                    <ChevronDown size={12} className={`transition-transform duration-300 ${showProfileMenu ? 'rotate-180' : ''}`} />
@@ -74,13 +74,14 @@ export default function Home() {
                     <div className="fixed inset-0 z-[1900]" onClick={() => setShowProfileMenu(false)}></div>
                     <div className="absolute right-0 mt-3 w-64 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-[2rem] shadow-2xl p-2 z-[2000] animate-in fade-in zoom-in-95 duration-200 origin-top-right">
                        <div className="px-5 py-6 border-b border-slate-100 mb-2 text-center">
-                       <div className="px-5 py-6 border-b border-slate-100 mb-2 text-center">
                           <div className="w-16 h-16 rounded-2xl overflow-hidden mb-4 mx-auto border border-slate-100 shadow-lg">
-                             <img src="/logo-acb.png?v=99?v=99" alt="ACB" className="w-full h-full object-cover" />
+                             <img src="/logo-acb.png?v=99" alt="ACB" className="w-full h-full object-cover" />
                           </div>
                           <p className="text-[8px] font-black text-blue-600 uppercase tracking-widest leading-none mb-1">ACB Official Account</p>
                           <p className="text-[10px] font-bold text-slate-900 truncate">{user.email}</p>
                        </div>
+                       
+                       <div className="space-y-1">
                           <button 
                             onClick={() => logout()}
                             className="flex items-center gap-3 w-full p-3 hover:bg-red-50 text-slate-500 hover:text-red-600 rounded-2xl transition-all group"
@@ -105,7 +106,7 @@ export default function Home() {
                <a 
                  href="/ApnaCollegeBihar_Stable.apk" 
                  download 
-                 className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                 className="flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
                >
                  Download App
                </a>
@@ -257,40 +258,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── App Promotion ── */}
-      <section className="py-20 px-6 md:px-16 container mx-auto">
-        <div className="bg-white rounded-[4rem] p-10 md:p-16 border border-slate-200/80 flex flex-col md:flex-row items-center gap-12 relative overflow-hidden group">
-          <div className="absolute inset-0 bg-blue-600/5 opacity-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none"></div>
-          <div className="flex-1 space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600/10 border border-emerald-500/20 rounded-full text-emerald-400">
-               <Shield size={14} fill="currentColor"/>
-               <span className="text-[10px] font-black uppercase tracking-widest">Available for Android</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-[1000] tracking-tighter uppercase text-slate-900 leading-none">The Ultimate <br/> <span className="text-blue-500">Distraction Blocker</span> App</h2>
-            <p className="text-slate-500 font-bold uppercase tracking-widest text-[11px] leading-relaxed">
-              Bihar's first study app that strictly blocks distracting apps like Instagram & Games during your study timer. Even a reboot won't stop the focus. 🔒🚀
-            </p>
-            <div className="pt-4">
-               <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest">Available now via official APK</p>
-            </div>
-          </div>
-          <div className="flex-1 w-full max-w-sm">
-             <div className="aspect-[9/16] bg-slate-100 rounded-[3rem] border-[8px] border-slate-200 shadow-2xl relative overflow-hidden group-hover:scale-105 transition-all duration-700">
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent"></div>
-                <div className="p-8 flex flex-col items-center justify-center h-full text-center space-y-6">
-                   <Timer size={60} className="text-blue-500 animate-pulse" />
-                   <h3 className="text-xl font-black text-slate-900 uppercase tracking-tighter">IRON FOCUS ACTIVE</h3>
-                   <div className="w-full h-2 bg-slate-800 rounded-full">
-                      <div className="w-[65%] h-full bg-blue-500 rounded-full animate-progress"></div>
-                   </div>
-                   <p className="text-[10px] text-red-500 font-bold uppercase tracking-widest">All Distractions Blocked 🔒</p>
-                </div>
-             </div>
-          </div>
-        </div>
-      </section>
-
-
       {/* ── SEO Content Section ── */}
       <section className="py-16 px-6 md:px-16 container mx-auto">
         <div className="bg-slate-50 border border-slate-200/80 rounded-[3rem] p-10 md:p-14">
@@ -321,7 +288,7 @@ export default function Home() {
          <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="col-span-1 md:col-span-2 space-y-6">
                <div className="flex items-center gap-3 group">
-                  <img src="/logo-acb.png?v=99?v=99" alt="Logo" className="w-10 h-10 rounded-xl" />
+                  <img src="/logo-acb.png?v=99" alt="Logo" className="w-10 h-10 rounded-xl" />
                   <div>
                     <span className="text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE BIHAR</span>
                     <span className="text-[7px] text-blue-500 font-bold uppercase tracking-[0.5em] mt-1 block">Bihar's Study Hub</span>
