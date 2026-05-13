@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { 
   FileText, Book, GraduationCap, Bell, 
   Calculator, Send, MessageCircle, LogIn, 
-  User, Timer, Users, Globe, LayoutDashboard, LogOut
+  User, Timer, Users, Globe, LayoutDashboard, LogOut, Youtube
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Capacitor } from '@capacitor/core';
@@ -58,8 +58,8 @@ export default function AppHub() {
         <div className="flex items-center gap-3">
            <img src="/logo-acb.png?v=99" alt="Logo" className="w-10 h-10 rounded-xl" />
            <div>
-             <h1 className="text-sm font-[1000] tracking-tighter uppercase leading-none">BIHAR ENGINEERING UNIVERSITY</h1>
-             <p className="text-[6px] text-slate-500 font-black uppercase tracking-[0.4em] mt-1">Official Student Engine</p>
+             <h1 className="text-sm font-[1000] tracking-tighter uppercase leading-none">APNA COLLEGE BIHAR</h1>
+             <p className="text-[6px] text-blue-500 font-black uppercase tracking-[0.4em] mt-1">Official Student Engine</p>
            </div>
         </div>
         
@@ -153,9 +153,17 @@ export default function AppHub() {
                </div>
             </div>
 
+            <div className="p-6 bg-[#ff0000]/10 border border-[#ff0000]/20 rounded-[2.5rem] flex items-center justify-between group hover:bg-[#ff0000]/20 transition-all">
+               <div>
+                  <h4 className="text-xs font-black uppercase tracking-tighter text-[#ff0000]">YouTube Channel</h4>
+                  <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Watch Tutorials & Guides</p>
+               </div>
+               <button onClick={() => window.open('https://youtube.com/@apnacollegebihar', '_blank')} className="p-3 bg-[#ff0000] text-white rounded-xl shadow-lg shadow-red-900/40"><Youtube size={20}/></button>
+            </div>
+
             <div className="p-6 bg-slate-900 border border-slate-800 rounded-[2.5rem] flex items-center justify-between">
                <div>
-                  <h4 className="text-xs font-black uppercase tracking-tighter">Official Telegram</h4>
+                  <h4 className="text-xs font-black uppercase tracking-tighter text-blue-400">Official Telegram</h4>
                   <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Get Instant Notifications</p>
                </div>
                <button onClick={() => window.open('https://t.me/apnacollegebihar', '_blank')} className="p-3 bg-blue-600/10 text-blue-500 rounded-xl"><Send size={20}/></button>
