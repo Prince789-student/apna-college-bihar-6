@@ -262,38 +262,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── App Promotion ── */}
-      <section className="py-20 px-6 md:px-16 container mx-auto">
-        <div className="bg-white rounded-[4rem] p-10 md:p-16 border border-slate-200/80 flex flex-col md:flex-row items-center gap-12 relative overflow-hidden group">
-          <div className="absolute inset-0 bg-blue-600/5 opacity-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none"></div>
-          <div className="flex-1 space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600/10 border border-emerald-500/20 rounded-full text-emerald-400">
-               <Shield size={14} fill="currentColor"/>
-               <span className="text-[10px] font-black uppercase tracking-widest">Available for Android</span>
-            </div>
-            <h2 className="text-4xl md:text-5xl font-[1000] tracking-tighter uppercase text-slate-900 leading-none">The Ultimate <br/> <span className="text-blue-500">Distraction Blocker</span> App</h2>
-            <p className="text-slate-500 font-bold uppercase tracking-widest text-[11px] leading-relaxed">
-              Bihar's first study app that strictly blocks distracting apps like Instagram & Games during your study timer. Even a reboot won't stop the focus. 🔒🚀
-            </p>
-            <div className="pt-4">
-               <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest">Available now via official APK</p>
-            </div>
-          </div>
-          <div className="flex-1 w-full max-w-sm">
-             <div className="aspect-[9/16] bg-slate-100 rounded-[3rem] border-[8px] border-slate-200 shadow-2xl relative overflow-hidden group-hover:scale-105 transition-all duration-700">
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent"></div>
-                <div className="p-8 flex flex-col items-center justify-center h-full text-center space-y-6">
-                   <Timer size={60} className="text-blue-500 animate-pulse" />
-                   <h3 className="text-xl font-black text-slate-900 uppercase tracking-tighter">IRON FOCUS ACTIVE</h3>
-                   <div className="w-full h-2 bg-slate-800 rounded-full">
-                      <div className="w-[65%] h-full bg-blue-500 rounded-full animate-progress"></div>
-                   </div>
-                   <p className="text-[10px] text-red-500 font-bold uppercase tracking-widest">All Distractions Blocked 🔒</p>
-                </div>
-             </div>
-          </div>
-        </div>
-      </section>
 
 
       {/* ── SEO Content Section ── */}
