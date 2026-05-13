@@ -70,46 +70,45 @@ export default function Home() {
                  </button>
 
                  {showProfileMenu && (
-                   <div className="fixed inset-0 z-[2000] flex justify-end">
-                      <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setShowProfileMenu(false)}></div>
-                      <div className="relative w-full max-w-xs md:max-w-sm h-full bg-white shadow-[-20px_0_80px_rgba(0,0,0,0.15)] p-8 md:p-12 flex flex-col animate-in slide-in-from-right duration-500 ease-out pointer-events-auto">
-                         <div className="flex flex-col items-center text-center mb-12">
-                            <div className="w-24 h-24 rounded-[2rem] overflow-hidden mb-6 border border-slate-100 shadow-2xl mx-auto ring-8 ring-slate-50">
-                               <img src="/logo_acb.png" alt="ACB" className="w-full h-full object-cover" />
-                            </div>
-                            <p className="text-[10px] font-[1000] text-blue-600 uppercase tracking-[0.4em] mb-2">ACB Official Account</p>
-                            <p className="text-sm font-bold text-slate-900 truncate max-w-full">{user.email}</p>
-                         </div>
-                         
-                         <div className="flex-1 space-y-4 overflow-y-auto pr-2 custom-scrollbar">
-                            <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100 mb-8">
-                               <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-6">Quick Navigation</p>
-                               <div className="space-y-3">
-                                  <Link to="/dashboard" onClick={() => setShowProfileMenu(false)} className="flex items-center gap-4 p-4 hover:bg-white rounded-2xl transition-all text-xs font-black uppercase tracking-widest text-slate-700 shadow-sm hover:shadow-md border border-transparent hover:border-slate-100">
-                                     <LayoutDashboard size={20} className="text-blue-500"/> Dashboard
-                                  </Link>
-                               </div>
-                            </div>
+                   <>
+                    <div className="fixed inset-0 z-[1900]" onClick={() => setShowProfileMenu(false)}></div>
+                    <div className="absolute right-0 mt-3 w-64 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-[2rem] shadow-2xl p-2 z-[2000] animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+                       <div className="px-5 py-6 border-b border-slate-100 mb-2 text-center">
+                          <div className="w-16 h-16 rounded-2xl overflow-hidden mb-4 mx-auto border border-slate-100 shadow-lg">
+                             <img src="/logo_acb.png?v=2" alt="ACB" className="w-full h-full object-cover" />
+                          </div>
+                          <p className="text-[8px] font-black text-blue-600 uppercase tracking-widest leading-none mb-1">ACB Official Account</p>
+                          <p className="text-[10px] font-bold text-slate-900 truncate">{user.email}</p>
+                       </div>
+                       
+                       <div className="space-y-1">
+                          <Link 
+                            to="/dashboard" 
+                            onClick={() => setShowProfileMenu(false)}
+                            className="flex items-center gap-3 w-full p-3 hover:bg-slate-50 text-slate-700 rounded-2xl transition-all group"
+                          >
+                             <div className="p-2 bg-slate-100 group-hover:bg-blue-600/10 group-hover:text-blue-600 rounded-xl transition-colors">
+                               <LayoutDashboard size={14} />
+                             </div>
+                             <span className="text-[10px] font-black uppercase tracking-widest">Dashboard</span>
+                          </Link>
 
-                            <button 
-                              onClick={() => logout()}
-                              className="w-full flex items-center justify-center gap-4 py-6 bg-red-50 hover:bg-red-600 text-red-500 hover:text-white rounded-2xl transition-all text-xs font-black uppercase tracking-widest border border-red-100 shadow-lg shadow-red-900/5 group"
-                            >
-                               <LogOut size={20} className="group-hover:scale-110 transition-transform" /> Log Out Session
-                            </button>
-                            <button 
-                              onClick={() => setShowProfileMenu(false)}
-                              className="w-full py-4 text-slate-400 text-[10px] font-black uppercase tracking-widest hover:text-slate-900 transition-all"
-                            >
-                               Close Sidebar
-                            </button>
-                         </div>
+                          <button 
+                            onClick={() => logout()}
+                            className="flex items-center gap-3 w-full p-3 hover:bg-red-50 text-slate-500 hover:text-red-600 rounded-2xl transition-all group"
+                          >
+                             <div className="p-2 bg-slate-100 group-hover:bg-red-600/10 rounded-xl transition-colors">
+                               <LogOut size={14} />
+                             </div>
+                             <span className="text-[10px] font-black uppercase tracking-widest">Logout Session</span>
+                          </button>
+                       </div>
 
-                         <div className="pt-8 border-t border-slate-100 text-center">
-                            <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest">Apna College Bihar • 2026</p>
-                         </div>
-                      </div>
-                   </div>
+                       <div className="mt-2 p-3 border-t border-slate-100 text-center">
+                          <p className="text-[7px] text-slate-400 font-bold uppercase tracking-widest">Apna College Bihar • 2026</p>
+                       </div>
+                    </div>
+                   </>
                  )}
                </div>
              </div>
