@@ -13,7 +13,7 @@ import { useAuth } from '../context/AuthContext';
 export default function Home() {
   const { user, loading, logout } = useAuth();
   const [stats, setStats] = useState({ users: 5000, docs: 100, groups: 24 });
-  const [showAccountMenu, setShowAccountMenu] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   useEffect(() => {
     const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
@@ -56,31 +56,22 @@ export default function Home() {
            ) : user ? (
              <div className="relative">
                <button 
-                 onClick={() => setShowAccountMenu(!showAccountMenu)}
+                 onClick={() => setShowProfileMenu(!showProfileMenu)}
                  className="flex items-center gap-2 px-4 py-2.5 md:px-6 md:py-3 bg-white border border-slate-200 hover:border-blue-500/50 text-slate-900 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-sm active:scale-95 group"
                >
                  <div className="w-5 h-5 rounded-full bg-blue-600/10 flex items-center justify-center text-blue-600">
                    <User size={12} />
                  </div>
-                 <span>My Account</span>
-                 <ChevronDown size={12} className={`transition-transform duration-300 ${showAccountMenu ? 'rotate-180' : ''}`} />
+                 <span>My Profile</span>
+                 <ChevronDown size={12} className={`transition-transform duration-300 ${showProfileMenu ? 'rotate-180' : ''}`} />
                </button>
 
-               {showAccountMenu && (
+               {showProfileMenu && (
                  <div className="absolute right-0 mt-3 w-56 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-3xl shadow-2xl p-2 z-[1000] animate-in fade-in zoom-in-95 duration-200 origin-top-right">
                     <div className="px-4 py-3 border-b border-slate-100 mb-2">
                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Scholar Profile</p>
                        <p className="text-[10px] font-bold text-slate-900 truncate">{user.email}</p>
                     </div>
-                    <Link 
-                      to="/dashboard" 
-                      className="flex items-center gap-3 w-full p-3 hover:bg-blue-50 text-slate-700 hover:text-blue-600 rounded-2xl transition-all group"
-                    >
-                       <div className="p-2 bg-slate-100 group-hover:bg-blue-600/10 rounded-lg transition-colors">
-                         <LayoutDashboard size={14} />
-                       </div>
-                       <span className="text-[10px] font-black uppercase tracking-widest">Dashboard</span>
-                    </Link>
                     <button 
                       onClick={() => logout()}
                       className="flex items-center gap-3 w-full p-3 hover:bg-red-50 text-slate-500 hover:text-red-600 rounded-2xl transition-all group"
