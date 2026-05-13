@@ -54,53 +54,69 @@ export default function Home() {
            {loading ? (
              <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
            ) : user ? (
-             <div className="relative">
-               <button 
-                 onClick={() => setShowProfileMenu(!showProfileMenu)}
-                 className="flex items-center gap-2 px-4 py-2.5 md:px-6 md:py-3 bg-white border border-slate-200 hover:border-blue-500/50 text-slate-900 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-sm active:scale-95 group"
+             <div className="flex items-center gap-4">
+               <a 
+                 href="/ApnaCollegeBihar_Stable.apk" 
+                 download 
+                 className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
                >
-                 <div className="w-5 h-5 rounded-full bg-blue-600/10 flex items-center justify-center text-blue-600">
-                   <User size={12} />
-                 </div>
-                 <span>My Profile</span>
-                 <ChevronDown size={12} className={`transition-transform duration-300 ${showProfileMenu ? 'rotate-180' : ''}`} />
-               </button>
+                 Download App
+               </a>
+               <div className="relative">
+                 <button 
+                   onClick={() => setShowProfileMenu(!showProfileMenu)}
+                   className="flex items-center gap-2 px-4 py-2.5 md:px-6 md:py-3 bg-white border border-slate-200 hover:border-blue-500/50 text-slate-900 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-sm active:scale-95 group"
+                 >
+                   <div className="w-5 h-5 rounded-full bg-blue-600/10 flex items-center justify-center text-blue-600">
+                     <User size={12} />
+                   </div>
+                   <span>My Profile</span>
+                   <ChevronDown size={12} className={`transition-transform duration-300 ${showProfileMenu ? 'rotate-180' : ''}`} />
+                 </button>
 
-               {showProfileMenu && (
-                 <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6">
-                    <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setShowProfileMenu(false)}></div>
-                    <div className="relative w-full max-w-xs bg-white border border-slate-200 rounded-[2.5rem] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
-                       <div className="flex flex-col items-center text-center mb-8">
-                          <div className="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center text-blue-600 mb-4 border border-blue-500/10">
-                             <User size={32} />
-                          </div>
-                          <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Scholar Hub Account</p>
-                          <p className="text-xs font-bold text-slate-900 truncate max-w-full">{user.email}</p>
-                       </div>
-                       
-                       <div className="space-y-3">
-                          <button 
-                            onClick={() => logout()}
-                            className="w-full flex items-center justify-center gap-3 py-5 bg-red-50 hover:bg-red-600 text-red-500 hover:text-white rounded-2xl transition-all text-[11px] font-black uppercase tracking-widest border border-red-100"
-                          >
-                             <LogOut size={16} /> Log Out Session
-                          </button>
-                          <button 
-                            onClick={() => setShowProfileMenu(false)}
-                            className="w-full py-4 text-slate-400 text-[9px] font-black uppercase tracking-widest hover:text-slate-600 transition-all"
-                          >
-                             Close Menu
-                          </button>
-                       </div>
-                    </div>
-                 </div>
-               )}
+                 {showProfileMenu && (
+                   <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6">
+                      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setShowProfileMenu(false)}></div>
+                      <div className="relative w-full max-w-xs bg-white border border-slate-200 rounded-[2.5rem] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
+                         <div className="flex flex-col items-center text-center mb-8">
+                            <div className="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center text-blue-600 mb-4 border border-blue-500/10">
+                               <User size={32} />
+                            </div>
+                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Scholar Hub Account</p>
+                            <p className="text-xs font-bold text-slate-900 truncate max-w-full">{user.email}</p>
+                         </div>
+                         
+                         <div className="space-y-3">
+                            <button 
+                              onClick={() => logout()}
+                              className="w-full flex items-center justify-center gap-3 py-5 bg-red-50 hover:bg-red-600 text-red-500 hover:text-white rounded-2xl transition-all text-[11px] font-black uppercase tracking-widest border border-red-100"
+                            >
+                               <LogOut size={16} /> Log Out Session
+                            </button>
+                            <button 
+                              onClick={() => setShowProfileMenu(false)}
+                              className="w-full py-4 text-slate-400 text-[9px] font-black uppercase tracking-widest hover:text-slate-600 transition-all"
+                            >
+                               Close Menu
+                            </button>
+                         </div>
+                      </div>
+                   </div>
+                 )}
+               </div>
              </div>
            ) : (
-             <>
+             <div className="flex items-center gap-3 md:gap-5">
+               <a 
+                 href="/ApnaCollegeBihar_Stable.apk" 
+                 download 
+                 className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+               >
+                 Download App
+               </a>
                <Link to="/login" className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Login</Link>
                <Link to="/signup" className="px-4 py-2.5 md:px-6 md:py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95">Signup</Link>
-             </>
+             </div>
            )}
         </div>
       </nav>
@@ -128,27 +144,8 @@ export default function Home() {
                    Bihar ke engineering students ke liye — UGEAC 2025 rank se college predict karo, BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya ka cutoff dekho, aur free BEU semester notes download karo.
                 </p>
 
-           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 px-4 w-full flex-wrap">
-              <Link to={user ? "/dashboard" : "/signup"} className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-white text-black rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-slate-200 transition-all flex items-center justify-center gap-3 active:scale-95 shadow-2xl border border-slate-200">
-                {user ? "Go to Dashboard" : "Get Started Now"} <ArrowRight size={18}/>
-              </Link>
-              <div className="relative group">
-                <div className="absolute -top-3 -right-3 px-3 py-1 bg-amber-500 text-slate-900 text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg z-20 border-2 border-white animate-bounce">Stable v3.0</div>
-                <a 
-                  href="/ApnaCollegeBihar_Stable.apk" 
-                  download="ApnaCollegeBihar_Stable.apk"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.location.href = `/ApnaCollegeBihar_Stable.apk?t=${Date.now()}`;
-                  }}
-                  className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-blue-600 text-white rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-blue-500 transition-all flex items-center justify-center gap-3 active:scale-95 shadow-xl shadow-blue-900/20 border border-blue-500"
-                >
-                  Download App
-                </a>
-              </div>
-              <Link to={user ? "/dashboard" : "/login"} className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-slate-100/50 border border-slate-200 text-slate-900 rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-slate-100 transition-all active:scale-95">
-                {user ? "Enter Hub" : "Visit Campus Hub"}
-              </Link>
+            <div className="pt-8 max-w-2xl mx-auto">
+               <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.3em]">Scroll down to explore features</p>
             </div>
  
             <div className="pt-16 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 items-center opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">
@@ -278,16 +275,8 @@ export default function Home() {
             <p className="text-slate-500 font-bold uppercase tracking-widest text-[11px] leading-relaxed">
               Bihar's first study app that strictly blocks distracting apps like Instagram & Games during your study timer. Even a reboot won't stop the focus. 🔒🚀
             </p>
-            <div className="pt-4 flex flex-wrap gap-4">
-               <a 
-                 href="/ApnaCollegeBihar_Stable.apk" 
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 className="w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/40"
-               >
-                 Download APK Now
-               </a>
-               <div className="px-8 py-4 bg-slate-100 border border-slate-200 text-slate-500 rounded-2xl font-[1000] text-[10px] uppercase tracking-widest">Coming to Play Store</div>
+            <div className="pt-4">
+               <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest">Available now via official APK</p>
             </div>
           </div>
           <div className="flex-1 w-full max-w-sm">
