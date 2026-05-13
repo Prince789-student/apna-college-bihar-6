@@ -58,7 +58,7 @@ export default function Signup() {
           {/* Header */}
           <div className="flex flex-col items-center mb-10">
             <div className="w-20 h-20 rounded-2xl overflow-hidden shadow-xl mb-6 border border-slate-200 p-1 bg-white">
-              <img src="/logo_acb.png" alt="Logo" className="w-full h-full object-cover rounded-xl" />
+              <img src="/logo.jpg" alt="Logo" className="w-full h-full object-cover rounded-xl" />
             </div>
             <h1 className="text-2xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">
               APNA COLLEGE<br/>
