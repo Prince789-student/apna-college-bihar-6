@@ -58,7 +58,7 @@ export default function Home() {
                <a 
                  href="/ApnaCollegeBihar_Stable.apk" 
                  download 
-                 className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
+                 className="flex items-center gap-2 px-3 py-2 sm:px-5 sm:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
                >
                  Download App
                </a>
@@ -110,7 +110,7 @@ export default function Home() {
                <a 
                  href="/ApnaCollegeBihar_Stable.apk" 
                  download 
-                 className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                 className="flex items-center gap-2 px-3 py-2 sm:px-5 sm:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] sm:text-[9px] font-black uppercase tracking-widest transition-all"
                >
                  Download App
                </a>
