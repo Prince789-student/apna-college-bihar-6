@@ -102,11 +102,9 @@ export default function Signup() {
               </Link>
             </p>
 
-            {!Capacitor.isNative && (
-              <Link to="/" className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-300 text-[9px] font-black uppercase tracking-[0.3em] transition-all group">
-                <BookOpen size={14} className="group-hover:-translate-x-1 transition-transform" /> Back to Campus
-              </Link>
-            )}
+            <Link to="/" className="inline-flex items-center gap-2 text-slate-600 hover:text-slate-300 text-[9px] font-black uppercase tracking-[0.3em] transition-all group">
+              <BookOpen size={14} className="group-hover:-translate-x-1 transition-transform" /> Back to Campus
+            </Link>
           </div>
         </div>
       </div>
