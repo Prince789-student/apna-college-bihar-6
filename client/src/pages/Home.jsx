@@ -295,21 +295,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Call to Action ── */}
-      <section className="py-20 px-6 md:px-16 container mx-auto">
-         <div className="bg-gradient-to-br from-blue-600 to-indigo-900 rounded-[4rem] p-10 md:p-20 relative overflow-hidden text-center space-y-8 group shadow-[0_0_100px_rgba(37,99,235,0.2)]">
-            <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10 pointer-events-none"></div>
-            <div className="relative z-10 space-y-6">
-               <h2 className="text-5xl md:text-7xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Ready to Crush <br/> Your Finals?</h2>
-               <p className="text-slate-900/60 font-bold uppercase tracking-widest text-xs md:text-sm max-w-xl mx-auto italic">Join thousands of students who have already upgraded their study workflow.</p>
-               <div className="pt-8">
-                  <Link to={user ? "/dashboard" : "/signup"} className="inline-flex px-12 py-5 bg-white text-black rounded-[2rem] font-[1000] text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl">
-                    {user ? "Go to My Dashboard" : "Create Free Account"}
-                  </Link>
-               </div>
-            </div>
-         </div>
-      </section>
 
       {/* ── SEO Content Section ── */}
       <section className="py-16 px-6 md:px-16 container mx-auto">
