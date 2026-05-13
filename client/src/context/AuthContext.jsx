@@ -32,6 +32,7 @@ export function AuthProvider({ children }) {
   // Sync profile logic
   const syncProfile = async (u) => {
     if (!u) { 
+      console.log("[AUTH] No user to sync.");
       setUser(null); 
       return; 
     }
@@ -39,6 +40,8 @@ export function AuthProvider({ children }) {
     // Prevent double sync
     if (isSyncing.current) return;
     isSyncing.current = true;
+
+    console.log("[AUTH] Syncing profile for:", u.email);
 
     try {
       const docRef = doc(db, "users", u.uid);
@@ -48,6 +51,8 @@ export function AuthProvider({ children }) {
       
       if (userDoc.exists()) {
         const userData = userDoc.data();
+        console.log("[AUTH] Existing user data found:", userData.role);
+        
         if (isFounder && userData.role !== ROLES.SUPER_ADMIN) {
            await updateDoc(docRef, { role: ROLES.SUPER_ADMIN });
            setUser({ ...u, ...userData, role: ROLES.SUPER_ADMIN });
@@ -55,6 +60,7 @@ export function AuthProvider({ children }) {
            setUser({ ...u, ...userData });
         }
       } else {
+        console.log("[AUTH] No existing profile. Creating new entry...");
         const data = {
           uid: u.uid,
           name: u.displayName || 'Scholar',
@@ -69,7 +75,7 @@ export function AuthProvider({ children }) {
         setUser({ ...u, ...data });
       }
     } catch (err) {
-      console.error("Profile sync failed:", err);
+      console.error("[AUTH] Profile sync critical failure:", err);
       // Fallback: set basic user info even if firestore fails
       setUser({
         uid: u.uid,
