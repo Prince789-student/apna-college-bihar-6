@@ -7,16 +7,15 @@
    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
    <meta http-equiv="Pragma" content="no-cache" />
    <meta http-equiv="Expires" content="0" />
-   <script>
-      // Hard-Reload if stale 'Portal' title detected
-      if (document.title.includes('Portal')) { window.location.reload(true); }
-
-      // Register Service Worker for PWA
+    <script>
+      // Temporarily disabled Service Worker to prevent cache loops
+      /*
       if ('serviceWorker' in navigator) {
          window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js').catch(err => console.error("SW error:", err));
          });
       }
+      */
 
       // Handle PWA Install Prompt
       window.addEventListener('beforeinstallprompt', (e) => {
@@ -174,7 +173,7 @@
          width: 0 !important;
       }
    </style>
-  <script type="module" crossorigin src="/assets/index-47931114.js"></script>
+  <script type="module" crossorigin src="/assets/index-4298e0e3.js"></script>
   <link rel="stylesheet" href="/assets/index-60565ae2.css">
 </head>
 

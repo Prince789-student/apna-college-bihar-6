@@ -6,9 +6,16 @@ import { toast } from 'react-hot-toast';
 
 export default function Signup() {
   const navigate = useNavigate();
-  const { googleLogin } = useAuth();
+  const { googleLogin, user, loading: authLoading } = useAuth();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Auto-Redirect if already logged in
+  React.useEffect(() => {
+    if (!authLoading && user) {
+      navigate('/', { replace: true });
+    }
+  }, [user, authLoading, navigate]);
 
   const handleGoogleSignup = async () => {
     try {

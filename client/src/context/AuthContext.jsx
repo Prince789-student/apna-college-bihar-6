@@ -8,7 +8,9 @@ import {
   RecaptchaVerifier, 
   signInWithPhoneNumber,
   signInWithCredential,
-  GoogleAuthProvider
+  GoogleAuthProvider,
+  signInWithRedirect,
+  getRedirectResult
 } from "firebase/auth";
 import { auth, db, googleProvider } from "../firebase";
 import { doc, getDoc, setDoc, serverTimestamp, updateDoc } from "firebase/firestore";
@@ -134,10 +136,28 @@ export function AuthProvider({ children }) {
         return res.user;
       }
     } else {
-      // WEB: Standard popup
-      const res = await signInWithPopup(auth, googleProvider);
-      await syncProfile(res.user);
-      return res.user;
+      try {
+        // Detect mobile browser to avoid popup issues
+        const isMobileBrowser = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        if (isMobileBrowser) {
+          console.log("[AUTH] Mobile browser detected, using Redirect flow...");
+          return await signInWithRedirect(auth, googleProvider);
+        }
+
+        // WEB: Standard popup for desktop
+        const res = await signInWithPopup(auth, googleProvider);
+        await syncProfile(res.user);
+        return res.user;
+      } catch (err) {
+        console.error("Google Login Error:", err);
+        // Fallback to redirect if popup fails or is blocked
+        if (err.code === 'auth/popup-blocked' || err.code === 'auth/cancelled-popup-request') {
+          console.log("[AUTH] Popup blocked, falling back to Redirect...");
+          return await signInWithRedirect(auth, googleProvider);
+        }
+        throw err;
+      }
     }
   }
 
@@ -175,6 +195,20 @@ export function AuthProvider({ children }) {
       }
     });
     return unsubscribe;
+  }, []);
+
+  // Handle Redirect Results (for mobile web stability)
+  useEffect(() => {
+    getRedirectResult(auth)
+      .then(async (result) => {
+        if (result?.user) {
+          console.log("[AUTH] Redirect result success:", result.user.email);
+          await syncProfile(result.user);
+        }
+      })
+      .catch((error) => {
+        console.error("[AUTH] Redirect result error:", error);
+      });
   }, []);
 
   const value = {

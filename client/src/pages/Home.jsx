@@ -7,8 +7,10 @@ import {
 } from 'lucide-react';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
+import { useAuth } from '../context/AuthContext';
 
 export default function Home() {
+  const { user, loading } = useAuth();
   const [stats, setStats] = useState({ users: 5000, docs: 100, groups: 24 });
 
   useEffect(() => {
@@ -47,8 +49,16 @@ export default function Home() {
            <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Contact</Link>
         </div>
         <div className="flex items-center gap-3 md:gap-4">
-           <Link to="/login" className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Login</Link>
-           <Link to="/signup" className="px-4 py-2.5 md:px-6 md:py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95">Signup</Link>
+           {loading ? (
+             <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+           ) : user ? (
+             <Link to="/dashboard" className="px-4 py-2.5 md:px-6 md:py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95">Dashboard</Link>
+           ) : (
+             <>
+               <Link to="/login" className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Login</Link>
+               <Link to="/signup" className="px-4 py-2.5 md:px-6 md:py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95">Signup</Link>
+             </>
+           )}
         </div>
       </nav>
 
@@ -76,8 +86,8 @@ export default function Home() {
                 </p>
 
            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 px-4 w-full flex-wrap">
-              <Link to="/signup" className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-white text-black rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-slate-200 transition-all flex items-center justify-center gap-3 active:scale-95 shadow-2xl border border-slate-200">
-                Get Started Now <ArrowRight size={18}/>
+              <Link to={user ? "/dashboard" : "/signup"} className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-white text-black rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-slate-200 transition-all flex items-center justify-center gap-3 active:scale-95 shadow-2xl border border-slate-200">
+                {user ? "Go to Dashboard" : "Get Started Now"} <ArrowRight size={18}/>
               </Link>
               <div className="relative group">
                 <div className="absolute -top-3 -right-3 px-3 py-1 bg-amber-500 text-slate-900 text-[8px] font-black uppercase tracking-widest rounded-full shadow-lg z-20 border-2 border-white animate-bounce">Stable v3.0</div>
@@ -93,8 +103,8 @@ export default function Home() {
                   Download App
                 </a>
               </div>
-              <Link to="/login" className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-slate-100/50 border border-slate-200 text-slate-900 rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-slate-100 transition-all active:scale-95">
-                Visit Campus Hub
+              <Link to={user ? "/dashboard" : "/login"} className="w-full sm:w-auto px-8 py-4 md:px-10 md:py-5 bg-slate-100/50 border border-slate-200 text-slate-900 rounded-2xl md:rounded-[2rem] font-[1000] text-xs md:text-sm uppercase tracking-widest hover:bg-slate-100 transition-all active:scale-95">
+                {user ? "Enter Hub" : "Visit Campus Hub"}
               </Link>
             </div>
  
@@ -261,7 +271,9 @@ export default function Home() {
                <h2 className="text-5xl md:text-7xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Ready to Crush <br/> Your Finals?</h2>
                <p className="text-slate-900/60 font-bold uppercase tracking-widest text-xs md:text-sm max-w-xl mx-auto italic">Join thousands of students who have already upgraded their study workflow.</p>
                <div className="pt-8">
-                  <Link to="/signup" className="inline-flex px-12 py-5 bg-white text-black rounded-[2rem] font-[1000] text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl">Create Free Account</Link>
+                  <Link to={user ? "/dashboard" : "/signup"} className="inline-flex px-12 py-5 bg-white text-black rounded-[2rem] font-[1000] text-sm uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-2xl">
+                    {user ? "Go to My Dashboard" : "Create Free Account"}
+                  </Link>
                </div>
             </div>
          </div>
