@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Apna College Bihar</string>
-    <string name="title_activity_main">Apna College Bihar</string>
+    <string name="app_name">ACB</string>
+    <string name="title_activity_main">ACB Hub</string>
     <string name="package_name">com.apnacollegebihar.online</string>
     <string name="custom_url_scheme">com.apnacollegebihar.online</string>
     <string name="accessibility_service_label">ACB Focus Mode</string>
