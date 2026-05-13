@@ -65,13 +65,8 @@ function App() {
         <Toaster position="top-right" />
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={
-            isNative ? (
-              <AppHub />
-            ) : (
-              <Home />
-            )
-          } />
+          <Route path="/" element={<Home />} />
+          <Route path="/hub" element={<AppHub />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 

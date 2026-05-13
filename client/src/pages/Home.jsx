@@ -80,9 +80,9 @@ export default function Home() {
                       <div className="relative w-full max-w-xs bg-white border border-slate-200 rounded-[2.5rem] shadow-2xl p-8 animate-in fade-in zoom-in-95 duration-200">
                          <div className="flex flex-col items-center text-center mb-8">
                             <div className="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center text-blue-600 mb-4 border border-blue-500/10">
-                               <User size={32} />
+                               <img src="/logo.jpg" alt="ACB" className="w-full h-full object-cover" />
                             </div>
-                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Scholar Hub Account</p>
+                            <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">ACB Official Account</p>
                             <p className="text-xs font-bold text-slate-900 truncate max-w-full">{user.email}</p>
                          </div>
                          
@@ -297,7 +297,7 @@ export default function Home() {
                   <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
                   <div>
                     <span className="text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE BIHAR</span>
-                    <span className="text-[7px] text-blue-500 font-bold uppercase tracking-[0.5em] mt-1 block">Bihar's Study Hub</span>
+                    <span className="text-[7px] text-blue-500 font-bold uppercase tracking-[0.5em] mt-1 block">ACB OFFICIAL</span>
                   </div>
                </div>
                <p className="text-slate-500 font-bold text-xs uppercase tracking-widest leading-loose max-w-sm">Bihar's first open-source academic website dedicated to Bihar Engineering University students.</p>
@@ -315,7 +315,7 @@ export default function Home() {
                <div className="flex flex-col gap-4">
                   <Link to="/about" className="text-[10px] font-black uppercase text-slate-500 hover:text-slate-900 transition-all">About ACB</Link>
                   <Link to="/contact" className="text-[10px] font-black uppercase text-slate-500 hover:text-slate-900 transition-all">Support Center</Link>
-                  <Link to="/dashboard" className="text-[10px] font-black uppercase text-slate-500 hover:text-slate-900 transition-all">Study Tools</Link>
+                  
                </div>
             </div>
             <div className="space-y-6">

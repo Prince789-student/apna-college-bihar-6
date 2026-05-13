@@ -83,9 +83,9 @@ export default function AppHub() {
                 <div className="relative w-full max-w-xs bg-slate-900 border border-slate-800 rounded-[2.5rem] shadow-2xl p-8 pointer-events-auto">
                   <div className="flex flex-col items-center text-center mb-8">
                     <div className="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center text-blue-500 mb-4 border border-blue-500/20">
-                      <User size={32} />
+                      <img src="/logo.jpg" alt="ACB" className="w-full h-full object-cover" />
                     </div>
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">Scholar Hub Account</p>
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest leading-none mb-1">ACB Official Account</p>
                     <p className="text-xs font-bold text-white truncate max-w-full">{user.email}</p>
                   </div>
                   
