@@ -11,8 +11,8 @@ const ProtectedRoute = () => {
 
   if (loading) return <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center"><div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div></div>;
   if (!user) {
-    // Save current path before redirecting
-    localStorage.setItem('lastPath', window.location.pathname);
+    // Save current path AND query parameters before redirecting
+    localStorage.setItem('lastPath', window.location.pathname + window.location.search);
     return <Navigate to="/login" replace />;
   }
 
