@@ -310,7 +310,7 @@ function UgeacPredictor() {
     // Load Logo
     let logoData = null;
     try {
-      const resp = await fetch('/logo_acb.png');
+      const resp = await fetch('/logo_acb.png?v=3');
       if (resp.ok) {
         const blob = await resp.blob();
         logoData = await new Promise(r => {
@@ -441,7 +441,7 @@ function UgeacPredictor() {
                  <div className="relative group">
                     <div className="absolute inset-0 bg-indigo-500 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
                     <div className="bg-slate-900/50 p-2 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden floating-icon">
-                       <img src="/logo_acb.png" alt="Logo" className="w-20 h-20 rounded-2xl" />
+                       <img src="/logo_acb.png?v=3" alt="Logo" className="w-20 h-20 rounded-2xl" />
                     </div>
                  </div>
               </div>
@@ -756,7 +756,7 @@ function UgeacPredictor() {
         )}
 
         <footer className="mt-32 py-16 border-t border-white/5 text-center">
-           <img src="/logo_acb.png" alt="Logo" className="w-14 h-14 rounded-full mx-auto mb-8 grayscale opacity-30 hover:opacity-100 transition-opacity" />
+           <img src="/logo_acb.png?v=3" alt="Logo" className="w-14 h-14 rounded-full mx-auto mb-8 grayscale opacity-30 hover:opacity-100 transition-opacity" />
            <p className="text-slate-500 text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Official Admissions Intelligence Report</p>
            <p className="text-indigo-600 font-black text-xs uppercase tracking-[0.5em] mb-2">APNA COLLEGE BIHAR 2025</p>
            <p className="text-slate-600 text-[9px] font-black uppercase tracking-widest">www.apnacollegebihar.online</p>

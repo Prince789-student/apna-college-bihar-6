@@ -34,7 +34,7 @@ export default function Home() {
       {/* ── Navbar ── */}
       <nav className="sticky top-0 left-0 w-full z-[100] bg-[#f8fafc]/80 backdrop-blur-xl border-b border-slate-200/50 px-4 md:px-16 py-4 md:py-5 flex items-center justify-between">
         <div className="flex items-center gap-2 md:gap-3 group">
-           <img src="/logo_acb.png" alt="Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl" />
+           <img src="/logo_acb.png?v=3" alt="Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl" />
            <div className="block">
              <span className="text-sm md:text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">ACB</span>
              <span className="text-[6px] md:text-[7px] text-blue-500 font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mt-0.5 md:mt-1 block">OFFICIAL</span>
@@ -63,7 +63,7 @@ export default function Home() {
                    className="flex items-center gap-2 px-4 py-2.5 md:px-6 md:py-3 bg-white border border-slate-200 hover:border-blue-500/50 text-slate-900 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-sm active:scale-95 group"
                  >
                    <div className="w-5 h-5 rounded-lg overflow-hidden bg-slate-50">
-                     <img src="/logo_acb.png" alt="Profile" className="w-full h-full object-cover" />
+                     <img src="/logo_acb.png?v=3" alt="Profile" className="w-full h-full object-cover" />
                    </div>
                    <span>My Profile</span>
                    <ChevronDown size={12} className={`transition-transform duration-300 ${showProfileMenu ? 'rotate-180' : ''}`} />
@@ -75,7 +75,7 @@ export default function Home() {
                     <div className="absolute right-0 mt-3 w-64 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-[2rem] shadow-2xl p-2 z-[2000] animate-in fade-in zoom-in-95 duration-200 origin-top-right">
                        <div className="px-5 py-6 border-b border-slate-100 mb-2 text-center">
                           <div className="w-16 h-16 rounded-2xl overflow-hidden mb-4 mx-auto border border-slate-100 shadow-lg">
-                             <img src="/logo_acb.png?v=2" alt="ACB" className="w-full h-full object-cover" />
+                             <img src="/logo_acb.png?v=3?v=2" alt="ACB" className="w-full h-full object-cover" />
                           </div>
                           <p className="text-[8px] font-black text-blue-600 uppercase tracking-widest leading-none mb-1">ACB Official Account</p>
                           <p className="text-[10px] font-bold text-slate-900 truncate">{user.email}</p>
@@ -333,7 +333,7 @@ export default function Home() {
          <div className="container mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="col-span-1 md:col-span-2 space-y-6">
                <div className="flex items-center gap-3 group">
-                  <img src="/logo_acb.png" alt="Logo" className="w-10 h-10 rounded-xl" />
+                  <img src="/logo_acb.png?v=3" alt="Logo" className="w-10 h-10 rounded-xl" />
                   <div>
                     <span className="text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE BIHAR</span>
                     <span className="text-[7px] text-blue-500 font-bold uppercase tracking-[0.5em] mt-1 block">Bihar's Study Hub</span>

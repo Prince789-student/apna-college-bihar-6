@@ -56,7 +56,7 @@ export default function AppHub() {
       {/* Header */}
       <header className="relative z-[100] px-6 py-8 flex items-center justify-between">
         <div className="flex items-center gap-3">
-           <img src="/logo_acb.png" alt="Logo" className="w-10 h-10 rounded-xl" />
+           <img src="/logo_acb.png?v=3" alt="Logo" className="w-10 h-10 rounded-xl" />
            <div>
              <h1 className="text-sm font-[1000] tracking-tighter uppercase leading-none">BIHAR ENGINEERING UNIVERSITY</h1>
              <p className="text-[6px] text-slate-500 font-black uppercase tracking-[0.4em] mt-1">Official Student Engine</p>
@@ -74,7 +74,7 @@ export default function AppHub() {
               className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all border border-slate-700"
             >
               <div className="w-4 h-4 rounded-md overflow-hidden bg-white/10">
-                <img src="/logo_acb.png" alt="Profile" className="w-full h-full object-cover" />
+                <img src="/logo_acb.png?v=3" alt="Profile" className="w-full h-full object-cover" />
               </div>
               Profile
             </button>
@@ -86,7 +86,7 @@ export default function AppHub() {
                 <div className="absolute right-0 mt-3 w-56 bg-slate-900 border border-slate-800 rounded-[2rem] shadow-2xl p-2 z-[2000] animate-in fade-in zoom-in-95 duration-200 origin-top-right">
                    <div className="px-4 py-5 border-b border-slate-800 mb-2 text-center">
                       <div className="w-14 h-14 rounded-2xl overflow-hidden mb-3 mx-auto border border-slate-800 shadow-xl">
-                         <img src="/logo_acb.png?v=2" alt="ACB" className="w-full h-full object-cover" />
+                         <img src="/logo_acb.png?v=3?v=2" alt="ACB" className="w-full h-full object-cover" />
                       </div>
                       <p className="text-[7px] font-black text-blue-500 uppercase tracking-widest leading-none mb-1">ACB Official Account</p>
                       <p className="text-[9px] font-bold text-white truncate">{user.email}</p>
