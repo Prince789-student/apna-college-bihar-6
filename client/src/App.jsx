@@ -65,9 +65,9 @@ function App() {
         <Toaster position="top-right" />
         <Routes>
           {/* Public Routes */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={isNative || (new URLSearchParams(window.location.search).get('standalone') === 'true') ? <AppHub /> : <Home />} />
           <Route path="/hub" element={<AppHub />} />
-        <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
         {/* Protected Dashboard Routes */}

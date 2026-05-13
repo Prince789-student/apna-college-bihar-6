@@ -33,6 +33,7 @@ export default function AppHub() {
     { name: 'Scientific Calc', icon: <Calculator size={32} />, path: '/dashboard/calculator', color: 'text-rose-500' },
     { name: 'BEU Results', icon: <Globe size={32} />, path: 'https://results.beu.ac.in', external: true, color: 'text-slate-400' },
     { name: 'Official Notices', icon: <Bell size={32} />, path: 'https://t.me/apnacollegebihar', external: true, color: 'text-amber-500' },
+    { name: 'YouTube Channel', icon: <Youtube size={32} />, path: 'https://youtube.com/@apnacollegebihar', external: true, color: 'text-red-500' },
   ];
 
   const handleFeatureClick = (f) => {
