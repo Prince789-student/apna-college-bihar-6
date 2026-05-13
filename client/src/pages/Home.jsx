@@ -299,7 +299,7 @@ export default function Home() {
                   <a href="https://t.me/apnacollegebihar" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-[#0088cc]/10 rounded-xl flex items-center justify-center text-[#0088cc] hover:bg-[#0088cc] hover:text-slate-900 border border-[#0088cc]/20 transition-all cursor-pointer">
                     <Send size={18} />
                   </a>
-                  <a href="https://youtube.com/@appne-h8p?si=0xA0suRWTouLWP3i" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-red-600/10 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-600 hover:text-slate-900 border border-red-500/20 transition-all cursor-pointer">
+                  <a href="https://youtube.com/@apnacollegebihar" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-red-600/10 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-600 hover:text-slate-900 border border-red-500/20 transition-all cursor-pointer">
                     <Youtube size={18} />
                   </a>
                </div>
