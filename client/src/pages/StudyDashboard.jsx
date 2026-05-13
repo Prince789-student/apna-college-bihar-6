@@ -227,7 +227,7 @@ export default function StudyDashboard() {
 
       {/* ACB Study Zone Header */}
       <div className="flex items-center gap-3 pt-4 pb-3">
-        <img src="/logo-acb.png?v=final_fix?v=fresh?v=3" alt="ACB" className="w-10 h-10 rounded-xl" />
+        <img src="/logo-acb.png?v=99?v=99" alt="ACB" className="w-10 h-10 rounded-xl" />
         <div>
           <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.3em]">Apna College Bihar</p>
           <h1 className="text-lg font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Study Zone</h1>
