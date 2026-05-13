@@ -56,7 +56,7 @@ export default function AppHub() {
       {/* Header */}
       <header className="relative z-[100] px-6 py-8 flex items-center justify-between">
         <div className="flex items-center gap-3">
-           <img src="/logo.jpg" alt="Logo" className="w-10 h-10 rounded-xl" />
+           <img src="/logo_acb.png" alt="Logo" className="w-10 h-10 rounded-xl" />
            <div>
              <h1 className="text-sm font-[1000] tracking-tighter uppercase leading-none">BIHAR ENGINEERING UNIVERSITY</h1>
              <p className="text-[6px] text-slate-500 font-black uppercase tracking-[0.4em] mt-1">Official Student Engine</p>
@@ -74,7 +74,7 @@ export default function AppHub() {
               className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all border border-slate-700"
             >
               <div className="w-4 h-4 rounded-md overflow-hidden bg-white/10">
-                <img src="/logo.jpg" alt="Profile" className="w-full h-full object-cover" />
+                <img src="/logo_acb.png" alt="Profile" className="w-full h-full object-cover" />
               </div>
               Profile
             </button>
@@ -86,7 +86,7 @@ export default function AppHub() {
                 <div className="relative w-full max-w-xs h-full bg-slate-900 shadow-[-20px_0_80px_rgba(0,0,0,0.5)] p-10 flex flex-col animate-in slide-in-from-right duration-500 ease-out pointer-events-auto border-l border-slate-800">
                   <div className="flex flex-col items-center text-center mb-12">
                     <div className="w-24 h-24 rounded-[2rem] overflow-hidden mb-6 border border-slate-700 shadow-2xl mx-auto ring-8 ring-slate-800/50">
-                      <img src="/logo.jpg" alt="ACB" className="w-full h-full object-cover" />
+                      <img src="/logo_acb.png" alt="ACB" className="w-full h-full object-cover" />
                     </div>
                     <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] mb-2">ACB Official Account</p>
                     <p className="text-sm font-bold text-white truncate max-w-full">{user.email}</p>
