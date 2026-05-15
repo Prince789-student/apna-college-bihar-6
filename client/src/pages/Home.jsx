@@ -36,8 +36,8 @@ export default function Home() {
         <div className="flex items-center gap-2 md:gap-3 group">
            <img src="/logo-acb.png?v=99" alt="Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl" />
            <div className="block">
-             <span className="text-sm md:text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">ACB</span>
-             <span className="text-[6px] md:text-[7px] text-blue-500 font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mt-0.5 md:mt-1 block">OFFICIAL</span>
+             <span className="text-sm md:text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE BIHAR</span>
+             <span className="text-[6px] md:text-[7px] text-blue-500 font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mt-0.5 md:mt-1 block">OFFICIAL STUDY ENGINE</span>
            </div>
         </div>
         <div className="hidden md:flex items-center gap-10">
@@ -237,7 +237,7 @@ export default function Home() {
            <p className="text-slate-500 font-bold uppercase tracking-widest text-[9px] max-w-xs text-right italic">"Built with modern stack for maximum speed and SEO dominance."</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-3 gap-3 md:gap-6">
            {[
              { title: "UGEAC 2025 Predictor", ic: <Send className="text-emerald-500"/>, d: "Bihar Engineering Counselling 2025 — Rank predictor based on 2024-2025 official data.", link: "/dashboard/ugeac-predictor?standalone=true" },
              { title: "BEU Notes & PYQ Hub", ic: <BookOpen className="text-blue-500"/>, d: "Free handwritten notes and previous year questions for all BEU semesters.", link: "/dashboard/notes?standalone=true" },
@@ -249,12 +249,12 @@ export default function Home() {
              { title: "Official Notices", ic: <Bell className="text-amber-500"/>, d: "Stay updated with real-time official notices via our Telegram hub.", link: "https://t.me/apnacollegebihar" },
              { title: "YouTube Tutorials", ic: <Youtube className="text-red-500"/>, d: "Watch detailed guides and lectures on our official YouTube channel.", link: "https://youtube.com/@apnacollegebihar" }
            ].map((f, i) => (
-             <Link key={i} to={f.link} target={f.link.startsWith('http') ? '_blank' : '_self'} className="group p-8 bg-white border border-slate-200/80 rounded-[3rem] hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left">
-                <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mb-8 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform">
-                  {f.ic}
+             <Link key={i} to={f.link} target={f.link.startsWith('http') ? '_blank' : '_self'} className="group p-4 md:p-8 bg-white border border-slate-200/80 rounded-2xl md:rounded-[3rem] hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left">
+                <div className="w-10 h-10 md:w-14 md:h-14 bg-slate-100 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-8 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform">
+                  {React.cloneElement(f.ic, { size: 20 })}
                 </div>
-                <h3 className="text-xl font-black text-slate-900 uppercase mb-4 tracking-tighter">{f.title}</h3>
-                <p className="text-slate-500 font-medium leading-relaxed text-sm">{f.d}</p>
+                <h3 className="text-[9px] md:text-xl font-black text-slate-900 uppercase mb-2 md:mb-4 tracking-tighter leading-none">{f.title}</h3>
+                <p className="hidden md:block text-slate-500 font-medium leading-relaxed text-sm">{f.d}</p>
              </Link>
            ))}
         </div>

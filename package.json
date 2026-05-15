@@ -11,6 +11,7 @@
     "dev": "npm run dev --prefix client",
     "electron:dev": "electron .",
     "electron:build": "npm run build --prefix client && electron-builder",
+    "electron:package": "npm run build --prefix client && electron-packager . \"Apna College Bihar\" --platform=win32 --arch=x64 --out=dist-electron --overwrite",
     "save": "git add . && git commit -m \"auto commit\" && git push"
   },
   "build": {
@@ -24,8 +25,9 @@
       "client/dist/**/*"
     ],
     "win": {
-      "target": "nsis",
-      "icon": "client/public/logo-acb.png"
+      "target": "portable",
+      "icon": "client/public/logo-acb.png",
+      "forceCodeSigning": false
     }
   },
   "engines": {
@@ -33,6 +35,7 @@
   },
   "devDependencies": {
     "electron": "^42.1.0",
-    "electron-builder": "^26.8.1"
+    "electron-builder": "^26.8.1",
+    "electron-packager": "^17.1.2"
   }
 }

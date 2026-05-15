@@ -9,3 +9,4 @@ build/
 apnacollegebihar-hostinger.zip
 firebase-debug.log*
 .DS_Store
+dist-electron/
