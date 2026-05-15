@@ -2,15 +2,37 @@
   "name": "edu-platform-fullstack",
   "version": "1.0.0",
   "description": "Full stack application ready for Render deployment",
+  "main": "electron-main.js",
   "scripts": {
     "start": "node server/server.js",
     "install-app": "npm install --prefix server && npm install --prefix client",
     "build": "npm install --prefix server",
     "heroku-postbuild": "npm run build",
     "dev": "npm run dev --prefix client",
+    "electron:dev": "electron .",
+    "electron:build": "npm run build --prefix client && electron-builder",
     "save": "git add . && git commit -m \"auto commit\" && git push"
+  },
+  "build": {
+    "appId": "com.apnacollegebihar.app",
+    "productName": "Apna College Bihar",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "electron-main.js",
+      "client/dist/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "client/public/logo-acb.png"
+    }
   },
   "engines": {
     "node": "20.x"
+  },
+  "devDependencies": {
+    "electron": "^42.1.0",
+    "electron-builder": "^26.8.1"
   }
 }

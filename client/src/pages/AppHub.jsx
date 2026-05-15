@@ -29,7 +29,6 @@ export default function AppHub() {
     { name: 'UGEAC Predictor', icon: <Send size={32} />, path: '/dashboard/ugeac-predictor', color: 'text-emerald-500' },
     { name: 'Study Network', icon: <Users size={32} />, path: '/dashboard/groups', color: 'text-orange-500' },
     { name: 'CGPA Calculator', icon: <GraduationCap size={32} />, path: '/dashboard/cgpa', color: 'text-cyan-500' },
-    { name: 'Syllabus Hub', icon: <FileText size={32} />, path: '/dashboard/notes', color: 'text-purple-500' },
     { name: 'Scientific Calc', icon: <Calculator size={32} />, path: '/dashboard/calculator', color: 'text-rose-500' },
     { name: 'BEU Results', icon: <Globe size={32} />, path: 'https://results.beu.ac.in', external: true, color: 'text-slate-400' },
     { name: 'Official Notices', icon: <Bell size={32} />, path: 'https://t.me/apnacollegebihar', external: true, color: 'text-amber-500' },
