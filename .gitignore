@@ -10,3 +10,6 @@ apnacollegebihar-hostinger.zip
 firebase-debug.log*
 .DS_Store
 dist-electron/
+electron-workspace/
+Apna-College-Bihar-Windows-App.zip
+*.zip
