@@ -237,17 +237,19 @@ export default function Home() {
            <p className="text-slate-500 font-bold uppercase tracking-widest text-[9px] max-w-xs text-right italic">"Built with modern stack for maximum speed and SEO dominance."</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
            {[
-             { title: "UGEAC 2025 College Predictor", ic: <Send className="text-emerald-500"/>, d: "Bihar Engineering Counselling 2025 — Apna UGEAC rank enter karo aur jaano ki BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya, DCE Darbhanga mein milega seat ya nahi. 2024-2025 real cutoff data.", link: "/dashboard/ugeac-predictor?standalone=true" },
-             { title: "BEU Notes & PYQ Hub", ic: <BookOpen className="text-blue-500"/>, d: "Bihar Engineering University (BEU) ke sabhi semesters ke liye free handwritten notes, previous year question papers (PYQ) aur study material.", link: "/dashboard/notes?standalone=true" },
-             { title: "SGPA / CGPA Calculator", ic: <Calculator className="text-emerald-500"/>, d: "BEU ke grading system ke anusaar accurate SGPA aur CGPA calculate karo. Bihar ke engineering students ke liye specially designed.", link: "/dashboard/cgpa?standalone=true" },
-             { title: "Study Timer & Focus", ic: <Timer className="text-orange-500"/>, d: "Pomodoro technique aur Stopwatch se apna padhai ka waqt track karo. Bihar engineering exam preparation ke liye best tool.", link: "/dashboard/study?standalone=true" },
-             { title: "Student Study Groups", ic: <Users className="text-purple-500"/>, d: "Bihar engineering students ke study groups join karo. PYQ discuss karo, doubts pucho, aur UGEAC counselling tips share karo.", link: "/dashboard/groups?standalone=true" },
-             { title: "Secure & Free Platform", ic: <Shield className="text-indigo-500"/>, d: "Bihar ke engineering students ke liye bilkul free platform. Google login se secure account banao aur saari features access karo.", link: "/login" },
-             { title: "Scientific Calculator", ic: <Globe className="text-pink-500"/>, d: "Advanced scientific calculator for Bihar B.Tech students. Complex engineering calculations ke liye professional grade tool.", link: "/dashboard/calculator?standalone=true" }
+             { title: "UGEAC 2025 Predictor", ic: <Send className="text-emerald-500"/>, d: "Bihar Engineering Counselling 2025 — Rank predictor based on 2024-2025 official data.", link: "/dashboard/ugeac-predictor?standalone=true" },
+             { title: "BEU Notes & PYQ Hub", ic: <BookOpen className="text-blue-500"/>, d: "Free handwritten notes and previous year questions for all BEU semesters.", link: "/dashboard/notes?standalone=true" },
+             { title: "SGPA / CGPA Calc", ic: <Calculator className="text-orange-500"/>, d: "Accurate BEU grading system calculator for semester results tracking.", link: "/dashboard/cgpa?standalone=true" },
+             { title: "Study Timer & Focus", ic: <Timer className="text-blue-500"/>, d: "Pomodoro technique and focus tracking for Bihar engineering students.", link: "/dashboard/study?standalone=true" },
+             { title: "Study Network", ic: <Users className="text-purple-500"/>, d: "Join student groups to discuss PYQs and UGEAC counselling tips.", link: "/dashboard/groups?standalone=true" },
+             { title: "Scientific Calc", ic: <Calculator className="text-pink-500"/>, d: "Advanced scientific calculator for professional engineering calculations.", link: "/dashboard/calculator?standalone=true" },
+             { title: "BEU Results Portal", ic: <Globe className="text-slate-400"/>, d: "Direct access to the official Bihar Engineering University results page.", link: "https://results.beu.ac.in" },
+             { title: "Official Notices", ic: <Bell className="text-amber-500"/>, d: "Stay updated with real-time official notices via our Telegram hub.", link: "https://t.me/apnacollegebihar" },
+             { title: "YouTube Tutorials", ic: <Youtube className="text-red-500"/>, d: "Watch detailed guides and lectures on our official YouTube channel.", link: "https://youtube.com/@apnacollegebihar" }
            ].map((f, i) => (
-             <Link key={i} to={f.link} className="group p-8 bg-white border border-slate-200/80 rounded-[3rem] hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left">
+             <Link key={i} to={f.link} target={f.link.startsWith('http') ? '_blank' : '_self'} className="group p-8 bg-white border border-slate-200/80 rounded-[3rem] hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left">
                 <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mb-8 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform">
                   {f.ic}
                 </div>
