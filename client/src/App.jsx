@@ -13,22 +13,31 @@ import DashboardLayout from './layouts/DashboardLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 
-// Pages
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Dashboard from './pages/Dashboard';
-import UgeacPredictor from './pages/UgeacPredictor';
-import Notes from './pages/Notes';
-import BeuCgpa from './pages/BeuCgpa';
-import StudyDashboard from './pages/StudyDashboard';
-import ScientificCalc from './pages/ScientificCalc';
-import AdminPanel from './pages/AdminPanel';
-import Achievements from './pages/Achievements';
-import Group from './pages/Group';
-import GroupDetail from './pages/GroupDetail';
+// Pages (Lazy Loaded)
+const Home = React.lazy(() => import('./pages/Home'));
+const AppHub = React.lazy(() => import('./pages/AppHub'));
+const Login = React.lazy(() => import('./pages/Login'));
+const Signup = React.lazy(() => import('./pages/Signup'));
+const Dashboard = React.lazy(() => import('./pages/Dashboard'));
+const UgeacPredictor = React.lazy(() => import('./pages/UgeacPredictor'));
+const Notes = React.lazy(() => import('./pages/Notes'));
+const BeuCgpa = React.lazy(() => import('./pages/BeuCgpa'));
+const StudyDashboard = React.lazy(() => import('./pages/StudyDashboard'));
+const ScientificCalc = React.lazy(() => import('./pages/ScientificCalc'));
+const AdminPanel = React.lazy(() => import('./pages/AdminPanel'));
+const Achievements = React.lazy(() => import('./pages/Achievements'));
+const Group = React.lazy(() => import('./pages/Group'));
+const GroupDetail = React.lazy(() => import('./pages/GroupDetail'));
 
-import AppHub from './pages/AppHub';
+function LoadingScreen() {
+  return (
+    <div className="min-h-screen bg-[#0a0f1d] flex flex-col items-center justify-center">
+      <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest animate-pulse">Loading Interface...</p>
+    </div>
+  );
+}
+
 
 function App() {
   const { focusBroken, setFocusBroken } = useStudy();
@@ -63,36 +72,38 @@ function App() {
     return (
       <>
         <Toaster position="top-right" />
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={isNative || (new URLSearchParams(window.location.search).get('standalone') === 'true') ? <AppHub /> : <Home />} />
-          <Route path="/hub" element={<AppHub />} />
-          <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <React.Suspense fallback={<LoadingScreen />}>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={isNative || (new URLSearchParams(window.location.search).get('standalone') === 'true') ? <AppHub /> : <Home />} />
+            <Route path="/hub" element={<AppHub />} />
+            <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
 
-        {/* Protected Dashboard Routes */}
-        <Route element={<ProtectedRoute />}>
-          <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/dashboard/ugeac-predictor" element={<UgeacPredictor />} />
-            <Route path="/dashboard/notes" element={<Notes />} />
-            <Route path="/dashboard/cgpa" element={<BeuCgpa />} />
-            <Route path="/dashboard/study" element={<StudyDashboard />} />
-            <Route path="/dashboard/calculator" element={<ScientificCalc />} />
-            <Route path="/dashboard/achievements" element={<Achievements />} />
-            <Route path="/dashboard/groups" element={<Group />} />
-            <Route path="/dashboard/groups/:groupId" element={<GroupDetail />} />
-            
-            {/* Admin Routes */}
-            <Route element={<AdminRoute />}>
-              <Route path="/dashboard/admin" element={<AdminPanel />} />
+          {/* Protected Dashboard Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<DashboardLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard/ugeac-predictor" element={<UgeacPredictor />} />
+              <Route path="/dashboard/notes" element={<Notes />} />
+              <Route path="/dashboard/cgpa" element={<BeuCgpa />} />
+              <Route path="/dashboard/study" element={<StudyDashboard />} />
+              <Route path="/dashboard/calculator" element={<ScientificCalc />} />
+              <Route path="/dashboard/achievements" element={<Achievements />} />
+              <Route path="/dashboard/groups" element={<Group />} />
+              <Route path="/dashboard/groups/:groupId" element={<GroupDetail />} />
+              
+              {/* Admin Routes */}
+              <Route element={<AdminRoute />}>
+                <Route path="/dashboard/admin" element={<AdminPanel />} />
+              </Route>
             </Route>
           </Route>
-        </Route>
 
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </React.Suspense>
 
       {/* Global Focus Shield Overlay */}
       {focusBroken && (
