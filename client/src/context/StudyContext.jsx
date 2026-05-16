@@ -189,27 +189,6 @@ export function StudyProvider({ children }) {
   }, [timerActive, user]);
 
   useEffect(() => {
-    const handleViolation = () => {
-      if (timerActive) {
-        if (timerMode === 'STOPWATCH') {
-          setTimerActive(false);
-          setFocusBroken(true);
-        }
-      }
-    };
-    
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'hidden') handleViolation();
-    };
-
-    const handleBlur = () => {
-      setTimeout(() => {
-        if (!document.hasFocus() && timerActive) {
-          handleViolation();
-        }
-      }, 100);
-    };
-
     const handleBeforeUnload = (e) => {
       if (timerActive) {
         e.preventDefault();
@@ -217,15 +196,11 @@ export function StudyProvider({ children }) {
       }
     };
 
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('blur', handleBlur);
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('blur', handleBlur);
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [timerActive, timerMode]);
+  }, [timerActive]);
 
   useEffect(() => {
     if (timerActive) {
