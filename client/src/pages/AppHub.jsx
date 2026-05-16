@@ -45,51 +45,53 @@ export default function AppHub() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0f1d] text-white font-['Inter'] flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-[#0a0f1d] text-white font-['Inter'] flex flex-col items-center justify-center p-4 pt-24">
       
-      {/* Top Header Bar (Moved completely to the top outside the card) */}
-      <div className="w-full max-w-md px-2 pt-4 pb-6 flex items-center justify-between relative z-50">
-        <div className="flex items-center gap-3">
-          <img src="/logo-acb.png?v=99" alt="ACB Logo" className="w-10 h-10 rounded-xl border border-white/10 shadow-lg object-cover" />
-          <div>
-            <h2 className="text-xs font-black text-blue-400 uppercase tracking-[0.2em] leading-tight">APNA COLLEGE BIHAR</h2>
-            <p className="text-[7px] text-slate-500 font-black uppercase tracking-[0.3em] mt-0.5">Official Study Engine</p>
-          </div>
-        </div>
-        <div className="relative">
-          {!user ? (
-            <Link to="/login" className="flex items-center gap-1.5 px-3.5 py-2.5 bg-blue-600/20 border border-blue-500/30 text-blue-400 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all active:scale-95 shadow-md">
-              <LogIn size={14} /> Login
-            </Link>
-          ) : (
+      {/* Fixed Top Header Bar (Pinned exactly to the absolute top of the screen) */}
+      <div className="fixed top-0 left-0 right-0 w-full bg-[#0a0f1d]/95 backdrop-blur-md border-b border-white/10 z-50 px-6 py-3.5 flex items-center justify-between shadow-2xl">
+        <div className="flex items-center gap-3.5 max-w-md mx-auto w-full justify-between">
+          <div className="flex items-center gap-3">
+            <img src="/logo-acb.png?v=99" alt="ACB Logo" className="w-10 h-10 rounded-xl border border-white/10 shadow-lg object-cover" />
             <div>
-              <button 
-                onClick={() => setShowProfileMenu(!showProfileMenu)} 
-                className="flex items-center gap-1.5 px-3.5 py-2.5 bg-blue-600/20 border border-blue-500/30 text-blue-400 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all active:scale-95 shadow-md"
-              >
-                <User size={14} /> My Profile
-              </button>
-
-              {showProfileMenu && (
-                <div className="absolute right-0 top-12 w-48 bg-[#10192d] border border-white/10 rounded-2xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95">
-                  <div className="pb-2 mb-2 border-b border-white/10">
-                    <p className="text-[10px] font-bold text-slate-300 truncate">{user?.email || 'Student Member'}</p>
-                    <p className="text-[8px] text-emerald-400 font-black uppercase tracking-widest mt-0.5">Active Scholar</p>
-                  </div>
-                  <button 
-                    onClick={handleLogout} 
-                    className="w-full py-2.5 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
-                  >
-                    <LogOut size={14} /> Logout
-                  </button>
-                </div>
-              )}
+              <h2 className="text-xs font-black text-blue-400 uppercase tracking-[0.2em] leading-tight">APNA COLLEGE BIHAR</h2>
+              <p className="text-[7px] text-slate-500 font-black uppercase tracking-[0.3em] mt-0.5">Official Study Engine</p>
             </div>
-          )}
+          </div>
+          <div className="relative">
+            {!user ? (
+              <Link to="/login" className="flex items-center gap-1.5 px-3.5 py-2.5 bg-blue-600/20 border border-blue-500/30 text-blue-400 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all active:scale-95 shadow-md">
+                <LogIn size={14} /> Login
+              </Link>
+            ) : (
+              <div>
+                <button 
+                  onClick={() => setShowProfileMenu(!showProfileMenu)} 
+                  className="flex items-center gap-1.5 px-3.5 py-2.5 bg-blue-600/20 border border-blue-500/30 text-blue-400 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all active:scale-95 shadow-md"
+                >
+                  <User size={14} /> My Profile
+                </button>
+
+                {showProfileMenu && (
+                  <div className="absolute right-0 top-14 w-48 bg-[#10192d] border border-white/10 rounded-2xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95">
+                    <div className="pb-2 mb-2 border-b border-white/10">
+                      <p className="text-[10px] font-bold text-slate-300 truncate">{user?.email || 'Student Member'}</p>
+                      <p className="text-[8px] text-emerald-400 font-black uppercase tracking-widest mt-0.5">Active Scholar</p>
+                    </div>
+                    <button 
+                      onClick={handleLogout} 
+                      className="w-full py-2.5 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
+                    >
+                      <LogOut size={14} /> Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="w-full max-w-md bg-[#0d1526] border-2 border-blue-900/30 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col">
+      <div className="w-full max-w-md bg-[#0d1526] border-2 border-blue-900/30 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col my-auto">
         {/* 3x3 Grid */}
         <div className="p-6 grid grid-cols-3 gap-3">
           {features.map((f, i) => (
