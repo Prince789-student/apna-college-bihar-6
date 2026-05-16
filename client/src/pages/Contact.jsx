@@ -35,6 +35,7 @@ export default function Contact() {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
     setSubmitted(true);
+    window.location.href = `mailto:prince86944@gmail.com?subject=${encodeURIComponent('ACB Support Ticket: ' + formState.subject)}&body=${encodeURIComponent('Student Name: ' + formState.name + '\nStudent Email: ' + formState.email + '\n\nQuery / Feedback:\n' + formState.message)}`;
   };
 
   return (
@@ -101,17 +102,17 @@ export default function Contact() {
           </div>
 
           <div 
-            onClick={() => window.location.href = 'mailto:prince86944@gmail.com'}
+            onClick={() => window.open('https://t.me/apnacollegebihar', '_blank')}
             className="bg-[#0d1526] border border-white/10 hover:border-blue-500/50 rounded-[2.5rem] p-8 shadow-2xl space-y-4 cursor-pointer transition-all hover:-translate-y-1 group"
           >
             <div className="w-12 h-12 bg-blue-600/20 text-blue-400 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-              <Mail size={24} />
+              <Send size={24} />
             </div>
             <div>
-              <h3 className="text-lg font-[1000] uppercase tracking-tight text-white">Official Email</h3>
-              <p className="text-xs font-medium text-slate-400 pt-1">Drop us an email for business inquiries, bug reports, or note contributions.</p>
+              <h3 className="text-lg font-[1000] uppercase tracking-tight text-white">Telegram Channel</h3>
+              <p className="text-xs font-medium text-slate-400 pt-1">Join our active Telegram community for PDF notes and instant discussion.</p>
             </div>
-            <span className="inline-block text-[10px] font-black text-blue-400 uppercase tracking-widest pt-2 group-hover:underline">Send Email →</span>
+            <span className="inline-block text-[10px] font-black text-blue-400 uppercase tracking-widest pt-2 group-hover:underline">Join Telegram →</span>
           </div>
         </div>
 
