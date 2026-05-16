@@ -60,30 +60,80 @@
    <meta name="twitter:title" content="Apna College Bihar | UGEAC 2025 College Predictor" />
    <meta name="twitter:description" content="Bihar Engineering Counselling 2025 - Free UGEAC College Predictor, Cutoff Ranks & Study Material." />
 
-   <!-- Schema.org Structured Data for Google -->
+   <!-- Schema.org Structured Data for Google Brand Verification & Knowledge Graph -->
    <script type="application/ld+json">
    {
      "@context": "https://schema.org",
-     "@type": "EducationalOrganization",
-     "name": "Apna College Bihar",
-     "url": "https://www.apnacollegebihar.online",
-     "description": "Official resource for Bihar Engineering students. Provides UGEAC 2025 College Predictor, Cutoff Ranks, B.Tech Notes, PYQ Papers and CGPA Calculator.",
-     "address": {
-       "@type": "PostalAddress",
-       "addressRegion": "Bihar",
-       "addressCountry": "IN"
-     },
-     "sameAs": [],
-     "offers": [
+     "@graph": [
        {
-         "@type": "Offer",
-         "name": "UGEAC 2025 College Predictor",
-         "description": "Predict your college based on UGEAC rank with 2024-2025 cutoff data"
+         "@type": ["EducationalOrganization", "Organization", "Brand"],
+         "@id": "https://www.apnacollegebihar.online/#organization",
+         "name": "Apna College Bihar",
+         "alternateName": ["ACB", "ACB Hub", "Apna College Bihar Hub"],
+         "url": "https://www.apnacollegebihar.online/",
+         "logo": "https://www.apnacollegebihar.online/logo-acb.png",
+         "image": "https://www.apnacollegebihar.online/logo-acb.png",
+         "description": "Apna College Bihar is the official digital academic hub and state-of-the-art study companion built exclusively for engineering students across Bihar. Provides UGEAC 2025 College Predictor, Cutoff Ranks, B.Tech Notes, PYQ Papers, SGPA Calculator and Focus Zone.",
+         "address": {
+           "@type": "PostalAddress",
+           "streetAddress": "GEC Sheikhpura Campus",
+           "addressLocality": "Sheikhpura",
+           "addressRegion": "Bihar",
+           "postalCode": "811105",
+           "addressCountry": "IN"
+         },
+         "foundingLocation": {
+           "@type": "Place",
+           "name": "GEC Sheikhpura, Bihar, India"
+         },
+         "sameAs": [
+           "https://youtube.com/@apnacollegebihar",
+           "https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a",
+           "https://t.me/apnacollegebihar"
+         ],
+         "contactPoint": {
+           "@type": "ContactPoint",
+           "email": "prince86944@gmail.com",
+           "contactType": "customer support",
+           "availableLanguage": ["English", "Hindi"]
+         },
+         "offers": [
+           {
+             "@type": "Offer",
+             "name": "UGEAC 2025 College Predictor",
+             "description": "Predict your engineering college in Bihar based on UGEAC rank with 2024-2025 cutoff data",
+             "category": "Educational Tool",
+             "price": "0",
+             "priceCurrency": "INR"
+           },
+           {
+             "@type": "Offer",
+             "name": "Bihar Engineering B.Tech Notes & PYQs",
+             "description": "Free B.Tech semester notes, study material, and previous year question papers for BEU syllabus",
+             "category": "Educational Material",
+             "price": "0",
+             "priceCurrency": "INR"
+           }
+         ]
        },
        {
-         "@type": "Offer",
-         "name": "Bihar Engineering Notes",
-         "description": "Free B.Tech semester notes and previous year question papers"
+         "@type": "WebSite",
+         "@id": "https://www.apnacollegebihar.online/#website",
+         "url": "https://www.apnacollegebihar.online/",
+         "name": "Apna College Bihar",
+         "alternateName": "ACB",
+         "description": "Official Study Hub for Bihar Engineering Students",
+         "publisher": {
+           "@id": "https://www.apnacollegebihar.online/#organization"
+         },
+         "potentialAction": {
+           "@type": "SearchAction",
+           "target": {
+             "@type": "EntryPoint",
+             "urlTemplate": "https://www.apnacollegebihar.online/?search={search_term_string}"
+           },
+           "query-input": "required name=search_term_string"
+         }
        }
      ]
    }
