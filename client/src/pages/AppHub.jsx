@@ -85,7 +85,7 @@ export default function AppHub() {
               <span className="text-[8px] font-black uppercase tracking-widest text-slate-300">Telegram</span>
             </button>
             <button 
-              onClick={() => window.open('https://whatsapp.com/channel/0029VaA8f9m0AgW7i7R7fC1v', '_blank')}
+              onClick={() => window.open('https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a', '_blank')}
               className="flex-1 py-3 bg-[#152036] border border-white/5 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95"
             >
               <MessageCircle size={14} className="text-emerald-400" />

@@ -503,7 +503,7 @@ function UgeacPredictor() {
                    </div>
                    <div className="flex gap-4 w-full md:w-auto">
                       <a href="https://t.me/apnacollegebihar" target="_blank" rel="noreferrer" className="flex-1 md:flex-none px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all text-center">Telegram Group</a>
-                      <a href="https://whatsapp.com/channel/..." target="_blank" rel="noreferrer" className="flex-1 md:flex-none px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all text-center">WhatsApp Channel</a>
+                      <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noreferrer" className="flex-1 md:flex-none px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all text-center">WhatsApp Channel</a>
                    </div>
                 </div>
              </div>
