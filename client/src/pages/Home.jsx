@@ -4,7 +4,7 @@ import {
   BookOpen, Calculator, Timer, Users, 
   ArrowRight, CheckCircle, GraduationCap, 
   Globe, Shield, Zap, Flame, Send, Youtube,
-  User, LogOut, ChevronDown, LayoutDashboard, Bell
+  User, LogOut, ChevronDown, LayoutDashboard, Bell, Download
 } from 'lucide-react';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -55,7 +55,7 @@ export default function Home() {
                  download 
                  className="flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
                >
-                 Android App
+                 Download Final APK
                </a>
                <div className="relative">
                  <button 
@@ -108,7 +108,7 @@ export default function Home() {
                  download 
                  className="flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
                >
-                 Android App
+                 Download Final APK
                </a>
                <Link to="/login" className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Login</Link>
                <Link to="/signup" className="px-4 py-2.5 md:px-6 md:py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95">Signup</Link>
@@ -136,9 +136,25 @@ export default function Home() {
                 <p className="text-slate-500 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mb-2 max-w-xl mx-auto">
                    UGEAC 2025 College Predictor · Bihar B.Tech Cutoff · BEU Notes · BCECE
                 </p>
-                <p className="text-slate-400 text-xs font-medium mb-8 max-w-2xl mx-auto leading-relaxed">
+                <p className="text-slate-400 text-xs font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
                    Bihar ke engineering students ke liye — UGEAC 2025 rank se college predict karo, BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya ka cutoff dekho, aur free BEU semester notes download karo.
                 </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+               <a 
+                 href="/ACB_v22_Final.apk" 
+                 download 
+                 className="w-full sm:w-auto px-10 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] shadow-[0_20px_50px_rgba(37,99,235,0.3)] transition-all active:scale-95 flex items-center justify-center gap-3"
+               >
+                 <Download size={20} /> Download Final APK (v2.2)
+               </a>
+               <Link 
+                 to="/hub" 
+                 className="w-full sm:w-auto px-10 py-5 bg-white border border-slate-200 hover:border-blue-500/50 text-slate-900 rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] transition-all active:scale-95 flex items-center justify-center gap-3"
+               >
+                 Explore App Hub <ArrowRight size={18} />
+               </Link>
+            </div>
 
             <div className="pt-8 max-w-2xl mx-auto">
                <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.3em]">Scroll down to explore features</p>
@@ -251,7 +267,7 @@ export default function Home() {
            ].map((f, i) => (
              <Link key={i} to={f.link} target={f.link.startsWith('http') ? '_blank' : '_self'} className="group p-4 md:p-8 bg-white border border-slate-200/80 rounded-2xl md:rounded-[3rem] hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left">
                 <div className="w-10 h-10 md:w-14 md:h-14 bg-slate-100 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-8 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform">
-                  {React.cloneElement(f.ic, { size: 20 })}
+                   {React.cloneElement(f.ic, { size: 20 })}
                 </div>
                 <h3 className="text-[9px] md:text-xl font-black text-slate-900 uppercase mb-2 md:mb-4 tracking-tighter leading-none">{f.title}</h3>
                 <p className="hidden md:block text-slate-500 font-medium leading-relaxed text-sm">{f.d}</p>
