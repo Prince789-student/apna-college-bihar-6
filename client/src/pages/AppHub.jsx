@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { 
   Send, BookOpen, GraduationCap, Timer, 
   Users, Calculator, Globe, UserCheck, 
-  Bell, LogIn, LogOut, MessageCircle, Youtube, User
+  Bell, LogIn, LogOut, MessageCircle, Youtube, User, Trash2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -77,6 +77,12 @@ export default function AppHub() {
                       <p className="text-[10px] font-bold text-slate-300 truncate">{user?.email || 'Student Member'}</p>
                       <p className="text-[8px] text-emerald-400 font-black uppercase tracking-widest mt-0.5">Active Scholar</p>
                     </div>
+                    <Link 
+                      to="/delete-account" 
+                      className="w-full py-2.5 bg-orange-500/10 hover:bg-orange-500 text-orange-400 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 mb-1.5"
+                    >
+                      <Trash2 size={14} /> Delete Account
+                    </Link>
                     <button 
                       onClick={handleLogout} 
                       className="w-full py-2.5 bg-red-500/10 hover:bg-red-500 text-red-400 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
@@ -127,8 +133,15 @@ export default function AppHub() {
         </div>
       </div>
 
-      {/* Footer Attribution */}
-      <div className="mt-6 text-center">
+      {/* Footer Attribution & Policy Links */}
+      <div className="mt-6 text-center space-y-3 pb-8">
+        <div className="flex items-center justify-center gap-4 text-[9px] font-bold text-slate-500 uppercase tracking-wider">
+          <Link to="/privacy-policy" className="hover:text-blue-400 transition-colors">Privacy Policy</Link>
+          <span>•</span>
+          <Link to="/terms" className="hover:text-blue-400 transition-colors">Terms of Service</Link>
+          <span>•</span>
+          <Link to="/delete-account" className="hover:text-red-400 transition-colors">Delete Account</Link>
+        </div>
         <p className="text-[8px] font-black text-slate-600 uppercase tracking-[0.4em]">GEC SHEIKHPURA - APNA COLLEGE BIHAR</p>
       </div>
     </div>

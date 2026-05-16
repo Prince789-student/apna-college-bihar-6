@@ -31,6 +31,9 @@ const Timetable = React.lazy(() => import('./pages/Timetable'));
 const Attendance = React.lazy(() => import('./pages/Attendance'));
 const Extras = React.lazy(() => import('./pages/PersonalManager')); // Mapping Extras to PersonalManager
 const Calendar = React.lazy(() => import('./pages/Calendar'));
+const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
+const Terms = React.lazy(() => import('./pages/Terms'));
+const DeleteAccount = React.lazy(() => import('./pages/DeleteAccount'));
 
 function LoadingScreen() {
   return (
@@ -88,6 +91,9 @@ function App() {
             <Route path="/hub" element={<AppHub />} />
             <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/delete-account" element={<DeleteAccount />} />
 
           {/* Protected Dashboard Routes */}
           <Route element={<ProtectedRoute />}>

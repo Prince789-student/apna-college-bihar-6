@@ -333,8 +333,9 @@ export default function Home() {
             <div className="space-y-6">
                <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-900">Legal Ops</h4>
                <div className="flex flex-col gap-4">
-                  <Link to="/privacy" className="text-[10px] font-black uppercase text-slate-500 hover:text-slate-900 transition-all">Privacy Policy</Link>
-                  <a href="/sitemap.xml" className="text-[10px] font-black uppercase text-slate-500 hover:text-slate-900 transition-all">Sitemap XML</a>
+                  <Link to="/privacy-policy" className="text-[10px] font-black uppercase text-slate-500 hover:text-slate-900 transition-all">Privacy Policy</Link>
+                  <Link to="/terms" className="text-[10px] font-black uppercase text-slate-500 hover:text-slate-900 transition-all">Terms of Service</Link>
+                  <Link to="/delete-account" className="text-[10px] font-black uppercase text-red-500 hover:text-red-600 transition-all">Delete Account</Link>
                </div>
             </div>
          </div>
