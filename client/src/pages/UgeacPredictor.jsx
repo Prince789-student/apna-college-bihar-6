@@ -106,8 +106,8 @@ function UgeacPredictor() {
 
   useEffect(() => {
     Promise.all([
-      fetch('/data/cutoffs.json').then(res => res.json()),
-      fetch('/data/seat_matrix.json').then(res => res.json()).catch(() => [])
+      fetch(`/data/cutoffs.json?v=${Date.now()}`).then(res => res.json()),
+      fetch(`/data/seat_matrix.json?v=${Date.now()}`).then(res => res.json()).catch(() => [])
     ]).then(([json, seats]) => {
         const process = (raw) => raw.map(c => {
           const key = c.collegeShort?.toUpperCase().trim();
