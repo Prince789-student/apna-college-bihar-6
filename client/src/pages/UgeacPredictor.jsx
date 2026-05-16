@@ -184,7 +184,9 @@ function UgeacPredictor() {
             branch: d.branch, 
             chance, 
             cutoff25: cut25 ? cut25.closing : 'N/A', 
+            opening25: cut25 ? cut25.opening : 'N/A', 
             cutoff24: cut24 ? cut24.closing : 'N/A', 
+            opening24: cut24 ? cut24.opening : 'N/A', 
             cat: d.category, 
             seatType: d.seatType, 
             myCompRank: compRank,
@@ -385,8 +387,8 @@ function UgeacPredictor() {
     
     autoTable(doc, {
       startY: 40,
-      head: [['#', 'Institute Name', 'Branch', 'Your Rank', '2024 CO', '2025 CO', 'Status']],
-      body: results.all.map((r, i) => [i+1, r.college.name, r.branch, `#${r.myCompRank} (${r.cat}${r.seatType === 'Female' ? ' F' : ''})`, r.cutoff24, r.cutoff25, r.chance]),
+      head: [['#', 'Institute Name', 'Branch', 'Category', 'Your Rank', '2024 OR', '2024 CR', '2025 OR', '2025 CR', 'Status']],
+      body: results.all.map((r, i) => [i+1, r.college.name, r.branch, `${r.cat}${r.seatType === 'Female' ? ' (F)' : ''}`, `#${r.myCompRank}`, r.opening24, r.cutoff24, r.opening25, r.cutoff25, r.chance]),
       theme: 'striped',
       headStyles: { fillColor: [79, 70, 229], fontSize: 8 },
       styles: { fontSize: 7 },
@@ -694,9 +696,12 @@ function UgeacPredictor() {
                           <thead>
                              <tr>
                                 <th>Institute & Branch</th>
+                                <th className="text-center">Category</th>
                                 <th className="text-center">Your Rank</th>
-                                <th className="text-center">2024 CO</th>
-                                <th className="text-center">2025 CO</th>
+                                <th className="text-center">2024 OR</th>
+                                <th className="text-center">2024 CR</th>
+                                <th className="text-center">2025 OR</th>
+                                <th className="text-center">2025 CR</th>
                                 <th className="text-center">Chance</th>
                                 {mode === 'wizard' && <th className="text-center">Add</th>}
                              </tr>
@@ -708,16 +713,27 @@ function UgeacPredictor() {
                                       <div className="college-name">{item.college.name}</div>
                                       <div className="branch-name">{branchMapping[item.branch] || item.branch}</div>
                                    </td>
+                                   <td className="text-center" data-label="Category">
+                                      <span className="cat-badge px-3 py-1 bg-slate-800 text-slate-300 rounded-xl text-[11px] font-bold border border-white/5">
+                                        {item.cat} {item.seatType === 'Female' ? '(F)' : ''}
+                                      </span>
+                                   </td>
                                    <td className="text-center" data-label="Your Rank">
                                       <div className="rank-badge-box mx-auto">
                                          <span className="rank">#{item.myCompRank}</span>
                                          <span className="cat">{item.cat} {item.seatType === 'Female' ? '(F)' : 'CAT'}</span>
                                       </div>
                                    </td>
-                                   <td className="text-center" data-label="2024 Cutoff">
+                                   <td className="text-center" data-label="2024 OR">
+                                      <span className="text-[11px] font-bold text-slate-500 font-mono">{item.opening24}</span>
+                                   </td>
+                                   <td className="text-center" data-label="2024 CR">
                                       <span className="text-[11px] font-black text-slate-900 font-mono">{item.cutoff24}</span>
                                    </td>
-                                   <td className="text-center" data-label="2025 Cutoff">
+                                   <td className="text-center" data-label="2025 OR">
+                                      <span className="text-[11px] font-bold text-slate-500 font-mono">{item.opening25}</span>
+                                   </td>
+                                   <td className="text-center" data-label="2025 CR">
                                       <span className="text-[13px] font-[1000] text-indigo-700 font-mono">{item.cutoff25}</span>
                                    </td>
                                    <td className="text-center" data-label="Admission Chance">

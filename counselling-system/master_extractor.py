@@ -105,9 +105,10 @@ BRANCH_PRIORITY = [
 ]
 
 CAT_MAP = {
-    'UR': 'UR', 'E-UR': 'UR', 'BC': 'BC', 'E-BC': 'BC', 
-    'EBC': 'EBC', 'E-EBC': 'EBC', 'SC': 'SC', 'E-SC': 'SC', 'ST': 'ST', 'E-ST': 'ST',
-    'EWS': 'EWS', 'E-EWS': 'EWS', 'DQ': 'DQ', 'SMQ': 'SMQ', 'RCG': 'RCG', 'E-RCG': 'RCG'
+    'UR': 'UR', 'E-UR': 'E-UR', 'BC': 'BC', 'E-BC': 'E-BC', 
+    'EBC': 'EBC', 'E-EBC': 'E-EBC', 'SC': 'SC', 'E-SC': 'E-SC', 'ST': 'ST', 'E-ST': 'E-ST',
+    'EWS': 'EWS', 'E-EWS': 'E-EWS', 'DQ': 'DQ', 'SMQ': 'SMQ', 'RCG': 'RCG', 'E-RCG': 'E-RCG',
+    'E-DQ': 'E-DQ', 'E-SMQ': 'E-SMQ'
 }
 
 def clean_str(val):
