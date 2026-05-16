@@ -1,12 +1,11 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { 
-  FileText, Book, GraduationCap, Bell, 
-  Calculator, Send, MessageCircle, LogIn, 
-  User, Timer, Users, Globe, LayoutDashboard, LogOut, Youtube
+  FileText, BookOpen, BarChart3, Megaphone, 
+  UserCheck, Calculator, CalendarClock, Layers, 
+  CalendarRange, LogIn, User, LogOut, Send, MessageCircle
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { Capacitor } from '@capacitor/core';
 
 export default function AppHub() {
   const { user, logout } = useAuth();
@@ -24,15 +23,15 @@ export default function AppHub() {
   };
 
   const features = [
-    { name: 'Study Zone', icon: <Timer size={32} />, path: '/dashboard/study', color: 'text-blue-500' },
-    { name: 'Knowledge Hub', icon: <Book size={32} />, path: '/dashboard/notes', color: 'text-indigo-500' },
-    { name: 'UGEAC Predictor', icon: <Send size={32} />, path: '/dashboard/ugeac-predictor', color: 'text-emerald-500' },
-    { name: 'Study Network', icon: <Users size={32} />, path: '/dashboard/groups', color: 'text-orange-500' },
-    { name: 'CGPA Calculator', icon: <GraduationCap size={32} />, path: '/dashboard/cgpa', color: 'text-cyan-500' },
-    { name: 'Scientific Calc', icon: <Calculator size={32} />, path: '/dashboard/calculator', color: 'text-rose-500' },
-    { name: 'BEU Results', icon: <Globe size={32} />, path: 'https://results.beu.ac.in', external: true, color: 'text-slate-400' },
-    { name: 'Official Notices', icon: <Bell size={32} />, path: 'https://t.me/apnacollegebihar', external: true, color: 'text-amber-500' },
-    { name: 'YouTube Channel', icon: <Youtube size={32} />, path: 'https://youtube.com/@apnacollegebihar', external: true, color: 'text-red-500' },
+    { name: 'PYQs', icon: <FileText size={28} />, path: '/dashboard/notes?tab=pyqs', color: 'text-blue-400' },
+    { name: 'Syllabus', icon: <BookOpen size={28} />, path: '/dashboard/notes?tab=syllabus', color: 'text-indigo-400' },
+    { name: 'Results', icon: <BarChart3 size={28} />, path: 'https://results.beu.ac.in', external: true, color: 'text-rose-400' },
+    { name: 'BEU Notice', icon: <Megaphone size={28} />, path: 'https://t.me/apnacollegebihar', external: true, color: 'text-amber-400' },
+    { name: 'Attendance', icon: <UserCheck size={28} />, path: '/dashboard/attendance', color: 'text-emerald-400' },
+    { name: 'SGPA CalC', icon: <Calculator size={28} />, path: '/dashboard/cgpa', color: 'text-cyan-400' },
+    { name: 'Time Table', icon: <CalendarClock size={28} />, path: '/dashboard/timetable', color: 'text-blue-400' },
+    { name: 'Extras', icon: <Layers size={28} />, path: '/dashboard/extras', color: 'text-indigo-400' },
+    { name: 'Calendar', icon: <CalendarRange size={28} />, path: '/dashboard/calendar', color: 'text-orange-400' },
   ];
 
   const handleFeatureClick = (f) => {
@@ -48,156 +47,66 @@ export default function AppHub() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0f1d] text-white font-['Inter'] relative overflow-hidden flex flex-col">
-      {/* Background Orbs */}
-      <div className="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-      <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-[100px] pointer-events-none"></div>
-
-      {/* Header */}
-      <header className="relative z-[100] px-6 py-8 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-           <img src="/logo-acb.png?v=99" alt="Logo" className="w-10 h-10 rounded-xl" />
-           <div>
-             <h1 className="text-sm font-[1000] tracking-tighter uppercase leading-none">APNA COLLEGE BIHAR</h1>
-             <p className="text-[6px] text-blue-500 font-black uppercase tracking-[0.4em] mt-1">Official Student Engine</p>
-           </div>
-        </div>
+    <div className="min-h-screen bg-[#0a0f1d] text-white font-['Inter'] flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md bg-[#0d1526] border-2 border-blue-900/30 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col">
         
-        {!user ? (
-          <Link to="/login" className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-blue-900/20 active:scale-95 transition-all">
-            <LogIn size={14} /> Login
-          </Link>
-        ) : (
-          <div className="relative">
-            <button 
-              onClick={() => setShowProfileMenu(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all border border-slate-700"
-            >
-              <div className="w-4 h-4 rounded-md overflow-hidden bg-white/10">
-                <img src="/logo-acb.png?v=99" alt="Profile" className="w-full h-full object-cover" />
-              </div>
-              Profile
-            </button>
-            
-            {/* Small Dropdown Profile Menu */}
-            {showProfileMenu && (
-              <>
-                <div className="fixed inset-0 z-[1900]" onClick={() => setShowProfileMenu(false)}></div>
-                <div className="absolute right-0 mt-3 w-56 bg-slate-900 border border-slate-800 rounded-[2rem] shadow-2xl p-2 z-[2000] animate-in fade-in zoom-in-95 duration-200 origin-top-right">
-                   <div className="px-4 py-5 border-b border-slate-800 mb-2 text-center">
-                      <div className="w-14 h-14 rounded-2xl overflow-hidden mb-3 mx-auto border border-slate-800 shadow-xl">
-                         <img src="/logo-acb.png?v=99" alt="ACB" className="w-full h-full object-cover" />
-                      </div>
-                      <p className="text-[7px] font-black text-blue-500 uppercase tracking-widest leading-none mb-1">ACB Official Account</p>
-                      <p className="text-[9px] font-bold text-white truncate">{user.email}</p>
-                   </div>
-                   
-                   <div className="space-y-1">
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleLogout();
-                        }}
-                        className="flex items-center gap-3 w-full p-3 hover:bg-red-600/10 text-slate-400 hover:text-red-500 rounded-2xl transition-all group"
-                      >
-                         <div className="p-2 bg-slate-800 group-hover:bg-red-600/20 rounded-xl transition-colors">
-                           <LogOut size={14} />
-                         </div>
-                         <span className="text-[10px] font-black uppercase tracking-widest">Logout Session</span>
-                      </button>
-                   </div>
-                </div>
-              </>
-            )}
-          </div>
-        )}
-      </header>
-
-      {/* Hero Stats */}
-      <div className="px-6 py-4 flex items-center gap-4">
-        <div className="flex-1 bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-3xl text-center">
-           <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Active Now</p>
-           <p className="text-xl font-black text-white leading-none tracking-tighter">1.2K+</p>
+        {/* Header Title */}
+        <div className="pt-8 pb-4 text-center">
+          <h2 className="text-sm font-black text-blue-400 uppercase tracking-[0.3em]">BIHAR ENGINEERING UNIVERSITY</h2>
         </div>
-        <div className="flex-1 bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-3xl text-center">
-           <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">Study Hours</p>
-           <p className="text-xl font-black text-white leading-none tracking-tighter">24K+</p>
+
+        {/* 3x3 Grid */}
+        <div className="p-6 grid grid-cols-3 gap-3">
+          {features.map((f, i) => (
+            <button 
+              key={i} 
+              onClick={() => handleFeatureClick(f)}
+              className="aspect-square bg-[#152036] border border-white/5 rounded-3xl flex flex-col items-center justify-center gap-3 active:scale-95 transition-all hover:bg-[#1c2b4a] shadow-lg"
+            >
+              <div className={`${f.color}`}>{f.icon}</div>
+              <span className="text-[9px] font-black uppercase tracking-wider text-slate-300">{f.name}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Social Buttons */}
+        <div className="p-6 pt-0 flex flex-col gap-3">
+          <div className="flex gap-3">
+            <button 
+              onClick={() => window.open('https://t.me/apnacollegebihar', '_blank')}
+              className="flex-1 py-3 bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/20 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95"
+            >
+              <Send size={14} className="text-blue-400" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-blue-400">Telegram Group</span>
+            </button>
+            <button 
+              onClick={() => window.open('https://whatsapp.com/channel/0029VaA8f9m0AgW7i7R7fC1v', '_blank')}
+              className="flex-1 py-3 bg-emerald-600/10 hover:bg-emerald-600/20 border border-emerald-500/20 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95"
+            >
+              <MessageCircle size={14} className="text-emerald-400" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400">WhatsApp Channel</span>
+            </button>
+          </div>
+
+          {!user ? (
+            <Link to="/login" className="py-3 bg-blue-600 text-white rounded-2xl text-center text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-900/40">
+              Access All Features
+            </Link>
+          ) : (
+            <button 
+              onClick={handleLogout}
+              className="py-3 bg-slate-800 text-slate-400 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-slate-700 active:scale-95"
+            >
+              Logout Session
+            </button>
+          )}
         </div>
       </div>
 
-      {/* Main Grid */}
-      <main className="flex-1 px-6 py-6 pb-24 overflow-y-auto custom-scrollbar">
-         <div className="grid grid-cols-3 gap-3">
-            {features.map((f, i) => (
-              <button 
-                key={i} 
-                onClick={() => handleFeatureClick(f)}
-                className="aspect-square bg-white/5 backdrop-blur-xl border border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-3 active:scale-90 transition-all hover:bg-white/10 group"
-              >
-                 <div className={`${f.color} group-hover:scale-110 transition-transform`}>{f.icon}</div>
-                 <span className="text-[7px] font-[1000] uppercase tracking-widest text-slate-400 text-center px-2">{f.name}</span>
-              </button>
-            ))}
-         </div>
-
-         {/* Bottom Action */}
-         <div className="mt-8 space-y-4">
-            <div className="p-6 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[2.5rem] relative overflow-hidden group shadow-2xl shadow-blue-900/40">
-               <div className="relative z-10 space-y-2">
-                  <h3 className="text-xl font-black uppercase tracking-tighter">UGEAC Predictor 2025</h3>
-                  <p className="text-[9px] font-bold text-blue-100 uppercase tracking-widest">Predict your government college now</p>
-                  <button onClick={() => navigate('/dashboard/ugeac-predictor')} className="mt-4 px-6 py-3 bg-white text-blue-600 rounded-2xl text-[9px] font-black uppercase tracking-widest shadow-lg">Start Prediction</button>
-               </div>
-               <div className="absolute right-[-10%] bottom-[-20%] opacity-20 rotate-12 group-hover:rotate-0 transition-transform">
-                  <Send size={120} />
-               </div>
-            </div>
-
-            <div className="p-6 bg-[#ff0000]/10 border border-[#ff0000]/20 rounded-[2.5rem] flex items-center justify-between group hover:bg-[#ff0000]/20 transition-all">
-               <div>
-                  <h4 className="text-xs font-black uppercase tracking-tighter text-[#ff0000]">YouTube Channel</h4>
-                  <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Watch Tutorials & Guides</p>
-               </div>
-               <button onClick={() => window.open('https://youtube.com/@apnacollegebihar', '_blank')} className="p-3 bg-[#ff0000] text-white rounded-xl shadow-lg shadow-red-900/40"><Youtube size={20}/></button>
-            </div>
-
-            <div className="p-6 bg-slate-900 border border-slate-800 rounded-[2.5rem] flex items-center justify-between">
-               <div>
-                  <h4 className="text-xs font-black uppercase tracking-tighter text-blue-400">Official Telegram</h4>
-                  <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Get Instant Notifications</p>
-               </div>
-               <button onClick={() => window.open('https://t.me/apnacollegebihar', '_blank')} className="p-3 bg-blue-600/10 text-blue-500 rounded-xl"><Send size={20}/></button>
-            </div>
-         </div>
-      </main>
-
-      {/* App Bar Navigation (Only for Mobile Hub) */}
-      <nav className="fixed bottom-0 left-0 w-full px-6 py-4 bg-[#0a0f1d]/90 backdrop-blur-2xl border-t border-white/5 flex items-center justify-between z-[2000]">
-         <Link to="/" className="p-3 text-slate-500 hover:text-white transition-colors flex flex-col items-center gap-1">
-            <LayoutDashboard size={20} />
-            <span className="text-[6px] font-black uppercase tracking-widest">Home</span>
-         </Link>
-         <Link to="/dashboard/notes" className="p-3 text-slate-500 hover:text-white transition-colors flex flex-col items-center gap-1">
-            <Book size={20} />
-            <span className="text-[6px] font-black uppercase tracking-widest">Notes</span>
-         </Link>
-         <div className="relative -top-8">
-            <button 
-              onClick={() => navigate('/dashboard/study')}
-              className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center shadow-2xl shadow-blue-600/40 active:scale-90 transition-all border-4 border-[#0a0f1d]"
-            >
-               <Timer size={28} className="text-white" />
-            </button>
-         </div>
-         <Link to="/dashboard/ugeac-predictor" className="p-3 text-slate-500 hover:text-white transition-colors flex flex-col items-center gap-1">
-            <Send size={20} />
-            <span className="text-[6px] font-black uppercase tracking-widest">UGEAC</span>
-         </Link>
-         <Link to="/dashboard" className="p-3 text-slate-500 hover:text-white transition-colors flex flex-col items-center gap-1">
-            <User size={20} />
-            <span className="text-[6px] font-black uppercase tracking-widest">My Hub</span>
-         </Link>
-      </nav>
+      {/* Footer Attribution */}
+      <div className="mt-6 text-center">
+        <p className="text-[8px] font-black text-slate-700 uppercase tracking-[0.5em]">Apna College Bihar • Official Engine</p>
+      </div>
     </div>
   );
 }
