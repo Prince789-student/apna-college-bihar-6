@@ -45,7 +45,14 @@ function LoadingScreen() {
 function App() {
   const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const isNative = Capacitor.isNativePlatform();
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     // Safety timeout: Never stay loading more than 5 seconds
@@ -77,7 +84,7 @@ function App() {
         <React.Suspense fallback={<LoadingScreen />}>
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={isNative || (new URLSearchParams(window.location.search).get('standalone') === 'true') ? <AppHub /> : <Home />} />
+            <Route path="/" element={isNative || isMobile || (new URLSearchParams(window.location.search).get('standalone') === 'true') ? <AppHub /> : <Home />} />
             <Route path="/hub" element={<AppHub />} />
             <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
