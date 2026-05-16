@@ -21,12 +21,12 @@ export default function AppHub() {
   };
 
   const features = [
-    { name: 'UGEAC 2025', icon: <Send size={28} />, path: '/dashboard/ugeac-predictor', color: 'text-emerald-400' },
-    { name: 'Notes & PYQs', icon: <BookOpen size={28} />, path: '/dashboard/notes', color: 'text-blue-400' },
-    { name: 'SGPA CalC', icon: <GraduationCap size={28} />, path: '/dashboard/cgpa', color: 'text-cyan-400' },
-    { name: 'Study Timer', icon: <Timer size={28} />, path: '/dashboard/study', color: 'text-indigo-400' },
-    { name: 'Study Network', icon: <Users size={28} />, path: '/dashboard/groups', color: 'text-orange-400' },
-    { name: 'Scientific Calc', icon: <Calculator size={28} />, path: '/dashboard/calculator', color: 'text-rose-400' },
+    { name: 'UGEAC 2025', icon: <Send size={28} />, path: '/dashboard/ugeac-predictor?standalone=true', color: 'text-emerald-400' },
+    { name: 'Notes & PYQs', icon: <BookOpen size={28} />, path: '/dashboard/notes?standalone=true', color: 'text-blue-400' },
+    { name: 'SGPA CalC', icon: <GraduationCap size={28} />, path: '/dashboard/cgpa?standalone=true', color: 'text-cyan-400' },
+    { name: 'Study Timer', icon: <Timer size={28} />, path: '/dashboard/study?standalone=true', color: 'text-indigo-400' },
+    { name: 'Study Network', icon: <Users size={28} />, path: '/dashboard/groups?standalone=true', color: 'text-orange-400' },
+    { name: 'Scientific Calc', icon: <Calculator size={28} />, path: '/dashboard/calculator?standalone=true', color: 'text-rose-400' },
     { name: 'Results Portal', icon: <Globe size={28} />, path: 'https://results.beu.ac.in', external: true, color: 'text-slate-400' },
   ];
 
