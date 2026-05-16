@@ -309,6 +309,8 @@ export default function StudyDashboard() {
                     <input type="number" min="0" max="59" value={customSeconds} onChange={e => setCustomSeconds(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))} className="w-20 bg-white border-2 border-slate-200 rounded-xl p-3 text-center font-black text-2xl outline-none focus:border-blue-500" />
                     <span className="text-[9px] font-black text-slate-400 uppercase">Sec</span>
                   </div>
+                </div>
+              )}
               {/* Control Buttons */}
               {!timerActive ? (
                 <div className="flex gap-3 w-full">
