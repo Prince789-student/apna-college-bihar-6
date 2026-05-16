@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AlertTriangle, Shield } from 'lucide-react';
-import { useStudy } from './context/StudyContext';
 import { useAuth } from './context/AuthContext';
 import { Capacitor } from '@capacitor/core';
 
@@ -28,6 +27,10 @@ const AdminPanel = React.lazy(() => import('./pages/AdminPanel'));
 const Achievements = React.lazy(() => import('./pages/Achievements'));
 const Group = React.lazy(() => import('./pages/Group'));
 const GroupDetail = React.lazy(() => import('./pages/GroupDetail'));
+const Timetable = React.lazy(() => import('./pages/Timetable'));
+const Attendance = React.lazy(() => import('./pages/Attendance'));
+const Extras = React.lazy(() => import('./pages/PersonalManager')); // Mapping Extras to PersonalManager
+const Calendar = React.lazy(() => import('./pages/Calendar'));
 
 function LoadingScreen() {
   return (
@@ -40,7 +43,6 @@ function LoadingScreen() {
 
 
 function App() {
-  const { focusBroken, setFocusBroken } = useStudy();
   const { user, loading: authLoading } = useAuth();
   const [loading, setLoading] = useState(true);
   const isNative = Capacitor.isNativePlatform();
@@ -92,6 +94,10 @@ function App() {
               <Route path="/dashboard/achievements" element={<Achievements />} />
               <Route path="/dashboard/groups" element={<Group />} />
               <Route path="/dashboard/groups/:groupId" element={<GroupDetail />} />
+              <Route path="/dashboard/timetable" element={<Timetable />} />
+              <Route path="/dashboard/attendance" element={<Attendance />} />
+              <Route path="/dashboard/extras" element={<Extras />} />
+              <Route path="/dashboard/calendar" element={<Calendar />} />
               
               {/* Admin Routes */}
               <Route element={<AdminRoute />}>
@@ -104,35 +110,6 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </React.Suspense>
-
-      {/* Global Focus Shield Overlay */}
-      {focusBroken && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-6 bg-slate-950/98 backdrop-blur-3xl animate-in fade-in duration-500">
-          <div className="w-full max-w-lg text-center space-y-12">
-            <div className="relative">
-               <div className="absolute inset-0 bg-blue-600/20 blur-[60px] animate-pulse"></div>
-               <div className="w-32 h-32 bg-slate-900 border-2 border-blue-500/50 text-blue-500 rounded-[2.5rem] flex items-center justify-center mx-auto relative z-10 animate-bounce shadow-[0_0_50px_rgba(37,99,235,0.3)]">
-                 <Shield size={64} className="animate-pulse" />
-               </div>
-            </div>
-            <div className="space-y-4">
-              <h2 className="text-6xl font-[1000] text-white tracking-tighter uppercase leading-none">Iron Focus</h2>
-              <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.4em] leading-relaxed max-w-sm mx-auto">
-                <span className="text-blue-500">Distraction Detected.</span> <br/>
-                Protocol is currently locked. <br/>
-                Return to your academic targets.
-              </p>
-            </div>
-            <button 
-              onClick={() => setFocusBroken(false)} 
-              className="w-full py-8 bg-blue-600 hover:bg-blue-500 text-white rounded-[2.5rem] font-black text-xs uppercase tracking-[0.3em] shadow-[0_25px_60px_rgba(37,99,235,0.4)] active:scale-95 transition-all border border-blue-400/30"
-            >
-              Resume Protocol
-            </button>
-            <p className="text-slate-600 text-[8px] font-bold uppercase tracking-widest">Biometric bypass disabled · Session integrity verified</p>
-          </div>
-        </div>
-      )}
       </>
     );
   } catch (error) {
