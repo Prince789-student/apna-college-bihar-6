@@ -28,8 +28,6 @@ export default function AppHub() {
     { name: 'Study Network', icon: <Users size={28} />, path: '/dashboard/groups', color: 'text-orange-400' },
     { name: 'Scientific Calc', icon: <Calculator size={28} />, path: '/dashboard/calculator', color: 'text-rose-400' },
     { name: 'Results Portal', icon: <Globe size={28} />, path: 'https://results.beu.ac.in', external: true, color: 'text-slate-400' },
-    { name: 'Attendance', icon: <UserCheck size={28} />, path: '/dashboard/attendance', color: 'text-emerald-400' },
-    { name: 'Official Notice', icon: <Bell size={28} />, path: 'https://t.me/apnacollegebihar', external: true, color: 'text-amber-400' },
   ];
 
   const handleFeatureClick = (f) => {
