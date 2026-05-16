@@ -241,12 +241,23 @@ def master_extract():
     # 2024 R2 (Excel)
     all_2024 += process_excel("REV_UGEAC2024_SOCRANK.xlsx", 2024)
     
+    # Deduplicate keeping the latest entry (since R2 is combined R1+R2)
+    def deduplicate(data):
+        unique = {}
+        for row in data:
+            key = f"{row['collegeShort']}|{row['branch']}|{row['category']}|{row['seatType']}"
+            unique[key] = row
+        return list(unique.values())
+
+    all_2025 = deduplicate(all_2025)
+    all_2024 = deduplicate(all_2024)
+
     output_path = "../client/public/data/cutoffs.json"
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w") as f:
         json.dump({"cutoffs2024": all_2024, "cutoffs2025": all_2025}, f, indent=2)
         
-    print(f"Master Extraction Finished! Total 2025 entries: {len(all_2025)}, Total 2024 entries: {len(all_2024)}")
+    print(f"Master Extraction Finished! Unique 2025 entries: {len(all_2025)}, Unique 2024 entries: {len(all_2024)}")
 
 if __name__ == "__main__":
     master_extract()
