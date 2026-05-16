@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ChevronLeft, MessageCircle, Youtube, Mail, Send, CheckCircle2, AlertTriangle, HelpCircle, ChevronDown, Phone } from 'lucide-react';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 
 export default function Contact() {
   const navigate = useNavigate();
@@ -31,11 +33,36 @@ export default function Contact() {
     }
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
     setSubmitted(true);
-    window.location.href = `mailto:prince86944@gmail.com?subject=${encodeURIComponent('ACB Support Ticket: ' + formState.subject)}&body=${encodeURIComponent('Student Name: ' + formState.name + '\nStudent Email: ' + formState.email + '\n\nQuery / Feedback:\n' + formState.message)}`;
+    
+    // 1. Save directly to Firestore database as a backup
+    try {
+      await addDoc(collection(db, 'support_tickets'), {
+        name: formState.name,
+        email: formState.email,
+        subject: formState.subject,
+        message: formState.message,
+        createdAt: new Date().toISOString()
+      });
+    } catch (err) {
+      console.error('Firestore ticket error:', err);
+    }
+
+    // 2. Force open email app across all platforms (Native Android/iOS & Web)
+    const mailUrl = `mailto:prince86944@gmail.com?subject=${encodeURIComponent('ACB Support Ticket: ' + formState.subject)}&body=${encodeURIComponent('Student Name: ' + formState.name + '\nStudent Email: ' + formState.email + '\n\nQuery / Feedback:\n' + formState.message)}`;
+    
+    try {
+      window.open(mailUrl, '_system');
+    } catch (err) {}
+    
+    try {
+      window.open(mailUrl, '_blank');
+    } catch (err) {}
+
+    window.location.href = mailUrl;
   };
 
   return (

@@ -309,30 +309,14 @@ export default function StudyDashboard() {
                     <input type="number" min="0" max="59" value={customSeconds} onChange={e => setCustomSeconds(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))} className="w-20 bg-white border-2 border-slate-200 rounded-xl p-3 text-center font-black text-2xl outline-none focus:border-blue-500" />
                     <span className="text-[9px] font-black text-slate-400 uppercase">Sec</span>
                   </div>
-                </div>
-              )}
               {/* Control Buttons */}
               {!timerActive ? (
                 <div className="flex gap-3 w-full">
                   <button onClick={() => {
-                    if (isNative && !isAccessibilityEnabled) {
-                      openAccessibilitySettings();
-                      return;
-                    }
                     setTimerActive(true);
-                    // Auto-launch the first whitelisted app if available
-                    const firstApp = (allowedPackages || '').split(',').filter(Boolean)[0];
-                    if (firstApp) {
-                      setTimeout(() => launchApp(firstApp), 1000);
-                    }
-                  }} className="flex-[2] py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2">
+                  }} className="w-full py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2">
                     <Shield size={16} /> Start Focus
                   </button>
-                  {isNative && (
-                    <button onClick={() => setShowWhitelist(true)} className="flex-1 py-5 bg-slate-900 text-white rounded-2xl font-[1000] text-[9px] uppercase tracking-widest active:scale-95 transition-all flex items-center justify-center gap-1">
-                      <Settings size={14} /> Apps
-                    </button>
-                  )}
                 </div>
               ) : (
                 <div className="flex gap-3 w-full animate-in fade-in duration-300">
