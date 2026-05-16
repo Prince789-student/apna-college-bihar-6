@@ -261,9 +261,7 @@ export default function Home() {
              { title: "Study Timer & Focus", ic: <Timer className="text-blue-500"/>, d: "Pomodoro technique and focus tracking for Bihar engineering students.", link: "/dashboard/study?standalone=true" },
              { title: "Study Network", ic: <Users className="text-purple-500"/>, d: "Join student groups to discuss PYQs and UGEAC counselling tips.", link: "/dashboard/groups?standalone=true" },
              { title: "Scientific Calc", ic: <Calculator className="text-pink-500"/>, d: "Advanced scientific calculator for professional engineering calculations.", link: "/dashboard/calculator?standalone=true" },
-             { title: "BEU Results Portal", ic: <Globe className="text-slate-400"/>, d: "Direct access to the official Bihar Engineering University results page.", link: "https://results.beu.ac.in" },
-             { title: "Official Notices", ic: <Bell className="text-amber-500"/>, d: "Stay updated with real-time official notices via our Telegram hub.", link: "https://t.me/apnacollegebihar" },
-             { title: "YouTube Tutorials", ic: <Youtube className="text-red-500"/>, d: "Watch detailed guides and lectures on our official YouTube channel.", link: "https://youtube.com/@apnacollegebihar" }
+             { title: "BEU Results Portal", ic: <Globe className="text-slate-400"/>, d: "Direct access to the official Bihar Engineering University results page.", link: "https://results.beu.ac.in" }
            ].map((f, i) => (
              <Link key={i} to={f.link} target={f.link.startsWith('http') ? '_blank' : '_self'} className="group p-4 md:p-8 bg-white border border-slate-200/80 rounded-2xl md:rounded-[3rem] hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left">
                 <div className="w-10 h-10 md:w-14 md:h-14 bg-slate-100 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-8 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform">
