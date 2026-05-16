@@ -2,8 +2,8 @@
   RewriteEngine On
   RewriteBase /
   
-  # 1. Force Download for APK files
-  RewriteRule ^(.*\.apk)$ - [L]
+  # 1. Force Download for APK and ZIP files
+  RewriteRule ^(.*\.(apk|zip))$ - [L]
   
   # 2. SPA Routing: If the file or directory exists, serve it
   RewriteCond %{REQUEST_FILENAME} -f [OR]
