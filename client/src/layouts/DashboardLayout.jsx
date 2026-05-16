@@ -112,8 +112,8 @@ export default function DashboardLayout() {
       {!isAppMode && <aside className={`hidden md:flex flex-col bg-white border-r border-slate-200/80 transition-all duration-500 shadow-2xl relative z-40 ${isSidebarOpen ? 'w-64' : 'w-20'}`}><SidebarContent /></aside>}
       {isMobileMenuOpen && !isStandalone && <div className="fixed inset-0 z-[100] md:hidden"><div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)} /><aside className="absolute top-0 left-0 h-full w-[85%] max-w-[320px] bg-white shadow-2xl flex flex-col"><SidebarContent isMobile /></aside></div>}
       <main className="flex-1 flex flex-col min-h-0 h-full bg-white relative overflow-hidden">
-        {/* Standalone Back Button */}
-        {isStandalone && (
+        {/* Standalone / Native Back Button */}
+        {(isStandalone || isNative) && (
           <div className="flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-[100]">
              <button 
                 onClick={() => {
@@ -136,18 +136,6 @@ export default function DashboardLayout() {
                 <img src="/logo-acb.png?v=99" alt="Logo" className="w-8 h-8 rounded-lg" />
                 <span className="text-[10px] font-[1000] tracking-tighter uppercase text-slate-900">ACB Hub</span>
              </div>
-          </div>
-        )}
-        {/* Minimal Native Header */}
-        {isNative && (
-          <div className="md:hidden flex items-center px-5 py-4 bg-white border-b border-slate-100 sticky top-0 z-[100]">
-            <button onClick={() => navigate(-1)} className="p-2 -ml-3 text-slate-900 active:scale-95 transition-all">
-              <ChevronLeft size={28} />
-            </button>
-            <div className="ml-2">
-              <p className="text-[10px] font-black text-slate-900 uppercase tracking-tighter leading-none">Back to</p>
-              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-0.5">App Hub Grid</p>
-            </div>
           </div>
         )}
 
