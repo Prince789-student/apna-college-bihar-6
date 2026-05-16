@@ -34,6 +34,8 @@ const Calendar = React.lazy(() => import('./pages/Calendar'));
 const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
 const Terms = React.lazy(() => import('./pages/Terms'));
 const DeleteAccount = React.lazy(() => import('./pages/DeleteAccount'));
+const About = React.lazy(() => import('./pages/About'));
+const Contact = React.lazy(() => import('./pages/Contact'));
 
 function LoadingScreen() {
   return (
@@ -94,6 +96,8 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/delete-account" element={<DeleteAccount />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
 
           {/* Protected Dashboard Routes */}
           <Route element={<ProtectedRoute />}>
