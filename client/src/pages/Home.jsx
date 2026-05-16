@@ -4,7 +4,7 @@ import {
   BookOpen, Calculator, Timer, Users, 
   ArrowRight, CheckCircle, GraduationCap, 
   Globe, Shield, Zap, Flame, Send, Youtube,
-  User, LogOut, ChevronDown, LayoutDashboard, Bell, Download
+  User, LogOut, ChevronDown, LayoutDashboard, Bell, Download, MessageCircle
 } from 'lucide-react';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -312,10 +312,13 @@ export default function Home() {
                </div>
                <p className="text-slate-500 font-bold text-xs uppercase tracking-widest leading-loose max-w-sm">Bihar's first open-source academic website dedicated to Bihar Engineering University students.</p>
                <div className="flex gap-4">
-                  <a href="https://t.me/apnacollegebihar" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-[#0088cc]/10 rounded-xl flex items-center justify-center text-[#0088cc] hover:bg-[#0088cc] hover:text-slate-900 border border-[#0088cc]/20 transition-all cursor-pointer">
+                  <a href="https://t.me/apnacollegebihar" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-[#0088cc]/10 rounded-xl flex items-center justify-center text-[#0088cc] hover:bg-[#0088cc] hover:text-slate-900 border border-[#0088cc]/20 transition-all cursor-pointer shadow-md">
                     <Send size={18} />
                   </a>
-                  <a href="https://youtube.com/@apnacollegebihar" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-red-600/10 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-600 hover:text-slate-900 border border-red-500/20 transition-all cursor-pointer">
+                  <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-emerald-600/10 rounded-xl flex items-center justify-center text-emerald-500 hover:bg-emerald-600 hover:text-slate-900 border border-emerald-500/20 transition-all cursor-pointer shadow-md">
+                    <MessageCircle size={18} />
+                  </a>
+                  <a href="https://youtube.com/@apnacollegebihar" target="_blank" rel="noopener noreferrer" className="w-10 h-10 bg-red-600/10 rounded-xl flex items-center justify-center text-red-500 hover:bg-red-600 hover:text-slate-900 border border-red-500/20 transition-all cursor-pointer shadow-md">
                     <Youtube size={18} />
                   </a>
                </div>
@@ -336,7 +339,7 @@ export default function Home() {
             </div>
          </div>
          <div className="mt-20 pt-10 border-t border-slate-900 flex flex-col md:flex-row items-center justify-between gap-6">
-            <p className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">© 2026 Apna College Bihar. All Rights Reserved.</p>
+            <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">GEC SHEIKHPURA - APNA COLLEGE BIHAR</p>
             <div className="flex items-center gap-3">
               <span className="text-[8px] font-black text-slate-700 uppercase tracking-widest">Powered by Bihar Scholarly Community</span>
             </div>
