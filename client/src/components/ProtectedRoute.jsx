@@ -16,7 +16,7 @@ const ProtectedRoute = () => {
     return <Navigate to="/login" replace />;
   }
 
-  const needsPhone = !user?.phone || user?.phone?.trim() === "";
+  const needsPhone = !user?.phone || user?.phone?.trim() === "" || user?.phone === "NOT LINKED";
 
   const handlePhoneSubmit = async (e) => {
     e.preventDefault();

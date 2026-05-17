@@ -52,7 +52,7 @@ function GlobalPhonePrompt() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const needsPhone = user && (!user?.phone || user?.phone?.trim() === "");
+  const needsPhone = user && (!user?.phone || user?.phone?.trim() === "" || user?.phone === "NOT LINKED");
 
   if (!needsPhone) return null;
 
