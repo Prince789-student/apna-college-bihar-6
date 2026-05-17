@@ -18,20 +18,15 @@ public class AppBlockerService extends AccessibilityService {
 
     @Override
     protected void onServiceConnected() {
-
         super.onServiceConnected();
-
-        AccessibilityServiceInfo info =
-                new AccessibilityServiceInfo();
-
-        info.eventTypes =
-                AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
-
-        info.feedbackType =
-                AccessibilityServiceInfo.FEEDBACK_GENERIC;
-
+        AccessibilityServiceInfo info = getServiceInfo();
+        if (info == null) {
+            info = new AccessibilityServiceInfo();
+        }
+        info.eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
+        info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
+        info.flags |= AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS | AccessibilityServiceInfo.DEFAULT;
         info.notificationTimeout = 100;
-
         setServiceInfo(info);
     }
 

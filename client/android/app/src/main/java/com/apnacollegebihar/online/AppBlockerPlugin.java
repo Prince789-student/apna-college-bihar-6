@@ -90,7 +90,9 @@ public class AppBlockerPlugin extends Plugin {
 
         prefs.edit()
                 .putLong(KEY_COUNTDOWN_END, endTime)
+                .putString(KEY_COUNTDOWN_END, String.valueOf(endTime))
                 .putBoolean(KEY_IS_ACTIVE, true)
+                .putString(KEY_IS_ACTIVE, "true")
                 .apply();
 
         JSObject ret = new JSObject();
@@ -110,7 +112,9 @@ public class AppBlockerPlugin extends Plugin {
 
         prefs.edit()
                 .putBoolean(KEY_IS_ACTIVE, false)
+                .putString(KEY_IS_ACTIVE, "false")
                 .putLong(KEY_COUNTDOWN_END, 0)
+                .putString(KEY_COUNTDOWN_END, "0")
                 .apply();
 
         call.resolve();
@@ -134,6 +138,7 @@ public class AppBlockerPlugin extends Plugin {
 
         prefs.edit()
                 .putBoolean(KEY_IS_ACTIVE, active)
+                .putString(KEY_IS_ACTIVE, active ? "true" : "false")
                 .apply();
 
         call.resolve();
