@@ -49,20 +49,46 @@ public class AppBlockerService extends AccessibilityService {
         SharedPreferences prefs =
                 getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        boolean isActive =
-                prefs.getBoolean(KEY_IS_ACTIVE, false);
+        boolean isActive = false;
+        try {
+            isActive = prefs.getBoolean(KEY_IS_ACTIVE, false);
+        } catch (ClassCastException e) {
+            try {
+                String str = prefs.getString(KEY_IS_ACTIVE, "false");
+                isActive = "true".equalsIgnoreCase(str);
+            } catch (Exception ex) {}
+        }
 
-        long endTime =
-                prefs.getLong(KEY_COUNTDOWN_END, 0);
+        long endTime = 0;
+        try {
+            endTime = prefs.getLong(KEY_COUNTDOWN_END, 0);
+        } catch (ClassCastException e) {
+            try {
+                String str = prefs.getString(KEY_COUNTDOWN_END, "0");
+                if (str != null && !str.isEmpty()) {
+                    endTime = Long.parseLong(str);
+                }
+            } catch (Exception ex) {}
+        }
 
         boolean timerRunning =
                 endTime > System.currentTimeMillis();
 
-        Set<String> allowedPackages =
-                prefs.getStringSet(
-                        KEY_ALLOWED_PACKAGES,
-                        new HashSet<>()
-                );
+        Set<String> allowedPackages = new HashSet<>();
+        try {
+            Set<String> stored = prefs.getStringSet(KEY_ALLOWED_PACKAGES, new HashSet<>());
+            if (stored != null) allowedPackages.addAll(stored);
+        } catch (ClassCastException e) {
+            try {
+                String str = prefs.getString(KEY_ALLOWED_PACKAGES, "");
+                if (str != null && !str.isEmpty()) {
+                    String[] parts = str.split(",");
+                    for (String p : parts) {
+                        if (!p.trim().isEmpty()) allowedPackages.add(p.trim());
+                    }
+                }
+            } catch (Exception ex) {}
+        }
 
         if (!(isActive || timerRunning)) {
             return;
