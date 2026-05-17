@@ -461,9 +461,6 @@ function UgeacPredictor() {
              <div className="glass-panel border-indigo-200 bg-gradient-to-r from-indigo-50 via-white to-indigo-50/50 p-8 md:p-10 relative overflow-hidden shadow-xl">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
                 <div className="max-w-3xl space-y-4 relative z-10">
-                   <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-600 border border-indigo-300 rounded-full text-white text-[10px] font-black uppercase tracking-widest shadow-sm">
-                      <span>📢 Official UGEAC 2026 Prospectus Data</span>
-                   </div>
                    <h2 className="text-2xl md:text-4xl font-black text-slate-900 uppercase tracking-tight leading-tight">
                       BCECEB Bihar Engineering <br className="hidden md:block" />
                       <span className="text-indigo-600">Admission Counselling Guide</span>
