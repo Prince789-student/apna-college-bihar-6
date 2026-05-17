@@ -455,56 +455,190 @@ function UgeacPredictor() {
               </div>
            </div>
         </header>
-        
         {mode === 'guide' ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in">
-             <div className="glass-panel border-indigo-500/30">
-                <h3 className="section-title"><ShieldCheck /> Documents Required</h3>
-                <ul className="space-y-4 text-sm font-medium text-slate-300">
-                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> UGEAC Rank Card 2024/25</li>
-                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> Part A & B of Application Form</li>
-                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> JEE Main Admit Card & Rank Card</li>
-                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> Class 10 & 12 Marks-sheet & Certificate</li>
-                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> Residence & Category Certificate (Bihar)</li>
-                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> 6 Passport Size Photographs (Original)</li>
-                   <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400" size={18} /> Choice Slip & Allotment Letter (3 copies)</li>
-                </ul>
-             </div>
-             <div className="glass-panel border-indigo-500/30">
-                <h3 className="section-title"><Layers /> Counselling Process</h3>
-                <div className="space-y-6">
-                   {[
-                      { step: "01", title: "Registration", desc: "Pay UGEAC registration fee (approx ₹1200) on BCECEB portal." },
-                      { step: "02", title: "Choice Filling", desc: "Fill your college preferences in decreasing order of priority." },
-                      { step: "03", title: "First Round Allotment", desc: "Check allotted college. If satisfied, download letter & go for DV." },
-                      { step: "04", title: "Document Verification (DV)", desc: "Visit designated nodal center with all original documents." },
-                      { step: "05", title: "Admission/Sliding", desc: "Pay admission fee or opt for 'Auto Upgradation' for Round 2." }
-                   ].map(s => (
-                      <div key={s.step} className="flex gap-4 items-start">
-                         <div className="text-2xl font-black text-indigo-500/50 font-mono leading-none">{s.step}</div>
-                         <div>
-                            <h4 className="text-white font-bold text-sm mb-1">{s.title}</h4>
-                            <p className="text-[11px] text-slate-500 leading-relaxed uppercase font-black">{s.desc}</p>
-                         </div>
-                      </div>
-                   ))}
+          <div className="space-y-12 animate-in fade-in">
+             {/* Hero Info Banner */}
+             <div className="glass-panel border-indigo-500/40 bg-gradient-to-r from-indigo-900/40 via-slate-900/60 to-indigo-950/40 p-8 md:p-10 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="max-w-3xl space-y-4 relative z-10">
+                   <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-500/20 border border-indigo-500/30 rounded-full text-indigo-300 text-[10px] font-black uppercase tracking-widest">
+                      <span>📢 Official UGEAC 2026 Prospectus Data</span>
+                   </div>
+                   <h2 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight leading-tight">
+                      BCECEB Bihar Engineering <br className="hidden md:block" />
+                      <span className="text-indigo-400">Admission Counselling Guide</span>
+                   </h2>
+                   <p className="text-xs md:text-sm text-slate-300 font-medium leading-relaxed">
+                      Complete official roadmap, eligibility criteria, category reservation matrix, and document checklist derived directly from the BCECEB UGEAC-2026 Prospectus.
+                   </p>
+                </div>
+
+                {/* Important Dates Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-8 border-t border-white/10 relative z-10">
+                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Registration Starts</span>
+                      <span className="text-sm md:text-base font-black text-white uppercase tracking-tight block mt-1">13 May 2026</span>
+                   </div>
+                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Registration Closes</span>
+                      <span className="text-sm md:text-base font-black text-white uppercase tracking-tight block mt-1">05 June 2026</span>
+                   </div>
+                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Merit List Publication</span>
+                      <span className="text-sm md:text-base font-black text-indigo-400 uppercase tracking-tight block mt-1">08 June 2026</span>
+                   </div>
+                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Online Counselling</span>
+                      <span className="text-sm md:text-base font-black text-emerald-400 uppercase tracking-tight block mt-1">10 June 2026</span>
+                   </div>
                 </div>
              </div>
-             <div className="md:col-span-2 glass-panel border-emerald-500/30 bg-emerald-500/5">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                   <div className="flex items-center gap-6">
-                      <div className="w-16 h-16 bg-emerald-500/20 rounded-2xl flex items-center justify-center border border-emerald-500/20 shadow-inner">
-                         <Send size={32} className="text-emerald-400" />
+
+             {/* Two Column Grid: Eligibility & Fees */}
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="glass-panel border-indigo-500/30 space-y-6">
+                   <div className="flex items-center gap-3 border-b border-white/10 pb-4">
+                      <div className="w-10 h-10 bg-indigo-500/20 rounded-xl flex items-center justify-center border border-indigo-500/30 text-indigo-400">
+                         <GraduationCap size={20} />
                       </div>
                       <div>
-                         <h3 className="text-xl font-black text-white uppercase tracking-tighter">Live Support Community</h3>
-                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Join 5000+ Bihar Students for Real-time Help</p>
+                         <h3 className="text-base font-black text-white uppercase tracking-tight">Official Eligibility (Clause 5.1)</h3>
+                         <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">AICTE APH 2026-27 Norms</p>
                       </div>
                    </div>
-                   <div className="flex gap-4 w-full md:w-auto">
-                      <a href="https://t.me/apnacollegebihar" target="_blank" rel="noreferrer" className="flex-1 md:flex-none px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all text-center">Telegram Group</a>
-                      <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noreferrer" className="flex-1 md:flex-none px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all text-center">WhatsApp Channel</a>
+                   <ul className="space-y-4 text-xs font-medium text-slate-300 leading-relaxed">
+                      <li className="flex items-start gap-3 bg-white/5 p-4 rounded-2xl border border-white/5">
+                         <CheckCircle2 className="text-indigo-400 mt-0.5 shrink-0" size={16} />
+                         <span><strong className="text-white">Academic Qualification:</strong> Passed 10+2 examination with Physics, Mathematics, and Chemistry/Computer Science/Electronics/IT/Biology/Informatics Practices/Vocational subjects.</span>
+                      </li>
+                      <li className="flex items-start gap-3 bg-white/5 p-4 rounded-2xl border border-white/5">
+                         <CheckCircle2 className="text-indigo-400 mt-0.5 shrink-0" size={16} />
+                         <span><strong className="text-white">Minimum Marks:</strong> Obtained at least 45% marks (40% marks in case of candidates belonging to reserved categories SC/ST/EBC/BC/RCG) in the above subjects taken together.</span>
+                      </li>
+                      <li className="flex items-start gap-3 bg-white/5 p-4 rounded-2xl border border-white/5">
+                         <CheckCircle2 className="text-indigo-400 mt-0.5 shrink-0" size={16} />
+                         <span><strong className="text-white">Valid Entrance Score:</strong> Must possess a valid NTA JEE (Main) 2026 Paper-1 score for B.Tech admission (or NATA 2026 for B.Arch).</span>
+                      </li>
+                      <li className="flex items-start gap-3 bg-white/5 p-4 rounded-2xl border border-white/5">
+                         <CheckCircle2 className="text-indigo-400 mt-0.5 shrink-0" size={16} />
+                         <span><strong className="text-white">Domicile Requirement:</strong> Must be a permanent resident of Bihar OR parents are serving employees of Bihar Govt / Central Govt posted in Bihar.</span>
+                      </li>
+                   </ul>
+                </div>
+
+                <div className="glass-panel border-indigo-500/30 space-y-6 flex flex-col justify-between">
+                   <div>
+                      <div className="flex items-center gap-3 border-b border-white/10 pb-4">
+                         <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30 text-emerald-400">
+                            <Zap size={20} />
+                         </div>
+                         <div>
+                            <h3 className="text-base font-black text-white uppercase tracking-tight">Registration Fees & Modes</h3>
+                            <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Non-Refundable Counselling Fee</p>
+                         </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4 mt-6">
+                         <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2">
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">General / BC / EBC</span>
+                            <span className="text-3xl font-[1000] text-white block">₹1200</span>
+                            <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest block">Net Banking / UPI / Card</span>
+                         </div>
+                         <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2">
+                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">SC / ST / DQ (PwD)</span>
+                            <span className="text-3xl font-[1000] text-indigo-400 block">₹600</span>
+                            <span className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest block">Net Banking / UPI / Card</span>
+                         </div>
+                      </div>
                    </div>
+
+                   {/* Reservation Matrix Box */}
+                   <div className="bg-slate-900/60 border border-white/10 p-6 rounded-3xl space-y-4">
+                      <span className="text-xs font-black text-white uppercase tracking-wider block border-b border-white/10 pb-2">Bihar Govt Category Reservation Matrix (Clause 4.2)</span>
+                      <div className="grid grid-cols-3 md:grid-cols-4 gap-3 text-center pt-2">
+                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">UR</span><span className="text-sm font-black text-white block mt-0.5">40%</span></div>
+                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">EBC</span><span className="text-sm font-black text-indigo-400 block mt-0.5">18%</span></div>
+                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">SC</span><span className="text-sm font-black text-white block mt-0.5">16%</span></div>
+                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">BC</span><span className="text-sm font-black text-indigo-400 block mt-0.5">12%</span></div>
+                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">EWS</span><span className="text-sm font-black text-white block mt-0.5">10%</span></div>
+                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">RCG</span><span className="text-sm font-black text-pink-400 block mt-0.5">3%</span></div>
+                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">ST</span><span className="text-sm font-black text-white block mt-0.5">1%</span></div>
+                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">DQ</span><span className="text-sm font-black text-emerald-400 block mt-0.5">5%</span></div>
+                      </div>
+                   </div>
+                </div>
+             </div>
+
+             {/* Two Column Grid: Steps & Documents */}
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="glass-panel border-indigo-500/30 space-y-6">
+                   <div className="flex items-center gap-3 border-b border-white/10 pb-4">
+                      <div className="w-10 h-10 bg-indigo-500/20 rounded-xl flex items-center justify-center border border-indigo-500/30 text-indigo-400">
+                         <Layers size={20} />
+                      </div>
+                      <div>
+                         <h3 className="text-base font-black text-white uppercase tracking-tight">5-Step Counselling Roadmap</h3>
+                         <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">From Registration to College Admission</p>
+                      </div>
+                   </div>
+                   <div className="space-y-6 pt-2">
+                      {[
+                         { step: "01", title: "Online Registration & Fee Payment", desc: "Register on BCECEB portal using JEE Main 2026 application number and pay the counselling registration fee." },
+                         { step: "02", title: "Online Choice Filling & Locking", desc: "Select your preferred engineering colleges and branches in decreasing order of priority. Lock choices before the deadline." },
+                         { step: "03", title: "First Round Seat Allotment", desc: "Download Provisional Allotment Order. If satisfied, freeze the seat; otherwise, opt for 'Auto-Upgradation' for Round 2." },
+                         { step: "04", title: "Document Verification (DV)", desc: "Report physically to the designated Nodal Centre with all original certificates, allotment order, and 6 photographs." },
+                         { step: "05", title: "Final Admission / Fee Payment", desc: "Complete the admission formalities at the allotted college by submitting the required verification slip and admission fees." }
+                      ].map(s => (
+                         <div key={s.step} className="flex gap-5 items-start bg-white/5 p-5 rounded-2xl border border-white/5 hover:border-indigo-500/30 transition-colors">
+                            <div className="text-3xl font-[1000] text-indigo-500/40 font-mono leading-none pt-0.5">{s.step}</div>
+                            <div className="space-y-1">
+                               <h4 className="text-white font-black text-xs uppercase tracking-wider">{s.title}</h4>
+                               <p className="text-xs text-slate-400 leading-relaxed font-medium">{s.desc}</p>
+                            </div>
+                         </div>
+                      ))}
+                   </div>
+                </div>
+
+                <div className="glass-panel border-indigo-500/30 space-y-6 flex flex-col justify-between">
+                   <div>
+                      <div className="flex items-center gap-3 border-b border-white/10 pb-4">
+                         <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30 text-emerald-400">
+                            <ShieldCheck size={20} />
+                         </div>
+                         <div>
+                            <h3 className="text-base font-black text-white uppercase tracking-tight">Mandatory Document Checklist</h3>
+                            <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Originals Required at Nodal Centre</p>
+                         </div>
+                      </div>
+                      <ul className="space-y-3.5 text-xs font-medium text-slate-300 pt-6">
+                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Downloaded Print of Online Filled Application Form (Part A & Part B)</li>
+                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> UGEAC 2026 Official Rank Card</li>
+                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> JEE Main 2026 Admit Card & NTA Score Card</li>
+                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Class 10th Marksheet, Passing Certificate & Admit Card (for Age Proof)</li>
+                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Class 12th (Intermediate) Marksheet & Passing Certificate</li>
+                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Bihar Permanent Residence (Domicile) Certificate</li>
+                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Caste / Category Certificate (SC/ST/BC/EBC/EWS) issued by CO/SDO</li>
+                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Six Copies of Passport Size Photographs (same as pasted on JEE Main Admit Card)</li>
+                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Aadhar Card & Allotment Order (3 copies)</li>
+                      </ul>
+                   </div>
+                </div>
+             </div>
+
+             {/* Live Support Banner */}
+             <div className="glass-panel border-emerald-500/30 bg-emerald-500/5 p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex items-center gap-6">
+                   <div className="w-16 h-16 bg-emerald-500/20 rounded-2xl flex items-center justify-center border border-emerald-500/20 shadow-inner">
+                      <Send size={32} className="text-emerald-400" />
+                   </div>
+                   <div>
+                      <h3 className="text-xl font-black text-white uppercase tracking-tighter">Live Support Community</h3>
+                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Join 5000+ Bihar Students for Real-time Help</p>
+                   </div>
+                </div>
+                <div className="flex gap-4 w-full md:w-auto">
+                   <a href="https://t.me/apnacollegebihar" target="_blank" rel="noreferrer" className="flex-1 md:flex-none px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all text-center shadow-lg shadow-emerald-500/20">Telegram Group</a>
+                   <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noreferrer" className="flex-1 md:flex-none px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all text-center border border-white/10 shadow-xl">WhatsApp Channel</a>
                 </div>
              </div>
           </div>
