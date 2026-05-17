@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Info } from 'lucide-react';
+import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Info, Download, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import jsPDF from 'jspdf';
+
 export default function BeuSyllabus() {
   const [syllabusData, setSyllabusData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
   
   const [selectedSem, setSelectedSem] = useState('sem1');
   const [selectedBranch, setSelectedBranch] = useState('cse');
@@ -46,7 +49,144 @@ export default function BeuSyllabus() {
     { id: 'eee', label: 'Electrical & Electronics' },
   ];
 
-  // We will just use ReactMarkdown instead of custom render logic
+  const handleDownloadPdf = () => {
+    if (!currentSyllabus) return;
+    setIsDownloading(true);
+
+    try {
+      const doc = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = doc.internal.pageSize.getWidth(); // 210
+      const pageHeight = doc.internal.pageSize.getHeight(); // 297
+      const margin = 20;
+      const maxW = pageWidth - margin * 2; // 170
+
+      let cursorY = margin + 25; // Start below header
+      let pageCount = 1;
+
+      const branchLabel = branches.find(b => b.id === selectedBranch)?.label || selectedBranch.toUpperCase();
+      const semLabel = semesters.find(s => s.id === selectedSem)?.label || selectedSem.toUpperCase();
+
+      // Helper to add Header & Watermark to a page
+      const addPageDecoration = (pageNum) => {
+        // 1. Watermark (Diagonal in center)
+        doc.setTextColor(240, 243, 248); // Very light grey/blue watermark
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(42);
+        doc.text('APNA COLLEGE BIHAR', pageWidth / 2, pageHeight / 2 + 10, { align: 'center', angle: 45 });
+
+        // 2. Header Box & Logo
+        doc.setFillColor(79, 70, 229); // Indigo 600 top accent bar
+        doc.rect(0, 0, pageWidth, 6, 'F');
+
+        // Header Text
+        doc.setTextColor(15, 23, 42); // Slate 900
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.text('APNA COLLEGE BIHAR', margin + 14, margin + 5);
+
+        doc.setTextColor(79, 70, 229); // Indigo 600
+        doc.setFontSize(10); doc.setFont('helvetica', 'bold');
+        doc.text('OFFICIAL BEU SYLLABUS', margin + 14, margin + 11);
+
+        // Subtitle (Branch & Sem)
+        doc.setTextColor(100, 116, 139); // Slate 500
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+        doc.text(`${branchLabel} • ${semLabel}`, margin + 14, margin + 16);
+
+        // Draw a line under header
+        doc.setDrawColor(226, 232, 240); // Slate 200
+        doc.setLineWidth(0.5);
+        doc.line(margin, margin + 20, pageWidth - margin, margin + 20);
+
+        // Footer
+        doc.setFontSize(8); doc.setTextColor(148, 163, 184);
+        doc.text(`Page ${pageNum}`, pageWidth / 2, pageHeight - 12, { align: 'center' });
+        doc.text('https://apnacollegebihar.online', margin, pageHeight - 12);
+        doc.text('GEC Sheikhpura Hub', pageWidth - margin, pageHeight - 12, { align: 'right' });
+      };
+
+      // Try loading ACB logo image for header
+      const imgEl = new Image();
+      imgEl.src = '/logo-acb.png';
+      imgEl.onload = () => { generateContent(imgEl); };
+      imgEl.onerror = () => { generateContent(null); };
+
+      const generateContent = (logoImg) => {
+        if (logoImg) {
+          doc.addImage(logoImg, 'PNG', margin, margin - 1, 11, 11);
+        }
+        addPageDecoration(1);
+
+        const checkPageBreak = (neededHeight) => {
+          if (cursorY + neededHeight > pageHeight - margin - 15) {
+            doc.addPage(); pageCount++;
+            cursorY = margin + 25;
+            if (logoImg) doc.addImage(logoImg, 'PNG', margin, margin - 1, 11, 11);
+            addPageDecoration(pageCount);
+          }
+        };
+
+        const lines = currentSyllabus.content.split('\n');
+        for (let line of lines) {
+          line = line.trim();
+          if (!line) { cursorY += 3; continue; }
+
+          if (line.startsWith('## 📘') || line.startsWith('## ')) {
+            checkPageBreak(18); cursorY += 6;
+            const cleanTitle = line.replace('## 📘', '').replace('##', '').trim();
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(67, 56, 202); // Indigo 700
+            const splitTitle = doc.splitTextToSize(cleanTitle, maxW);
+            doc.text(splitTitle, margin, cursorY);
+            cursorY += splitTitle.length * 6 + 2;
+            doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
+            doc.line(margin, cursorY - 3, pageWidth - margin, cursorY - 3);
+            cursorY += 4;
+          } else if (line.startsWith('### 📌') || line.startsWith('### ')) {
+            checkPageBreak(12); cursorY += 4;
+            const cleanSub = line.replace('### 📌', '').replace('###', '').trim();
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(79, 70, 229);
+            const splitSub = doc.splitTextToSize(cleanSub, maxW);
+            doc.text(splitSub, margin, cursorY);
+            cursorY += splitSub.length * 5 + 2;
+          } else if (line.startsWith('####')) {
+            checkPageBreak(10); cursorY += 3;
+            const cleanH4 = line.replace('####', '').trim();
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(15, 23, 42);
+            const splitH4 = doc.splitTextToSize(cleanH4, maxW);
+            doc.text(splitH4, margin, cursorY);
+            cursorY += splitH4.length * 5 + 1;
+          } else if (line.startsWith('**Course Code:**') || line.startsWith('**')) {
+            checkPageBreak(8);
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
+            const splitCC = doc.splitTextToSize(line.replace(/\*\*/g, ''), maxW);
+            doc.text(splitCC, margin, cursorY);
+            cursorY += splitCC.length * 5 + 2;
+          } else if (line.startsWith('- ') || line.startsWith('* ')) {
+            checkPageBreak(8);
+            const cleanBullet = line.substring(2).trim();
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
+            doc.text('•', margin + 2, cursorY);
+            const splitBullet = doc.splitTextToSize(cleanBullet, maxW - 6);
+            doc.text(splitBullet, margin + 6, cursorY);
+            cursorY += splitBullet.length * 5 + 1;
+          } else {
+            checkPageBreak(8);
+            doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
+            const splitText = doc.splitTextToSize(line, maxW);
+            doc.text(splitText, margin, cursorY);
+            cursorY += splitText.length * 5 + 1;
+          }
+        }
+
+        doc.save(`ACB_${selectedBranch.toUpperCase()}_${selectedSem.toUpperCase()}_Syllabus.pdf`);
+        setIsDownloading(false);
+      };
+
+    } catch (err) {
+      console.error("PDF generation error:", err);
+      setIsDownloading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 font-['Inter'] pb-24">
@@ -106,7 +246,7 @@ export default function BeuSyllabus() {
 
         {/* Content Area */}
         <div className="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden min-h-[400px]">
-          <div className="p-6 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+          <div className="p-6 bg-slate-50 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">
                 {branches.find(b => b.id === selectedBranch)?.label}
@@ -115,9 +255,24 @@ export default function BeuSyllabus() {
                 {semesters.find(s => s.id === selectedSem)?.label}
               </p>
             </div>
-            <div className="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center">
-              <Info size={20} />
-            </div>
+            
+            {currentSyllabus && (
+              <button 
+                onClick={handleDownloadPdf}
+                disabled={isDownloading}
+                className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-400 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-indigo-900/20 transition-all active:scale-95 ml-auto"
+              >
+                {isDownloading ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" /> Generating PDF...
+                  </>
+                ) : (
+                  <>
+                    <Download size={16} /> Download PDF Syllabus
+                  </>
+                )}
+              </button>
+            )}
           </div>
           
           <div className="p-6 md:p-10">
