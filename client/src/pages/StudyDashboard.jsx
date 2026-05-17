@@ -98,7 +98,7 @@ export default function StudyDashboard() {
   const checkPermissions = async () => {
     if (!isNative) return;
     try {
-      const { enabled } = await AppBlocker.isAccessibilityServiceEnabled();
+      const { enabled } = await AppBlocker.checkAccessibility();
       setIsAccessibilityEnabled(enabled);
       
       const { granted } = await AppBlocker.checkOverlayPermission();
@@ -328,6 +328,74 @@ export default function StudyDashboard() {
                   <button onClick={() => saveGlobalSession()} className="flex-1 py-5 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-[1000] text-[10px] uppercase tracking-widest shadow-xl shadow-red-600/20 transition-all active:scale-95">
                     Stop & Save
                   </button>
+                </div>
+              )}
+
+              {/* Native App Blocker / Iron Focus Panel */}
+              {isNative && (
+                <div className="w-full bg-slate-50 border border-slate-200/80 rounded-[2rem] p-6 space-y-4 animate-in fade-in duration-500 font-['Inter']">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 bg-blue-600/10 text-blue-600 rounded-2xl">
+                      <Shield size={22} />
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-[1000] text-slate-900 uppercase tracking-tight">Iron Focus Shield (App Blocker)</h3>
+                      <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">Strict background app blocking</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 pt-2">
+                    {/* Accessibility Button */}
+                    <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200/60 shadow-sm">
+                      <div className="flex items-center gap-3">
+                        <AlertTriangle size={18} className={isAccessibilityEnabled ? "text-emerald-500" : "text-amber-500"} />
+                        <div>
+                          <p className="text-[11px] font-[1000] text-slate-800 uppercase tracking-tight">Accessibility Service</p>
+                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Blocks distracting apps</p>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={openAccessibility}
+                        className={`px-4 py-2.5 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isAccessibilityEnabled ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg active:scale-95'}`}
+                      >
+                        {isAccessibilityEnabled ? 'Enabled' : 'Enable'}
+                      </button>
+                    </div>
+
+                    {/* Overlay Button */}
+                    <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200/60 shadow-sm">
+                      <div className="flex items-center gap-3">
+                        <Timer size={18} className={isOverlayEnabled ? "text-emerald-500" : "text-amber-500"} />
+                        <div>
+                          <p className="text-[11px] font-[1000] text-slate-800 uppercase tracking-tight">Overlay Permission</p>
+                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Displays lock screen</p>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={openOverlay}
+                        className={`px-4 py-2.5 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isOverlayEnabled ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg active:scale-95'}`}
+                      >
+                        {isOverlayEnabled ? 'Enabled' : 'Enable'}
+                      </button>
+                    </div>
+
+                    {/* Whitelist Button */}
+                    <button 
+                      onClick={() => setShowWhitelist(true)}
+                      className="w-full mt-2 flex items-center justify-between p-5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl transition-all active:scale-95 shadow-xl group"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 bg-white/10 rounded-xl text-blue-400 group-hover:scale-110 transition-transform">
+                          <Activity size={18} />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-[11px] font-[1000] uppercase tracking-tight leading-none">Configure Whitelist</p>
+                          <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest mt-1.5">{(allowedPackages || '').split(',').filter(Boolean).length} Apps Allowed</p>
+                        </div>
+                      </div>
+                      <ArrowRight size={18} className="text-slate-400 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
