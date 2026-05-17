@@ -36,7 +36,6 @@ export default function Contact() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
-    setSubmitted(true);
     
     // 1. Save directly to Firestore database as a backup
     try {
@@ -51,8 +50,26 @@ export default function Contact() {
       console.error('Firestore ticket error:', err);
     }
 
-    // Note: Removed automatic mailto: forcing as it crashes the Android Capacitor WebView 
-    // with ERR_UNKNOWN_URL_SCHEME. The ticket is already successfully saved to Firestore above.
+    // 2. Send automatic email via FormSubmit API
+    try {
+      fetch("https://formsubmit.co/ajax/prince86944@gmail.com", {
+          method: "POST",
+          headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+              _subject: `ACB Support Ticket: ${formState.subject}`,
+              Student_Name: formState.name,
+              Student_Email: formState.email,
+              Category: formState.subject,
+              Message: formState.message,
+              _template: "table"
+          })
+      }).catch(err => console.log("Mail delivery error:", err));
+    } catch (err) {}
+
+    setSubmitted(true);
   };
 
   return (
