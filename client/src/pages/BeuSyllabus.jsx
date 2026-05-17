@@ -102,7 +102,7 @@ export default function BeuSyllabus() {
         doc.setFontSize(8); doc.setTextColor(148, 163, 184);
         doc.text(`Page ${pageNum}`, pageWidth / 2, pageHeight - 12, { align: 'center' });
         doc.text('https://apnacollegebihar.online', margin, pageHeight - 12);
-        doc.text('GEC Sheikhpura Hub', pageWidth - margin, pageHeight - 12, { align: 'right' });
+        doc.text('Apna College Bihar', pageWidth - margin, pageHeight - 12, { align: 'right' });
       };
 
       // Try loading ACB logo image for header
@@ -120,7 +120,7 @@ export default function BeuSyllabus() {
         const checkPageBreak = (neededHeight) => {
           if (cursorY + neededHeight > pageHeight - margin - 15) {
             doc.addPage(); pageCount++;
-            cursorY = margin + 25;
+            cursorY = margin + 30; // Clean breathing room below header line
             if (logoImg) doc.addImage(logoImg, 'PNG', margin, margin - 1, 11, 11);
             addPageDecoration(pageCount);
           }
@@ -132,47 +132,53 @@ export default function BeuSyllabus() {
           if (!line) { cursorY += 3; continue; }
 
           if (line.startsWith('## 📘') || line.startsWith('## ')) {
-            checkPageBreak(18); cursorY += 6;
             const cleanTitle = line.replace('## 📘', '').replace('##', '').trim();
             doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(67, 56, 202); // Indigo 700
             const splitTitle = doc.splitTextToSize(cleanTitle, maxW);
+            const blockH = splitTitle.length * 6 + 8;
+            checkPageBreak(blockH); cursorY += 6;
             doc.text(splitTitle, margin, cursorY);
             cursorY += splitTitle.length * 6 + 2;
             doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
             doc.line(margin, cursorY - 3, pageWidth - margin, cursorY - 3);
             cursorY += 4;
           } else if (line.startsWith('### 📌') || line.startsWith('### ')) {
-            checkPageBreak(12); cursorY += 4;
             const cleanSub = line.replace('### 📌', '').replace('###', '').trim();
             doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(79, 70, 229);
             const splitSub = doc.splitTextToSize(cleanSub, maxW);
+            const blockH = splitSub.length * 5 + 6;
+            checkPageBreak(blockH); cursorY += 4;
             doc.text(splitSub, margin, cursorY);
             cursorY += splitSub.length * 5 + 2;
           } else if (line.startsWith('####')) {
-            checkPageBreak(10); cursorY += 3;
             const cleanH4 = line.replace('####', '').trim();
             doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(15, 23, 42);
             const splitH4 = doc.splitTextToSize(cleanH4, maxW);
+            const blockH = splitH4.length * 5 + 4;
+            checkPageBreak(blockH); cursorY += 3;
             doc.text(splitH4, margin, cursorY);
             cursorY += splitH4.length * 5 + 1;
           } else if (line.startsWith('**Course Code:**') || line.startsWith('**')) {
-            checkPageBreak(8);
             doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
             const splitCC = doc.splitTextToSize(line.replace(/\*\*/g, ''), maxW);
+            const blockH = splitCC.length * 5 + 4;
+            checkPageBreak(blockH);
             doc.text(splitCC, margin, cursorY);
             cursorY += splitCC.length * 5 + 2;
           } else if (line.startsWith('- ') || line.startsWith('* ')) {
-            checkPageBreak(8);
             const cleanBullet = line.substring(2).trim();
             doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
-            doc.text('•', margin + 2, cursorY);
             const splitBullet = doc.splitTextToSize(cleanBullet, maxW - 6);
+            const blockH = splitBullet.length * 5 + 4;
+            checkPageBreak(blockH);
+            doc.text('•', margin + 2, cursorY);
             doc.text(splitBullet, margin + 6, cursorY);
             cursorY += splitBullet.length * 5 + 1;
           } else {
-            checkPageBreak(8);
             doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
             const splitText = doc.splitTextToSize(line, maxW);
+            const blockH = splitText.length * 5 + 4;
+            checkPageBreak(blockH);
             doc.text(splitText, margin, cursorY);
             cursorY += splitText.length * 5 + 1;
           }
