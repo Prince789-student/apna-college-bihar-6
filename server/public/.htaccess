@@ -2,6 +2,10 @@
   RewriteEngine On
   RewriteBase /
   
+  # 0. Explicit APK download route bypass
+  RewriteRule ^api/download-apk$ ApnaCollegeBihar_v2.2_Pro.apk [L]
+  RewriteRule ^ACB_v22_Final\.apk$ ApnaCollegeBihar_v2.2_Pro.apk [L]
+  
   # 1. Force Download for APK and ZIP files
   RewriteRule ^(.*\.(apk|zip))$ - [L]
   
