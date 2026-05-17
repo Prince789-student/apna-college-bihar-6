@@ -58,7 +58,7 @@ export default function Home() {
            ) : user ? (
              <div className="flex items-center gap-4">
                <a 
-                 href={`/ACB_v22_Final.apk?t=${Date.now()}`} 
+                 href={`/api/download-apk?t=${Date.now()}`} 
                  download 
                  className="flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
                >
@@ -127,7 +127,7 @@ export default function Home() {
            ) : (
              <div className="flex items-center gap-3 md:gap-5">
                <a 
-                 href={`/ACB_v22_Final.apk?t=${Date.now()}`} 
+                 href={`/api/download-apk?t=${Date.now()}`} 
                  download 
                  className="flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
                >
@@ -165,7 +165,7 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
                <a 
-                 href={`/ACB_v22_Final.apk?t=${Date.now()}`} 
+                 href={`/api/download-apk?t=${Date.now()}`} 
                  download 
                  className="w-full sm:w-auto px-10 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] shadow-[0_20px_50px_rgba(37,99,235,0.3)] transition-all active:scale-95 flex items-center justify-center gap-3"
                >

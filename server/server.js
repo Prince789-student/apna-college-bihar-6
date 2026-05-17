@@ -12,8 +12,14 @@ const app = express();
 // 1. ABSOLUTE PRIORITY: APK DOWNLOAD ROUTE
 // This must be BEFORE any other middleware to avoid SPA interception
 app.get('/api/download-apk', (req, res) => {
-    const apkPath = path.join(__dirname, 'downloads', 'ACB.apk');
+    const apkPath1 = path.join(__dirname, 'downloads', 'ACB.apk');
+    const apkPath2 = path.join(__dirname, 'public', 'ACB_v22_Final.apk');
+    const apkPath = fs.existsSync(apkPath1) ? apkPath1 : apkPath2;
+    
     if (fs.existsSync(apkPath)) {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
         res.setHeader('Content-Type', 'application/vnd.android.package-archive');
         res.setHeader('Content-Disposition', 'attachment; filename="ApnaCollegeBihar_Stable.apk"');
         return res.sendFile(apkPath);
