@@ -51,18 +51,8 @@ export default function Contact() {
       console.error('Firestore ticket error:', err);
     }
 
-    // 2. Force open email app across all platforms (Native Android/iOS & Web)
-    const mailUrl = `mailto:prince86944@gmail.com?subject=${encodeURIComponent('ACB Support Ticket: ' + formState.subject)}&body=${encodeURIComponent('Student Name: ' + formState.name + '\nStudent Email: ' + formState.email + '\n\nQuery / Feedback:\n' + formState.message)}`;
-    
-    try {
-      window.open(mailUrl, '_system');
-    } catch (err) {}
-    
-    try {
-      window.open(mailUrl, '_blank');
-    } catch (err) {}
-
-    window.location.href = mailUrl;
+    // Note: Removed automatic mailto: forcing as it crashes the Android Capacitor WebView 
+    // with ERR_UNKNOWN_URL_SCHEME. The ticket is already successfully saved to Firestore above.
   };
 
   return (
@@ -161,9 +151,17 @@ export default function Contact() {
                 <p className="text-xs font-medium text-slate-300 leading-relaxed">
                   Thank you for reaching out! Our support team has received your query and will contact you via email shortly.
                 </p>
-                <button onClick={() => setSubmitted(false)} className="px-6 py-3 bg-blue-600 text-white font-black text-[10px] uppercase tracking-widest rounded-xl shadow-lg active:scale-95 transition-all">
-                  Send Another Message
-                </button>
+                <div className="flex flex-col gap-3 pt-2">
+                  <a 
+                    href={`mailto:prince86944@gmail.com?subject=${encodeURIComponent('ACB Support Ticket: ' + formState.subject)}&body=${encodeURIComponent('Student Name: ' + formState.name + '\nStudent Email: ' + formState.email + '\n\nQuery / Feedback:\n' + formState.message)}`}
+                    className="w-full py-3.5 bg-white/5 hover:bg-white/10 text-white font-black text-[10px] uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 border border-white/10"
+                  >
+                    <Mail size={16} /> Open in Email App (Optional)
+                  </a>
+                  <button onClick={() => { setSubmitted(false); setFormState({...formState, message: ''}); }} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-[10px] uppercase tracking-widest rounded-xl shadow-lg active:scale-95 transition-all">
+                    Send Another Message
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
