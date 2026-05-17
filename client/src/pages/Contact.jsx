@@ -47,6 +47,9 @@ export default function Contact() {
         createdAt: new Date().toISOString()
       });
     } catch (err) {
+      console.error("Firestore backup failed:", err);
+    }
+    
     // 2. Submit form to FormSubmit via a hidden iframe to bypass AJAX restrictions and trigger activation
     const iframeName = 'hidden_iframe_' + Date.now();
     const iframe = document.createElement('iframe');

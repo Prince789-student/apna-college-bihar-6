@@ -20,6 +20,7 @@ const Signup = React.lazy(() => import('./pages/Signup'));
 const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const UgeacPredictor = React.lazy(() => import('./pages/UgeacPredictor'));
 const Notes = React.lazy(() => import('./pages/Notes'));
+const BeuSyllabus = React.lazy(() => import('./pages/BeuSyllabus'));
 const BeuCgpa = React.lazy(() => import('./pages/BeuCgpa'));
 const StudyDashboard = React.lazy(() => import('./pages/StudyDashboard'));
 const ScientificCalc = React.lazy(() => import('./pages/ScientificCalc'));
@@ -115,6 +116,7 @@ function App() {
               <Route path="/dashboard/attendance" element={<Attendance />} />
               <Route path="/dashboard/extras" element={<Extras />} />
               <Route path="/dashboard/calendar" element={<Calendar />} />
+              <Route path="/dashboard/syllabus" element={<BeuSyllabus />} />
               
               {/* Admin Routes */}
               <Route element={<AdminRoute />}>
