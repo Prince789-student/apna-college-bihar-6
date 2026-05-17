@@ -232,7 +232,7 @@ export default function BeuCgpa() {
             </div>
             <div className="flex items-center gap-2">
               <button 
-                onClick={() => window.open('https://results.beup.ac.in', '_blank')}
+                onClick={() => window.open('https://beu-bih.ac.in/result-one', '_blank')}
                 className="flex items-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all"
               >
                 <ExternalLink size={14} /> Open in New Tab
@@ -246,7 +246,7 @@ export default function BeuCgpa() {
               <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Connecting to BEU Patna Server...</p>
             </div>
             <iframe 
-              src="https://results.beup.ac.in" 
+              src="https://beu-bih.ac.in/result-one" 
               title="BEU Official Results Portal"
               className="w-full h-full relative z-10 border-0 bg-white"
               sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
