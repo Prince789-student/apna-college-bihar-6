@@ -47,27 +47,37 @@ export default function Contact() {
         createdAt: new Date().toISOString()
       });
     } catch (err) {
-      console.error('Firestore ticket error:', err);
-    }
+    // 2. Submit form to FormSubmit via a hidden iframe to bypass AJAX restrictions and trigger activation
+    const iframeName = 'hidden_iframe_' + Date.now();
+    const iframe = document.createElement('iframe');
+    iframe.name = iframeName;
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
 
-    // 2. Send automatic email via FormSubmit API
-    try {
-      fetch("https://formsubmit.co/ajax/prince86944@gmail.com", {
-          method: "POST",
-          headers: { 
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-              _subject: `ACB Support Ticket: ${formState.subject}`,
-              Student_Name: formState.name,
-              Student_Email: formState.email,
-              Category: formState.subject,
-              Message: formState.message,
-              _template: "table"
-          })
-      }).catch(err => console.log("Mail delivery error:", err));
-    } catch (err) {}
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://formsubmit.co/prince86944@gmail.com';
+    form.target = iframeName;
+    form.style.display = 'none';
+
+    form.innerHTML = `
+      <input type="hidden" name="_subject" value="ACB Support Ticket: ${formState.subject}">
+      <input type="hidden" name="Student Name" value="${formState.name}">
+      <input type="hidden" name="Student Email" value="${formState.email}">
+      <input type="hidden" name="Category" value="${formState.subject}">
+      <input type="hidden" name="Message" value="${formState.message}">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_template" value="table">
+    `;
+
+    document.body.appendChild(form);
+    form.submit();
+
+    // Clean up DOM after submission
+    setTimeout(() => {
+        try { document.body.removeChild(form); } catch(e){}
+        try { document.body.removeChild(iframe); } catch(e){}
+    }, 5000);
 
     setSubmitted(true);
   };
@@ -169,12 +179,6 @@ export default function Contact() {
                   Thank you for reaching out! Our support team has received your query and will contact you via email shortly.
                 </p>
                 <div className="flex flex-col gap-3 pt-2">
-                  <a 
-                    href={`mailto:prince86944@gmail.com?subject=${encodeURIComponent('ACB Support Ticket: ' + formState.subject)}&body=${encodeURIComponent('Student Name: ' + formState.name + '\nStudent Email: ' + formState.email + '\n\nQuery / Feedback:\n' + formState.message)}`}
-                    className="w-full py-3.5 bg-white/5 hover:bg-white/10 text-white font-black text-[10px] uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 border border-white/10"
-                  >
-                    <Mail size={16} /> Open in Email App (Optional)
-                  </a>
                   <button onClick={() => { setSubmitted(false); setFormState({...formState, message: ''}); }} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-[10px] uppercase tracking-widest rounded-xl shadow-lg active:scale-95 transition-all">
                     Send Another Message
                   </button>
