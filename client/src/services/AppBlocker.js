@@ -3,8 +3,7 @@ import { registerPlugin } from '@capacitor/core';
 // Safe Plugin Registration with Web Fallback
 let AppBlocker = null;
 try {
-  // Only attempt to register if Capacitor is truly present (Native)
-  if (typeof window !== 'undefined' && window.Capacitor && window.Capacitor.isNativePlatform()) {
+  if (typeof window !== 'undefined' && window.Capacitor) {
     AppBlocker = registerPlugin('AppBlocker');
   }
 } catch (error) {

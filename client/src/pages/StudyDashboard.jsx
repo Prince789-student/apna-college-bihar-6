@@ -68,18 +68,34 @@ export default function StudyDashboard() {
   const [newTask, setNewTask] = useState('');
   const [newTaskSubject, setNewTaskSubject] = useState('OTHERS');
 
-  const isNative = Capacitor.isNativePlatform();
+  const [isNative, setIsNative] = useState(() => {
+    return Capacitor.isNativePlatform() || (typeof window !== 'undefined' && window.Capacitor && (window.Capacitor.isNativePlatform?.() || window.Capacitor.isPluginAvailable?.('AppBlocker'))) || Capacitor.isPluginAvailable('AppBlocker');
+  });
+
+  useEffect(() => {
+    const checkBridge = () => {
+      if (Capacitor.isNativePlatform() || (typeof window !== 'undefined' && window.Capacitor && (window.Capacitor.isNativePlatform?.() || window.Capacitor.isPluginAvailable?.('AppBlocker'))) || Capacitor.isPluginAvailable('AppBlocker')) {
+        setIsNative(true);
+      }
+    };
+    checkBridge();
+    const timer1 = setTimeout(checkBridge, 1000);
+    const timer2 = setTimeout(checkBridge, 3000);
+    return () => { clearTimeout(timer1); clearTimeout(timer2); };
+  }, []);
 
   const [isAccessibilityEnabled, setIsAccessibilityEnabled] = useState(false);
   const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
 
   const openAccessibility = async () => {
     try {
-      // Test the plugin first
-      const test = await AppBlocker.testPlugin();
-      console.log("Plugin Test:", test);
-      
-      await AppBlocker.openAccessibilitySettings();
+      if (AppBlocker && AppBlocker.testPlugin) {
+        const test = await AppBlocker.testPlugin();
+        console.log("Plugin Test:", test);
+      }
+      if (AppBlocker && AppBlocker.openAccessibilitySettings) {
+        await AppBlocker.openAccessibilitySettings();
+      }
     } catch (e) {
       console.log("Plugin Error:", e);
       alert("AppBlocker Plugin Error: " + JSON.stringify(e));
@@ -88,7 +104,9 @@ export default function StudyDashboard() {
 
   const openOverlay = async () => {
     try {
-      await AppBlocker.requestOverlayPermission();
+      if (AppBlocker && AppBlocker.requestOverlayPermission) {
+        await AppBlocker.requestOverlayPermission();
+      }
     } catch (e) {
       console.log(e);
       alert(JSON.stringify(e));
@@ -96,18 +114,20 @@ export default function StudyDashboard() {
   };
 
   const checkPermissions = async () => {
-    if (!isNative) return;
     try {
-      const { enabled } = await AppBlocker.checkAccessibility();
-      setIsAccessibilityEnabled(enabled);
-      
-      const { granted } = await AppBlocker.checkOverlayPermission();
-      setIsOverlayEnabled(granted);
+      if (AppBlocker && AppBlocker.checkAccessibility) {
+        const { enabled } = await AppBlocker.checkAccessibility();
+        setIsAccessibilityEnabled(enabled);
+      }
+      if (AppBlocker && AppBlocker.checkOverlayPermission) {
+        const { granted } = await AppBlocker.checkOverlayPermission();
+        setIsOverlayEnabled(granted);
+      }
     } catch (err) { console.error("Permission Check Failed:", err); }
   };
 
   useEffect(() => {
-    if (isNative) {
+    if (isNative || Capacitor.isPluginAvailable('AppBlocker')) {
       fetchApps();
       checkPermissions();
       const interval = setInterval(checkPermissions, 5000);

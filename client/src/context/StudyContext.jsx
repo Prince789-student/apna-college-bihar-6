@@ -32,8 +32,10 @@ export function StudyProvider({ children }) {
   const [installedApps, setInstalledApps] = useState([]);
   const timerRef = useRef(null);
 
+  const isNativeApp = () => Capacitor.isNativePlatform() || (typeof window !== 'undefined' && window.Capacitor && (window.Capacitor.isNativePlatform?.() || window.Capacitor.isPluginAvailable?.('AppBlocker'))) || Capacitor.isPluginAvailable('AppBlocker');
+
   const fetchApps = async () => {
-    if (!Capacitor.isNativePlatform()) return;
+    if (!isNativeApp()) return;
     try {
       const AppBlocker = Capacitor.Plugins.AppBlocker;
       if (AppBlocker) {
@@ -44,7 +46,7 @@ export function StudyProvider({ children }) {
   };
 
   useEffect(() => {
-    if (Capacitor.isNativePlatform()) {
+    if (isNativeApp()) {
       fetchApps();
       
       try {
@@ -60,7 +62,7 @@ export function StudyProvider({ children }) {
   const setAllowedPackages = (val) => {
     _setAllowedPackages(val);
     localStorage.setItem('allowedPackages', JSON.stringify(val));
-    if (Capacitor.isNativePlatform()) {
+    if (isNativeApp()) {
       Preferences.set({ key: 'allowedPackages', value: val });
       try {
         const pkgArray = (val || '').split(',').filter(Boolean);
@@ -76,7 +78,7 @@ export function StudyProvider({ children }) {
     _setTimerActive(val);
     localStorage.setItem('timerActive', JSON.stringify(val));
     
-    if (Capacitor.isNativePlatform()) {
+    if (isNativeApp()) {
       try {
         if (val) {
           Capacitor.Plugins.AppBlocker.setBlockerActive({ active: true });
@@ -245,13 +247,13 @@ export function StudyProvider({ children }) {
     installedApps,
     fetchApps,
     launchApp: async (pkg) => {
-      if (!Capacitor.isNativePlatform()) return;
+      if (!isNativeApp()) return;
       try {
         await Capacitor.Plugins.AppBlocker.launchApp({ packageName: pkg });
       } catch (e) { console.error(e); }
     },
     openAccessibilitySettings: async () => {
-      if (!Capacitor.isNativePlatform()) return;
+      if (!isNativeApp()) return;
       try {
         await Capacitor.Plugins.AppBlocker.openAccessibilitySettings();
       } catch (e) { console.error(e); }
