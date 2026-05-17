@@ -20,6 +20,10 @@ public class AppBlockerService extends AccessibilityService {
     private static final String KEY_ALLOWED_PACKAGES_LEGACY = "_cap_allowedPackages";
     private static final String KEY_ALLOWED_PACKAGES_CLEAN = "allowedPackages";
 
+    public static volatile boolean sIsActive = false;
+    public static volatile long sCountdownEnd = 0;
+    public static final Set<String> sAllowedPackages = new HashSet<>();
+
     private boolean getBooleanSafe(SharedPreferences prefs, String key) {
         try {
             return prefs.getBoolean(key, false);
@@ -75,8 +79,8 @@ public class AppBlockerService extends AccessibilityService {
 
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        boolean isActive = getBooleanSafe(prefs, KEY_IS_ACTIVE_LEGACY) || getBooleanSafe(prefs, KEY_IS_ACTIVE_CLEAN);
-        long endTime = Math.max(getLongSafe(prefs, KEY_COUNTDOWN_END_LEGACY), getLongSafe(prefs, KEY_COUNTDOWN_END_CLEAN));
+        boolean isActive = sIsActive || getBooleanSafe(prefs, KEY_IS_ACTIVE_LEGACY) || getBooleanSafe(prefs, KEY_IS_ACTIVE_CLEAN);
+        long endTime = Math.max(sCountdownEnd, Math.max(getLongSafe(prefs, KEY_COUNTDOWN_END_LEGACY), getLongSafe(prefs, KEY_COUNTDOWN_END_CLEAN)));
         boolean timerRunning = endTime > System.currentTimeMillis();
 
         Log.d(TAG, "onAccessibilityEvent pkg: " + packageName + ", isActive: " + isActive + ", timerRunning: " + timerRunning);
@@ -86,6 +90,9 @@ public class AppBlockerService extends AccessibilityService {
         }
 
         Set<String> allowedPackages = new HashSet<>();
+        synchronized (sAllowedPackages) {
+            allowedPackages.addAll(sAllowedPackages);
+        }
         allowedPackages.addAll(getStringSetSafe(prefs, KEY_ALLOWED_PACKAGES_LEGACY));
         allowedPackages.addAll(getStringSetSafe(prefs, KEY_ALLOWED_PACKAGES_CLEAN));
 

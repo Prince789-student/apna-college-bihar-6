@@ -93,7 +93,10 @@ public class AppBlockerPlugin extends Plugin {
                 .putString(KEY_COUNTDOWN_END, String.valueOf(endTime))
                 .putBoolean(KEY_IS_ACTIVE, true)
                 .putString(KEY_IS_ACTIVE, "true")
-                .apply();
+                .commit();
+
+        AppBlockerService.sIsActive = true;
+        AppBlockerService.sCountdownEnd = endTime;
 
         JSObject ret = new JSObject();
         ret.put("endTime", endTime);
@@ -115,7 +118,10 @@ public class AppBlockerPlugin extends Plugin {
                 .putString(KEY_IS_ACTIVE, "false")
                 .putLong(KEY_COUNTDOWN_END, 0)
                 .putString(KEY_COUNTDOWN_END, "0")
-                .apply();
+                .commit();
+
+        AppBlockerService.sIsActive = false;
+        AppBlockerService.sCountdownEnd = 0;
 
         call.resolve();
     }
@@ -139,7 +145,9 @@ public class AppBlockerPlugin extends Plugin {
         prefs.edit()
                 .putBoolean(KEY_IS_ACTIVE, active)
                 .putString(KEY_IS_ACTIVE, active ? "true" : "false")
-                .apply();
+                .commit();
+
+        AppBlockerService.sIsActive = active;
 
         call.resolve();
     }
@@ -172,7 +180,12 @@ public class AppBlockerPlugin extends Plugin {
 
             prefs.edit()
                     .putStringSet(KEY_ALLOWED_PACKAGES, allowedSet)
-                    .apply();
+                    .commit();
+
+            synchronized (AppBlockerService.sAllowedPackages) {
+                AppBlockerService.sAllowedPackages.clear();
+                AppBlockerService.sAllowedPackages.addAll(allowedSet);
+            }
 
             call.resolve();
 

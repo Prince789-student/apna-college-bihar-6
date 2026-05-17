@@ -4,9 +4,7 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**",
-      "**/*.apk",
-      "**/*.exe"
+      "**/node_modules/**"
     ],
     "headers": [
       {
