@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { 
   Send, BookOpen, GraduationCap, Timer, 
   Users, Calculator, Globe, UserCheck, 
-  Bell, LogIn, LogOut, MessageCircle, Youtube, User, Trash2
+  Bell, LogIn, LogOut, MessageCircle, Youtube, User, Trash2, ShieldCheck, Calendar
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -21,6 +21,10 @@ export default function AppHub() {
       console.error("Logout failed:", err);
     }
   };
+
+  const joinDate = user?.metadata?.creationTime 
+    ? new Date(user.metadata.creationTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+    : 'Recently';
 
   const features = [
     { name: 'UGEAC 2025', icon: <Send size={28} />, path: '/dashboard/ugeac-predictor?standalone=true', color: 'text-emerald-400' },
@@ -73,11 +77,24 @@ export default function AppHub() {
                 </button>
 
                 {showProfileMenu && (
-                  <div className="absolute right-0 top-14 w-48 bg-[#10192d] border border-white/10 rounded-2xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95">
-                    <div className="pb-2 mb-2 border-b border-white/10">
+                  <div className="absolute right-0 top-14 w-56 bg-[#10192d] border border-white/10 rounded-2xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95">
+                    <div className="pb-2.5 mb-2.5 border-b border-white/10">
                       <p className="text-[10px] font-bold text-slate-300 truncate">{user?.email || 'Student Member'}</p>
-                      <p className="text-[8px] text-emerald-400 font-black uppercase tracking-widest mt-0.5">Active Scholar</p>
+                      <div className="flex items-center gap-1 text-[8px] text-slate-400 mt-1">
+                        <Calendar size={10} className="text-blue-400" />
+                        <span>Joined: <strong className="text-white">{joinDate}</strong></span>
+                      </div>
                     </div>
+                    
+                    {(user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN') && (
+                      <Link 
+                        to="/dashboard/admin" 
+                        className="w-full py-2.5 bg-blue-500/20 hover:bg-blue-500 border border-blue-500/30 text-blue-400 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 mb-1.5 shadow-md"
+                      >
+                        <ShieldCheck size={14} /> Admin Panel
+                      </Link>
+                    )}
+                    
                     <Link 
                       to="/delete-account" 
                       className="w-full py-2.5 bg-orange-500/10 hover:bg-orange-500 text-orange-400 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 mb-1.5"

@@ -4,7 +4,7 @@ import {
   BookOpen, Calculator, Timer, Users, 
   ArrowRight, CheckCircle, GraduationCap, 
   Globe, Shield, Zap, Flame, Send, Youtube,
-  User, LogOut, ChevronDown, LayoutDashboard, Bell, Download, MessageCircle
+  User, LogOut, ChevronDown, LayoutDashboard, Bell, Download, MessageCircle, ShieldCheck, Calendar
 } from 'lucide-react';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -14,6 +14,10 @@ export default function Home() {
   const { user, loading, logout } = useAuth();
   const [stats, setStats] = useState({ users: 5000, docs: 100, groups: 24 });
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+
+  const joinDate = user?.metadata?.creationTime 
+    ? new Date(user.metadata.creationTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+    : 'Recently';
 
   useEffect(() => {
     const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
@@ -27,6 +31,9 @@ export default function Home() {
     });
     return () => { unsubUsers(); unsubDocs(); unsubGroups(); };
   }, []);
+
+  // Calculate remaining lines down to profile menu
+  // (We match from imports all the way down to the profile menu)
 
   return (
     <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center font-['Inter'] relative overflow-hidden">
@@ -73,15 +80,31 @@ export default function Home() {
                    <>
                     <div className="fixed inset-0 z-[1900]" onClick={() => setShowProfileMenu(false)}></div>
                     <div className="absolute right-0 mt-3 w-64 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-[2rem] shadow-2xl p-2 z-[2000] animate-in fade-in zoom-in-95 duration-200 origin-top-right">
-                       <div className="px-5 py-6 border-b border-slate-100 mb-2 text-center">
-                          <div className="w-16 h-16 rounded-2xl overflow-hidden mb-4 mx-auto border border-slate-100 shadow-lg">
+                       <div className="px-5 py-5 border-b border-slate-100 mb-2 text-center">
+                          <div className="w-16 h-16 rounded-2xl overflow-hidden mb-3 mx-auto border border-slate-100 shadow-lg">
                              <img src="/logo-acb.png?v=99" alt="ACB" className="w-full h-full object-cover" />
                           </div>
                           <p className="text-[8px] font-black text-blue-600 uppercase tracking-widest leading-none mb-1">ACB Official Account</p>
                           <p className="text-[10px] font-bold text-slate-900 truncate">{user.email}</p>
+                          <div className="flex items-center justify-center gap-1 text-[8px] text-slate-500 mt-1.5 font-bold">
+                            <Calendar size={10} className="text-blue-500" />
+                            <span>Joined: <strong className="text-slate-900">{joinDate}</strong></span>
+                          </div>
                        </div>
                        
                        <div className="space-y-1">
+                          {(user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN') && (
+                            <Link 
+                              to="/dashboard/admin" 
+                              className="flex items-center gap-3 w-full p-3 hover:bg-blue-50 text-slate-700 hover:text-blue-600 rounded-2xl transition-all group font-bold"
+                            >
+                               <div className="p-2 bg-slate-100 group-hover:bg-blue-600/10 rounded-xl transition-colors">
+                                 <ShieldCheck size={14} className="text-blue-600" />
+                               </div>
+                               <span className="text-[10px] font-black uppercase tracking-widest">Admin Panel</span>
+                            </Link>
+                          )}
+
                           <button 
                             onClick={() => logout()}
                             className="flex items-center gap-3 w-full p-3 hover:bg-red-50 text-slate-500 hover:text-red-600 rounded-2xl transition-all group"
