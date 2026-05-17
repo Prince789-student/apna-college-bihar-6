@@ -12,7 +12,7 @@ function UgeacPredictor() {
   const [gender, setGender] = useState('Male');
   const [catInput, setCatInput] = useState('');
   
-  const [mode, setMode] = useState('explore'); // explore, finder, wizard, guide
+  const [mode, setMode] = useState('finder'); // finder, guide
   const [targetColleges, setTargetColleges] = useState([]);
   const [targetBranches, setTargetBranches] = useState([]);
   const [choices, setChoices] = useState([]); 
@@ -450,9 +450,7 @@ function UgeacPredictor() {
               <h1>UGEAC <span className="highlight-text">PREDICTOR</span></h1>
               <p>Bihar's most accurate engineering admission AI. Predict your college choices based on historical round-wise cutoffs with 99% precision.</p>
               <div className="nav-pills">
-                 <button onClick={() => setMode('explore')} className={`nav-btn ${mode === 'explore' ? 'active' : ''}`}><LayoutGrid size={16} /> Explore</button>
                  <button onClick={() => setMode('finder')} className={`nav-btn ${mode === 'finder' ? 'active' : ''}`}><Search size={16} /> College Finder</button>
-                 <button onClick={() => setMode('wizard')} className={`nav-btn ${mode === 'wizard' ? 'active' : ''}`}><Zap size={16} /> Choice Wizard</button>
                  <button onClick={() => setMode('guide')} className={`nav-btn ${mode === 'guide' ? 'active' : ''}`}><BookOpen size={16} /> Guide</button>
               </div>
            </div>
