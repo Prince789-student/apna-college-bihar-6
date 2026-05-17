@@ -64,26 +64,33 @@ async function scrapePage(sem, branch, filename) {
         const html = response.data;
         const $ = cheerio.load(html);
         
-        // We will just extract the main syllabus container text.
-        // It looks like the syllabus text is either in .container or direct body elements.
+        const TurndownService = require('turndown');
+        const turndownService = new TurndownService();
+        
         let syllabusText = '';
         
-        // Look for headings and paragraphs
-        $('h3, h4, p, ul, ol').each((i, el) => {
-            const tagName = $(el)[0].name;
-            const text = $(el).text().trim().replace(/\s+/g, ' ');
-            if (text.length > 3 && !text.includes('GuideNova') && !text.includes('CONTACT US') && !text.includes('QUICK LINKS')) {
-                if (tagName.startsWith('h')) {
-                    syllabusText += `\n\n## ${text}\n`;
-                } else if (tagName === 'ul' || tagName === 'ol') {
-                    $(el).find('li').each((j, li) => {
-                        syllabusText += `- ${$(li).text().trim().replace(/\s+/g, ' ')}\n`;
-                    });
-                } else {
-                    syllabusText += `${text}\n`;
-                }
+        // Loop over each subject block in the HTML
+        $('.subject-title').each((i, el) => {
+            const subjectName = $(el).text().trim();
+            const contentHtml = $(el).next('.content').html();
+            
+            if (subjectName && contentHtml) {
+                syllabusText += `\n\n## ${subjectName}\n\n`;
+                const markdown = turndownService.turndown(contentHtml);
+                syllabusText += markdown;
             }
         });
+        
+        // If there were no .subject-title elements, try fallback parsing using <main>
+        if (!syllabusText) {
+            const mainContent = $('main').html() || $('body').html();
+            if (mainContent) {
+                let markdown = turndownService.turndown(mainContent);
+                // Clean up generic site content
+                markdown = markdown.replace(/GuideNova/g, '');
+                syllabusText = markdown;
+            }
+        }
         
         resultData.push({
             semester: sem,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
+import ReactMarkdown from 'react-markdown';
 export default function BeuSyllabus() {
   const [syllabusData, setSyllabusData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,53 +46,7 @@ export default function BeuSyllabus() {
     { id: 'eee', label: 'Electrical & Electronics' },
   ];
 
-  const renderContent = (content) => {
-    if (!content) return null;
-    
-    const lines = content.split('\n');
-    let elements = [];
-    let currentList = [];
-    
-    const flushList = () => {
-      if (currentList.length > 0) {
-        elements.push(<ul key={elements.length} className="list-disc pl-5 mb-4 text-slate-600 font-medium space-y-1">{currentList}</ul>);
-        currentList = [];
-      }
-    };
-
-    lines.forEach((line, index) => {
-      line = line.trim();
-      if (!line) return;
-
-      if (line.startsWith('## ')) {
-        flushList();
-        elements.push(
-          <h3 key={index} className="text-lg font-black text-indigo-700 mt-6 mb-3 uppercase tracking-wide border-b border-indigo-100 pb-2">
-            {line.substring(3)}
-          </h3>
-        );
-      } else if (line.startsWith('- ')) {
-        currentList.push(<li key={index} className="text-[13px]">{line.substring(2)}</li>);
-      } else if (/^\d+\./.test(line)) {
-        flushList();
-        elements.push(
-          <p key={index} className="text-[14px] font-bold text-slate-800 mt-4 mb-2">
-            {line}
-          </p>
-        );
-      } else {
-        flushList();
-        elements.push(
-          <p key={index} className="text-[13px] font-medium text-slate-600 mb-2 leading-relaxed">
-            {line}
-          </p>
-        );
-      }
-    });
-    
-    flushList();
-    return elements;
-  };
+  // We will just use ReactMarkdown instead of custom render logic
 
   return (
     <div className="min-h-screen bg-slate-50 font-['Inter'] pb-24">
@@ -173,8 +127,8 @@ export default function BeuSyllabus() {
                 <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Loading Syllabus Data...</p>
               </div>
             ) : currentSyllabus ? (
-              <div className="prose prose-sm max-w-none">
-                {renderContent(currentSyllabus.content)}
+              <div className="prose prose-sm max-w-none prose-headings:font-black prose-h2:text-indigo-700 prose-h2:uppercase prose-h2:tracking-tight prose-h2:border-b prose-h2:border-indigo-100 prose-h2:pb-2 prose-h4:text-indigo-600 prose-h4:mt-6 prose-strong:text-slate-800 prose-p:text-slate-600 prose-p:font-medium prose-p:leading-relaxed">
+                <ReactMarkdown>{currentSyllabus.content}</ReactMarkdown>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-20 text-center">
