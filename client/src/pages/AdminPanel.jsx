@@ -4,7 +4,7 @@ import {
   Trash2, Ban, UserCheck, UploadCloud, 
   Search, RefreshCw, BarChart3, 
   ChevronRight, AlertCircle, Loader2,
-  FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye
+  FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye, Calendar
 } from 'lucide-react';
 import { db, storage } from '../firebase';
 import { 
@@ -41,6 +41,23 @@ export default function AdminPanel() {
   const flash = (text, type = 'ok') => {
     setMsg({ text, type });
     setTimeout(() => setMsg(null), 4000);
+  };
+
+  const getJoinDate = (u) => {
+    if (!u?.createdAt) return 'Legacy Member';
+    try {
+      let dateObj;
+      if (u.createdAt?.toDate) {
+        dateObj = u.createdAt.toDate();
+      } else if (u.createdAt?.seconds) {
+        dateObj = new Date(u.createdAt.seconds * 1000);
+      } else {
+        dateObj = new Date(u.createdAt);
+      }
+      return dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+    } catch(e) {
+      return 'Legacy Member';
+    }
   };
 
   useEffect(() => {
@@ -307,7 +324,7 @@ export default function AdminPanel() {
       </div>
 
       {msg && (
-        <div className={`p-4 rounded-2xl border flex items-center gap-3 animate-in zoom-in duration-300 ${msg.type==='ok'?'bg-emerald-600/20 text-emerald-400 border-emerald-500/30':'bg-red-600/20 text-red-400 border-red-500/30'}`}>
+        <div className={`p-4 rounded-2xl border flex items-center gap-3 animate-in zoom-in duration-300 ${msg.type==='ok'?'bg-emerald-600/20 text-emerald-400 border-emerald-50-30':'bg-red-600/20 text-red-400 border-red-500/30'}`}>
           <AlertCircle size={18}/> <span className="text-[13px] font-bold uppercase tracking-tight">{msg.text}</span>
         </div>
       )}
@@ -349,6 +366,7 @@ export default function AdminPanel() {
                  <tr className="bg-slate-100/40 text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 border-b border-slate-200/50">
                    <th className="py-5 px-8">Identity</th>
                    <th className="py-5 px-8 text-center">Contact</th>
+                   <th className="py-5 px-8 text-center">Join Date</th>
                    <th className="py-5 px-8 text-center">Status</th>
                    <th className="py-5 px-8">Rank</th>
                    <th className="py-5 px-8 text-right">Operations</th>
@@ -372,6 +390,13 @@ export default function AdminPanel() {
                         <div className="inline-block px-3 py-1.5 bg-slate-100/50 border border-slate-200/80 rounded-xl">
                           <span className="text-[11px] font-bold text-slate-500 tracking-widest">
                             {u.phone || 'NOT LINKED'}
+                          </span>
+                        </div>
+                     </td>
+                     <td className="py-6 px-8 text-center">
+                        <div className="inline-block px-3 py-1.5 bg-indigo-50/50 border border-indigo-200/80 rounded-xl">
+                          <span className="text-[11px] font-bold text-indigo-600 tracking-widest">
+                            {getJoinDate(u)}
                           </span>
                         </div>
                      </td>
