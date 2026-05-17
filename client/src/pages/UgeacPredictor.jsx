@@ -458,111 +458,111 @@ function UgeacPredictor() {
         {mode === 'guide' ? (
           <div className="space-y-12 animate-in fade-in">
              {/* Hero Info Banner */}
-             <div className="glass-panel border-indigo-500/40 bg-gradient-to-r from-indigo-900/40 via-slate-900/60 to-indigo-950/40 p-8 md:p-10 relative overflow-hidden">
+             <div className="glass-panel border-indigo-200 bg-gradient-to-r from-indigo-50 via-white to-indigo-50/50 p-8 md:p-10 relative overflow-hidden shadow-xl">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
                 <div className="max-w-3xl space-y-4 relative z-10">
-                   <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-500/20 border border-indigo-500/30 rounded-full text-indigo-300 text-[10px] font-black uppercase tracking-widest">
+                   <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-600 border border-indigo-300 rounded-full text-white text-[10px] font-black uppercase tracking-widest shadow-sm">
                       <span>📢 Official UGEAC 2026 Prospectus Data</span>
                    </div>
-                   <h2 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tight leading-tight">
+                   <h2 className="text-2xl md:text-4xl font-black text-slate-900 uppercase tracking-tight leading-tight">
                       BCECEB Bihar Engineering <br className="hidden md:block" />
-                      <span className="text-indigo-400">Admission Counselling Guide</span>
+                      <span className="text-indigo-600">Admission Counselling Guide</span>
                    </h2>
-                   <p className="text-xs md:text-sm text-slate-300 font-medium leading-relaxed">
+                   <p className="text-xs md:text-sm text-slate-600 font-medium leading-relaxed">
                       Complete official roadmap, eligibility criteria, category reservation matrix, and document checklist derived directly from the BCECEB UGEAC-2026 Prospectus.
                    </p>
                 </div>
 
                 {/* Important Dates Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-8 border-t border-white/10 relative z-10">
-                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Registration Starts</span>
-                      <span className="text-sm md:text-base font-black text-white uppercase tracking-tight block mt-1">13 May 2026</span>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-8 border-t border-slate-200 relative z-10">
+                   <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Registration Starts</span>
+                      <span className="text-sm md:text-base font-black text-slate-900 uppercase tracking-tight block mt-1">13 May 2026</span>
                    </div>
-                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Registration Closes</span>
-                      <span className="text-sm md:text-base font-black text-white uppercase tracking-tight block mt-1">05 June 2026</span>
+                   <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Registration Closes</span>
+                      <span className="text-sm md:text-base font-black text-slate-900 uppercase tracking-tight block mt-1">05 June 2026</span>
                    </div>
-                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Merit List Publication</span>
-                      <span className="text-sm md:text-base font-black text-indigo-400 uppercase tracking-tight block mt-1">08 June 2026</span>
+                   <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Merit List Publication</span>
+                      <span className="text-sm md:text-base font-black text-indigo-600 uppercase tracking-tight block mt-1">08 June 2026</span>
                    </div>
-                   <div className="bg-white/5 border border-white/10 p-4 rounded-2xl">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Online Counselling</span>
-                      <span className="text-sm md:text-base font-black text-emerald-400 uppercase tracking-tight block mt-1">10 June 2026</span>
+                   <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm">
+                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block">Online Counselling</span>
+                      <span className="text-sm md:text-base font-black text-emerald-600 uppercase tracking-tight block mt-1">10 June 2026</span>
                    </div>
                 </div>
              </div>
 
              {/* Two Column Grid: Eligibility & Fees */}
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="glass-panel border-indigo-500/30 space-y-6">
-                   <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-                      <div className="w-10 h-10 bg-indigo-500/20 rounded-xl flex items-center justify-center border border-indigo-500/30 text-indigo-400">
+                <div className="glass-panel border-slate-200 space-y-6 shadow-xl bg-white p-8 rounded-[2.5rem]">
+                   <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+                      <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100 text-indigo-600">
                          <GraduationCap size={20} />
                       </div>
                       <div>
-                         <h3 className="text-base font-black text-white uppercase tracking-tight">Official Eligibility (Clause 5.1)</h3>
-                         <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">AICTE APH 2026-27 Norms</p>
+                         <h3 className="text-base font-black text-slate-900 uppercase tracking-tight">Official Eligibility (Clause 5.1)</h3>
+                         <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">AICTE APH 2026-27 Norms</p>
                       </div>
                    </div>
-                   <ul className="space-y-4 text-xs font-medium text-slate-300 leading-relaxed">
-                      <li className="flex items-start gap-3 bg-white/5 p-4 rounded-2xl border border-white/5">
-                         <CheckCircle2 className="text-indigo-400 mt-0.5 shrink-0" size={16} />
-                         <span><strong className="text-white">Academic Qualification:</strong> Passed 10+2 examination with Physics, Mathematics, and Chemistry/Computer Science/Electronics/IT/Biology/Informatics Practices/Vocational subjects.</span>
+                   <ul className="space-y-4 text-xs font-medium text-slate-600 leading-relaxed">
+                      <li className="flex items-start gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                         <CheckCircle2 className="text-indigo-600 mt-0.5 shrink-0" size={16} />
+                         <span><strong className="text-slate-900">Academic Qualification:</strong> Passed 10+2 examination with Physics, Mathematics, and Chemistry/Computer Science/Electronics/IT/Biology/Informatics Practices/Vocational subjects.</span>
                       </li>
-                      <li className="flex items-start gap-3 bg-white/5 p-4 rounded-2xl border border-white/5">
-                         <CheckCircle2 className="text-indigo-400 mt-0.5 shrink-0" size={16} />
-                         <span><strong className="text-white">Minimum Marks:</strong> Obtained at least 45% marks (40% marks in case of candidates belonging to reserved categories SC/ST/EBC/BC/RCG) in the above subjects taken together.</span>
+                      <li className="flex items-start gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                         <CheckCircle2 className="text-indigo-600 mt-0.5 shrink-0" size={16} />
+                         <span><strong className="text-slate-900">Minimum Marks:</strong> Obtained at least 45% marks (40% marks in case of candidates belonging to reserved categories SC/ST/EBC/BC/RCG) in the above subjects taken together.</span>
                       </li>
-                      <li className="flex items-start gap-3 bg-white/5 p-4 rounded-2xl border border-white/5">
-                         <CheckCircle2 className="text-indigo-400 mt-0.5 shrink-0" size={16} />
-                         <span><strong className="text-white">Valid Entrance Score:</strong> Must possess a valid NTA JEE (Main) 2026 Paper-1 score for B.Tech admission (or NATA 2026 for B.Arch).</span>
+                      <li className="flex items-start gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                         <CheckCircle2 className="text-indigo-600 mt-0.5 shrink-0" size={16} />
+                         <span><strong className="text-slate-900">Valid Entrance Score:</strong> Must possess a valid NTA JEE (Main) 2026 Paper-1 score for B.Tech admission (or NATA 2026 for B.Arch).</span>
                       </li>
-                      <li className="flex items-start gap-3 bg-white/5 p-4 rounded-2xl border border-white/5">
-                         <CheckCircle2 className="text-indigo-400 mt-0.5 shrink-0" size={16} />
-                         <span><strong className="text-white">Domicile Requirement:</strong> Must be a permanent resident of Bihar OR parents are serving employees of Bihar Govt / Central Govt posted in Bihar.</span>
+                      <li className="flex items-start gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                         <CheckCircle2 className="text-indigo-600 mt-0.5 shrink-0" size={16} />
+                         <span><strong className="text-slate-900">Domicile Requirement:</strong> Must be a permanent resident of Bihar OR parents are serving employees of Bihar Govt / Central Govt posted in Bihar.</span>
                       </li>
                    </ul>
                 </div>
 
-                <div className="glass-panel border-indigo-500/30 space-y-6 flex flex-col justify-between">
+                <div className="glass-panel border-slate-200 space-y-6 flex flex-col justify-between shadow-xl bg-white p-8 rounded-[2.5rem]">
                    <div>
-                      <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-                         <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30 text-emerald-400">
+                      <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+                         <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center border border-emerald-100 text-emerald-600">
                             <Zap size={20} />
                          </div>
                          <div>
-                            <h3 className="text-base font-black text-white uppercase tracking-tight">Registration Fees & Modes</h3>
-                            <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Non-Refundable Counselling Fee</p>
+                            <h3 className="text-base font-black text-slate-900 uppercase tracking-tight">Registration Fees & Modes</h3>
+                            <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Non-Refundable Counselling Fee</p>
                          </div>
                       </div>
                       <div className="grid grid-cols-2 gap-4 mt-6">
-                         <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2">
-                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">General / BC / EBC</span>
-                            <span className="text-3xl font-[1000] text-white block">₹1200</span>
-                            <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-widest block">Net Banking / UPI / Card</span>
+                         <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl text-center space-y-2 shadow-sm">
+                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">General / BC / EBC</span>
+                            <span className="text-3xl font-[1000] text-slate-900 block">₹1200</span>
+                            <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block">Net Banking / UPI / Card</span>
                          </div>
-                         <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2">
-                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">SC / ST / DQ (PwD)</span>
-                            <span className="text-3xl font-[1000] text-indigo-400 block">₹600</span>
-                            <span className="text-[9px] font-bold text-indigo-400 uppercase tracking-widest block">Net Banking / UPI / Card</span>
+                         <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl text-center space-y-2 shadow-sm">
+                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">SC / ST / DQ (PwD)</span>
+                            <span className="text-3xl font-[1000] text-indigo-600 block">₹600</span>
+                            <span className="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block">Net Banking / UPI / Card</span>
                          </div>
                       </div>
                    </div>
 
                    {/* Reservation Matrix Box */}
-                   <div className="bg-slate-900/60 border border-white/10 p-6 rounded-3xl space-y-4">
-                      <span className="text-xs font-black text-white uppercase tracking-wider block border-b border-white/10 pb-2">Bihar Govt Category Reservation Matrix (Clause 4.2)</span>
+                   <div className="bg-slate-900 border border-slate-800 p-6 rounded-3xl space-y-4 shadow-2xl">
+                      <span className="text-xs font-black text-white uppercase tracking-wider block border-b border-slate-800 pb-2">Bihar Govt Category Reservation Matrix (Clause 4.2)</span>
                       <div className="grid grid-cols-3 md:grid-cols-4 gap-3 text-center pt-2">
-                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">UR</span><span className="text-sm font-black text-white block mt-0.5">40%</span></div>
-                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">EBC</span><span className="text-sm font-black text-indigo-400 block mt-0.5">18%</span></div>
-                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">SC</span><span className="text-sm font-black text-white block mt-0.5">16%</span></div>
-                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">BC</span><span className="text-sm font-black text-indigo-400 block mt-0.5">12%</span></div>
-                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">EWS</span><span className="text-sm font-black text-white block mt-0.5">10%</span></div>
-                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">RCG</span><span className="text-sm font-black text-pink-400 block mt-0.5">3%</span></div>
-                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">ST</span><span className="text-sm font-black text-white block mt-0.5">1%</span></div>
-                         <div className="bg-white/5 p-3 rounded-xl border border-white/5"><span className="text-[10px] text-slate-400 font-bold uppercase block">DQ</span><span className="text-sm font-black text-emerald-400 block mt-0.5">5%</span></div>
+                         <div className="bg-white/10 p-3 rounded-xl border border-white/10"><span className="text-[10px] text-slate-300 font-bold uppercase block">UR</span><span className="text-sm font-black text-white block mt-0.5">40%</span></div>
+                         <div className="bg-white/10 p-3 rounded-xl border border-white/10"><span className="text-[10px] text-slate-300 font-bold uppercase block">EBC</span><span className="text-sm font-black text-indigo-400 block mt-0.5">18%</span></div>
+                         <div className="bg-white/10 p-3 rounded-xl border border-white/10"><span className="text-[10px] text-slate-300 font-bold uppercase block">SC</span><span className="text-sm font-black text-white block mt-0.5">16%</span></div>
+                         <div className="bg-white/10 p-3 rounded-xl border border-white/10"><span className="text-[10px] text-slate-300 font-bold uppercase block">BC</span><span className="text-sm font-black text-indigo-400 block mt-0.5">12%</span></div>
+                         <div className="bg-white/10 p-3 rounded-xl border border-white/10"><span className="text-[10px] text-slate-300 font-bold uppercase block">EWS</span><span className="text-sm font-black text-white block mt-0.5">10%</span></div>
+                         <div className="bg-white/10 p-3 rounded-xl border border-white/10"><span className="text-[10px] text-slate-300 font-bold uppercase block">RCG</span><span className="text-sm font-black text-pink-400 block mt-0.5">3%</span></div>
+                         <div className="bg-white/10 p-3 rounded-xl border border-white/10"><span className="text-[10px] text-slate-300 font-bold uppercase block">ST</span><span className="text-sm font-black text-white block mt-0.5">1%</span></div>
+                         <div className="bg-white/10 p-3 rounded-xl border border-white/10"><span className="text-[10px] text-slate-300 font-bold uppercase block">DQ</span><span className="text-sm font-black text-emerald-400 block mt-0.5">5%</span></div>
                       </div>
                    </div>
                 </div>
@@ -570,14 +570,14 @@ function UgeacPredictor() {
 
              {/* Two Column Grid: Steps & Documents */}
              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="glass-panel border-indigo-500/30 space-y-6">
-                   <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-                      <div className="w-10 h-10 bg-indigo-500/20 rounded-xl flex items-center justify-center border border-indigo-500/30 text-indigo-400">
+                <div className="glass-panel border-slate-200 space-y-6 shadow-xl bg-white p-8 rounded-[2.5rem]">
+                   <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+                      <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100 text-indigo-600">
                          <Layers size={20} />
                       </div>
                       <div>
-                         <h3 className="text-base font-black text-white uppercase tracking-tight">5-Step Counselling Roadmap</h3>
-                         <p className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">From Registration to College Admission</p>
+                         <h3 className="text-base font-black text-slate-900 uppercase tracking-tight">5-Step Counselling Roadmap</h3>
+                         <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">From Registration to College Admission</p>
                       </div>
                    </div>
                    <div className="space-y-6 pt-2">
@@ -588,57 +588,57 @@ function UgeacPredictor() {
                          { step: "04", title: "Document Verification (DV)", desc: "Report physically to the designated Nodal Centre with all original certificates, allotment order, and 6 photographs." },
                          { step: "05", title: "Final Admission / Fee Payment", desc: "Complete the admission formalities at the allotted college by submitting the required verification slip and admission fees." }
                       ].map(s => (
-                         <div key={s.step} className="flex gap-5 items-start bg-white/5 p-5 rounded-2xl border border-white/5 hover:border-indigo-500/30 transition-colors">
-                            <div className="text-3xl font-[1000] text-indigo-500/40 font-mono leading-none pt-0.5">{s.step}</div>
+                         <div key={s.step} className="flex gap-5 items-start bg-slate-50 p-5 rounded-2xl border border-slate-100 hover:border-indigo-200 transition-colors shadow-sm">
+                            <div className="text-3xl font-[1000] text-indigo-600 font-mono leading-none pt-0.5">{s.step}</div>
                             <div className="space-y-1">
-                               <h4 className="text-white font-black text-xs uppercase tracking-wider">{s.title}</h4>
-                               <p className="text-xs text-slate-400 leading-relaxed font-medium">{s.desc}</p>
+                               <h4 className="text-slate-900 font-black text-xs uppercase tracking-wider">{s.title}</h4>
+                               <p className="text-xs text-slate-600 leading-relaxed font-medium">{s.desc}</p>
                             </div>
                          </div>
                       ))}
                    </div>
                 </div>
 
-                <div className="glass-panel border-indigo-500/30 space-y-6 flex flex-col justify-between">
+                <div className="glass-panel border-slate-200 space-y-6 flex flex-col justify-between shadow-xl bg-white p-8 rounded-[2.5rem]">
                    <div>
-                      <div className="flex items-center gap-3 border-b border-white/10 pb-4">
-                         <div className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center border border-emerald-500/30 text-emerald-400">
+                      <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+                         <div className="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center border border-emerald-100 text-emerald-600">
                             <ShieldCheck size={20} />
                          </div>
                          <div>
-                            <h3 className="text-base font-black text-white uppercase tracking-tight">Mandatory Document Checklist</h3>
-                            <p className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Originals Required at Nodal Centre</p>
+                             <h3 className="text-base font-black text-slate-900 uppercase tracking-tight">Mandatory Document Checklist</h3>
+                            <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Originals Required at Nodal Centre</p>
                          </div>
                       </div>
-                      <ul className="space-y-3.5 text-xs font-medium text-slate-300 pt-6">
-                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Downloaded Print of Online Filled Application Form (Part A & Part B)</li>
-                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> UGEAC 2026 Official Rank Card</li>
-                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> JEE Main 2026 Admit Card & NTA Score Card</li>
-                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Class 10th Marksheet, Passing Certificate & Admit Card (for Age Proof)</li>
-                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Class 12th (Intermediate) Marksheet & Passing Certificate</li>
-                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Bihar Permanent Residence (Domicile) Certificate</li>
-                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Caste / Category Certificate (SC/ST/BC/EBC/EWS) issued by CO/SDO</li>
-                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Six Copies of Passport Size Photographs (same as pasted on JEE Main Admit Card)</li>
-                         <li className="flex items-center gap-3 bg-white/5 p-4 rounded-xl border border-white/5"><CheckCircle2 className="text-emerald-400 shrink-0" size={18} /> Aadhar Card & Allotment Order (3 copies)</li>
+                      <ul className="space-y-3.5 text-xs font-medium text-slate-600 pt-6">
+                         <li className="flex items-center gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm"><CheckCircle2 className="text-emerald-600 shrink-0" size={18} /> <span className="text-slate-900 font-bold">Application Form:</span> Downloaded Print of Online Filled Application Form (Part A & Part B)</li>
+                         <li className="flex items-center gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm"><CheckCircle2 className="text-emerald-600 shrink-0" size={18} /> <span className="text-slate-900 font-bold">Rank Card:</span> UGEAC 2026 Official Rank Card</li>
+                         <li className="flex items-center gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm"><CheckCircle2 className="text-emerald-600 shrink-0" size={18} /> <span className="text-slate-900 font-bold">JEE Score:</span> JEE Main 2026 Admit Card & NTA Score Card</li>
+                         <li className="flex items-center gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm"><CheckCircle2 className="text-emerald-600 shrink-0" size={18} /> <span className="text-slate-900 font-bold">10th Certificate:</span> Class 10th Marksheet, Passing Certificate & Admit Card (for Age Proof)</li>
+                         <li className="flex items-center gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm"><CheckCircle2 className="text-emerald-600 shrink-0" size={18} /> <span className="text-slate-900 font-bold">12th Certificate:</span> Class 12th (Intermediate) Marksheet & Passing Certificate</li>
+                         <li className="flex items-center gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm"><CheckCircle2 className="text-emerald-600 shrink-0" size={18} /> <span className="text-slate-900 font-bold">Domicile:</span> Bihar Permanent Residence (Domicile) Certificate</li>
+                         <li className="flex items-center gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm"><CheckCircle2 className="text-emerald-600 shrink-0" size={18} /> <span className="text-slate-900 font-bold">Caste Certificate:</span> Caste / Category Certificate (SC/ST/BC/EBC/EWS) issued by CO/SDO</li>
+                         <li className="flex items-center gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm"><CheckCircle2 className="text-emerald-600 shrink-0" size={18} /> <span className="text-slate-900 font-bold">Photographs:</span> Six Copies of Passport Size Photographs (same as pasted on JEE Main Admit Card)</li>
+                         <li className="flex items-center gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100 shadow-sm"><CheckCircle2 className="text-emerald-600 shrink-0" size={18} /> <span className="text-slate-900 font-bold">ID & Allotment:</span> Aadhar Card & Allotment Order (3 copies)</li>
                       </ul>
                    </div>
                 </div>
              </div>
 
              {/* Live Support Banner */}
-             <div className="glass-panel border-emerald-500/30 bg-emerald-500/5 p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6">
+             <div className="glass-panel border-emerald-200 bg-emerald-50/50 p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
                 <div className="flex items-center gap-6">
-                   <div className="w-16 h-16 bg-emerald-500/20 rounded-2xl flex items-center justify-center border border-emerald-500/20 shadow-inner">
-                      <Send size={32} className="text-emerald-400" />
+                   <div className="w-16 h-16 bg-emerald-100 rounded-2xl flex items-center justify-center border border-emerald-200 shadow-inner">
+                      <Send size={32} className="text-emerald-600" />
                    </div>
                    <div>
-                      <h3 className="text-xl font-black text-white uppercase tracking-tighter">Live Support Community</h3>
-                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Join 5000+ Bihar Students for Real-time Help</p>
+                      <h3 className="text-xl font-black text-slate-900 uppercase tracking-tighter">Live Support Community</h3>
+                      <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1">Join 5000+ Bihar Students for Real-time Help</p>
                    </div>
                 </div>
                 <div className="flex gap-4 w-full md:w-auto">
                    <a href="https://t.me/apnacollegebihar" target="_blank" rel="noreferrer" className="flex-1 md:flex-none px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all text-center shadow-lg shadow-emerald-500/20">Telegram Group</a>
-                   <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noreferrer" className="flex-1 md:flex-none px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all text-center border border-white/10 shadow-xl">WhatsApp Channel</a>
+                   <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noreferrer" className="flex-1 md:flex-none px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all text-center shadow-xl">WhatsApp Channel</a>
                 </div>
              </div>
           </div>
