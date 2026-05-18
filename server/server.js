@@ -9,6 +9,16 @@ const rateLimit = require('express-rate-limit');
 
 const app = express();
 
+// Connect Mongoose
+if (process.env.MONGO_URI) {
+    mongoose.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => console.log('✅ MongoDB Connected'))
+    .catch(err => console.log('❌ MongoDB Connect Error:', err));
+}
+
 // 1. ABSOLUTE PRIORITY: APK DOWNLOAD ROUTE
 // This must be BEFORE any other middleware to avoid SPA interception
 app.get('/api/download-apk', (req, res) => {

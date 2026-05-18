@@ -5,6 +5,7 @@
   "main": "electron-main.js",
   "scripts": {
     "start": "node server/server.js",
+    "postinstall": "npm install --prefix server",
     "install-app": "npm install --prefix server && npm install --prefix client",
     "build": "npm install --prefix server",
     "heroku-postbuild": "npm run build",
