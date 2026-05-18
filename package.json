@@ -31,11 +31,6 @@
       "forceCodeSigning": false
     }
   },
-  "devDependencies": {
-    "electron": "^42.1.0",
-    "electron-builder": "^26.8.1",
-    "electron-packager": "^17.1.2"
-  },
   "engines": {
     "node": "20.x"
   }
