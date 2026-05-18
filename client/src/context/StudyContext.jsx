@@ -3,7 +3,9 @@ import { db } from '../firebase';
 import { doc, updateDoc, addDoc, collection, getDoc } from 'firebase/firestore';
 import { useAuth } from './AuthContext';
 import { Preferences } from '@capacitor/preferences';
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, registerPlugin } from '@capacitor/core';
+
+const AppBlocker = registerPlugin('AppBlocker');
 
 const StudyContext = createContext(null);
 
@@ -37,8 +39,7 @@ export function StudyProvider({ children }) {
   const fetchApps = async () => {
     if (!isNativeApp()) return;
     try {
-      const AppBlocker = Capacitor.Plugins.AppBlocker;
-      if (AppBlocker) {
+      if (AppBlocker && AppBlocker.getInstalledApps) {
         const { apps } = await AppBlocker.getInstalledApps();
         setInstalledApps(apps.sort((a, b) => a.name.localeCompare(b.name)));
       }
@@ -50,7 +51,7 @@ export function StudyProvider({ children }) {
       fetchApps();
       
       try {
-        Capacitor.Plugins.AppBlocker.stopBlocker();
+        if (AppBlocker && AppBlocker.stopBlocker) AppBlocker.stopBlocker();
         Preferences.set({ key: 'isBlockerActive', value: 'false' });
         Preferences.set({ key: 'countdownEndTime', value: '0' });
       } catch (e) {}
@@ -69,7 +70,9 @@ export function StudyProvider({ children }) {
         if (!pkgArray.includes('com.apnacollegebihar.online')) {
             pkgArray.push('com.apnacollegebihar.online');
         }
-        Capacitor.Plugins.AppBlocker.setAllowedPackages({ packages: pkgArray });
+        if (AppBlocker && AppBlocker.setAllowedPackages) {
+          AppBlocker.setAllowedPackages({ packages: pkgArray });
+        }
       } catch (e) {}
     }
   };
@@ -81,12 +84,16 @@ export function StudyProvider({ children }) {
     if (isNativeApp()) {
       try {
         if (val) {
-          Capacitor.Plugins.AppBlocker.setBlockerActive({ active: true });
+          if (AppBlocker && AppBlocker.setBlockerActive) {
+            AppBlocker.setBlockerActive({ active: true });
+          }
           
           if (timerMode === 'COUNTDOWN') {
-            Capacitor.Plugins.AppBlocker.startCountdown({ 
-              minutes: Math.ceil(timerTime / 60)
-            });
+            if (AppBlocker && AppBlocker.startCountdown) {
+              AppBlocker.startCountdown({ 
+                minutes: Math.ceil(timerTime / 60)
+              });
+            }
             
             const endTime = Date.now() + (timerTime * 1000);
             Preferences.set({ key: 'countdownEndTime', value: String(endTime) });
@@ -96,11 +103,13 @@ export function StudyProvider({ children }) {
           if (!pkgArray.includes('com.apnacollegebihar.online')) {
             pkgArray.push('com.apnacollegebihar.online');
           }
-          Capacitor.Plugins.AppBlocker.setAllowedPackages({ packages: pkgArray });
+          if (AppBlocker && AppBlocker.setAllowedPackages) {
+            AppBlocker.setAllowedPackages({ packages: pkgArray });
+          }
           
           Preferences.set({ key: 'isBlockerActive', value: 'true' });
         } else {
-          Capacitor.Plugins.AppBlocker.stopBlocker();
+          if (AppBlocker && AppBlocker.stopBlocker) AppBlocker.stopBlocker();
           Preferences.set({ key: 'isBlockerActive', value: 'false' });
           Preferences.set({ key: 'countdownEndTime', value: '0' });
         }

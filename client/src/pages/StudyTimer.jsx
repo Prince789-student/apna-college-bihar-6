@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
+import { useStudy } from '../context/StudyContext';
 import { 
   collection, addDoc, query, where, 
   getDocs, serverTimestamp, orderBy, limit,
@@ -14,6 +15,7 @@ import {
 
 export default function StudyTimer() {
   const { user } = useAuth();
+  const { setTimerActive } = useStudy();
   const [active, setActive] = useState(false);
   const [time, setTime] = useState(0);
   const [subjects, setSubjects] = useState(['Physics', 'Chemistry', 'Maths', 'CS']);
@@ -41,7 +43,7 @@ export default function StudyTimer() {
   };
 
   const save = async () => {
-    if (time < 10) { alert('Session must be > 10s'); setActive(false); setTime(0); return; }
+    if (time < 10) { alert('Session must be > 10s'); setActive(false); setTimerActive(false); setTime(0); return; }
     try {
       await addDoc(collection(db, 'StudySessions'), {
         userId: user.uid,
@@ -50,7 +52,7 @@ export default function StudyTimer() {
         duration: time,
         createdAt: serverTimestamp()
       });
-      setActive(false); setTime(0);
+      setActive(false); setTimerActive(false); setTime(0);
       fetchStats();
     } catch (e) { console.error(e); }
   };
@@ -110,17 +112,17 @@ export default function StudyTimer() {
 
               <div className="mt-12 flex gap-4 w-full max-w-sm">
                 {!active ? (
-                  <button onClick={() => setActive(true)} 
+                  <button onClick={() => { setActive(true); setTimerActive(true); }} 
                     className="flex-1 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-3xl font-black text-xs uppercase tracking-widest shadow-xl shadow-blue-900/20 active:scale-95 transition-all flex items-center justify-center gap-3">
                     <Play size={18} fill="currentColor" /> Initialize Focus
                   </button>
                 ) : (
                   <>
-                    <button onClick={() => setActive(false)} 
+                    <button onClick={() => { setActive(false); setTimerActive(false); }} 
                       className="flex-1 py-5 bg-orange-600 hover:bg-orange-500 text-white rounded-3xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-3">
                       <Pause size={18} fill="currentColor" /> Suspend
                     </button>
-                    <button onClick={save} 
+                    <button onClick={() => { save(); setTimerActive(false); }} 
                       className="flex-1 py-5 bg-red-600 hover:bg-red-500 text-white rounded-3xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-3">
                       <Square size={18} fill="currentColor" /> Terminate
                     </button>
