@@ -260,4 +260,25 @@ public class AppBlockerPlugin extends Plugin {
         ret.put("working", true);
         call.resolve(ret);
     }
+
+    @PluginMethod
+    public void launchApp(PluginCall call) {
+        String packageName = call.getString("packageName");
+        if (packageName == null) {
+            call.reject("Package name required");
+            return;
+        }
+        try {
+            Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
+            if (intent != null) {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(intent);
+                call.resolve();
+            } else {
+                call.reject("App not found");
+            }
+        } catch (Exception e) {
+            call.reject(e.getMessage());
+        }
+    }
 }

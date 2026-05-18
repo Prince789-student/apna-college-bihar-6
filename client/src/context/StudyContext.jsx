@@ -258,13 +258,17 @@ export function StudyProvider({ children }) {
     launchApp: async (pkg) => {
       if (!isNativeApp()) return;
       try {
-        await Capacitor.Plugins.AppBlocker.launchApp({ packageName: pkg });
+        if (AppBlocker && AppBlocker.launchApp) {
+          await AppBlocker.launchApp({ packageName: pkg });
+        }
       } catch (e) { console.error(e); }
     },
     openAccessibilitySettings: async () => {
       if (!isNativeApp()) return;
       try {
-        await Capacitor.Plugins.AppBlocker.openAccessibilitySettings();
+        if (AppBlocker && AppBlocker.openAccessibilitySettings) {
+          await AppBlocker.openAccessibilitySettings();
+        }
       } catch (e) { console.error(e); }
     }
   };
