@@ -22,16 +22,34 @@ function copyRecursiveSync(src, dest) {
     }
 }
 
+function cleanDir(dir) {
+    if (!fs.existsSync(dir)) return;
+    fs.readdirSync(dir).forEach(file => {
+        const filePath = path.join(dir, file);
+        const stat = fs.statSync(filePath);
+        if (stat.isDirectory()) {
+            cleanDir(filePath);
+            if (fs.readdirSync(filePath).length === 0) {
+                fs.rmdirSync(filePath);
+            }
+        } else {
+            const isProtected = file.endsWith('.apk') || 
+                                file.endsWith('.aab') || 
+                                file.endsWith('.pdf') || 
+                                file === '.htaccess' || 
+                                file === '_redirects';
+            if (!isProtected) {
+                fs.unlinkSync(filePath);
+            }
+        }
+    });
+}
+
 function syncBuild() {
     try {
         console.log('Syncing build assets...');
         if (fs.existsSync(destDir)) {
-            // Delete everything EXCEPT .apk, .htaccess, and _redirects
-            fs.readdirSync(destDir).forEach(file => {
-                if (!file.endsWith('.apk') && file !== '.htaccess' && file !== '_redirects') {
-                    fs.rmSync(path.join(destDir, file), { recursive: true, force: true });
-                }
-            });
+            cleanDir(destDir);
         }
         fs.mkdirSync(destDir, { recursive: true });
         copyRecursiveSync(srcDir, destDir);

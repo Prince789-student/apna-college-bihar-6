@@ -64,15 +64,12 @@ try {
 console.log('Zipping the final app...');
 const appFolder = path.join(DIST_ELECTRON, 'Apna College Bihar-win32-x64');
 const serverZipFile = path.join(__dirname, 'server', 'public', 'Apna-College-Bihar-Windows.zip');
-const clientZipFile = path.join(__dirname, 'client', 'public', 'Apna-College-Bihar-Windows.zip');
 
 if (fs.existsSync(serverZipFile)) fs.unlinkSync(serverZipFile);
-if (fs.existsSync(clientZipFile)) fs.unlinkSync(clientZipFile);
 
 try {
   execSync(`powershell -Command "Compress-Archive -Path '${appFolder}' -DestinationPath '${serverZipFile}' -Force"`, { stdio: 'inherit' });
-  fs.copyFileSync(serverZipFile, clientZipFile);
-  console.log('Zipping complete! File located at:', serverZipFile, 'and', clientZipFile);
+  console.log('Zipping complete! File located at:', serverZipFile);
 } catch (e) {
   console.error('Zipping failed:', e.message);
 }
