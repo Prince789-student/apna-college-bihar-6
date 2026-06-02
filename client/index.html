@@ -4,9 +4,11 @@
 <head>
    <meta charset="UTF-8" />
    <base href="/" />
-   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-   <meta http-equiv="Pragma" content="no-cache" />
-   <meta http-equiv="Expires" content="0" />
+   <!-- Preconnect for speed -->
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+   <link rel="preconnect" href="https://www.googletagmanager.com" />
+   <!-- Cache headers managed server-side for better SEO crawling -->
     <script>
       // Temporarily disabled Service Worker to prevent cache loops
       /*
@@ -29,10 +31,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <meta name="theme-color" content="#0d121f" />
    <meta name="google-site-verification" content="RYqt3qpPlTqKuw2uXw9hLSZNDCLA3iGIzzv_JLOQEVs" />
-   <meta name="description"
-      content="Apna College Bihar - The Official Website for Bihar Engineering Students. Download Semester Notes, Previous Year Questions, SGPA Calculator and more!" />
-   <meta name="keywords"
-      content="BEU Notes, Bihar Engineering University, AKU Bihar Notes, B.Tech Notes PDF, Engineering Study Material Bihar, SGPA Calculator BEU, Apna College Bihar Website" />
+   <meta name="google" content="notranslate" />
    <title>Apna College Bihar | UGEAC Counselling, College Predictor & B.Tech Notes - Bihar Engineering</title>
 
    <link rel="canonical" href="https://www.apnacollegebihar.online/" />
@@ -54,11 +53,15 @@
    <meta property="og:description" content="Bihar Engineering Counselling 2025 - UGEAC College Predictor, Cutoff Ranks, BCECE Seat Matrix, Free B.Tech Notes & PYQ Papers for Bihar Engineering Students." />
    <meta property="og:site_name" content="Apna College Bihar" />
    <meta property="og:locale" content="en_IN" />
+   <meta property="og:image" content="https://www.apnacollegebihar.online/acb_brand_final.png" />
+   <meta property="og:image:width" content="1200" />
+   <meta property="og:image:height" content="630" />
 
    <!-- Twitter Card -->
    <meta name="twitter:card" content="summary_large_image" />
    <meta name="twitter:title" content="Apna College Bihar | UGEAC 2025 College Predictor" />
    <meta name="twitter:description" content="Bihar Engineering Counselling 2025 - Free UGEAC College Predictor, Cutoff Ranks & Study Material." />
+   <meta name="twitter:image" content="https://www.apnacollegebihar.online/acb_brand_final.png" />
 
    <!-- Schema.org Structured Data for Google Brand Verification & Knowledge Graph -->
    <script type="application/ld+json">
@@ -222,8 +225,6 @@
    <link rel="manifest" href="/manifest.json" />
    <link rel="icon" type="image/png" href="/logo-acb.png?v=99" />
    <link rel="shortcut icon" href="/logo-acb.png?v=99" />
-   <title>Apna College Bihar | Website</title>
-
    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
    <!-- Use Tailwind CSS via CDN for rapid styling -->
    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
@@ -284,19 +285,53 @@
             INITIALIZING STUDY HUB...</p>
       </div>
    </div>
+   <!-- SEO: Hidden footer for Googlebot crawlability — all internal links -->
    <footer style="display:none;" aria-hidden="true">
       <nav>
          <ul>
-            <li><a href="/ugeac-2025-bihar-engineering-admission.html">UGEAC 2025 Bihar Engineering Counselling Guide</a></li>
-            <li><a href="/dashboard/cgpa?standalone=true">SGPA / CGPA Calculator & BEU Results Portal</a></li>
-            <li><a href="/dashboard/syllabus?standalone=true">BEU Syllabus Hub (All Branches & Semesters)</a></li>
+            <!-- App Pages -->
             <li><a href="/dashboard/ugeac-predictor?standalone=true">UGEAC 2025 College Predictor & Cutoff Ranks</a></li>
             <li><a href="/dashboard/notes?standalone=true">BEU Notes & PYQ Question Papers Hub</a></li>
+            <li><a href="/dashboard/cgpa?standalone=true">SGPA / CGPA Calculator & BEU Results Portal</a></li>
+            <li><a href="/dashboard/syllabus?standalone=true">BEU Syllabus Hub (All Branches & Semesters)</a></li>
             <li><a href="/dashboard/study?standalone=true">Study Timer & Focus Zone</a></li>
             <li><a href="/dashboard/groups?standalone=true">Study Network & Student Groups</a></li>
+            <!-- UGEAC Master Guides -->
+            <li><a href="/ugeac-2025-bihar-engineering-admission.html">UGEAC 2025 Bihar Engineering Admission Master Guide</a></li>
+            <li><a href="/bihar-engineering-counselling-2025.html">Bihar Engineering Counselling 2025 Complete Guide</a></li>
+            <li><a href="/ugeac-2025-college-predictor-bihar.html">UGEAC 2025 College Predictor Bihar</a></li>
+            <li><a href="/ugeac-2025-choice-filling.html">UGEAC 2025 Choice Filling Strategy</a></li>
+            <li><a href="/ugeac-2025-seat-allotment-result.html">UGEAC 2025 Seat Allotment Result — Round 1 2 3</a></li>
+            <li><a href="/bihar-engineering-college-list-2025.html">Bihar Engineering College List 2025</a></li>
+            <!-- College Cutoff Pages -->
+            <li><a href="/ugeac-2025-cutoff-rank-all-colleges.html">UGEAC 2025 Cutoff Rank All Colleges Bihar</a></li>
+            <li><a href="/bce-bhagalpur-cutoff-rank-2025.html">BCE Bhagalpur Cutoff Rank 2025</a></li>
+            <li><a href="/mit-muzaffarpur-cutoff-rank-2025.html">MIT Muzaffarpur Cutoff Rank 2025</a></li>
+            <li><a href="/gce-gaya-cutoff-rank-2025.html">GCE Gaya Cutoff Rank 2025</a></li>
+            <li><a href="/dce-darbhanga-cutoff-rank-2025.html">DCE Darbhanga Cutoff Rank 2025</a></li>
+            <li><a href="/mce-motihari-cutoff-rank-2025.html">MCE Motihari Cutoff Rank 2025</a></li>
+            <li><a href="/lnjpit-chapra-cutoff-rank-2025.html">LNJPIT Chapra Cutoff Rank 2025</a></li>
+            <!-- BEU Study Resources -->
+            <li><a href="/beu-syllabus-download-bihar-engineering.html">BEU Syllabus Download Bihar Engineering</a></li>
+            <li><a href="/beu-patna-syllabus-2025.html">BEU Patna Syllabus 2025 All Semesters</a></li>
+            <li><a href="/beu-notes-download-bihar-engineering.html">BEU Notes Free Download Bihar Engineering</a></li>
+            <li><a href="/beu-sgpa-cgpa-calculator-bihar.html">BEU SGPA CGPA Calculator Bihar</a></li>
          </ul>
       </nav>
    </footer>
+   <!-- SEO: Noscript fallback for search engine crawlers -->
+   <noscript>
+      <h1>Apna College Bihar — Bihar Engineering Students Ka Official Study Hub</h1>
+      <p>UGEAC 2025 College Predictor, Bihar Engineering Counselling Guide, BEU Notes Download, SGPA CGPA Calculator, Previous Year Question Papers — sab free!</p>
+      <ul>
+         <li><a href="/ugeac-2025-bihar-engineering-admission.html">UGEAC 2025 Bihar Engineering Admission Guide</a></li>
+         <li><a href="/ugeac-2025-cutoff-rank-all-colleges.html">All Bihar Colleges Cutoff Rank 2025</a></li>
+         <li><a href="/beu-notes-download-bihar-engineering.html">BEU Notes Free Download</a></li>
+         <li><a href="/beu-sgpa-cgpa-calculator-bihar.html">BEU SGPA CGPA Calculator</a></li>
+         <li><a href="/beu-patna-syllabus-2025.html">BEU Syllabus 2025</a></li>
+         <li><a href="/bihar-engineering-counselling-2025.html">Bihar Engineering Counselling Guide</a></li>
+      </ul>
+   </noscript>
    <script type="module" src="/src/main.jsx"></script>
 </body>
 
