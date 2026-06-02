@@ -50,7 +50,7 @@ Guidelines:
 
         const payload = {
             contents: geminiContents,
-            systemInstruction: {
+            system_instruction: {
                 parts: [{ text: systemInstructionText }]
             },
             generationConfig: {
