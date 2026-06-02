@@ -58,7 +58,7 @@ export default function Home() {
            ) : user ? (
              <div className="flex items-center gap-4">
                <a 
-                 href="/ApnaCollegeBihar_Stable.apk" 
+                 href="https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/server/public/ApnaCollegeBihar_Stable.apk" 
                  target="_blank"
                  rel="noopener noreferrer"
                  download="ApnaCollegeBihar_Stable.apk"
@@ -129,7 +129,7 @@ export default function Home() {
            ) : (
              <div className="flex items-center gap-3 md:gap-5">
                <a 
-                 href="/ApnaCollegeBihar_Stable.apk" 
+                 href="https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/server/public/ApnaCollegeBihar_Stable.apk" 
                  target="_blank"
                  rel="noopener noreferrer"
                  download="ApnaCollegeBihar_Stable.apk"
@@ -169,7 +169,7 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
                <a 
-                 href="/ApnaCollegeBihar_Stable.apk" 
+                 href="https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/server/public/ApnaCollegeBihar_Stable.apk" 
                  target="_blank"
                  rel="noopener noreferrer"
                  download="ApnaCollegeBihar_Stable.apk"
