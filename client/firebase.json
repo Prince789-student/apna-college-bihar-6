@@ -11,17 +11,17 @@
     "redirects": [
       {
         "source": "/ApnaCollegeBihar_Stable.apk",
-        "destination": "https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/client/public/ApnaCollegeBihar_Stable.apk",
+        "destination": "https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/server/public/ApnaCollegeBihar_Stable.apk",
         "type": 302
       },
       {
         "source": "/ACB_v22_Final.apk",
-        "destination": "https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/client/public/ApnaCollegeBihar_Stable.apk",
+        "destination": "https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/server/public/ACB_v22_Final.apk",
         "type": 302
       },
       {
         "source": "/ApnaCollegeBihar_v2.2_Pro.apk",
-        "destination": "https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/client/public/ApnaCollegeBihar_Stable.apk",
+        "destination": "https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/server/public/ApnaCollegeBihar_v2.2_Pro.apk",
         "type": 302
       }
     ],

@@ -38,11 +38,6 @@ export default function Dashboard() {
 
   const isNative = Capacitor.isNativePlatform();
 
-  const handleDownload = (e) => {
-    e.preventDefault();
-    window.location.href = `/ApnaCollegeBihar_Stable.apk?t=${Date.now()}`;
-  };
-
   useEffect(() => {
     if (isNative) fetchApps();
   }, [isNative]);

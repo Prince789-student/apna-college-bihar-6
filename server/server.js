@@ -39,6 +39,21 @@ app.get('/api/download-apk', (req, res) => {
     }
 });
 
+// Route for specific APK file names to prevent SPA interception
+app.get('/:filename.apk', (req, res, next) => {
+    const filename = req.params.filename;
+    const apkPath = path.join(__dirname, 'public', `${filename}.apk`);
+    if (fs.existsSync(apkPath)) {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+        res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+        res.setHeader('Content-Disposition', `attachment; filename="${filename}.apk"`);
+        return res.sendFile(apkPath);
+    }
+    next();
+});
+
 // 2. Middleware
 app.use(compression());
 app.use(express.json());
