@@ -6,8 +6,6 @@ import { db } from '../firebase';
 
 export default function Contact() {
   const navigate = useNavigate();
-  const [formState, setFormState] = useState({ name: '', email: '', subject: 'GENERAL', message: '' });
-  const [submitted, setSubmitted] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
 
   const faqs = [
@@ -33,57 +31,7 @@ export default function Contact() {
     }
   ];
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!formState.name || !formState.email || !formState.message) return;
-    
-    // 1. Save directly to Firestore database as a backup
-    try {
-      await addDoc(collection(db, 'support_tickets'), {
-        name: formState.name,
-        email: formState.email,
-        subject: formState.subject,
-        message: formState.message,
-        createdAt: new Date().toISOString()
-      });
-    } catch (err) {
-      console.error("Firestore backup failed:", err);
-    }
-    
-    // 2. Submit form to FormSubmit via a hidden iframe to bypass AJAX restrictions and trigger activation
-    const iframeName = 'hidden_iframe_' + Date.now();
-    const iframe = document.createElement('iframe');
-    iframe.name = iframeName;
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
 
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'https://formsubmit.co/prince86944@gmail.com';
-    form.target = iframeName;
-    form.style.display = 'none';
-
-    form.innerHTML = `
-      <input type="hidden" name="_subject" value="ACB Support Ticket: ${formState.subject}">
-      <input type="hidden" name="Student Name" value="${formState.name}">
-      <input type="hidden" name="Student Email" value="${formState.email}">
-      <input type="hidden" name="Category" value="${formState.subject}">
-      <input type="hidden" name="Message" value="${formState.message}">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_template" value="table">
-    `;
-
-    document.body.appendChild(form);
-    form.submit();
-
-    // Clean up DOM after submission
-    setTimeout(() => {
-        try { document.body.removeChild(form); } catch(e){}
-        try { document.body.removeChild(iframe); } catch(e){}
-    }, 5000);
-
-    setSubmitted(true);
-  };
 
   return (
     <div className="min-h-screen bg-[#0a0f1d] text-white font-['Inter'] selection:bg-blue-500/30 pb-24">
@@ -165,89 +113,20 @@ export default function Contact() {
 
         {/* Contact Form & FAQ Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 pt-6 items-start">
-          {/* Contact Form */}
-          <div className="bg-[#0d1526] border border-white/10 rounded-[2.5rem] p-8 md:p-10 shadow-2xl space-y-6">
-            <div className="space-y-2">
-              <h2 className="text-2xl font-[1000] uppercase tracking-tighter text-white">Send a Support Ticket</h2>
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">We respond within 24 hours</p>
-            </div>
-
-            {submitted ? (
-              <div className="bg-[#152036] border border-emerald-500/30 rounded-3xl p-8 text-center space-y-4 animate-in zoom-in-95">
-                <div className="w-12 h-12 bg-emerald-600/20 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto">
-                  <CheckCircle2 size={28} />
-                </div>
-                <h3 className="text-lg font-[1000] uppercase text-white">Ticket Submitted Successfully</h3>
-                <p className="text-xs font-medium text-slate-300 leading-relaxed">
-                  Thank you for reaching out! Our support team has received your query and will contact you via email shortly.
-                </p>
-                <div className="flex flex-col gap-3 pt-2">
-                  <button onClick={() => { setSubmitted(false); setFormState({...formState, message: ''}); }} className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-[10px] uppercase tracking-widest rounded-xl shadow-lg active:scale-95 transition-all">
-                    Send Another Message
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-300">Your Name</label>
-                  <input 
-                    type="text" 
-                    required 
-                    placeholder="Rahul Kumar" 
-                    value={formState.name}
-                    onChange={e => setFormState({...formState, name: e.target.value})}
-                    className="w-full bg-[#152036] border border-white/10 rounded-2xl px-4 py-3.5 text-xs font-bold text-white outline-none focus:border-blue-500 transition-all"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-300">Email Address</label>
-                  <input 
-                    type="email" 
-                    required 
-                    placeholder="rahul@gmail.com" 
-                    value={formState.email}
-                    onChange={e => setFormState({...formState, email: e.target.value})}
-                    className="w-full bg-[#152036] border border-white/10 rounded-2xl px-4 py-3.5 text-xs font-bold text-white outline-none focus:border-blue-500 transition-all"
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-300">Category</label>
-                  <select 
-                    value={formState.subject}
-                    onChange={e => setFormState({...formState, subject: e.target.value})}
-                    className="w-full bg-[#152036] border border-white/10 rounded-2xl px-4 py-3.5 text-xs font-black uppercase tracking-wider text-white outline-none focus:border-blue-500 transition-all"
-                  >
-                    <option value="GENERAL">General Query</option>
-                    <option value="UGEAC">UGEAC Counselling Help</option>
-                    <option value="NOTES">Notes & PYQ Contribution</option>
-                    <option value="BUG">Bug / Error Report</option>
-                    <option value="BUSINESS">Business Inquiry</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-300">Message</label>
-                  <textarea 
-                    rows="4" 
-                    required 
-                    placeholder="Describe your query or feedback in detail..." 
-                    value={formState.message}
-                    onChange={e => setFormState({...formState, message: e.target.value})}
-                    className="w-full bg-[#152036] border border-white/10 rounded-2xl px-4 py-3.5 text-xs font-bold text-white outline-none focus:border-blue-500 transition-all resize-none"
-                  ></textarea>
-                </div>
-
-                <button 
-                  type="submit" 
-                  className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-2 transition-all active:scale-95 pt-2"
-                >
-                  <Send size={16} /> Submit Support Ticket
-                </button>
-              </form>
-            )}
+          {/* Contact Form - Embedded Google Form */}
+          <div className="bg-[#0d1526] border border-white/10 rounded-[2.5rem] p-4 md:p-6 shadow-2xl overflow-hidden">
+            <iframe 
+              src="https://docs.google.com/forms/d/e/1FAIpQLSdombJtFUikEw2fHDkOKVXeu-z6F8siD5FGYH1-HtV1gpGJJQ/viewform?embedded=true" 
+              width="100%" 
+              height="1852" 
+              frameBorder="0" 
+              marginHeight="0" 
+              marginWidth="0"
+              className="rounded-2xl bg-white w-full"
+              title="Contact Us Form"
+            >
+              Loading…
+            </iframe>
           </div>
 
           {/* FAQ Accordion */}
