@@ -46,7 +46,7 @@ Guidelines:
 7. Always sign off or reference yourself as "Apna College Bihar AI Assistant" when appropriate.
 `;
 
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
         const payload = {
             contents: geminiContents,
