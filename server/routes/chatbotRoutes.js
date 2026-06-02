@@ -46,7 +46,7 @@ Guidelines:
 7. Always sign off or reference yourself as "Apna College Bihar AI Assistant" when appropriate.
 `;
 
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
 
         const payload = {
             contents: geminiContents,
@@ -101,21 +101,10 @@ Guidelines:
 
 // @route   GET /api/ai/status
 // @desc    Check if Gemini AI key is configured
-router.get('/status', async (req, res) => {
-    try {
-        const apiKey = process.env.GEMINI_API_KEY;
-        if (!apiKey) {
-            return res.json({ configured: false });
-        }
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-        const data = await response.json();
-        return res.json({
-            configured: true,
-            models: data.models ? data.models.map(m => m.name) : data
-        });
-    } catch (e) {
-        return res.json({ configured: true, error: e.message });
-    }
+router.get('/status', (req, res) => {
+    res.json({
+        configured: !!process.env.GEMINI_API_KEY
+    });
 });
 
 module.exports = router;
