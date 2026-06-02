@@ -1,5 +1,25 @@
+# Apna College Bihar — Robots.txt
+# Website: https://www.apnacollegebihar.online
+# Last Updated: 2025-06-02
+
 User-agent: *
 Allow: /
 
-# Sitemap Location
+# Block internal/dev paths
+Disallow: /api/
+Disallow: /admin
+Disallow: /src/
+Disallow: /.firebase/
+Disallow: /.netlify/
+Disallow: /node_modules/
+
+# Crawl rate (polite crawling)
+Crawl-delay: 1
+
+# Sitemaps
 Sitemap: https://www.apnacollegebihar.online/sitemap.xml
+
+# Googlebot specific (faster crawling allowed)
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0

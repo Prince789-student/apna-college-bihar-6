@@ -2,4 +2,5 @@
 /ACB_v22_Final.apk            https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/server/public/ACB_v22_Final.apk  302
 /ApnaCollegeBihar_v2.2_Pro.apk https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/server/public/ApnaCollegeBihar_v2.2_Pro.apk  302
 /api/download-apk             https://raw.githubusercontent.com/Prince789-student/apna-college-bihar-6/main/server/public/ApnaCollegeBihar_v2.2_Pro.apk  302
+/api/*                         https://apna-college-bihar-6.onrender.com/api/:splat 200
 /*                            /index.html  200
