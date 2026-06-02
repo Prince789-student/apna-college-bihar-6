@@ -242,26 +242,29 @@
          }
       }
    </script>
-   <style>
-      html,
-      body,
-      #root {
-         font-family: 'Inter', sans-serif;
-         margin: 0 !important;
-         padding: 0 !important;
-         height: 100%;
-         min-height: 100%;
-         overflow-x: hidden;
-         overflow-y: auto;
-      }
+    <!-- Google AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-818059891079" crossorigin="anonymous"></script>
 
-      /* Prevent AdSense from injecting huge spacers */
-      .adsbygoogle {
-         display: none !important;
-         height: 0 !important;
-         width: 0 !important;
-      }
-   </style>
+    <style>
+       html,
+       body,
+       #root {
+          font-family: 'Inter', sans-serif;
+          margin: 0 !important;
+          padding: 0 !important;
+          height: 100%;
+          min-height: 100%;
+          overflow-x: hidden;
+          overflow-y: auto;
+       }
+ 
+       /* Prevent AdSense from injecting huge spacers when unfilled, but show active ads */
+       .adsbygoogle[data-ad-status="unfilled"] {
+          display: none !important;
+          height: 0 !important;
+          width: 0 !important;
+       }
+    </style>
   <script type="module" crossorigin src="/assets/index.js"></script>
 </head>
 
