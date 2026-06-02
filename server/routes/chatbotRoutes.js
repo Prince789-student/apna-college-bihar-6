@@ -103,7 +103,8 @@ Guidelines:
 // @desc    Check if Gemini AI key is configured
 router.get('/status', (req, res) => {
     res.json({
-        configured: !!process.env.GEMINI_API_KEY
+        configured: !!process.env.GEMINI_API_KEY,
+        endpoint: 'v1beta'
     });
 });
 
