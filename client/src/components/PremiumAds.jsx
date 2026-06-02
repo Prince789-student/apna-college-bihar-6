@@ -72,7 +72,7 @@ export default function PremiumAds({ type = 'BANNER' }) {
            <ins className="adsbygoogle"
                 style={{ display: 'block' }}
                 data-ad-client="ca-pub-818059891079"
-                data-ad-slot={type === 'BANNER' ? '1234567890' : '0987654321'} // User will set real slot ID
+                data-ad-slot={current.adSlot || (type === 'BANNER' ? '1234567890' : '0987654321')}
                 data-ad-format="auto"
                 data-full-width-responsive="true"></ins>
         </div>

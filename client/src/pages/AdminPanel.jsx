@@ -24,7 +24,7 @@ export default function AdminPanel() {
   const [anns, setAnns] = useState([]);
   const [ads, setAds] = useState([]);
   const [newAnn, setNewAnn] = useState({ title: '', content: '', type: 'INFO' });
-  const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '', useAdSense: false });
+  const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '', useAdSense: false, adSlot: '' });
   const [msg, setMsg] = useState(null);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -280,12 +280,13 @@ export default function AdminPanel() {
         imageUrl: imageUrl || "",
         type: adForm.type,
         useAdSense: adForm.useAdSense,
+        adSlot: adForm.adSlot || "",
         active: true,
         createdAt: serverTimestamp()
       });
       
       flash('Campaign Deployment Victory! 🚀✨');
-      setAdForm({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '', useAdSense: false });
+      setAdForm({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '', useAdSense: false, adSlot: '' });
     } catch (err) {
       if (timeoutId) clearTimeout(timeoutId);
       console.error("AD DEPLOY ERROR:", err);
@@ -768,6 +769,13 @@ export default function AdminPanel() {
                    </div>
                    <input type="checkbox" checked={adForm.useAdSense} onChange={e=>setAdForm({...adForm, useAdSense: e.target.checked})} className="w-6 h-6 rounded-lg bg-slate-800 accent-amber-500 border-none outline-none" />
                 </div>
+
+                {adForm.useAdSense && (
+                  <div className="space-y-2 animate-in slide-in-from-top-2 duration-300">
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">Google AdSense Slot ID</p>
+                    <input value={adForm.adSlot || ''} onChange={e=>setAdForm({...adForm, adSlot: e.target.value})} placeholder="e.g. 5492477382" className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none border-2 border-transparent focus:border-emerald-500" />
+                  </div>
+                )}
 
                 <select value={adForm.type} onChange={e=>setAdForm({...adForm, type: e.target.value})} className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none">
                    <option value="BANNER">DASHBOARD BANNER (TOP)</option>
