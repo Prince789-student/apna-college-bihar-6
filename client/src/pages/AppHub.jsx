@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { 
   Send, BookOpen, GraduationCap, Timer, 
   Users, Calculator, Globe, UserCheck, 
-  Bell, LogIn, LogOut, MessageCircle, Youtube, User, Trash2, ShieldCheck, Calendar
+  Bell, LogIn, LogOut, MessageCircle, Youtube, User, Trash2, ShieldCheck, Calendar, Sparkles
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -34,6 +34,7 @@ export default function AppHub() {
     { name: 'Study Network', icon: <Users size={28} />, path: '/dashboard/groups?standalone=true', color: 'text-orange-400' },
     { name: 'Scientific Calc', icon: <Calculator size={28} />, path: '/dashboard/calculator?standalone=true', color: 'text-rose-400' },
     { name: 'BEU Syllabus', icon: <BookOpen size={28} />, path: '/dashboard/syllabus?standalone=true', color: 'text-purple-400' },
+    { name: 'ACB AI Bot', icon: <Sparkles size={28} />, path: '/dashboard/chatbot?standalone=true', color: 'text-yellow-400' },
     { name: 'Results Portal', icon: <Globe size={28} />, path: 'https://results.beu.ac.in', external: true, color: 'text-slate-400' },
   ];
 

@@ -4,7 +4,7 @@ import {
   BookOpen, Calculator, Timer, Users, 
   ArrowRight, CheckCircle, GraduationCap, 
   Globe, Shield, Zap, Flame, Send, Youtube,
-  User, LogOut, ChevronDown, LayoutDashboard, Bell, Download, MessageCircle, ShieldCheck, Calendar
+  User, LogOut, ChevronDown, LayoutDashboard, Bell, Download, MessageCircle, ShieldCheck, Calendar, Sparkles
 } from 'lucide-react';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -282,7 +282,7 @@ export default function Home() {
            <p className="text-slate-500 font-bold uppercase tracking-widest text-[9px] max-w-xs text-right italic">"Built with modern stack for maximum speed and SEO dominance."</p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
            {[
              { title: "UGEAC 2025 Predictor", ic: <Send className="text-emerald-500"/>, d: "Bihar Engineering Counselling 2025 — Rank predictor based on 2024-2025 official data.", link: "/dashboard/ugeac-predictor?standalone=true" },
              { title: "BEU Notes & PYQ Hub", ic: <BookOpen className="text-blue-500"/>, d: "Free handwritten notes and previous year questions for all BEU semesters.", link: "/dashboard/notes?standalone=true" },
@@ -291,7 +291,8 @@ export default function Home() {
              { title: "Study Timer & Focus", ic: <Timer className="text-blue-500"/>, d: "Pomodoro technique and focus tracking for Bihar engineering students.", link: "/dashboard/study?standalone=true" },
              { title: "Study Network", ic: <Users className="text-purple-500"/>, d: "Join student groups to discuss PYQs and UGEAC counselling tips.", link: "/dashboard/groups?standalone=true" },
              { title: "Scientific Calc", ic: <Calculator className="text-pink-500"/>, d: "Advanced scientific calculator for professional engineering calculations.", link: "/dashboard/calculator?standalone=true" },
-             { title: "BEU Results Portal", ic: <Globe className="text-slate-400"/>, d: "Direct access to the official Bihar Engineering University results page.", link: "/dashboard/cgpa?standalone=true" }
+             { title: "AI Doubts Solver", ic: <Sparkles className="text-yellow-500"/>, d: "Ask doubts about Bihar engineering colleges, BEU exams, CGPA rules, and notes.", link: "/dashboard/chatbot?standalone=true" },
+             { title: "BEU Results Portal", ic: <Globe className="text-slate-400"/>, d: "Direct access to the official Bihar Engineering University results page.", link: "https://results.beu.ac.in" }
            ].map((f, i) => (
              <Link key={i} to={f.link} target={f.link.startsWith('http') ? '_blank' : '_self'} className="group p-4 md:p-8 bg-white border border-slate-200/80 rounded-2xl md:rounded-[3rem] hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left shadow-sm">
                 <div className="w-10 h-10 md:w-14 md:h-14 bg-slate-100 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-8 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform">
