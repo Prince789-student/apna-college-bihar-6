@@ -104,7 +104,7 @@ Guidelines:
 router.get('/status', (req, res) => {
     res.json({
         configured: !!process.env.GEMINI_API_KEY,
-        endpoint: 'v1beta'
+        endpoint: 'v1beta-1.5'
     });
 });
 
