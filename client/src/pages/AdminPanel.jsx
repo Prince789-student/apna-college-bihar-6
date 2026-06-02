@@ -18,6 +18,7 @@ export default function AdminPanel() {
   const { user, ROLES, loading: authLoading } = useAuth();
   const [tab, setTab] = useState('overview');
   const [users, setUsers] = useState([]);
+  const [userSearch, setUserSearch] = useState('');
   const [groups, setGroups] = useState([]);
   const [docs, setDocs] = useState([]);
   const [anns, setAnns] = useState([]);
@@ -57,6 +58,23 @@ export default function AdminPanel() {
       return dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
     } catch(e) {
       return 'Legacy Member';
+    }
+  };
+
+  const getFormattedDate = (val) => {
+    if (!val) return 'N/A';
+    try {
+      let dateObj;
+      if (val.toDate) {
+        dateObj = val.toDate();
+      } else if (val.seconds) {
+        dateObj = new Date(val.seconds * 1000);
+      } else {
+        dateObj = new Date(val);
+      }
+      return dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    } catch(e) {
+      return String(val);
     }
   };
 
@@ -357,24 +375,48 @@ export default function AdminPanel() {
               <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest">Scholar Directory</h2>
               <div className="relative group w-full md:w-72">
                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500" size={16} />
-                 <input placeholder="Search UID/Email/Name..." className="w-full bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-2.5 pl-12 text-slate-900 text-[12px] font-bold outline-none" />
+                 <input 
+                   value={userSearch}
+                   onChange={(e) => setUserSearch(e.target.value)}
+                   placeholder="Search UID/Name/District/College..." 
+                   className="w-full bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-2.5 pl-12 text-slate-900 text-[12px] font-bold outline-none" 
+                 />
               </div>
            </div>
            <div className="overflow-x-auto">
              <table className="w-full text-left">
                <thead>
                  <tr className="bg-slate-100/40 text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 border-b border-slate-200/50">
-                   <th className="py-5 px-8">Identity</th>
-                   <th className="py-5 px-8 text-center">Contact</th>
-                   <th className="py-5 px-8 text-center">Join Date</th>
-                   <th className="py-5 px-8 text-center">Status</th>
-                   <th className="py-5 px-8">Rank</th>
+                   <th className="py-5 px-8">Identity & UID</th>
+                   <th className="py-5 px-8">Contact & Device</th>
+                   <th className="py-5 px-8">Academics</th>
+                   <th className="py-5 px-8">Rank & Verification</th>
+                   <th className="py-5 px-8">Activity Timeline</th>
                    <th className="py-5 px-8 text-right">Operations</th>
                  </tr>
                </thead>
                <tbody className="divide-y divide-slate-800/30">
-                 {users.map(u => (
+                 {users.filter(u => {
+                   const query = userSearch.toLowerCase();
+                   return (
+                     u.id?.toLowerCase().includes(query) ||
+                     u.uid?.toLowerCase().includes(query) ||
+                     u.name?.toLowerCase().includes(query) ||
+                     u.email?.toLowerCase().includes(query) ||
+                     u.phone?.toLowerCase().includes(query) ||
+                     u.role?.toLowerCase().includes(query) ||
+                     u.homeDistrict?.toLowerCase().includes(query) ||
+                     u.district?.toLowerCase().includes(query) ||
+                     u.home_district?.toLowerCase().includes(query) ||
+                     u.collegeName?.toLowerCase().includes(query) ||
+                     u.college?.toLowerCase().includes(query) ||
+                     u.college_name?.toLowerCase().includes(query) ||
+                     u.deviceId?.toLowerCase().includes(query) ||
+                     u.device_id?.toLowerCase().includes(query)
+                   );
+                 }).map(u => (
                    <tr key={u.id} className="hover:bg-slate-100/20 transition-all group">
+                     {/* Identity & UID */}
                      <td className="py-6 px-8">
                         <div className="flex items-center gap-4">
                             <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-black text-white text-[11px] group-hover:scale-110 transition-transform">
@@ -382,46 +424,80 @@ export default function AdminPanel() {
                             </div>
                            <div>
                               <p className="text-[13px] font-black text-slate-900 uppercase tracking-tight">{u.name}</p>
-                              <p className="text-[10px] font-bold text-slate-600 truncate max-w-[150px]">{u.email}</p>
+                              <p className="text-[10px] font-bold text-slate-600 truncate max-w-[180px]">{u.email}</p>
+                              <p className="text-[9px] font-mono text-slate-400 truncate max-w-[180px] mt-1 select-all" title={u.id || u.uid}>ID: {u.id || u.uid}</p>
                            </div>
                         </div>
                      </td>
-                     <td className="py-6 px-8 text-center">
-                        <div className="inline-block px-3 py-1.5 bg-slate-100/50 border border-slate-200/80 rounded-xl">
-                          <span className="text-[11px] font-bold text-slate-500 tracking-widest">
-                            {u.phone || 'NOT LINKED'}
-                          </span>
-                        </div>
-                     </td>
-                     <td className="py-6 px-8 text-center">
-                        <div className="inline-block px-3 py-1.5 bg-indigo-50/50 border border-indigo-200/80 rounded-xl">
-                          <span className="text-[11px] font-bold text-indigo-600 tracking-widest">
-                            {getJoinDate(u)}
-                          </span>
-                        </div>
-                     </td>
-                     <td className="py-6 px-8 text-center">
-                        <span className={`text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-tighter ${u.banned?'bg-red-500/10 text-red-400 border border-red-500/20':'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}`}>
-                          {u.banned ? 'TERMINATED' : 'VERIFIED'}
-                        </span>
-                     </td>
+
+                     {/* Contact & Device */}
                      <td className="py-6 px-8">
-                        <div className="flex items-center gap-2">
-                           <Shield size={12} className={u.role===ROLES.SUPER_ADMIN?'text-amber-500':u.role===ROLES.ADMIN?'text-blue-500':'text-slate-600'} />
-                           <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{u.role}</span>
+                        <div className="space-y-1">
+                          <div className="inline-block px-2.5 py-1 bg-slate-100/50 border border-slate-200/80 rounded-lg">
+                            <span className="text-[10px] font-black text-slate-600 tracking-wider">
+                              {u.phone || 'NO PHONE'}
+                            </span>
+                          </div>
+                          <p className="text-[9px] font-mono text-slate-500 truncate max-w-[150px] select-all" title={u.deviceId || u.device_id}>
+                            Device: {u.deviceId || u.device_id || 'N/A'}
+                          </p>
+                          <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter inline-block ${u.banned?'bg-red-500/10 text-red-400 border border-red-500/20':'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}`}>
+                            {u.banned ? 'BANNED' : u.status || 'ACTIVE'}
+                          </span>
                         </div>
                      </td>
-                     <td className="py-6 px-8 text-right space-x-2">
-                        <button onClick={()=>toggleBan(u.id, u.banned)} className={`p-2 rounded-xl transition-all ${u.banned?'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-slate-900':'bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-slate-900'}`}>
+
+                     {/* Academics */}
+                     <td className="py-6 px-8">
+                        <div>
+                           <p className="text-[12px] font-black text-slate-800 uppercase tracking-tight leading-tight max-w-[200px] truncate" title={u.collegeName || u.college || u.college_name}>
+                             {u.collegeName || u.college || u.college_name || 'N/A'}
+                           </p>
+                           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">
+                             District: <span className="text-indigo-600">{u.homeDistrict || u.district || u.home_district || 'N/A'}</span>
+                           </p>
+                        </div>
+                     </td>
+
+                     {/* Rank & Verification */}
+                     <td className="py-6 px-8">
+                        <div className="space-y-1">
+                           <div className="flex items-center gap-1.5">
+                              <Shield size={12} className={u.role===ROLES.SUPER_ADMIN?'text-amber-500':u.role===ROLES.ADMIN?'text-blue-500':'text-slate-600'} />
+                              <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">{u.role}</span>
+                           </div>
+                           <div>
+                              <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider ${u.is_verified || u.isVerified || u.emailVerified ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-slate-50 text-slate-400 border border-slate-100'}`}>
+                                {u.is_verified || u.isVerified || u.emailVerified ? 'EMAIL VERIFIED' : 'UNVERIFIED EMAIL'}
+                              </span>
+                           </div>
+                        </div>
+                     </td>
+
+                     {/* Activity Timeline */}
+                     <td className="py-6 px-8">
+                        <div className="space-y-1">
+                           <p className="text-[10px] font-bold text-slate-700">
+                             Joined: <span className="text-slate-900">{getJoinDate(u)}</span>
+                           </p>
+                           <p className="text-[9px] font-bold text-slate-500">
+                             Active: <span className="text-slate-700">{getFormattedDate(u.lastLogin || u.last_login)}</span>
+                           </p>
+                        </div>
+                     </td>
+
+                     {/* Operations */}
+                     <td className="py-6 px-8 text-right space-x-2 whitespace-nowrap">
+                        <button onClick={()=>toggleBan(u.id, u.banned)} className={`p-2 rounded-xl transition-all ${u.banned?'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-slate-900':'bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-slate-900'}`} title={u.banned ? 'Unban User' : 'Ban User'}>
                            {u.banned ? <UserCheck size={16}/> : <Ban size={16}/>}
                         </button>
                         {isSuper && (
-                          <button onClick={()=>changeRole(u.id, u.role==='STUDENT'?'ADMIN':'STUDENT')} className="p-2 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-slate-900 rounded-xl">
+                          <button onClick={()=>changeRole(u.id, u.role==='STUDENT'?'ADMIN':'STUDENT')} className="p-2 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-slate-900 rounded-xl" title="Change Role">
                             {u.role==='STUDENT'?<UserPlus size={16}/>:<UserMinus size={16}/>}
                           </button>
                         )}
                         {u.role!==ROLES.SUPER_ADMIN && (
-                          <button onClick={()=>deleteUser(u.id)} className="p-2 bg-slate-800 text-slate-500 hover:text-red-500 rounded-xl"><Trash2 size={16}/></button>
+                          <button onClick={()=>deleteUser(u.id)} className="p-2 bg-slate-800 text-slate-500 hover:text-red-500 rounded-xl" title="Delete User"><Trash2 size={16}/></button>
                         )}
                      </td>
                    </tr>
