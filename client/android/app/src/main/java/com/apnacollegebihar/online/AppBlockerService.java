@@ -10,89 +10,129 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 public class AppBlockerService extends AccessibilityService {
 
     private static final String TAG = "AppBlockerService";
-    
-    // Key Prefs keys (legacy Cap prefix and clean)
-    private static final String KEY_IS_ACTIVE_LEGACY = "_cap_isBlockerActive";
-    private static final String KEY_IS_ACTIVE_CLEAN = "isBlockerActive";
-    private static final String KEY_COUNTDOWN_END_LEGACY = "_cap_countdownEndTime";
-    private static final String KEY_COUNTDOWN_END_CLEAN = "countdownEndTime";
-    private static final String KEY_ALLOWED_PACKAGES_LEGACY = "_cap_allowedPackages";
-    private static final String KEY_ALLOWED_PACKAGES_CLEAN = "allowedPackages";
 
+    // SharedPreferences file — must match AppBlockerPlugin
+    private static final String PREFS_NAME = "CapacitorStorage";
+
+    // Keys with _cap_ prefix — this is how @capacitor/preferences stores them
+    private static final String KEY_IS_ACTIVE = "_cap_isBlockerActive";
+    private static final String KEY_COUNTDOWN_END = "_cap_countdownEndTime";
+    private static final String KEY_ALLOWED_PACKAGES = "_cap_allowedPackages";
+
+    // In-memory state (updated by plugin directly)
     public static volatile boolean sIsActive = false;
     public static volatile long sCountdownEnd = 0;
     public static final Set<String> sAllowedPackages = new HashSet<>();
 
     private String mCachedLauncherPackage = null;
+    private long mLastToastTime = 0;
 
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
-        Log.d(TAG, "AppBlockerService Connected!");
+        Log.d(TAG, "AppBlockerService Connected and running!");
         try {
-            Toast.makeText(this, "ACB Focus Mode Service Connected!", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {}
+            Toast.makeText(this, "ACB Focus Mode: Service Started!", Toast.LENGTH_SHORT).show();
+        } catch (Exception ignored) {}
     }
 
-    // Returns all three potential SharedPreferences storage files used by Capacitor/Plugins
-    private SharedPreferences[] getPrefsList() {
-        return new SharedPreferences[]{
-            getSharedPreferences("CapacitorStorage", MODE_PRIVATE),
-            getSharedPreferences("com.getcapacitor.android.plugins.preferences.Preferences", MODE_PRIVATE),
-            getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE)
-        };
+    private SharedPreferences getPrefs() {
+        return getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
     }
 
-    private boolean getBooleanSafe(SharedPreferences prefs, String key) {
+    /**
+     * Read a String value from SharedPreferences.
+     * @capacitor/preferences stores all values as JSON strings.
+     */
+    private String getString(String key) {
+        SharedPreferences prefs = getPrefs();
         try {
-            return prefs.getBoolean(key, false);
+            // @capacitor/preferences stores as String
+            return prefs.getString(key, null);
         } catch (ClassCastException e) {
+            // Fallback: maybe stored as other type
             try {
-                String str = prefs.getString(key, "false");
-                return "true".equalsIgnoreCase(str);
+                Object val = prefs.getAll().get(key);
+                return val != null ? val.toString() : null;
             } catch (Exception ex) {
-                return false;
+                return null;
             }
         }
     }
 
-    private long getLongSafe(SharedPreferences prefs, String key) {
-        try {
-            return prefs.getLong(key, 0);
-        } catch (ClassCastException e) {
-            try {
-                String str = prefs.getString(key, "0");
-                if (str != null && !str.isEmpty()) {
-                    return Long.parseLong(str);
-                }
-            } catch (Exception ex) {}
-            return 0;
+    private boolean isBlockerActive() {
+        // Check in-memory first (fastest)
+        if (sIsActive) return true;
+
+        // Check SharedPreferences (written by @capacitor/preferences and plugin)
+        String val = getString(KEY_IS_ACTIVE);
+        if (val != null) {
+            // @capacitor/preferences stores booleans as "true" or "false" strings
+            return "true".equalsIgnoreCase(val.trim());
         }
+        return false;
     }
 
-    private Set<String> getStringSetSafe(SharedPreferences prefs, String key) {
-        Set<String> result = new HashSet<>();
-        try {
-            Set<String> stored = prefs.getStringSet(key, new HashSet<>());
-            if (stored != null) result.addAll(stored);
-        } catch (ClassCastException e) {
+    private long getCountdownEnd() {
+        // In-memory takes priority
+        if (sCountdownEnd > 0) return sCountdownEnd;
+
+        String val = getString(KEY_COUNTDOWN_END);
+        if (val != null && !val.trim().isEmpty()) {
             try {
-                String str = prefs.getString(key, "");
-                if (str != null && !str.isEmpty()) {
-                    String[] parts = str.split(",");
-                    for (String p : parts) {
-                        if (!p.trim().isEmpty()) result.add(p.trim());
-                    }
-                }
-            } catch (Exception ex) {}
+                return Long.parseLong(val.trim());
+            } catch (NumberFormatException e) {
+                Log.w(TAG, "Could not parse countdownEnd: " + val);
+            }
         }
+        return 0;
+    }
+
+    private Set<String> getAllowedPackages() {
+        Set<String> result = new HashSet<>();
+
+        // In-memory packages
+        synchronized (sAllowedPackages) {
+            result.addAll(sAllowedPackages);
+        }
+
+        // Also check SharedPreferences
+        String val = getString(KEY_ALLOWED_PACKAGES);
+        if (val != null && !val.trim().isEmpty()) {
+            String[] parts = val.split(",");
+            for (String part : parts) {
+                String trimmed = part.trim();
+                if (!trimmed.isEmpty()) {
+                    result.add(trimmed);
+                }
+            }
+        }
+
         return result;
+    }
+
+    private String getLauncherPackage() {
+        if (mCachedLauncherPackage != null) return mCachedLauncherPackage;
+        try {
+            PackageManager pm = getPackageManager();
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            ResolveInfo resolveInfo = pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
+            if (resolveInfo != null && resolveInfo.activityInfo != null) {
+                mCachedLauncherPackage = resolveInfo.activityInfo.packageName;
+                return mCachedLauncherPackage;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to resolve launcher", e);
+        }
+        return "";
     }
 
     @Override
@@ -101,70 +141,29 @@ public class AppBlockerService extends AccessibilityService {
             if (event == null || event.getPackageName() == null) return;
 
             String packageName = event.getPackageName().toString();
-            String myPackage = getPackageName();
+            if (packageName.trim().isEmpty()) return;
 
-            SharedPreferences[] prefsList = getPrefsList();
-
-            // Evaluate if blocker is active across all possible settings sources
-            boolean isActive = sIsActive;
-            for (SharedPreferences prefs : prefsList) {
-                if (getBooleanSafe(prefs, KEY_IS_ACTIVE_LEGACY) || getBooleanSafe(prefs, KEY_IS_ACTIVE_CLEAN)) {
-                    isActive = true;
-                    break;
-                }
-            }
-
-            long endTime = sCountdownEnd;
-            for (SharedPreferences prefs : prefsList) {
-                endTime = Math.max(endTime, Math.max(
-                    getLongSafe(prefs, KEY_COUNTDOWN_END_LEGACY),
-                    getLongSafe(prefs, KEY_COUNTDOWN_END_CLEAN)
-                ));
-            }
+            // Check if blocker should be active
+            boolean isActive = isBlockerActive();
+            long endTime = getCountdownEnd();
             boolean timerRunning = endTime > System.currentTimeMillis();
 
-            if (!(isActive || timerRunning)) {
+            if (!isActive && !timerRunning) {
                 return;
             }
 
-            // Resolve and cache the launcher package dynamically to avoid redundant PM queries
-            String currentLauncherPackage = mCachedLauncherPackage;
-            if (currentLauncherPackage == null) {
-                try {
-                    PackageManager pm = getPackageManager();
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    ResolveInfo resolveInfo = pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
-                    if (resolveInfo != null && resolveInfo.activityInfo != null) {
-                        mCachedLauncherPackage = resolveInfo.activityInfo.packageName;
-                        currentLauncherPackage = mCachedLauncherPackage;
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "Failed to resolve launcher package", e);
-                }
-            }
-            if (currentLauncherPackage == null) {
-                currentLauncherPackage = "";
-            }
+            String myPackage = getPackageName();
+            String launcherPackage = getLauncherPackage();
 
-            // Pull whitelisted packages from all possible SharedPreferences sources
-            Set<String> allowedPackages = new HashSet<>();
-            synchronized (sAllowedPackages) {
-                allowedPackages.addAll(sAllowedPackages);
-            }
-            for (SharedPreferences prefs : prefsList) {
-                allowedPackages.addAll(getStringSetSafe(prefs, KEY_ALLOWED_PACKAGES_LEGACY));
-                allowedPackages.addAll(getStringSetSafe(prefs, KEY_ALLOWED_PACKAGES_CLEAN));
-            }
+            // Get whitelisted packages
+            Set<String> allowed = getAllowedPackages();
 
-            boolean isWhitelisted = allowedPackages.contains(packageName);
-
-            // Safe-list standard UI, launchers, system apps, and essential incoming calls
-            boolean isIgnoredPackage = 
+            // Packages to never block
+            boolean isIgnored =
                     packageName.equals(myPackage) ||
-                    packageName.equals(currentLauncherPackage) ||
+                    packageName.equals(launcherPackage) ||
                     packageName.contains("launcher") ||
-                    packageName.contains("home") ||
+                    packageName.contains(".home") ||
                     packageName.contains("systemui") ||
                     packageName.contains("settings") ||
                     packageName.equals("android") ||
@@ -172,20 +171,26 @@ public class AppBlockerService extends AccessibilityService {
                     packageName.equals("com.android.server.telecom") ||
                     packageName.equals("com.google.android.dialer") ||
                     packageName.equals("com.android.incallui") ||
-                    isWhitelisted;
+                    allowed.contains(packageName);
 
-            if (isIgnoredPackage) {
+            if (isIgnored) {
                 return;
             }
 
-            Log.d(TAG, "Blocking distracting package: " + packageName);
-            try {
-                Toast.makeText(this, "Focus Mode is Active!", Toast.LENGTH_SHORT).show();
-            } catch (Exception tErr) {}
-            
-            // Go to home screen to block the app
+            Log.d(TAG, "BLOCKING: " + packageName + " | active=" + isActive + " | timer=" + timerRunning);
+
+            // Show toast at most once per 3 seconds to avoid spam
+            long now = System.currentTimeMillis();
+            if (now - mLastToastTime > 3000) {
+                mLastToastTime = now;
+                try {
+                    Toast.makeText(this, "🛡️ Focus Mode Active! App blocked.", Toast.LENGTH_SHORT).show();
+                } catch (Exception ignored) {}
+            }
+
+            // Go to home screen
             performGlobalAction(GLOBAL_ACTION_HOME);
-            
+
         } catch (Exception e) {
             Log.e(TAG, "Error in onAccessibilityEvent", e);
         }
@@ -193,5 +198,6 @@ public class AppBlockerService extends AccessibilityService {
 
     @Override
     public void onInterrupt() {
+        Log.d(TAG, "AppBlockerService interrupted");
     }
 }
