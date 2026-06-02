@@ -7,6 +7,7 @@ import { db } from '../firebase';
 export default function Contact() {
   const navigate = useNavigate();
   const [activeFaq, setActiveFaq] = useState(null);
+  const [iframeLoading, setIframeLoading] = useState(true);
 
   const faqs = [
     {
@@ -114,16 +115,24 @@ export default function Contact() {
         {/* Contact Form & FAQ Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 pt-6 items-start">
           {/* Contact Form - Embedded Google Form */}
-          <div className="bg-[#0d1526] border border-white/10 rounded-[2.5rem] p-4 md:p-6 shadow-2xl overflow-hidden">
+          <div className="bg-[#0d1526] border border-white/10 rounded-[2.5rem] p-4 md:p-6 shadow-2xl relative min-h-[600px] flex items-center justify-center overflow-hidden">
+            {iframeLoading && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0d1526] rounded-[2.5rem] z-10 animate-in fade-in duration-300">
+                <div className="w-10 h-10 border-4 border-slate-700 border-t-blue-500 rounded-full animate-spin mb-3"></div>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Loading Form...</p>
+              </div>
+            )}
             <iframe 
               src="https://docs.google.com/forms/d/e/1FAIpQLSdombJtFUikEw2fHDkOKVXeu-z6F8siD5FGYH1-HtV1gpGJJQ/viewform?embedded=true" 
               width="100%" 
-              height="1852" 
+              height="800" 
               frameBorder="0" 
               marginHeight="0" 
               marginWidth="0"
-              className="rounded-2xl bg-white w-full"
+              className="rounded-2xl bg-white w-full transition-opacity duration-500"
               title="Contact Us Form"
+              onLoad={() => setIframeLoading(false)}
+              style={{ opacity: iframeLoading ? 0 : 1 }}
             >
               Loading…
             </iframe>
