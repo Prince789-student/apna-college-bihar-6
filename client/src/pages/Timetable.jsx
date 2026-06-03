@@ -8,6 +8,16 @@ import toast from 'react-hot-toast';
 
 const DAYS_OF_WEEK = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 
+export const formatTime12h = (time24) => {
+  if (!time24) return '';
+  const [h, m] = time24.split(':');
+  let hour = parseInt(h, 10);
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12;
+  hour = hour ? hour : 12;
+  return `${hour}:${m} ${ampm}`;
+};
+
 export default function Timetable() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -104,7 +114,7 @@ export default function Timetable() {
   const addClass = (day) => {
     const newSchedule = { ...schedule };
     if (!newSchedule[day]) newSchedule[day] = [];
-    newSchedule[day].push({ id: Date.now().toString(), timeSlot: '', subject: '' });
+    newSchedule[day].push({ id: Date.now().toString(), startTime: '', endTime: '', subject: '' });
     setSchedule(newSchedule);
     setSaved(false);
   };
@@ -173,7 +183,7 @@ export default function Timetable() {
         <div className="flex items-start gap-3 mb-6">
            <Info size={18} className="text-indigo-500 shrink-0 mt-0.5" />
            <p className="text-xs font-bold text-slate-500 leading-relaxed">
-             Manually type your class timings (e.g. "10:00 - 12:00" or "2 hrs") and subject names. 
+             Select your class start time and end time using the clock. 
              All subjects you add here will automatically appear in your Attendance Tracker.
            </p>
         </div>
@@ -198,26 +208,31 @@ export default function Timetable() {
                   ) : (
                     classes.map((cls, idx) => (
                       <div key={cls.id} className="flex gap-2 relative group">
-                        <div className="w-1/3">
+                        <div className="w-1/3 flex flex-col gap-1">
                           <input 
-                            type="text"
-                            placeholder="Time (e.g. 10-12)"
-                            value={cls.timeSlot}
-                            onChange={(e) => updateClass(day, cls.id, 'timeSlot', e.target.value)}
-                            className={`w-full text-[10px] font-black uppercase tracking-widest px-3 py-2.5 rounded-xl border outline-none transition-all ${isToday ? 'bg-white border-indigo-100 focus:border-indigo-400' : 'bg-white border-slate-200 focus:border-slate-400'}`}
+                            type="time"
+                            value={cls.startTime || ''}
+                            onChange={(e) => updateClass(day, cls.id, 'startTime', e.target.value)}
+                            className={`w-full text-[10px] font-black uppercase tracking-widest px-2 py-1.5 rounded-lg border outline-none transition-all ${isToday ? 'bg-white border-indigo-100 focus:border-indigo-400' : 'bg-white border-slate-200 focus:border-slate-400'}`}
+                          />
+                          <input 
+                            type="time"
+                            value={cls.endTime || ''}
+                            onChange={(e) => updateClass(day, cls.id, 'endTime', e.target.value)}
+                            className={`w-full text-[10px] font-black uppercase tracking-widest px-2 py-1.5 rounded-lg border outline-none transition-all ${isToday ? 'bg-white border-indigo-100 focus:border-indigo-400' : 'bg-white border-slate-200 focus:border-slate-400'}`}
                           />
                         </div>
-                        <div className="w-2/3 relative">
+                        <div className="w-2/3 relative flex items-center">
                           <input 
                             type="text"
                             placeholder="Subject Name"
                             value={cls.subject}
                             onChange={(e) => updateClass(day, cls.id, 'subject', e.target.value)}
-                            className={`w-full text-xs font-bold px-3 py-2.5 rounded-xl border outline-none transition-all pr-8 ${isToday ? 'bg-white border-indigo-100 focus:border-indigo-400' : 'bg-white border-slate-200 focus:border-slate-400'}`}
+                            className={`w-full text-xs font-bold px-3 py-3 rounded-xl border outline-none transition-all pr-8 h-full ${isToday ? 'bg-white border-indigo-100 focus:border-indigo-400' : 'bg-white border-slate-200 focus:border-slate-400'}`}
                           />
                           <button 
                             onClick={() => deleteClass(day, cls.id)}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-slate-300 hover:text-red-500 transition-colors rounded-md hover:bg-red-50"
+                            className="absolute right-2 p-1 text-slate-300 hover:text-red-500 transition-colors rounded-md hover:bg-red-50"
                           >
                             <X size={14} />
                           </button>

@@ -124,8 +124,8 @@ export default function Attendance() {
           const classes = todaySchedule
             .filter(c => c.subject && c.subject.trim() !== '')
             .map(c => ({
-              slot: c.timeSlot || 'No Time',
-              displaySlot: c.timeSlot || 'No Time',
+              slot: c.startTime || 'No Time',
+              displaySlot: c.startTime && c.endTime ? `${formatTime12h(c.startTime)} - ${formatTime12h(c.endTime)}` : (c.startTime ? formatTime12h(c.startTime) : 'No Time'),
               subject: c.subject.trim()
             }));
             
