@@ -7,7 +7,7 @@ const { protect } = require('../middleware/authMiddleware');
 router.post('/chat', async (req, res) => {
     try {
         const apiKey = process.env.GEMINI_API_KEY;
-        const { messages, isSyllabusQuery, topicText, subjectName } = req.body;
+        const { messages, isSyllabusQuery, topicText, subjectName, language } = req.body;
 
         if (!messages || !Array.isArray(messages) || messages.length === 0) {
             return res.status(400).json({ success: false, message: 'Messages array is required' });
@@ -44,13 +44,17 @@ Guidelines:
 `;
 
         if (isSyllabusQuery && topicText) {
+            const langInstruction = language === 'english' 
+                ? "1. Explain in VERY EASY NORMAL ENGLISH using simple words that a first-year engineering student can understand."
+                : "1. Explain in VERY EASY ENGLISH and Hinglish mix using simple words that a first-year engineering student can understand.";
+
             systemInstructionText = `Act as a senior Bihar Engineering University (BEU) professor and expert teacher.
 
 Explain the topic: "${topicText}"
 
 Instructions:
 
-1. Explain in VERY EASY ENGLISH and Hinglish mix using simple words that a first-year engineering student can understand.
+${langInstruction}
 
 2. Start from ZERO BASIC LEVEL.
    - Assume the student knows nothing about the topic.
@@ -122,7 +126,7 @@ Instructions:
                 parts: [{ text: systemInstructionText }]
             },
             generationConfig: {
-                maxOutputTokens: 2048,
+                maxOutputTokens: 8192,
                 temperature: 0.7
             }
         };

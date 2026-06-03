@@ -276,6 +276,7 @@ export default function BeuSyllabus() {
   const [aiQuery, setAiQuery] = useState(null);
   const [aiAnswer, setAiAnswer] = useState('');
   const [aiVideoId, setAiVideoId] = useState(null);
+  const [aiLanguage, setAiLanguage] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [selectedSem, setSelectedSem] = useState('sem1');
   const [selectedBranch, setSelectedBranch] = useState('cse');
@@ -314,11 +315,16 @@ export default function BeuSyllabus() {
   const overallProgress = realTopics.length > 0 ? Math.round((doneCount / realTopics.length) * 100) : 0;
 
   // AI Handler
-  const handleAskAI = async (topicText) => {
+  const handleAskAI = (topicText) => {
     const subjectName = branches.find(b => b.id === selectedBranch)?.label || '';
     setAiQuery({ topic: topicText, subject: subjectName });
     setAiAnswer('');
     setAiVideoId(null);
+    setAiLanguage(null);
+  };
+
+  const fetchAiResponse = async (language) => {
+    setAiLanguage(language);
     setAiLoading(true);
     try {
       const response = await fetch('/api/ai/chat', {
@@ -330,8 +336,9 @@ export default function BeuSyllabus() {
             text: `Please explain this topic.`
           }],
           isSyllabusQuery: true,
-          topicText: topicText,
-          subjectName: subjectName
+          topicText: aiQuery.topic,
+          subjectName: aiQuery.subject,
+          language: language
         })
       });
       const data = await response.json();
@@ -340,6 +347,7 @@ export default function BeuSyllabus() {
          return;
       }
       setAiAnswer(data.reply || data.message || 'Could not get response. Try again!');
+      if (data.videoId) setAiVideoId(data.videoId);
     } catch (err) {
       setAiAnswer('AI response failed. Please check your connection or server logs.');
     } finally {
@@ -576,7 +584,25 @@ export default function BeuSyllabus() {
             </div>
 
             <div className="p-5 max-h-[50vh] overflow-y-auto">
-              {aiLoading ? (
+              {!aiLanguage ? (
+                <div className="flex flex-col gap-3 py-4">
+                  <p className="text-sm font-bold text-slate-700 text-center mb-2">Choose Explanation Language</p>
+                  <button 
+                    onClick={() => fetchAiResponse('hinglish')}
+                    className="w-full py-3 px-4 bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white rounded-xl font-bold text-sm transition-all border border-indigo-100 hover:border-indigo-600 text-left flex justify-between items-center"
+                  >
+                    <span>🇮🇳 Explain in Hinglish (Bihar Style)</span>
+                    <ChevronRight size={16} />
+                  </button>
+                  <button 
+                    onClick={() => fetchAiResponse('english')}
+                    className="w-full py-3 px-4 bg-slate-50 hover:bg-slate-800 text-slate-700 hover:text-white rounded-xl font-bold text-sm transition-all border border-slate-200 hover:border-slate-800 text-left flex justify-between items-center"
+                  >
+                    <span>🇬🇧 Explain in Normal English</span>
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              ) : aiLoading ? (
                 <div className="flex flex-col items-center py-8 gap-3">
                   <Loader2 size={28} className="text-indigo-500 animate-spin" />
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">AI is thinking...</p>
