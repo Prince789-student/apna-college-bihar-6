@@ -60,7 +60,7 @@ export default function BeuResult() {
         <div className="p-4 bg-blue-50 border border-blue-100 rounded-2xl flex items-start gap-3 text-blue-800 text-xs shadow-sm">
           <Info size={18} className="text-blue-600 shrink-0 mt-0.5" />
           <div className="leading-relaxed">
-            <span className="font-black uppercase tracking-wide">💡 Pro Tip for Students:</span> Select your course and semester from the list inside the portal above, enter your BEU Roll Number / Registration Number, and click <span className="font-black bg-blue-200/50 px-1.5 py-0.5 rounded">'Show Result'</span> to instantly view and download your marksheet PDF.
+            <span className="font-black uppercase tracking-wide">👉 Kaise Check Karein:</span> Neeche list mein se pehle apna <span className="font-black text-blue-900">Exam / Semester select karein</span> (jaise "B.Tech 1st Semester..."). Uspe click karne ke baad Registration Number dalne ka option aayega!
           </div>
         </div>
       </div>
