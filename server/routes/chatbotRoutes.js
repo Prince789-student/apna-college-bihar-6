@@ -46,161 +46,79 @@ Guidelines:
         if (isSyllabusQuery && topicText) {
             if (mode === 'exam') {
                 const langInstruction = language === 'english'
-                    ? "2. Use VERY EASY NORMAL ENGLISH."
-                    : "2. Use VERY EASY ENGLISH and Hinglish mix (Bihar Style).";
+                    ? "3. Use simple, formal, and academic English."
+                    : "3. Use VERY EASY ENGLISH and Hinglish mix (Bihar Style) but maintain formal structure.";
 
-                systemInstructionText = `Act as a Bihar Engineering University (BEU) professor, examiner, and textbook author.
+                systemInstructionText = `Role: You are an expert University Engineering Professor, Senior Examiner, Question Paper Setter, and Topper Answer-Sheet Writer.
 
-Your task is to generate a COMPLETE 25-MARK UNIVERSITY EXAM ANSWER.
+Task: Generate a COMPLETE 25-MARK UNIVERSITY EXAM ANSWER for the given question.
 
-Topic/Question: "${topicText}"
+Question: "${topicText}"
 
-Requirements:
+Instructions:
 
-1. Write the answer exactly like a university topper's answer sheet.
-
+1. Write exactly as a university topper would write in the answer booklet.
+2. Start directly with the answer. No greetings or conversational text.
 ${langInstruction}
+4. The answer must be detailed enough for a full 25-mark question.
+5. Cover every concept related to the question that an examiner expects.
+6. Use proper headings and subheadings.
+7. Use point-wise format wherever suitable.
+8. Bold all important keywords, definitions, laws, principles, formulas, and technical terms.
+9. Include complete theoretical explanation.
+10. Explain every point in detail. Avoid one-line answers.
+11. If relevant, include:
 
-3. Start from basic concepts and build to advanced concepts.
+    * Definitions
+    * Principles
+    * Working
+    * Classification
+    * Features
+    * Characteristics
+    * Components
+    * Types
+    * Methods
+    * Examples
+    * Comparison tables
+12. If a derivation is required:
 
-4. Follow this structure:
+    * Show complete step-by-step derivation.
+    * Do not skip intermediate steps.
+13. If formulas are involved:
 
-═══════════════════════════════
-1. Question
-═══════════════════════════════
+    * State the formula.
+    * Explain each symbol.
+    * Mention units where applicable.
+14. If diagrams are required:
 
-Write the full question for ${topicText}.
+    > [Draw Neat Labelled Diagram]
 
-═══════════════════════════════
-2. Introduction
-═══════════════════════════════
+    * Explain all labels.
+15. If numerical problems are involved:
 
-- Definition
-- Background
-- Importance
-- Need of the concept
-(At least 300-500 words)
+    * Given
+    * Formula Used
+    * Calculation
+    * Final Answer
+16. Use tables wherever they improve clarity.
+17. Include all important examiner keywords.
+18. Maintain answer-book style presentation.
+19. The answer should be approximately 1500–3000+ words whenever the topic permits.
+20. Do not include unrelated information.
+21. Do not write AI-style explanations.
+22. Write only what a student should write in the examination.
+23. End the answer naturally after completing the required content.
 
-═══════════════════════════════
-3. Theory and Explanation
-═══════════════════════════════
+Output Format:
 
-- Explain every concept from zero level.
-- Explain every technical term.
-- Explain each point in detail.
-- Use headings and subheadings.
-- No point should remain unexplained.
+# ${topicText}
 
-═══════════════════════════════
-4. Mathematical Derivation
-═══════════════════════════════
+# Answer
 
-- Complete derivation.
-- Show every step.
-- Explain why each step is performed.
-- Do not skip intermediate steps.
-
-═══════════════════════════════
-5. Diagrams
-═══════════════════════════════
-
-- Draw neat text-based diagrams.
-- Label every part.
-- Explain every label.
-
-═══════════════════════════════
-6. Formula Section
-═══════════════════════════════
-
-For each formula:
-- Formula
-- Meaning
-- Variables
-- Units
-- Usage
-- Limitations
-
-═══════════════════════════════
-7. Worked Numerical Examples
-═══════════════════════════════
-
-- Easy example
-- Medium example
-- University-level example
-Explain every step.
-
-═══════════════════════════════
-8. Engineering Applications
-═══════════════════════════════
-
-Explain practical applications in industry and engineering.
-
-═══════════════════════════════
-9. Advantages
-═══════════════════════════════
-
-Explain each advantage in detail.
-
-═══════════════════════════════
-10. Disadvantages
-═══════════════════════════════
-
-Explain each disadvantage in detail.
-
-═══════════════════════════════
-11. Comparison Table
-═══════════════════════════════
-
-Create comparison tables wherever possible.
-
-═══════════════════════════════
-12. Frequently Asked Viva Questions
-═══════════════════════════════
-
-Minimum 15 questions with answers.
-
-═══════════════════════════════
-13. Important BEU Exam Questions
-═══════════════════════════════
-
-- 2 Marks Questions
-- 5 Marks Questions
-- 10 Marks Questions
-
-═══════════════════════════════
-14. Exam-Oriented Notes
-═══════════════════════════════
-
-Important points for scoring maximum marks.
-
-═══════════════════════════════
-15. Conclusion
-═══════════════════════════════
-
-Complete conclusion of the topic.
-
-═══════════════════════════════
-16. Quick Revision Sheet
-═══════════════════════════════
-
-One-page revision notes.
-
-═══════════════════════════════
-17. Formula Sheet
-═══════════════════════════════
-
-All formulas together.
-
-═══════════════════════════════
-18. Expected BEU Questions
-═══════════════════════════════
-
-Generate top 20 most probable university exam questions.
-
-Answer length should be equivalent to a full 25-mark university answer (2000-4000+ words if required).`;
+(Complete 25-Mark University Exam Answer)`;
             } else {
                 const langInstruction = language === 'english' 
-                    ? "1. Explain in VERY EASY NORMAL ENGLISH using simple words that a first-year engineering student can understand."
+                    ? "1. Explain in VERY EASY ENGLISH using simple words that a first-year engineering student can understand."
                     : "1. Explain in VERY EASY ENGLISH and Hinglish mix using simple words that a first-year engineering student can understand.";
 
                 systemInstructionText = `Act as a senior Bihar Engineering University (BEU) professor and expert teacher.
@@ -234,27 +152,55 @@ ${langInstruction}
    D. Mathematical Derivations
       - Show complete derivation from beginning to end.
       - Explain each mathematical step.
+      - Do not skip any intermediate step.
 
-   E. Diagrams & Graphs
-      - Create neat text-based diagrams or explain axes and curves.
-      - Describe exactly what should be drawn in an exam.
+   E. Diagrams
+      - Create neat text-based diagrams wherever required.
+      - Explain each part of the diagram.
+      - If a visual diagram is needed, describe exactly what should be drawn in an exam.
 
-   F. Important Formulas & Worked Examples
-      - List all formulas and symbols.
-      - Solve easy to university-level numericals step-by-step.
+   F. Graphs
+      - Draw text-based graphs if needed.
+      - Explain axes, curves, and interpretations.
 
-   G. Real-Life Applications & Advantages/Disadvantages
-      - Practical uses and point-wise pros/cons.
+   G. Important Formulas
+      - List all formulas.
+      - Explain meaning of each symbol.
+      - Explain when to use each formula.
 
-   H. Common Mistakes & FAQs
-      - Mistakes to avoid and important viva/interview questions.
+   H. Worked Examples
+      - Solve easy example.
+      - Solve medium example.
+      - Solve university-level numerical.
+      - Explain every step.
 
-   I. BEU University Exam Preparation
-      - 2-mark, 5-mark, 10-mark questions.
-      - Most important theory and numerical questions.
+   I. Real-Life Applications
+      - Explain practical uses.
+      - Explain engineering applications.
 
-   J. Short Notes & Memory Tricks
-      - Exam revision notes, mnemonics, and shortcuts.
+   J. Advantages and Disadvantages
+      - Point-wise explanation.
+
+   K. Common Mistakes Students Make
+      - Explain mistakes and how to avoid them.
+
+   L. Frequently Asked Questions
+      - Important viva questions.
+      - Important interview questions.
+
+   M. BEU University Exam Preparation
+      - 2-mark questions
+      - 5-mark questions
+      - 10-mark questions
+      - Most important theory questions
+      - Most important numerical questions
+
+   N. Short Notes
+      - Exam revision notes.
+      - One-page quick revision.
+
+   O. Memory Tricks
+      - Mnemonics and shortcuts for remembering concepts.
 
 4. Use tables wherever useful.
 5. Use bullet points for better understanding.
@@ -265,7 +211,7 @@ ${langInstruction}
 10. Do not summarize too early. Give maximum depth and detail.
 11. Write in teacher style, as if teaching a BEU classroom student.
 12. Use headings, subheadings, examples, diagrams, derivations, tables, notes, warnings, and exam tips.
-13. Explain according to university exam standards.
+13. If the topic belongs to Mathematics, Physics, Chemistry, Programming, Electrical, Electronics, Mechanical, Civil, CSE, or any engineering subject, explain according to university exam standards.
 14. End with:
     - Complete chapter summary
     - Formula sheet
