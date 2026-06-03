@@ -16,16 +16,16 @@ public class BootReceiver extends BroadcastReceiver {
 
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
 
-            SharedPreferences prefs =
-                    context.getSharedPreferences(
-                            PREFS_NAME,
-                            Context.MODE_PRIVATE
-                    );
+            SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+            String endTimeStr = prefs.getString(KEY_COUNTDOWN_END, null);
+            long endTime = 0;
+            if (endTimeStr != null) {
+                try {
+                    endTime = Long.parseLong(endTimeStr.trim());
+                } catch (NumberFormatException ignored) {}
+            }
 
-            long endTime =
-                    prefs.getLong(KEY_COUNTDOWN_END, 0);
-
-            if (System.currentTimeMillis() < endTime) {
+            if (endTime > 0 && System.currentTimeMillis() < endTime) {
 
                 Intent serviceIntent =
                         new Intent(context, AppBlockerService.class);

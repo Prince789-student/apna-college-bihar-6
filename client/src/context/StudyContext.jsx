@@ -47,17 +47,45 @@ export function StudyProvider({ children }) {
   };
 
   useEffect(() => {
-    if (isNativeApp()) {
-      fetchApps();
-      
-      try {
-        if (AppBlocker && AppBlocker.stopBlocker) AppBlocker.stopBlocker();
-        Preferences.set({ key: 'isBlockerActive', value: 'false' });
-        Preferences.set({ key: 'countdownEndTime', value: '0' });
-      } catch (e) {}
-    }
-    localStorage.setItem('timerActive', 'false');
-    localStorage.setItem('focusBroken', 'false');
+    const initBlocker = async () => {
+      if (isNativeApp()) {
+        await fetchApps();
+        
+        try {
+          const getEnd = await Preferences.get({ key: 'countdownEndTime' });
+          const endTime = Number(getEnd.value || 0);
+          
+          if (endTime > Date.now()) {
+            // Restore active countdown state
+            const remainingSecs = Math.ceil((endTime - Date.now()) / 1000);
+            setTimerTime(remainingSecs);
+            _setTimerActive(true);
+            setTimerMode('COUNTDOWN');
+            
+            // Restore allowed packages
+            const getPrefsAllowed = await Preferences.get({ key: 'allowedPackages' });
+            if (getPrefsAllowed.value) {
+              _setAllowedPackages(getPrefsAllowed.value);
+            }
+            
+            console.log("Restored active focus session on initialization:", remainingSecs, "seconds remaining");
+          } else {
+            // Clean up expired focus session
+            if (AppBlocker && AppBlocker.stopBlocker) await AppBlocker.stopBlocker();
+            await Preferences.set({ key: 'isBlockerActive', value: 'false' });
+            await Preferences.set({ key: 'countdownEndTime', value: '0' });
+            localStorage.setItem('timerActive', 'false');
+          }
+        } catch (e) {
+          console.error("Error restoring blocker state:", e);
+        }
+      } else {
+        localStorage.setItem('timerActive', 'false');
+      }
+      localStorage.setItem('focusBroken', 'false');
+    };
+    
+    initBlocker();
   }, []);
 
   const setAllowedPackages = (val) => {

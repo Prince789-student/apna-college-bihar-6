@@ -260,6 +260,16 @@ public class AppBlockerPlugin extends Plugin {
             return;
         }
         try {
+            // Store the launched package and time in SharedPreferences
+            SharedPreferences.Editor editor = getPrefs().edit();
+            editor.putString("_cap_lastLaunchedPackage", packageName);
+            editor.putString("_cap_lastLaunchedTime", String.valueOf(System.currentTimeMillis()));
+            editor.apply();
+
+            // Update in-memory static fields on service too
+            AppBlockerService.sLastLaunchedPackage = packageName;
+            AppBlockerService.sLastLaunchedTime = System.currentTimeMillis();
+
             Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
             if (intent != null) {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

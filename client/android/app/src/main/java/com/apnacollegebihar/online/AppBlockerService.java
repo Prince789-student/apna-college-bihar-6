@@ -31,8 +31,26 @@ public class AppBlockerService extends AccessibilityService {
     public static volatile long sCountdownEnd = 0;
     public static final Set<String> sAllowedPackages = new HashSet<>();
 
+    private static final String KEY_LAST_LAUNCHED_PACKAGE = "_cap_lastLaunchedPackage";
+    private static final String KEY_LAST_LAUNCHED_TIME = "_cap_lastLaunchedTime";
+
+    public static volatile String sLastLaunchedPackage = null;
+    public static volatile long sLastLaunchedTime = 0;
+
     private String mCachedLauncherPackage = null;
     private long mLastToastTime = 0;
+
+    private void clearLastLaunched() {
+        sLastLaunchedPackage = "";
+        sLastLaunchedTime = 0;
+        try {
+            SharedPreferences.Editor editor = getPrefs().edit();
+            editor.putString(KEY_LAST_LAUNCHED_PACKAGE, "");
+            editor.putString(KEY_LAST_LAUNCHED_TIME, "0");
+            editor.apply();
+        } catch (Exception ignored) {}
+        Log.d(TAG, "Cleared last launched package");
+    }
 
     @Override
     protected void onServiceConnected() {
@@ -155,23 +173,64 @@ public class AppBlockerService extends AccessibilityService {
             String myPackage = getPackageName();
             String launcherPackage = getLauncherPackage();
 
-            // Get whitelisted packages
-            Set<String> allowed = getAllowedPackages();
-
-            // Packages to never block
-            boolean isIgnored =
+            // Basic system packages that should never be blocked
+            boolean isSystemIgnored =
                     packageName.equals(myPackage) ||
                     packageName.equals(launcherPackage) ||
                     packageName.contains("launcher") ||
                     packageName.contains(".home") ||
                     packageName.contains("systemui") ||
-                    packageName.contains("settings") ||
                     packageName.equals("android") ||
                     packageName.equals("com.android.phone") ||
                     packageName.equals("com.android.server.telecom") ||
                     packageName.equals("com.google.android.dialer") ||
                     packageName.equals("com.android.incallui") ||
-                    allowed.contains(packageName);
+                    packageName.contains("packageinstaller") ||
+                    packageName.contains("inputmethod") ||
+                    packageName.equals("com.google.android.gms");
+
+            // Settings is only blocked if the blocker is active and the timer is running
+            boolean isSettings = packageName.contains("settings") || packageName.equals("com.android.settings");
+            boolean isBlockedSettings = isSettings && (isActive && timerRunning);
+
+            // Get whitelisted packages
+            Set<String> allowed = getAllowedPackages();
+
+            // Read last launched package and time from memory / SharedPreferences
+            String lastLaunchedPkg = sLastLaunchedPackage;
+            long lastLaunchedT = sLastLaunchedTime;
+            if (lastLaunchedPkg == null) {
+                lastLaunchedPkg = getString(KEY_LAST_LAUNCHED_PACKAGE);
+                String tStr = getString(KEY_LAST_LAUNCHED_TIME);
+                if (tStr != null && !tStr.trim().isEmpty()) {
+                    try {
+                        lastLaunchedT = Long.parseLong(tStr.trim());
+                    } catch (NumberFormatException ignored) {}
+                }
+            }
+
+            long now = System.currentTimeMillis();
+            long timeSinceLaunch = now - lastLaunchedT;
+
+            // Clear the launched package when user returns to our app or launcher
+            if (packageName.equals(myPackage)) {
+                if (lastLaunchedPkg != null && !lastLaunchedPkg.isEmpty() && timeSinceLaunch > 3000) {
+                    clearLastLaunched();
+                }
+                return;
+            }
+
+            if (packageName.equals(launcherPackage) || packageName.contains("launcher") || packageName.contains(".home")) {
+                if (lastLaunchedPkg != null && !lastLaunchedPkg.isEmpty() && timeSinceLaunch > 3000) {
+                    clearLastLaunched();
+                }
+                return;
+            }
+
+            // An allowed app is only ignored if it matches the last launched package from our app
+            boolean isLastLaunchedAllowed = allowed.contains(packageName) && packageName.equals(lastLaunchedPkg);
+
+            boolean isIgnored = isSystemIgnored || (isSettings && !isBlockedSettings) || isLastLaunchedAllowed;
 
             if (isIgnored) {
                 return;
@@ -180,7 +239,6 @@ public class AppBlockerService extends AccessibilityService {
             Log.d(TAG, "BLOCKING: " + packageName + " | active=" + isActive + " | timer=" + timerRunning);
 
             // Show toast at most once per 3 seconds to avoid spam
-            long now = System.currentTimeMillis();
             if (now - mLastToastTime > 3000) {
                 mLastToastTime = now;
                 try {
@@ -188,8 +246,14 @@ public class AppBlockerService extends AccessibilityService {
                 } catch (Exception ignored) {}
             }
 
-            // Go to home screen
-            performGlobalAction(GLOBAL_ACTION_HOME);
+            // Bring our app to the foreground instead of going home
+            Intent launchIntent = getPackageManager().getLaunchIntentForPackage(myPackage);
+            if (launchIntent != null) {
+                launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(launchIntent);
+            } else {
+                performGlobalAction(GLOBAL_ACTION_HOME);
+            }
 
         } catch (Exception e) {
             Log.e(TAG, "Error in onAccessibilityEvent", e);

@@ -341,13 +341,26 @@ export default function StudyDashboard() {
                   </button>
                 </div>
               ) : (
-                <div className="flex gap-3 w-full animate-in fade-in duration-300">
-                  <button onClick={() => setTimerActive(false)} className="flex-1 py-5 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-2xl font-[1000] text-[10px] uppercase tracking-widest transition-all shadow-md active:scale-95">
-                    Pause Focus
-                  </button>
-                  <button onClick={() => saveGlobalSession()} className="flex-1 py-5 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-[1000] text-[10px] uppercase tracking-widest shadow-xl shadow-red-600/20 transition-all active:scale-95">
-                    Stop & Save
-                  </button>
+                <div className="w-full space-y-3 animate-in fade-in duration-300">
+                  {timerMode === 'COUNTDOWN' ? (
+                    <div className="bg-amber-500/10 border border-amber-500/20 p-5 rounded-2xl text-center space-y-2">
+                      <div className="flex items-center justify-center gap-2 text-amber-600 font-[1000] text-[10px] uppercase tracking-widest">
+                        <Shield size={14} className="animate-pulse" /> Focus Session is Locked
+                      </div>
+                      <p className="text-[9px] font-bold text-slate-500 uppercase tracking-wider leading-relaxed">
+                        To build ultimate discipline, stop and pause controls are disabled until the timer runs out.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="flex gap-3 w-full">
+                      <button onClick={() => setTimerActive(false)} className="flex-1 py-5 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-2xl font-[1000] text-[10px] uppercase tracking-widest transition-all shadow-md active:scale-95">
+                        Pause Focus
+                      </button>
+                      <button onClick={() => saveGlobalSession()} className="flex-1 py-5 bg-red-600 hover:bg-red-500 text-white rounded-2xl font-[1000] text-[10px] uppercase tracking-widest shadow-xl shadow-red-600/20 transition-all active:scale-95">
+                        Stop & Save
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
