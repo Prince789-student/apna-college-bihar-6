@@ -170,7 +170,7 @@ function TopicRow({ topic, doneKey, onAskAI, subjectName }) {
     );
   }
 
-  const ytQuery = encodeURIComponent(`${topic.text} ${subjectName} btech in hindi`);
+  const ytQuery = encodeURIComponent(`${topic.text} ${subjectName} BEU B.Tech in Hindi`);
 
   return (
     <div className={`flex items-start gap-3 px-4 py-3 border-b border-slate-100 group transition-all ${done ? 'bg-emerald-50/50' : 'hover:bg-slate-50'}`}>
@@ -280,7 +280,7 @@ export default function BeuSyllabus() {
   const [selectedBranch, setSelectedBranch] = useState('cse');
 
   useEffect(() => {
-    fetch('/data/syllabus.json')
+    fetch('/data/syllabus.json?v=' + new Date().getTime())
       .then(res => res.json())
       .then(data => { setSyllabusData(data); setLoading(false); })
       .catch(err => { console.error("Error fetching syllabus:", err); setLoading(false); });

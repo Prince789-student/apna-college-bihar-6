@@ -46,7 +46,8 @@ Guidelines:
 7. Always sign off or reference yourself as "Apna College Bihar AI Assistant" when appropriate.
 `;
 
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
+        const axios = require('axios');
+        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
         const payload = {
             contents: geminiContents,
@@ -59,39 +60,32 @@ Guidelines:
             }
         };
 
-        const response = await fetch(geminiUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
+        try {
+            const response = await axios.post(geminiUrl, payload, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = response.data;
+            const botResponseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            
+            if (!botResponseText) {
+                return res.status(500).json({
+                    success: false,
+                    message: 'AI did not return any readable content.'
+                });
+            }
 
-        if (!response.ok) {
-            const errData = await response.json().catch(() => ({}));
-            console.error('Gemini API Error Status:', response.status, errData);
+            return res.json({
+                success: true,
+                reply: botResponseText
+            });
+        } catch (apiError) {
+            console.error('Gemini API Error:', apiError.response?.data || apiError.message);
             return res.status(500).json({
                 success: false,
                 message: 'Failed to communicate with AI model',
-                details: errData
+                details: apiError.response?.data || {}
             });
         }
-
-        const data = await response.json();
-        
-        // Extract content from Gemini response
-        const botResponseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!botResponseText) {
-            return res.status(500).json({
-                success: false,
-                message: 'AI did not return any readable content.'
-            });
-        }
-
-        return res.json({
-            success: true,
-            reply: botResponseText
-        });
 
     } catch (error) {
         console.error('Chatbot API Route Error:', error);
