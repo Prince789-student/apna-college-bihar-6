@@ -18,6 +18,12 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.util.Base64;
+import java.io.ByteArrayOutputStream;
 
 @CapacitorPlugin(name = "AppBlocker")
 public class AppBlockerPlugin extends Plugin {
@@ -57,6 +63,30 @@ public class AppBlockerPlugin extends Plugin {
                     JSObject appObj = new JSObject();
                     appObj.put("name", info.loadLabel(pm).toString());
                     appObj.put("packageName", pkg);
+                    
+                    // Fetch icon and convert to base64
+                    try {
+                        Drawable icon = info.loadIcon(pm);
+                        int width = icon.getIntrinsicWidth() > 0 ? icon.getIntrinsicWidth() : 96;
+                        int height = icon.getIntrinsicHeight() > 0 ? icon.getIntrinsicHeight() : 96;
+                        if (width > 96 || height > 96) {
+                            width = 96;
+                            height = 96;
+                        }
+                        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(bitmap);
+                        icon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                        icon.draw(canvas);
+
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
+                        byte[] byteArray = outputStream.toByteArray();
+                        String base64Icon = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+                        appObj.put("icon", "data:image/png;base64," + base64Icon);
+                    } catch (Exception ignored) {
+                        appObj.put("icon", "");
+                    }
+                    
                     retApps.put(appObj);
                 }
             }

@@ -458,7 +458,13 @@ export default function StudyDashboard() {
                         onClick={() => launchApp(app.packageName)}
                         className="flex items-center gap-3 p-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/40 rounded-2xl transition-all text-left shadow-sm active:scale-95 group/appBtn"
                       >
-                        <div className="w-8 h-8 rounded-xl bg-blue-600/10 text-blue-600 flex items-center justify-center font-[1000] text-sm group-hover/appBtn:bg-blue-600 group-hover/appBtn:text-white transition-all">{app.name[0]}</div>
+                        <div className="w-8 h-8 rounded-xl overflow-hidden flex items-center justify-center bg-blue-600/10 text-blue-600 font-[1000] text-sm group-hover/appBtn:bg-blue-600 group-hover/appBtn:text-white transition-all shrink-0">
+                          {app.icon ? (
+                            <img src={app.icon} alt={app.name} className="w-6 h-6 object-contain" />
+                          ) : (
+                            app.name[0]
+                          )}
+                        </div>
                         <span className="text-[10px] font-black text-slate-700 uppercase truncate flex-1">{app.name}</span>
                       </button>
                     ))
@@ -641,7 +647,13 @@ export default function StudyDashboard() {
                       className={`flex items-center justify-between p-5 rounded-[1.5rem] cursor-pointer transition-all border-2 ${isSelected ? 'bg-blue-50 border-blue-200' : 'bg-slate-50/50 border-transparent hover:bg-slate-50'}`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-[1000] text-lg ${isSelected ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>{app.name[0]}</div>
+                        <div className="w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center bg-slate-100 border border-slate-200/50 shrink-0">
+                          {app.icon ? (
+                            <img src={app.icon} alt={app.name} className="w-8 h-8 object-contain" />
+                          ) : (
+                            <div className={`w-full h-full flex items-center justify-center font-[1000] text-lg ${isSelected ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>{app.name[0]}</div>
+                          )}
+                        </div>
                         <div>
                           <p className="text-sm font-[1000] text-slate-900 uppercase tracking-tight leading-none">{app.name}</p>
                           <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-2 truncate max-w-[200px]">{app.packageName}</p>
