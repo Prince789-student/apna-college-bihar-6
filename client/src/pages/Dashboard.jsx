@@ -5,7 +5,7 @@ import {
   BarChart2, BookOpen, Bell, ArrowRight,
   TrendingUp, Globe, Shield, RefreshCw,
   Calculator, Send, Search, CheckCircle2, X,
-  Smartphone, Lock
+  Smartphone, Lock, UserCheck
 } from 'lucide-react';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
@@ -135,8 +135,11 @@ export default function Dashboard() {
             <Link to="/dashboard/ugeac-predictor" className="px-6 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-emerald-500/20">
                UGEAC <Send size={14} />
             </Link>
-            <Link to="/dashboard/notes" className="col-span-2 sm:col-span-1 px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-blue-500/30">
+            <Link to="/dashboard/notes" className="px-6 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-blue-500/30">
                Vault <BookOpen size={14} />
+            </Link>
+            <Link to="/dashboard/attendance" className="col-span-2 sm:col-span-1 px-8 py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 transition-all active:scale-95 shadow-xl shadow-indigo-500/30">
+               Attendance <UserCheck size={14} />
             </Link>
           </div>
       </div>
