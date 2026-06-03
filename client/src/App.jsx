@@ -37,7 +37,6 @@ const Terms = React.lazy(() => import('./pages/Terms'));
 const DeleteAccount = React.lazy(() => import('./pages/DeleteAccount'));
 const About = React.lazy(() => import('./pages/About'));
 const Contact = React.lazy(() => import('./pages/Contact'));
-const AiChatbot = React.lazy(() => import('./pages/AiChatbot'));
 
 function LoadingScreen() {
   return (
@@ -175,7 +174,6 @@ function App() {
               <Route path="/dashboard/extras" element={<Extras />} />
               <Route path="/dashboard/calendar" element={<Calendar />} />
               <Route path="/dashboard/syllabus" element={<BeuSyllabus />} />
-              <Route path="/dashboard/chatbot" element={<AiChatbot />} />
               
               {/* Admin Routes */}
               <Route element={<AdminRoute />}>

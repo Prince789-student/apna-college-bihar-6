@@ -286,7 +286,6 @@ export default function Home() {
              { title: "Study Network", ic: <Users className="text-purple-500"/>, d: "Join student groups to discuss PYQs and UGEAC counselling tips.", link: "/dashboard/groups?standalone=true" },
              { title: "Scientific Calc", ic: <Calculator className="text-pink-500"/>, d: "Advanced scientific calculator for professional engineering calculations.", link: "/dashboard/calculator?standalone=true" },
              { title: "My Attendance", ic: <UserCheck className="text-green-500"/>, d: "Manage your weekly class timetable and track BEU 75% attendance criteria.", link: "/dashboard/attendance?standalone=true" },
-             { title: "AI Doubts Solver", ic: <Sparkles className="text-yellow-500"/>, d: "Ask doubts about Bihar engineering colleges, BEU exams, CGPA rules, and notes.", link: "/dashboard/chatbot?standalone=true" },
              { title: "BEU Results Portal", ic: <Globe className="text-slate-400"/>, d: "Direct access to the official Bihar Engineering University results page.", link: "https://results.beu.ac.in" }
            ].map((f, i) => (
              <Link key={i} to={f.link} target={f.link.startsWith('http') ? '_blank' : '_self'} className="group p-4 md:p-8 bg-white border border-slate-200/80 rounded-2xl md:rounded-[3rem] hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left shadow-sm">
