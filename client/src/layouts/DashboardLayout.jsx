@@ -16,16 +16,33 @@ export default function DashboardLayout() {
   const [phone, setPhone] = useState('');
   const [isPhoneModalOpen, setPhoneModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const { timerActive } = useStudy();
 
 
+  // Track online/offline status
   useEffect(() => {
-    if (user && !user.phone) setPhoneModalOpen(true);
-    else setPhoneModalOpen(false);
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
-    // Setup push notifications
+  useEffect(() => {
+    // Only show phone modal when: online + user loaded + phone missing
+    if (isOnline && user && user.uid && !user.phone) {
+      setPhoneModalOpen(true);
+    } else {
+      setPhoneModalOpen(false);
+    }
+
+    // Setup push notifications (only when online)
     const setupNotifications = async () => {
-      if (!user || !messaging) return;
+      if (!user || !messaging || !isOnline) return;
       try {
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
@@ -39,7 +56,7 @@ export default function DashboardLayout() {
       }
     };
     setupNotifications();
-  }, [user]);
+  }, [user, isOnline]);
 
   const handlePhoneSubmit = async (e) => {
     e.preventDefault();
@@ -102,8 +119,8 @@ export default function DashboardLayout() {
         </div>
       </main>
       
-      {/* Verification Modal */}
-      {isPhoneModalOpen && <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-slate-50/80 backdrop-blur-xl"><div className="w-full max-w-md bg-white border border-slate-200 rounded-[3rem] p-10 text-center space-y-8 shadow-2xl relative overflow-hidden"><div className="inline-flex p-5 bg-blue-600/20 text-blue-500 rounded-3xl"><Shield size={32} /></div><h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Security Update</h2><form onSubmit={handlePhoneSubmit} className="space-y-6"><div className="flex gap-2"><div className="bg-slate-100 px-4 py-4 rounded-2xl text-xs font-black">+91</div><input type="tel" maxLength={10} value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} placeholder="9XXXXXXXXX" className="flex-1 bg-slate-100 rounded-2xl p-4 text-sm font-black outline-none" /></div><button type="submit" className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest transition-all">Secure Access</button></form></div></div>}
+      {/* Verification Modal - only shows when online */}
+      {isPhoneModalOpen && isOnline && <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-slate-50/80 backdrop-blur-xl"><div className="w-full max-w-md bg-white border border-slate-200 rounded-[3rem] p-10 text-center space-y-8 shadow-2xl relative overflow-hidden"><div className="inline-flex p-5 bg-blue-600/20 text-blue-500 rounded-3xl"><Shield size={32} /></div><h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Security Update</h2><p className="text-slate-500 text-sm">Please link your active mobile number to secure your college portal access.</p><form onSubmit={handlePhoneSubmit} className="space-y-6"><div className="flex gap-2"><div className="bg-slate-100 px-4 py-4 rounded-2xl text-xs font-black">+91</div><input type="tel" maxLength={10} value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} placeholder="10-DIGIT MOBILE NO." className="flex-1 bg-slate-100 rounded-2xl p-4 text-sm font-black outline-none" /></div><button type="submit" className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest transition-all">Save & Continue</button></form></div></div>}
 
       <FloatingTimer />
     </div>
