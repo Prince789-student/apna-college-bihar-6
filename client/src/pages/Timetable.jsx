@@ -20,19 +20,29 @@ export const formatTime12h = (time24) => {
 
 const to24h = (h, m, ampm) => {
   let hour = parseInt(h, 10);
-  if (ampm === 'PM' && hour !== 12) hour += 12;
-  if (ampm === 'AM' && hour === 12) hour = 0;
+  if (ampm === 'PM' && hour !== 12) hour += 12;  // 1PM=13, 11PM=23
+  if (ampm === 'AM' && hour === 12) hour = 0;    // 12AM=midnight=0
+  // 12PM stays as 12 (correct noon)
   return `${String(hour).padStart(2, '0')}:${m}`;
 };
 
 const parse24h = (time24) => {
-  if (!time24) return { h: '08', m: '00', ampm: 'AM' };
+  if (!time24) return { h: '8', m: '00', ampm: 'AM' };
   const [hr, mn] = time24.split(':');
   let hour = parseInt(hr, 10);
-  const ampm = hour >= 12 ? 'PM' : 'AM';
-  hour = hour % 12;
-  hour = hour ? hour : 12;
+  const ampm = hour >= 12 ? 'PM' : 'AM';  // 12=PM, 13=PM, 0=AM, 11=AM
+  hour = hour % 12;                         // 12%12=0, 13%12=1, 0%12=0
+  hour = hour === 0 ? 12 : hour;            // 0 → 12 (for both noon & midnight)
   return { h: String(hour), m: mn || '00', ampm };
+};
+
+// Add 1 hour to a 24h time string: "11:00" → "12:00", "23:00" → "23:00"
+const addOneHour = (time24) => {
+  if (!time24) return '09:00';
+  const [hr, mn] = time24.split(':');
+  let hour = parseInt(hr, 10) + 1;
+  if (hour >= 24) hour = 23;
+  return `${String(hour).padStart(2, '0')}:${mn}`;
 };
 
 const HOURS = ['1','2','3','4','5','6','7','8','9','10','11','12'];
@@ -160,7 +170,24 @@ export default function Timetable() {
   const addClass = (day) => {
     const newSchedule = { ...schedule };
     if (!newSchedule[day]) newSchedule[day] = [];
-    newSchedule[day].push({ id: Date.now().toString(), startTime: '', endTime: '', subject: '' });
+    
+    // Auto-fill: next class starts where the last one ended
+    const dayClasses = newSchedule[day];
+    let defaultStart = '08:00';
+    if (dayClasses.length > 0) {
+      const lastClass = dayClasses[dayClasses.length - 1];
+      if (lastClass.endTime) {
+        defaultStart = lastClass.endTime; // next start = previous end
+      }
+    }
+    const defaultEnd = addOneHour(defaultStart); // end = start + 1 hr
+    
+    newSchedule[day].push({ 
+      id: Date.now().toString(), 
+      startTime: defaultStart, 
+      endTime: defaultEnd, 
+      subject: '' 
+    });
     setSchedule(newSchedule);
     setSaved(false);
   };
