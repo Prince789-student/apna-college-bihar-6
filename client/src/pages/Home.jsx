@@ -62,7 +62,7 @@ export default function Home() {
                  download="ApnaCollegeBihar_Stable.apk"
                  className="flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
                >
-                 Download App
+                 Download APK
                </a>
                <div className="relative">
                  <button 
