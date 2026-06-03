@@ -80,6 +80,23 @@ export default function Attendance() {
   const [scanProgress, setScanProgress] = useState(0);
   const scanIntervalRef = useRef(null);
 
+  // Timetable state
+  const [timetable, setTimetable] = useState({});
+  const [todayClasses, setTodayClasses] = useState([]);
+
+  // BEU Sessional Marks Calculator
+  const calculateBEUMarks = (percent, total) => {
+    if (total === 0 || percent < 75) return { marks: 0, label: 'No Marks', color: 'text-slate-400', bg: 'bg-slate-50 border-slate-200' };
+    if (percent <= 80) return { marks: 1, label: '+1 Mark', color: 'text-yellow-600', bg: 'bg-yellow-50 border-yellow-200' };
+    if (percent <= 85) return { marks: 2, label: '+2 Marks', color: 'text-orange-500', bg: 'bg-orange-50 border-orange-200' };
+    if (percent <= 90) return { marks: 3, label: '+3 Marks', color: 'text-blue-600', bg: 'bg-blue-50 border-blue-200' };
+    if (percent <= 95) return { marks: 4, label: '+4 Marks', color: 'text-purple-600', bg: 'bg-purple-50 border-purple-200' };
+    return { marks: 5, label: '+5 Marks', color: 'text-emerald-600', bg: 'bg-emerald-50 border-emerald-200' };
+  };
+
+  // Day name to key mapping
+  const DAYS_MAP = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
   useEffect(() => {
     if (user) fetchAttendance();
   }, [user]);
@@ -94,6 +111,32 @@ export default function Attendance() {
         }
         if (data.dailyAttendanceLog) {
           setDailyLog(data.dailyAttendanceLog);
+        }
+        if (data.timetable) {
+          setTimetable(data.timetable);
+          // Parse today's classes from timetable
+          const todayDay = DAYS_MAP[new Date().getDay()];
+          const classes = Object.entries(data.timetable)
+            .filter(([key, val]) => key.startsWith(todayDay + '_') && val && val.trim())
+            .map(([key, val]) => ({ slot: key.replace(todayDay + '_', ''), subject: val.trim() }))
+            .sort((a, b) => {
+              // Sort by slot time (rough AM/PM sort)
+              const timeA = a.slot;
+              const timeB = b.slot;
+              const order = ['6 AM','7 AM','8 AM','9 AM','10 AM','11 AM','12 PM','1 PM','2 PM','3 PM','4 PM','5 PM','6 PM','7 PM','8 PM','9 PM','10 PM'];
+              return order.indexOf(timeA) - order.indexOf(timeB);
+            });
+          setTodayClasses(classes);
+          // Show notification toast for today's classes
+          if (classes.length > 0) {
+            setTimeout(() => {
+              toast(`📚 Today's ${classes.length} Class${classes.length > 1 ? 'es' : ''}: ${classes.map(c => c.subject).join(', ')}`, {
+                duration: 5000,
+                style: { background: '#1e293b', color: '#f8fafc', fontWeight: '800', fontSize: '12px' },
+                icon: '🗓️',
+              });
+            }, 1000);
+          }
         }
       }
     } catch (e) {
@@ -344,33 +387,74 @@ export default function Attendance() {
         ))}
       </div>
 
+      {/* Today's Schedule Banner */}
+      {activeTab === 'subjects' && todayClasses.length > 0 && (
+        <div className="bg-indigo-600 p-5 md:p-6 rounded-[2rem] flex flex-col sm:flex-row sm:items-center gap-4 shadow-lg shadow-indigo-500/20">
+          <div className="p-3 bg-white/20 rounded-2xl shrink-0">
+            <Calendar size={22} className="text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[9px] font-black text-indigo-200 uppercase tracking-widest mb-1">📌 Today's Class Schedule — {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' })}</p>
+            <div className="flex flex-wrap gap-2">
+              {todayClasses.map((cls, idx) => (
+                <span key={idx} className="px-3 py-1 bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl text-white text-[10px] font-black">
+                  {cls.slot}: {cls.subject}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="text-white text-right shrink-0">
+            <p className="text-[8px] font-black uppercase tracking-widest text-indigo-300 mb-0.5">Total</p>
+            <p className="text-2xl font-black">{todayClasses.length}</p>
+          </div>
+        </div>
+      )}
+
       {/* Tab Contents: Subjects Tracker */}
       {activeTab === 'subjects' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {subjects.map((s, i) => {
             const percent = s.total > 0 ? Number(((s.present / s.total) * 100).toFixed(1)) : 0;
             const isDanger = percent < 75 && s.total > 0;
+            const beuMarks = calculateBEUMarks(percent, s.total);
+
+            // Lectures needed to reach 75%
+            const neededFor75 = s.total > 0 && percent < 75
+              ? Math.ceil((0.75 * s.total - s.present) / 0.25)
+              : 0;
 
             return (
               <div key={i} className="bg-white border border-slate-200/80 p-6 md:p-8 rounded-[2.5rem] shadow-sm hover:shadow-lg transition-all relative overflow-hidden group flex flex-col justify-between">
                 <div>
-                  <div className="flex justify-between items-start gap-3 mb-6">
-                    <div>
+                  <div className="flex justify-between items-start gap-3 mb-4">
+                    <div className="min-w-0">
                       <h3 className="text-lg md:text-xl font-black text-slate-900 uppercase tracking-tighter truncate max-w-[150px]" title={s.name}>{s.name}</h3>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">{s.present} / {s.total} Lectures Attended</p>
                     </div>
-                    <div className={`px-3.5 py-1.5 rounded-2xl text-[11px] font-black ${isDanger ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-emerald-50 text-emerald-600 border border-emerald-100'}`}>
-                      {percent}%
+                    <div className="flex flex-col items-end gap-1.5">
+                      <div className={`px-3.5 py-1.5 rounded-2xl text-[11px] font-black ${isDanger ? 'bg-red-50 text-red-600 border border-red-100' : 'bg-emerald-50 text-emerald-600 border border-emerald-100'}`}>
+                        {percent}%
+                      </div>
+                      <div className={`px-2.5 py-1 rounded-xl text-[9px] font-black border ${beuMarks.bg} ${beuMarks.color}`}>
+                        BEU: {beuMarks.label}
+                      </div>
                     </div>
                   </div>
 
                   {/* Progress Bar */}
-                  <div className="h-2.5 bg-slate-100 rounded-full mb-6 overflow-hidden">
+                  <div className="h-2.5 bg-slate-100 rounded-full mb-4 overflow-hidden">
                     <div 
                       className={`h-full transition-all duration-700 ${isDanger ? 'bg-red-500' : 'bg-emerald-500'}`}
                       style={{ width: `${percent}%` }}
                     ></div>
                   </div>
+
+                  {/* Need-to-attend alert */}
+                  {neededFor75 > 0 && (
+                    <p className="text-[9px] font-black text-red-500 uppercase tracking-wider mb-4 bg-red-50 px-3 py-1.5 rounded-xl border border-red-100">
+                      ⚠️ Attend {neededFor75} more class{neededFor75 > 1 ? 'es' : ''} to reach 75%
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-3">
