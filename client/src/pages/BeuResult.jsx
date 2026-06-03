@@ -171,7 +171,6 @@ export default function BeuResult() {
                 src="https://beu-bih.ac.in/result-one" 
                 title="BEU Official Results Portal"
                 className="w-full h-full relative z-10 border-0 bg-white"
-                sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
               />
             </div>
           </div>
