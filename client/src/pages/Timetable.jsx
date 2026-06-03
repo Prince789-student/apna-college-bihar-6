@@ -54,11 +54,21 @@ function TimePickerAMPM({ value, onChange, isToday, label }) {
     isToday ? 'bg-white border-indigo-200 focus:border-indigo-500 text-indigo-700' : 'bg-white border-slate-200 focus:border-slate-400 text-slate-700'
   }`;
   const update = (newH, newM, newAmpm) => onChange(to24h(newH, newM, newAmpm));
+
+  const handleHourChange = (newH) => {
+    // Auto-switch AM↔PM at 12:
+    // If user picks 12 while in AM → switch to PM (noon, not midnight)
+    // If user picks 1-11 while in PM → keep PM (1PM, 2PM... not AM)
+    let autoAmpm = ampm;
+    if (newH === '12' && ampm === 'AM') autoAmpm = 'PM';
+    update(newH, m, autoAmpm);
+  };
+
   return (
     <div className="flex flex-col gap-0.5">
       <span className={`text-[8px] font-black uppercase tracking-widest ${isToday ? 'text-indigo-400' : 'text-slate-400'}`}>{label}</span>
       <div className="flex items-center gap-0.5">
-        <select value={h} onChange={e => update(e.target.value, m, ampm)} className={sel} style={{width:'36px'}}>
+        <select value={h} onChange={e => handleHourChange(e.target.value)} className={sel} style={{width:'36px'}}>
           {HOURS.map(hr => <option key={hr} value={hr}>{hr}</option>)}
         </select>
         <span className="text-slate-400 font-black text-xs">:</span>
