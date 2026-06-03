@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Download } from 'lucide-react';
+import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Download, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import jsPDF from 'jspdf';
