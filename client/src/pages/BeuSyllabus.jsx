@@ -4,7 +4,68 @@ import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import jsPDF from 'jspdf';
 
+// ─── Smart Syllabus Text Cleaner ──────────────────────────────────────────────
+// Fixes PDF extraction artifacts (broken words, wrong spaces, hyphenated line-breaks)
+function cleanSyllabusText(text) {
+  if (!text) return text;
+
+  return text
+    // 1. Fix hyphenated line-breaks: "Gauss -\nJordan" → "Gauss-Jordan"
+    //    and "co -ordination" → "co-ordination"
+    .replace(/ -\n/g, '-')
+    .replace(/- \n/g, '-')
+
+    // 2. Remove soft-hyphen artifacts: "Gauss -Jordan" → "Gauss-Jordan"
+    //    (space before hyphen followed by lowercase = broken hyphen)
+    .replace(/ -([a-z])/g, '-$1')
+
+    // 3. Fix broken words that have a space in the middle:
+    //    Pattern: word ending mid-letter + space + rest of letter
+    //    e.g. "ra diations" → "radiations", "additi on" → "addition"
+    //    Strategy: if two adjacent words form a valid-looking token, join them
+    .replace(/([a-z]{2,}) ([a-z]{2,})/g, (match, a, b) => {
+      // Only join if it looks like a broken word (no natural word boundary)
+      // Heuristic: if combined word has no double-consonant anomaly, join
+      const combined = a + b;
+      // Don't join common two-word phrases — only join if a or b is very short (1-3 chars)
+      // or if b starts with a vowel continuation (typical split)
+      if (a.length <= 3 || b.length <= 3) return combined;
+      // Check if split looks like "pro cess", "solu tion" etc.
+      if (/[aeiou]$/.test(a) && /^[bcdfghjklmnpqrstvwxyz]/.test(b)) return combined;
+      if (/[bcdfghjklmnpqrstvwxyz]$/.test(a) && /^[aeiou]/.test(b) && b.length <= 4) return combined;
+      return match;
+    })
+
+    // 4. Fix "co -ordination" style → "co-ordination"
+    .replace(/co -([a-z])/g, 'co-$1')
+    .replace(/non -([a-z])/g, 'non-$1')
+    .replace(/pre -([a-z])/g, 'pre-$1')
+    .replace(/self -([a-z])/g, 'self-$1')
+    .replace(/over -([a-z])/g, 'over-$1')
+    .replace(/sub -([a-z])/g, 'sub-$1')
+
+    // 5. Fix "Buna -S" style chemical names
+    .replace(/([A-Z][a-z]*) -([A-Z0-9])/g, '$1-$2')
+
+    // 6. Remove junk artifact lines (curriculum codes like "3 1 0 4")
+    .replace(/^[–\-]\w+\s+\d\s+\d\s+\d\s+\d\s*$/gm, '')
+
+    // 7. Fix "T aylor", "Re ena", "M.J . Sienko" style mid-word spaces in names
+    .replace(/([A-Z]) ([a-z]{3,})/g, '$1$2')
+
+    // 8. Normalize multiple spaces to single space
+    .replace(/  +/g, ' ')
+
+    // 9. Fix "proximate an d" style: 2-letter broken words
+    .replace(/\b([a-z]{2,10}) (an|in|of|or|to|at|by|as|if|is|it|be|on|up|do) ([a-z])/g,
+      (match, a, b, c) => `${a} ${b} ${c}`)
+
+    // 10. Trim lines
+    .split('\n').map(l => l.trimEnd()).join('\n');
+}
+
 export default function BeuSyllabus() {
+
   const [syllabusData, setSyllabusData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -126,7 +187,7 @@ export default function BeuSyllabus() {
           }
         };
 
-        const lines = currentSyllabus.content.split('\n');
+        const lines = cleanSyllabusText(currentSyllabus.content).split('\n');
         for (let line of lines) {
           line = line.trim();
           if (!line) { cursorY += 3; continue; }
@@ -288,8 +349,8 @@ export default function BeuSyllabus() {
                 <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Loading Syllabus Data...</p>
               </div>
             ) : currentSyllabus ? (
-              <div className="prose prose-sm max-w-none prose-headings:font-black prose-h2:text-indigo-700 prose-h2:uppercase prose-h2:tracking-tight prose-h2:border-b prose-h2:border-indigo-100 prose-h2:pb-2 prose-h4:text-indigo-600 prose-h4:mt-6 prose-strong:text-slate-800 prose-p:text-slate-600 prose-p:font-medium prose-p:leading-relaxed">
-                <ReactMarkdown>{currentSyllabus.content}</ReactMarkdown>
+              <div className="prose prose-sm max-w-none prose-headings:font-black prose-h2:text-indigo-700 prose-h2:uppercase prose-h2:tracking-tight prose-h2:border-b prose-h2:border-indigo-100 prose-h2:pb-2 prose-h3:text-slate-800 prose-h4:text-indigo-600 prose-h4:mt-4 prose-strong:text-slate-800 prose-p:text-slate-600 prose-p:font-medium prose-p:leading-relaxed prose-li:text-slate-600 prose-li:leading-relaxed">
+                <ReactMarkdown>{cleanSyllabusText(currentSyllabus.content)}</ReactMarkdown>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-20 text-center">
