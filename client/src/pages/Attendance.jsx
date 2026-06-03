@@ -1,34 +1,39 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { UserCheck, Plus, Minus, RotateCcw, Shield, Calendar, Fingerprint, AlertCircle, Info, Trash2, CheckCircle2, XCircle, Award } from 'lucide-react';
+import { UserCheck, Plus, Minus, RotateCcw, Shield, Calendar, Fingerprint, AlertCircle, Info, Trash2, CheckCircle2, XCircle, Award, ChevronLeft, ChevronRight } from 'lucide-react';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const HOLIDAYS_2026 = [
-  { name: 'Republic Day (Gantantra Diwas)', date: '26 Jan 2026', day: 'Sunday', duration: 1 },
-  { name: 'Basant Panchami', date: '02 Feb 2026', day: 'Monday', duration: 1 },
-  { name: 'Maha Shivratri', date: '15 Feb 2026', day: 'Sunday', duration: 1 },
-  { name: 'Holi Festival', date: '13-14 Mar 2026', day: 'Fri-Sat', duration: 2 },
-  { name: 'Bihar Diwas', date: '22 Mar 2026', day: 'Sunday', duration: 1 },
-  { name: 'Eid-ul-Fitr', date: '20-21 Mar 2026', day: 'Fri-Sat', duration: 2 },
-  { name: 'Ram Navami', date: '27 Mar 2026', day: 'Friday', duration: 1 },
-  { name: 'Mahavir Jayanti', date: '10 Apr 2026', day: 'Friday', duration: 1 },
-  { name: 'Ambedkar Jayanti', date: '14 Apr 2026', day: 'Tuesday', duration: 1 },
-  { name: 'May Day', date: '01 May 2026', day: 'Friday', duration: 1 },
-  { name: 'Buddha Purnima', date: '02 May 2026', day: 'Saturday', duration: 1 },
-  { name: 'Eid-ul-Zoha (Bakrid)', date: '27-28 May 2026', day: 'Wed-Thu', duration: 2 },
-  { name: 'Muharram', date: '25-26 Jun 2026', day: 'Thu-Fri', duration: 2 },
-  { name: 'Independence Day', date: '15 Aug 2026', day: 'Saturday', duration: 1 },
-  { name: 'Krishna Janmashtami', date: '04 Sep 2026', day: 'Friday', duration: 1 },
-  { name: 'Eid-e-Milad', date: '05 Sep 2026', day: 'Saturday', duration: 1 },
-  { name: 'Gandhi Jayanti', date: '02 Oct 2026', day: 'Friday', duration: 1 },
-  { name: 'Durga Puja (Saptami-Navami)', date: '18-20 Oct 2026', day: 'Sun-Tue', duration: 3 },
-  { name: 'Deepawali', date: '08-09 Nov 2026', day: 'Sun-Mon', duration: 2 },
-  { name: 'Bhaiya Dooj / Chitragupta Puja', date: '10 Nov 2026', day: 'Tuesday', duration: 1 },
-  { name: 'Chhath Puja', date: '15-16 Nov 2026', day: 'Sun-Mon', duration: 2 },
-  { name: 'Guru Nanak Jayanti', date: '24 Nov 2026', day: 'Tuesday', duration: 1 },
-  { name: 'Christmas Day', date: '25 Dec 2026', day: 'Thursday', duration: 1 }
+  { name: 'New Year Begins (नववर्ष आरम्भ)', date: '01 Jan 2026', dateStrings: ['2026-01-01'], day: 'Thursday', duration: 1, sundays: 0 },
+  { name: 'Makar Sankranti (मकर संक्रांति)', date: '14 Jan 2026', dateStrings: ['2026-01-14'], day: 'Wednesday', duration: 1, sundays: 0 },
+  { name: 'Basant Panchami / Saraswati Puja (बसंत पंचमी / सरस्वती पूजा)', date: '23 Jan 2026', dateStrings: ['2026-01-23'], day: 'Friday', duration: 1, sundays: 0 },
+  { name: 'Sant Ravidas Jayanti (संत रविदास जयंती)', date: '01 Feb 2026', dateStrings: ['2026-02-01'], day: 'Sunday', duration: 0, sundays: 1 },
+  { name: 'Shab-e-Barat (शब-ए-बरात)', date: '04 Feb 2026', dateStrings: ['2026-02-04'], day: 'Wednesday', duration: 1, sundays: 0 },
+  { name: 'Maha Shivratri (महाशिवरात्रि)', date: '15 Feb 2026', dateStrings: ['2026-02-15'], day: 'Sunday', duration: 0, sundays: 1 },
+  { name: 'Holika Dahan / Holi (होलिका दहन / होली)', date: '02-04 Mar 2026', dateStrings: ['2026-03-02', '2026-03-03', '2026-03-04'], day: 'Mon-Wed', duration: 3, sundays: 0 },
+  { name: 'Eid-ul-Fitr (ईद-उल-फितर)', date: '21 Mar 2026', dateStrings: ['2026-03-21'], day: 'Saturday', duration: 1, sundays: 0 },
+  { name: 'Bihar Diwas (बिहार दिवस)', date: '22 Mar 2026', dateStrings: ['2026-03-22'], day: 'Sunday', duration: 0, sundays: 1 },
+  { name: 'Samrat Ashok Jayanti (सम्राट अशोक जयंती)', date: '26 Mar 2026', dateStrings: ['2026-03-26'], day: 'Thursday', duration: 1, sundays: 0 },
+  { name: 'Ram Navami (रामनवमी)', date: '27 Mar 2026', dateStrings: ['2026-03-27'], day: 'Friday', duration: 1, sundays: 0 },
+  { name: 'Mahavir Jayanti (महावीर जयंती)', date: '31 Mar 2026', dateStrings: ['2026-03-31'], day: 'Tuesday', duration: 1, sundays: 0 },
+  { name: 'Good Friday (गुड फ्राइडे)', date: '03 Apr 2026', dateStrings: ['2026-04-03'], day: 'Friday', duration: 1, sundays: 0 },
+  { name: 'Dr. B.R. Ambedkar Jayanti (डॉ० भीम राव अम्बेडकर जयंती)', date: '14 Apr 2026', dateStrings: ['2026-04-14'], day: 'Tuesday', duration: 1, sundays: 0 },
+  { name: 'Veer Kunwar Singh Jayanti (वीर कुँवर सिंह जयंती)', date: '23 Apr 2026', dateStrings: ['2026-04-23'], day: 'Thursday', duration: 1, sundays: 0 },
+  { name: 'Janaki Navami (जानकी नवमी)', date: '25 Apr 2026', dateStrings: ['2026-04-25'], day: 'Saturday', duration: 1, sundays: 0 },
+  { name: 'May Day / Labour Day / Buddha Purnima (मई दिवस / बुद्ध पूर्णिमा)', date: '01 May 2026', dateStrings: ['2026-05-01'], day: 'Friday', duration: 1, sundays: 0 },
+  { name: 'Eid-ul-Adha / Bakrid (ईद-उल-जोहा / बकरीद)', date: '28 May 2026', dateStrings: ['2026-05-28'], day: 'Thursday', duration: 1, sundays: 0 },
+  { name: 'Summer Vacation (शिक्षकों के लिए) / Kabir Jayanti', date: '01-30 Jun 2026', dateStrings: Array.from({ length: 30 }, (_, i) => `2026-06-${String(i + 1).padStart(2, '0')}`), day: 'Mon-Tue', duration: 26, sundays: 4 },
+  { name: 'Chehallum (चेहल्लुम)', date: '04 Aug 2026', dateStrings: ['2026-08-04'], day: 'Tuesday', duration: 1, sundays: 0 },
+  { name: 'Hazrat Mohammad Birthday (हज़रत मोहम्मद जन्म दिवस)', date: '26 Aug 2026', dateStrings: ['2026-08-26'], day: 'Wednesday', duration: 1, sundays: 0 },
+  { name: 'Raksha Bandhan (रक्षाबंधन)', date: '28 Aug 2026', dateStrings: ['2026-08-28'], day: 'Friday', duration: 1, sundays: 0 },
+  { name: 'Krishna Janmashtami (श्री कृष्ण जन्माष्टमी)', date: '04 Sep 2026', dateStrings: ['2026-09-04'], day: 'Friday', duration: 1, sundays: 0 },
+  { name: 'Mahatma Gandhi Jayanti (महात्मा गाँधी जयंती)', date: '02 Oct 2026', dateStrings: ['2026-10-02'], day: 'Friday', duration: 1, sundays: 0 },
+  { name: 'Durga Puja (दुर्गा पूजा)', date: '17-20 Oct 2026', dateStrings: ['2026-10-17', '2026-10-18', '2026-10-19', '2026-10-20'], day: 'Sat-Tue', duration: 3, sundays: 1 },
+  { name: 'Deepawali / Bhai Dooj / Chhath Puja (दीपावली / छठ पूजा)', date: '08-16 Nov 2026', dateStrings: ['2026-11-08', '2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13', '2026-11-14', '2026-11-15', '2026-11-16'], day: 'Sun-Mon', duration: 7, sundays: 2 },
+  { name: 'Guru Nanak Jayanti / Kartik Purnima (गुरुनानक जयंती)', date: '24 Nov 2026', dateStrings: ['2026-11-24'], day: 'Tuesday', duration: 1, sundays: 0 },
+  { name: 'Christmas / Winter Vacation (क्रिसमस / शीतकालीन अवकाश)', date: '25-31 Dec 2026', dateStrings: ['2026-12-25', '2026-12-26', '2026-12-27', '2026-12-28', '2026-12-29', '2026-12-30', '2026-12-31'], day: 'Fri-Thu', duration: 6, sundays: 1 }
 ];
 
 export default function Attendance() {
@@ -41,6 +46,38 @@ export default function Attendance() {
   const [dailyLog, setDailyLog] = useState({});
   const [activeTab, setActiveTab] = useState('subjects'); // 'subjects', 'daily', 'holidays'
   const [loading, setLoading] = useState(true);
+  
+  const [currentDate, setCurrentDate] = useState(() => {
+    const today = new Date();
+    if (today.getFullYear() !== 2026) {
+      return new Date('2026-06-03');
+    }
+    return today;
+  });
+
+  const handlePrevMonth = () => {
+    setCurrentDate(prev => {
+      const newDate = new Date(prev);
+      newDate.setMonth(newDate.getMonth() - 1);
+      if (newDate.getFullYear() < 2026) {
+        toast.error("Holidays and logging are configured for 2026!");
+        return prev;
+      }
+      return newDate;
+    });
+  };
+
+  const handleNextMonth = () => {
+    setCurrentDate(prev => {
+      const newDate = new Date(prev);
+      newDate.setMonth(newDate.getMonth() + 1);
+      if (newDate.getFullYear() > 2026) {
+        toast.error("Holidays and logging are configured for 2026!");
+        return prev;
+      }
+      return newDate;
+    });
+  };
   
   // Biometric Scan State
   const [scanning, setScanning] = useState(false);
@@ -188,9 +225,8 @@ export default function Attendance() {
 
   // Generate days for calendar rendering
   const getDaysArray = () => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = date.getMonth();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     
     const arr = [];
@@ -202,9 +238,22 @@ export default function Attendance() {
   };
 
   const calendarDays = getDaysArray();
-  const currentMonthName = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const currentMonthName = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
-  // Calculate statistics from dailyLog
+  // Holiday matchers
+  const holidayDatesSet = new Set();
+  HOLIDAYS_2026.forEach(h => {
+    if (h.dateStrings) {
+      h.dateStrings.forEach(d => holidayDatesSet.add(d));
+    }
+  });
+
+  const getOfficialHolidayName = (dateStr) => {
+    const h = HOLIDAYS_2026.find(h => h.dateStrings && h.dateStrings.includes(dateStr));
+    return h ? h.name : null;
+  };
+
+  // Calculate statistics from dailyLog (All-time overall)
   const dailyStats = Object.values(dailyLog).reduce((acc, status) => {
     if (status === 'PRESENT') acc.present += 1;
     if (status === 'ABSENT') acc.absent += 1;
@@ -214,6 +263,23 @@ export default function Attendance() {
 
   const totalLogCount = dailyStats.present + dailyStats.absent;
   const overallDailyPercent = totalLogCount > 0 ? ((dailyStats.present / totalLogCount) * 100).toFixed(1) : 0;
+
+  // Selected Month Stats
+  const selYear = currentDate.getFullYear();
+  const selMonth = currentDate.getMonth();
+  const prefix = `${selYear}-${String(selMonth + 1).padStart(2, '0')}-`;
+
+  const monthlyStats = Object.entries(dailyLog).reduce((acc, [dateStr, status]) => {
+    if (dateStr.startsWith(prefix)) {
+      if (status === 'PRESENT') acc.present += 1;
+      if (status === 'ABSENT') acc.absent += 1;
+      if (status === 'HOLIDAY') acc.holiday += 1;
+    }
+    return acc;
+  }, { present: 0, absent: 0, holiday: 0 });
+
+  const totalMonthlyCount = monthlyStats.present + monthlyStats.absent;
+  const monthlyPercent = totalMonthlyCount > 0 ? ((monthlyStats.present / totalMonthlyCount) * 100).toFixed(1) : 0;
 
   if (loading) return <div className="flex justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
 
@@ -429,7 +495,28 @@ export default function Attendance() {
             <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-6">
               <div>
                 <h3 className="text-lg font-black text-slate-900 uppercase tracking-tighter">My Attendance Log</h3>
-                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">Calendar representation for {currentMonthName}</p>
+                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">Mark daily logs & view status</p>
+              </div>
+
+              {/* Month Navigation */}
+              <div className="flex items-center gap-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200">
+                <button 
+                  onClick={handlePrevMonth} 
+                  className="p-1.5 hover:bg-white rounded-lg text-slate-600 active:scale-90 transition-all"
+                  title="Previous Month"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-800 px-2 min-w-[120px] text-center">
+                  {currentMonthName}
+                </span>
+                <button 
+                  onClick={handleNextMonth} 
+                  className="p-1.5 hover:bg-white rounded-lg text-slate-600 active:scale-90 transition-all"
+                  title="Next Month"
+                >
+                  <ChevronRight size={16} />
+                </button>
               </div>
               
               {/* Legends */}
@@ -448,18 +535,24 @@ export default function Attendance() {
             </div>
 
             {/* Stats row */}
-            <div className="grid grid-cols-4 gap-2 mb-6 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <div className="grid grid-cols-4 gap-2 mb-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
               {[
-                { label: 'Present', val: dailyStats.present, color: 'text-emerald-600' },
-                { label: 'Absent', val: dailyStats.absent, color: 'text-red-600' },
-                { label: 'Holiday', val: dailyStats.holiday, color: 'text-amber-600' },
-                { label: 'Ratio', val: `${overallDailyPercent}%`, color: 'text-blue-600' }
+                { label: 'Present', val: monthlyStats.present, color: 'text-emerald-600' },
+                { label: 'Absent', val: monthlyStats.absent, color: 'text-red-600' },
+                { label: 'Holiday', val: monthlyStats.holiday, color: 'text-amber-600' },
+                { label: 'Month %', val: `${monthlyPercent}%`, color: 'text-blue-600' }
               ].map(s => (
                 <div key={s.label} className="text-center">
                   <p className="text-[8px] font-black text-slate-400 uppercase tracking-wider leading-none mb-1">{s.label}</p>
                   <p className={`text-base font-black ${s.color}`}>{s.val}</p>
                 </div>
               ))}
+            </div>
+
+            {/* Overall stats banner */}
+            <div className="flex justify-between items-center px-4 py-2.5 bg-blue-50/50 rounded-2xl border border-blue-100/50 mb-6">
+              <span className="text-[9px] font-black uppercase text-blue-900 tracking-wider">Overall Punch-In Attendance</span>
+              <span className="text-xs font-black text-blue-700">{overallDailyPercent}% ({dailyStats.present} of {totalLogCount} days)</span>
             </div>
 
             {/* Calendar grid */}
@@ -470,8 +563,8 @@ export default function Attendance() {
               
               {/* Padding for first day of month alignment */}
               {(() => {
-                const year = new Date().getFullYear();
-                const month = new Date().getMonth();
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth();
                 const startDayOfWeek = new Date(year, month, 1).getDay();
                 const p = [];
                 for (let i = 0; i < startDayOfWeek; i++) {
@@ -483,20 +576,23 @@ export default function Attendance() {
               {/* Render days */}
               {calendarDays.map(dayObj => {
                 const status = dailyLog[dayObj.dateStr];
+                const holidayName = getOfficialHolidayName(dayObj.dateStr);
                 
                 let tileColor = 'bg-slate-50 border border-slate-100 hover:bg-slate-100 text-slate-600';
                 if (status === 'PRESENT') tileColor = 'bg-emerald-500 border border-emerald-600 text-white shadow-[0_4px_12px_rgba(16,185,129,0.3)]';
                 else if (status === 'ABSENT') tileColor = 'bg-red-500 border border-red-600 text-white shadow-[0_4px_12px_rgba(239,68,68,0.3)]';
                 else if (status === 'HOLIDAY') tileColor = 'bg-amber-500 border border-amber-600 text-white shadow-[0_4px_12px_rgba(245,158,11,0.3)]';
+                else if (holidayName) tileColor = 'bg-amber-50 border border-amber-200 text-amber-600 hover:bg-amber-100/70';
 
                 return (
                   <button
                     key={dayObj.day}
                     onClick={() => toggleDailyDate(dayObj.dateStr)}
-                    className={`w-10 h-10 mx-auto rounded-xl flex items-center justify-center text-xs font-black transition-all active:scale-90 ${tileColor}`}
-                    title={`Date: ${dayObj.dateStr} | Status: ${status || 'Unmarked'} (Click to change)`}
+                    className={`w-10 h-10 mx-auto rounded-xl flex flex-col items-center justify-center text-xs font-black transition-all active:scale-90 relative ${tileColor}`}
+                    title={holidayName ? `Official Holiday: ${holidayName} (Click to override)` : `Date: ${dayObj.dateStr} | Status: ${status || 'Unmarked'} (Click to change)`}
                   >
-                    {dayObj.day}
+                    <span>{dayObj.day}</span>
+                    {holidayName && !status && <span className="absolute bottom-1 w-1 h-1 bg-amber-500 rounded-full"></span>}
                   </button>
                 );
               })}
@@ -519,7 +615,9 @@ export default function Attendance() {
             </div>
             <div className="px-5 py-2.5 bg-amber-50 border border-amber-200/50 text-amber-700 rounded-xl text-center">
               <p className="text-[8px] font-black uppercase tracking-widest leading-none mb-1">Total Holidays</p>
-              <p className="text-base font-black leading-none">30 Days</p>
+              <p className="text-base font-black leading-none">
+                {HOLIDAYS_2026.reduce((acc, h) => acc + h.duration, 0)} Days + {HOLIDAYS_2026.reduce((acc, h) => acc + h.sundays, 0)} Sundays
+              </p>
             </div>
           </div>
 
@@ -527,8 +625,8 @@ export default function Attendance() {
             {HOLIDAYS_2026.map((h, idx) => (
               <div key={idx} className="p-4 bg-slate-50 border border-slate-200/50 rounded-2xl flex items-center justify-between group hover:border-amber-500/20 transition-all">
                 <div className="flex items-center gap-3.5 min-w-0 pr-2">
-                  <div className="w-10 h-10 bg-amber-500/10 text-amber-600 rounded-xl flex items-center justify-center shrink-0 font-black text-sm">
-                    {h.duration}d
+                  <div className="w-10 h-10 bg-amber-500/10 text-amber-600 rounded-xl flex items-center justify-center shrink-0 font-black text-[10px]">
+                    {h.duration > 0 ? `${h.duration}d` : 'Sun'}
                   </div>
                   <div className="min-w-0">
                     <p className="text-[12px] font-black text-slate-800 uppercase truncate leading-tight">{h.name}</p>

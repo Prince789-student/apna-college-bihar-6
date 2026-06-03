@@ -57,7 +57,7 @@ export default function DashboardLayout() {
               if (location.state?.from === 'study-network') {
                 navigate('/dashboard/study?standalone=true', { state: { tab: 'network' } });
               } else {
-                navigate('/');
+                navigate(-1);
               }
             }} 
             className="flex items-center gap-2 text-slate-900 hover:text-blue-600 transition-colors group"
@@ -66,7 +66,7 @@ export default function DashboardLayout() {
                <ChevronLeft size={20} />
             </div>
             <span className="text-[10px] font-black uppercase tracking-widest">
-              {location.state?.from === 'study-network' ? 'Back to Network' : 'Back to Home'}
+              Back
             </span>
          </button>
          <div className="flex items-center gap-3">
