@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Download, ChevronRight } from 'lucide-react';
+import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import jsPDF from 'jspdf';
@@ -98,60 +98,80 @@ function cleanSyllabusText(rawText) {
   return result.join('\n').replace(/\n{3,}/g, '\n\n');
 }
 
-// ─── Parse markdown syllabus text into structured units with topics ───────────
-function parseSyllabusIntoUnits(rawText) {
+// ─── Parse markdown syllabus text into structured subjects and units with topics ───
+function parseSyllabusIntoSubjects(rawText) {
   if (!rawText) return [];
   const cleaned = cleanSyllabusText(rawText);
   const lines = cleaned.split('\n');
-  const units = [];
+  const subjects = [];
+  let currentSubject = null;
   let currentUnit = null;
 
   for (const line of lines) {
     const trimmed = line.trim();
     if (!trimmed) continue;
 
-    if (/^#{2,3}\s*📌?\s*Unit[-–\s]*\d/i.test(trimmed)) {
-      const title = trimmed.replace(/^#+\s*📌?\s*/, '').trim();
-      currentUnit = { title, topics: [] };
-      units.push(currentUnit);
-      continue;
-    }
-
-    if (/^##\s*📘/.test(trimmed) || (/^##\s/.test(trimmed) && !/unit/i.test(trimmed))) {
+    // Check for Subject header starting with ##
+    if (/^##\s*📘?/.test(trimmed)) {
       const title = trimmed.replace(/^#+\s*📘?\s*/, '').trim();
-      currentUnit = { title, topics: [], isSubject: true };
-      units.push(currentUnit);
+      currentSubject = { title, courseCode: '', units: [] };
+      currentUnit = null;
+      subjects.push(currentSubject);
       continue;
     }
 
-    if (/^####/.test(trimmed)) {
-      const title = trimmed.replace(/^#+\s*/, '').trim();
-      if (currentUnit) {
-        currentUnit.topics.push({ text: title, isHeading: true });
+    // Check for Course Code line
+    if (/^\*\*Course Code:\*\*/i.test(trimmed)) {
+      if (currentSubject) {
+        currentSubject.courseCode = trimmed.replace(/^\*\*Course Code:\*\*\s*/i, '').trim();
       }
       continue;
     }
 
-    if (/^[-*•]\s+/.test(trimmed) && currentUnit) {
-      const text = trimmed.replace(/^[-*•]\s+/, '').replace(/\*\*/g, '').trim();
-      if (text.length > 3) {
-        currentUnit.topics.push({ text, isHeading: false });
+    // Check for Unit header
+    const isUnitHeader = /^#{2,3}\s*📌?\s*Unit[-–\s]*\d/i.test(trimmed) || /^UNIT\s+\d/i.test(trimmed);
+    if (isUnitHeader) {
+      const title = trimmed.replace(/^#+\s*📌?\s*/, '').replace(/^UNIT\s+/i, 'Unit ').trim();
+      currentUnit = { title, topics: [] };
+      if (currentSubject) {
+        currentSubject.units.push(currentUnit);
       }
       continue;
     }
 
-    if (currentUnit && trimmed.length > 10 && !/^(course code|credit|l\s*t\s*p|references|text|prerequisite|\*\*)/i.test(trimmed)) {
-      if (!/^\d+\s+\d+\s+\d+/.test(trimmed)) {
-        currentUnit.topics.push({ text: trimmed.replace(/\*\*/g, '').trim(), isHeading: false });
+    // Check for Topic inside the current unit
+    if (currentUnit) {
+      // Check if it's a sub-heading inside unit
+      if (/^####/.test(trimmed)) {
+        const text = trimmed.replace(/^#+\s*/, '').trim();
+        currentUnit.topics.push({ text, isHeading: true });
+        continue;
+      }
+
+      // Check if it's a bullet point topic
+      if (/^[-*•]\s+/.test(trimmed)) {
+        const text = trimmed.replace(/^[-*•]\s+/, '').replace(/\*\*/g, '').trim();
+        if (text.length > 3) {
+          currentUnit.topics.push({ text, isHeading: false });
+        }
+        continue;
+      }
+
+      // Fallback for regular text topic lines
+      if (trimmed.length > 10 && !/^(course code|credit|l\s*t\s*p|references|text|prerequisite|\*\*)/i.test(trimmed)) {
+        if (!/^\d+\s+\d+\s+\d+/.test(trimmed)) {
+          currentUnit.topics.push({ text: trimmed.replace(/\*\*/g, '').trim(), isHeading: false });
+        }
       }
     }
   }
 
-  return units.filter(u => u.topics.length > 0);
+  // Only return subjects that actually have units inside them
+  return subjects.filter(s => s.units.length > 0);
 }
 
 // ─── Single Topic Row Component ───────────────────────────────────────────────
-function TopicRow({ topic, doneKey, onAskAI, subjectName }) {
+function TopicRow({ topic, doneKey, subjectName }) {
   const [done, setDone] = React.useState(() => {
     try { return JSON.parse(localStorage.getItem(doneKey) || 'false'); } catch { return false; }
   });
@@ -190,13 +210,6 @@ function TopicRow({ topic, doneKey, onAskAI, subjectName }) {
 
       {/* Right/Bottom part: Action Buttons */}
       <div className="flex flex-wrap items-center gap-1.5 pl-8 md:pl-0 flex-shrink-0 opacity-90 md:opacity-60 md:group-hover:opacity-100 transition-opacity">
-        <button
-          onClick={() => onAskAI(topic.text)}
-          className="flex items-center gap-1.5 px-2.5 py-1.5 md:px-2 md:py-1 bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm"
-        >
-          <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-          Ask AI
-        </button>
         <a
           href={`https://www.youtube.com/results?search_query=${ytQuery}`}
           target="_blank"
@@ -208,7 +221,7 @@ function TopicRow({ topic, doneKey, onAskAI, subjectName }) {
         </a>
         <button
           onClick={toggleDone}
-          className={`px-2.5 py-1.5 md:px-2 md:py-1 rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm ${done ? 'bg-emerald-500 text-white' : 'bg-slate-100 hover:bg-emerald-500 text-slate-500 hover:text-white'}`}
+          className={`px-2.5 py-1.5 md:px-2 md:py-1 rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm ${done ? 'bg-emerald-500 text-white' : 'bg-slate-100 hover:bg-emerald-500 text-slate-505 hover:text-white'}`}
         >
           {done ? '✓ Done' : 'Mark Done'}
         </button>
@@ -218,7 +231,7 @@ function TopicRow({ topic, doneKey, onAskAI, subjectName }) {
 }
 
 // ─── Unit Accordion Component ──────────────────────────────────────────────────
-function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, onAskAI }) {
+function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey }) {
   const [open, setOpen] = React.useState(unitIndex === 0);
 
   const topicKeys = unit.topics.map((t, ti) =>
@@ -239,8 +252,8 @@ function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, onAskAI }) 
         className="w-full flex items-center justify-between px-5 py-4 bg-white hover:bg-slate-50 transition-all"
       >
         <div className="flex items-center gap-3 text-left">
-          <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black ${unit.isSubject ? 'bg-indigo-600 text-white' : 'bg-indigo-50 text-indigo-600'}`}>
-            {unit.isSubject ? '📘' : `U${unitIndex + 1}`}
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black bg-indigo-50 text-indigo-600">
+            {`U${unitIndex + 1}`}
           </div>
           <div>
             <p className="text-sm font-black text-slate-800 uppercase tracking-tight leading-snug">{unit.title}</p>
@@ -265,7 +278,6 @@ function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, onAskAI }) 
               key={ti}
               topic={topic}
               doneKey={topicKeys[ti]}
-              onAskAI={onAskAI}
               subjectName={subjectName}
             />
           ))}
@@ -280,12 +292,6 @@ export default function BeuSyllabus() {
   const [syllabusData, setSyllabusData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [aiQuery, setAiQuery] = useState(null);
-  const [aiAnswer, setAiAnswer] = useState('');
-  const [aiVideoId, setAiVideoId] = useState(null);
-  const [aiLanguage, setAiLanguage] = useState(null);
-  const [aiMode, setAiMode] = useState(null);
-  const [aiLoading, setAiLoading] = useState(false);
   const [selectedSem, setSelectedSem] = useState('sem1');
   const [selectedBranch, setSelectedBranch] = useState('cse');
 
@@ -313,57 +319,26 @@ export default function BeuSyllabus() {
   ];
 
   const currentSyllabus = syllabusData.find(s => s.semester === selectedSem && s.branch === selectedBranch);
-  const units = currentSyllabus ? parseSyllabusIntoUnits(currentSyllabus.content) : [];
+  const subjects = currentSyllabus ? parseSyllabusIntoSubjects(currentSyllabus.content) : [];
   const semBranchKey = `${selectedSem}_${selectedBranch}`;
 
   // Overall progress calculation
-  const allTopicKeys = units.flatMap((u, ui) => u.topics.map((t, ti) => `syllabus_done_${semBranchKey}_u${ui}_t${ti}`));
-  const realTopics = units.flatMap(u => u.topics.filter(t => !t.isHeading));
+  const allTopicKeys = [];
+  const realTopics = [];
+  subjects.forEach((subject, si) => {
+    subject.units.forEach((unit, ui) => {
+      unit.topics.forEach((t, ti) => {
+        const key = `syllabus_done_${semBranchKey}_s${si}_u${ui}_t${ti}`;
+        if (!t.isHeading) {
+          allTopicKeys.push(key);
+          realTopics.push(t);
+        }
+      });
+    });
+  });
+
   const doneCount = allTopicKeys.filter(k => { try { return JSON.parse(localStorage.getItem(k) || 'false'); } catch { return false; } }).length;
   const overallProgress = realTopics.length > 0 ? Math.round((doneCount / realTopics.length) * 100) : 0;
-
-  // AI Handler
-  const handleAskAI = (topicText) => {
-    const subjectName = branches.find(b => b.id === selectedBranch)?.label || '';
-    setAiQuery({ topic: topicText, subject: subjectName });
-    setAiAnswer('');
-    setAiVideoId(null);
-    setAiLanguage(null);
-    setAiMode(null);
-  };
-
-  const fetchAiResponse = async (mode, language) => {
-    setAiLanguage(language);
-    setAiLoading(true);
-    try {
-      const response = await fetch('/api/ai/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [{
-            sender: 'user',
-            text: `Please explain this topic.`
-          }],
-          isSyllabusQuery: true,
-          topicText: aiQuery.topic,
-          subjectName: aiQuery.subject,
-          language: language,
-          mode: mode
-        })
-      });
-      const data = await response.json();
-      if (!response.ok) {
-         setAiAnswer(`Error: ${data.details || data.message || 'Server error'}`);
-         return;
-      }
-      setAiAnswer(data.reply || data.message || 'Could not get response. Try again!');
-      if (data.videoId) setAiVideoId(data.videoId);
-    } catch (err) {
-      setAiAnswer('AI response failed. Please check your connection or server logs.');
-    } finally {
-      setAiLoading(false);
-    }
-  };
 
   // PDF Download Handler
   const handleDownloadPdf = () => {
@@ -463,7 +438,7 @@ export default function BeuSyllabus() {
           </div>
           <h1 className="text-3xl md:text-5xl font-[1000] tracking-tighter uppercase mb-4">BEU Syllabus</h1>
           <p className="text-indigo-100 text-[11px] md:text-sm font-bold uppercase tracking-widest max-w-lg">
-            Topic-wise interactive syllabus • Ask AI • Watch on YouTube • Track Progress
+            Topic-wise interactive syllabus • Watch on YouTube • Track Progress
           </p>
         </div>
       </div>
@@ -535,17 +510,37 @@ export default function BeuSyllabus() {
                 <Loader2 size={40} className="text-indigo-500 animate-spin mb-4" />
                 <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Loading Syllabus Data...</p>
               </div>
-            ) : currentSyllabus && units.length > 0 ? (
-              <div className="space-y-1">
-                {units.map((unit, ui) => (
-                  <UnitAccordion
-                    key={ui}
-                    unit={unit}
-                    unitIndex={ui}
-                    subjectName={branches.find(b => b.id === selectedBranch)?.label || ''}
-                    semBranchKey={semBranchKey}
-                    onAskAI={handleAskAI}
-                  />
+            ) : currentSyllabus && subjects.length > 0 ? (
+              <div className="space-y-8">
+                {subjects.map((subject, si) => (
+                  <div key={si} className="bg-slate-50/50 p-4 md:p-6 rounded-[2.2rem] border border-slate-200/60 shadow-sm">
+                    {/* Subject Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 px-2">
+                      <div>
+                        <h3 className="text-base font-[900] text-indigo-600 uppercase tracking-tight">
+                          📘 {subject.title}
+                        </h3>
+                        {subject.courseCode && (
+                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                            Course Code: {subject.courseCode}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Units list */}
+                    <div className="space-y-2">
+                      {subject.units.map((unit, ui) => (
+                        <UnitAccordion
+                          key={ui}
+                          unit={unit}
+                          unitIndex={ui}
+                          subjectName={subject.title}
+                          semBranchKey={`${semBranchKey}_s${si}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
             ) : currentSyllabus ? (
@@ -560,101 +555,12 @@ export default function BeuSyllabus() {
                 <h3 className="text-lg font-black text-slate-800 uppercase tracking-tighter mb-2">No Syllabus Found</h3>
                 <p className="text-[12px] font-bold text-slate-500 max-w-xs">
                   The syllabus for this specific semester and branch combination is not available yet.
-                </p>
+                  </p>
               </div>
             )}
           </div>
         </div>
       </div>
-
-      {/* AI Answer Modal */}
-      {aiQuery && (
-        <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center p-0 md:p-4 bg-black/60 backdrop-blur-sm" onClick={() => setAiQuery(null)}>
-          <div className="bg-white w-full max-w-lg rounded-t-[2rem] md:rounded-[2rem] shadow-2xl overflow-hidden animate-in slide-in-from-bottom-5 duration-300" onClick={e => e.stopPropagation()}>
-            <div className="bg-indigo-600 p-5">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-                </div>
-                <div>
-                  <p className="text-[9px] font-black text-indigo-200 uppercase tracking-widest">AI Explanation</p>
-                  <p className="text-sm font-black text-white leading-tight">{aiQuery.topic}</p>
-                </div>
-                <button onClick={() => setAiQuery(null)} className="ml-auto text-white/70 hover:text-white text-xl font-black">×</button>
-              </div>
-            </div>
-
-            <div className="px-5 pt-4 flex gap-2">
-              <a href={`https://www.youtube.com/results?search_query=${encodeURIComponent(aiQuery.topic + ' ' + aiQuery.subject)}`}
-                target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-3 py-2 bg-red-50 hover:bg-red-600 text-red-600 hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-                Watch on YouTube
-              </a>
-            </div>
-
-            <div className="p-5 max-h-[80vh] md:max-h-[60vh] overflow-y-auto custom-scrollbar">
-              {!aiMode ? (
-                <div className="flex flex-col gap-3 py-4">
-                  <p className="text-sm font-bold text-slate-700 text-center mb-2">Choose Explanation Type</p>
-                  <button 
-                    onClick={() => setAiMode('basic')}
-                    className="w-full py-3 px-4 bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white rounded-xl font-bold text-sm transition-all border border-indigo-100 hover:border-indigo-600 text-left flex justify-between items-center"
-                  >
-                    <span>🧠 Understanding from Basic</span>
-                    <ChevronRight size={16} />
-                  </button>
-                  <button 
-                    onClick={() => setAiMode('exam')}
-                    className="w-full py-3 px-4 bg-amber-50 hover:bg-amber-600 text-amber-700 hover:text-white rounded-xl font-bold text-sm transition-all border border-amber-100 hover:border-amber-600 text-left flex justify-between items-center"
-                  >
-                    <span>📝 Exam Like (25-Mark Answer)</span>
-                    <ChevronRight size={16} />
-                  </button>
-                </div>
-              ) : !aiLanguage ? (
-                <div className="flex flex-col gap-3 py-4">
-                  <p className="text-sm font-bold text-slate-700 text-center mb-2">Choose Explanation Language</p>
-                  <button 
-                    onClick={() => fetchAiResponse(aiMode, 'hinglish')}
-                    className="w-full py-3 px-4 bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white rounded-xl font-bold text-sm transition-all border border-indigo-100 hover:border-indigo-600 text-left flex justify-between items-center"
-                  >
-                    <span>🇮🇳 Explain in Hinglish (Bihar Style)</span>
-                    <ChevronRight size={16} />
-                  </button>
-                  <button 
-                    onClick={() => fetchAiResponse(aiMode, 'english')}
-                    className="w-full py-3 px-4 bg-slate-50 hover:bg-slate-800 text-slate-700 hover:text-white rounded-xl font-bold text-sm transition-all border border-slate-200 hover:border-slate-800 text-left flex justify-between items-center"
-                  >
-                    <span>🇬🇧 Explain in Normal English</span>
-                    <ChevronRight size={16} />
-                  </button>
-                </div>
-              ) : aiLoading ? (
-                <div className="flex flex-col items-center py-8 gap-3">
-                  <Loader2 size={28} className="text-indigo-500 animate-spin" />
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">AI is thinking...</p>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-5">
-                  {aiVideoId && (
-                    <div className="w-full aspect-video rounded-xl overflow-hidden bg-slate-900 shadow-inner">
-                      <iframe 
-                        src={`https://www.youtube.com/embed/${aiVideoId}`} 
-                        className="w-full h-full border-0" 
-                        allowFullScreen>
-                      </iframe>
-                    </div>
-                  )}
-                  <div className="prose prose-sm max-w-none text-slate-700">
-                    <ReactMarkdown>{aiAnswer}</ReactMarkdown>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
