@@ -413,8 +413,14 @@ export default function StudyDashboard() {
 
                   {/* Whitelist Button */}
                   <button 
-                    onClick={() => setShowWhitelist(true)}
-                    className="w-full mt-2 flex items-center justify-between p-5 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl transition-all active:scale-95 shadow-xl group"
+                    onClick={() => {
+                      if (timerActive && timerMode === 'COUNTDOWN') {
+                        alert("Focus Session is Locked! You cannot modify allowed apps during an active countdown session.");
+                        return;
+                      }
+                      setShowWhitelist(true);
+                    }}
+                    className={`w-full mt-2 flex items-center justify-between p-5 rounded-2xl transition-all active:scale-95 shadow-xl group ${timerActive && timerMode === 'COUNTDOWN' ? 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60' : 'bg-slate-900 hover:bg-slate-800 text-white'}`}
                   >
                     <div className="flex items-center gap-4">
                       <div className="p-2 bg-white/10 rounded-xl text-blue-400 group-hover:scale-110 transition-transform">
@@ -430,7 +436,38 @@ export default function StudyDashboard() {
                 </div>
               </div>
             </div>
+
+            {/* Allowed Apps Launch Pad Card */}
+            {isNative && installedApps.filter(app => (allowedPackages || '').split(',').filter(Boolean).includes(app.packageName)).length > 0 && (
+              <div className="bg-white rounded-[3rem] border border-slate-200/60 shadow-sm p-6 space-y-4 animate-in slide-in-from-bottom-4 duration-500">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-blue-600/10 text-blue-600 rounded-2xl">
+                    <Activity size={20} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-[1000] text-slate-900 uppercase tracking-tight">Allowed Apps Launch Pad</h3>
+                    <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">Click an app to open it safely</p>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2 pt-2">
+                  {installedApps
+                    .filter(app => (allowedPackages || '').split(',').filter(Boolean).includes(app.packageName))
+                    .map(app => (
+                      <button
+                        key={app.packageName}
+                        onClick={() => launchApp(app.packageName)}
+                        className="flex items-center gap-3 p-3 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/40 rounded-2xl transition-all text-left shadow-sm active:scale-95 group/appBtn"
+                      >
+                        <div className="w-8 h-8 rounded-xl bg-blue-600/10 text-blue-600 flex items-center justify-center font-[1000] text-sm group-hover/appBtn:bg-blue-600 group-hover/appBtn:text-white transition-all">{app.name[0]}</div>
+                        <span className="text-[10px] font-black text-slate-700 uppercase truncate flex-1">{app.name}</span>
+                      </button>
+                    ))
+                  }
+                </div>
+              </div>
+            )}
           </div>
+        
         )}
 
         {/* ─── TAB: DASHBOARD ─── */}
