@@ -110,7 +110,7 @@ function parseSyllabusIntoUnits(rawText) {
     const trimmed = line.trim();
     if (!trimmed) continue;
 
-    if (/^#{2,3}\s*📌?\s*Unit\s*\d/i.test(trimmed) || /^#{2,3}\s*Unit\s*\d/i.test(trimmed)) {
+    if (/^#{2,3}\s*📌?\s*Unit[-–\s]*\d/i.test(trimmed)) {
       const title = trimmed.replace(/^#+\s*📌?\s*/, '').trim();
       currentUnit = { title, topics: [] };
       units.push(currentUnit);
@@ -173,35 +173,42 @@ function TopicRow({ topic, doneKey, onAskAI, subjectName }) {
   const ytQuery = encodeURIComponent(`${topic.text} ${subjectName} BEU B.Tech in Hindi`);
 
   return (
-    <div className={`flex items-start gap-3 px-4 py-3 border-b border-slate-100 group transition-all ${done ? 'bg-emerald-50/50' : 'hover:bg-slate-50'}`}>
-      <button onClick={toggleDone} className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${done ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300 hover:border-emerald-400'}`}>
-        {done && <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="white" strokeWidth="2"><polyline points="1,6 4,9 11,3"/></svg>}
-      </button>
+    <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 px-4 py-3.5 border-b border-slate-100 group transition-all ${done ? 'bg-emerald-50/50' : 'hover:bg-slate-50'}`}>
+      {/* Left part: Checkbox + Text */}
+      <div className="flex items-start gap-3 flex-1 min-w-0">
+        <button 
+          onClick={toggleDone} 
+          className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${done ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300 hover:border-emerald-400'}`}
+        >
+          {done && <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="white" strokeWidth="2"><polyline points="1,6 4,9 11,3"/></svg>}
+        </button>
 
-      <p className={`flex-1 text-sm font-medium leading-relaxed ${done ? 'line-through text-slate-400' : 'text-slate-700'}`}>
-        {topic.text}
-      </p>
+        <p className={`text-[13px] md:text-sm font-semibold leading-relaxed ${done ? 'line-through text-slate-400' : 'text-slate-800'}`}>
+          {topic.text}
+        </p>
+      </div>
 
-      <div className="flex items-center gap-1.5 flex-shrink-0 opacity-60 group-hover:opacity-100 transition-opacity">
+      {/* Right/Bottom part: Action Buttons */}
+      <div className="flex flex-wrap items-center gap-1.5 pl-8 md:pl-0 flex-shrink-0 opacity-90 md:opacity-60 md:group-hover:opacity-100 transition-opacity">
         <button
           onClick={() => onAskAI(topic.text)}
-          className="flex items-center gap-1 px-2 py-1 bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white rounded-lg text-[9px] font-black uppercase tracking-wide transition-all"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 md:px-2 md:py-1 bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm"
         >
-          <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+          <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
           Ask AI
         </button>
         <a
           href={`https://www.youtube.com/results?search_query=${ytQuery}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1 px-2 py-1 bg-red-50 hover:bg-red-600 text-red-600 hover:text-white rounded-lg text-[9px] font-black uppercase tracking-wide transition-all"
+          className="flex items-center gap-1.5 px-2.5 py-1.5 md:px-2 md:py-1 bg-red-50 hover:bg-red-600 text-red-600 hover:text-white rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm"
         >
-          <svg viewBox="0 0 24 24" width="10" height="10" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+          <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
           YouTube
         </a>
         <button
           onClick={toggleDone}
-          className={`px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-wide transition-all ${done ? 'bg-emerald-500 text-white' : 'bg-slate-100 hover:bg-emerald-500 text-slate-500 hover:text-white'}`}
+          className={`px-2.5 py-1.5 md:px-2 md:py-1 rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm ${done ? 'bg-emerald-500 text-white' : 'bg-slate-100 hover:bg-emerald-500 text-slate-500 hover:text-white'}`}
         >
           {done ? '✓ Done' : 'Mark Done'}
         </button>
@@ -236,7 +243,7 @@ function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, onAskAI }) 
             {unit.isSubject ? '📘' : `U${unitIndex + 1}`}
           </div>
           <div>
-            <p className="text-sm font-black text-slate-800 uppercase tracking-tight leading-none">{unit.title}</p>
+            <p className="text-sm font-black text-slate-800 uppercase tracking-tight leading-snug">{unit.title}</p>
             <p className="text-[9px] text-slate-400 font-bold mt-0.5">{totalTopics} topics · {progress}% done</p>
           </div>
         </div>
