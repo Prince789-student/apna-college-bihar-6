@@ -7,7 +7,7 @@ const { protect } = require('../middleware/authMiddleware');
 router.post('/chat', async (req, res) => {
     try {
         const apiKey = process.env.GEMINI_API_KEY;
-        const { messages, isSyllabusQuery, topicText, subjectName, language } = req.body;
+        const { messages, isSyllabusQuery, topicText, subjectName, language, mode } = req.body;
 
         if (!messages || !Array.isArray(messages) || messages.length === 0) {
             return res.status(400).json({ success: false, message: 'Messages array is required' });
@@ -44,11 +44,166 @@ Guidelines:
 `;
 
         if (isSyllabusQuery && topicText) {
-            const langInstruction = language === 'english' 
-                ? "1. Explain in VERY EASY NORMAL ENGLISH using simple words that a first-year engineering student can understand."
-                : "1. Explain in VERY EASY ENGLISH and Hinglish mix using simple words that a first-year engineering student can understand.";
+            if (mode === 'exam') {
+                const langInstruction = language === 'english'
+                    ? "2. Use VERY EASY NORMAL ENGLISH."
+                    : "2. Use VERY EASY ENGLISH and Hinglish mix (Bihar Style).";
 
-            systemInstructionText = `Act as a senior Bihar Engineering University (BEU) professor and expert teacher.
+                systemInstructionText = `Act as a Bihar Engineering University (BEU) professor, examiner, and textbook author.
+
+Your task is to generate a COMPLETE 25-MARK UNIVERSITY EXAM ANSWER.
+
+Topic/Question: "${topicText}"
+
+Requirements:
+
+1. Write the answer exactly like a university topper's answer sheet.
+
+${langInstruction}
+
+3. Start from basic concepts and build to advanced concepts.
+
+4. Follow this structure:
+
+═══════════════════════════════
+1. Question
+═══════════════════════════════
+
+Write the full question for ${topicText}.
+
+═══════════════════════════════
+2. Introduction
+═══════════════════════════════
+
+- Definition
+- Background
+- Importance
+- Need of the concept
+(At least 300-500 words)
+
+═══════════════════════════════
+3. Theory and Explanation
+═══════════════════════════════
+
+- Explain every concept from zero level.
+- Explain every technical term.
+- Explain each point in detail.
+- Use headings and subheadings.
+- No point should remain unexplained.
+
+═══════════════════════════════
+4. Mathematical Derivation
+═══════════════════════════════
+
+- Complete derivation.
+- Show every step.
+- Explain why each step is performed.
+- Do not skip intermediate steps.
+
+═══════════════════════════════
+5. Diagrams
+═══════════════════════════════
+
+- Draw neat text-based diagrams.
+- Label every part.
+- Explain every label.
+
+═══════════════════════════════
+6. Formula Section
+═══════════════════════════════
+
+For each formula:
+- Formula
+- Meaning
+- Variables
+- Units
+- Usage
+- Limitations
+
+═══════════════════════════════
+7. Worked Numerical Examples
+═══════════════════════════════
+
+- Easy example
+- Medium example
+- University-level example
+Explain every step.
+
+═══════════════════════════════
+8. Engineering Applications
+═══════════════════════════════
+
+Explain practical applications in industry and engineering.
+
+═══════════════════════════════
+9. Advantages
+═══════════════════════════════
+
+Explain each advantage in detail.
+
+═══════════════════════════════
+10. Disadvantages
+═══════════════════════════════
+
+Explain each disadvantage in detail.
+
+═══════════════════════════════
+11. Comparison Table
+═══════════════════════════════
+
+Create comparison tables wherever possible.
+
+═══════════════════════════════
+12. Frequently Asked Viva Questions
+═══════════════════════════════
+
+Minimum 15 questions with answers.
+
+═══════════════════════════════
+13. Important BEU Exam Questions
+═══════════════════════════════
+
+- 2 Marks Questions
+- 5 Marks Questions
+- 10 Marks Questions
+
+═══════════════════════════════
+14. Exam-Oriented Notes
+═══════════════════════════════
+
+Important points for scoring maximum marks.
+
+═══════════════════════════════
+15. Conclusion
+═══════════════════════════════
+
+Complete conclusion of the topic.
+
+═══════════════════════════════
+16. Quick Revision Sheet
+═══════════════════════════════
+
+One-page revision notes.
+
+═══════════════════════════════
+17. Formula Sheet
+═══════════════════════════════
+
+All formulas together.
+
+═══════════════════════════════
+18. Expected BEU Questions
+═══════════════════════════════
+
+Generate top 20 most probable university exam questions.
+
+Answer length should be equivalent to a full 25-mark university answer (2000-4000+ words if required).`;
+            } else {
+                const langInstruction = language === 'english' 
+                    ? "1. Explain in VERY EASY NORMAL ENGLISH using simple words that a first-year engineering student can understand."
+                    : "1. Explain in VERY EASY ENGLISH and Hinglish mix using simple words that a first-year engineering student can understand.";
+
+                systemInstructionText = `Act as a senior Bihar Engineering University (BEU) professor and expert teacher.
 
 Explain the topic: "${topicText}"
 
@@ -76,7 +231,7 @@ ${langInstruction}
       - Explain the logic behind every formula.
       - Explain why the formula works.
 
-   D. Mathematical Derivations (if any)
+   D. Mathematical Derivations
       - Show complete derivation from beginning to end.
       - Explain each mathematical step.
 

@@ -277,6 +277,7 @@ export default function BeuSyllabus() {
   const [aiAnswer, setAiAnswer] = useState('');
   const [aiVideoId, setAiVideoId] = useState(null);
   const [aiLanguage, setAiLanguage] = useState(null);
+  const [aiMode, setAiMode] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [selectedSem, setSelectedSem] = useState('sem1');
   const [selectedBranch, setSelectedBranch] = useState('cse');
@@ -321,9 +322,10 @@ export default function BeuSyllabus() {
     setAiAnswer('');
     setAiVideoId(null);
     setAiLanguage(null);
+    setAiMode(null);
   };
 
-  const fetchAiResponse = async (language) => {
+  const fetchAiResponse = async (mode, language) => {
     setAiLanguage(language);
     setAiLoading(true);
     try {
@@ -338,7 +340,8 @@ export default function BeuSyllabus() {
           isSyllabusQuery: true,
           topicText: aiQuery.topic,
           subjectName: aiQuery.subject,
-          language: language
+          language: language,
+          mode: mode
         })
       });
       const data = await response.json();
@@ -584,18 +587,36 @@ export default function BeuSyllabus() {
             </div>
 
             <div className="p-5 max-h-[50vh] overflow-y-auto">
-              {!aiLanguage ? (
+              {!aiMode ? (
+                <div className="flex flex-col gap-3 py-4">
+                  <p className="text-sm font-bold text-slate-700 text-center mb-2">Choose Explanation Type</p>
+                  <button 
+                    onClick={() => setAiMode('basic')}
+                    className="w-full py-3 px-4 bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white rounded-xl font-bold text-sm transition-all border border-indigo-100 hover:border-indigo-600 text-left flex justify-between items-center"
+                  >
+                    <span>🧠 Understanding from Basic</span>
+                    <ChevronRight size={16} />
+                  </button>
+                  <button 
+                    onClick={() => setAiMode('exam')}
+                    className="w-full py-3 px-4 bg-amber-50 hover:bg-amber-600 text-amber-700 hover:text-white rounded-xl font-bold text-sm transition-all border border-amber-100 hover:border-amber-600 text-left flex justify-between items-center"
+                  >
+                    <span>📝 Exam Like (25-Mark Answer)</span>
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+              ) : !aiLanguage ? (
                 <div className="flex flex-col gap-3 py-4">
                   <p className="text-sm font-bold text-slate-700 text-center mb-2">Choose Explanation Language</p>
                   <button 
-                    onClick={() => fetchAiResponse('hinglish')}
+                    onClick={() => fetchAiResponse(aiMode, 'hinglish')}
                     className="w-full py-3 px-4 bg-indigo-50 hover:bg-indigo-600 text-indigo-700 hover:text-white rounded-xl font-bold text-sm transition-all border border-indigo-100 hover:border-indigo-600 text-left flex justify-between items-center"
                   >
                     <span>🇮🇳 Explain in Hinglish (Bihar Style)</span>
                     <ChevronRight size={16} />
                   </button>
                   <button 
-                    onClick={() => fetchAiResponse('english')}
+                    onClick={() => fetchAiResponse(aiMode, 'english')}
                     className="w-full py-3 px-4 bg-slate-50 hover:bg-slate-800 text-slate-700 hover:text-white rounded-xl font-bold text-sm transition-all border border-slate-200 hover:border-slate-800 text-left flex justify-between items-center"
                   >
                     <span>🇬🇧 Explain in Normal English</span>
