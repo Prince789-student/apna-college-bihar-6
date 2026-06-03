@@ -6,34 +6,30 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const HOLIDAYS_2026 = [
-  { name: 'New Year Begins (नववर्ष आरम्भ)', date: '01 Jan 2026', dateStrings: ['2026-01-01'], day: 'Thursday', duration: 1, sundays: 0 },
-  { name: 'Makar Sankranti (मकर संक्रांति)', date: '14 Jan 2026', dateStrings: ['2026-01-14'], day: 'Wednesday', duration: 1, sundays: 0 },
-  { name: 'Basant Panchami / Saraswati Puja (बसंत पंचमी / सरस्वती पूजा)', date: '23 Jan 2026', dateStrings: ['2026-01-23'], day: 'Friday', duration: 1, sundays: 0 },
-  { name: 'Sant Ravidas Jayanti (संत रविदास जयंती)', date: '01 Feb 2026', dateStrings: ['2026-02-01'], day: 'Sunday', duration: 0, sundays: 1 },
-  { name: 'Shab-e-Barat (शब-ए-बरात)', date: '04 Feb 2026', dateStrings: ['2026-02-04'], day: 'Wednesday', duration: 1, sundays: 0 },
-  { name: 'Maha Shivratri (महाशिवरात्रि)', date: '15 Feb 2026', dateStrings: ['2026-02-15'], day: 'Sunday', duration: 0, sundays: 1 },
-  { name: 'Holika Dahan / Holi (होलिका दहन / होली)', date: '02-04 Mar 2026', dateStrings: ['2026-03-02', '2026-03-03', '2026-03-04'], day: 'Mon-Wed', duration: 3, sundays: 0 },
-  { name: 'Eid-ul-Fitr (ईद-उल-फितर)', date: '21 Mar 2026', dateStrings: ['2026-03-21'], day: 'Saturday', duration: 1, sundays: 0 },
-  { name: 'Bihar Diwas (बिहार दिवस)', date: '22 Mar 2026', dateStrings: ['2026-03-22'], day: 'Sunday', duration: 0, sundays: 1 },
-  { name: 'Samrat Ashok Jayanti (सम्राट अशोक जयंती)', date: '26 Mar 2026', dateStrings: ['2026-03-26'], day: 'Thursday', duration: 1, sundays: 0 },
-  { name: 'Ram Navami (रामनवमी)', date: '27 Mar 2026', dateStrings: ['2026-03-27'], day: 'Friday', duration: 1, sundays: 0 },
-  { name: 'Mahavir Jayanti (महावीर जयंती)', date: '31 Mar 2026', dateStrings: ['2026-03-31'], day: 'Tuesday', duration: 1, sundays: 0 },
-  { name: 'Good Friday (गुड फ्राइडे)', date: '03 Apr 2026', dateStrings: ['2026-04-03'], day: 'Friday', duration: 1, sundays: 0 },
-  { name: 'Dr. B.R. Ambedkar Jayanti (डॉ० भीम राव अम्बेडकर जयंती)', date: '14 Apr 2026', dateStrings: ['2026-04-14'], day: 'Tuesday', duration: 1, sundays: 0 },
-  { name: 'Veer Kunwar Singh Jayanti (वीर कुँवर सिंह जयंती)', date: '23 Apr 2026', dateStrings: ['2026-04-23'], day: 'Thursday', duration: 1, sundays: 0 },
-  { name: 'Janaki Navami (जानकी नवमी)', date: '25 Apr 2026', dateStrings: ['2026-04-25'], day: 'Saturday', duration: 1, sundays: 0 },
-  { name: 'May Day / Labour Day / Buddha Purnima (मई दिवस / बुद्ध पूर्णिमा)', date: '01 May 2026', dateStrings: ['2026-05-01'], day: 'Friday', duration: 1, sundays: 0 },
-  { name: 'Eid-ul-Adha / Bakrid (ईद-उल-जोहा / बकरीद)', date: '28 May 2026', dateStrings: ['2026-05-28'], day: 'Thursday', duration: 1, sundays: 0 },
-  { name: 'Summer Vacation (शिक्षकों के लिए) / Kabir Jayanti', date: '01-30 Jun 2026', dateStrings: Array.from({ length: 30 }, (_, i) => `2026-06-${String(i + 1).padStart(2, '0')}`), day: 'Mon-Tue', duration: 26, sundays: 4 },
-  { name: 'Chehallum (चेहल्लुम)', date: '04 Aug 2026', dateStrings: ['2026-08-04'], day: 'Tuesday', duration: 1, sundays: 0 },
-  { name: 'Hazrat Mohammad Birthday (हज़रत मोहम्मद जन्म दिवस)', date: '26 Aug 2026', dateStrings: ['2026-08-26'], day: 'Wednesday', duration: 1, sundays: 0 },
-  { name: 'Raksha Bandhan (रक्षाबंधन)', date: '28 Aug 2026', dateStrings: ['2026-08-28'], day: 'Friday', duration: 1, sundays: 0 },
-  { name: 'Krishna Janmashtami (श्री कृष्ण जन्माष्टमी)', date: '04 Sep 2026', dateStrings: ['2026-09-04'], day: 'Friday', duration: 1, sundays: 0 },
-  { name: 'Mahatma Gandhi Jayanti (महात्मा गाँधी जयंती)', date: '02 Oct 2026', dateStrings: ['2026-10-02'], day: 'Friday', duration: 1, sundays: 0 },
-  { name: 'Durga Puja (दुर्गा पूजा)', date: '17-20 Oct 2026', dateStrings: ['2026-10-17', '2026-10-18', '2026-10-19', '2026-10-20'], day: 'Sat-Tue', duration: 3, sundays: 1 },
-  { name: 'Deepawali / Bhai Dooj / Chhath Puja (दीपावली / छठ पूजा)', date: '08-16 Nov 2026', dateStrings: ['2026-11-08', '2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13', '2026-11-14', '2026-11-15', '2026-11-16'], day: 'Sun-Mon', duration: 7, sundays: 2 },
-  { name: 'Guru Nanak Jayanti / Kartik Purnima (गुरुनानक जयंती)', date: '24 Nov 2026', dateStrings: ['2026-11-24'], day: 'Tuesday', duration: 1, sundays: 0 },
-  { name: 'Christmas / Winter Vacation (क्रिसमस / शीतकालीन अवकाश)', date: '25-31 Dec 2026', dateStrings: ['2026-12-25', '2026-12-26', '2026-12-27', '2026-12-28', '2026-12-29', '2026-12-30', '2026-12-31'], day: 'Fri-Thu', duration: 6, sundays: 1 }
+  { name: 'Makar Sankranti (मकर संक्रांति)', date: '14 Jan 2026', dateStrings: ['2026-01-14'], day: 'Wednesday', duration: 1 },
+  { name: 'Republic Day (गणतंत्र दिवस)', date: '26 Jan 2026', dateStrings: ['2026-01-26'], day: 'Monday', duration: 1 },
+  { name: 'Saraswati Puja (सरस्वती पूजा)', date: '02 Feb 2026', dateStrings: ['2026-02-02'], day: 'Monday', duration: 1 },
+  { name: 'Shab-e-Barat (शब-ए-बरात)', date: '15 Feb 2026', dateStrings: ['2026-02-15'], day: 'Sunday', duration: 1 },
+  { name: 'Mahashivratri (महाशिवरात्रि)', date: '04 Mar 2026', dateStrings: ['2026-03-04'], day: 'Wednesday', duration: 1 },
+  { name: 'Eid-ul-Fitr (ईद-उल-फितर)', date: '21 Mar 2026', dateStrings: ['2026-03-21'], day: 'Saturday', duration: 1 },
+  { name: 'Holi Vacation (होली अवकाश)', date: '22-24 Mar 2026', dateStrings: ['2026-03-22', '2026-03-23', '2026-03-24'], day: 'Sun-Tue', duration: 3 },
+  { name: 'Ram Navami (रामनवमी)', date: '02 Apr 2026', dateStrings: ['2026-04-02'], day: 'Thursday', duration: 1 },
+  { name: 'Mahavir Jayanti (महावीर जयंती)', date: '03 Apr 2026', dateStrings: ['2026-04-03'], day: 'Friday', duration: 1 },
+  { name: 'Good Friday (गुड फ्राइडे)', date: '04 Apr 2026', dateStrings: ['2026-04-04'], day: 'Friday', duration: 1 },
+  { name: 'Dr. B.R. Ambedkar Jayanti (डॉ० भीम राव अम्बेडकर जयंती)', date: '14 Apr 2026', dateStrings: ['2026-04-14'], day: 'Tuesday', duration: 1 },
+  { name: 'Buddha Purnima (बुद्ध पूर्णिमा)', date: '30 Apr 2026', dateStrings: ['2026-04-30'], day: 'Thursday', duration: 1 },
+  { name: 'Summer Vacation (ग्रीष्मावकाश)', date: '01-30 Jun 2026', dateStrings: Array.from({ length: 30 }, (_, i) => `2026-06-${String(i + 1).padStart(2, '0')}`), day: 'Mon-Tue', duration: 30 },
+  { name: 'Eid-ul-Zuha / Bakrid (ईद-उल-जोहा / बकरीद)', date: '28 Jul 2026', dateStrings: ['2026-07-28'], day: 'Tuesday', duration: 1 },
+  { name: 'Muharram (मुहर्रम)', date: '07 Aug 2026', dateStrings: ['2026-08-07'], day: 'Friday', duration: 1 },
+  { name: 'Independence Day (स्वतंत्रता दिवस)', date: '15 Aug 2026', dateStrings: ['2026-08-15'], day: 'Saturday', duration: 1 },
+  { name: 'Janmashtami (जन्माष्टमी)', date: '16 Aug 2026', dateStrings: ['2026-08-16'], day: 'Sunday', duration: 1 },
+  { name: 'Vishwakarma Puja (विश्वकर्मा पूजा)', date: '17 Sep 2026', dateStrings: ['2026-09-17'], day: 'Thursday', duration: 1 },
+  { name: 'Gandhi Jayanti (गाँधी जयंती)', date: '02 Oct 2026', dateStrings: ['2026-10-02'], day: 'Friday', duration: 1 },
+  { name: 'Durga Puja Vacation (दुर्गा पूजा अवकाश)', date: '17-20 Oct 2026', dateStrings: ['2026-10-17', '2026-10-18', '2026-10-19', '2026-10-20'], day: 'Sat-Tue', duration: 4 },
+  { name: 'Chhath Puja (छठ पूजा)', date: '05 Nov 2026', dateStrings: ['2026-11-05'], day: 'Thursday', duration: 1 },
+  { name: 'Diwali, Chitragupta Puja & Bhai Dooj Vacation', date: '13-16 Nov 2026', dateStrings: ['2026-11-13', '2026-11-14', '2026-11-15', '2026-11-16'], day: 'Fri-Mon', duration: 4 },
+  { name: 'Guru Nanak Jayanti (गुरुनानक जयंती)', date: '25 Nov 2026', dateStrings: ['2026-11-25'], day: 'Wednesday', duration: 1 },
+  { name: 'Christmas & Winter Vacation (क्रिसमस एवं शीतकालीन अवकाश)', date: '25-31 Dec 2026', dateStrings: ['2026-12-25', '2026-12-26', '2026-12-27', '2026-12-28', '2026-12-29', '2026-12-30', '2026-12-31'], day: 'Fri-Thu', duration: 7 }
 ];
 
 export default function Attendance() {
@@ -608,17 +604,33 @@ export default function Attendance() {
       {/* Tab Contents: BEU Holiday Calendar 2026 */}
       {activeTab === 'holidays' && (
         <div className="bg-white p-6 md:p-8 rounded-[3rem] border border-slate-200">
-          <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-8 border-b border-slate-100 pb-4">
+          <div className="flex flex-col lg:flex-row justify-between lg:items-center gap-4 mb-6 border-b border-slate-100 pb-6">
             <div>
               <h3 className="text-xl font-black text-slate-900 uppercase tracking-tighter">BEU ADDA Holiday Calendar 2026</h3>
               <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">Official list of Bihar Engineering College Holidays</p>
             </div>
-            <div className="px-5 py-2.5 bg-amber-50 border border-amber-200/50 text-amber-700 rounded-xl text-center">
-              <p className="text-[8px] font-black uppercase tracking-widest leading-none mb-1">Total Holidays</p>
-              <p className="text-base font-black leading-none">
-                {HOLIDAYS_2026.reduce((acc, h) => acc + h.duration, 0)} Days + {HOLIDAYS_2026.reduce((acc, h) => acc + h.sundays, 0)} Sundays
-              </p>
+            
+            {/* Holiday Stats Cards */}
+            <div className="flex gap-2 flex-wrap">
+              <div className="px-4 py-2 bg-amber-50 border border-amber-200/50 text-amber-700 rounded-2xl text-center min-w-[90px]">
+                <p className="text-[7px] font-black uppercase tracking-widest mb-0.5">Declared</p>
+                <p className="text-sm font-black leading-none">78 Days</p>
+              </div>
+              <div className="px-4 py-2 bg-blue-50 border border-blue-200/50 text-blue-700 rounded-2xl text-center min-w-[90px]">
+                <p className="text-[7px] font-black uppercase tracking-widest mb-0.5">Sundays</p>
+                <p className="text-sm font-black leading-none">52 Days</p>
+              </div>
+              <div className="px-4 py-2 bg-purple-50 border border-purple-200/50 text-purple-700 rounded-2xl text-center min-w-[90px]">
+                <p className="text-[7px] font-black uppercase tracking-widest mb-0.5">Total Leaves</p>
+                <p className="text-sm font-black leading-none">~120-125d</p>
+              </div>
             </div>
+          </div>
+          
+          {/* Note from User */}
+          <div className="bg-slate-50 border border-slate-200/80 p-4 rounded-2xl text-[9px] font-bold text-slate-500 uppercase tracking-wide leading-relaxed mb-6">
+            💡 <strong>Note:</strong> Some Sundays fall within Summer Vacation, Winter Vacation, and festival holidays. 
+            The actual unique holiday count is around 120–125 days out of 365, giving engineering students approximately 4 months of leaves in a year (≈ 240–245 class/working days).
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
