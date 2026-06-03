@@ -275,6 +275,7 @@ export default function BeuSyllabus() {
   const [isDownloading, setIsDownloading] = useState(false);
   const [aiQuery, setAiQuery] = useState(null);
   const [aiAnswer, setAiAnswer] = useState('');
+  const [aiVideoId, setAiVideoId] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [selectedSem, setSelectedSem] = useState('sem1');
   const [selectedBranch, setSelectedBranch] = useState('cse');
@@ -317,6 +318,7 @@ export default function BeuSyllabus() {
     const subjectName = branches.find(b => b.id === selectedBranch)?.label || '';
     setAiQuery({ topic: topicText, subject: subjectName });
     setAiAnswer('');
+    setAiVideoId(null);
     setAiLoading(true);
     try {
       const response = await fetch('/api/ai/chat', {
@@ -325,8 +327,11 @@ export default function BeuSyllabus() {
         body: JSON.stringify({
           messages: [{
             sender: 'user',
-            text: `Explain this BEU syllabus topic in simple Hindi/English mix: "${topicText}" from ${subjectName}. Give 4-5 key points with examples.`
-          }]
+            text: `Please explain this topic.`
+          }],
+          isSyllabusQuery: true,
+          topicText: topicText,
+          subjectName: subjectName
         })
       });
       const data = await response.json();
@@ -577,8 +582,19 @@ export default function BeuSyllabus() {
                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">AI is thinking...</p>
                 </div>
               ) : (
-                <div className="prose prose-sm max-w-none text-slate-700">
-                  <ReactMarkdown>{aiAnswer}</ReactMarkdown>
+                <div className="flex flex-col gap-5">
+                  {aiVideoId && (
+                    <div className="w-full aspect-video rounded-xl overflow-hidden bg-slate-900 shadow-inner">
+                      <iframe 
+                        src={`https://www.youtube.com/embed/${aiVideoId}`} 
+                        className="w-full h-full border-0" 
+                        allowFullScreen>
+                      </iframe>
+                    </div>
+                  )}
+                  <div className="prose prose-sm max-w-none text-slate-700">
+                    <ReactMarkdown>{aiAnswer}</ReactMarkdown>
+                  </div>
                 </div>
               )}
             </div>
