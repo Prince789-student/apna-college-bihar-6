@@ -22,6 +22,7 @@ export default function Timetable() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [schedule, setSchedule] = useState({});
+  const [slotLabels, setSlotLabels] = useState({});
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -32,8 +33,9 @@ export default function Timetable() {
   const fetchSchedule = async () => {
     try {
       const snap = await getDoc(doc(db, 'users', user.uid));
-      if (snap.exists() && snap.data().timetable) {
-        setSchedule(snap.data().timetable);
+      if (snap.exists()) {
+        if (snap.data().timetable) setSchedule(snap.data().timetable);
+        if (snap.data().slotLabels) setSlotLabels(snap.data().slotLabels);
       }
     } catch(e) { console.error(e); }
     finally { setLoading(false); }
@@ -44,6 +46,11 @@ export default function Timetable() {
       ...prev,
       [`${day}_${slot}`]: value
     }));
+    setSaved(false);
+  };
+
+  const updateSlotLabel = (slot, value) => {
+    setSlotLabels(prev => ({ ...prev, [slot]: value }));
     setSaved(false);
   };
 
@@ -78,6 +85,7 @@ export default function Timetable() {
       // 4. Save timetable + merged attendance to Firestore
       await updateDoc(docRef, {
         timetable: schedule,
+        slotLabels: slotLabels,
         attendance: updatedAttendance,
       });
 
@@ -249,7 +257,14 @@ export default function Timetable() {
             <tbody>
               {SLOTS.map((slot, si) => (
                 <tr key={slot} className={`border-b border-slate-200/30 ${si % 2 === 0 ? '' : 'bg-slate-50/30'}`}>
-                  <td className="p-2 pl-5 text-[10px] font-black text-slate-400 whitespace-nowrap">{slot}</td>
+                  <td className="p-2 text-[10px] font-black text-slate-400 whitespace-nowrap">
+                    <input 
+                      type="text" 
+                      value={slotLabels[slot] !== undefined ? slotLabels[slot] : slot} 
+                      onChange={e => updateSlotLabel(slot, e.target.value)} 
+                      className="w-20 sm:w-24 bg-transparent outline-none text-center hover:bg-slate-100 focus:bg-slate-100 rounded-lg py-1 transition-all" 
+                    />
+                  </td>
                   {DAYS.map(day => {
                     const key = `${day}_${slot}`;
                     const isToday = day === todayDayKey;

@@ -114,13 +114,17 @@ export default function Attendance() {
         if (data.dailyAttendanceLog) {
           setDailyLog(data.dailyAttendanceLog);
         }
-        if (data.timetable) {
+          if (data.timetable) {
           setTimetable(data.timetable);
           // Parse today's classes from timetable
           const todayDay = DAYS_MAP[new Date().getDay()];
           const classes = Object.entries(data.timetable)
             .filter(([key, val]) => key.startsWith(todayDay + '_') && val && val.trim())
-            .map(([key, val]) => ({ slot: key.replace(todayDay + '_', ''), subject: val.trim() }))
+            .map(([key, val]) => {
+               const baseSlot = key.replace(todayDay + '_', '');
+               const displaySlot = data.slotLabels && data.slotLabels[baseSlot] ? data.slotLabels[baseSlot] : baseSlot;
+               return { slot: baseSlot, displaySlot: displaySlot, subject: val.trim() };
+            })
             .sort((a, b) => {
               const order = ['6 AM','7 AM','8 AM','9 AM','10 AM','11 AM','12 PM','1 PM','2 PM','3 PM','4 PM','5 PM','6 PM','7 PM','8 PM','9 PM','10 PM'];
               return order.indexOf(a.slot) - order.indexOf(b.slot);
@@ -206,16 +210,6 @@ export default function Attendance() {
     setSubjects(newSubjects);
     saveAttendance(newSubjects);
     toast.success('Subject Attendance Updated');
-  };
-
-  const addSubject = () => {
-    const name = prompt('Enter Subject Name:');
-    if (name && name.trim()) {
-      const newSubjects = [...subjects, { name: name.trim(), present: 0, total: 0 }];
-      setSubjects(newSubjects);
-      saveAttendance(newSubjects);
-      toast.success('Subject Added');
-    }
   };
 
   const deleteSubject = (index) => {
@@ -393,8 +387,8 @@ export default function Attendance() {
         </div>
         <div className="flex gap-2">
           {activeTab === 'subjects' && (
-            <button onClick={addSubject} className="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl flex items-center gap-2 text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-md">
-              <Plus size={16} /> Add Subject
+            <button onClick={() => navigate('/dashboard/timetable')} className="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl flex items-center gap-2 text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-md">
+              <Calendar size={16} /> Edit Timetable
             </button>
           )}
         </div>
@@ -436,7 +430,7 @@ export default function Attendance() {
               <div className="flex flex-wrap gap-2">
                 {todayClasses.map((cls, idx) => (
                   <span key={idx} className="px-3 py-1 bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl text-white text-[10px] font-black">
-                    {cls.slot}: {cls.subject}
+                    {cls.displaySlot}: {cls.subject}
                   </span>
                 ))}
               </div>
@@ -564,7 +558,8 @@ export default function Attendance() {
           {subjects.length === 0 && (
             <div className="col-span-full py-16 text-center bg-white rounded-[3rem] border border-slate-200">
               <Award size={36} className="mx-auto text-slate-300 mb-2" />
-              <p className="text-xs font-black uppercase tracking-widest text-slate-400">No subjects tracked yet. Click "Add Subject" above!</p>
+              <p className="text-xs font-black uppercase tracking-widest text-slate-400">No subjects tracked yet.</p>
+              <p className="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest">Go to Edit Timetable and build your schedule to auto-sync subjects.</p>
             </div>
           )}
         </div>
