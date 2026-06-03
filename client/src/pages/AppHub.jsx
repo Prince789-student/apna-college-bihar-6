@@ -34,7 +34,7 @@ export default function AppHub() {
         { name: 'Attendance', icon: <UserCheck size={24} />, path: '/dashboard/attendance?standalone=true', color: 'text-green-400' },
         { name: 'Timetable', icon: <Calendar size={24} />, path: '/dashboard/timetable?standalone=true', color: 'text-yellow-400' },
         { name: 'Notes', icon: <BookOpen size={24} />, path: '/dashboard/notes?standalone=true', color: 'text-indigo-400' },
-        { name: 'PYQ', icon: <FileText size={24} />, path: '/dashboard/notes?standalone=true', color: 'text-purple-400' },
+        { name: 'PYQ', icon: <FileText size={24} />, path: '/dashboard/pyq?standalone=true', color: 'text-purple-400' },
         { name: 'SGPA/CGPA', icon: <GraduationCap size={24} />, path: '/dashboard/cgpa?standalone=true', color: 'text-cyan-400' },
         { name: 'Syllabus', icon: <Library size={24} />, path: '/dashboard/syllabus?standalone=true', color: 'text-pink-400' },
       ]
@@ -171,15 +171,8 @@ export default function AppHub() {
           ))}
         </div>
 
-        {/* Social Channels & Get App Buttons */}
+        {/* Social Channels */}
         <div className="p-6 pt-0 flex flex-col gap-4 border-t border-white/5 mt-2">
-          <button 
-            onClick={() => window.open('/ApnaCollegeBihar_Stable.apk', '_blank')}
-            className="w-full py-4 bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-500 hover:to-rose-400 text-white rounded-2xl flex items-center justify-center gap-2 font-black uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-pink-900/20"
-          >
-            <Smartphone size={18} /> Get Android App
-          </button>
-          
           <div className="flex gap-3">
             <button 
               onClick={() => window.open('https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a', '_blank')}

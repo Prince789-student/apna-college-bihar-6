@@ -16,7 +16,7 @@ export default function Notes({ isPersonal = false }) {
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [cat, setCat] = useState('ALL');
+  const [cat, setCat] = useState('NOTES');
   const [sem, setSem] = useState('ALL');
   const [showUpload, setShowUpload] = useState(false);
   const [uploadData, setUploadData] = useState({ title: '', subject: '', category: 'NOTES', semester: '1', file: null, externalUrl: '' });
@@ -65,14 +65,15 @@ export default function Notes({ isPersonal = false }) {
       d.title?.toLowerCase().includes(search.toLowerCase()) || 
       d.subject?.toLowerCase().includes(search.toLowerCase());
     
-    if (search) return matchesSearch;
+    if (search) return matchesSearch && (d.category === 'NOTES' || d.type === 'folder');
 
-    const matchesCat = cat === 'ALL' || d.category === cat;
     const matchesSem = sem === 'ALL' || d.semester === sem;
     const isRootItem = !d.parentId || d.parentId === 'root';
     const matchesFolder = currentFolder ? d.parentId === currentFolder.id : isRootItem;
+    // Show NOTES files and FOLDERs only
+    const isNotesOrFolder = d.category === 'NOTES' || d.type === 'folder';
 
-    return matchesCat && matchesSem && matchesFolder;
+    return isNotesOrFolder && matchesSem && matchesFolder;
   });
 
   const handleUpload = async (e) => {
@@ -137,10 +138,10 @@ export default function Notes({ isPersonal = false }) {
                 <div className="p-4 bg-indigo-600/20 text-indigo-400 rounded-3xl">
                   <BookOpen size={36} />
                 </div>
-                <div>
-                  <h1 className="text-4xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Knowledge Hub</h1>
-                  <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.3em] mt-3">Hierarchical Notes Repository</p>
-                </div>
+                 <div>
+                   <h1 className="text-4xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Notes Library</h1>
+                   <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.3em] mt-3">Folder-based Notes Repository</p>
+                 </div>
               </div>
               {currentFolder && (
                 <button onClick={goBack} className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2">
@@ -174,24 +175,14 @@ export default function Notes({ isPersonal = false }) {
               <div className="relative group flex-1">
                  <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-500" size={20} />
                  <input value={search} onChange={e=>setSearch(e.target.value)}
-                   placeholder="Search Subject, Title or Topic..."
+                   placeholder="Search Notes by Subject or Title..."
                    className="w-full bg-slate-100 border-2 border-transparent focus:border-indigo-500/50 rounded-[2rem] p-5 pl-16 text-slate-900 text-sm font-bold outline-none transition-all placeholder:text-slate-600 shadow-xl" />
               </div>
-               <div className="flex flex-wrap gap-4">
-                  <div className="flex gap-2 p-1.5 bg-slate-100 rounded-[2rem] border border-slate-200/50">
-                     {['ALL','NOTES','PYQ'].map(c => (
-                       <button key={c} onClick={()=>setCat(c)}
-                         className={`px-6 py-3 rounded-[1.5rem] text-[10px] font-black uppercase tracking-widest transition-all ${cat===c?'bg-indigo-600 text-white shadow-xl':'text-slate-500 hover:text-slate-900'}`}>
-                         {c}
-                       </button>
-                     ))}
-                  </div>
-                  <div className="flex gap-2 p-1.5 bg-slate-100 rounded-[2rem] border border-slate-200/50">
-                     <select value={sem} onChange={e=>setSem(e.target.value)} className="bg-transparent text-[10px] font-black text-slate-500 uppercase tracking-widest outline-none px-4">
-                       <option value="ALL">All Semesters</option>
-                       {[1,2,3,4,5,6,7,8].map(s => <option key={s} value={String(s)}>Sem {s}</option>)}
-                     </select>
-                  </div>
+               <div className="flex gap-2 p-1.5 bg-slate-100 rounded-[2rem] border border-slate-200/50">
+                  <select value={sem} onChange={e=>setSem(e.target.value)} className="bg-transparent text-[10px] font-black text-slate-500 uppercase tracking-widest outline-none px-4">
+                    <option value="ALL">All Semesters</option>
+                    {[1,2,3,4,5,6,7,8].map(s => <option key={s} value={String(s)}>Sem {s}</option>)}
+                  </select>
                </div>
            </div>
         </div>
@@ -321,13 +312,13 @@ export default function Notes({ isPersonal = false }) {
                    </div>
                  </div>
                  <div className="grid grid-cols-2 gap-4">
-                   <div className="space-y-2">
-                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Category</p>
-                     <select value={uploadData.category} onChange={e=>setUploadData({...uploadData, category: e.target.value})} className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 text-slate-900 text-xs outline-none appearance-none">
-                       <option value="NOTES">NOTES</option>
-                       <option value="PYQ">PYQ</option><option value="FOLDER">FOLDER</option>
-                     </select>
-                   </div>
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Category</p>
+                      <select value={uploadData.category} onChange={e=>setUploadData({...uploadData, category: e.target.value})} className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 text-slate-900 text-xs outline-none appearance-none">
+                        <option value="NOTES">NOTES</option>
+                        <option value="FOLDER">FOLDER</option>
+                      </select>
+                    </div>
                    <div className="space-y-2">
                      <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Semester</p>
                      <select value={uploadData.semester} onChange={e=>setUploadData({...uploadData, semester: e.target.value})} className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 text-slate-900 text-xs outline-none appearance-none">
