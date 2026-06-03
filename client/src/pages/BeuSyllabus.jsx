@@ -5,64 +5,137 @@ import ReactMarkdown from 'react-markdown';
 import jsPDF from 'jspdf';
 
 // ─── Smart Syllabus Text Cleaner ──────────────────────────────────────────────
-// Fixes PDF extraction artifacts (broken words, wrong spaces, hyphenated line-breaks)
-function cleanSyllabusText(text) {
-  if (!text) return text;
+// Fixes PDF extraction artifacts and converts raw text to proper markdown
+function cleanSyllabusText(rawText) {
+  if (!rawText) return rawText;
 
-  return text
-    // 1. Fix hyphenated line-breaks: "Gauss -\nJordan" → "Gauss-Jordan"
-    //    and "co -ordination" → "co-ordination"
-    .replace(/ -\n/g, '-')
-    .replace(/- \n/g, '-')
+  // Step 1: Fix PDF line-continuation hyphens FIRST (before other replacements)
+  // "Gauss -\nJordan" → "Gauss-Jordan"
+  let text = rawText
+    .replace(/ -\n([a-z])/g, '-$1')
+    .replace(/-\n([a-z])/g, '-$1');
 
-    // 2. Remove soft-hyphen artifacts: "Gauss -Jordan" → "Gauss-Jordan"
-    //    (space before hyphen followed by lowercase = broken hyphen)
-    .replace(/ -([a-z])/g, '-$1')
+  // Step 2: Fix "space before hyphen" artifacts: "co -ordination" → "co-ordination"
+  const prefixes = ['co', 'non', 'pre', 'self', 'over', 'sub', 'inter', 'intra', 're', 'semi', 'multi', 'poly'];
+  for (const p of prefixes) {
+    text = text.replace(new RegExp(`\\b${p} -([a-z])`, 'g'), `${p}-$1`);
+  }
 
-    // 3. Fix broken words that have a space in the middle:
-    //    Pattern: word ending mid-letter + space + rest of letter
-    //    e.g. "ra diations" → "radiations", "additi on" → "addition"
-    //    Strategy: if two adjacent words form a valid-looking token, join them
-    .replace(/([a-z]{2,}) ([a-z]{2,})/g, (match, a, b) => {
-      // Only join if it looks like a broken word (no natural word boundary)
-      // Heuristic: if combined word has no double-consonant anomaly, join
-      const combined = a + b;
-      // Don't join common two-word phrases — only join if a or b is very short (1-3 chars)
-      // or if b starts with a vowel continuation (typical split)
-      if (a.length <= 3 || b.length <= 3) return combined;
-      // Check if split looks like "pro cess", "solu tion" etc.
-      if (/[aeiou]$/.test(a) && /^[bcdfghjklmnpqrstvwxyz]/.test(b)) return combined;
-      if (/[bcdfghjklmnpqrstvwxyz]$/.test(a) && /^[aeiou]/.test(b) && b.length <= 4) return combined;
-      return match;
-    })
+  // Step 3: Fix "Buna -S", "Cayley- Hamilton" style hyphenated proper terms
+  text = text
+    .replace(/([A-Za-z]) - ([A-Z])/g, '$1-$2')   // "Cayley- Hamilton" → "Cayley-Hamilton"
+    .replace(/([A-Z][a-z]+) -([A-Z0-9])/g, '$1-$2') // "Buna -S" → "Buna-S"
 
-    // 4. Fix "co -ordination" style → "co-ordination"
-    .replace(/co -([a-z])/g, 'co-$1')
-    .replace(/non -([a-z])/g, 'non-$1')
-    .replace(/pre -([a-z])/g, 'pre-$1')
-    .replace(/self -([a-z])/g, 'self-$1')
-    .replace(/over -([a-z])/g, 'over-$1')
-    .replace(/sub -([a-z])/g, 'sub-$1')
+  // Step 4: Remove pure junk artifact lines (e.g., "–I   3 1 0 4", "()", empty brackets)
+  text = text
+    .replace(/^[–\-]?\w{1,4}\s+\d\s+\d\s+\d\s+\d\s*$/gm, '')
+    .replace(/^\(\)\s*$/gm, '')
+    .replace(/^\s*\(\s*\)\s*$/gm, '');
 
-    // 5. Fix "Buna -S" style chemical names
-    .replace(/([A-Z][a-z]*) -([A-Z0-9])/g, '$1-$2')
+  // Step 5: Process line by line — smart reformatting
+  const lines = text.split('\n');
+  const result = [];
+  let insideReferences = false;
+  let refCount = 0;
 
-    // 6. Remove junk artifact lines (curriculum codes like "3 1 0 4")
-    .replace(/^[–\-]\w+\s+\d\s+\d\s+\d\s+\d\s*$/gm, '')
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i].trim();
+    if (!line) {
+      result.push('');
+      continue;
+    }
 
-    // 7. Fix "T aylor", "Re ena", "M.J . Sienko" style mid-word spaces in names
-    .replace(/([A-Z]) ([a-z]{3,})/g, '$1$2')
+    // Detect "Test/ Reference:-" or "Text/ Reference:-" → section heading
+    if (/^(test|text)[\s/]+reference[s]?[-:]*/i.test(line)) {
+      insideReferences = true;
+      refCount = 0;
+      result.push('\n**📚 References & Textbooks:**\n');
+      continue;
+    }
 
-    // 8. Normalize multiple spaces to single space
-    .replace(/  +/g, ' ')
+    // If we're in references section and line starts with a number like "1." "2." etc
+    if (insideReferences && /^\d+[\.\)]/.test(line)) {
+      // Strip the "#### " prefix if it crept in
+      line = line.replace(/^#+\s*/, '');
+      result.push(`- ${line}`);
+      continue;
+    }
 
-    // 9. Fix "proximate an d" style: 2-letter broken words
-    .replace(/\b([a-z]{2,10}) (an|in|of|or|to|at|by|as|if|is|it|be|on|up|do) ([a-z])/g,
-      (match, a, b, c) => `${a} ${b} ${c}`)
+    // If line starts with "#### " and looks like a reference (has author/publisher clues)
+    if (line.startsWith('####')) {
+      const cleaned = line.replace(/^#+\s*/, '').trim();
+      // Check if it's a reference entry (contains digits, publication keywords, or ISBNs)
+      if (/\d{4}|ISBN|Pearson|McGraw|Wiley|Oxford|Laxmi|Narosa|PHI|edition/i.test(cleaned) ||
+          /^\d+[\.\)]/.test(cleaned)) {
+        insideReferences = true;
+        result.push(`- ${cleaned}`);
+        continue;
+      }
+      // Otherwise it's a real heading — keep it but check if it's in references context
+      if (insideReferences) {
+        result.push(`- ${cleaned}`);
+      } else {
+        result.push(line); // keep original heading
+      }
+      continue;
+    }
 
-    // 10. Trim lines
-    .split('\n').map(l => l.trimEnd()).join('\n');
+    // Detect inline UNIT headings (not already markdown):
+    // "UNIT 1.0- Atomic Structure   8 hrs" → "### 📌 Unit 1.0: Atomic Structure (8 hrs)"
+    const unitMatch = line.match(/^UNIT\s+(\d+\.?\d*)\s*[-–:.]?\s*(.+?)\s+(\d+\s*hrs?)/i);
+    if (unitMatch && !line.startsWith('#')) {
+      const num = unitMatch[1];
+      const title = unitMatch[2].replace(/\s{2,}/g, ' ').trim();
+      const hrs = unitMatch[3].trim();
+      result.push(`\n### 📌 Unit ${num}: ${title} (${hrs})\n`);
+      insideReferences = false;
+      continue;
+    }
+
+    // Detect "Unit- 1.0: Title   7 hrs" pattern (already somewhat formatted but missing heading)
+    const unitMatch2 = line.match(/^Unit[-–\s]+(\d+\.?\d*)\s*[:.]?\s*(.+?)\s+(\d+\s*hrs?)/i);
+    if (unitMatch2 && !line.startsWith('#')) {
+      const num = unitMatch2[1];
+      const title = unitMatch2[2].replace(/\s{2,}/g, ' ').trim();
+      const hrs = unitMatch2[3].trim();
+      result.push(`\n### 📌 Unit ${num}: ${title} (${hrs})\n`);
+      insideReferences = false;
+      continue;
+    }
+
+    // Fix multiple spaces in normal lines
+    line = line.replace(/  +/g, ' ');
+
+    // Fix mid-name space: "T aylor" → "Taylor", "Re ena" → "Reena"  
+    // Only for capital letter followed by space then 3+ lowercase (typical split)
+    line = line.replace(/\b([A-Z])\s([a-z]{3,})\b/g, '$1$2');
+
+    // Fix "M.J . Sienko" → "M.J. Sienko"
+    line = line.replace(/([A-Z]\.[A-Z])\s\.\s/g, '$1. ');
+
+    // Fix broken 2-fragment words: only very safe joins
+    // "pro cess" → "process", "solu tion" → "solution"
+    // Rule: if first part ends vowel + consonant and second part is 2-4 letters starting vowel/consonant continuation
+    line = line.replace(/\b([a-z]{3,})\s([a-z]{2,4})\b/g, (m, a, b) => {
+      // Only join if 'b' looks like a suffix fragment (very short)
+      if (b.length <= 2) return a + b;
+      // "pro cess" — a ends in vowel, b starts consonant, total <= 10 chars
+      if (a.length + b.length <= 9 && /[aeiou]$/.test(a) && /^[bcdfghjklmnpqrstvwxyz]/.test(b)) return a + b;
+      return m;
+    });
+
+    // Fix remaining "space before hyphen" cases not caught earlier: "water line" is fine, "additi on" needs join
+    // "an d" → "and", "additi on" → "addition"  
+    line = line.replace(/\b([a-z]{3,})(i|ti|di|si|ri|li|ni|mi)\s+(on|ons|ing|ed|er|al|ation)\b/g, '$1$2$3');
+
+    result.push(line);
+  }
+
+  return result.join('\n')
+    // Final: collapse 3+ blank lines to 2
+    .replace(/\n{3,}/g, '\n\n');
 }
+
 
 export default function BeuSyllabus() {
 
