@@ -4,6 +4,9 @@ import { ChevronLeft, Shield, Timer, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStudy } from '../context/StudyContext';
 import { Capacitor } from '@capacitor/core';
+import { getToken } from 'firebase/messaging';
+import { doc, updateDoc } from 'firebase/firestore';
+import { messaging, VAPID_KEY, db } from '../firebase';
 
 export default function DashboardLayout() {
   const isNative = Capacitor.isNativePlatform();
@@ -15,9 +18,27 @@ export default function DashboardLayout() {
   const [isUpdating, setIsUpdating] = useState(false);
   const { timerActive } = useStudy();
 
+
   useEffect(() => {
     if (user && !user.phone) setPhoneModalOpen(true);
     else setPhoneModalOpen(false);
+
+    // Setup push notifications
+    const setupNotifications = async () => {
+      if (!user || !messaging) return;
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+          const token = await getToken(messaging, { vapidKey: VAPID_KEY });
+          if (token) {
+            await updateDoc(doc(db, 'users', user.uid), { fcmToken: token });
+          }
+        }
+      } catch (err) {
+        console.error('Push notification setup failed:', err);
+      }
+    };
+    setupNotifications();
   }, [user]);
 
   const handlePhoneSubmit = async (e) => {

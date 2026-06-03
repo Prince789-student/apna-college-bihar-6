@@ -18,6 +18,9 @@ if (process.env.MONGO_URI) {
     .then(() => console.log('✅ MongoDB Connected'))
     .catch(err => console.log('❌ MongoDB Connect Error:', err));
 }
+// Start daily cron job for class notifications
+const startDailyCron = require('./cron/dailyNotifier');
+startDailyCron();
 
 // 1. ABSOLUTE PRIORITY: APK DOWNLOAD ROUTE
 // This must be BEFORE any other middleware to avoid SPA interception
