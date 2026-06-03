@@ -562,8 +562,8 @@ export default function BeuSyllabus() {
 
       {/* AI Answer Modal */}
       {aiQuery && (
-        <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setAiQuery(null)}>
-          <div className="bg-white w-full max-w-lg rounded-[2rem] shadow-2xl overflow-hidden animate-in slide-in-from-bottom-5 duration-300" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center p-0 md:p-4 bg-black/60 backdrop-blur-sm" onClick={() => setAiQuery(null)}>
+          <div className="bg-white w-full max-w-lg rounded-t-[2rem] md:rounded-[2rem] shadow-2xl overflow-hidden animate-in slide-in-from-bottom-5 duration-300" onClick={e => e.stopPropagation()}>
             <div className="bg-indigo-600 p-5">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 bg-white/20 rounded-xl flex items-center justify-center">
@@ -586,7 +586,7 @@ export default function BeuSyllabus() {
               </a>
             </div>
 
-            <div className="p-5 max-h-[50vh] overflow-y-auto">
+            <div className="p-5 max-h-[80vh] md:max-h-[60vh] overflow-y-auto custom-scrollbar">
               {!aiMode ? (
                 <div className="flex flex-col gap-3 py-4">
                   <p className="text-sm font-bold text-slate-700 text-center mb-2">Choose Explanation Type</p>
