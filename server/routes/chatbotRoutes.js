@@ -105,7 +105,11 @@ Guidelines:
         });
     } catch (error) {
         console.error('Chatbot API Route Error:', error);
-        return res.status(500).json({ success: false, message: 'Internal server error in Chatbot' });
+        return res.status(500).json({ 
+            success: false, 
+            message: 'Internal server error in Chatbot',
+            details: error.message || error.error?.message || JSON.stringify(error)
+        });
     }
 });
 

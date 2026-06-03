@@ -330,9 +330,13 @@ export default function BeuSyllabus() {
         })
       });
       const data = await response.json();
+      if (!response.ok) {
+         setAiAnswer(`Error: ${data.details || data.message || 'Server error'}`);
+         return;
+      }
       setAiAnswer(data.reply || data.message || 'Could not get response. Try again!');
     } catch (err) {
-      setAiAnswer('AI response failed. Please check your connection.');
+      setAiAnswer('AI response failed. Please check your connection or server logs.');
     } finally {
       setAiLoading(false);
     }
