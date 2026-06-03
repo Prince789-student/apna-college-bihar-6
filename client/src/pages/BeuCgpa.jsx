@@ -80,7 +80,7 @@ export default function BeuCgpa() {
   const [showAdd, setShowAdd]   = useState(false);
   const [marksModal, setMarksModal] = useState(null); // subject doc id
   const [expandedId, setExpandedId] = useState(null);
-  const [activeTab, setActiveTab] = useState('portal'); // 'portal' | 'calculator'
+  const [activeTab, setActiveTab] = useState('calculator'); // always calculator
 
   // Add subject form
   const [form, setForm] = useState({ name: '', type: 'theory', credits: 4 });
@@ -188,124 +188,65 @@ export default function BeuCgpa() {
       
       {/* ── Header ─── */}
       <div>
-        <h1 className="text-2xl font-black text-slate-900 uppercase tracking-tight">BEU Examination Results & CGPA Calculator</h1>
-        <p className="text-[11px] text-slate-500 mt-1">Bihar Engineering University · Official Portal & Marks-based grading system</p>
+        <h1 className="text-2xl font-black text-slate-900 uppercase tracking-tight">BEU CGPA Calculator</h1>
+        <p className="text-[11px] text-slate-500 mt-1">Bihar Engineering University · Marks-based grading system · Semester wise</p>
         
         {!user && (
           <div className="mt-4 p-4 bg-orange-600/10 border border-orange-500/20 rounded-2xl flex items-center gap-3">
              <AlertTriangle size={18} className="text-orange-400 shrink-0"/>
-             <p className="text-[11px] font-bold text-orange-200">
+             <p className="text-[11px] font-bold text-orange-300">
                <span className="text-orange-400 font-black uppercase">Guest Mode:</span> Aapka data save nahi ho raha. Login karein marks hamesha ke liye save karne ke liye.
              </p>
              <Link to="/login" className="ml-auto px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Login</Link>
           </div>
         )}
-
-        {/* ── Tab Switcher ── */}
-        <div className="flex bg-slate-200/60 p-1.5 rounded-2xl max-w-md mt-6 border border-slate-300/50">
-          <button 
-            onClick={() => setActiveTab('portal')}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-black tracking-wider uppercase transition-all ${activeTab === 'portal' ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' : 'text-slate-600 hover:text-slate-900'}`}
-          >
-            <Globe size={16} /> Official BEU Portal
-          </button>
-          <button 
-            onClick={() => setActiveTab('calculator')}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-black tracking-wider uppercase transition-all ${activeTab === 'calculator' ? 'bg-blue-600 text-white shadow-lg shadow-blue-900/20' : 'text-slate-600 hover:text-slate-900'}`}
-          >
-            <Calculator size={16} /> CGPA Calculator
-          </button>
-        </div>
       </div>
 
-      {activeTab === 'portal' ? (
-        <div className="space-y-4 animate-in fade-in duration-300">
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-4 shadow-sm">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-500/10 text-blue-600 rounded-xl flex items-center justify-center font-black text-xs border border-blue-500/20 shrink-0">
-                BEU
-              </div>
-              <div>
-                <p className="text-sm font-black text-slate-900 uppercase tracking-tight">Bihar Engineering University Examination Portal</p>
-                <p className="text-[11px] text-slate-500 font-medium">Direct marksheet access without leaving Apna College Bihar</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => window.open('https://beu-bih.ac.in/result-one', '_blank')}
-                className="flex items-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all"
-              >
-                <ExternalLink size={14} /> Open in New Tab
+      <div className="space-y-6 animate-in fade-in duration-300">
+        {/* ── Semester Selector ─── */}
+        <div className="bg-white p-4 rounded-2xl border border-slate-200/50">
+          <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-3">Semester Select Karo</p>
+          <div className="flex flex-wrap gap-2">
+            {SEMESTERS.map(s => (
+              <button key={s} onClick={() => setSemester(s)}
+                className={`w-12 h-12 rounded-2xl font-black text-sm transition-all ${semester === s ? 'bg-blue-600 text-slate-900 shadow-lg shadow-blue-900/30' : 'bg-slate-800/50 text-slate-500 hover:bg-slate-200'}`}>
+                {s}
               </button>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-[2rem] border border-slate-200 shadow-xl overflow-hidden relative" style={{ height: '750px' }}>
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50 z-0 pointer-events-none">
-              <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-3"></div>
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Connecting to BEU Patna Server...</p>
-            </div>
-            <iframe 
-              src="https://beu-bih.ac.in/result-one" 
-              title="BEU Official Results Portal"
-              className="w-full h-full relative z-10 border-0 bg-white"
-              sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals"
-            />
-          </div>
-
-          <div className="p-4 bg-blue-50 border border-blue-100 rounded-2xl flex items-start gap-3 text-blue-800 text-xs shadow-sm">
-            <Info size={18} className="text-blue-600 shrink-0 mt-0.5" />
-            <div className="leading-relaxed">
-              <span className="font-black uppercase tracking-wide">💡 Pro Tip for Students:</span> Select your course and semester from the list inside the portal above, enter your BEU Roll Number / Registration Number, and click <span className="font-black bg-blue-200/50 px-1.5 py-0.5 rounded">'Show Result'</span> to instantly view and download your marksheet PDF.
-            </div>
+            ))}
           </div>
         </div>
-      ) : (
-        <div className="space-y-6 animate-in fade-in duration-300">
-          {/* ── Semester Selector ─── */}
-      <div className="bg-white p-4 rounded-2xl border border-slate-200/50">
-        <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-3">Semester Select Karo</p>
-        <div className="flex flex-wrap gap-2">
-          {SEMESTERS.map(s => (
-            <button key={s} onClick={() => setSemester(s)}
-              className={`w-12 h-12 rounded-2xl font-black text-sm transition-all ${semester === s ? 'bg-blue-600 text-slate-900 shadow-lg shadow-blue-900/30' : 'bg-slate-800/50 text-slate-500 hover:bg-slate-200'}`}>
-              {s}
-            </button>
+
+        {/* ── CGPA Summary Card ─── */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="col-span-2 bg-white p-6 rounded-[2rem] border border-slate-200/50 flex items-center gap-5">
+            <div className="w-20 h-20 bg-blue-500/10 rounded-2xl border border-blue-500/20 flex flex-col items-center justify-center shrink-0">
+              <p className={`text-3xl font-black leading-none ${cgpaColor}`}>{cgpa || '—'}</p>
+              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">CGPA</p>
+            </div>
+            <div>
+              <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Semester {semester} Result</p>
+              <p className="text-sm font-black text-slate-900">{graded.length} / {subjects.length} subjects graded</p>
+              <p className="text-[10px] text-slate-500 mt-1">Total Credits: <span className="text-slate-900 font-black">{totalCredits}</span></p>
+              {backlogs.length > 0 && (
+                <p className="text-[10px] text-red-400 font-black mt-1 flex items-center gap-1">
+                  <AlertTriangle size={11}/> {backlogs.length} Backlog{backlogs.length > 1 ? 's' : ''}!
+                </p>
+              )}
+            </div>
+          </div>
+          {[
+            { label: 'Subjects', val: subjects.length, icon: <BookOpen size={16} className="text-blue-400"/> },
+            { label: 'Passed', val: passed.length, icon: <CheckCircle size={16} className="text-emerald-400"/> },
+            { label: 'Backlogs', val: backlogs.length, icon: <AlertTriangle size={16} className={backlogs.length > 0 ? 'text-red-400' : 'text-slate-600'}/> },
+            { label: 'Total Credits Attempted', val: totalCredits, icon: <Award size={16} className="text-amber-400"/> },
+          ].slice(0,2).map(({label, val, icon}) => (
+            <div key={label} className="bg-white p-5 rounded-2xl border border-slate-200/50 text-center space-y-2">
+              <div className="flex justify-center">{icon}</div>
+              <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest">{label}</p>
+              <p className="text-2xl font-black text-slate-900">{val}</p>
+            </div>
           ))}
         </div>
-      </div>
-
-      {/* ── CGPA Summary Card ─── */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="col-span-2 bg-white p-6 rounded-[2rem] border border-slate-200/50 flex items-center gap-5">
-          <div className="w-20 h-20 bg-blue-500/10 rounded-2xl border border-blue-500/20 flex flex-col items-center justify-center shrink-0">
-            <p className={`text-3xl font-black leading-none ${cgpaColor}`}>{cgpa || '—'}</p>
-            <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">CGPA</p>
-          </div>
-          <div>
-            <p className="text-[9px] text-slate-500 font-bold uppercase tracking-widest">Semester {semester} Result</p>
-            <p className="text-sm font-black text-slate-900">{graded.length} / {subjects.length} subjects graded</p>
-            <p className="text-[10px] text-slate-500 mt-1">Total Credits: <span className="text-slate-900 font-black">{totalCredits}</span></p>
-            {backlogs.length > 0 && (
-              <p className="text-[10px] text-red-400 font-black mt-1 flex items-center gap-1">
-                <AlertTriangle size={11}/> {backlogs.length} Backlog{backlogs.length > 1 ? 's' : ''}!
-              </p>
-            )}
-          </div>
-        </div>
-        {[
-          { label: 'Subjects', val: subjects.length, icon: <BookOpen size={16} className="text-blue-400"/> },
-          { label: 'Passed', val: passed.length, icon: <CheckCircle size={16} className="text-emerald-400"/> },
-          { label: 'Backlogs', val: backlogs.length, icon: <AlertTriangle size={16} className={backlogs.length > 0 ? 'text-red-400' : 'text-slate-600'}/> },
-          { label: 'Total Credits Attempted', val: totalCredits, icon: <Award size={16} className="text-amber-400"/> },
-        ].slice(0,2).map(({label, val, icon}) => (
-          <div key={label} className="bg-white p-5 rounded-2xl border border-slate-200/50 text-center space-y-2">
-            <div className="flex justify-center">{icon}</div>
-            <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest">{label}</p>
-            <p className="text-2xl font-black text-slate-900">{val}</p>
-          </div>
-        ))}
-      </div>
 
       {/* ── Add Subject Button ─── */}
       <div className="flex items-center justify-between">
@@ -505,7 +446,6 @@ export default function BeuCgpa() {
         </div>
       </div>
       </div>
-      )}
 
       {/* ══ ADD SUBJECT MODAL ══════════════════════════════ */}
       {showAdd && (

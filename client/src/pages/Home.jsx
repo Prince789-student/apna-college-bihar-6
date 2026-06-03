@@ -171,12 +171,6 @@ export default function Home() {
                >
                  <Download size={20} /> Download App
                </a>
-               <Link 
-                 to="/hub" 
-                 className="w-full sm:w-auto px-10 py-5 bg-white border border-slate-200 hover:border-blue-500/50 text-slate-900 rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] transition-all active:scale-95 flex items-center justify-center gap-3"
-               >
-                 Explore App Hub <ArrowRight size={18} />
-               </Link>
             </div>
 
             <div className="pt-8 max-w-2xl mx-auto">
