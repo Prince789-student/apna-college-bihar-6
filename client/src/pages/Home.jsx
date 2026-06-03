@@ -4,7 +4,7 @@ import {
   BookOpen, Calculator, Timer, Users, 
   ArrowRight, CheckCircle, GraduationCap, 
   Globe, Shield, Zap, Flame, Send, Youtube,
-  User, LogOut, ChevronDown, LayoutDashboard, Bell, Download, MessageCircle, ShieldCheck, Calendar, Sparkles, UserCheck
+  User, LogOut, ChevronDown, LayoutDashboard, Bell, Download, MessageCircle, ShieldCheck, Calendar, Sparkles, UserCheck, Briefcase, Award, Landmark, FileText, Library, ExternalLink
 } from 'lucide-react';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -260,7 +260,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Feature Grid ── */}
+      {/* ── Feature Grid (Categorized) ── */}
       <section id="features" className="py-20 md:py-32 px-6 md:px-16 container mx-auto">
         <div className="flex flex-col md:flex-row items-end justify-between gap-6 mb-16">
            <div className="max-w-xl space-y-4">
@@ -270,27 +270,64 @@ export default function Home() {
            <p className="text-slate-500 font-bold uppercase tracking-widest text-[9px] max-w-xs text-right italic">"Built with modern stack for maximum speed and SEO dominance."</p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
-           {[
-             { title: "UGEAC 2025 Predictor", ic: <Send className="text-emerald-500"/>, d: "Bihar Engineering Counselling 2025 — Rank predictor based on 2024-2025 official data.", link: "/dashboard/ugeac-predictor?standalone=true" },
-             { title: "BEU Notes & PYQ Hub", ic: <BookOpen className="text-blue-500"/>, d: "Free handwritten notes and previous year questions for all BEU semesters.", link: "/dashboard/notes?standalone=true" },
-             { title: "SGPA / CGPA Calc", ic: <Calculator className="text-orange-500"/>, d: "Accurate BEU grading system calculator for semester results tracking.", link: "/dashboard/cgpa?standalone=true" },
-             { title: "BEU Syllabus", ic: <BookOpen className="text-purple-500"/>, d: "Official BEU Patna new syllabus for all semesters and branches.", link: "/dashboard/syllabus?standalone=true" },
-             { title: "Study Timer & Focus", ic: <Timer className="text-blue-500"/>, d: "Pomodoro technique and focus tracking for Bihar engineering students.", link: "/dashboard/study?standalone=true" },
-             { title: "Study Network", ic: <Users className="text-purple-500"/>, d: "Join student groups to discuss PYQs and UGEAC counselling tips.", link: "/dashboard/groups?standalone=true" },
-             { title: "Scientific Calc", ic: <Calculator className="text-pink-500"/>, d: "Advanced scientific calculator for professional engineering calculations.", link: "/dashboard/calculator?standalone=true" },
-             { title: "My Timetable", ic: <Calendar className="text-indigo-500"/>, d: "Create your weekly class timetable with custom timings. Auto-syncs to Attendance tracker.", link: "/dashboard/timetable?standalone=true" },
-             { title: "My Attendance", ic: <UserCheck className="text-green-500"/>, d: "Manage your weekly class timetable and track BEU 75% attendance criteria.", link: "/dashboard/attendance?standalone=true" },
-             { title: "BEU Result", ic: <Globe className="text-slate-400"/>, d: "Apna Registration Number dale aur BEU result seedha yahan dekho — kisi doosri website pe jaane ki zaroorat nahi!", link: "/dashboard/beu-result?standalone=true" }
-           ].map((f, i) => (
-             <Link key={i} to={f.link} target={f.link.startsWith('http') ? '_blank' : '_self'} className="group p-4 md:p-8 bg-white border border-slate-200/80 rounded-2xl md:rounded-[3rem] hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left shadow-sm">
-                <div className="w-10 h-10 md:w-14 md:h-14 bg-slate-100 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-8 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform">
-                   {React.cloneElement(f.ic, { size: 20 })}
-                </div>
-                <h3 className="text-[9px] md:text-xl font-black text-slate-900 uppercase mb-2 md:mb-4 tracking-tighter leading-none">{f.title}</h3>
-                <p className="hidden md:block text-slate-500 font-medium leading-relaxed text-sm">{f.d}</p>
-             </Link>
-           ))}
+        <div className="space-y-16">
+          {[
+            {
+              title: "🎓 BEU",
+              items: [
+                { title: "BEU Result", ic: <Globe className="text-blue-500"/>, d: "Direct portal to check BEU results instantly.", link: "/dashboard/beu-result?standalone=true" },
+                { title: "Attendance", ic: <UserCheck className="text-green-500"/>, d: "Track the mandatory 75% BEU attendance.", link: "/dashboard/attendance?standalone=true" },
+                { title: "Timetable", ic: <Calendar className="text-yellow-500"/>, d: "Create and manage weekly class routines.", link: "/dashboard/timetable?standalone=true" },
+                { title: "Notes", ic: <BookOpen className="text-indigo-500"/>, d: "Free handwritten notes for all semesters.", link: "/dashboard/notes?standalone=true" },
+                { title: "PYQ", ic: <FileText className="text-purple-500"/>, d: "Previous 5 years question papers organized.", link: "/dashboard/notes?standalone=true" },
+                { title: "SGPA / CGPA", ic: <GraduationCap className="text-cyan-500"/>, d: "Calculate your exact academic performance.", link: "/dashboard/cgpa?standalone=true" },
+                { title: "Syllabus", ic: <Library className="text-pink-500"/>, d: "Official BEU syllabus for every branch.", link: "/dashboard/syllabus?standalone=true" },
+              ]
+            },
+            {
+              title: "📚 STUDY",
+              items: [
+                { title: "Study Timer", ic: <Timer className="text-rose-500"/>, d: "Pomodoro technique and focus tracking.", link: "/dashboard/study?standalone=true" },
+                { title: "Study Network", ic: <Users className="text-orange-500"/>, d: "Join student groups to discuss study material.", link: "/dashboard/groups?standalone=true" },
+                { title: "Scientific Calc", ic: <Calculator className="text-emerald-500"/>, d: "Advanced calculator for professional engineering.", link: "/dashboard/calculator?standalone=true" },
+              ]
+            },
+            {
+              title: "🧭 COUNSELLING",
+              items: [
+                { title: "UGEAC 2025", ic: <Send className="text-amber-500"/>, d: "Rank predictor based on official Bihar cutoff data.", link: "/dashboard/ugeac-predictor?standalone=true" },
+              ]
+            },
+            {
+              title: "🌐 IMPORTANT WEBSITES",
+              items: [
+                { title: "AICTE Internship", ic: <Briefcase className="text-slate-500"/>, d: "Official AICTE internship portal for engineering students.", link: "https://internship.aicte-india.org/" },
+                { title: "SWAYAM", ic: <Globe className="text-orange-500"/>, d: "Free online courses by Ministry of Education.", link: "https://swayam.gov.in/" },
+                { title: "NPTEL", ic: <Award className="text-blue-500"/>, d: "National Programme on Technology Enhanced Learning.", link: "https://nptel.ac.in/" },
+                { title: "NSP", ic: <Landmark className="text-emerald-500"/>, d: "National Scholarship Portal for central schemes.", link: "https://scholarships.gov.in/" },
+                { title: "PMS Bihar", ic: <Landmark className="text-purple-500"/>, d: "Post Matric Scholarship portal for Bihar students.", link: "https://pmsonline.bih.nic.in/" },
+                { title: "BSSC", ic: <ExternalLink className="text-cyan-500"/>, d: "Bihar Staff Selection Commission official website.", link: "https://bssc.bihar.gov.in/" },
+              ]
+            }
+          ].map((cat, idx) => (
+            <div key={idx} className="space-y-6">
+              <h3 className="text-xs md:text-sm font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-4">
+                {cat.title}
+                <div className="h-px flex-1 bg-slate-200"></div>
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
+                 {cat.items.map((f, i) => (
+                   <Link key={i} to={f.link} target={f.link.startsWith('http') ? '_blank' : '_self'} className="group p-4 md:p-6 bg-white border border-slate-200/80 rounded-2xl md:rounded-3xl hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left shadow-sm flex flex-col h-full">
+                      <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center mb-4 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform shrink-0">
+                         {React.cloneElement(f.ic, { size: 18 })}
+                      </div>
+                      <h4 className="text-[10px] md:text-sm font-black text-slate-900 uppercase mb-2 tracking-tighter leading-none">{f.title}</h4>
+                      <p className="hidden md:block text-slate-500 font-medium leading-relaxed text-xs mt-auto">{f.d}</p>
+                   </Link>
+                 ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
