@@ -12,14 +12,11 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * DailyNotificationReceiver
@@ -44,9 +41,9 @@ public class DailyNotificationReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Daily notification alarm fired");
 
-        // Get today's day abbreviation
-        int dayOfWeek = new java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_WEEK);
-        // Calendar.DAY_OF_WEEK: 1=Sun, 2=Mon ... 7=Sat
+        // Get today's day abbreviation (Calendar.DAY_OF_WEEK: 1=Sun, 2=Mon ... 7=Sat)
+        Calendar cal = Calendar.getInstance();
+        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
         String todayKey = DAY_KEYS[dayOfWeek - 1];
 
         // Read timetable from SharedPreferences
@@ -65,7 +62,7 @@ public class DailyNotificationReceiver extends BroadcastReceiver {
                     if (timetable.has(cellKey)) {
                         String subject = timetable.getString(cellKey).trim();
                         if (!subject.isEmpty()) {
-                            todaySubjects.add(subject + " (" + slot + ")");
+                            todaySubjects.add(subject);
                         }
                     }
                 }
@@ -79,30 +76,36 @@ public class DailyNotificationReceiver extends BroadcastReceiver {
         String body;
 
         if (todaySubjects.isEmpty()) {
-            // No classes today — check if timetable was set up at all
             if (timetableJson == null) {
-                title = "📅 Apna College Bihar";
+                title = "Apna College Bihar";
                 body = "Aaj ki classes track karo! Timetable set karo aur attendance mark karo.";
             } else {
-                title = "✅ Aaj koi class nahi!";
-                body = "Today's schedule is clear. But don't forget to mark your overall attendance!";
+                title = "Aaj koi class nahi!";
+                body = "Today's schedule is clear. Attendance zaroor check karo!";
             }
         } else {
-            title = "📚 Aaj ki Classes — " + todaySubjects.size() + " Subjects";
+            title = "Aaj ki Classes — " + todaySubjects.size() + " Subject" + (todaySubjects.size() > 1 ? "s" : "");
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < Math.min(todaySubjects.size(), 4); i++) {
+            int showCount = Math.min(todaySubjects.size(), 4);
+            for (int i = 0; i < showCount; i++) {
                 if (i > 0) sb.append(", ");
-                sb.append(todaySubjects.get(i).split(" \\(")[0]); // just subject name
+                sb.append(todaySubjects.get(i));
             }
-            if (todaySubjects.size() > 4) sb.append(" +" + (todaySubjects.size() - 4) + " more");
-            body = sb.toString() + "\nAttendance mark karna mat bhoolo! 🎯";
+            if (todaySubjects.size() > 4) {
+                sb.append(" +").append(todaySubjects.size() - 4).append(" more");
+            }
+            body = sb.toString() + "\nAttendance mark karna mat bhoolo!";
         }
 
         showNotification(context, title, body);
+
+        // Reschedule for next day (for Android M+ where setExactAndAllowWhileIdle doesn't repeat)
+        BootReceiver.scheduleDailyAlarm(context, 8, 0);
     }
 
     private void showNotification(Context context, String title, String body) {
         NotificationManager nm = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (nm == null) return;
 
         // Create notification channel for Android O+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
