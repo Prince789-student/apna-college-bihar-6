@@ -170,7 +170,7 @@ function TopicRow({ topic, doneKey, onAskAI, subjectName }) {
     );
   }
 
-  const ytQuery = encodeURIComponent(`${topic.text} ${subjectName}`);
+  const ytQuery = encodeURIComponent(`${topic.text} ${subjectName} btech in hindi`);
 
   return (
     <div className={`flex items-start gap-3 px-4 py-3 border-b border-slate-100 group transition-all ${done ? 'bg-emerald-50/50' : 'hover:bg-slate-50'}`}>
@@ -319,11 +319,14 @@ export default function BeuSyllabus() {
     setAiAnswer('');
     setAiLoading(true);
     try {
-      const response = await fetch('/api/ai/ask', {
+      const response = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: `Explain this BEU syllabus topic in simple Hindi/English mix: "${topicText}" from ${subjectName}. Give 4-5 key points with examples.`
+          messages: [{
+            sender: 'user',
+            text: `Explain this BEU syllabus topic in simple Hindi/English mix: "${topicText}" from ${subjectName}. Give 4-5 key points with examples.`
+          }]
         })
       });
       const data = await response.json();
