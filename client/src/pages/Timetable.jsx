@@ -18,6 +18,52 @@ export const formatTime12h = (time24) => {
   return `${hour}:${m} ${ampm}`;
 };
 
+const to24h = (h, m, ampm) => {
+  let hour = parseInt(h, 10);
+  if (ampm === 'PM' && hour !== 12) hour += 12;
+  if (ampm === 'AM' && hour === 12) hour = 0;
+  return `${String(hour).padStart(2, '0')}:${m}`;
+};
+
+const parse24h = (time24) => {
+  if (!time24) return { h: '08', m: '00', ampm: 'AM' };
+  const [hr, mn] = time24.split(':');
+  let hour = parseInt(hr, 10);
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12;
+  hour = hour ? hour : 12;
+  return { h: String(hour), m: mn || '00', ampm };
+};
+
+const HOURS = ['1','2','3','4','5','6','7','8','9','10','11','12'];
+const MINUTES = ['00','05','10','15','20','25','30','35','40','45','50','55'];
+
+function TimePickerAMPM({ value, onChange, isToday, label }) {
+  const { h, m, ampm } = parse24h(value);
+  const sel = `text-[10px] font-black border outline-none rounded-lg px-1.5 py-1 cursor-pointer transition-all appearance-none text-center ${
+    isToday ? 'bg-white border-indigo-200 focus:border-indigo-500 text-indigo-700' : 'bg-white border-slate-200 focus:border-slate-400 text-slate-700'
+  }`;
+  const update = (newH, newM, newAmpm) => onChange(to24h(newH, newM, newAmpm));
+  return (
+    <div className="flex flex-col gap-0.5">
+      <span className={`text-[8px] font-black uppercase tracking-widest ${isToday ? 'text-indigo-400' : 'text-slate-400'}`}>{label}</span>
+      <div className="flex items-center gap-0.5">
+        <select value={h} onChange={e => update(e.target.value, m, ampm)} className={sel} style={{width:'36px'}}>
+          {HOURS.map(hr => <option key={hr} value={hr}>{hr}</option>)}
+        </select>
+        <span className="text-slate-400 font-black text-xs">:</span>
+        <select value={m} onChange={e => update(h, e.target.value, ampm)} className={sel} style={{width:'38px'}}>
+          {MINUTES.map(mn => <option key={mn} value={mn}>{mn}</option>)}
+        </select>
+        <select value={ampm} onChange={e => update(h, m, e.target.value)} className={sel} style={{width:'40px'}}>
+          <option value="AM">AM</option>
+          <option value="PM">PM</option>
+        </select>
+      </div>
+    </div>
+  );
+}
+
 export default function Timetable() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -208,21 +254,21 @@ export default function Timetable() {
                   ) : (
                     classes.map((cls, idx) => (
                       <div key={cls.id} className="flex gap-2 relative group">
-                        <div className="w-1/3 flex flex-col gap-1">
-                          <input 
-                            type="time"
-                            value={cls.startTime || ''}
-                            onChange={(e) => updateClass(day, cls.id, 'startTime', e.target.value)}
-                            className={`w-full text-[10px] font-black uppercase tracking-widest px-2 py-1.5 rounded-lg border outline-none transition-all ${isToday ? 'bg-white border-indigo-100 focus:border-indigo-400' : 'bg-white border-slate-200 focus:border-slate-400'}`}
+                        <div className="flex flex-col gap-1 flex-shrink-0">
+                          <TimePickerAMPM
+                            label="Start"
+                            value={cls.startTime || '08:00'}
+                            isToday={isToday}
+                            onChange={(val) => updateClass(day, cls.id, 'startTime', val)}
                           />
-                          <input 
-                            type="time"
-                            value={cls.endTime || ''}
-                            onChange={(e) => updateClass(day, cls.id, 'endTime', e.target.value)}
-                            className={`w-full text-[10px] font-black uppercase tracking-widest px-2 py-1.5 rounded-lg border outline-none transition-all ${isToday ? 'bg-white border-indigo-100 focus:border-indigo-400' : 'bg-white border-slate-200 focus:border-slate-400'}`}
+                          <TimePickerAMPM
+                            label="End"
+                            value={cls.endTime || '09:00'}
+                            isToday={isToday}
+                            onChange={(val) => updateClass(day, cls.id, 'endTime', val)}
                           />
                         </div>
-                        <div className="w-2/3 relative flex items-center">
+                        <div className="flex-1 relative flex items-center">
                           <input 
                             type="text"
                             placeholder="Subject Name"
