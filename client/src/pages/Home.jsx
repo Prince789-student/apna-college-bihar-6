@@ -287,7 +287,7 @@ export default function Home() {
              { title: "Scientific Calc", ic: <Calculator className="text-pink-500"/>, d: "Advanced scientific calculator for professional engineering calculations.", link: "/dashboard/calculator?standalone=true" },
              { title: "My Timetable", ic: <Calendar className="text-indigo-500"/>, d: "Create your weekly class timetable with custom timings. Auto-syncs to Attendance tracker.", link: "/dashboard/timetable?standalone=true" },
              { title: "My Attendance", ic: <UserCheck className="text-green-500"/>, d: "Manage your weekly class timetable and track BEU 75% attendance criteria.", link: "/dashboard/attendance?standalone=true" },
-             { title: "BEU Results Portal", ic: <Globe className="text-slate-400"/>, d: "Direct access to the official Bihar Engineering University results page.", link: "https://results.beu.ac.in" }
+             { title: "BEU Result", ic: <Globe className="text-slate-400"/>, d: "Direct access to the official Bihar Engineering University results page.", link: "https://beu-bih.ac.in/result-one" }
            ].map((f, i) => (
              <Link key={i} to={f.link} target={f.link.startsWith('http') ? '_blank' : '_self'} className="group p-4 md:p-8 bg-white border border-slate-200/80 rounded-2xl md:rounded-[3rem] hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left shadow-sm">
                 <div className="w-10 h-10 md:w-14 md:h-14 bg-slate-100 rounded-xl md:rounded-2xl flex items-center justify-center mb-4 md:mb-8 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform">
