@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { UserCheck, Plus, Minus, RotateCcw, Shield, Calendar, Fingerprint, AlertCircle, Info, Trash2, CheckCircle2, XCircle, Award, ChevronLeft, ChevronRight } from 'lucide-react';
+import { UserCheck, Plus, Minus, RotateCcw, Shield, Calendar, Fingerprint, AlertCircle, Info, Trash2, CheckCircle2, XCircle, Award, ChevronLeft, ChevronRight, Bell, ExternalLink } from 'lucide-react';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const HOLIDAYS_2026 = [
@@ -34,6 +35,7 @@ const HOLIDAYS_2026 = [
 
 export default function Attendance() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [subjects, setSubjects] = useState([
     { name: 'Mathematics', present: 0, total: 0 },
     { name: 'Physics', present: 0, total: 0 },
@@ -120,29 +122,62 @@ export default function Attendance() {
             .filter(([key, val]) => key.startsWith(todayDay + '_') && val && val.trim())
             .map(([key, val]) => ({ slot: key.replace(todayDay + '_', ''), subject: val.trim() }))
             .sort((a, b) => {
-              // Sort by slot time (rough AM/PM sort)
-              const timeA = a.slot;
-              const timeB = b.slot;
               const order = ['6 AM','7 AM','8 AM','9 AM','10 AM','11 AM','12 PM','1 PM','2 PM','3 PM','4 PM','5 PM','6 PM','7 PM','8 PM','9 PM','10 PM'];
-              return order.indexOf(timeA) - order.indexOf(timeB);
+              return order.indexOf(a.slot) - order.indexOf(b.slot);
             });
           setTodayClasses(classes);
           // Show notification toast for today's classes
           if (classes.length > 0) {
             setTimeout(() => {
-              toast(`📚 Today's ${classes.length} Class${classes.length > 1 ? 'es' : ''}: ${classes.map(c => c.subject).join(', ')}`, {
+              toast(`📚 Today: ${classes.map(c => c.subject).join(', ')}`, {
                 duration: 5000,
                 style: { background: '#1e293b', color: '#f8fafc', fontWeight: '800', fontSize: '12px' },
                 icon: '🗓️',
               });
             }, 1000);
           }
+          // Schedule daily web notification if browser supports it
+          scheduleDailyWebNotification(classes);
         }
       }
     } catch (e) {
       console.error("Fetch attendance error:", e);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Web Push Notification: Request permission and show daily notification
+  const scheduleDailyWebNotification = async (classes) => {
+    if (!('Notification' in window)) return;
+    // Only show notification if permission is already granted (don't auto-prompt)
+    if (Notification.permission === 'granted' && classes.length > 0) {
+      // Check if we already notified today
+      const todayKey = new Date().toLocaleDateString('en-CA');
+      const lastNotified = localStorage.getItem('lastAttendanceNotification');
+      if (lastNotified !== todayKey) {
+        localStorage.setItem('lastAttendanceNotification', todayKey);
+        new Notification('📚 Aaj ki Classes — Apna College Bihar', {
+          body: `${classes.length} class${classes.length > 1 ? 'es' : ''} today: ${classes.map(c => c.subject).join(', ')}`,
+          icon: '/icons/icon-192x192.png',
+          badge: '/icons/icon-192x192.png',
+          tag: 'daily-attendance',
+        });
+      }
+    }
+  };
+
+  const requestNotificationPermission = async () => {
+    if (!('Notification' in window)) {
+      toast.error('This browser does not support notifications.');
+      return;
+    }
+    const result = await Notification.requestPermission();
+    if (result === 'granted') {
+      toast.success('✅ Notifications enabled! You will get daily class reminders.');
+      scheduleDailyWebNotification(todayClasses);
+    } else {
+      toast.error('Notifications blocked. Please allow from browser settings.');
     }
   };
 
@@ -387,27 +422,62 @@ export default function Attendance() {
         ))}
       </div>
 
-      {/* Today's Schedule Banner */}
-      {activeTab === 'subjects' && todayClasses.length > 0 && (
-        <div className="bg-indigo-600 p-5 md:p-6 rounded-[2rem] flex flex-col sm:flex-row sm:items-center gap-4 shadow-lg shadow-indigo-500/20">
-          <div className="p-3 bg-white/20 rounded-2xl shrink-0">
-            <Calendar size={22} className="text-white" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[9px] font-black text-indigo-200 uppercase tracking-widest mb-1">📌 Today's Class Schedule — {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' })}</p>
-            <div className="flex flex-wrap gap-2">
-              {todayClasses.map((cls, idx) => (
-                <span key={idx} className="px-3 py-1 bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl text-white text-[10px] font-black">
-                  {cls.slot}: {cls.subject}
-                </span>
-              ))}
+      {/* Today's Schedule Banner — always shows */}
+      {activeTab === 'subjects' && (
+        todayClasses.length > 0 ? (
+          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-5 md:p-6 rounded-[2rem] flex flex-col sm:flex-row sm:items-center gap-4 shadow-lg shadow-indigo-500/20">
+            <div className="p-3 bg-white/20 rounded-2xl shrink-0">
+              <Calendar size={22} className="text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-[9px] font-black text-indigo-200 uppercase tracking-widest mb-2">
+                📌 Today — {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' })}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {todayClasses.map((cls, idx) => (
+                  <span key={idx} className="px-3 py-1 bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl text-white text-[10px] font-black">
+                    {cls.slot}: {cls.subject}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col items-end gap-2">
+              <div className="text-white text-right">
+                <p className="text-[8px] font-black uppercase tracking-widest text-indigo-300">Today's Classes</p>
+                <p className="text-2xl font-black">{todayClasses.length}</p>
+              </div>
+              {Notification && Notification.permission !== 'granted' && (
+                <button
+                  onClick={requestNotificationPermission}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 border border-white/20 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                >
+                  <Bell size={12} /> Enable Alerts
+                </button>
+              )}
             </div>
           </div>
-          <div className="text-white text-right shrink-0">
-            <p className="text-[8px] font-black uppercase tracking-widest text-indigo-300 mb-0.5">Total</p>
-            <p className="text-2xl font-black">{todayClasses.length}</p>
+        ) : (
+          <div className="bg-white border-2 border-dashed border-indigo-200 p-5 md:p-6 rounded-[2rem] flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="p-3 bg-indigo-50 rounded-2xl shrink-0">
+              <Calendar size={22} className="text-indigo-400" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-black text-slate-900 uppercase tracking-tighter">No Classes Set for Today</p>
+              <p className="text-[10px] text-slate-400 font-bold mt-1">
+                {Object.keys(timetable).length > 0
+                  ? 'Your timetable has no classes scheduled for today.'
+                  : 'Create your weekly timetable to see today\'s classes here.'}
+              </p>
+            </div>
+            <button
+              onClick={() => navigate('/dashboard/timetable')}
+              className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all active:scale-95 shrink-0"
+            >
+              <ExternalLink size={13} />
+              {Object.keys(timetable).length > 0 ? 'Edit Timetable' : 'Setup Timetable'}
+            </button>
           </div>
-        </div>
+        )
       )}
 
       {/* Tab Contents: Subjects Tracker */}

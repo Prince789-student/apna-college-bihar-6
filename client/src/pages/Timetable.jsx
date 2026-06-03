@@ -75,11 +75,33 @@ export default function Timetable() {
         }
       });
 
-      // 4. Save timetable + merged attendance
+      // 4. Save timetable + merged attendance to Firestore
       await updateDoc(docRef, {
         timetable: schedule,
         attendance: updatedAttendance,
       });
+
+      // 5. Schedule native Android daily notification (8 AM daily)
+      try {
+        const { Capacitor } = await import('@capacitor/core');
+        if (Capacitor.isNativePlatform()) {
+          const plugin = Capacitor.Plugins && Capacitor.Plugins.DailyNotificationPlugin;
+          if (plugin) {
+            await plugin.saveTimetableForNotification({ timetableJson: JSON.stringify(schedule) });
+            await plugin.scheduleDailyNotification({ hour: 8, minute: 0 });
+          }
+        }
+      } catch (nativeErr) {
+        console.log('Native notification (web fallback):', nativeErr && nativeErr.message);
+      }
+
+      // 6. Request web notification permission if not yet granted
+      if ('Notification' in window && Notification.permission === 'default') {
+        const perm = await Notification.requestPermission();
+        if (perm === 'granted') {
+          toast.success('🔔 Daily class notifications enabled!');
+        }
+      }
 
       setSaved(true);
       if (addedCount > 0) {
