@@ -114,21 +114,21 @@ export default function Attendance() {
         if (data.dailyAttendanceLog) {
           setDailyLog(data.dailyAttendanceLog);
         }
-          if (data.timetable) {
-          setTimetable(data.timetable);
-          // Parse today's classes from timetable
-          const todayDay = DAYS_MAP[new Date().getDay()];
-          const classes = Object.entries(data.timetable)
-            .filter(([key, val]) => key.startsWith(todayDay + '_') && val && val.trim())
-            .map(([key, val]) => {
-               const baseSlot = key.replace(todayDay + '_', '');
-               const displaySlot = data.slotLabels && data.slotLabels[baseSlot] ? data.slotLabels[baseSlot] : baseSlot;
-               return { slot: baseSlot, displaySlot: displaySlot, subject: val.trim() };
-            })
-            .sort((a, b) => {
-              const order = ['6 AM','7 AM','8 AM','9 AM','10 AM','11 AM','12 PM','1 PM','2 PM','3 PM','4 PM','5 PM','6 PM','7 PM','8 PM','9 PM','10 PM'];
-              return order.indexOf(a.slot) - order.indexOf(b.slot);
-            });
+        if (data.timetableV2) {
+          setTimetable(data.timetableV2);
+          // Parse today's classes from timetableV2
+          const FULL_DAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+          const todayDay = FULL_DAYS[new Date().getDay()];
+          const todaySchedule = data.timetableV2[todayDay] || [];
+          
+          const classes = todaySchedule
+            .filter(c => !c.isBreak && c.subject && c.subject.trim() !== '')
+            .map(c => ({
+              slot: c.startTime,
+              displaySlot: `${c.startTime} - ${c.endTime}`,
+              subject: c.subject.trim()
+            }));
+            
           setTodayClasses(classes);
           // Show notification toast for today's classes
           if (classes.length > 0) {
