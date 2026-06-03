@@ -114,18 +114,18 @@ export default function Attendance() {
         if (data.dailyAttendanceLog) {
           setDailyLog(data.dailyAttendanceLog);
         }
-        if (data.timetableV2) {
-          setTimetable(data.timetableV2);
-          // Parse today's classes from timetableV2
+        if (data.timetableV3) {
+          setTimetable(data.timetableV3);
+          // Parse today's classes from timetableV3
           const FULL_DAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
           const todayDay = FULL_DAYS[new Date().getDay()];
-          const todaySchedule = data.timetableV2[todayDay] || [];
+          const todaySchedule = data.timetableV3[todayDay] || [];
           
           const classes = todaySchedule
-            .filter(c => !c.isBreak && c.subject && c.subject.trim() !== '')
+            .filter(c => c.subject && c.subject.trim() !== '')
             .map(c => ({
-              slot: c.startTime,
-              displaySlot: `${c.startTime} - ${c.endTime}`,
+              slot: c.timeSlot || 'No Time',
+              displaySlot: c.timeSlot || 'No Time',
               subject: c.subject.trim()
             }));
             
