@@ -46,8 +46,7 @@ Guidelines:
 7. Always sign off or reference yourself as "Apna College Bihar AI Assistant" when appropriate.
 `;
 
-        const axios = require('axios');
-        const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        const https = require('https');
 
         const payload = {
             contents: geminiContents,
@@ -60,33 +59,50 @@ Guidelines:
             }
         };
 
-        try {
-            const response = await axios.post(geminiUrl, payload, {
-                headers: { 'Content-Type': 'application/json' }
-            });
-            const data = response.data;
-            const botResponseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-            
-            if (!botResponseText) {
-                return res.status(500).json({
-                    success: false,
-                    message: 'AI did not return any readable content.'
-                });
+        const payloadString = JSON.stringify(payload);
+        const options = {
+            hostname: 'generativelanguage.googleapis.com',
+            path: `/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(payloadString)
             }
+        };
 
-            return res.json({
-                success: true,
-                reply: botResponseText
+        const botResponseText = await new Promise((resolve, reject) => {
+            const reqUrl = https.request(options, (resObj) => {
+                let dataChunks = '';
+                resObj.on('data', chunk => { dataChunks += chunk; });
+                resObj.on('end', () => {
+                    try {
+                        const parsed = JSON.parse(dataChunks);
+                        if (resObj.statusCode >= 400) {
+                            return reject(parsed);
+                        }
+                        const text = parsed.candidates?.[0]?.content?.parts?.[0]?.text;
+                        resolve(text);
+                    } catch (e) {
+                        reject(e);
+                    }
+                });
             });
-        } catch (apiError) {
-            console.error('Gemini API Error:', apiError.response?.data || apiError.message);
+            reqUrl.on('error', reject);
+            reqUrl.write(payloadString);
+            reqUrl.end();
+        });
+
+        if (!botResponseText) {
             return res.status(500).json({
                 success: false,
-                message: 'Failed to communicate with AI model',
-                details: apiError.response?.data || {}
+                message: 'AI did not return any readable content.'
             });
         }
 
+        return res.json({
+            success: true,
+            reply: botResponseText
+        });
     } catch (error) {
         console.error('Chatbot API Route Error:', error);
         return res.status(500).json({ success: false, message: 'Internal server error in Chatbot' });
