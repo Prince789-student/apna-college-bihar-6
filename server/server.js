@@ -76,6 +76,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/documents', require('./routes/documentRoutes'));
 app.use('/api/tasks', require('./routes/taskRoutes'));
 app.use('/api/ai', require('./routes/chatbotRoutes'));
+app.use('/api/beu-result', require('./routes/beuResultRoutes'));
 
 // 5. Health Check & Debug
 app.get('/_health', (req, res) => res.json({ status: 'ok', serverTime: new Date() }));

@@ -30,6 +30,7 @@ const Group = React.lazy(() => import('./pages/Group'));
 const GroupDetail = React.lazy(() => import('./pages/GroupDetail'));
 const Timetable = React.lazy(() => import('./pages/Timetable'));
 const Attendance = React.lazy(() => import('./pages/Attendance'));
+const BeuResult = React.lazy(() => import('./pages/BeuResult'));
 const Extras = React.lazy(() => import('./pages/PersonalManager')); // Mapping Extras to PersonalManager
 const Calendar = React.lazy(() => import('./pages/Calendar'));
 const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
@@ -174,7 +175,7 @@ function App() {
               <Route path="/dashboard/extras" element={<Extras />} />
               <Route path="/dashboard/calendar" element={<Calendar />} />
               <Route path="/dashboard/syllabus" element={<BeuSyllabus />} />
-              
+              <Route path="/dashboard/beu-result" element={<BeuResult />} />
               {/* Admin Routes */}
               <Route element={<AdminRoute />}>
                 <Route path="/dashboard/admin" element={<AdminPanel />} />
