@@ -34,7 +34,7 @@ public class AppBlockerService extends AccessibilityService {
     private static final String KEY_LAST_LAUNCHED_PACKAGE = "_cap_lastLaunchedPackage";
     private static final String KEY_LAST_LAUNCHED_TIME = "_cap_lastLaunchedTime";
 
-    public static volatile String sLastLaunchedPackage = null;
+    public static volatile String sLastLaunchedPackage = "";
     public static volatile long sLastLaunchedTime = 0;
 
     private String mCachedLauncherPackage = null;
@@ -56,9 +56,95 @@ public class AppBlockerService extends AccessibilityService {
     protected void onServiceConnected() {
         super.onServiceConnected();
         Log.d(TAG, "AppBlockerService Connected and running!");
+        loadSettingsFromPreferences();
+
+        // Auto-launch on boot / service connection if countdown focus is active
+        long now = System.currentTimeMillis();
+        if (sIsActive && sCountdownEnd > now) {
+            Log.d(TAG, "Active countdown detected on service connection. Force launching main activity.");
+            try {
+                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+                if (launchIntent != null) {
+                    launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(launchIntent);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to launch main activity on service connected", e);
+            }
+        }
+
         try {
             Toast.makeText(this, "ACB Focus Mode: Service Started!", Toast.LENGTH_SHORT).show();
         } catch (Exception ignored) {}
+    }
+
+    public void loadSettingsFromPreferences() {
+        try {
+            // Load sIsActive
+            String valActive = getString(KEY_IS_ACTIVE);
+            if (valActive != null) {
+                sIsActive = "true".equalsIgnoreCase(valActive.trim());
+            }
+
+            // Load sCountdownEnd
+            String valEnd = getString(KEY_COUNTDOWN_END);
+            if (valEnd != null && !valEnd.trim().isEmpty()) {
+                try {
+                    sCountdownEnd = Long.parseLong(valEnd.trim());
+                } catch (NumberFormatException ignored) {}
+            }
+
+            // Load sAllowedPackages
+            String valAllowed = getString(KEY_ALLOWED_PACKAGES);
+            if (valAllowed != null && !valAllowed.trim().isEmpty()) {
+                String[] parts = valAllowed.split(",");
+                synchronized (sAllowedPackages) {
+                    sAllowedPackages.clear();
+                    for (String part : parts) {
+                        String trimmed = part.trim();
+                        if (!trimmed.isEmpty()) {
+                            sAllowedPackages.add(trimmed);
+                        }
+                    }
+                }
+            }
+
+            // Load last launched package and time
+            String valLastPkg = getString(KEY_LAST_LAUNCHED_PACKAGE);
+            if (valLastPkg != null) {
+                sLastLaunchedPackage = valLastPkg.trim();
+            } else {
+                sLastLaunchedPackage = "";
+            }
+
+            String valLastTime = getString(KEY_LAST_LAUNCHED_TIME);
+            if (valLastTime != null && !valLastTime.trim().isEmpty()) {
+                try {
+                    sLastLaunchedTime = Long.parseLong(valLastTime.trim());
+                } catch (NumberFormatException ignored) {}
+            }
+
+            // Safe boot-completion / connection check:
+            // If the blocker is active but the countdown has expired (or it's stopwatch mode), disable the blocker on startup
+            long now = System.currentTimeMillis();
+            if (sIsActive && sCountdownEnd <= now) {
+                Log.d(TAG, "Reboot/Startup: Blocker was active but timer is not running. Auto-disabling.");
+                sIsActive = false;
+                sCountdownEnd = 0;
+                try {
+                    SharedPreferences.Editor editor = getPrefs().edit();
+                    editor.putString(KEY_IS_ACTIVE, "false");
+                    editor.putString(KEY_COUNTDOWN_END, "0");
+                    editor.apply();
+                } catch (Exception ignored) {}
+            }
+
+            Log.d(TAG, "Settings loaded from Preferences: isActive=" + sIsActive 
+                + ", allowedCount=" + sAllowedPackages.size() 
+                + ", lastLaunched=" + sLastLaunchedPackage);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to load settings from preferences", e);
+        }
     }
 
     private SharedPreferences getPrefs() {
@@ -86,54 +172,17 @@ public class AppBlockerService extends AccessibilityService {
     }
 
     private boolean isBlockerActive() {
-        // Check in-memory first (fastest)
-        if (sIsActive) return true;
-
-        // Check SharedPreferences (written by @capacitor/preferences and plugin)
-        String val = getString(KEY_IS_ACTIVE);
-        if (val != null) {
-            // @capacitor/preferences stores booleans as "true" or "false" strings
-            return "true".equalsIgnoreCase(val.trim());
-        }
-        return false;
+        return sIsActive;
     }
 
     private long getCountdownEnd() {
-        // In-memory takes priority
-        if (sCountdownEnd > 0) return sCountdownEnd;
-
-        String val = getString(KEY_COUNTDOWN_END);
-        if (val != null && !val.trim().isEmpty()) {
-            try {
-                return Long.parseLong(val.trim());
-            } catch (NumberFormatException e) {
-                Log.w(TAG, "Could not parse countdownEnd: " + val);
-            }
-        }
-        return 0;
+        return sCountdownEnd;
     }
 
     private Set<String> getAllowedPackages() {
-        Set<String> result = new HashSet<>();
-
-        // In-memory packages
         synchronized (sAllowedPackages) {
-            result.addAll(sAllowedPackages);
+            return new HashSet<>(sAllowedPackages);
         }
-
-        // Also check SharedPreferences
-        String val = getString(KEY_ALLOWED_PACKAGES);
-        if (val != null && !val.trim().isEmpty()) {
-            String[] parts = val.split(",");
-            for (String part : parts) {
-                String trimmed = part.trim();
-                if (!trimmed.isEmpty()) {
-                    result.add(trimmed);
-                }
-            }
-        }
-
-        return result;
     }
 
     private String getLauncherPackage() {
@@ -164,7 +213,26 @@ public class AppBlockerService extends AccessibilityService {
             // Check if blocker should be active
             boolean isActive = isBlockerActive();
             long endTime = getCountdownEnd();
-            boolean timerRunning = endTime > System.currentTimeMillis();
+            long now = System.currentTimeMillis();
+
+            // If it is a countdown session and the timer has expired, auto-disable the blocker.
+            // This handles background timeout when JavaScript execution in WebView is suspended.
+            if (endTime > 0 && now >= endTime) {
+                if (isActive) {
+                    Log.d(TAG, "Countdown timer expired. Auto-disabling blocker.");
+                    sIsActive = false;
+                    sCountdownEnd = 0;
+                    try {
+                        SharedPreferences.Editor editor = getPrefs().edit();
+                        editor.putString(KEY_IS_ACTIVE, "false");
+                        editor.putString(KEY_COUNTDOWN_END, "0");
+                        editor.apply();
+                    } catch (Exception ignored) {}
+                    isActive = false;
+                }
+            }
+
+            boolean timerRunning = endTime > now;
 
             if (!isActive && !timerRunning) {
                 return;
@@ -185,7 +253,6 @@ public class AppBlockerService extends AccessibilityService {
                     packageName.equals("com.android.server.telecom") ||
                     packageName.equals("com.google.android.dialer") ||
                     packageName.equals("com.android.incallui") ||
-                    packageName.contains("packageinstaller") ||
                     packageName.contains("inputmethod") ||
                     packageName.equals("com.google.android.gms");
 
@@ -193,23 +260,17 @@ public class AppBlockerService extends AccessibilityService {
             boolean isSettings = packageName.contains("settings") || packageName.equals("com.android.settings");
             boolean isBlockedSettings = isSettings && (isActive && timerRunning);
 
+            // Package installer is only blocked if the blocker is active and the timer is running (prevents uninstallation)
+            boolean isInstaller = packageName.contains("packageinstaller");
+            boolean isBlockedInstaller = isInstaller && (isActive && timerRunning);
+
             // Get whitelisted packages
             Set<String> allowed = getAllowedPackages();
 
-            // Read last launched package and time from memory / SharedPreferences
-            String lastLaunchedPkg = sLastLaunchedPackage;
+            // Read last launched package and time from memory only to avoid blockages caused by disk reads
+            String lastLaunchedPkg = sLastLaunchedPackage != null ? sLastLaunchedPackage : "";
             long lastLaunchedT = sLastLaunchedTime;
-            if (lastLaunchedPkg == null) {
-                lastLaunchedPkg = getString(KEY_LAST_LAUNCHED_PACKAGE);
-                String tStr = getString(KEY_LAST_LAUNCHED_TIME);
-                if (tStr != null && !tStr.trim().isEmpty()) {
-                    try {
-                        lastLaunchedT = Long.parseLong(tStr.trim());
-                    } catch (NumberFormatException ignored) {}
-                }
-            }
 
-            long now = System.currentTimeMillis();
             long timeSinceLaunch = now - lastLaunchedT;
 
             // Clear the launched package when user returns to our app or launcher
@@ -230,7 +291,7 @@ public class AppBlockerService extends AccessibilityService {
             // An allowed app is only ignored if it matches the last launched package from our app
             boolean isLastLaunchedAllowed = allowed.contains(packageName) && packageName.equals(lastLaunchedPkg);
 
-            boolean isIgnored = isSystemIgnored || (isSettings && !isBlockedSettings) || isLastLaunchedAllowed;
+            boolean isIgnored = isSystemIgnored || (isSettings && !isBlockedSettings) || (isInstaller && !isBlockedInstaller) || isLastLaunchedAllowed;
 
             if (isIgnored) {
                 return;

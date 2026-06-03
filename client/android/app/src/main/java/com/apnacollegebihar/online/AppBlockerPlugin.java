@@ -44,61 +44,66 @@ public class AppBlockerPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void getInstalledApps(PluginCall call) {
-        try {
-            PackageManager pm = getContext().getPackageManager();
+    public void getInstalledApps(final PluginCall call) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    PackageManager pm = getContext().getPackageManager();
 
-            Intent intent = new Intent(Intent.ACTION_MAIN, null);
-            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    Intent intent = new Intent(Intent.ACTION_MAIN, null);
+                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-            List<ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
+                    List<ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
 
-            JSArray retApps = new JSArray();
+                    JSArray retApps = new JSArray();
 
-            String myPkg = getContext().getPackageName();
+                    String myPkg = getContext().getPackageName();
 
-            for (ResolveInfo info : resolveInfos) {
-                String pkg = info.activityInfo.packageName;
-                if (!pkg.equals(myPkg)) {
-                    JSObject appObj = new JSObject();
-                    appObj.put("name", info.loadLabel(pm).toString());
-                    appObj.put("packageName", pkg);
-                    
-                    // Fetch icon and convert to base64
-                    try {
-                        Drawable icon = info.loadIcon(pm);
-                        int width = icon.getIntrinsicWidth() > 0 ? icon.getIntrinsicWidth() : 96;
-                        int height = icon.getIntrinsicHeight() > 0 ? icon.getIntrinsicHeight() : 96;
-                        if (width > 96 || height > 96) {
-                            width = 96;
-                            height = 96;
+                    for (ResolveInfo info : resolveInfos) {
+                        String pkg = info.activityInfo.packageName;
+                        if (!pkg.equals(myPkg)) {
+                            JSObject appObj = new JSObject();
+                            appObj.put("name", info.loadLabel(pm).toString());
+                            appObj.put("packageName", pkg);
+                            
+                            // Fetch icon and convert to base64
+                            try {
+                                Drawable icon = info.loadIcon(pm);
+                                int width = icon.getIntrinsicWidth() > 0 ? icon.getIntrinsicWidth() : 96;
+                                int height = icon.getIntrinsicHeight() > 0 ? icon.getIntrinsicHeight() : 96;
+                                if (width > 96 || height > 96) {
+                                    width = 96;
+                                    height = 96;
+                                }
+                                Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                                Canvas canvas = new Canvas(bitmap);
+                                icon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                                icon.draw(canvas);
+
+                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
+                                byte[] byteArray = outputStream.toByteArray();
+                                String base64Icon = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+                                appObj.put("icon", "data:image/png;base64," + base64Icon);
+                            } catch (Exception ignored) {
+                                appObj.put("icon", "");
+                            }
+                            
+                            retApps.put(appObj);
                         }
-                        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-                        Canvas canvas = new Canvas(bitmap);
-                        icon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-                        icon.draw(canvas);
-
-                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
-                        byte[] byteArray = outputStream.toByteArray();
-                        String base64Icon = Base64.encodeToString(byteArray, Base64.NO_WRAP);
-                        appObj.put("icon", "data:image/png;base64," + base64Icon);
-                    } catch (Exception ignored) {
-                        appObj.put("icon", "");
                     }
-                    
-                    retApps.put(appObj);
+
+                    JSObject ret = new JSObject();
+                    ret.put("apps", retApps);
+                    call.resolve(ret);
+
+                } catch (Exception e) {
+                    Log.e(TAG, "getInstalledApps error", e);
+                    call.reject(e.getMessage());
                 }
             }
-
-            JSObject ret = new JSObject();
-            ret.put("apps", retApps);
-            call.resolve(ret);
-
-        } catch (Exception e) {
-            Log.e(TAG, "getInstalledApps error", e);
-            call.reject(e.getMessage());
-        }
+        }).start();
     }
 
     @PluginMethod
