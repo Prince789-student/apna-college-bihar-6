@@ -29,14 +29,14 @@ export default function AppHub() {
   const features = [
     { name: 'UGEAC 2025', icon: <Send size={28} />, path: '/dashboard/ugeac-predictor?standalone=true', color: 'text-emerald-400' },
     { name: 'Notes & PYQs', icon: <BookOpen size={28} />, path: '/dashboard/notes?standalone=true', color: 'text-blue-400' },
-    { name: 'SGPA CalC', icon: <GraduationCap size={28} />, path: '/dashboard/cgpa?standalone=true', color: 'text-cyan-400' },
+    { name: 'CGPA Calc', icon: <GraduationCap size={28} />, path: '/dashboard/cgpa?standalone=true', color: 'text-cyan-400' },
     { name: 'My Attendance', icon: <UserCheck size={28} />, path: '/dashboard/attendance?standalone=true', color: 'text-green-400' },
     { name: 'Timetable', icon: <Calendar size={28} />, path: '/dashboard/timetable?standalone=true', color: 'text-yellow-400' },
     { name: 'Study Timer', icon: <Timer size={28} />, path: '/dashboard/study?standalone=true', color: 'text-indigo-400' },
     { name: 'Study Network', icon: <Users size={28} />, path: '/dashboard/groups?standalone=true', color: 'text-orange-400' },
     { name: 'Scientific Calc', icon: <Calculator size={28} />, path: '/dashboard/calculator?standalone=true', color: 'text-rose-400' },
     { name: 'BEU Syllabus', icon: <BookOpen size={28} />, path: '/dashboard/syllabus?standalone=true', color: 'text-purple-400' },
-    { name: 'Results Portal', icon: <Globe size={28} />, path: 'https://results.beu.ac.in', external: true, color: 'text-slate-400' },
+    { name: 'BEU Result', icon: <Globe size={28} />, path: 'https://results.beu.ac.in', external: true, color: 'text-slate-400' },
     { name: 'Get App', icon: <Smartphone size={28} />, path: '/ApnaCollegeBihar_Stable.apk', external: true, color: 'text-pink-400' },
   ];
 
