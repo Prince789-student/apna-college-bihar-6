@@ -98,8 +98,8 @@ export default function DashboardLayout() {
     if (pathname.includes('/calculator')) return 'Calculator';
     if (pathname.includes('/achievements')) return 'Achievements';
     if (pathname.includes('/groups')) return 'Study Groups';
-    if (pathname.includes('/timetable')) return 'Timetable';
-    if (pathname.includes('/attendance')) return 'Attendance Tracker';
+    if (pathname.includes('/timetable')) return 'BEU Timetable';
+    if (pathname.includes('/attendance')) return 'BEU Attendance Tracker';
     if (pathname.includes('/extras')) return 'Personal Manager';
     if (pathname.includes('/calendar')) return 'Calendar';
     if (pathname.includes('/beu-result')) return 'BEU Result';

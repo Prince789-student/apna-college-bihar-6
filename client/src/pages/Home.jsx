@@ -522,6 +522,7 @@ export default function Home() {
                <div className="flex flex-col gap-4">
                   <Link to="/about" className="text-[10px] font-black uppercase text-slate-500 hover:text-slate-900 transition-all">About ACB</Link>
                   <Link to="/contact" className="text-[10px] font-black uppercase text-slate-500 hover:text-slate-900 transition-all">Support Center</Link>
+                  <Link to="/directory" className="text-[10px] font-black uppercase text-slate-500 hover:text-slate-900 transition-all">Web Directory / Sitemap</Link>
                </div>
             </div>
             <div className="space-y-6">

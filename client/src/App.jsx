@@ -47,6 +47,7 @@ const BranchHub = React.lazy(() => import('./pages/BranchHub'));
 const UgeacInfo = React.lazy(() => import('./pages/UgeacInfo'));
 const SubjectPage = React.lazy(() => import('./pages/SubjectPage'));
 const HackathonHub = React.lazy(() => import('./pages/HackathonHub'));
+const SitemapDirectory = React.lazy(() => import('./pages/SitemapDirectory'));
 
 function LoadingScreen() {
   return (
@@ -166,6 +167,7 @@ function App() {
           <Route path="/delete-account" element={<DeleteAccount />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/directory" element={<SitemapDirectory />} />
 
           {/* Public Dashboard Routes (For SEO & Direct Sharing) */}
           <Route element={<DashboardLayout />}>
