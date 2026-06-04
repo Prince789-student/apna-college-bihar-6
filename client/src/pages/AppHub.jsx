@@ -98,6 +98,7 @@ export default function AppHub() {
               <h2 className="text-xs font-black text-blue-400 uppercase tracking-[0.2em] leading-tight">APNA COLLEGE BIHAR</h2>
               <p className="text-[7px] text-slate-500 font-black uppercase tracking-[0.3em] mt-0.5">Official Study Engine</p>
             </div>
+          </div>
           <div className="relative">
             {!user ? (
               <Link to="/login" className="flex items-center gap-1.5 px-3.5 py-2.5 bg-blue-600/20 border border-blue-500/30 text-blue-400 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all active:scale-95 shadow-md">
