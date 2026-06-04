@@ -17,7 +17,6 @@ const Home = React.lazy(() => import('./pages/Home'));
 const AppHub = React.lazy(() => import('./pages/AppHub'));
 const Login = React.lazy(() => import('./pages/Login'));
 const Signup = React.lazy(() => import('./pages/Signup'));
-const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const UgeacPredictor = React.lazy(() => import('./pages/UgeacPredictor'));
 const Notes = React.lazy(() => import('./pages/Notes'));
 const PYQ = React.lazy(() => import('./pages/PYQ'));
@@ -195,7 +194,7 @@ function App() {
           {/* Protected Dashboard Routes */}
           <Route element={<ProtectedRoute />}>
             <Route element={<DashboardLayout />}>
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Navigate to="/" replace />} />
               <Route path="/dashboard/ugeac-predictor" element={<UgeacPredictor />} />
               <Route path="/dashboard/notes" element={<Notes />} />
               <Route path="/dashboard/pyq" element={<PYQ />} />
