@@ -58,6 +58,26 @@ const colleges = [
   'gec-begusarai'
 ];
 
+const commonSubjects = [
+  'engineering-mathematics-1', 'engineering-mathematics-2', 'engineering-mathematics-3', 
+  'engineering-physics', 'engineering-chemistry', 'basic-electrical-engineering', 
+  'basic-electronics-engineering', 'programming-for-problem-solving', 'engineering-graphics', 
+  'workshop-manufacturing-practices', 'english', 'data-structures-and-algorithms', 
+  'object-oriented-programming-using-cpp', 'computer-organization-and-architecture', 
+  'database-management-systems', 'operating-systems', 'design-and-analysis-of-algorithms', 
+  'formal-language-and-automata-theory', 'computer-networks', 'software-engineering', 
+  'compiler-design', 'artificial-intelligence', 'machine-learning', 'internet-of-things', 
+  'thermodynamics', 'fluid-mechanics', 'strength-of-materials', 'theory-of-machines', 
+  'heat-and-mass-transfer', 'engineering-mechanics', 'surveying', 'building-materials', 
+  'concrete-technology', 'structural-analysis', 'geotechnical-engineering', 
+  'environmental-engineering', 'transportation-engineering', 'water-resources-engineering', 
+  'power-systems', 'control-systems', 'electrical-machines', 'power-electronics', 
+  'signals-and-systems', 'digital-electronics', 'analog-electronic-circuits', 
+  'electromagnetic-waves', 'microprocessors-and-microcontrollers', 'communication-systems', 
+  'vlsi-design', 'data-science', 'cyber-security', 'cloud-computing', 'block-chain', 
+  'biology-for-engineers', 'indian-constitution', 'environmental-science'
+];
+
 const urls = [];
 
 // Static Pages
@@ -82,6 +102,13 @@ for (const branch of branches) {
 // College Pages
 for (const col of colleges) {
   urls.push(`/college/${col}`);
+}
+
+// Programmatic SEO Keywords (Search routes)
+for (const subject of commonSubjects) {
+  urls.push(`/search/${subject}`);
+  urls.push(`/search/${subject}-notes`);
+  urls.push(`/search/${subject}-pyq`);
 }
 
 let xml = `<?xml version="1.0" encoding="UTF-8"?>

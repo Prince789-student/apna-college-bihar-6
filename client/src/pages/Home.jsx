@@ -10,6 +10,7 @@ import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
+import GlobalSearch from '../components/GlobalSearch';
 
 export default function Home() {
   const { user, loading, logout } = useAuth();

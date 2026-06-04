@@ -40,6 +40,7 @@ const Terms = React.lazy(() => import('./pages/Terms'));
 const DeleteAccount = React.lazy(() => import('./pages/DeleteAccount'));
 const About = React.lazy(() => import('./pages/About'));
 const Contact = React.lazy(() => import('./pages/Contact'));
+const SearchSEO = React.lazy(() => import('./pages/SearchSEO'));
 
 function LoadingScreen() {
   return (
@@ -162,6 +163,7 @@ function App() {
 
           {/* Public Dashboard Routes (For SEO & Direct Sharing) */}
           <Route element={<DashboardLayout />}>
+            <Route path="/search/:keyword" element={<SearchSEO />} />
             <Route path="/notes/:branchId/:semesterId" element={<Notes />} />
             <Route path="/notes/:branchId" element={<Notes />} />
             <Route path="/pyq/:branchId/:semesterId" element={<PYQ />} />
