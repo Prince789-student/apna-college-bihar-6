@@ -8,6 +8,7 @@ import {
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import { useStudy } from '../context/StudyContext';
+import SEO from '../components/SEO';
 import {
   Clock, Plus, Flame, Target,
   LayoutDashboard, Settings, Trash2, Trophy,
