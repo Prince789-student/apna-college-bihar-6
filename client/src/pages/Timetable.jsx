@@ -98,7 +98,11 @@ export default function Timetable() {
   const todayName = todayIndex >= 1 && todayIndex <= 6 ? DAYS_OF_WEEK[todayIndex - 1] : '';
 
   useEffect(() => {
-    if (user) fetchSchedule();
+    if (user) {
+      fetchSchedule();
+    } else {
+      setLoading(false);
+    }
   }, [user]);
 
   const fetchSchedule = async () => {

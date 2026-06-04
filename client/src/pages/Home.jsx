@@ -412,8 +412,8 @@ export default function Home() {
               title: "🎓 BEU",
               items: [
                 { title: "BEU Result", ic: <Globe className="text-blue-500"/>, d: "Direct portal to check BEU results instantly.", link: "/beu-result?standalone=true" },
-                { title: "Attendance", ic: <UserCheck className="text-green-500"/>, d: "Track the mandatory 75% BEU attendance.", link: "/dashboard/attendance?standalone=true" },
-                { title: "Timetable", ic: <Calendar className="text-yellow-500"/>, d: "Create and manage weekly class routines.", link: "/dashboard/timetable?standalone=true" },
+                { title: "Attendance", ic: <UserCheck className="text-green-500"/>, d: "Track the mandatory 75% BEU attendance.", link: "/attendance?standalone=true" },
+                { title: "Timetable", ic: <Calendar className="text-yellow-500"/>, d: "Create and manage weekly class routines.", link: "/timetable?standalone=true" },
                 { title: "Notes", ic: <BookOpen className="text-indigo-500"/>, d: "Free handwritten notes for all semesters.", link: "/notes?standalone=true" },
                 { title: "PYQ", ic: <FileText className="text-purple-500"/>, d: "Previous 5 years question papers organized.", link: "/pyq?standalone=true" },
                 { title: "SGPA / CGPA", ic: <GraduationCap className="text-cyan-500"/>, d: "Calculate your exact academic performance.", link: "/cgpa?standalone=true" },
@@ -423,10 +423,10 @@ export default function Home() {
             {
               title: "📚 STUDY",
               items: [
-                { title: "Study Timer", ic: <Timer className="text-rose-500"/>, d: "Pomodoro technique and focus tracking.", link: "/dashboard/study?standalone=true" },
-                { title: "Study Network", ic: <Users className="text-orange-500"/>, d: "Join student groups to discuss study material.", link: "/dashboard/groups?standalone=true" },
-                { title: "Scientific Calc", ic: <Calculator className="text-emerald-500"/>, d: "Advanced calculator for professional engineering.", link: "/dashboard/calculator?standalone=true" },
-                { title: "Study Resource", ic: <Link2 className="text-cyan-500"/>, d: "Share helpful links and descriptions with scholars.", link: "/dashboard/study-resources?standalone=true" },
+                { title: "Study Timer", ic: <Timer className="text-rose-500"/>, d: "Pomodoro technique and focus tracking.", link: "/study?standalone=true" },
+                { title: "Study Network", ic: <Users className="text-orange-500"/>, d: "Join student groups to discuss study material.", link: "/groups?standalone=true" },
+                { title: "Scientific Calc", ic: <Calculator className="text-emerald-500"/>, d: "Advanced calculator for professional engineering.", link: "/calculator?standalone=true" },
+                { title: "Study Resource", ic: <Link2 className="text-cyan-500"/>, d: "Share helpful links and descriptions with scholars.", link: "/study-resources?standalone=true" },
               ]
             },
             {

@@ -33,7 +33,10 @@ export default function Group() {
 
   // Fetch groups
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
     const q = query(collection(db, 'groups'), orderBy('createdAt', 'desc'), limit(50));
 
     const unsub = onSnapshot(q, (snap) => {

@@ -100,7 +100,11 @@ export default function Attendance() {
   const DAYS_MAP = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   useEffect(() => {
-    if (user) fetchAttendance();
+    if (user) {
+      fetchAttendance();
+    } else {
+      setLoading(false);
+    }
   }, [user]);
 
   const fetchAttendance = async () => {

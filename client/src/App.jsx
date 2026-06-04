@@ -176,6 +176,16 @@ function App() {
             <Route path="/pyq" element={<PYQ />} />
             <Route path="/pyq/:branchId/:semesterId" element={<PYQ />} />
             <Route path="/pyq/:branchId" element={<PYQ />} />
+            <Route path="/attendance" element={<Attendance />} />
+            <Route path="/timetable" element={<Timetable />} />
+            <Route path="/study" element={<StudyDashboard />} />
+            <Route path="/study-resources" element={<StudyResources />} />
+            <Route path="/calculator" element={<ScientificCalc />} />
+            <Route path="/groups" element={<Group />} />
+            <Route path="/groups/:groupId" element={<GroupDetail />} />
+            <Route path="/achievements" element={<Achievements />} />
+            <Route path="/extras" element={<Extras />} />
+            <Route path="/calendar" element={<Calendar />} />
             <Route path="/cgpa" element={<BeuCgpa />} />
             <Route path="/ugeac-predictor" element={<UgeacPredictor />} />
             <Route path="/beu-result" element={<BeuResult />} />
@@ -201,22 +211,6 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route element={<DashboardLayout />}>
               <Route path="/dashboard" element={<Navigate to="/" replace />} />
-              <Route path="/dashboard/ugeac-predictor" element={<UgeacPredictor />} />
-              <Route path="/dashboard/notes" element={<Notes />} />
-              <Route path="/dashboard/pyq" element={<PYQ />} />
-              <Route path="/dashboard/cgpa" element={<BeuCgpa />} />
-              <Route path="/dashboard/study" element={<StudyDashboard />} />
-              <Route path="/dashboard/study-resources" element={<StudyResources />} />
-              <Route path="/dashboard/calculator" element={<ScientificCalc />} />
-              <Route path="/dashboard/achievements" element={<Achievements />} />
-              <Route path="/dashboard/groups" element={<Group />} />
-              <Route path="/dashboard/groups/:groupId" element={<GroupDetail />} />
-              <Route path="/dashboard/timetable" element={<Timetable />} />
-              <Route path="/dashboard/attendance" element={<Attendance />} />
-              <Route path="/dashboard/extras" element={<Extras />} />
-              <Route path="/dashboard/calendar" element={<Calendar />} />
-              <Route path="/dashboard/syllabus" element={<BeuSyllabus />} />
-              <Route path="/dashboard/beu-result" element={<BeuResult />} />
               {/* Admin Routes */}
               <Route element={<AdminRoute />}>
                 <Route path="/dashboard/admin" element={<AdminPanel />} />

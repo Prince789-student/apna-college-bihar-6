@@ -136,7 +136,10 @@ export default function StudyDashboard() {
   }, [isNative]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
     const fetchStatic = async () => {
       try {
         const uSnap = await getDoc(doc(db, 'users', user.uid));
