@@ -554,34 +554,43 @@ export default function BeuSyllabus() {
           }
         };
         subjects.forEach(subject => {
-          doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(67, 56, 202);
           const s = doc.splitTextToSize(subject.title, maxW); 
           checkPageBreak(s.length * 6 + 25); cursorY += 6;
-          s.forEach(line => { doc.text(line, margin, cursorY); cursorY += 6; });
+          s.forEach(line => { 
+            doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(67, 56, 202);
+            doc.text(line, margin, cursorY); cursorY += 6; 
+          });
           doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
           doc.line(margin, cursorY - 3, pageWidth - margin, cursorY - 3); cursorY += 4;
           
           subject.units.forEach((unit, ui) => {
-            doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(79, 70, 229);
             const ut = doc.splitTextToSize(`Unit ${ui + 1}: ${unit.title}`, maxW); 
             checkPageBreak(ut.length * 5 + 15); cursorY += 4;
-            ut.forEach(line => { doc.text(line, margin, cursorY); cursorY += 5; });
+            ut.forEach(line => { 
+              doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(79, 70, 229);
+              doc.text(line, margin, cursorY); cursorY += 5; 
+            });
             cursorY += 1;
             
             unit.topics.forEach(topic => {
               if (topic.isHeading) {
-                doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(51, 65, 85);
                 const ht = doc.splitTextToSize(topic.text, maxW); 
                 cursorY += 2;
-                ht.forEach(line => { checkPageBreak(6); doc.text(line, margin, cursorY); cursorY += 5; });
+                ht.forEach(line => { 
+                  checkPageBreak(6); 
+                  doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(51, 65, 85);
+                  doc.text(line, margin, cursorY); cursorY += 5; 
+                });
                 cursorY += 1;
               } else {
-                doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
-                const tt = doc.splitTextToSize(topic.text, maxW - 6); 
+                const isNumbered = /^\\?\\d+/.test(topic.text);
+                const indent = isNumbered ? 2 : 6;
+                const tt = doc.splitTextToSize(topic.text, maxW - indent); 
                 tt.forEach((line, lineIdx) => { 
                   checkPageBreak(6); 
-                  if (lineIdx === 0) doc.text('•', margin + 2, cursorY); 
-                  doc.text(line, margin + 6, cursorY); 
+                  doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
+                  if (lineIdx === 0 && !isNumbered) doc.text('•', margin + 2, cursorY); 
+                  doc.text(line, margin + indent, cursorY); 
                   cursorY += 5; 
                 });
                 cursorY += 1;
