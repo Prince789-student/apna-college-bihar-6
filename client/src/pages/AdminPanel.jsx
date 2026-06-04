@@ -30,7 +30,7 @@ export default function AdminPanel() {
   const [uploading, setUploading] = useState(false);
 
   // ── UPLOAD STATE ──
-  const [docForm, setDocForm] = useState({ title: '', subject: '', category: 'NOTES', file: null });
+  const [docForm, setDocForm] = useState({ title: '', subject: '', category: 'NOTES', branch: 'CSE', semester: '1', file: null, externalUrl: '' });
   const [newGroup, setNewGroup] = useState({ name: '', description: '', code: '' });
   const [currentFolder, setCurrentFolder] = useState(null);
   const [navHistory, setNavHistory] = useState([]);
@@ -225,12 +225,14 @@ export default function AdminPanel() {
         finalUrl = await getDownloadURL(snapshot.ref);
       }
 
-      if (!finalUrl) { flash('File or Direct Link required', 'err'); setUploading(false); return; }
+      if (!finalUrl && category !== 'FOLDER') { flash('File or Direct Link required', 'err'); setUploading(false); return; }
 
       await addDoc(collection(db, 'documents'), {
         title,
         subject: subject || 'GENERAL',
         category,
+        branch: docForm.branch || '',
+        semester: docForm.semester || '',
         fileUrl: category === 'FOLDER' ? '' : finalUrl,
         type: category === 'FOLDER' ? 'folder' : 'file',
         parentId: currentFolder?.id || 'root',
@@ -239,7 +241,7 @@ export default function AdminPanel() {
       });
       
       flash('Success! Document ready in Library! ✅');
-      setDocForm({ title: '', subject: '', category: 'NOTES', file: null, externalUrl: '' });
+      setDocForm({ title: '', subject: '', category: 'NOTES', branch: 'CSE', semester: '1', file: null, externalUrl: '' });
     } catch (err) { 
        console.error("DEPLOY ERROR:", err);
        flash('Deployment failed: ' + err.message, 'err'); 
@@ -538,10 +540,24 @@ export default function AdminPanel() {
                   </div>
 
                   <select value={docForm.category} onChange={e=>setDocForm({...docForm, category:e.target.value})} className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none">
-                    <option value="NOTES">Notes</option>
-                    <option value="PYQ">PYQ</option>
-                    <option value="FOLDER">FOLDER</option>
+                    <option value="NOTES">📚 Notes</option>
+                    <option value="PYQ">📋 PYQ</option>
+                    <option value="FOLDER">📂 FOLDER (Subject Folder)</option>
                   </select>
+
+                  <div className="grid grid-cols-2 gap-3">
+                     <select value={docForm.branch} onChange={e=>setDocForm({...docForm, branch:e.target.value})} className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none">
+                       <option value="CSE">💻 CSE</option>
+                       <option value="ECE">📡 ECE</option>
+                       <option value="ME">⚙️ ME</option>
+                       <option value="CIVIL">🏗️ CIVIL</option>
+                       <option value="EE">⚡ EE</option>
+                       <option value="EEE">🔌 EEE</option>
+                     </select>
+                     <select value={docForm.semester} onChange={e=>setDocForm({...docForm, semester:e.target.value})} className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none">
+                       {[1,2,3,4,5,6,7,8].map(s => <option key={s} value={String(s)}>Sem {s}</option>)}
+                     </select>
+                  </div>
 
                   <button disabled={uploading} className="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-3xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-indigo-950/20 group">
                      {uploading ? <Loader2 size={18} className="animate-spin" /> : <><RefreshCw size={18} className="group-hover:rotate-180 transition-transform duration-700"/> Push to Library</>}
