@@ -11,6 +11,26 @@ export default function SEO({
 }) {
   const fullTitle = title.includes("Apna College Bihar") ? title : `${title} | Apna College Bihar`;
 
+  React.useEffect(() => {
+    document.title = fullTitle;
+    
+    // Dynamically update description meta if exists
+    const descMeta = document.querySelector('meta[name="description"]');
+    if (descMeta) {
+      descMeta.setAttribute('content', description);
+    }
+    
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) {
+      ogTitle.setAttribute('content', fullTitle);
+    }
+
+    const ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) {
+      ogDesc.setAttribute('content', description);
+    }
+  }, [fullTitle, description]);
+
   return (
     <Helmet>
       {/* Standard Meta */}
