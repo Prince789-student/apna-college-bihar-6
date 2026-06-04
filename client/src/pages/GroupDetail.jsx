@@ -139,7 +139,7 @@ export default function GroupDetail() {
         <div className="flex items-center gap-4">
           <div className="hidden md:block text-right">
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Scholar Density</p>
-            <div className="flex items-center gap-2"><span className="text-2xl font-black text-slate-900">{group.memberCount}</span><span className="text-xs text-slate-400 font-bold uppercase">/ 70</span></div>
+            <div className="flex items-center gap-2"><span className="text-2xl font-black text-slate-900">{group.memberCount}</span><span className="text-xs text-slate-400 font-bold uppercase">/ {group.maxMembers || 150}</span></div>
           </div>
           {isAdmin && <button onClick={deleteGroup} className="p-4 bg-red-50 text-red-500 hover:bg-red-500 rounded-2xl transition-all border border-red-100"><Trash2 size={18} /></button>}
         </div>
@@ -247,7 +247,7 @@ export default function GroupDetail() {
               <h3 className="text-sm font-black text-slate-900 uppercase tracking-[0.3em] italic flex items-center gap-2"><Clock size={16} className="text-blue-500" /> Operational Specs</h3>
               <div className="bg-white border border-slate-200 rounded-3xl p-8 space-y-6 shadow-2xl">
                  <div className="flex justify-between items-center border-b border-slate-200/50 pb-4"><span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">Protocol</span><span className="text-xs font-black text-blue-500 uppercase tracking-widest">Study Group</span></div>
-                 <div className="flex justify-between items-center border-b border-slate-200/50 pb-4"><span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">Capacity</span><span className="text-xs font-black text-slate-700 uppercase tracking-widest">70 Seats</span></div>
+                 <div className="flex justify-between items-center border-b border-slate-200/50 pb-4"><span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">Capacity</span><span className="text-xs font-black text-slate-700 uppercase tracking-widest">{group.maxMembers || 150} Seats</span></div>
                  <div className="flex justify-between items-center border-b border-slate-200/50 pb-4"><span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">Status</span><span className="text-xs font-black text-emerald-500 uppercase tracking-widest flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></div> Secure</span></div>
               </div>
            </div>

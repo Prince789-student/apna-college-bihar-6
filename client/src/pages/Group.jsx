@@ -29,7 +29,7 @@ export default function Group() {
   const [joinCode, setJoinCode] = useState('');
   const [createMsg, setCreateMsg] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [newGroupData, setNewGroupData] = useState({ name: '', description: '' });
+  const [newGroupData, setNewGroupData] = useState({ name: '', description: '', meetingLink: '' });
 
   // Fetch groups
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function Group() {
   // Create Group (Rate limited: 5/day)
   const createGroup = async (e) => {
     e.preventDefault();
-    const { name, description } = newGroupData;
+    const { name, description, meetingLink } = newGroupData;
     if (!name.trim()) return;
     const today = new Date().toDateString();
     let count = user.lastGroupCreateDate === today ? (user.groupsCreatedToday || 0) : 0;
@@ -72,7 +72,8 @@ export default function Group() {
         creatorName: user?.displayName || user?.name || 'Scholar',
         members: [user?.uid],
         memberCount: 1,
-        maxMembers: 70,
+        maxMembers: 150,
+        meetingLink: meetingLink.trim() || '',
         createdAt: serverTimestamp()
       };
       await addDoc(collection(db, 'groups'), newGroup);
@@ -85,7 +86,7 @@ export default function Group() {
       });
       setCreateMsg({ type: 'ok', text: `Group "${name}" created! Code: ${code}` });
       setShowCreateModal(false);
-      setNewGroupData({ name: '', description: '' });
+      setNewGroupData({ name: '', description: '', meetingLink: '' });
     } catch (e) {
       setCreateMsg({ type: 'err', text: 'Creation failed.' });
     }
@@ -113,8 +114,8 @@ export default function Group() {
         return;
       }
 
-      if (gData.memberCount >= (gData.maxMembers || 70)) {
-        setCreateMsg({ type: 'err', text: 'Group is full (max 70)!' });
+      if (gData.memberCount >= (gData.maxMembers || 150)) {
+        setCreateMsg({ type: 'err', text: `Group is full (max ${gData.maxMembers || 150})!` });
         return;
       }
 
@@ -192,7 +193,7 @@ export default function Group() {
                   </div>
                   <div className="flex items-center gap-1 text-[10px] font-black text-slate-500 bg-slate-100/50 px-2 py-1 rounded-full uppercase tracking-widest">
                     <Users size={10} />
-                    {g.memberCount}/70
+                    {g.memberCount}/{g.maxMembers || 150}
                   </div>
                 </div>
                 <h3 className="text-lg font-black text-slate-900 group-hover:text-blue-400 transition-colors uppercase truncate">{g.name}</h3>
@@ -281,6 +282,10 @@ export default function Group() {
               <div className="space-y-2">
                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">Description / Motto</p>
                 <textarea required value={newGroupData.description} onChange={e => setNewGroupData({ ...newGroupData, description: e.target.value })} placeholder="What is this hub about?" rows={3} className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 text-slate-900 text-xs font-bold outline-none focus:border-blue-500 resize-none" />
+              </div>
+              <div className="space-y-2">
+                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-2">Google Meet Link (Optional)</p>
+                <input value={newGroupData.meetingLink} onChange={e => setNewGroupData({ ...newGroupData, meetingLink: e.target.value })} placeholder="e.g. https://meet.google.com/abc-defg-hij" className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 text-slate-900 text-xs font-bold outline-none focus:border-blue-500" />
               </div>
               <div className="flex items-center gap-4 pt-4">
                 <button type="button" onClick={() => setShowCreateModal(false)} className="flex-1 py-4 bg-slate-100 text-slate-500 rounded-2xl font-black text-xs uppercase tracking-widest">Cancel</button>

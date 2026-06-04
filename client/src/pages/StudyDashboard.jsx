@@ -54,7 +54,8 @@ export default function StudyDashboard() {
     saveGlobalSession,
     allowedPackages, setAllowedPackages,
     installedApps, fetchApps,
-    launchApp, openAccessibilitySettings
+    launchApp, openAccessibilitySettings,
+    selectedTaskId, setSelectedTaskId
   } = useStudy();
 
   const [userData, setUserData] = useState(null);
@@ -68,6 +69,9 @@ export default function StudyDashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [newTask, setNewTask] = useState('');
   const [newTaskSubject, setNewTaskSubject] = useState('OTHERS');
+  const [newTaskDuration, setNewTaskDuration] = useState('');
+  const [newSubjectName, setNewSubjectName] = useState('');
+  const [showSubjectManager, setShowSubjectManager] = useState(false);
 
   const [isNative, setIsNative] = useState(() => {
     return Capacitor.isNativePlatform() || (typeof window !== 'undefined' && window.Capacitor && (window.Capacitor.isNativePlatform?.() || window.Capacitor.isPluginAvailable?.('AppBlocker'))) || Capacitor.isPluginAvailable?.('AppBlocker');
@@ -85,10 +89,39 @@ export default function StudyDashboard() {
     return () => { clearTimeout(timer1); clearTimeout(timer2); };
   }, []);
 
+  const addSubject = async () => {
+    if (!newSubjectName.trim()) return;
+    try {
+      const docRef = await addDoc(collection(db, 'Subjects'), {
+        userId: user.uid,
+        subjectName: newSubjectName.trim().toUpperCase()
+      });
+      setSubjects([...subjects, { id: docRef.id, userId: user.uid, subjectName: newSubjectName.trim().toUpperCase() }]);
+      setNewSubjectName('');
+      toast.success("Subject added successfully!");
+    } catch(e) {
+      toast.error("Failed to add subject");
+    }
+  };
+
+  const deleteSubject = async (subId) => {
+    try {
+      await deleteDoc(doc(db, 'Subjects', subId));
+      setSubjects(subjects.filter(s => s.id !== subId));
+      toast.success("Subject deleted successfully!");
+    } catch(e) {
+      toast.error("Failed to delete subject");
+    }
+  };
+
   const [isAccessibilityEnabled, setIsAccessibilityEnabled] = useState(false);
   const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
 
   const openAccessibility = async () => {
+    if (!isNative) {
+      toast.error("Please download our app to use this feature!");
+      return;
+    }
     try {
       if (AppBlocker && AppBlocker.testPlugin) {
         const test = await AppBlocker.testPlugin();
@@ -104,6 +137,10 @@ export default function StudyDashboard() {
   };
 
   const openOverlay = async () => {
+    if (!isNative) {
+      toast.error("Please download our app to use this feature!");
+      return;
+    }
     try {
       if (AppBlocker && AppBlocker.requestOverlayPermission) {
         await AppBlocker.requestOverlayPermission();
@@ -240,9 +277,12 @@ export default function StudyDashboard() {
     await addDoc(collection(db, 'Tasks'), {
       userId: user.uid, text: newTask.trim(),
       subject: newTaskSubject, done: false,
-      date: todayStr, createdAt: new Date().toISOString()
+      date: todayStr, 
+      duration: newTaskDuration ? parseInt(newTaskDuration) : null,
+      createdAt: new Date().toISOString()
     });
     setNewTask('');
+    setNewTaskDuration('');
     setNewTaskSubject('OTHERS');
   };
 
@@ -314,17 +354,84 @@ export default function StudyDashboard() {
               <span className={`ml-auto text-[8px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${timerActive ? 'bg-blue-600 text-white animate-pulse' : 'bg-slate-100 text-slate-400'}`}>{timerActive ? 'ACTIVE' : 'STANDBY'}</span>
             </div>
             <div className="p-6 flex flex-col items-center gap-6">
-              {/* Mode + Subject */}
+              {/* Mode */}
               <div className="flex gap-2 w-full">
                 {['COUNTDOWN', 'STOPWATCH'].map(m => (
                   <button key={m} onClick={() => !timerActive && setTimerMode(m)} className={`flex-1 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${timerMode === m ? 'bg-blue-600 text-white shadow-lg' : 'bg-slate-100 text-slate-500'}`}>{m}</button>
                 ))}
               </div>
+
+              {/* Subject Selector */}
               <div className="flex items-center gap-2 w-full px-4 py-3 bg-slate-50 rounded-2xl border border-slate-200/50">
                 <BookOpen size={14} className="text-blue-500" />
                 <select value={timerSubject} onChange={e => setTimerSubject(e.target.value)} disabled={timerActive} className="bg-transparent text-[10px] font-black uppercase tracking-widest text-slate-900 outline-none flex-1">
                   <option value="OTHERS">SELECT SUBJECT</option>
                   {subjects.map(s => <option key={s.id} value={s.subjectName}>{s.subjectName}</option>)}
+                </select>
+                <button 
+                  onClick={() => setShowSubjectManager(!showSubjectManager)} 
+                  disabled={timerActive}
+                  className="p-1 hover:text-blue-600 text-slate-400 transition-colors"
+                  title="Manage Subjects"
+                >
+                  <Settings size={16} />
+                </button>
+              </div>
+
+              {/* Subject Manager Panel */}
+              {showSubjectManager && (
+                <div className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl p-4 space-y-3">
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Manage Subjects</p>
+                  <div className="flex gap-2">
+                    <input 
+                      type="text" 
+                      value={newSubjectName} 
+                      onChange={e => setNewSubjectName(e.target.value)}
+                      placeholder="NEW SUBJECT NAME" 
+                      className="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none"
+                    />
+                    <button onClick={addSubject} className="bg-blue-600 text-white px-4 rounded-xl text-xs font-bold active:scale-95 transition-all">Add</button>
+                  </div>
+                  {subjects.length > 0 && (
+                    <div className="max-h-32 overflow-y-auto space-y-1.5 pt-2 border-t border-slate-200/50">
+                      {subjects.map(s => (
+                        <div key={s.id} className="flex justify-between items-center bg-white px-3 py-1.5 rounded-lg border border-slate-100">
+                          <span className="text-[10px] font-bold text-slate-700">{s.subjectName}</span>
+                          <button onClick={() => deleteSubject(s.id)} className="text-red-400 hover:text-red-600"><Trash2 size={12} /></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Task Selector for Focus */}
+              <div className="flex items-center gap-2 w-full px-4 py-3 bg-slate-50 rounded-2xl border border-slate-200/50">
+                <ClipboardList size={14} className="text-blue-500" />
+                <select 
+                  value={selectedTaskId || ''} 
+                  onChange={e => {
+                    const taskId = e.target.value;
+                    setSelectedTaskId(taskId);
+                    const task = tasks.find(t => t.id === taskId);
+                    if (task) {
+                      setTimerSubject(task.subject || 'OTHERS');
+                      if (task.duration && !timerActive && timerMode === 'COUNTDOWN') {
+                        setTimerTime(task.duration * 60);
+                        setCustomMinutes(task.duration);
+                        setCustomSeconds(0);
+                      }
+                    }
+                  }} 
+                  disabled={timerActive} 
+                  className="bg-transparent text-[10px] font-black uppercase tracking-widest text-slate-900 outline-none flex-1"
+                >
+                  <option value="">SELECT TASK TO FOCUS ON (OPTIONAL)</option>
+                  {tasks.filter(t => !t.done).map(t => (
+                    <option key={t.id} value={t.id}>
+                      {t.text} {t.duration ? `(${t.duration}m)` : ''}
+                    </option>
+                  ))}
                 </select>
               </div>
               {/* Timer Display */}
@@ -559,13 +666,22 @@ export default function StudyDashboard() {
             </div>
           <div className="p-4 space-y-4">
             {/* Add Task */}
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input value={newTask} onChange={e => setNewTask(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Add a task..." className="flex-1 bg-slate-50 rounded-xl px-4 py-3 text-sm font-bold outline-none border border-slate-200 focus:border-blue-400" />
-              <select value={newTaskSubject} onChange={e => setNewTaskSubject(e.target.value)} className="bg-slate-50 rounded-xl px-3 py-3 text-[9px] font-black uppercase outline-none border border-slate-200 max-w-[90px]">
-                <option value="OTHERS">Subject</option>
-                {subjects.map(s => <option key={s.id} value={s.subjectName}>{s.subjectName}</option>)}
-              </select>
-              <button onClick={addTask} className="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center active:scale-95 transition-all"><Plus size={22} /></button>
+              <div className="flex gap-2">
+                <input 
+                  type="number" 
+                  value={newTaskDuration} 
+                  onChange={e => setNewTaskDuration(e.target.value)} 
+                  placeholder="Mins (opt)" 
+                  className="w-20 bg-slate-50 rounded-xl px-2 py-3 text-xs font-bold outline-none border border-slate-200 text-center" 
+                />
+                <select value={newTaskSubject} onChange={e => setNewTaskSubject(e.target.value)} className="bg-slate-50 rounded-xl px-3 py-3 text-[9px] font-black uppercase outline-none border border-slate-200 max-w-[90px]">
+                  <option value="OTHERS">Subject</option>
+                  {subjects.map(s => <option key={s.id} value={s.subjectName}>{s.subjectName}</option>)}
+                </select>
+                <button onClick={addTask} className="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center active:scale-95 transition-all"><Plus size={22} /></button>
+              </div>
             </div>
             {/* Task List */}
             {tasks.length === 0 ? (
@@ -577,7 +693,9 @@ export default function StudyDashboard() {
                     <button onClick={async () => await updateDoc(doc(db, 'Tasks', task.id), { done: !task.done })} className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${task.done ? 'bg-emerald-500 text-white' : 'border-2 border-slate-300'}`}><CheckCircle2 size={14} /></button>
                     <div className="flex-1 min-w-0">
                       <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase ${task.done ? 'bg-slate-200 text-slate-400' : 'bg-blue-100 text-blue-600'}`}>{task.subject || 'OTHERS'}</span>
-                      <p className={`text-sm font-bold mt-0.5 ${task.done ? 'text-slate-400 line-through' : 'text-slate-900'}`}>{task.text}</p>
+                      <p className={`text-sm font-bold mt-0.5 ${task.done ? 'text-slate-400 line-through' : 'text-slate-900'}`}>
+                        {task.text} {task.duration ? <span className="text-xs font-normal text-slate-400 ml-1">({task.duration}m)</span> : ''}
+                      </p>
                     </div>
                     <button onClick={async () => await deleteDoc(doc(db, 'Tasks', task.id))} className="text-slate-200 hover:text-red-500 p-1 flex-shrink-0"><Trash2 size={16} /></button>
                   </div>

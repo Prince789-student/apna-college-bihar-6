@@ -24,14 +24,15 @@ export function StudyProvider({ children }) {
   };
 
   const [timerActive, _setTimerActive] = useState(false);
-  const [timerTime, setTimerTime] = useState(1500);
+  const [timerTime, setTimerTime] = useState(60);
   const [timerSubject, setTimerSubject] = useState('OTHERS');
-  const [customMinutes, setCustomMinutes] = useState(25);
+  const [customMinutes, setCustomMinutes] = useState(1);
   const [customSeconds, setCustomSeconds] = useState(0);
   const [timerMode, setTimerMode] = useState('COUNTDOWN');
   const [focusBroken, _setFocusBroken] = useState(false);
   const [allowedPackages, _setAllowedPackages] = useState(() => getInitialState('allowedPackages', ''));
   const [installedApps, setInstalledApps] = useState([]);
+  const [selectedTaskId, setSelectedTaskId] = useState('');
   const timerRef = useRef(null);
 
   const isNativeApp = () => Capacitor.isNativePlatform() || (typeof window !== 'undefined' && window.Capacitor && (window.Capacitor.isNativePlatform?.() || window.Capacitor.isPluginAvailable?.('AppBlocker'))) || Capacitor.isPluginAvailable?.('AppBlocker');
@@ -218,6 +219,12 @@ export function StudyProvider({ children }) {
           isStudying: false 
         });
       }
+      
+      if (selectedTaskId) {
+        await updateDoc(doc(db, 'Tasks', selectedTaskId), { done: true });
+        setSelectedTaskId('');
+      }
+      
       setTimerActive(false);
     } catch (e) { console.error("Global Save Error:", e); }
   };
@@ -261,7 +268,7 @@ export function StudyProvider({ children }) {
       clearInterval(timerRef.current);
     }
     return () => clearInterval(timerRef.current);
-  }, [timerActive, timerMode, user, customMinutes, customSeconds]);
+  }, [timerActive, timerMode, user, customMinutes, customSeconds, selectedTaskId]);
 
   const value = {
     timerActive,
@@ -283,6 +290,8 @@ export function StudyProvider({ children }) {
     setAllowedPackages,
     installedApps,
     fetchApps,
+    selectedTaskId,
+    setSelectedTaskId,
     launchApp: async (pkg) => {
       if (!isNativeApp()) return;
       try {
