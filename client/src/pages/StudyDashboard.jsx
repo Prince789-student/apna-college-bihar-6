@@ -128,7 +128,7 @@ export default function StudyDashboard() {
   };
 
   useEffect(() => {
-    if (isNative || Capacitor.isPluginAvailable('AppBlocker')) {
+    if (isNative || Capacitor.isPluginAvailable?.('AppBlocker')) {
       fetchApps();
       checkPermissions();
       const interval = setInterval(checkPermissions, 5000);
