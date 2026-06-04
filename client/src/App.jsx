@@ -170,10 +170,14 @@ function App() {
           {/* Public Dashboard Routes (For SEO & Direct Sharing) */}
           <Route element={<DashboardLayout />}>
             <Route path="/search/:keyword" element={<SearchSEO />} />
+            <Route path="/notes" element={<Notes />} />
             <Route path="/notes/:branchId/:semesterId" element={<Notes />} />
             <Route path="/notes/:branchId" element={<Notes />} />
+            <Route path="/pyq" element={<PYQ />} />
             <Route path="/pyq/:branchId/:semesterId" element={<PYQ />} />
             <Route path="/pyq/:branchId" element={<PYQ />} />
+            <Route path="/cgpa" element={<BeuCgpa />} />
+            <Route path="/syllabus" element={<BeuSyllabus />} />
             <Route path="/syllabus/:branchId" element={<BeuSyllabus />} />
             <Route path="/college/:collegeSlug" element={<CollegePage />} />
             <Route path="/college/:collegeSlug/:section" element={<CollegePage />} />

@@ -414,10 +414,10 @@ export default function Home() {
                 { title: "BEU Result", ic: <Globe className="text-blue-500"/>, d: "Direct portal to check BEU results instantly.", link: "/dashboard/beu-result?standalone=true" },
                 { title: "Attendance", ic: <UserCheck className="text-green-500"/>, d: "Track the mandatory 75% BEU attendance.", link: "/dashboard/attendance?standalone=true" },
                 { title: "Timetable", ic: <Calendar className="text-yellow-500"/>, d: "Create and manage weekly class routines.", link: "/dashboard/timetable?standalone=true" },
-                { title: "Notes", ic: <BookOpen className="text-indigo-500"/>, d: "Free handwritten notes for all semesters.", link: "/dashboard/notes?standalone=true" },
-                { title: "PYQ", ic: <FileText className="text-purple-500"/>, d: "Previous 5 years question papers organized.", link: "/dashboard/notes?standalone=true" },
-                { title: "SGPA / CGPA", ic: <GraduationCap className="text-cyan-500"/>, d: "Calculate your exact academic performance.", link: "/dashboard/cgpa?standalone=true" },
-                { title: "Syllabus", ic: <Library className="text-pink-500"/>, d: "Official BEU syllabus for every branch.", link: "/dashboard/syllabus?standalone=true" },
+                { title: "Notes", ic: <BookOpen className="text-indigo-500"/>, d: "Free handwritten notes for all semesters.", link: "/notes?standalone=true" },
+                { title: "PYQ", ic: <FileText className="text-purple-500"/>, d: "Previous 5 years question papers organized.", link: "/pyq?standalone=true" },
+                { title: "SGPA / CGPA", ic: <GraduationCap className="text-cyan-500"/>, d: "Calculate your exact academic performance.", link: "/cgpa?standalone=true" },
+                { title: "Syllabus", ic: <Library className="text-pink-500"/>, d: "Official BEU syllabus for every branch.", link: "/syllabus?standalone=true" },
               ]
             },
             {

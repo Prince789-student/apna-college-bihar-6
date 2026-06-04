@@ -4,6 +4,8 @@ import { ChevronLeft, MessageCircle, Youtube, Mail, Send, CheckCircle2, AlertTri
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
+import SEO from '../components/SEO';
+
 export default function Contact() {
   const navigate = useNavigate();
   const [activeFaq, setActiveFaq] = useState(null);
@@ -36,6 +38,11 @@ export default function Contact() {
 
   return (
     <div className="min-h-screen bg-[#0a0f1d] text-white font-['Inter'] selection:bg-blue-500/30 pb-24">
+      <SEO 
+        title="Contact Us | Apna College Bihar" 
+        description="Get in touch with Apna College Bihar support. 24/7 assistance for Bihar Engineering students, BEU exam queries, and UGEAC counselling."
+        url="https://www.apnacollegebihar.online/contact"
+      />
       {/* Header */}
       <div className="sticky top-0 z-50 bg-[#0a0f1d]/90 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex items-center justify-between shadow-2xl">
         <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors group">
