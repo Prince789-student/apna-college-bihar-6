@@ -41,6 +41,7 @@ const DeleteAccount = React.lazy(() => import('./pages/DeleteAccount'));
 const About = React.lazy(() => import('./pages/About'));
 const Contact = React.lazy(() => import('./pages/Contact'));
 const SearchSEO = React.lazy(() => import('./pages/SearchSEO'));
+const BeuToolSEO = React.lazy(() => import('./pages/BeuToolSEO'));
 
 function LoadingScreen() {
   return (
@@ -170,6 +171,9 @@ function App() {
             <Route path="/pyq/:branchId" element={<PYQ />} />
             <Route path="/syllabus/:branchId" element={<BeuSyllabus />} />
             <Route path="/college/:collegeSlug" element={<UgeacPredictor />} />
+            {/* BEU Tool SEO Routes – Attendance, Timetable, CGPA, Result */}
+            <Route path="/beu/:tool" element={<BeuToolSEO />} />
+            <Route path="/beu/:tool/:keyword" element={<BeuToolSEO />} />
           </Route>
 
           {/* Protected Dashboard Routes */}

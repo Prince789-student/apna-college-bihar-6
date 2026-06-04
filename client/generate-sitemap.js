@@ -111,6 +111,125 @@ for (const subject of commonSubjects) {
   urls.push(`/search/${subject}-pyq`);
 }
 
+// ── BEU Tool SEO Keywords ──────────────────────────────────────────
+
+// Static Tool Pages
+urls.push('/beu/attendance');
+urls.push('/beu/timetable');
+urls.push('/beu/cgpa');
+urls.push('/beu/result');
+
+// Attendance Keywords
+const attendanceKeywords = [
+  'beu-attendance-calculator',
+  'attendance-percentage-calculator',
+  'bihar-engineering-attendance',
+  '75-percent-attendance-calculator',
+  'attendance-shortfall-calculator',
+  'engineering-attendance-calculator',
+  'beu-attendance-tracker',
+  'minimum-attendance-beu',
+  'how-to-calculate-attendance-beu',
+  'beu-attendance-rules',
+  'cse-attendance-calculator',
+  'civil-attendance-calculator',
+  'mechanical-attendance-calculator',
+  'electrical-attendance-calculator',
+  'ece-attendance-calculator',
+  'it-attendance-calculator-beu',
+  'ece-vlsi-attendance-beu',
+  'cse-aiml-attendance-beu',
+  'cse-ds-attendance-beu',
+  'cse-cyber-attendance-beu',
+  'beu-attendance-sem1', 'beu-attendance-sem2', 'beu-attendance-sem3',
+  'beu-attendance-sem4', 'beu-attendance-sem5', 'beu-attendance-sem6',
+  'beu-attendance-sem7', 'beu-attendance-sem8',
+  'attendance-calculator-2025',
+  'beu-attendance-shortage-calculator',
+  'mit-muzaffarpur-attendance-calculator',
+  'bce-bhagalpur-attendance-calculator',
+  'gce-gaya-attendance-calculator',
+];
+
+// Timetable Keywords
+const timetableKeywords = [
+  'beu-timetable-2025',
+  'beu-exam-schedule-2025',
+  'beu-class-timetable',
+  'bihar-engineering-timetable',
+  'beu-semester-schedule',
+  'beu-timetable-cse',
+  'beu-timetable-civil',
+  'beu-timetable-mechanical',
+  'beu-timetable-electrical',
+  'beu-timetable-ece',
+  'beu-sem1-timetable', 'beu-sem2-timetable', 'beu-sem3-timetable',
+  'beu-sem4-timetable', 'beu-sem5-timetable', 'beu-sem6-timetable',
+  'beu-sem7-timetable', 'beu-sem8-timetable',
+  'beu-exam-date-sheet-2025',
+  'beu-practical-schedule',
+  'beu-internal-exam-timetable',
+  'bihar-engineering-university-exam-schedule',
+  'beu-back-exam-schedule',
+];
+
+// CGPA Keywords
+const cgpaKeywords = [
+  'beu-cgpa-calculator',
+  'beu-sgpa-calculator',
+  'sgpa-to-cgpa-converter',
+  'beu-grade-calculator',
+  'beu-marks-to-cgpa',
+  'bihar-engineering-cgpa',
+  'beu-gpa-calculator',
+  'beu-cgpa-cse',
+  'beu-cgpa-civil',
+  'beu-cgpa-mechanical',
+  'beu-cgpa-electrical',
+  'beu-cgpa-ece',
+  'beu-sem1-cgpa', 'beu-sem2-cgpa', 'beu-sem3-cgpa',
+  'beu-sem4-cgpa', 'beu-sem5-cgpa', 'beu-sem6-cgpa',
+  'beu-sem7-cgpa', 'beu-sem8-cgpa',
+  'beu-cgpa-2025',
+  'beu-sgpa-2025',
+  'how-to-calculate-cgpa-beu',
+  'beu-grade-point-average',
+  'beu-percentage-to-cgpa',
+  'beu-cgpa-to-percentage',
+  'bihar-engineering-grading-system',
+  'beu-distinction-cgpa',
+  'beu-first-division-cgpa',
+];
+
+// Result Keywords
+const resultKeywords = [
+  'beu-result-2025',
+  'bihar-engineering-result',
+  'beu-exam-result',
+  'beu-result-marksheet',
+  'beu-result-sem1', 'beu-result-sem2', 'beu-result-sem3',
+  'beu-result-sem4', 'beu-result-sem5', 'beu-result-sem6',
+  'beu-result-sem7', 'beu-result-sem8',
+  'beu-result-cse', 'beu-result-civil', 'beu-result-mechanical',
+  'beu-result-electrical', 'beu-result-ece',
+  'bihar-engineering-university-result-2025',
+  'beu-back-result-2025',
+  'beu-supplementary-result',
+  'beu-result-link-2025',
+  'beu-marksheet-download',
+  'mit-muzaffarpur-result-2025',
+  'bce-bhagalpur-result-2025',
+  'gce-gaya-result-2025',
+  'beu-rank-list-2025',
+  'beu-merit-list-2025',
+];
+
+for (const kw of attendanceKeywords) urls.push(`/beu/attendance/${kw}`);
+for (const kw of timetableKeywords) urls.push(`/beu/timetable/${kw}`);
+for (const kw of cgpaKeywords) urls.push(`/beu/cgpa/${kw}`);
+for (const kw of resultKeywords) urls.push(`/beu/result/${kw}`);
+
+
 let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 `;
