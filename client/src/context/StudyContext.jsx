@@ -34,7 +34,7 @@ export function StudyProvider({ children }) {
   const [installedApps, setInstalledApps] = useState([]);
   const timerRef = useRef(null);
 
-  const isNativeApp = () => Capacitor.isNativePlatform() || (typeof window !== 'undefined' && window.Capacitor && (window.Capacitor.isNativePlatform?.() || window.Capacitor.isPluginAvailable?.('AppBlocker'))) || Capacitor.isPluginAvailable('AppBlocker');
+  const isNativeApp = () => Capacitor.isNativePlatform() || (typeof window !== 'undefined' && window.Capacitor && (window.Capacitor.isNativePlatform?.() || window.Capacitor.isPluginAvailable?.('AppBlocker'))) || Capacitor.isPluginAvailable?.('AppBlocker');
 
   const fetchApps = async () => {
     if (!isNativeApp()) return;
