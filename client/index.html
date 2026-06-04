@@ -242,29 +242,67 @@
          }
       }
    </script>
-    <!-- Google AdSense Script -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4005389118070865" crossorigin="anonymous"></script>
+     <!-- Google AdSense Script -->
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4005389118070865" crossorigin="anonymous"></script>
 
-    <style>
-       html,
-       body,
-       #root {
-          font-family: 'Inter', sans-serif;
-          margin: 0 !important;
-          padding: 0 !important;
-          height: 100%;
-          min-height: 100%;
-          overflow-x: hidden;
-          overflow-y: auto;
-       }
- 
-       /* Prevent AdSense from injecting huge spacers when unfilled, but show active ads */
-       .adsbygoogle[data-ad-status="unfilled"] {
-          display: none !important;
-          height: 0 !important;
-          width: 0 !important;
-       }
-    </style>
+     <script>
+      // Prevent Google AdSense Auto Ads from shifting layout (e.g. injecting marginRight / width on html/body)
+      (function() {
+         const resetLayoutStyles = () => {
+            const html = document.documentElement;
+            const body = document.body;
+            if (html && (html.style.marginRight || html.style.paddingRight || html.style.width)) {
+               html.style.setProperty('margin-right', '0px', 'important');
+               html.style.setProperty('padding-right', '0px', 'important');
+               html.style.setProperty('width', '100%', 'important');
+            }
+            if (body && (body.style.marginRight || body.style.paddingRight || body.style.width)) {
+               body.style.setProperty('margin-right', '0px', 'important');
+               body.style.setProperty('padding-right', '0px', 'important');
+               body.style.setProperty('width', '100%', 'important');
+            }
+         };
+         
+         resetLayoutStyles();
+         
+         const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+               if (mutation.attributeName === 'style') {
+                  resetLayoutStyles();
+               }
+            });
+         });
+         
+         document.addEventListener('DOMContentLoaded', () => {
+            resetLayoutStyles();
+            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
+            observer.observe(document.body, { attributes: true, attributeFilter: ['style'] });
+         });
+      })();
+     </script>
+
+     <style>
+        html,
+        body,
+        #root {
+           font-family: 'Inter', sans-serif;
+           margin: 0 !important;
+           padding: 0 !important;
+           height: 100% !important;
+           min-height: 100% !important;
+           width: 100% !important;
+           max-width: 100vw !important;
+           overflow-x: hidden !important;
+           overflow-y: auto !important;
+        }
+  
+        /* Prevent AdSense from injecting huge spacers when unfilled, but show active ads */
+        .adsbygoogle[data-ad-status="unfilled"] {
+           display: none !important;
+           height: 0 !important;
+           width: 0 !important;
+        }
+     </style>
 </head>
 
 <body class="bg-slate-50 font-sans antialiased text-slate-900">
