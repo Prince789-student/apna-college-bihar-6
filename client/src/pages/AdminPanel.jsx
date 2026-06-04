@@ -229,7 +229,6 @@ export default function AdminPanel() {
     await deleteDoc(doc(db, 'announcements', id));
     flash('Broadcast Removed');
   };
-
   const handleUpload = async (e) => {
     e.preventDefault();
     const { title, subject, category, branch, semester, selectedSubjectId, file, externalUrl } = docForm;
@@ -241,15 +240,9 @@ export default function AdminPanel() {
     try {
       let finalUrl = externalUrl;
       if (file) {
-        const timeout = setTimeout(() => {
-          setUploading(false);
-          flash('File Upload Timed Out! Use "Direct Link" as a bypass.', 'err');
-        }, 12000);
-
         const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
         const storageRef = ref(storage, `notes/${fileName}`);
         const snapshot = await uploadBytes(storageRef, file);
-        clearTimeout(timeout);
         finalUrl = await getDownloadURL(snapshot.ref);
       }
 
