@@ -177,7 +177,7 @@ export default function SubjectPage() {
     return basePath;
   };
 
-  const seoTitle = `${subjectInfo.name} B.Tech ${currentSection === 'pyq' ? 'PYQ Papers' : currentSection === 'syllabus' ? 'Syllabus' : 'Notes'} Download | BEU Patna`;
+  const seoTitle = `${subjectInfo.name} B.Tech ${currentSection === 'pyq' ? 'PYQ Papers' : currentSection === 'syllabus' ? 'Syllabus' : 'Notes'} | Apna College Bihar`;
   const seoDescription = `Free PDF download of ${subjectInfo.name} ${currentSection === 'pyq' ? 'previous year question papers' : currentSection === 'syllabus' ? 'official unit syllabus' : 'semester notes'} for Bihar Engineering University B.Tech students.`;
   const seoKeywords = `${subjectInfo.name} notes, ${subjectInfo.name} pyq, ${subjectInfo.name} syllabus BEU, Bihar Engineering study material`;
 

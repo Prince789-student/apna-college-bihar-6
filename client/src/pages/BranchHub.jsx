@@ -116,7 +116,17 @@ export default function BranchHub() {
     { id: 'internship', name: 'Internships' }
   ];
 
-  const seoTitle = `${meta.name} Branch Guide | Career, Salary, Skills & Placements`;
+  const tabTitles = {
+    overview: 'Overview',
+    career: 'Career Prospects',
+    salary: 'Salary Trends',
+    skills: 'Core Skills',
+    placement: 'Bihar Placements',
+    internship: 'Internships'
+  };
+  const activeTabTitle = tabTitles[currentSection] || 'Overview';
+
+  const seoTitle = `${meta.name} ${activeTabTitle} | Apna College Bihar`;
   const seoDescription = `Discover ${meta.name} engineering scope in Bihar. Check career opportunities, salary trends, core skills to learn, placements in Bihar engineering colleges, and internship options.`;
   const seoKeywords = `${meta.name} scope, ${meta.name} career options, ${meta.name} salary in India, Bihar Engineering branches`;
 

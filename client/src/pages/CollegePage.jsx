@@ -226,9 +226,17 @@ export default function CollegePage() {
     }
   };
 
-  const placementStats = getPlacementStats(college.tier);
-
-  const seoTitle = `${college.name} Admission ${selectedYear} | Cutoff, Fees, Hostel & Placements`;
+  const tabTitles = {
+    overview: 'Admission & Details',
+    branches: 'Seat Matrix & Branches',
+    fees: 'Fee Structure',
+    placement: 'Placements & Statistics',
+    hostel: 'Hostel Facilities',
+    cutoff: `UGEAC ${selectedYear} Cutoff`,
+    review: 'Student Reviews'
+  };
+  const activeTabTitle = tabTitles[currentSection] || 'Details';
+  const seoTitle = `${college.short} ${activeTabTitle} | Apna College Bihar`;
   const seoDescription = `Check detailed profile of ${college.name} (${college.short}) including UGEAC Cutoff Ranks, mess fees, seat matrix, hostel facilities, branch-wise placements, and reviews.`;
   const seoKeywords = `${college.short} Cutoff, ${college.name} Fees, ${college.short} Hostel, Bihar Engineering admission, UGEAC Cutoff ${selectedYear}`;
 

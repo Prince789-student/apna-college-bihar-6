@@ -483,7 +483,6 @@ export default function BeuSyllabus() {
     { id: 'sem1', label: '1st Semester' }, { id: 'sem2', label: '2nd Semester' },
     { id: 'sem3', label: '3rd Semester' }, { id: 'sem4', label: '4th Semester' },
     { id: 'sem5', label: '5th Semester' }, { id: 'sem6', label: '6th Semester' },
-    { id: 'sem7', label: '7th Semester' }, { id: 'sem8', label: '8th Semester' },
   ];
 
   const branches = [
@@ -625,9 +624,9 @@ export default function BeuSyllabus() {
   return (
     <div className="min-h-screen bg-slate-50 font-['Inter'] pb-24">
       <SEO 
-        title={`BEU ${selectedBranch.toUpperCase()} Syllabus | Apna College Bihar`}
-        description={`Check official Bihar Engineering University (BEU) syllabus for ${selectedBranch.toUpperCase()} branch. Track your syllabus progress online.`}
-        keywords={`BEU Syllabus, ${selectedBranch} Syllabus, Bihar Engineering Syllabus, B.Tech Syllabus BEU`}
+        title={`BEU ${selectedBranch.toUpperCase()} Sem ${selectedSem.replace('sem', '')} Syllabus | Apna College Bihar`}
+        description={`Check official Bihar Engineering University (BEU) syllabus for ${selectedBranch.toUpperCase()} Semester ${selectedSem.replace('sem', '')}. Track your syllabus progress online.`}
+        keywords={`BEU Syllabus, ${selectedBranch} Syllabus, Semester ${selectedSem.replace('sem', '')} Syllabus, Bihar Engineering Syllabus, B.Tech Syllabus BEU`}
         url={`https://www.apnacollegebihar.online/syllabus/${selectedBranch}`}
       />
       
@@ -715,7 +714,15 @@ export default function BeuSyllabus() {
                 <Loader2 size={40} className="text-indigo-500 animate-spin mb-4" />
                 <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Loading Syllabus Data...</p>
               </div>
-            ) : currentSyllabus && subjects.length > 0 ? (
+            ) : !currentSyllabus ? (
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <BookOpen size={48} className="text-slate-300 mb-4" />
+                <h3 className="text-xl font-black text-slate-800 uppercase tracking-tight mb-2">Syllabus Not Available</h3>
+                <p className="text-xs font-bold text-slate-500 max-w-sm mx-auto">
+                  We are still compiling the official BEU syllabus for this semester and branch. It will be added soon!
+                </p>
+              </div>
+            ) : subjects.length > 0 ? (
               <div className="space-y-8">
                 {subjects.map((subject, si) => (
                   <div key={si} className="bg-slate-50/50 p-4 md:p-6 rounded-[2.2rem] border border-slate-200/60 shadow-sm">

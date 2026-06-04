@@ -11,6 +11,7 @@ import {
   ChevronDown, ChevronUp, AlertTriangle, CheckCircle, Award, Target, BarChart3,
   Globe, Calculator, ExternalLink, Info
 } from 'lucide-react';
+import SEO from '../components/SEO';
 
 // ─── BEU Grading ─────────────────────────────────────────
 function getGrade(pct) {
@@ -185,6 +186,10 @@ export default function BeuCgpa() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-6 pb-20 animate-in fade-in duration-300">
+      <SEO 
+        title="BEU CGPA Calculator | Apna College Bihar" 
+        description="Calculate your Bihar Engineering University (BEU) semester CGPA easily. Track your academic progress." 
+      />
       
       {/* ── Header ─── */}
       <div>

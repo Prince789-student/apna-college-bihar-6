@@ -161,7 +161,7 @@ export default function Notes() {
 
   return (
     <div className="max-w-5xl mx-auto px-3 md:px-4 pb-24 space-y-4 md:space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-
+      
       {/* Header */}
       <div className="bg-white p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] border border-slate-200/80 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-indigo-600/8 rounded-full blur-[80px] pointer-events-none"></div>
@@ -196,7 +196,14 @@ export default function Notes() {
       </div>
       
       {/* SEO Tags */}
-      {branch && sem ? (
+      {folder && branch && sem ? (
+        <SEO 
+          title={`${folder.title} Notes - BEU ${branch.short} Sem ${sem} | Apna College Bihar`}
+          description={`Download free PDF notes for ${folder.title} (Semester ${sem} ${branch.short}) at Apna College Bihar.`}
+          keywords={`BEU Notes, ${folder.title} Notes, ${branch.short} Semester ${sem}`}
+          url={`https://www.apnacollegebihar.online/notes/${branch.id.toLowerCase()}/${sem}`}
+        />
+      ) : branch && sem ? (
         <SEO 
           title={`BEU ${branch.short} Semester ${sem} Notes PDF Download`} 
           description={`Download free B.Tech ${branch.label} Semester ${sem} notes for Bihar Engineering University (BEU). Best study material, chapter-wise PDFs.`}

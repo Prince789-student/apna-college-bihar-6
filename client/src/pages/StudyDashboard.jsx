@@ -242,10 +242,22 @@ export default function StudyDashboard() {
     setNewTaskSubject('OTHERS');
   };
 
+  const tabTitles = {
+    timer: 'Focus Timer',
+    overview: 'Study Dashboard',
+    todo: 'Study Plan & Tasks',
+    network: 'Study Network'
+  };
+  const activeTabTitle = tabTitles[tab] || 'Study Dashboard';
+
   if (loading) return <div className="flex justify-center p-20"><div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div></div>;
 
   return (
     <div className="max-w-2xl mx-auto pb-24 px-3 md:px-0">
+      <SEO 
+        title={`${activeTabTitle} | Apna College Bihar`} 
+        description="Track your study hours, manage tasks, block distractions, and focus better with Apna College Bihar's Study Dashboard."
+      />
 
       {/* ACB Study Zone Header */}
       <div className="flex items-center gap-3 pt-4 pb-3">

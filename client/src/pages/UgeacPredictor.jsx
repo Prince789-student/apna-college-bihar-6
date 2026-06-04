@@ -430,6 +430,10 @@ function UgeacPredictor() {
 
   return (
     <div className="main-app-container">
+      <SEO 
+        title="UGEAC College Predictor 2025 | Apna College Bihar" 
+        description="Predict your Bihar Engineering college based on your UGEAC Rank and JEE Main percentile."
+      />
       {collegeSlug && initialCollege ? (
         <SEO 
           title={`${initialCollege.name} | UGEAC Cutoff Rank 2025`}

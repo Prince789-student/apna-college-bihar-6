@@ -184,7 +184,14 @@ export default function PYQ() {
       </div>
 
       {/* SEO Tags */}
-      {branch && sem ? (
+      {folder && branch && sem ? (
+        <SEO 
+          title={`${folder.title} PYQ Papers - BEU ${branch.short} Sem ${sem} | Apna College Bihar`}
+          description={`Download free Previous Year Question (PYQ) papers for ${folder.title} (Semester ${sem} ${branch.short}) at Apna College Bihar.`}
+          keywords={`BEU PYQ, ${folder.title} PYQ, ${branch.short} Semester ${sem} PYQ`}
+          url={`https://www.apnacollegebihar.online/pyq/${branch.id.toLowerCase()}/${sem}`}
+        />
+      ) : branch && sem ? (
         <SEO 
           title={`BEU ${branch.short} Semester ${sem} PYQ Papers Download`} 
           description={`Download free B.Tech ${branch.label} Semester ${sem} Previous Year Question (PYQ) papers for Bihar Engineering University (BEU).`}
