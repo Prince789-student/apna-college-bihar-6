@@ -40,7 +40,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center font-['Inter'] relative overflow-hidden">
       <SEO 
-        title="Apna College Bihar | UGEAC Counselling, B.Tech Notes, PYQ & College Predictor"
+        title="Apna College Bihar"
         description="Bihar Engineering Counselling 2025 - UGEAC College Predictor, Cutoff Ranks, B.Tech Notes, PYQ Papers & CGPA Calculator. Official resource for Bihar Engineering students."
         url="https://www.apnacollegebihar.online/"
       />
