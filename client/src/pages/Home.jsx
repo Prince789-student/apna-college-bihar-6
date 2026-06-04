@@ -160,14 +160,13 @@ export default function Home() {
            </div>
            
            <h1 className="text-4xl md:text-7xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.9] md:leading-[0.8] mb-6">
-                   Apna College <br/>
-                   <span className="text-blue-500">Bihar</span>
+                   Apna College <span className="text-blue-500">Bihar</span>
                 </h1>
                 <p className="text-slate-500 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mb-2 max-w-xl mx-auto">
-                   Bihar Engineering Counselling Hub · UGEAC Predictor
+                   #1 BEU Academic & Bihar Engineering Counselling Hub
                 </p>
-                <p className="text-slate-400 text-xs font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
-                   Bihar ke engineering students ke liye — UGEAC 2025 rank se college predict karo, BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya ka cutoff dekho, aur free BEU semester notes download karo.
+                <p className="text-slate-400 text-xs md:text-sm font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
+                   Bihar ke engineering students ke liye complete solution — BEU semester notes download karein, UGEAC rank se apna college predict karein, aur counselling ki saari updates ek jagah paayein.
                 </p>
 
             <div className="pt-8 max-w-2xl mx-auto mb-16">
