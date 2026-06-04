@@ -73,7 +73,7 @@ export default function Home() {
                    Download APK
                  </a>
                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
-                   Latest
+                   Latest APK
                  </span>
                </div>
                <div className="relative">
@@ -147,7 +147,7 @@ export default function Home() {
                    Download App
                  </a>
                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
-                   Latest
+                   Latest APK
                  </span>
                </div>
                <Link to="/login" className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Login</Link>
@@ -332,7 +332,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="pt-6">
+              <div className="pt-6 relative inline-block">
                 <a 
                   href="/ApnaCollegeBihar_Stable.apk"
                   download="ApnaCollegeBihar_Stable.apk"
@@ -340,6 +340,9 @@ export default function Home() {
                 >
                   <Download size={16} /> Get Native Android App (with Blocker)
                 </a>
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-black uppercase px-2 py-1 rounded-full shadow-md animate-pulse">
+                  Latest APK
+                </span>
               </div>
             </div>
 
