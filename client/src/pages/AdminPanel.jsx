@@ -24,6 +24,7 @@ export default function AdminPanel() {
   const [anns, setAnns] = useState([]);
   const [ads, setAds] = useState([]);
   const [studyResources, setStudyResources] = useState([]);
+  const [resourceForm, setResourceForm] = useState({ title: '', url: '', description: '' });
   const [newAnn, setNewAnn] = useState({ title: '', content: '', type: 'INFO' });
   const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '', useAdSense: false, adSlot: '' });
   const [msg, setMsg] = useState(null);
@@ -137,6 +138,28 @@ export default function AdminPanel() {
     if (!window.confirm('Delete this resource permanently?')) return;
     await deleteDoc(doc(db, 'studyResources', id));
     flash('Study Resource Deleted.');
+  };
+
+  const addResource = async (e) => {
+    e.preventDefault();
+    if (!resourceForm.title || !resourceForm.url) { flash('Title & URL required!', 'err'); return; }
+    setUploading(true);
+    try {
+      await addDoc(collection(db, 'studyResources'), {
+        title: resourceForm.title.toUpperCase(),
+        url: resourceForm.url.trim(),
+        description: resourceForm.description.trim(),
+        verified: true,
+        uploadedBy: user?.email || 'ADMIN',
+        createdAt: serverTimestamp()
+      });
+      setResourceForm({ title: '', url: '', description: '' });
+      flash('Study Resource added & auto-approved! 🚀');
+    } catch (err) {
+      flash('Failed: ' + err.message, 'err');
+    } finally {
+      setUploading(false);
+    }
   };
 
   // ── USER ACTIONS ──
@@ -1025,9 +1048,28 @@ export default function AdminPanel() {
 
       {/* ── STUDY RESOURCES TAB ── */}
       {tab==='resources' && (
-        <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] border border-slate-200/80 overflow-hidden shadow-2xl animate-in fade-in duration-500 p-8">
+        <div className="space-y-8 animate-in fade-in duration-500">
+
+          {/* Admin Add Resource Form */}
+          <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] border border-slate-200/80 shadow-2xl p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-2.5 bg-cyan-600/10 text-cyan-600 rounded-xl"><BookOpen size={18}/></div>
+              <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest">Add Resource (Admin Direct)</h2>
+            </div>
+            <form onSubmit={addResource} className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+              <input value={resourceForm.title} onChange={e=>setResourceForm({...resourceForm, title: e.target.value})} placeholder="Resource Title" className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none border-2 border-transparent focus:border-cyan-500" />
+              <input value={resourceForm.url} onChange={e=>setResourceForm({...resourceForm, url: e.target.value})} placeholder="https://..." className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-blue-400 outline-none border-2 border-transparent focus:border-cyan-500" />
+              <input value={resourceForm.description} onChange={e=>setResourceForm({...resourceForm, description: e.target.value})} placeholder="Short description..." className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none border-2 border-transparent focus:border-cyan-500" />
+              <button type="submit" disabled={uploading} className="w-full py-4 bg-cyan-600 hover:bg-cyan-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-cyan-950/20 transition-all active:scale-95 flex items-center justify-center gap-2">
+                {uploading ? <Loader2 className="animate-spin" size={16}/> : '+ Add Resource'}
+              </button>
+            </form>
+          </div>
+
+          {/* Resource List */}
+          <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] border border-slate-200/80 overflow-hidden shadow-2xl p-8">
            <div className="flex items-center justify-between mb-8">
-              <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest">Shared Study Resources</h2>
+              <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest">All Study Resources ({studyResources.length})</h2>
               <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-4 py-1.5 rounded-full uppercase">
                 Pending: {studyResources.filter(r => !r.verified).length}
               </span>
@@ -1089,6 +1131,7 @@ export default function AdminPanel() {
                 </table>
              </div>
            )}
+        </div>
         </div>
       )}
     </div>
