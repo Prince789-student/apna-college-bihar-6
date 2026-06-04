@@ -229,6 +229,143 @@ for (const kw of timetableKeywords) urls.push(`/beu/timetable/${kw}`);
 for (const kw of cgpaKeywords) urls.push(`/beu/cgpa/${kw}`);
 for (const kw of resultKeywords) urls.push(`/beu/result/${kw}`);
 
+// ── Feature SEO Keywords ────────────────────────────────────────────
+
+// Static Feature Pages
+urls.push('/feature/focus-timer');
+urls.push('/feature/study-groups');
+urls.push('/feature/study-resources');
+urls.push('/feature/calculator');
+urls.push('/feature/personal-manager');
+
+// Focus Timer / Pomodoro / Study Timer Keywords
+const focusTimerKeywords = [
+  'pomodoro-timer-for-students',
+  'study-timer-online',
+  'focus-mode-for-students',
+  '25-minute-study-timer',
+  'engineering-student-study-timer',
+  'study-streak-tracker',
+  'daily-study-goal-tracker',
+  'deep-work-timer-students',
+  'beu-focus-mode',
+  'study-session-tracker',
+  'focus-timer-online-free',
+  'pomodoro-technique-beu-students',
+  'study-hours-tracker-engineering',
+  'concentration-timer-students',
+  'exam-preparation-timer',
+  'beu-study-session-tracker',
+  'engineering-focus-session',
+  'productivity-timer-students',
+];
+
+// App Blocker Keywords
+const appBlockerKeywords = [
+  'app-blocker-for-students',
+  'study-app-blocker-android',
+  'distraction-blocker-students',
+  'block-social-media-studying',
+  'android-app-blocker-engineering',
+  'apna-college-bihar-app',
+  'apna-college-bihar-apk-download',
+  'focus-app-for-bihar-engineering',
+  'block-apps-while-studying',
+  'student-productivity-app-android',
+  'apna-college-bihar-app-download-2025',
+  'free-study-app-engineering-students',
+  'beu-student-app-android',
+];
+
+// Study Groups / Network Keywords
+const studyGroupKeywords = [
+  'online-study-group-engineers',
+  'beu-student-study-group',
+  'engineering-study-network-bihar',
+  'study-discussion-group-bihar',
+  'online-study-partner-beu',
+  'study-community-engineering',
+  'group-study-app-students',
+  'online-study-group-cse-bihar',
+  'study-buddy-engineering-bihar',
+  'beu-student-network-online',
+  'engineering-peer-learning-group',
+  'study-group-chat-engineering',
+];
+
+// Scientific Calculator Keywords
+const calculatorKeywords = [
+  'scientific-calculator-engineering',
+  'matrix-calculator-online',
+  'trigonometry-calculator-engineering',
+  'engineering-mathematics-calculator',
+  'free-scientific-calculator-online',
+  'complex-number-calculator-engineering',
+  'log-antilog-calculator-engineering',
+  'integration-calculator-engineering',
+  'beu-engineering-calculator-online',
+  'statistical-calculator-engineering',
+  'vector-calculator-online-engineering',
+  'physics-formula-calculator-engineering',
+  'fourier-series-calculator',
+  'laplace-transform-calculator',
+];
+
+// Personal Manager / Study Planner Keywords
+const plannerKeywords = [
+  'study-planner-engineering',
+  'semester-study-plan-beu',
+  'engineering-study-schedule',
+  'beu-student-planner',
+  'exam-preparation-planner',
+  'personal-task-manager-students',
+  'study-todo-list-app',
+  'exam-countdown-tracker',
+  'assignment-tracker-engineering',
+  'study-habit-tracker-beu',
+  'engineering-goal-tracker',
+  'semester-goal-planner-beu',
+];
+
+// Study Resources Keywords
+const studyResourceKeywords = [
+  'free-beu-study-material',
+  'engineering-notes-free-download',
+  'beu-youtube-resources',
+  'free-engineering-pdf-notes',
+  'beu-study-links-collection',
+  'bihar-engineering-free-resources',
+  'engineering-study-material-links',
+  'beu-student-resource-hub',
+  'engineering-exam-resources-free',
+];
+
+// UGEAC / College Predictor Keywords
+const ugeacKeywords = [
+  'ugeac-2025-college-predictor',
+  'ugeac-rank-predictor-2025',
+  'ugeac-cutoff-rank-2025',
+  'bihar-engineering-college-predictor',
+  'bcece-college-predictor-2025',
+  'ugeac-seat-allotment-2025',
+  'ugeac-choice-filling-guide-2025',
+  'ugeac-counselling-process-2025',
+  'ugeac-2025-application-form',
+  'ugeac-merit-list-2025',
+  'ugeac-rank-vs-college-2025',
+  'best-engineering-college-bihar-ugeac',
+  'mit-muzaffarpur-cutoff-2025',
+  'bce-bhagalpur-cutoff-2025',
+  'gce-gaya-cutoff-2025',
+];
+
+for (const kw of focusTimerKeywords) urls.push(`/feature/focus-timer/${kw}`);
+for (const kw of appBlockerKeywords) urls.push(`/feature/focus-timer/${kw}`);
+for (const kw of studyGroupKeywords) urls.push(`/feature/study-groups/${kw}`);
+for (const kw of calculatorKeywords) urls.push(`/feature/calculator/${kw}`);
+for (const kw of plannerKeywords) urls.push(`/feature/personal-manager/${kw}`);
+for (const kw of studyResourceKeywords) urls.push(`/feature/study-resources/${kw}`);
+for (const kw of ugeacKeywords) urls.push(`/search/${kw}`);
 
 let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

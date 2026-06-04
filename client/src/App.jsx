@@ -42,6 +42,7 @@ const About = React.lazy(() => import('./pages/About'));
 const Contact = React.lazy(() => import('./pages/Contact'));
 const SearchSEO = React.lazy(() => import('./pages/SearchSEO'));
 const BeuToolSEO = React.lazy(() => import('./pages/BeuToolSEO'));
+const FeatureSEO = React.lazy(() => import('./pages/FeatureSEO'));
 
 function LoadingScreen() {
   return (
@@ -174,6 +175,9 @@ function App() {
             {/* BEU Tool SEO Routes – Attendance, Timetable, CGPA, Result */}
             <Route path="/beu/:tool" element={<BeuToolSEO />} />
             <Route path="/beu/:tool/:keyword" element={<BeuToolSEO />} />
+            {/* Feature SEO Routes – Study Timer, Groups, Calculator, etc. */}
+            <Route path="/feature/:feature" element={<FeatureSEO />} />
+            <Route path="/feature/:feature/:keyword" element={<FeatureSEO />} />
           </Route>
 
           {/* Protected Dashboard Routes */}
