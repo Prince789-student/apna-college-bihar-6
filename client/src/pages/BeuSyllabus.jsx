@@ -528,7 +528,7 @@ export default function BeuSyllabus() {
         };
         subjects.forEach(subject => {
           doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(67, 56, 202);
-          const s = doc.splitTextToSize(subject.name, maxW); checkPageBreak(s.length * 6 + 8); cursorY += 6;
+          const s = doc.splitTextToSize(subject.title, maxW); checkPageBreak(s.length * 6 + 8); cursorY += 6;
           doc.text(s, margin, cursorY); cursorY += s.length * 6 + 2;
           doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
           doc.line(margin, cursorY - 3, pageWidth - margin, cursorY - 3); cursorY += 4;
