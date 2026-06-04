@@ -335,7 +335,7 @@ function parseSyllabusIntoSubjects(rawText) {
 }
 
 // ─── Single Topic Row Component ───────────────────────────────────────────────
-function TopicRow({ topic, doneKey, subjectName }) {
+function TopicRow({ topic, doneKey, subjectName, onToggle }) {
   const [done, setDone] = React.useState(() => {
     try { return JSON.parse(localStorage.getItem(doneKey) || 'false'); } catch { return false; }
   });
@@ -344,6 +344,7 @@ function TopicRow({ topic, doneKey, subjectName }) {
     const next = !done;
     setDone(next);
     localStorage.setItem(doneKey, JSON.stringify(next));
+    if (onToggle) onToggle();
   };
 
   if (topic.isHeading) {
@@ -395,7 +396,7 @@ function TopicRow({ topic, doneKey, subjectName }) {
 }
 
 // ─── Unit Accordion Component ──────────────────────────────────────────────────
-function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey }) {
+function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, onToggle }) {
   const [open, setOpen] = React.useState(unitIndex === 0);
 
   const topicKeys = unit.topics.map((t, ti) =>
@@ -443,6 +444,7 @@ function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey }) {
               topic={topic}
               doneKey={topicKeys[ti]}
               subjectName={subjectName}
+              onToggle={onToggle}
             />
           ))}
         </div>
@@ -458,6 +460,7 @@ export default function BeuSyllabus() {
   const [isDownloading, setIsDownloading] = useState(false);
   const [selectedSem, setSelectedSem] = useState('sem1');
   const [selectedBranch, setSelectedBranch] = useState('cse');
+  const [progressTicker, setProgressTicker] = useState(0);
 
   useEffect(() => {
     fetch('/data/syllabus.json?v=' + new Date().getTime())
@@ -722,6 +725,7 @@ export default function BeuSyllabus() {
                           unitIndex={ui}
                           subjectName={subject.title}
                           semBranchKey={`${semBranchKey}_s${si}`}
+                          onToggle={() => setProgressTicker(p => p + 1)}
                         />
                       ))}
                     </div>
