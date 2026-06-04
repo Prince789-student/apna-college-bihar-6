@@ -194,7 +194,18 @@ export default function AdminPanel() {
   };
 
   const deleteDocItem = async (id) => {
-    if(!window.confirm('Permanent delete?')) return;
+    const docToDelete = docs.find(d => d.id === id);
+    if (docToDelete?.type === 'folder') {
+      const children = docs.filter(d => d.parentId === id);
+      if (children.length > 0) {
+        alert(`Cannot delete folder! It contains ${children.length} file(s). Delete or move the files inside first.`);
+        return;
+      }
+      if(!window.confirm(`Delete empty folder '${docToDelete.title}' permanently?`)) return;
+    } else {
+      if(!window.confirm('Permanent delete this file?')) return;
+    }
+    
     await deleteDoc(doc(db, 'documents', id));
     flash('Document Deleted');
   };
