@@ -526,32 +526,33 @@ export default function BeuSyllabus() {
             addPageDecoration(pageCount);
           }
         };
-        const lines = cleanSyllabusText(currentSyllabus.content).split('\n');
-        for (let line of lines) {
-          line = line.trim(); if (!line) { cursorY += 3; continue; }
-          if (line.startsWith('## ')) {
-            const t = line.replace(/^#+\s*📘?\s*/, '').trim();
-            doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(67, 56, 202);
-            const s = doc.splitTextToSize(t, maxW); checkPageBreak(s.length * 6 + 8); cursorY += 6;
-            doc.text(s, margin, cursorY); cursorY += s.length * 6 + 2;
-            doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
-            doc.line(margin, cursorY - 3, pageWidth - margin, cursorY - 3); cursorY += 4;
-          } else if (line.startsWith('### ')) {
-            const t = line.replace(/^#+\s*📌?\s*/, '').trim();
+        subjects.forEach(subject => {
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(67, 56, 202);
+          const s = doc.splitTextToSize(subject.name, maxW); checkPageBreak(s.length * 6 + 8); cursorY += 6;
+          doc.text(s, margin, cursorY); cursorY += s.length * 6 + 2;
+          doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
+          doc.line(margin, cursorY - 3, pageWidth - margin, cursorY - 3); cursorY += 4;
+          
+          subject.units.forEach((unit, ui) => {
             doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(79, 70, 229);
-            const s = doc.splitTextToSize(t, maxW); checkPageBreak(s.length * 5 + 6); cursorY += 4;
-            doc.text(s, margin, cursorY); cursorY += s.length * 5 + 2;
-          } else if (line.startsWith('- ') || line.startsWith('* ')) {
-            const t = line.substring(2).trim();
-            doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
-            const s = doc.splitTextToSize(t, maxW - 6); checkPageBreak(s.length * 5 + 4);
-            doc.text('•', margin + 2, cursorY); doc.text(s, margin + 6, cursorY); cursorY += s.length * 5 + 1;
-          } else {
-            doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
-            const s = doc.splitTextToSize(line, maxW); checkPageBreak(s.length * 5 + 4);
-            doc.text(s, margin, cursorY); cursorY += s.length * 5 + 1;
-          }
-        }
+            const ut = doc.splitTextToSize(`Unit ${ui + 1}: ${unit.title}`, maxW); checkPageBreak(ut.length * 5 + 6); cursorY += 4;
+            doc.text(ut, margin, cursorY); cursorY += ut.length * 5 + 2;
+            
+            unit.topics.forEach(topic => {
+              if (topic.isHeading) {
+                doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(51, 65, 85);
+                const ht = doc.splitTextToSize(topic.text, maxW); checkPageBreak(ht.length * 5 + 4); cursorY += 2;
+                doc.text(ht, margin, cursorY); cursorY += ht.length * 5 + 1;
+              } else {
+                doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
+                const tt = doc.splitTextToSize(topic.text, maxW - 6); checkPageBreak(tt.length * 5 + 4);
+                doc.text('•', margin + 2, cursorY); doc.text(tt, margin + 6, cursorY); cursorY += tt.length * 5 + 1;
+              }
+            });
+            cursorY += 4;
+          });
+          cursorY += 6;
+        });
         doc.save(`ACB_${selectedBranch.toUpperCase()}_${selectedSem.toUpperCase()}_Syllabus.pdf`);
         setIsDownloading(false);
       };
