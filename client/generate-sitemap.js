@@ -83,6 +83,7 @@ const urls = [];
 // Static Pages
 urls.push('/');
 urls.push('/hub');
+urls.push('/hackathons');
 urls.push('/dashboard/ugeac-predictor');
 urls.push('/dashboard/notes');
 urls.push('/dashboard/pyq');

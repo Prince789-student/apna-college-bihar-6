@@ -22,6 +22,10 @@ if (process.env.MONGO_URI) {
 const startDailyCron = require('./cron/dailyNotifier');
 startDailyCron();
 
+// Start daily cron job to fetch hackathons
+const { startHackathonCron } = require('./cron/hackathonFetcher');
+startHackathonCron();
+
 // 1. ABSOLUTE PRIORITY: APK DOWNLOAD ROUTE
 // This must be BEFORE any other middleware to avoid SPA interception
 app.get('/api/download-apk', (req, res) => {

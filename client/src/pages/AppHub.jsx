@@ -57,6 +57,12 @@ export default function AppHub() {
       ]
     },
     {
+      title: "💼 CAREER OPTIONS",
+      items: [
+        { name: 'Hackathon Hub', icon: <Award size={24} />, path: '/hackathons', color: 'text-purple-400' },
+      ]
+    },
+    {
       title: "🌐 IMPORTANT WEBSITES",
       items: [
         { name: 'AICTE Internship', icon: <Briefcase size={24} />, path: 'https://internship.aicte-india.org/', external: true, color: 'text-slate-300' },
