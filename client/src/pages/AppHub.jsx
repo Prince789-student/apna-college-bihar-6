@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { 
   Send, BookOpen, GraduationCap, Timer, 
   Users, Calculator, Globe, UserCheck, 
-  Calendar, LogIn, LogOut, MessageCircle, Youtube, User, Trash2, ShieldCheck, Smartphone, ExternalLink, Briefcase, Award, GraduationCap as Cap2, Landmark, FileText, Library
+  Calendar, LogIn, LogOut, MessageCircle, Youtube, User, Trash2, ShieldCheck, Smartphone, ExternalLink, Briefcase, Award, GraduationCap as Cap2, Landmark, FileText, Library, Link2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -45,6 +45,7 @@ export default function AppHub() {
         { name: 'Study Timer', icon: <Timer size={24} />, path: '/dashboard/study?standalone=true', color: 'text-rose-400' },
         { name: 'Study Network', icon: <Users size={24} />, path: '/dashboard/groups?standalone=true', color: 'text-orange-400' },
         { name: 'Scientific Calc', icon: <Calculator size={24} />, path: '/dashboard/calculator?standalone=true', color: 'text-emerald-400' },
+        { name: 'Study Resource', icon: <Link2 size={24} />, path: '/dashboard/study-resources?standalone=true', color: 'text-cyan-400' },
       ]
     },
     {

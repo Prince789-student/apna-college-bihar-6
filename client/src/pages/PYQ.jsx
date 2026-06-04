@@ -2,12 +2,10 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   FileDigit, Search, Download, Eye,
   FolderOpen, ArrowRight, ArrowLeft,
-  ShieldCheck, Bookmark, FolderPlus, ChevronRight
+  ShieldCheck, Bookmark, ChevronRight
 } from 'lucide-react';
-import { db, storage } from '../firebase';
-import { collection, onSnapshot, addDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { useAuth } from '../context/AuthContext';
+import { db } from '../firebase';
+import { collection, onSnapshot } from 'firebase/firestore';
 import PremiumAds from '../components/PremiumAds';
 
 const BRANCHES = [
@@ -52,7 +50,6 @@ const BRANCH_COLORS = {
 };
 
 export default function PYQ() {
-  const { user } = useAuth();
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -61,10 +58,6 @@ export default function PYQ() {
   const [sem, setSem] = useState(null);
   const [folder, setFolder] = useState(null);
   const [navHistory, setNavHistory] = useState([]);
-
-  const [showUpload, setShowUpload] = useState(false);
-  const [uploadData, setUploadData] = useState({ title: '', subject: '', category: 'PYQ', semester: '1', file: null, externalUrl: '' });
-  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'documents'), (snap) => {
@@ -130,39 +123,6 @@ export default function PYQ() {
 
   const step = !branch ? 'branch' : !sem ? 'sem' : !folder ? 'subject' : 'files';
   const branchColor = branch ? BRANCH_COLORS[branch.color] : BRANCH_COLORS.amber;
-
-  const handleUpload = async (e) => {
-    e.preventDefault();
-    if (!uploadData.title) { alert('Title daalo!'); return; }
-    setUploading(true);
-    try {
-      let finalUrl = uploadData.externalUrl;
-      if (uploadData.file) {
-        if (uploadData.file.size > 10 * 1024 * 1024) { alert('10MB se badi file nahi chalegi!'); setUploading(false); return; }
-        const storageRef = ref(storage, `pyq/${Date.now()}_${uploadData.file.name.replace(/\s+/g, '_')}`);
-        const snapshot = await uploadBytes(storageRef, uploadData.file);
-        finalUrl = await getDownloadURL(snapshot.ref);
-      }
-      if (!finalUrl && uploadData.category !== 'FOLDER') { alert('File ya Drive link daalo!'); setUploading(false); return; }
-      await addDoc(collection(db, 'documents'), {
-        title: uploadData.title,
-        subject: uploadData.subject.toUpperCase() || 'GENERAL',
-        category: 'PYQ',
-        semester: sem ? String(sem) : uploadData.semester,
-        branch: branch?.id || '',
-        fileUrl: finalUrl || '',
-        parentId: folder?.id || 'root',
-        type: 'file',
-        createdAt: new Date().toISOString(),
-        verified: false,
-        uploadedBy: user?.email || 'Guest'
-      });
-      setShowUpload(false);
-      setUploadData({ title: '', subject: '', category: 'PYQ', semester: '1', file: null, externalUrl: '' });
-      alert('Uploaded! Admin verify karega.');
-    } catch(err) { alert('Error: ' + err.message); }
-    finally { setUploading(false); }
-  };
 
   return (
     <div className="max-w-5xl mx-auto px-4 pb-24 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -334,10 +294,6 @@ export default function PYQ() {
           <div className="flex items-center gap-3 mb-4">
             <button onClick={goBack} className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition-all"><ArrowLeft size={16} className="text-slate-600" /></button>
             <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{folder.title} — Previous Year Papers</p>
-            <button onClick={() => setShowUpload(true)}
-              className="ml-auto px-4 py-2 bg-amber-500 hover:bg-amber-400 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2">
-              <FolderPlus size={12} /> Upload PYQ
-            </button>
           </div>
           {loading ? (
             <div className="py-16 text-center"><p className="text-slate-400 font-black uppercase tracking-widest animate-pulse text-sm">Loading papers...</p></div>
@@ -381,38 +337,7 @@ export default function PYQ() {
         </div>
       </div>
 
-      {/* Upload Modal */}
-      {showUpload && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
-          <div className="bg-white w-full max-w-md rounded-[2.5rem] border border-slate-200 p-8 space-y-6 animate-in zoom-in-95 duration-300">
-            <h2 className="text-xl font-[1000] text-slate-900 uppercase tracking-tighter">Upload PYQ Paper</h2>
-            <form onSubmit={handleUpload} className="space-y-4">
-              <div className="space-y-1">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Title (e.g. OS 2023 End Sem)</p>
-                <input type="text" required value={uploadData.title} onChange={e => setUploadData({...uploadData, title: e.target.value})} placeholder="e.g. OS 2023 End Sem" className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 text-slate-900 text-sm outline-none focus:border-amber-500" />
-              </div>
-              <div className="space-y-1">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Google Drive Link</p>
-                <input type="url" value={uploadData.externalUrl} onChange={e => setUploadData({...uploadData, externalUrl: e.target.value})} placeholder="https://drive.google.com/..." className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 text-slate-900 text-sm outline-none focus:border-amber-500" />
-              </div>
-              <div className="relative py-1 flex items-center justify-center">
-                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-200"></div></div>
-                <span className="relative bg-white px-4 text-[9px] font-black text-slate-500 uppercase">OR</span>
-              </div>
-              <div className="space-y-1">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Direct File (PDF)</p>
-                <input type="file" accept="application/pdf" onChange={e => setUploadData({...uploadData, file: e.target.files[0]})} className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 text-slate-500 text-xs outline-none" />
-              </div>
-              <div className="flex gap-3 pt-2">
-                <button type="button" onClick={() => setShowUpload(false)} className="flex-1 py-4 bg-slate-100 text-slate-700 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all">Cancel</button>
-                <button type="submit" disabled={uploading} className="flex-1 py-4 bg-amber-500 hover:bg-amber-400 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg transition-all">
-                  {uploading ? 'Uploading...' : 'Upload PYQ'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+
     </div>
   );
 }

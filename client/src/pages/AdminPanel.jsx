@@ -23,6 +23,7 @@ export default function AdminPanel() {
   const [docs, setDocs] = useState([]);
   const [anns, setAnns] = useState([]);
   const [ads, setAds] = useState([]);
+  const [studyResources, setStudyResources] = useState([]);
   const [newAnn, setNewAnn] = useState({ title: '', content: '', type: 'INFO' });
   const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '', useAdSense: false, adSlot: '' });
   const [msg, setMsg] = useState(null);
@@ -112,6 +113,10 @@ export default function AdminPanel() {
       setAds(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     });
 
+    const unsubResources = onSnapshot(collection(db, 'studyResources'), (snap) => {
+      setStudyResources(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    });
+
     setLoading(false);
     return () => { 
       if(unsubUsers) unsubUsers(); 
@@ -119,8 +124,20 @@ export default function AdminPanel() {
       if(unsubDocs) unsubDocs(); 
       if(unsubAnns) unsubAnns(); 
       if(unsubAds) unsubAds();
+      if(unsubResources) unsubResources();
     };
   }, [isAdmin, authLoading]);
+
+  const approveResource = async (id) => {
+    await updateDoc(doc(db, 'studyResources', id), { verified: true });
+    flash('Study Resource Approved! ✅');
+  };
+
+  const deleteResource = async (id) => {
+    if (!window.confirm('Delete this resource permanently?')) return;
+    await deleteDoc(doc(db, 'studyResources', id));
+    flash('Study Resource Deleted.');
+  };
 
   // ── USER ACTIONS ──
   const toggleBan = async (uid, banned) => {
@@ -396,7 +413,7 @@ export default function AdminPanel() {
           </div>
         </div>
         <div className="flex flex-wrap bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 overflow-x-auto">
-           {['overview', 'users', 'groups', 'notes', 'broadcasts', 'ads'].map(t => (
+           {['overview', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources'].map(t => (
              <button key={t} onClick={()=>setTab(t)}
                className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${tab===t?'bg-indigo-600 text-slate-900 shadow-xl shadow-indigo-900/20':'text-slate-500 hover:text-slate-700'}`}>
                {t}
@@ -1003,6 +1020,75 @@ export default function AdminPanel() {
                 ))}
               </div>
            </div>
+        </div>
+      )}
+
+      {/* ── STUDY RESOURCES TAB ── */}
+      {tab==='resources' && (
+        <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] border border-slate-200/80 overflow-hidden shadow-2xl animate-in fade-in duration-500 p-8">
+           <div className="flex items-center justify-between mb-8">
+              <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest">Shared Study Resources</h2>
+              <span className="text-[10px] font-black bg-slate-100 text-slate-500 px-4 py-1.5 rounded-full uppercase">
+                Pending: {studyResources.filter(r => !r.verified).length}
+              </span>
+           </div>
+           
+           {studyResources.length === 0 ? (
+             <div className="py-20 text-center text-slate-400 font-bold uppercase tracking-widest text-xs">
+               No Shared Study Resources Yet
+             </div>
+           ) : (
+             <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="bg-slate-100/40 text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 border-b border-slate-200/50">
+                      <th className="py-5 px-8">Resource Details</th>
+                      <th className="py-5 px-8">About / Description</th>
+                      <th className="py-5 px-8">Target Link</th>
+                      <th className="py-5 px-8">Shared By</th>
+                      <th className="py-5 px-8">Status</th>
+                      <th className="py-5 px-8 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/30">
+                    {studyResources.map(r => (
+                      <tr key={r.id} className="text-xs font-bold text-slate-700 hover:bg-slate-50/50 transition-colors">
+                        <td className="py-5 px-8">
+                          <span className="text-[13px] font-[900] text-slate-900 uppercase tracking-tight block">{r.title || 'Untitled'}</span>
+                          <span className="text-[8px] text-slate-400 font-black uppercase tracking-widest mt-1 block">ID: {r.id}</span>
+                        </td>
+                        <td className="py-5 px-8 max-w-xs whitespace-pre-wrap leading-relaxed text-slate-500 font-medium">
+                          {r.description || 'No description provided.'}
+                        </td>
+                        <td className="py-5 px-8">
+                          <a href={r.url} target="_blank" rel="noreferrer" className="text-blue-500 hover:underline truncate block max-w-[200px]">
+                            {r.url}
+                          </a>
+                        </td>
+                        <td className="py-5 px-8 font-mono text-[10px] text-slate-600">
+                          {r.uploadedBy || 'Anonymous'}
+                        </td>
+                        <td className="py-5 px-8">
+                          <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider ${r.verified ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-amber-50 text-amber-600 border border-amber-100'}`}>
+                            {r.verified ? 'APPROVED' : 'PENDING'}
+                          </span>
+                        </td>
+                        <td className="py-5 px-8 text-right space-x-2 whitespace-nowrap">
+                          {!r.verified && (
+                            <button onClick={()=>approveResource(r.id)} className="px-3.5 py-1.5 bg-emerald-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest hover:bg-emerald-500 transition-all active:scale-95">
+                              Approve
+                            </button>
+                          )}
+                          <button onClick={()=>deleteResource(r.id)} className="p-2 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all active:scale-95 inline-flex items-center justify-center">
+                            <Trash2 size={13}/>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+             </div>
+           )}
         </div>
       )}
     </div>

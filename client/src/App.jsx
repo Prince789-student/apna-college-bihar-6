@@ -24,6 +24,7 @@ const PYQ = React.lazy(() => import('./pages/PYQ'));
 const BeuSyllabus = React.lazy(() => import('./pages/BeuSyllabus'));
 const BeuCgpa = React.lazy(() => import('./pages/BeuCgpa'));
 const StudyDashboard = React.lazy(() => import('./pages/StudyDashboard'));
+const StudyResources = React.lazy(() => import('./pages/StudyResources'));
 const ScientificCalc = React.lazy(() => import('./pages/ScientificCalc'));
 const AdminPanel = React.lazy(() => import('./pages/AdminPanel'));
 const Achievements = React.lazy(() => import('./pages/Achievements'));
@@ -168,6 +169,7 @@ function App() {
               <Route path="/dashboard/pyq" element={<PYQ />} />
               <Route path="/dashboard/cgpa" element={<BeuCgpa />} />
               <Route path="/dashboard/study" element={<StudyDashboard />} />
+              <Route path="/dashboard/study-resources" element={<StudyResources />} />
               <Route path="/dashboard/calculator" element={<ScientificCalc />} />
               <Route path="/dashboard/achievements" element={<Achievements />} />
               <Route path="/dashboard/groups" element={<Group />} />

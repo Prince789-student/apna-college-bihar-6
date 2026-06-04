@@ -4,7 +4,7 @@ import {
   BookOpen, Calculator, Timer, Users, 
   ArrowRight, CheckCircle, GraduationCap, 
   Globe, Shield, Zap, Flame, Send, Youtube,
-  User, LogOut, ChevronDown, LayoutDashboard, Bell, Download, MessageCircle, ShieldCheck, Calendar, Sparkles, UserCheck, Briefcase, Award, Landmark, FileText, Library, ExternalLink
+  User, LogOut, ChevronDown, LayoutDashboard, Bell, Download, MessageCircle, ShieldCheck, Calendar, Sparkles, UserCheck, Briefcase, Award, Landmark, FileText, Library, ExternalLink, Link2
 } from 'lucide-react';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -290,6 +290,7 @@ export default function Home() {
                 { title: "Study Timer", ic: <Timer className="text-rose-500"/>, d: "Pomodoro technique and focus tracking.", link: "/dashboard/study?standalone=true" },
                 { title: "Study Network", ic: <Users className="text-orange-500"/>, d: "Join student groups to discuss study material.", link: "/dashboard/groups?standalone=true" },
                 { title: "Scientific Calc", ic: <Calculator className="text-emerald-500"/>, d: "Advanced calculator for professional engineering.", link: "/dashboard/calculator?standalone=true" },
+                { title: "Study Resource", ic: <Link2 className="text-cyan-500"/>, d: "Share helpful links and descriptions with scholars.", link: "/dashboard/study-resources?standalone=true" },
               ]
             },
             {
