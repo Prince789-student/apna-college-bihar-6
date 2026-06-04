@@ -260,8 +260,26 @@ function parseSyllabusIntoSubjects(rawText) {
           continue;
         }
 
+        if (/^\d+\s*\\?\.\s*(.+?)/.test(trimmed)) {
+          const text = trimmed.replace(/^\d+\s*\\?\.\s*/, '').replace(/\*\*/g, '').trim();
+          if (text.length > 3) {
+            currentUnit.topics.push({ text, isHeading: false });
+          }
+          continue;
+        }
+
+        if (trimmed.includes('References & Textbooks')) {
+          currentUnit.topics.push({ text: 'References & Textbooks', isHeading: true });
+          continue;
+        }
+
         if (trimmed.length > 10 && !/^\d+\s+\d+\s+\d+/.test(trimmed)) {
-          currentUnit.topics.push({ text: trimmed.replace(/\*\*/g, '').trim(), isHeading: false });
+          const text = trimmed.replace(/\*\*/g, '').trim();
+          if (currentUnit.topics.length > 0 && !currentUnit.topics[currentUnit.topics.length - 1].isHeading) {
+            currentUnit.topics[currentUnit.topics.length - 1].text += ' ' + text;
+          } else {
+            currentUnit.topics.push({ text, isHeading: false });
+          }
         }
       }
     }
@@ -294,8 +312,17 @@ function parseSyllabusIntoSubjects(rawText) {
           }
           continue;
         }
+        if (tr.includes('References & Textbooks')) {
+          defaultUnit.topics.push({ text: 'References & Textbooks', isHeading: true });
+          continue;
+        }
         if (tr.length > 15 && !/^\d+\s+\d+\s+\d+/.test(tr)) {
-          defaultUnit.topics.push({ text: tr.replace(/\*\*/g, '').trim(), isHeading: false });
+          const text = tr.replace(/\*\*/g, '').trim();
+          if (defaultUnit.topics.length > 0 && !defaultUnit.topics[defaultUnit.topics.length - 1].isHeading) {
+            defaultUnit.topics[defaultUnit.topics.length - 1].text += ' ' + text;
+          } else {
+            defaultUnit.topics.push({ text, isHeading: false });
+          }
         }
       }
       if (defaultUnit.topics.length > 0) {
@@ -528,25 +555,36 @@ export default function BeuSyllabus() {
         };
         subjects.forEach(subject => {
           doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(67, 56, 202);
-          const s = doc.splitTextToSize(subject.title, maxW); checkPageBreak(s.length * 6 + 8); cursorY += 6;
-          doc.text(s, margin, cursorY); cursorY += s.length * 6 + 2;
+          const s = doc.splitTextToSize(subject.title, maxW); 
+          checkPageBreak(s.length * 6 + 25); cursorY += 6;
+          s.forEach(line => { doc.text(line, margin, cursorY); cursorY += 6; });
           doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
           doc.line(margin, cursorY - 3, pageWidth - margin, cursorY - 3); cursorY += 4;
           
           subject.units.forEach((unit, ui) => {
             doc.setFont('helvetica', 'bold'); doc.setFontSize(11); doc.setTextColor(79, 70, 229);
-            const ut = doc.splitTextToSize(`Unit ${ui + 1}: ${unit.title}`, maxW); checkPageBreak(ut.length * 5 + 6); cursorY += 4;
-            doc.text(ut, margin, cursorY); cursorY += ut.length * 5 + 2;
+            const ut = doc.splitTextToSize(`Unit ${ui + 1}: ${unit.title}`, maxW); 
+            checkPageBreak(ut.length * 5 + 15); cursorY += 4;
+            ut.forEach(line => { doc.text(line, margin, cursorY); cursorY += 5; });
+            cursorY += 1;
             
             unit.topics.forEach(topic => {
               if (topic.isHeading) {
                 doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(51, 65, 85);
-                const ht = doc.splitTextToSize(topic.text, maxW); checkPageBreak(ht.length * 5 + 4); cursorY += 2;
-                doc.text(ht, margin, cursorY); cursorY += ht.length * 5 + 1;
+                const ht = doc.splitTextToSize(topic.text, maxW); 
+                cursorY += 2;
+                ht.forEach(line => { checkPageBreak(6); doc.text(line, margin, cursorY); cursorY += 5; });
+                cursorY += 1;
               } else {
                 doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
-                const tt = doc.splitTextToSize(topic.text, maxW - 6); checkPageBreak(tt.length * 5 + 4);
-                doc.text('•', margin + 2, cursorY); doc.text(tt, margin + 6, cursorY); cursorY += tt.length * 5 + 1;
+                const tt = doc.splitTextToSize(topic.text, maxW - 6); 
+                tt.forEach((line, lineIdx) => { 
+                  checkPageBreak(6); 
+                  if (lineIdx === 0) doc.text('•', margin + 2, cursorY); 
+                  doc.text(line, margin + 6, cursorY); 
+                  cursorY += 5; 
+                });
+                cursorY += 1;
               }
             });
             cursorY += 4;
