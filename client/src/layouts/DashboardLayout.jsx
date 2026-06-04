@@ -86,6 +86,27 @@ export default function DashboardLayout() {
     );
   };
 
+  const getPageTitle = (pathname) => {
+    if (pathname.includes('/study-resources')) return 'Study Resources';
+    if (pathname.includes('/study')) return 'Study Zone';
+    if (pathname.includes('/notes')) return 'B.Tech Notes';
+    if (pathname.includes('/pyq')) return 'PYQ Papers';
+    if (pathname.includes('/syllabus')) return 'BEU Syllabus';
+    if (pathname.includes('/cgpa')) return 'CGPA Calculator';
+    if (pathname.includes('/ugeac-predictor')) return 'UGEAC Predictor';
+    if (pathname.includes('/calculator')) return 'Calculator';
+    if (pathname.includes('/achievements')) return 'Achievements';
+    if (pathname.includes('/groups')) return 'Study Groups';
+    if (pathname.includes('/timetable')) return 'Timetable';
+    if (pathname.includes('/attendance')) return 'Attendance Tracker';
+    if (pathname.includes('/extras')) return 'Personal Manager';
+    if (pathname.includes('/calendar')) return 'Calendar';
+    if (pathname.includes('/beu-result')) return 'BEU Result';
+    if (pathname.includes('/admin')) return 'Admin Panel';
+    return 'ACB Hub';
+  };
+  const pageTitle = getPageTitle(location.pathname);
+
   return (
     <div className="flex flex-col h-screen bg-white overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30">
       {/* Universal Clean Header for All Platforms & Devices */}
@@ -109,7 +130,7 @@ export default function DashboardLayout() {
          </button>
          <div className="flex items-center gap-3">
             <img src="/logo-acb.png?v=99" alt="Logo" className="w-8 h-8 rounded-lg object-cover shadow-sm" />
-            <span className="text-[10px] font-[1000] tracking-tighter uppercase text-slate-900">ACB Hub</span>
+            <span className="text-[10px] font-[1000] tracking-tighter uppercase text-slate-900">{pageTitle}</span>
          </div>
       </div>
 
