@@ -48,12 +48,6 @@ function cleanSyllabusText(rawText) {
 
     if (line.startsWith('####')) {
       const cleaned = line.replace(/^#+\s*/, '').trim();
-      if (/\d{4}|ISBN|Pearson|McGraw|Wiley|Oxford|Laxmi|Narosa|PHI|edition/i.test(cleaned) ||
-          /^\d+[\.\)]/.test(cleaned)) {
-        insideReferences = true;
-        result.push(`- ${cleaned}`);
-        continue;
-      }
       if (insideReferences) {
         result.push(`- ${cleaned}`);
       } else {
@@ -82,16 +76,6 @@ function cleanSyllabusText(rawText) {
       continue;
     }
 
-    line = line.replace(/  +/g, ' ');
-    line = line.replace(/\b([A-Z])\s([a-z]{3,})\b/g, '$1$2');
-    line = line.replace(/([A-Z]\.[A-Z])\s\.\s/g, '$1. ');
-    line = line.replace(/\b([a-z]{3,})\s([a-z]{2,4})\b/g, (m, a, b) => {
-      if (b.length <= 2) return a + b;
-      if (a.length + b.length <= 9 && /[aeiou]$/.test(a) && /^[bcdfghjklmnpqrstvwxyz]/.test(b)) return a + b;
-      return m;
-    });
-    line = line.replace(/\b([a-z]{3,})(i|ti|di|si|ri|li|ni|mi)\s+(on|ons|ing|ed|er|al|ation)\b/g, '$1$2$3');
-
     result.push(line);
   }
 
@@ -102,72 +86,225 @@ function cleanSyllabusText(rawText) {
 function parseSyllabusIntoSubjects(rawText) {
   if (!rawText) return [];
   const cleaned = cleanSyllabusText(rawText);
-  const lines = cleaned.split('\n');
+  
+  // First, split into raw subjects
+  const subjectBlocks = cleaned.split(/\n(?=##\s+)/);
   const subjects = [];
-  let currentSubject = null;
-  let currentUnit = null;
 
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) continue;
+  for (const block of subjectBlocks) {
+    const lines = block.split('\n');
+    let subject = null;
+    let currentUnit = null;
 
-    // Check for Subject header starting with ##
-    if (/^##\s*📘?/.test(trimmed)) {
-      const title = trimmed.replace(/^#+\s*📘?\s*/, '').trim();
-      currentSubject = { title, courseCode: '', units: [] };
-      currentUnit = null;
-      subjects.push(currentSubject);
-      continue;
-    }
-
-    // Check for Course Code line
-    if (/^\*\*Course Code:\*\*/i.test(trimmed)) {
-      if (currentSubject) {
-        currentSubject.courseCode = trimmed.replace(/^\*\*Course Code:\*\*\s*/i, '').trim();
+    // First pass of the block: find out if it contains any explicit unit headers
+    let hasExplicitUnits = false;
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (/^#{3,4}\s*📌?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
+          /^UNIT\s+\d/i.test(trimmed) || 
+          /^Module\s+\d/i.test(trimmed) || 
+          /^#{3,4}\s*Module\s+\d/i.test(trimmed)) {
+        hasExplicitUnits = true;
+        break;
       }
-      continue;
     }
 
-    // Check for Unit header
-    const isUnitHeader = /^#{2,3}\s*📌?\s*Unit[-–\s]*\d/i.test(trimmed) || /^UNIT\s+\d/i.test(trimmed);
-    if (isUnitHeader) {
-      const title = trimmed.replace(/^#+\s*📌?\s*/, '').replace(/^UNIT\s+/i, 'Unit ').trim();
-      currentUnit = { title, topics: [] };
-      if (currentSubject) {
-        currentSubject.units.push(currentUnit);
-      }
-      continue;
-    }
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const trimmed = line.trim();
+      if (!trimmed) continue;
 
-    // Check for Topic inside the current unit
-    if (currentUnit) {
-      // Check if it's a sub-heading inside unit
-      if (/^####/.test(trimmed)) {
-        const text = trimmed.replace(/^#+\s*/, '').trim();
-        currentUnit.topics.push({ text, isHeading: true });
+      // Subject title
+      if (/^##\s+/.test(trimmed)) {
+        let title = trimmed.replace(/^##\s*/, '');
+        title = title.replace(/^📘\s*/, '').replace(/"/g, '').trim();
+        subject = { title, courseCode: '', units: [] };
+        subjects.push(subject);
         continue;
       }
 
-      // Check if it's a bullet point topic
-      if (/^[-*•]\s+/.test(trimmed)) {
-        const text = trimmed.replace(/^[-*•]\s+/, '').replace(/\*\*/g, '').trim();
-        if (text.length > 3) {
-          currentUnit.topics.push({ text, isHeading: false });
+      if (!subject) continue;
+
+      // Course Code
+      if (/^\*\*Course Code:\*\*/i.test(trimmed)) {
+        subject.courseCode = trimmed.replace(/^\*\*Course Code:\*\*\s*/i, '').trim();
+        continue;
+      }
+      if (/^Course Code\s*:/i.test(trimmed)) {
+        subject.courseCode = trimmed.replace(/^Course Code\s*:\s*/i, '').trim();
+        continue;
+      }
+
+      // Check for Unit header
+      const isExplicitUnit = /^#{3,4}\s*📌?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
+                             /^UNIT\s+\d/i.test(trimmed) || 
+                             /^Module\s+\d/i.test(trimmed) || 
+                             /^#{3,4}\s*Module\s+\d/i.test(trimmed);
+
+      const isNumberedUnit = !hasExplicitUnits && 
+                             /^\d+\s*\\?\.\s*\*\*(.+?)\*\*/.test(trimmed) && 
+                             !/course/i.test(trimmed) && 
+                             !/credit/i.test(trimmed) &&
+                             !/l\s*t\s*p/i.test(trimmed);
+
+      const isH4NumberedUnit = !hasExplicitUnits && /^####\s*\d+\\?\.\s*(.+?)/.test(trimmed);
+
+      if (isExplicitUnit || isNumberedUnit || isH4NumberedUnit) {
+        let title = '';
+        let remainingText = '';
+
+        if (isExplicitUnit) {
+          title = trimmed.replace(/^#+\s*📌?\s*/, '').replace(/^UNIT\s+/i, 'Unit ').trim();
+        } else if (isNumberedUnit) {
+          const match = trimmed.match(/^\d+\s*\\?\.\s*\*\*(.+?)\*\*/);
+          const num = match[0].match(/\d+/)[0];
+          title = `Unit ${num}: ${match[1].replace(/\*\*/g, '').trim()}`;
+          remainingText = trimmed.replace(/^\d+\s*\\?\.\s*\*\*(.+?)\*\*\s*[:.-]?\s*/, '').trim();
+        } else if (isH4NumberedUnit) {
+          title = trimmed.replace(/^####\s*/, '').trim();
+        }
+
+        // SMART NEXT-LINE TITLE GRABBER & SUBHEADING COLLATOR:
+        const titleCleaned = title
+          .replace(/Unit[-–\s_—]*\d*/i, '')
+          .replace(/Module[-–\s_—]*\d*/i, '')
+          .replace(/\d+\s*(?:hrs?|hours?)/i, '')
+          .replace(/[^a-zA-Z]/g, '')
+          .trim();
+        const hasDescriptiveText = titleCleaned.length >= 3;
+
+        if (!hasDescriptiveText) {
+          // Strategy A: Next non-empty line title grabber
+          let lookAheadIdx = i + 1;
+          while (lookAheadIdx < lines.length && !lines[lookAheadIdx].trim()) {
+            lookAheadIdx++;
+          }
+          
+          let foundTitle = false;
+          if (lookAheadIdx < lines.length) {
+            const nextLine = lines[lookAheadIdx].trim();
+            const isNotHeader = !nextLine.startsWith('#');
+            const isNotListItem = !/^[-*•]\s+/.test(nextLine) && !/^\d+\s*\\?\.\s*/.test(nextLine);
+            const hasLetters = /[a-zA-Z]{3,}/.test(nextLine);
+            
+            if (isNotHeader && isNotListItem && hasLetters) {
+              let descriptiveTitle = nextLine;
+              if (descriptiveTitle.includes(':')) {
+                descriptiveTitle = descriptiveTitle.split(':')[0].trim();
+              }
+              title = `${title}: ${descriptiveTitle}`;
+              i = lookAheadIdx;
+              foundTitle = true;
+            }
+          }
+          
+          // Strategy B: Collect subheadings inside this unit (e.g. Physics)
+          if (!foundTitle) {
+            let scanIdx = i + 1;
+            const subheadings = [];
+            while (scanIdx < lines.length) {
+              const scanLine = lines[scanIdx].trim();
+              if (!scanLine) { scanIdx++; continue; }
+              
+              const isNextUnit = /^#{3,4}\s*📌?\s*Unit[-–\s_—]*\d/i.test(scanLine) || 
+                                 /^UNIT\s+\d/i.test(scanLine) || 
+                                 /^Module\s+\d/i.test(scanLine) || 
+                                 /^#{3,4}\s*Module\s+\d/i.test(scanLine);
+              if (isNextUnit || /^##\s+/.test(scanLine)) {
+                break;
+              }
+              
+              if (scanLine.startsWith('####')) {
+                let subhead = scanLine.replace(/^#+\s*/, '').trim();
+                subhead = subhead.replace(/^\d+\s*\\?\.\s*/, '').replace(/^\d+\s*\)\s*/, '');
+                subhead = subhead.replace(/:\s*$/, '').replace(/\(\d+\s*hrs?\)/i, '').trim();
+                if (subhead.length > 2) {
+                  subheadings.push(subhead);
+                }
+              }
+              scanIdx++;
+            }
+            
+            if (subheadings.length > 0) {
+              title = `${title}: ${subheadings.join(' & ')}`;
+            }
+          }
+        }
+
+        currentUnit = { title, topics: [] };
+        subject.units.push(currentUnit);
+
+        if (remainingText && remainingText.length > 5) {
+          currentUnit.topics.push({ text: remainingText, isHeading: false });
         }
         continue;
       }
 
-      // Fallback for regular text topic lines
-      if (trimmed.length > 10 && !/^(course code|credit|l\s*t\s*p|references|text|prerequisite|\*\*)/i.test(trimmed)) {
-        if (!/^\d+\s+\d+\s+\d+/.test(trimmed)) {
+      // Topics
+      if (currentUnit) {
+        if (/^(test|text|reference|credit|l\s*t\s*p|course outcome)/i.test(trimmed)) {
+          continue;
+        }
+
+        if (/^####/.test(trimmed)) {
+          const text = trimmed.replace(/^#+\s*/, '').trim();
+          currentUnit.topics.push({ text, isHeading: true });
+          continue;
+        }
+
+        if (/^[-*•]\s+/.test(trimmed)) {
+          const text = trimmed.replace(/^[-*•]\s+/, '').replace(/\*\*/g, '').trim();
+          if (text.length > 3) {
+            currentUnit.topics.push({ text, isHeading: false });
+          }
+          continue;
+        }
+
+        if (trimmed.length > 10 && !/^\d+\s+\d+\s+\d+/.test(trimmed)) {
           currentUnit.topics.push({ text: trimmed.replace(/\*\*/g, '').trim(), isHeading: false });
         }
       }
     }
+
+    // FALLBACK MECHANISM: If a subject has NO units parsed, create a default unit
+    if (subject && subject.units.length === 0) {
+      const defaultUnit = { title: 'Syllabus Topics', topics: [] };
+      for (const line of lines) {
+        const tr = line.trim();
+        // Skip subject header, credits, references, etc.
+        if (tr.startsWith('##') || /^(course code|\*\*course code|credits|\*\*credits|l\s*t\s*p|references|textbook)/i.test(tr)) {
+          continue;
+        }
+        if (/^#{3,4}\s*(.+?)/.test(tr)) {
+          const headingText = tr.replace(/^#+\s*/, '').trim();
+          defaultUnit.topics.push({ text: headingText, isHeading: true });
+          continue;
+        }
+        if (/^[-*•]\s+/.test(tr)) {
+          const text = tr.replace(/^[-*•]\s+/, '').replace(/\*\*/g, '').trim();
+          if (text.length > 3) {
+            defaultUnit.topics.push({ text, isHeading: false });
+          }
+          continue;
+        }
+        if (/^\d+\s*\\?\.\s*(.+?)/.test(tr)) {
+          const text = tr.replace(/^\d+\s*\\?\.\s*/, '').replace(/\*\*/g, '').trim();
+          if (text.length > 3) {
+            defaultUnit.topics.push({ text, isHeading: false });
+          }
+          continue;
+        }
+        if (tr.length > 15 && !/^\d+\s+\d+\s+\d+/.test(tr)) {
+          defaultUnit.topics.push({ text: tr.replace(/\*\*/g, '').trim(), isHeading: false });
+        }
+      }
+      if (defaultUnit.topics.length > 0) {
+        subject.units.push(defaultUnit);
+      }
+    }
   }
 
-  // Only return subjects that actually have units inside them
-  return subjects.filter(s => s.units.length > 0);
+  return subjects;
 }
 
 // ─── Single Topic Row Component ───────────────────────────────────────────────
@@ -221,7 +358,7 @@ function TopicRow({ topic, doneKey, subjectName }) {
         </a>
         <button
           onClick={toggleDone}
-          className={`px-2.5 py-1.5 md:px-2 md:py-1 rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm ${done ? 'bg-emerald-500 text-white' : 'bg-slate-100 hover:bg-emerald-500 text-slate-505 hover:text-white'}`}
+          className={`px-2.5 py-1.5 md:px-2 md:py-1 rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm ${done ? 'bg-emerald-500 text-white' : 'bg-slate-100 hover:bg-emerald-500 text-slate-500 hover:text-white'}`}
         >
           {done ? '✓ Done' : 'Mark Done'}
         </button>
