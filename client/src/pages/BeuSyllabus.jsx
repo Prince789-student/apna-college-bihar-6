@@ -398,17 +398,20 @@ function TopicRow({ topic, doneKey, subjectName, onToggle }) {
 // ─── Unit Accordion Component ──────────────────────────────────────────────────
 function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, onToggle }) {
   const [open, setOpen] = React.useState(unitIndex === 0);
+  const [tick, setTick] = React.useState(0);
 
   const topicKeys = unit.topics.map((t, ti) =>
     `syllabus_done_${semBranchKey}_u${unitIndex}_t${ti}`
   );
 
-  const doneCount = topicKeys.filter(k => {
+  const doneCount = React.useMemo(() => topicKeys.filter(k => {
     try { return JSON.parse(localStorage.getItem(k) || 'false'); } catch { return false; }
-  }).length;
+  }).length, [tick, topicKeys.join(',')]);
 
   const totalTopics = unit.topics.filter(t => !t.isHeading).length;
   const progress = totalTopics > 0 ? Math.round((doneCount / totalTopics) * 100) : 0;
+
+  const handleToggle = () => { setTick(t => t + 1); if (onToggle) onToggle(); };
 
   return (
     <div className={`border border-slate-200 rounded-2xl overflow-hidden mb-3 transition-all ${open ? 'shadow-md' : ''}`}>
@@ -417,20 +420,23 @@ function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, onToggle })
         className="w-full flex items-center justify-between px-5 py-4 bg-white hover:bg-slate-50 transition-all"
       >
         <div className="flex items-center gap-3 text-left">
-          <div className="w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black bg-indigo-50 text-indigo-600">
-            {`U${unitIndex + 1}`}
+          <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-xs font-black ${progress === 100 ? 'bg-emerald-100 text-emerald-600' : 'bg-indigo-50 text-indigo-600'}`}>
+            {progress === 100 ? '✓' : `U${unitIndex + 1}`}
           </div>
           <div>
             <p className="text-sm font-black text-slate-800 uppercase tracking-tight leading-snug">{unit.title}</p>
             <p className="text-[9px] text-slate-400 font-bold mt-0.5">{totalTopics} topics · {progress}% done</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="hidden md:flex items-center gap-2">
-            <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-              <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${progress}%` }}></div>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            <div className="w-14 md:w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all duration-500 ${progress === 100 ? 'bg-emerald-500' : progress >= 50 ? 'bg-indigo-500' : progress > 0 ? 'bg-amber-400' : 'bg-slate-200'}`}
+                style={{ width: `${progress}%` }}
+              ></div>
             </div>
-            <span className="text-[9px] font-black text-slate-400">{progress}%</span>
+            <span className={`text-[10px] font-black min-w-[30px] text-right ${progress === 100 ? 'text-emerald-500' : progress > 0 ? 'text-indigo-500' : 'text-slate-400'}`}>{progress}%</span>
           </div>
           {open ? <ChevronUp size={16} className="text-slate-400" /> : <ChevronDown size={16} className="text-slate-400" />}
         </div>
@@ -444,7 +450,7 @@ function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, onToggle })
               topic={topic}
               doneKey={topicKeys[ti]}
               subjectName={subjectName}
-              onToggle={onToggle}
+              onToggle={handleToggle}
             />
           ))}
         </div>
