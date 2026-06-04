@@ -226,6 +226,8 @@ export default function CollegePage() {
     }
   };
 
+  const placementStats = useMemo(() => getPlacementStats(college?.tier), [college]);
+
   const tabTitles = {
     overview: 'Admission & Details',
     branches: 'Seat Matrix & Branches',
