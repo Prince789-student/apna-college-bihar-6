@@ -11,12 +11,33 @@ import { useAuth } from '../context/AuthContext';
 import PremiumAds from '../components/PremiumAds';
 
 const BRANCHES = [
-  { id: 'CSE', label: 'Computer Science', short: 'CSE', color: 'indigo', emoji: '💻' },
-  { id: 'ECE', label: 'Electronics & Comm.', short: 'ECE', color: 'violet', emoji: '📡' },
-  { id: 'ME',  label: 'Mechanical Engg.', short: 'ME',  color: 'orange', emoji: '⚙️' },
-  { id: 'CIVIL', label: 'Civil Engineering', short: 'CIVIL', color: 'emerald', emoji: '🏗️' },
-  { id: 'EE',  label: 'Electrical Engg.', short: 'EE',  color: 'yellow', emoji: '⚡' },
-  { id: 'EEE', label: 'Electrical & Electronics', short: 'EEE', color: 'pink', emoji: '🔌' },
+  // Core Branches
+  { id: 'CSE', label: 'Computer Science', short: 'CSE', color: 'indigo', emoji: '💻', type: 'core' },
+  { id: 'CIVIL', label: 'Civil Engineering', short: 'CIVIL', color: 'emerald', emoji: '🏗️', type: 'core' },
+  { id: 'ME',  label: 'Mechanical Engg.', short: 'ME',  color: 'orange', emoji: '⚙️', type: 'core' },
+  { id: 'EE',  label: 'Electrical Engg.', short: 'EE',  color: 'yellow', emoji: '⚡', type: 'core' },
+  { id: 'ECE', label: 'Electronics & Comm.', short: 'ECE', color: 'violet', emoji: '📡', type: 'core' },
+  { id: 'EEE', label: 'Electrical & Electronics', short: 'EEE', color: 'pink', emoji: '🔌', type: 'core' },
+  { id: 'IT', label: 'Information Tech.', short: 'IT', color: 'indigo', emoji: 'ℹ️', type: 'core' },
+  { id: 'MINING', label: 'Mining Engineering', short: 'MINING', color: 'orange', emoji: '⛏️', type: 'core' },
+  { id: 'CHEMICAL', label: 'Chemical Engineering', short: 'CHEMICAL', color: 'emerald', emoji: '🧪', type: 'core' },
+  { id: 'BIOMEDICAL', label: 'Biomedical Engg.', short: 'BIOMEDICAL', color: 'pink', emoji: '🧬', type: 'core' },
+  { id: 'FOOD', label: 'Food Technology', short: 'FOOD', color: 'yellow', emoji: '🍎', type: 'core' },
+  { id: 'AERONAUTICAL', label: 'Aeronautical Engg.', short: 'AERONAUTICAL', color: 'violet', emoji: '🚀', type: 'core' },
+  { id: 'ROBOTICS', label: 'Robotics Engineering', short: 'ROBOTICS', color: 'indigo', emoji: '🤖', type: 'core' },
+  { id: 'FIRE', label: 'Fire & Safety Engg.', short: 'FIRE', color: 'orange', emoji: '🔥', type: 'core' },
+  { id: 'MECHATRONICS', label: 'Mechatronics Engg.', short: 'MECHATRONICS', color: 'violet', emoji: '⚙️🤖', type: 'core' },
+
+  // Specialization Branches
+  { id: 'CSE_DS', label: 'CSE (Data Science)', short: 'CSE DS', color: 'indigo', emoji: '📊', type: 'spec' },
+  { id: 'CSE_AIML', label: 'CSE (AI & ML)', short: 'CSE AI/ML', color: 'indigo', emoji: '🤖', type: 'spec' },
+  { id: 'CSE_AI', label: 'CSE (Artificial Intel.)', short: 'CSE AI', color: 'indigo', emoji: '🧠', type: 'spec' },
+  { id: 'CSE_CYBER', label: 'CSE (Cyber Security)', short: 'CSE Cyber', color: 'indigo', emoji: '🔒', type: 'spec' },
+  { id: 'CSE_IOT', label: 'CSE (IoT)', short: 'CSE IoT', color: 'indigo', emoji: '🌐', type: 'spec' },
+  { id: 'CSE_NETWORKS', label: 'CSE (Networks)', short: 'CSE Networks', color: 'indigo', emoji: '🕸️', type: 'spec' },
+  { id: 'ECE_VLSI', label: 'ECE (VLSI Design)', short: 'ECE VLSI', color: 'violet', emoji: '🎛️', type: 'spec' },
+  { id: 'CSE_IOT_CS_BC', label: 'CSE (IoT, CS, Blockchain)', short: 'CSE IoT/CS/BC', color: 'indigo', emoji: '⛓️', type: 'spec' },
+  { id: 'CIVIL_CA', label: 'Civil (Computer Appl.)', short: 'Civil CA', color: 'emerald', emoji: '🏗️💻', type: 'spec' },
 ];
 
 const SEMESTERS = [1,2,3,4,5,6,7,8];
@@ -208,25 +229,57 @@ export default function Notes() {
 
       {/* Step: Branch Selection */}
       {!search.trim() && step === 'branch' && (
-        <div>
-          <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 px-1">Select Your Branch</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {BRANCHES.map(b => {
-              const c = BRANCH_COLORS[b.color];
-              return (
-                <button key={b.id} onClick={() => { setBranch(b); setSem(null); setFolder(null); }}
-                  className={`flex flex-col items-start gap-3 p-6 rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:scale-[1.02] active:scale-[0.98] transition-all text-left shadow-sm hover:shadow-md`}>
-                  <span className="text-3xl">{b.emoji}</span>
-                  <div>
-                    <p className={`text-lg font-[900] tracking-tight ${c.text}`}>{b.short}</p>
-                    <p className="text-[10px] font-bold text-slate-500 mt-0.5">{b.label}</p>
-                  </div>
-                  <div className={`mt-auto flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${c.text}`}>
-                    Select <ArrowRight size={10} />
-                  </div>
-                </button>
-              );
-            })}
+        <div className="space-y-10">
+          {/* Core Branches */}
+          <div>
+            <div className="flex items-center gap-2 mb-4 px-1">
+              <span className="text-slate-400 text-xs font-black uppercase tracking-[0.25em]">Core Branches</span>
+              <div className="h-px flex-1 bg-slate-200"></div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {BRANCHES.filter(b => b.type === 'core').map(b => {
+                const c = BRANCH_COLORS[b.color] || BRANCH_COLORS.indigo;
+                return (
+                  <button key={b.id} onClick={() => { setBranch(b); setSem(null); setFolder(null); }}
+                    className={`flex flex-col items-start gap-3 p-5 rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:scale-[1.02] active:scale-[0.98] transition-all text-left shadow-sm hover:shadow-md`}>
+                    <span className="text-2xl">{b.emoji}</span>
+                    <div>
+                      <p className={`text-base font-[900] tracking-tight ${c.text}`}>{b.short}</p>
+                      <p className="text-[9px] font-bold text-slate-500 mt-0.5">{b.label}</p>
+                    </div>
+                    <div className={`mt-auto flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${c.text}`}>
+                      Select <ArrowRight size={10} />
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Specialization Branches */}
+          <div>
+            <div className="flex items-center gap-2 mb-4 px-1">
+              <span className="text-slate-400 text-xs font-black uppercase tracking-[0.25em]">Specialization Branches</span>
+              <div className="h-px flex-1 bg-slate-200"></div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {BRANCHES.filter(b => b.type === 'spec').map(b => {
+                const c = BRANCH_COLORS[b.color] || BRANCH_COLORS.indigo;
+                return (
+                  <button key={b.id} onClick={() => { setBranch(b); setSem(null); setFolder(null); }}
+                    className={`flex flex-col items-start gap-3 p-5 rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:scale-[1.02] active:scale-[0.98] transition-all text-left shadow-sm hover:shadow-md`}>
+                    <span className="text-2xl">{b.emoji}</span>
+                    <div>
+                      <p className={`text-base font-[900] tracking-tight ${c.text}`}>{b.short}</p>
+                      <p className="text-[9px] font-bold text-slate-500 mt-0.5">{b.label}</p>
+                    </div>
+                    <div className={`mt-auto flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${c.text}`}>
+                      Select <ArrowRight size={10} />
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}

@@ -579,12 +579,34 @@ export default function AdminPanel() {
                           }} 
                           className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none"
                         >
-                          <option value="CSE">💻 CSE</option>
-                          <option value="ECE">📡 ECE</option>
-                          <option value="ME">⚙️ ME</option>
-                          <option value="CIVIL">🏗️ CIVIL</option>
-                          <option value="EE">⚡ EE</option>
-                          <option value="EEE">🔌 EEE</option>
+                          <optgroup label="Core Branches">
+                            <option value="CSE">💻 CSE</option>
+                            <option value="ECE">📡 ECE</option>
+                            <option value="ME">⚙️ ME</option>
+                            <option value="CIVIL">🏗️ CIVIL</option>
+                            <option value="EE">⚡ EE</option>
+                            <option value="EEE">🔌 EEE</option>
+                            <option value="IT">ℹ️ IT</option>
+                            <option value="MINING">⛏️ MINING</option>
+                            <option value="CHEMICAL">🧪 CHEMICAL</option>
+                            <option value="BIOMEDICAL">🧬 BIOMEDICAL</option>
+                            <option value="FOOD">🍎 FOOD</option>
+                            <option value="AERONAUTICAL">🚀 AERONAUTICAL</option>
+                            <option value="ROBOTICS">🤖 ROBOTICS</option>
+                            <option value="FIRE">🔥 FIRE</option>
+                            <option value="MECHATRONICS">⚙️🤖 MECHATRONICS</option>
+                          </optgroup>
+                          <optgroup label="Specialization Branches">
+                            <option value="CSE_DS">📊 CSE DS</option>
+                            <option value="CSE_AIML">🤖 CSE AI/ML</option>
+                            <option value="CSE_AI">🧠 CSE AI</option>
+                            <option value="CSE_CYBER">🔒 CSE Cyber</option>
+                            <option value="CSE_IOT">🌐 CSE IoT</option>
+                            <option value="CSE_NETWORKS">🕸️ CSE Networks</option>
+                            <option value="ECE_VLSI">🎛️ ECE VLSI</option>
+                            <option value="CSE_IOT_CS_BC">⛓️ CSE IoT/CS/BC</option>
+                            <option value="CIVIL_CA">🏗️💻 Civil CA</option>
+                          </optgroup>
                         </select>
                      </div>
                      <div className="space-y-1">
