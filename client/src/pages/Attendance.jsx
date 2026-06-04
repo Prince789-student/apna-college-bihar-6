@@ -381,7 +381,7 @@ export default function Attendance() {
             <UserCheck size={32} />
           </div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-[1000] text-slate-900 uppercase tracking-tighter">My Attendance</h1>
+            <h1 className="text-2xl md:text-3xl font-[1000] text-slate-900 uppercase tracking-tighter">BEU Attendance</h1>
             <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.3em] mt-1">Goal: 75% Attendance Required (BEU Regulation)</p>
           </div>
         </div>

@@ -235,7 +235,7 @@ export default function Timetable() {
             <CalendarDays size={32} />
           </div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-[1000] text-slate-900 uppercase tracking-tighter">My Timetable</h1>
+            <h1 className="text-2xl md:text-3xl font-[1000] text-slate-900 uppercase tracking-tighter">BEU Timetable</h1>
             <p className="text-[10px] text-slate-500 font-black uppercase tracking-[0.3em] mt-1">
               Add your classes → Auto-sync to Attendance
             </p>
