@@ -64,13 +64,18 @@ export default function Home() {
              <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
            ) : user ? (
              <div className="flex items-center gap-4">
-               <a 
-                 href="/ApnaCollegeBihar_Stable.apk"
-                 download="ApnaCollegeBihar_Stable.apk"
-                 className="flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
-               >
-                 Download APK
-               </a>
+               <div className="relative">
+                 <a 
+                   href="/ApnaCollegeBihar_Stable.apk"
+                   download="ApnaCollegeBihar_Stable.apk"
+                   className="flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
+                 >
+                   Download APK
+                 </a>
+                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
+                   Latest
+                 </span>
+               </div>
                <div className="relative">
                  <button 
                    onClick={() => setShowProfileMenu(!showProfileMenu)}
@@ -133,13 +138,18 @@ export default function Home() {
              </div>
            ) : (
              <div className="flex items-center gap-3 md:gap-5">
-               <a 
-                 href="/ApnaCollegeBihar_Stable.apk"
-                 download="ApnaCollegeBihar_Stable.apk"
-                 className="flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
-               >
-                 Download App
-               </a>
+               <div className="relative">
+                 <a 
+                   href="/ApnaCollegeBihar_Stable.apk"
+                   download="ApnaCollegeBihar_Stable.apk"
+                   className="flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                 >
+                   Download App
+                 </a>
+                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
+                   Latest
+                 </span>
+               </div>
                <Link to="/login" className="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Login</Link>
                <Link to="/signup" className="px-4 py-2.5 md:px-6 md:py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95">Signup</Link>
              </div>
