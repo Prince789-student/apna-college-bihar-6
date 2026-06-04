@@ -6,7 +6,9 @@ import {
 } from 'lucide-react';
 import { db } from '../firebase';
 import { collection, onSnapshot } from 'firebase/firestore';
+import { useParams, useNavigate } from 'react-router-dom';
 import PremiumAds from '../components/PremiumAds';
+import SEO from '../components/SEO';
 
 const BRANCHES = [
   // Core Branches
@@ -50,12 +52,18 @@ const BRANCH_COLORS = {
 };
 
 export default function PYQ() {
+  const { branchId, semesterId } = useParams();
+  const navigate = useNavigate();
+
+  const initialBranch = branchId ? BRANCHES.find(b => b.id.toLowerCase() === branchId.toLowerCase()) : null;
+  const initialSem = semesterId ? parseInt(semesterId) : null;
+
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
 
-  const [branch, setBranch] = useState(null);
-  const [sem, setSem] = useState(null);
+  const [branch, setBranch] = useState(initialBranch);
+  const [sem, setSem] = useState(initialSem);
   const [folder, setFolder] = useState(null);
   const [navHistory, setNavHistory] = useState([]);
 
@@ -102,9 +110,24 @@ export default function PYQ() {
     );
   }, [docs, search]);
 
-  const goHome = () => { setBranch(null); setSem(null); setFolder(null); setNavHistory([]); };
-  const goToBranch = () => { setSem(null); setFolder(null); setNavHistory([]); };
-  const goToSem = () => { setFolder(null); setNavHistory([]); };
+  const handleBranchSelect = (b) => {
+    setBranch(b);
+    setSem(null);
+    setFolder(null);
+    setSearch('');
+    navigate(`/pyq/${b.id.toLowerCase()}`);
+  };
+
+  const handleSemSelect = (s) => {
+    setSem(s);
+    setFolder(null);
+    setSearch('');
+    if (branch) navigate(`/pyq/${branch.id.toLowerCase()}/${s}`);
+  };
+
+  const goHome = () => { setBranch(null); setSem(null); setFolder(null); setNavHistory([]); navigate('/pyq'); };
+  const goToBranch = () => { setSem(null); setFolder(null); setNavHistory([]); navigate(`/pyq/${branch.id.toLowerCase()}`); };
+  const goToSem = () => { setFolder(null); setNavHistory([]); navigate(`/pyq/${branch.id.toLowerCase()}/${sem}`); };
 
   const selectFolder = (f) => {
     if (folder) setNavHistory(h => [...h, folder]);
@@ -160,6 +183,29 @@ export default function PYQ() {
         </div>
       </div>
 
+      {/* SEO Tags */}
+      {branch && sem ? (
+        <SEO 
+          title={`BEU ${branch.short} Semester ${sem} PYQ Papers Download`} 
+          description={`Download free B.Tech ${branch.label} Semester ${sem} Previous Year Question (PYQ) papers for Bihar Engineering University (BEU).`}
+          keywords={`BEU PYQ, ${branch.short} PYQ, Semester ${sem} Question Papers, Bihar Engineering PYQ, B.Tech Question Papers`}
+          url={`https://www.apnacollegebihar.online/pyq/${branch.id.toLowerCase()}/${sem}`}
+        />
+      ) : branch ? (
+        <SEO 
+          title={`BEU ${branch.short} B.Tech PYQ Papers Download - All Semesters`} 
+          description={`Free B.Tech ${branch.label} Previous Year Question Papers for all semesters under Bihar Engineering University (BEU).`}
+          keywords={`BEU PYQ, ${branch.short} PYQ, Bihar Engineering Question Papers`}
+          url={`https://www.apnacollegebihar.online/pyq/${branch.id.toLowerCase()}`}
+        />
+      ) : (
+        <SEO 
+          title="BEU B.Tech PYQ Papers Download | Apna College Bihar" 
+          description="Download free B.Tech Previous Year Question (PYQ) papers for all branches under Bihar Engineering University (BEU)."
+          url="https://www.apnacollegebihar.online/dashboard/pyq"
+        />
+      )}
+
       {/* Search Results */}
       {search.trim() && (
         <div>
@@ -179,7 +225,6 @@ export default function PYQ() {
       {/* Step: Branch Selection */}
       {!search.trim() && step === 'branch' && (
         <div className="space-y-10">
-          {/* Core Branches */}
           <div>
             <div className="flex items-center gap-2 mb-4 px-1">
               <span className="text-slate-400 text-xs font-black uppercase tracking-[0.25em]">Core Branches</span>
@@ -189,7 +234,7 @@ export default function PYQ() {
               {BRANCHES.filter(b => b.type === 'core').map(b => {
                 const c = BRANCH_COLORS[b.color] || BRANCH_COLORS.amber;
                 return (
-                  <button key={b.id} onClick={() => { setBranch(b); setSem(null); setFolder(null); }}
+                  <button key={b.id} onClick={() => handleBranchSelect(b)}
                     className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:scale-[1.02] active:scale-[0.98] transition-all text-left shadow-sm hover:shadow-md`}>
                     <span className="text-xl md:text-2xl">{b.emoji}</span>
                     <div>
@@ -205,7 +250,6 @@ export default function PYQ() {
             </div>
           </div>
 
-          {/* Specialization Branches */}
           <div>
             <div className="flex items-center gap-2 mb-4 px-1">
               <span className="text-slate-400 text-xs font-black uppercase tracking-[0.25em]">Specialization Branches</span>
@@ -215,7 +259,7 @@ export default function PYQ() {
               {BRANCHES.filter(b => b.type === 'spec').map(b => {
                 const c = BRANCH_COLORS[b.color] || BRANCH_COLORS.amber;
                 return (
-                  <button key={b.id} onClick={() => { setBranch(b); setSem(null); setFolder(null); }}
+                  <button key={b.id} onClick={() => handleBranchSelect(b)}
                     className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:scale-[1.02] active:scale-[0.98] transition-all text-left shadow-sm hover:shadow-md`}>
                     <span className="text-xl md:text-2xl">{b.emoji}</span>
                     <div>
@@ -242,7 +286,7 @@ export default function PYQ() {
           </div>
           <div className="grid grid-cols-4 md:grid-cols-8 gap-2.5 md:gap-3">
             {SEMESTERS.map(s => (
-              <button key={s} onClick={() => setSem(s)}
+              <button key={s} onClick={() => handleSemSelect(s)}
                 className={`aspect-square rounded-2xl flex flex-col items-center justify-center border-2 font-[900] text-xl transition-all hover:scale-105 active:scale-95 shadow-sm hover:shadow-md ${branchColor.bg} ${branchColor.border} ${branchColor.text}`}>
                 {s}
                 <span className="text-[8px] font-bold text-slate-400 mt-0.5">SEM</span>

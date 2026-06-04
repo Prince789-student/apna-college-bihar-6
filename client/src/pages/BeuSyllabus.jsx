@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Download } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import jsPDF from 'jspdf';
+import SEO from '../components/SEO';
 
 // ─── Smart Syllabus Text Cleaner ──────────────────────────────────────────────
 function cleanSyllabusText(rawText) {
@@ -461,11 +462,14 @@ function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, onToggle })
 
 // ─── Main Component ────────────────────────────────────────────────────────────
 export default function BeuSyllabus() {
+  const { branchId } = useParams();
+  const navigate = useNavigate();
+
   const [syllabusData, setSyllabusData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
   const [selectedSem, setSelectedSem] = useState('sem1');
-  const [selectedBranch, setSelectedBranch] = useState('cse');
+  const [selectedBranch, setSelectedBranch] = useState(branchId ? branchId.toLowerCase() : 'cse');
   const [progressTicker, setProgressTicker] = useState(0);
 
   useEffect(() => {
@@ -620,6 +624,13 @@ export default function BeuSyllabus() {
 
   return (
     <div className="min-h-screen bg-slate-50 font-['Inter'] pb-24">
+      <SEO 
+        title={`BEU ${selectedBranch.toUpperCase()} Syllabus | Apna College Bihar`}
+        description={`Check official Bihar Engineering University (BEU) syllabus for ${selectedBranch.toUpperCase()} branch. Track your syllabus progress online.`}
+        keywords={`BEU Syllabus, ${selectedBranch} Syllabus, Bihar Engineering Syllabus, B.Tech Syllabus BEU`}
+        url={`https://www.apnacollegebihar.online/syllabus/${selectedBranch}`}
+      />
+      
       {/* Header */}
       <div className="bg-indigo-600 text-white rounded-b-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -654,7 +665,7 @@ export default function BeuSyllabus() {
           <div className="flex-1">
             <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-2">Select Branch</label>
             <div className="relative">
-              <select value={selectedBranch} onChange={e => setSelectedBranch(e.target.value)}
+              <select value={selectedBranch} onChange={e => { setSelectedBranch(e.target.value); navigate(`/syllabus/${e.target.value}`); }}
                 className="w-full appearance-none bg-slate-50 border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-slate-800 outline-none focus:border-indigo-500 transition-all cursor-pointer">
                 {branches.map(b => <option key={b.id} value={b.id}>{b.label}</option>)}
               </select>

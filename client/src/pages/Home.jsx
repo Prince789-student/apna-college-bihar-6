@@ -9,6 +9,7 @@ import {
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
+import SEO from '../components/SEO';
 
 export default function Home() {
   const { user, loading, logout } = useAuth();
@@ -37,6 +38,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center font-['Inter'] relative overflow-hidden">
+      <SEO 
+        title="Apna College Bihar | UGEAC Counselling, B.Tech Notes, PYQ & College Predictor"
+        description="Bihar Engineering Counselling 2025 - UGEAC College Predictor, Cutoff Ranks, B.Tech Notes, PYQ Papers & CGPA Calculator. Official resource for Bihar Engineering students."
+        url="https://www.apnacollegebihar.online/"
+      />
 
       {/* ── Navbar ── */}
       <nav className="sticky top-0 left-0 w-full z-[100] bg-[#f8fafc]/80 backdrop-blur-xl border-b border-slate-200/50 px-4 md:px-16 py-4 md:py-5 flex items-center justify-between">

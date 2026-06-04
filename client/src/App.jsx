@@ -160,6 +160,16 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
 
+          {/* Public Dashboard Routes (For SEO & Direct Sharing) */}
+          <Route element={<DashboardLayout />}>
+            <Route path="/notes/:branchId/:semesterId" element={<Notes />} />
+            <Route path="/notes/:branchId" element={<Notes />} />
+            <Route path="/pyq/:branchId/:semesterId" element={<PYQ />} />
+            <Route path="/pyq/:branchId" element={<PYQ />} />
+            <Route path="/syllabus/:branchId" element={<BeuSyllabus />} />
+            <Route path="/college/:collegeSlug" element={<UgeacPredictor />} />
+          </Route>
+
           {/* Protected Dashboard Routes */}
           <Route element={<ProtectedRoute />}>
             <Route element={<DashboardLayout />}>

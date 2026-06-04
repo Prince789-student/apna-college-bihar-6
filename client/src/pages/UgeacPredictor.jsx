@@ -3,9 +3,13 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import '../UgeacPredictor.css';
 import { colleges } from '../UgeacData';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus, Minus, Layers, Search, Zap, Filter, LayoutGrid, Download, X, Calculator } from 'lucide-react';
+import SEO from '../components/SEO';
 
 function UgeacPredictor() {
+  const { collegeSlug } = useParams();
+  
   const [rank, setRank] = useState('');
   const [ugeacInput, setUgeacInput] = useState('');
   const [category, setCategory] = useState('UR');
@@ -422,9 +426,24 @@ function UgeacPredictor() {
   };
 
   const sortedColleges = useMemo(() => [...colleges].sort((a,b) => a.name.localeCompare(b.name)), []);
+  const initialCollege = collegeSlug ? colleges.find(c => c.short.toLowerCase().replace(/[\s\.]+/g, '-') === collegeSlug.toLowerCase()) : null;
 
   return (
     <div className="main-app-container">
+      {collegeSlug && initialCollege ? (
+        <SEO 
+          title={`${initialCollege.name} | UGEAC Cutoff Rank 2025`}
+          description={`Check ${initialCollege.name} B.Tech admission cutoff ranks, fee structure, and seat matrix for UGEAC 2025.`}
+          keywords={`${initialCollege.short} Cutoff, ${initialCollege.name} admission, UGEAC Cutoff 2025, Bihar Engineering Cutoff`}
+          url={`https://www.apnacollegebihar.online/college/${collegeSlug}`}
+        />
+      ) : (
+        <SEO 
+          title="UGEAC 2025 College Predictor & Cutoff Ranks | Apna College Bihar"
+          description="Predict your engineering college in Bihar based on UGEAC rank with 2024-2025 official cutoff data."
+          url="https://www.apnacollegebihar.online/dashboard/ugeac-predictor"
+        />
+      )}
       {loadingData ? (
         <div className="flex flex-col items-center justify-center p-20 glass-panel min-h-[400px]">
           <div className="relative w-20 h-20 mb-8">

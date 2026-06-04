@@ -5,6 +5,7 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { StudyProvider } from './context/StudyContext'
+import { HelmetProvider } from 'react-helmet-async'
 
 console.log("[DEBUG] Imports done. Ready to mount...");
 
@@ -18,13 +19,15 @@ if (!rootEl) {
     console.log("[DEBUG] Rendering app to root...");
     root.render(
       <React.StrictMode>
-        <AuthProvider>
-          <StudyProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </StudyProvider>
-        </AuthProvider>
+        <HelmetProvider>
+          <AuthProvider>
+            <StudyProvider>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </StudyProvider>
+          </AuthProvider>
+        </HelmetProvider>
       </React.StrictMode>
     );
     console.log("[DEBUG] Render call reached.");

@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { 
   Link2, Plus, AlertCircle, Share2, Globe, BookOpen, ExternalLink, Search, X, Loader2
 } from 'lucide-react';
+import SEO from '../components/SEO';
 
 export default function StudyResources() {
   const { user } = useAuth();
@@ -100,6 +101,11 @@ export default function StudyResources() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 pb-24 space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <SEO 
+        title="Study Resources | Apna College Bihar"
+        description="Access and share verified study materials, links, and guides for Bihar Engineering University students."
+        url="https://www.apnacollegebihar.online/dashboard/study-resources"
+      />
       
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-[#f8fafc] p-6 border border-slate-200/80 rounded-[2rem] shadow-2xl relative overflow-hidden">

@@ -6,7 +6,9 @@ import {
 } from 'lucide-react';
 import { db } from '../firebase';
 import { collection, orderBy, onSnapshot } from 'firebase/firestore';
+import { useParams, useNavigate } from 'react-router-dom';
 import PremiumAds from '../components/PremiumAds';
+import SEO from '../components/SEO';
 
 const BRANCHES = [
   // Core Branches
@@ -50,14 +52,21 @@ const BRANCH_COLORS = {
 };
 
 export default function Notes() {
+  const { branchId, semesterId } = useParams();
+  const navigate = useNavigate();
+
+  // Parse URL params for initial state
+  const initialBranch = branchId ? BRANCHES.find(b => b.id.toLowerCase() === branchId.toLowerCase()) : null;
+  const initialSem = semesterId ? parseInt(semesterId) : null;
+
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
 
   // Navigation state
-  const [branch, setBranch] = useState(null);   // selected branch obj
-  const [sem, setSem] = useState(null);          // selected semester number
-  const [folder, setFolder] = useState(null);    // selected subject folder doc
+  const [branch, setBranch] = useState(initialBranch);
+  const [sem, setSem] = useState(initialSem);
+  const [folder, setFolder] = useState(null);
   const [navHistory, setNavHistory] = useState([]); // for sub-folders
 
   useEffect(() => {
@@ -112,9 +121,24 @@ export default function Notes() {
     );
   }, [docs, search]);
 
-  const goHome = () => { setBranch(null); setSem(null); setFolder(null); setNavHistory([]); };
-  const goToBranch = () => { setSem(null); setFolder(null); setNavHistory([]); };
-  const goToSem = () => { setFolder(null); setNavHistory([]); };
+  const handleBranchSelect = (b) => {
+    setBranch(b);
+    setSem(null);
+    setFolder(null);
+    setSearch('');
+    navigate(`/notes/${b.id.toLowerCase()}`);
+  };
+
+  const handleSemSelect = (s) => {
+    setSem(s);
+    setFolder(null);
+    setSearch('');
+    if (branch) navigate(`/notes/${branch.id.toLowerCase()}/${s}`);
+  };
+
+  const goHome = () => { setBranch(null); setSem(null); setFolder(null); setNavHistory([]); navigate('/notes'); };
+  const goToBranch = () => { setSem(null); setFolder(null); setNavHistory([]); navigate(`/notes/${branch.id.toLowerCase()}`); };
+  const goToSem = () => { setFolder(null); setNavHistory([]); navigate(`/notes/${branch.id.toLowerCase()}/${sem}`); };
 
   const selectFolder = (f) => {
     if (folder) setNavHistory(h => [...h, folder]);
@@ -170,6 +194,29 @@ export default function Notes() {
           </div>
         </div>
       </div>
+      
+      {/* SEO Tags */}
+      {branch && sem ? (
+        <SEO 
+          title={`BEU ${branch.short} Semester ${sem} Notes PDF Download`} 
+          description={`Download free B.Tech ${branch.label} Semester ${sem} notes for Bihar Engineering University (BEU). Best study material, chapter-wise PDFs.`}
+          keywords={`BEU Notes, ${branch.short} Notes, Semester ${sem} Notes, Bihar Engineering Notes, B.Tech Notes PDF`}
+          url={`https://www.apnacollegebihar.online/notes/${branch.id.toLowerCase()}/${sem}`}
+        />
+      ) : branch ? (
+        <SEO 
+          title={`BEU ${branch.short} B.Tech Notes PDF Download - All Semesters`} 
+          description={`Free B.Tech ${branch.label} notes for all semesters under Bihar Engineering University (BEU). Organized study material and PDFs.`}
+          keywords={`BEU Notes, ${branch.short} Notes, Bihar Engineering Notes, B.Tech Notes PDF`}
+          url={`https://www.apnacollegebihar.online/notes/${branch.id.toLowerCase()}`}
+        />
+      ) : (
+        <SEO 
+          title="BEU B.Tech Notes PDF Download | Apna College Bihar" 
+          description="Download free B.Tech semester notes and study material for all branches under Bihar Engineering University (BEU)."
+          url="https://www.apnacollegebihar.online/dashboard/notes"
+        />
+      )}
 
       {/* Search Results */}
       {search.trim() && (

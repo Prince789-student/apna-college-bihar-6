@@ -6,6 +6,7 @@ import {
   Calendar, LogIn, LogOut, MessageCircle, Youtube, User, Trash2, ShieldCheck, Smartphone, ExternalLink, Briefcase, Award, GraduationCap as Cap2, Landmark, FileText, Library, Link2
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import SEO from '../components/SEO';
 
 export default function AppHub() {
   const { user, logout } = useAuth();
@@ -80,7 +81,12 @@ export default function AppHub() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0f1d] text-white font-['Inter'] flex flex-col items-center justify-center p-4 pt-24 pb-12">
+    <div className="min-h-screen bg-[#0a0f1d] text-white font-['Inter'] flex flex-col items-center justify-center p-4 pt-24 pb-12 relative overflow-hidden">
+      <SEO 
+        title="App Hub | Apna College Bihar - The Official Study Engine"
+        description="Access all your college utilities - Study Timer, Notes, PYQs, UGEAC Predictor, SGPA Calculator, and more in one place."
+        url="https://www.apnacollegebihar.online/hub"
+      />
       
       {/* Fixed Top Header Bar */}
       <div className="fixed top-0 left-0 right-0 w-full bg-[#0a0f1d]/95 backdrop-blur-md border-b border-white/10 z-50 px-6 py-3.5 flex items-center justify-between shadow-2xl">
