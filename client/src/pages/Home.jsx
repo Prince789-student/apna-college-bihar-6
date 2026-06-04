@@ -411,7 +411,7 @@ export default function Home() {
             {
               title: "🎓 BEU",
               items: [
-                { title: "BEU Result", ic: <Globe className="text-blue-500"/>, d: "Direct portal to check BEU results instantly.", link: "/dashboard/beu-result?standalone=true" },
+                { title: "BEU Result", ic: <Globe className="text-blue-500"/>, d: "Direct portal to check BEU results instantly.", link: "/beu-result?standalone=true" },
                 { title: "Attendance", ic: <UserCheck className="text-green-500"/>, d: "Track the mandatory 75% BEU attendance.", link: "/dashboard/attendance?standalone=true" },
                 { title: "Timetable", ic: <Calendar className="text-yellow-500"/>, d: "Create and manage weekly class routines.", link: "/dashboard/timetable?standalone=true" },
                 { title: "Notes", ic: <BookOpen className="text-indigo-500"/>, d: "Free handwritten notes for all semesters.", link: "/notes?standalone=true" },
@@ -432,7 +432,7 @@ export default function Home() {
             {
               title: "🧭 COUNSELLING",
               items: [
-                { title: "UGEAC 2025", ic: <Send className="text-amber-500"/>, d: "Rank predictor based on official Bihar cutoff data.", link: "/dashboard/ugeac-predictor?standalone=true" },
+                { title: "UGEAC 2025", ic: <Send className="text-amber-500"/>, d: "Rank predictor based on official Bihar cutoff data.", link: "/ugeac-predictor?standalone=true" },
               ]
             },
             {

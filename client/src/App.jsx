@@ -177,6 +177,8 @@ function App() {
             <Route path="/pyq/:branchId/:semesterId" element={<PYQ />} />
             <Route path="/pyq/:branchId" element={<PYQ />} />
             <Route path="/cgpa" element={<BeuCgpa />} />
+            <Route path="/ugeac-predictor" element={<UgeacPredictor />} />
+            <Route path="/beu-result" element={<BeuResult />} />
             <Route path="/syllabus" element={<BeuSyllabus />} />
             <Route path="/syllabus/:branchId" element={<BeuSyllabus />} />
             <Route path="/college/:collegeSlug" element={<CollegePage />} />
