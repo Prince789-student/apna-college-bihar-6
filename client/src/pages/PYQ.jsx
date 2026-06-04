@@ -125,24 +125,25 @@ export default function PYQ() {
   const branchColor = branch ? BRANCH_COLORS[branch.color] : BRANCH_COLORS.amber;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 pb-24 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="max-w-5xl mx-auto px-3 md:px-4 pb-24 space-y-4 md:space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
 
       {/* Header */}
-      <div className="bg-white p-6 md:p-10 rounded-[2.5rem] border border-slate-200/80 shadow-xl relative overflow-hidden">
+      <div className="bg-white p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] border border-slate-200/80 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-amber-500/8 rounded-full blur-[80px] pointer-events-none"></div>
         <div className="relative z-10">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="p-3.5 bg-amber-500/15 text-amber-500 rounded-2xl">
-              <FileDigit size={30} />
+          <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
+            <div className="p-2.5 md:p-3.5 bg-amber-500/15 text-amber-500 rounded-xl md:rounded-2xl">
+              <FileDigit size={22} className="md:hidden" />
+              <FileDigit size={30} className="hidden md:block" />
             </div>
             <div>
-              <h1 className="text-3xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">PYQ Bank</h1>
-              <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.3em] mt-1">Branch → Semester → Subject → Papers</p>
+              <h1 className="text-xl md:text-3xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">PYQ Bank</h1>
+              <p className="text-[8px] md:text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] mt-0.5 md:mt-1">Branch → Semester → Subject → Papers</p>
             </div>
           </div>
 
           {/* Breadcrumb */}
-          <div className="flex items-center gap-1.5 flex-wrap mb-5">
+          <div className="flex items-center gap-1 md:gap-1.5 flex-wrap mb-3 md:mb-5">
             <button onClick={goHome} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'branch' ? 'bg-amber-500 text-white' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50'}`}>📋 PYQ</button>
             {branch && <><ChevronRight size={12} className="text-slate-300" /><button onClick={goToBranch} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'sem' ? 'bg-amber-500 text-white' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50'}`}>{branch.emoji} {branch.short}</button></>}
             {sem && <><ChevronRight size={12} className="text-slate-300" /><button onClick={goToSem} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'subject' ? 'bg-amber-500 text-white' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50'}`}>Sem {sem}</button></>}
@@ -151,10 +152,10 @@ export default function PYQ() {
 
           {/* Search */}
           <div className="relative group">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-amber-500" size={18} />
+            <Search className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-amber-500" size={16} />
             <input value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="Search PYQ across all subjects..."
-              className="w-full bg-slate-100 border-2 border-transparent focus:border-amber-500/40 rounded-2xl py-4 pl-14 pr-5 text-slate-900 text-sm font-bold outline-none transition-all placeholder:text-slate-400" />
+              placeholder="Search PYQ..."
+              className="w-full bg-slate-100 border-2 border-transparent focus:border-amber-500/40 rounded-xl md:rounded-2xl py-3 md:py-4 pl-11 md:pl-14 pr-4 md:pr-5 text-slate-900 text-xs md:text-sm font-bold outline-none transition-all placeholder:text-slate-400" />
           </div>
         </div>
       </div>
@@ -168,7 +169,7 @@ export default function PYQ() {
               <p className="text-slate-400 font-bold text-sm">No PYQs found for "{search}"</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
               {searchResults.map(d => <PYQFileCard key={d.id} d={d} onAction={handleAction} />)}
             </div>
           )}
@@ -184,16 +185,16 @@ export default function PYQ() {
               <span className="text-slate-400 text-xs font-black uppercase tracking-[0.25em]">Core Branches</span>
               <div className="h-px flex-1 bg-slate-200"></div>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 md:gap-4">
               {BRANCHES.filter(b => b.type === 'core').map(b => {
                 const c = BRANCH_COLORS[b.color] || BRANCH_COLORS.amber;
                 return (
                   <button key={b.id} onClick={() => { setBranch(b); setSem(null); setFolder(null); }}
-                    className={`flex flex-col items-start gap-3 p-5 rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:scale-[1.02] active:scale-[0.98] transition-all text-left shadow-sm hover:shadow-md`}>
-                    <span className="text-2xl">{b.emoji}</span>
+                    className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:scale-[1.02] active:scale-[0.98] transition-all text-left shadow-sm hover:shadow-md`}>
+                    <span className="text-xl md:text-2xl">{b.emoji}</span>
                     <div>
-                      <p className={`text-base font-[900] tracking-tight ${c.text}`}>{b.short}</p>
-                      <p className="text-[9px] font-bold text-slate-500 mt-0.5">{b.label}</p>
+                      <p className={`text-sm md:text-base font-[900] tracking-tight ${c.text}`}>{b.short}</p>
+                      <p className="text-[8px] md:text-[9px] font-bold text-slate-500 mt-0.5 leading-tight">{b.label}</p>
                     </div>
                     <div className={`mt-auto flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${c.text}`}>
                       Select <ArrowRight size={10} />
@@ -210,16 +211,16 @@ export default function PYQ() {
               <span className="text-slate-400 text-xs font-black uppercase tracking-[0.25em]">Specialization Branches</span>
               <div className="h-px flex-1 bg-slate-200"></div>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 md:gap-4">
               {BRANCHES.filter(b => b.type === 'spec').map(b => {
                 const c = BRANCH_COLORS[b.color] || BRANCH_COLORS.amber;
                 return (
                   <button key={b.id} onClick={() => { setBranch(b); setSem(null); setFolder(null); }}
-                    className={`flex flex-col items-start gap-3 p-5 rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:scale-[1.02] active:scale-[0.98] transition-all text-left shadow-sm hover:shadow-md`}>
-                    <span className="text-2xl">{b.emoji}</span>
+                    className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:scale-[1.02] active:scale-[0.98] transition-all text-left shadow-sm hover:shadow-md`}>
+                    <span className="text-xl md:text-2xl">{b.emoji}</span>
                     <div>
-                      <p className={`text-base font-[900] tracking-tight ${c.text}`}>{b.short}</p>
-                      <p className="text-[9px] font-bold text-slate-500 mt-0.5">{b.label}</p>
+                      <p className={`text-sm md:text-base font-[900] tracking-tight ${c.text}`}>{b.short}</p>
+                      <p className="text-[8px] md:text-[9px] font-bold text-slate-500 mt-0.5 leading-tight">{b.label}</p>
                     </div>
                     <div className={`mt-auto flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${c.text}`}>
                       Select <ArrowRight size={10} />
@@ -239,7 +240,7 @@ export default function PYQ() {
             <button onClick={goHome} className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition-all"><ArrowLeft size={16} className="text-slate-600" /></button>
             <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{branch.emoji} {branch.label} — Select Semester</p>
           </div>
-          <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
+          <div className="grid grid-cols-4 md:grid-cols-8 gap-2.5 md:gap-3">
             {SEMESTERS.map(s => (
               <button key={s} onClick={() => setSem(s)}
                 className={`aspect-square rounded-2xl flex flex-col items-center justify-center border-2 font-[900] text-xl transition-all hover:scale-105 active:scale-95 shadow-sm hover:shadow-md ${branchColor.bg} ${branchColor.border} ${branchColor.text}`}>
@@ -267,16 +268,17 @@ export default function PYQ() {
               <p className="text-slate-400 text-xs font-bold mt-1">Admin panel se {branch.short} Sem {sem} ke PYQ subject folders banao</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
               {subjectFolders.map(f => (
                 <button key={f.id} onClick={() => selectFolder(f)}
-                  className={`flex flex-col items-start gap-4 p-7 rounded-[2rem] border-2 bg-white hover:${branchColor.bg} ${branchColor.border} hover:scale-[1.01] active:scale-[0.99] transition-all text-left shadow-sm hover:shadow-lg group`}>
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${branchColor.badge}`}>
-                    <FolderOpen size={26} />
+                  className={`flex flex-col items-start gap-3 md:gap-4 p-5 md:p-7 rounded-2xl md:rounded-[2rem] border-2 bg-white hover:${branchColor.bg} ${branchColor.border} hover:scale-[1.01] active:scale-[0.99] transition-all text-left shadow-sm hover:shadow-lg group`}>
+                  <div className={`w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center ${branchColor.badge}`}>
+                    <FolderOpen size={20} className="md:hidden" />
+                    <FolderOpen size={26} className="hidden md:block" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-[900] text-slate-900 uppercase tracking-tight leading-tight">{f.title}</h3>
-                    <p className="text-[10px] font-bold text-slate-400 mt-1">{docs.filter(x => x.parentId === f.id).length} papers inside</p>
+                    <h3 className="text-base md:text-lg font-[900] text-slate-900 uppercase tracking-tight leading-tight">{f.title}</h3>
+                    <p className="text-[9px] md:text-[10px] font-bold text-slate-400 mt-1">{docs.filter(x => x.parentId === f.id).length} papers inside</p>
                   </div>
                   <div className={`flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${branchColor.text} group-hover:gap-2.5 transition-all`}>
                     Open PYQs <ArrowRight size={10} />
@@ -304,13 +306,13 @@ export default function PYQ() {
               <p className="text-slate-400 text-xs font-bold mt-1">Is subject mein abhi koi PYQ upload nahi hua</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
               {folderFiles.map((d, idx) => (
                 <React.Fragment key={d.id}>
                   {d.type === 'folder' ? (
                     <button onClick={() => selectFolder(d)}
-                      className="flex flex-col items-start gap-4 p-7 rounded-[2rem] border-2 bg-white hover:bg-amber-50 border-amber-100 hover:border-amber-300 transition-all text-left shadow-sm hover:shadow-md group">
-                      <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-amber-100"><FolderOpen size={22} className="text-amber-600" /></div>
+                      className="flex flex-col items-start gap-3 md:gap-4 p-5 md:p-7 rounded-2xl md:rounded-[2rem] border-2 bg-white hover:bg-amber-50 border-amber-100 hover:border-amber-300 transition-all text-left shadow-sm hover:shadow-md group">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center bg-amber-100"><FolderOpen size={20} className="text-amber-600" /></div>
                       <div>
                         <h3 className="text-base font-[900] text-slate-900 uppercase tracking-tight">{d.title}</h3>
                         <p className="text-[10px] font-bold text-slate-400 mt-1">{docs.filter(x => x.parentId === d.id).length} papers</p>
@@ -329,11 +331,11 @@ export default function PYQ() {
       )}
 
       {/* Footer */}
-      <div className="bg-slate-50 p-6 rounded-[2.5rem] border border-slate-200/50 flex items-center gap-3">
-        <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center"><ShieldCheck size={20} className="text-amber-600"/></div>
+      <div className="bg-slate-50 p-4 md:p-6 rounded-2xl md:rounded-[2.5rem] border border-slate-200/50 flex items-center gap-3">
+        <div className="w-9 h-9 md:w-10 md:h-10 bg-amber-100 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0"><ShieldCheck size={18} className="text-amber-600"/></div>
         <div>
-          <p className="text-slate-900 font-black uppercase text-xs">Verified PYQ Content</p>
-          <p className="text-[9px] text-slate-400 font-bold uppercase mt-0.5">Files verified by ACB Admin Team</p>
+          <p className="text-slate-900 font-black uppercase text-[10px] md:text-xs">Verified PYQ Content</p>
+          <p className="text-[8px] md:text-[9px] text-slate-400 font-bold uppercase mt-0.5">Files verified by ACB Admin Team</p>
         </div>
       </div>
 
@@ -344,28 +346,29 @@ export default function PYQ() {
 
 function PYQFileCard({ d, onAction }) {
   return (
-    <div className="bg-white rounded-[2rem] border border-slate-200/80 p-6 hover:border-amber-300/60 transition-all group flex flex-col shadow-sm hover:shadow-md">
-      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 bg-amber-100 text-amber-600 group-hover:scale-110 transition-transform">
-        <FileDigit size={22} />
+    <div className="bg-white rounded-2xl md:rounded-[2rem] border border-slate-200/80 p-4 md:p-6 hover:border-amber-300/60 transition-all group flex flex-col shadow-sm hover:shadow-md">
+      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4 bg-amber-100 text-amber-600 group-hover:scale-110 transition-transform">
+        <FileDigit size={18} className="md:hidden" />
+        <FileDigit size={22} className="hidden md:block" />
       </div>
-      <div className="flex-1 space-y-1.5 mb-4">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-widest border bg-amber-50 text-amber-600 border-amber-200">PYQ</span>
-          {d.semester && <span className="text-[8px] font-black bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full uppercase tracking-widest border border-slate-200">Sem {d.semester}</span>}
+      <div className="flex-1 space-y-1 md:space-y-1.5 mb-3 md:mb-4">
+        <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
+          <span className="text-[7px] md:text-[8px] font-black px-1.5 md:px-2 py-0.5 rounded-full uppercase tracking-widest border bg-amber-50 text-amber-600 border-amber-200">PYQ</span>
+          {d.semester && <span className="text-[7px] md:text-[8px] font-black bg-slate-100 text-slate-500 px-1.5 md:px-2 py-0.5 rounded-full uppercase tracking-widest border border-slate-200">Sem {d.semester}</span>}
         </div>
-        <h3 className="text-sm font-[900] text-slate-900 uppercase tracking-tight leading-tight">{d.title}</h3>
-        {d.subject && <p className="text-[10px] font-bold text-slate-500 flex items-center gap-1"><Bookmark size={9} className="text-amber-400" />{d.subject}</p>}
+        <h3 className="text-xs md:text-sm font-[900] text-slate-900 uppercase tracking-tight leading-tight">{d.title}</h3>
+        {d.subject && <p className="text-[9px] md:text-[10px] font-bold text-slate-500 flex items-center gap-1"><Bookmark size={9} className="text-amber-400" />{d.subject}</p>}
       </div>
-      <div className="flex items-center gap-2 pt-4 border-t border-slate-100">
+      <div className="flex items-center gap-1.5 md:gap-2 pt-3 md:pt-4 border-t border-slate-100">
         <button onClick={() => onAction(d.fileUrl, () => window.open(d.fileUrl, '_blank'))}
-          className="flex-1 flex items-center justify-center gap-1.5 py-3 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">
+          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 md:py-3 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg md:rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all">
           <Eye size={11} /> View
         </button>
         <button onClick={() => onAction(d.fileUrl, () => { const a = document.createElement('a'); a.href = d.fileUrl; a.download = d.title || 'pyq'; document.body.appendChild(a); a.click(); document.body.removeChild(a); })}
-          className="p-3 rounded-xl transition-all border bg-amber-100 hover:bg-amber-600 text-amber-600 hover:text-white border-amber-200"><Download size={13} /></button>
+          className="p-2.5 md:p-3 rounded-lg md:rounded-xl transition-all border bg-amber-100 hover:bg-amber-600 text-amber-600 hover:text-white border-amber-200"><Download size={12} /></button>
         <button onClick={() => onAction(d.fileUrl, () => window.open(`https://wa.me/?text=${encodeURIComponent(`Check out this PYQ: ${d.title} - ${d.fileUrl}`)}`, '_blank'))}
-          className="p-3 bg-emerald-50 hover:bg-emerald-600 text-emerald-600 hover:text-white rounded-xl transition-all border border-emerald-200">
-          <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.653a11.734 11.734 0 005.682 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          className="p-2.5 md:p-3 bg-emerald-50 hover:bg-emerald-600 text-emerald-600 hover:text-white rounded-lg md:rounded-xl transition-all border border-emerald-200">
+          <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.653a11.734 11.734 0 005.682 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
         </button>
       </div>
     </div>
