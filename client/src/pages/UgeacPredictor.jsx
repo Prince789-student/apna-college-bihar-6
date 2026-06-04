@@ -445,7 +445,7 @@ function UgeacPredictor() {
         <SEO 
           title="UGEAC 2025 College Predictor & Cutoff Ranks | Apna College Bihar"
           description="Predict your engineering college in Bihar based on UGEAC rank with 2024-2025 official cutoff data."
-          url="https://www.apnacollegebihar.online/dashboard/ugeac-predictor"
+          url="https://www.apnacollegebihar.online/ugeac-predictor"
         />
       )}
       {loadingData ? (

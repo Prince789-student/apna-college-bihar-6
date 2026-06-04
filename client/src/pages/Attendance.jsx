@@ -391,7 +391,7 @@ export default function Attendance() {
         </div>
         <div className="flex gap-2">
           {activeTab === 'subjects' && (
-            <button onClick={() => navigate('/dashboard/timetable')} className="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl flex items-center gap-2 text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-md">
+            <button onClick={() => navigate('/timetable')} className="px-5 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl flex items-center gap-2 text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-md">
               <Calendar size={16} /> Edit Timetable
             </button>
           )}
@@ -468,7 +468,7 @@ export default function Attendance() {
               </p>
             </div>
             <button
-              onClick={() => navigate('/dashboard/timetable')}
+              onClick={() => navigate('/timetable')}
               className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all active:scale-95 shrink-0"
             >
               <ExternalLink size={13} />

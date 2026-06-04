@@ -64,7 +64,7 @@ const ugeacPages = {
         <div className="p-6 bg-blue-500/5 border border-blue-500/10 rounded-2xl">
           <h4 className="text-xs font-black text-white uppercase tracking-wider mb-2">Want to predict your college options?</h4>
           <p className="text-xs text-slate-300 mb-4">Use our advanced UGEAC college predictor to evaluate your options using actual 2024 and 2025 cutoff datasets.</p>
-          <Link to="/dashboard/ugeac-predictor" className="inline-flex items-center gap-2 text-xs font-black text-blue-500 hover:text-blue-400 uppercase tracking-widest">
+          <Link to="/ugeac-predictor" className="inline-flex items-center gap-2 text-xs font-black text-blue-500 hover:text-blue-400 uppercase tracking-widest">
             Launch Predictor Tool <ChevronRight size={14} />
           </Link>
         </div>

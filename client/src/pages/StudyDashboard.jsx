@@ -595,7 +595,7 @@ export default function StudyDashboard() {
               <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Study Network</h2>
             </div>
           <div className="p-4">
-            <button onClick={() => navigate('/dashboard/groups' + (isStandalone ? '?standalone=true' : ''), { state: { from: 'study-network' } })} className="w-full flex items-center justify-between p-5 bg-slate-900 text-white rounded-2xl active:scale-95 transition-all">
+            <button onClick={() => navigate('/groups' + (isStandalone ? '?standalone=true' : ''), { state: { from: 'study-network' } })} className="w-full flex items-center justify-between p-5 bg-slate-900 text-white rounded-2xl active:scale-95 transition-all">
               <div className="flex items-center gap-3"><Users size={20} className="text-orange-400" /><div><p className="text-xs font-black uppercase tracking-widest">Study Groups</p><p className="text-[9px] text-slate-400 mt-0.5">Join or create a group</p></div></div>
               <ArrowRight size={18} className="text-slate-500" />
             </button>

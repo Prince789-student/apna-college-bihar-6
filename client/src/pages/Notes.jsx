@@ -221,7 +221,7 @@ export default function Notes() {
         <SEO 
           title="BEU B.Tech Notes PDF Download | Apna College Bihar" 
           description="Download free B.Tech semester notes and study material for all branches under Bihar Engineering University (BEU)."
-          url="https://www.apnacollegebihar.online/dashboard/notes"
+          url="https://www.apnacollegebihar.online/notes"
         />
       )}
 

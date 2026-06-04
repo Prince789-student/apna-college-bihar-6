@@ -7,7 +7,7 @@ const FALLBACK_ADS = {
   BANNER: {
     title: "Access Study Resources",
     desc: "Get all your engineering notes, PYQs, and college schedules in one place.",
-    link: "/dashboard/notes",
+    link: "/notes",
     type: "BANNER",
     icon: <BookOpen className="text-blue-400" size={32} />,
     col: "from-blue-600/20 to-indigo-900/40",
@@ -25,7 +25,7 @@ const FALLBACK_ADS = {
   INLINE: {
     title: "Support Educational Growth",
     desc: "Contribute to our notes bank and help fellow students succeed.",
-    link: "/dashboard/notes",
+    link: "/notes",
     type: "INLINE",
     icon: <Info className="text-emerald-400" size={20} />,
     col: "from-emerald-600/10 to-transparent",

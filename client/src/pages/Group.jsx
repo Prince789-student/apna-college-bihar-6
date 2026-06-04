@@ -208,7 +208,7 @@ export default function Group() {
                      <Copy size={12}/> Code: {g.code}
                    </button>
                    <button 
-                     onClick={() => navigate(`/dashboard/groups/${g.id}`)}
+                     onClick={() => navigate(`/groups/${g.id}`)}
                      className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-900/20"
                    >
                      Enter Hub

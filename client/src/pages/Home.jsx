@@ -179,8 +179,14 @@ export default function Home() {
                    Bihar ke engineering students ke liye complete solution — BEU semester notes download karein, UGEAC rank se apna college predict karein, aur counselling ki saari updates ek jagah paayein.
                 </p>
 
-            <div className="pt-8 max-w-2xl mx-auto mb-16">
-               <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.3em]">Scroll down to explore features</p>
+            <div className="pt-8 max-w-2xl mx-auto mb-16 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a href="#features" className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95 flex items-center gap-2">
+                Access Study Hub <ArrowRight size={16} />
+              </a>
+              <a href="/ApnaCollegeBihar_Stable.apk" download="ApnaCollegeBihar_Stable.apk" className="px-8 py-4 bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-sm active:scale-95 flex items-center gap-2 relative">
+                Download App <Download size={16} />
+                <span className="absolute -top-3 -right-3 bg-red-500 text-white text-[8px] font-black uppercase px-2 py-1 rounded-full shadow-lg animate-pulse">LATEST APK</span>
+              </a>
             </div>
  
             <div className="pt-16 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 items-center opacity-50 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-700">

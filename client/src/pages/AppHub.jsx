@@ -32,28 +32,28 @@ export default function AppHub() {
     {
       title: "🎓 BEU",
       items: [
-        { name: 'BEU Result', icon: <Globe size={24} />, path: '/dashboard/beu-result?standalone=true', color: 'text-blue-400' },
-        { name: 'Attendance', icon: <UserCheck size={24} />, path: '/dashboard/attendance?standalone=true', color: 'text-green-400' },
-        { name: 'Timetable', icon: <Calendar size={24} />, path: '/dashboard/timetable?standalone=true', color: 'text-yellow-400' },
-        { name: 'Notes', icon: <BookOpen size={24} />, path: '/dashboard/notes?standalone=true', color: 'text-indigo-400' },
-        { name: 'PYQ', icon: <FileText size={24} />, path: '/dashboard/pyq?standalone=true', color: 'text-purple-400' },
-        { name: 'SGPA/CGPA', icon: <GraduationCap size={24} />, path: '/dashboard/cgpa?standalone=true', color: 'text-cyan-400' },
-        { name: 'Syllabus', icon: <Library size={24} />, path: '/dashboard/syllabus?standalone=true', color: 'text-pink-400' },
+        { name: 'BEU Result', icon: <Globe size={24} />, path: '/beu-result?standalone=true', color: 'text-blue-400' },
+        { name: 'Attendance', icon: <UserCheck size={24} />, path: '/attendance?standalone=true', color: 'text-green-400' },
+        { name: 'Timetable', icon: <Calendar size={24} />, path: '/timetable?standalone=true', color: 'text-yellow-400' },
+        { name: 'Notes', icon: <BookOpen size={24} />, path: '/notes?standalone=true', color: 'text-indigo-400' },
+        { name: 'PYQ', icon: <FileText size={24} />, path: '/pyq?standalone=true', color: 'text-purple-400' },
+        { name: 'SGPA/CGPA', icon: <GraduationCap size={24} />, path: '/cgpa?standalone=true', color: 'text-cyan-400' },
+        { name: 'Syllabus', icon: <Library size={24} />, path: '/syllabus?standalone=true', color: 'text-pink-400' },
       ]
     },
     {
       title: "📚 STUDY",
       items: [
-        { name: 'Study Timer', icon: <Timer size={24} />, path: '/dashboard/study?standalone=true', color: 'text-rose-400' },
-        { name: 'Study Network', icon: <Users size={24} />, path: '/dashboard/groups?standalone=true', color: 'text-orange-400' },
-        { name: 'Scientific Calc', icon: <Calculator size={24} />, path: '/dashboard/calculator?standalone=true', color: 'text-emerald-400' },
-        { name: 'Study Resource', icon: <Link2 size={24} />, path: '/dashboard/study-resources?standalone=true', color: 'text-cyan-400' },
+        { name: 'Study Timer', icon: <Timer size={24} />, path: '/study?standalone=true', color: 'text-rose-400' },
+        { name: 'Study Network', icon: <Users size={24} />, path: '/groups?standalone=true', color: 'text-orange-400' },
+        { name: 'Scientific Calc', icon: <Calculator size={24} />, path: '/calculator?standalone=true', color: 'text-emerald-400' },
+        { name: 'Study Resource', icon: <Link2 size={24} />, path: '/study-resources?standalone=true', color: 'text-cyan-400' },
       ]
     },
     {
       title: "🧭 COUNSELLING",
       items: [
-        { name: 'UGEAC 2025', icon: <Send size={24} />, path: '/dashboard/ugeac-predictor?standalone=true', color: 'text-amber-400' },
+        { name: 'UGEAC 2025', icon: <Send size={24} />, path: '/ugeac-predictor?standalone=true', color: 'text-amber-400' },
       ]
     },
     {

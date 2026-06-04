@@ -212,7 +212,7 @@ function App() {
           {/* Protected Dashboard Routes */}
           <Route element={<ProtectedRoute />}>
             <Route element={<DashboardLayout />}>
-              <Route path="/dashboard" element={<Navigate to="/" replace />} />
+              <Route path="/" element={<Navigate to="/" replace />} />
               {/* Admin Routes */}
               <Route element={<AdminRoute />}>
                 <Route path="/dashboard/admin" element={<AdminPanel />} />

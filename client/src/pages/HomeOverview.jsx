@@ -11,7 +11,7 @@ export default function HomeOverview() {
       </h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Link to="/dashboard/notes" className="bg-slate-800 border border-slate-300 p-6 rounded-2xl shadow-lg hover:border-blue-500 transition group">
+          <Link to="/notes" className="bg-slate-800 border border-slate-300 p-6 rounded-2xl shadow-lg hover:border-blue-500 transition group">
             <div className="p-3 bg-slate-100 rounded-xl w-12 h-12 mb-4 flex items-center justify-center group-hover:bg-blue-600 transition">
               <BookOpen className="text-blue-400 group-hover:text-slate-900" />
             </div>
@@ -19,7 +19,7 @@ export default function HomeOverview() {
             <p className="text-slate-500">Access previous year question papers, lab manuals, and chapter notes here.</p>
           </Link>
           
-          <Link to="/dashboard/sgpa" className="bg-slate-800 border border-slate-300 p-6 rounded-2xl shadow-lg hover:border-green-500 transition group">
+          <Link to="/sgpa" className="bg-slate-800 border border-slate-300 p-6 rounded-2xl shadow-lg hover:border-green-500 transition group">
             <div className="p-3 bg-slate-100 rounded-xl w-12 h-12 mb-4 flex items-center justify-center group-hover:bg-green-600 transition">
               <GraduationCap className="text-green-400 group-hover:text-slate-900" />
             </div>
@@ -27,7 +27,7 @@ export default function HomeOverview() {
             <p className="text-slate-500">Instantly calculate your semester results using our official CGPA/SGPA tool.</p>
           </Link>
 
-          <Link to="/dashboard/calculator" className="bg-slate-800 border border-slate-300 p-6 rounded-2xl shadow-lg hover:border-purple-500 transition group">
+          <Link to="/calculator" className="bg-slate-800 border border-slate-300 p-6 rounded-2xl shadow-lg hover:border-purple-500 transition group">
             <div className="p-3 bg-slate-100 rounded-xl w-12 h-12 mb-4 flex items-center justify-center group-hover:bg-purple-600 transition">
               <Calculator className="text-purple-400 group-hover:text-slate-900" />
             </div>
@@ -35,7 +35,7 @@ export default function HomeOverview() {
             <p className="text-slate-500">Advanced calculator for complex engineering and math problems.</p>
           </Link>
 
-          <Link to="/dashboard/matrix" className="bg-slate-800 border border-slate-300 p-6 rounded-2xl shadow-lg hover:border-amber-500 transition group">
+          <Link to="/matrix" className="bg-slate-800 border border-slate-300 p-6 rounded-2xl shadow-lg hover:border-amber-500 transition group">
             <div className="p-3 bg-slate-100 rounded-xl w-12 h-12 mb-4 flex items-center justify-center group-hover:bg-amber-600 transition">
               <Grid className="text-amber-400 group-hover:text-slate-900" />
             </div>
@@ -43,7 +43,7 @@ export default function HomeOverview() {
             <p className="text-slate-500">Solve 4x4 matrices with our premium Casio-style solver tool.</p>
           </Link>
 
-          <Link to="/dashboard/study" className="bg-slate-800 border border-slate-300 p-6 rounded-2xl shadow-lg hover:border-orange-500 transition group">
+          <Link to="/study" className="bg-slate-800 border border-slate-300 p-6 rounded-2xl shadow-lg hover:border-orange-500 transition group">
             <div className="p-3 bg-slate-100 rounded-xl w-12 h-12 mb-4 flex items-center justify-center group-hover:bg-orange-600 transition mx-auto">
               <Timer className="text-orange-400 group-hover:text-slate-900" />
             </div>

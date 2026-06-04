@@ -247,7 +247,7 @@ export default function Timetable() {
         </div>
         <div className="flex gap-2 flex-wrap">
           <button
-            onClick={() => navigate('/dashboard/attendance')}
+            onClick={() => navigate('/attendance')}
             className="flex items-center gap-2 px-5 py-3 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
           >
             <UserCheck size={16} /> Mark Attendance <ArrowRight size={14} />

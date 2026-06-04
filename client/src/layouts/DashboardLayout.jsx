@@ -70,7 +70,7 @@ export default function DashboardLayout() {
   const FloatingTimer = () => {
     const { timerActive, timerTime } = useStudy();
     const [isMinimized, setIsMinimized] = useState(false);
-    if (!timerActive || location.pathname === '/dashboard/study') return null;
+    if (!timerActive || location.pathname === '/study') return null;
     const m = Math.floor((timerTime % 3600) / 60);
     const sec = timerTime % 60;
     return (
@@ -79,7 +79,7 @@ export default function DashboardLayout() {
           <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center animate-pulse"><Timer size={20} className="text-white" /></div>
           <div className={`flex items-center gap-4 pr-6 ${isMinimized ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
             <div><p className="text-[8px] font-black text-blue-400 uppercase tracking-widest leading-none mb-1">Live Focus</p><p className="text-xl font-black text-white tabular-nums tracking-tighter">{m.toString().padStart(2, '0')}:{sec.toString().padStart(2, '0')}</p></div>
-            <button onClick={() => navigate('/dashboard/study')} className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-white text-[9px] font-black uppercase tracking-widest">Resume</button>
+            <button onClick={() => navigate('/study')} className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-white text-[9px] font-black uppercase tracking-widest">Resume</button>
           </div>
           <button onClick={() => setIsMinimized(!isMinimized)} className="p-2 text-slate-500 hover:text-white">{isMinimized ? <ChevronLeft size={16} /> : <X size={16} />}</button>
         </div>
@@ -116,7 +116,7 @@ export default function DashboardLayout() {
          <button 
             onClick={() => {
               if (location.state?.from === 'study-network') {
-                navigate('/dashboard/study?standalone=true', { state: { tab: 'network' } });
+                navigate('/study?standalone=true', { state: { tab: 'network' } });
               } else {
                 navigate(-1);
               }

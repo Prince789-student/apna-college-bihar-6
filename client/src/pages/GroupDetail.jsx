@@ -25,7 +25,7 @@ export default function GroupDetail() {
       if (!docSnap.exists()) { setError('Study Collective not found'); setLoading(false); return; }
       const data = { id: docSnap.id, ...docSnap.data() };
       setGroup(data);
-      if (!data.members.includes(user.uid)) navigate('/dashboard/study');
+      if (!data.members.includes(user.uid)) navigate('/study');
       setLoading(false);
     });
     return () => unsubGroup();
@@ -50,7 +50,7 @@ export default function GroupDetail() {
 
   const deleteGroup = async () => {
     if (!isAdmin || !window.confirm('Permanently decommission this Hub?')) return;
-    try { await deleteDoc(doc(db, 'groups', groupId)); navigate('/dashboard/study'); } catch (e) { console.error(e); }
+    try { await deleteDoc(doc(db, 'groups', groupId)); navigate('/study'); } catch (e) { console.error(e); }
   };
 
   const setGroupGoal = async () => {
@@ -122,7 +122,7 @@ export default function GroupDetail() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-6 border-b border-slate-100">
         <div className="space-y-4 flex-1">
-           <button onClick={() => navigate('/dashboard/study', { state: { tab: 'group' } })} className="flex items-center space-x-2 text-slate-400 hover:text-blue-600 transition-colors group"><ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /><span className="text-[10px] font-black uppercase tracking-widest">Back to Network</span></button>
+           <button onClick={() => navigate('/study', { state: { tab: 'group' } })} className="flex items-center space-x-2 text-slate-400 hover:text-blue-600 transition-colors group"><ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /><span className="text-[10px] font-black uppercase tracking-widest">Back to Network</span></button>
            <div className="space-y-2">
               <h1 className="text-3xl md:text-5xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">{group.name}</h1>
               <div className="flex flex-wrap items-center gap-3">

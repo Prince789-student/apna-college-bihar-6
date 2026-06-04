@@ -259,7 +259,7 @@ export default function CollegePage() {
         <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">
           <Link to="/hub" className="hover:text-blue-500 transition-colors">Home</Link>
           <ChevronRight size={10} />
-          <Link to="/dashboard/ugeac-predictor" className="hover:text-blue-500 transition-colors">Predictor</Link>
+          <Link to="/ugeac-predictor" className="hover:text-blue-500 transition-colors">Predictor</Link>
           <ChevronRight size={10} />
           <span className="text-slate-400">{college.short}</span>
         </div>
@@ -287,7 +287,7 @@ export default function CollegePage() {
                 <Globe size={14} /> Official Portal
               </a>
             )}
-            <Link to="/dashboard/ugeac-predictor" className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20">
+            <Link to="/ugeac-predictor" className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20">
               UGEAC Predictor <ArrowRight size={14} />
             </Link>
           </div>
@@ -351,7 +351,7 @@ export default function CollegePage() {
                     Admissions to {college.short} B.Tech courses are conducted strictly based on JEE Main CRL/AIR Ranks via BCECE Board's Under Graduate Engineering Admission Counselling (UGEAC). Candidates must participate in the online choice locking process to secure allotment.
                   </p>
                   <div className="pt-2">
-                    <Link to="/dashboard/ugeac-predictor" className="inline-flex items-center gap-2 text-xs font-black text-blue-500 hover:text-blue-400 uppercase tracking-widest">
+                    <Link to="/ugeac-predictor" className="inline-flex items-center gap-2 text-xs font-black text-blue-500 hover:text-blue-400 uppercase tracking-widest">
                       Launch UGEAC Predictor Tool <ChevronRight size={14} />
                     </Link>
                   </div>

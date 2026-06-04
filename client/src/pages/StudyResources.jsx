@@ -104,7 +104,7 @@ export default function StudyResources() {
       <SEO 
         title="Study Resources | Apna College Bihar"
         description="Access and share verified study materials, links, and guides for Bihar Engineering University students."
-        url="https://www.apnacollegebihar.online/dashboard/study-resources"
+        url="https://www.apnacollegebihar.online/study-resources"
       />
       
       {/* Header Section */}

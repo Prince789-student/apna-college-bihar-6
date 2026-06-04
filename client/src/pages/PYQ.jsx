@@ -209,7 +209,7 @@ export default function PYQ() {
         <SEO 
           title="BEU B.Tech PYQ Papers Download | Apna College Bihar" 
           description="Download free B.Tech Previous Year Question (PYQ) papers for all branches under Bihar Engineering University (BEU)."
-          url="https://www.apnacollegebihar.online/dashboard/pyq"
+          url="https://www.apnacollegebihar.online/pyq"
         />
       )}
 
