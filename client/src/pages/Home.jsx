@@ -170,17 +170,7 @@ export default function Home() {
                    Bihar ke engineering students ke liye — UGEAC 2025 rank se college predict karo, BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya ka cutoff dekho, aur free BEU semester notes download karo.
                 </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
-               <a 
-                 href="/ApnaCollegeBihar_Stable.apk" 
-                 download="ApnaCollegeBihar_Stable.apk"
-                 className="w-full sm:w-auto px-10 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-[2rem] font-black text-xs uppercase tracking-[0.2em] shadow-[0_20px_50px_rgba(37,99,235,0.3)] transition-all active:scale-95 flex items-center justify-center gap-3"
-               >
-                 <Download size={20} /> Download App
-               </a>
-            </div>
-
-            <div className="pt-8 max-w-2xl mx-auto">
+            <div className="pt-8 max-w-2xl mx-auto mb-16">
                <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.3em]">Scroll down to explore features</p>
             </div>
  
@@ -264,6 +254,145 @@ export default function Home() {
                  </div>
               </div>
            </div>
+        </div>
+      </section>
+
+      {/* ── Strict App Blocker Feature Section ── */}
+      <section className="py-20 px-6 md:px-16 container mx-auto relative z-10">
+        <div className="bg-gradient-to-br from-slate-900 via-slate-950 to-indigo-950 text-white rounded-[3rem] p-8 md:p-16 relative overflow-hidden border border-slate-800 shadow-2xl">
+          {/* Decorative background grid/orbs */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-600/20 rounded-full blur-[100px] pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+            {/* Text description */}
+            <div className="lg:col-span-7 space-y-6 md:space-y-8 text-left">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 border border-red-500/20 rounded-full text-red-400">
+                <Shield size={14} className="animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-widest">Premium Mobile Feature</span>
+              </div>
+              
+              <h2 className="text-3xl md:text-5xl font-[1000] tracking-tighter uppercase leading-[0.9]">
+                🚫 Strict App Blocker <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Hardcore Focus Mode</span>
+              </h2>
+
+              <p className="text-slate-400 text-xs md:text-sm font-medium leading-relaxed">
+                Mobile notifications aur social media apps se hone wali distraction ko block karein. Hamare mobile app me integrated <strong>Strict App Blocker</strong> system aapko phone use karne se rokta hai aur focus karne par majboor karta hai.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                <div className="flex gap-4">
+                  <div className="p-3 bg-slate-800 border border-slate-700/50 rounded-2xl h-fit text-blue-400 shrink-0">
+                    <CheckCircle size={18} />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-black uppercase tracking-wider text-slate-200">Custom Whitelist</h4>
+                    <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">Select only the apps you need for study (like Chrome or YouTube for lectures) and block everything else.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="p-3 bg-slate-800 border border-slate-700/50 rounded-2xl h-fit text-indigo-400 shrink-0">
+                    <Timer size={18} />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-black uppercase tracking-wider text-slate-200">Timer Integration</h4>
+                    <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">Set your study timer (e.g. 45 mins) and the app blocker automatically locks the device until the timer ends.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="p-3 bg-slate-800 border border-slate-700/50 rounded-2xl h-fit text-red-400 shrink-0">
+                    <Shield size={18} />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-black uppercase tracking-wider text-slate-200">Hardcore Overlay Lock</h4>
+                    <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">If you try to open blocked apps, a strict full-screen reminder blocks them immediately via accessibility service.</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="p-3 bg-slate-800 border border-slate-700/50 rounded-2xl h-fit text-emerald-400 shrink-0">
+                    <Sparkles size={18} />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-black uppercase tracking-wider text-slate-200">Boost Study Hours</h4>
+                    <p className="text-slate-400 text-[11px] mt-1 leading-relaxed">Designed by engineers for engineering students to double active focus time during exam seasons.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-6">
+                <a 
+                  href="/ApnaCollegeBihar_Stable.apk"
+                  download="ApnaCollegeBihar_Stable.apk"
+                  className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl active:scale-95"
+                >
+                  <Download size={16} /> Get Native Android App (with Blocker)
+                </a>
+              </div>
+            </div>
+
+            {/* Visual simulation box / mockup */}
+            <div className="lg:col-span-5 relative mt-8 lg:mt-0">
+              <div className="absolute inset-0 bg-blue-500/20 rounded-[2.5rem] blur-2xl pointer-events-none"></div>
+              
+              {/* Phone Mockup Screen */}
+              <div className="relative mx-auto max-w-[280px] bg-slate-950 border-[6px] border-slate-800 rounded-[3rem] shadow-2xl overflow-hidden aspect-[9/18]">
+                {/* Speaker/Notch */}
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-28 h-4 bg-slate-800 rounded-b-xl z-20"></div>
+
+                {/* Inner Screen */}
+                <div className="relative p-6 h-full flex flex-col justify-between bg-slate-950 select-none">
+                  {/* Status Bar */}
+                  <div className="flex justify-between items-center text-[8px] text-slate-500 font-bold">
+                    <span>12:00 PM</span>
+                    <div className="flex items-center gap-1">
+                      <span>LTE</span>
+                      <div className="w-3 h-1.5 bg-slate-500 rounded-xs"></div>
+                    </div>
+                  </div>
+
+                  {/* Mock Blocker UI */}
+                  <div className="my-auto text-center space-y-6 flex flex-col items-center justify-center">
+                    <div className="w-16 h-16 bg-red-500/10 border border-red-500/30 rounded-2xl flex items-center justify-center text-red-500 animate-pulse">
+                      <ShieldCheck size={32} />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <h5 className="text-sm font-black uppercase tracking-wider text-red-400">Distraction Blocked</h5>
+                      <p className="text-[10px] text-slate-400 font-medium max-w-[180px] mx-auto leading-relaxed">
+                        Instagram is blocked. Remaining study time:
+                      </p>
+                    </div>
+
+                    {/* Timer */}
+                    <div className="bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 w-fit mx-auto shadow-inner">
+                      <span className="font-[1000] text-xl tracking-widest text-slate-200 font-mono">25:00</span>
+                    </div>
+
+                    <p className="text-[8px] text-slate-500 font-black uppercase tracking-widest">
+                      🔒 STRICT BLOCKER ACTIVE
+                    </p>
+                  </div>
+
+                  {/* Allowed Whitelist Indicator */}
+                  <div className="bg-slate-900/50 border border-slate-800 p-3 rounded-2xl text-center space-y-1.5">
+                    <span className="text-[7px] text-slate-400 font-black uppercase tracking-widest block">Allowed Apps Only:</span>
+                    <div className="flex justify-center gap-2">
+                      <div className="w-12 py-1 rounded bg-blue-600/20 border border-blue-500/30 text-blue-400 text-[8px] font-bold">
+                        Chrome
+                      </div>
+                      <div className="w-12 py-1 rounded bg-indigo-600/20 border border-indigo-500/30 text-indigo-400 text-[8px] font-bold">
+                        BEU
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
