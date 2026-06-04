@@ -99,9 +99,46 @@ for (const branch of branches) {
   }
 }
 
-// College Pages
+// College Pages & Sub-pages
 for (const col of colleges) {
   urls.push(`/college/${col}`);
+  urls.push(`/college/${col}/fees`);
+  urls.push(`/college/${col}/placement`);
+  urls.push(`/college/${col}/cutoff`);
+  urls.push(`/college/${col}/hostel`);
+  urls.push(`/college/${col}/review`);
+  urls.push(`/college/${col}/branches`);
+}
+
+// Branch Hub Pages & Sub-pages
+for (const branch of branches) {
+  urls.push(`/branch/${branch}`);
+  urls.push(`/branch/${branch}/career`);
+  urls.push(`/branch/${branch}/salary`);
+  urls.push(`/branch/${branch}/skills`);
+  urls.push(`/branch/${branch}/placement`);
+  urls.push(`/branch/${branch}/internship`);
+}
+
+// UGEAC Deep Pages
+const ugeacPages = [
+  'cutoff-2025',
+  'choice-filling-guide',
+  'seat-allotment',
+  'merit-list',
+  'counselling-process',
+  'document-verification'
+];
+for (const page of ugeacPages) {
+  urls.push(`/ugeac/${page}`);
+}
+
+// Subject Pages
+for (const subject of commonSubjects) {
+  urls.push(`/subject/${subject}`);
+  urls.push(`/subject/${subject}/notes`);
+  urls.push(`/subject/${subject}/pyq`);
+  urls.push(`/subject/${subject}/syllabus`);
 }
 
 // Programmatic SEO Keywords (Search routes)

@@ -43,6 +43,10 @@ const Contact = React.lazy(() => import('./pages/Contact'));
 const SearchSEO = React.lazy(() => import('./pages/SearchSEO'));
 const BeuToolSEO = React.lazy(() => import('./pages/BeuToolSEO'));
 const FeatureSEO = React.lazy(() => import('./pages/FeatureSEO'));
+const CollegePage = React.lazy(() => import('./pages/CollegePage'));
+const BranchHub = React.lazy(() => import('./pages/BranchHub'));
+const UgeacInfo = React.lazy(() => import('./pages/UgeacInfo'));
+const SubjectPage = React.lazy(() => import('./pages/SubjectPage'));
 
 function LoadingScreen() {
   return (
@@ -171,7 +175,13 @@ function App() {
             <Route path="/pyq/:branchId/:semesterId" element={<PYQ />} />
             <Route path="/pyq/:branchId" element={<PYQ />} />
             <Route path="/syllabus/:branchId" element={<BeuSyllabus />} />
-            <Route path="/college/:collegeSlug" element={<UgeacPredictor />} />
+            <Route path="/college/:collegeSlug" element={<CollegePage />} />
+            <Route path="/college/:collegeSlug/:section" element={<CollegePage />} />
+            <Route path="/branch/:branchId" element={<BranchHub />} />
+            <Route path="/branch/:branchId/:section" element={<BranchHub />} />
+            <Route path="/ugeac/:page" element={<UgeacInfo />} />
+            <Route path="/subject/:subjectSlug" element={<SubjectPage />} />
+            <Route path="/subject/:subjectSlug/:section" element={<SubjectPage />} />
             {/* BEU Tool SEO Routes – Attendance, Timetable, CGPA, Result */}
             <Route path="/beu/:tool" element={<BeuToolSEO />} />
             <Route path="/beu/:tool/:keyword" element={<BeuToolSEO />} />
