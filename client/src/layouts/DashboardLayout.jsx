@@ -7,6 +7,7 @@ import { Capacitor } from '@capacitor/core';
 import { getToken } from 'firebase/messaging';
 import { doc, updateDoc } from 'firebase/firestore';
 import { messaging, VAPID_KEY, db } from '../firebase';
+import SEO from '../components/SEO';
 
 export default function DashboardLayout() {
   const isNative = Capacitor.isNativePlatform();
@@ -109,6 +110,7 @@ export default function DashboardLayout() {
 
   return (
     <div className="flex flex-col h-screen bg-white overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30">
+      <SEO title={pageTitle} />
       {/* Universal Clean Header for All Platforms & Devices */}
       <div className="flex items-center justify-between px-6 py-4 bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-[100]">
          <button 
