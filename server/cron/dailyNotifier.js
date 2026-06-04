@@ -5,8 +5,8 @@ const admin = require('../firebaseAdmin');
 // Since server might run on UTC, 6:00 AM IST is 00:30 AM UTC.
 // Node-cron allows timezone configuration.
 const startDailyCron = () => {
-    if (!admin) {
-        console.warn('⚠️ Cron not started: Firebase Admin missing.');
+    if (!admin || admin.apps.length === 0) {
+        console.warn('⚠️ Cron not started: Firebase Admin not initialized.');
         return;
     }
 

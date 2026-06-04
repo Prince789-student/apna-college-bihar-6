@@ -62,8 +62,8 @@ const fallbackHackathons = [
 ];
 
 const fetchHackathons = async () => {
-  if (!admin) {
-    console.warn('⚠️ Hackathon Fetcher not started: Firebase Admin missing.');
+  if (!admin || admin.apps.length === 0) {
+    console.warn('⚠️ Hackathon Fetcher not started: Firebase Admin not initialized.');
     return;
   }
 
