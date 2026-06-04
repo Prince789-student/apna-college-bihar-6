@@ -32,7 +32,7 @@ const fallbackHackathons = [
     host: "HackIndia Organization",
     date: "Sep - Oct 2026",
     prize: "₹15,00,000 Prize Pool",
-    url: "https://hackindia.co",
+    url: "https://unstop.com/hackathons?query=hackindia",
     logo: "",
     source: "National",
     type: "Hybrid"
@@ -43,7 +43,7 @@ const fallbackHackathons = [
     host: "IIT Patna Techfest Cell",
     date: "Oct 2026",
     prize: "₹50,000 Prize Pool",
-    url: "https://celesta.org.in",
+    url: "https://unstop.com/college-fests?search=celesta",
     logo: "",
     source: "IIT Patna",
     type: "Offline"
@@ -54,7 +54,7 @@ const fallbackHackathons = [
     host: "NIT Patna Student Council",
     date: "Nov 2026",
     prize: "₹30,000 Prize Pool",
-    url: "https://nitp.ac.in",
+    url: "https://unstop.com/college-fests?search=nit+patna",
     logo: "",
     source: "NIT Patna",
     type: "Offline"

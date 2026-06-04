@@ -8,7 +8,7 @@ import { useAuth } from '../context/AuthContext';
 import { 
   Cpu, Users, Calendar, Award, BookOpen, Search, Plus, 
   HelpCircle, ChevronRight, CheckCircle2, AlertTriangle, 
-  ExternalLink, Code, Layers, FileSpreadsheet, Loader2 
+  ExternalLink, Code, Layers, FileSpreadsheet, Loader2, Building2
 } from 'lucide-react';
 import SEO from '../components/SEO';
 import toast from 'react-hot-toast';
@@ -43,7 +43,6 @@ export default function HackathonHub() {
     desc: ''
   });
 
-  // Local techfests list (Bihar-specific GEC events)
   const biharTechfests = [
     {
       title: "MIT TechFest 2026",
@@ -51,7 +50,7 @@ export default function HackathonHub() {
       date: "October 12-14, 2026",
       events: "Robo-war, Speed Coding, IoT Prototype Showcase",
       status: "Upcoming",
-      contact: "techfest@mitmuzaffarpur.org"
+      url: "https://unstop.com/college-fests?search=Muzaffarpur"
     },
     {
       title: "BCE Technokriti 2026",
@@ -59,7 +58,7 @@ export default function HackathonHub() {
       date: "November 05-08, 2026",
       events: "National Coding Challenge, Hack-a-Thon, Web Design",
       status: "Upcoming",
-      contact: "technokriti@bcebhagalpur.ac.in"
+      url: "https://unstop.com/college-fests?search=Bhagalpur"
     },
     {
       title: "GCE Gaya Tech-Sangram 2026",
@@ -67,7 +66,7 @@ export default function HackathonHub() {
       date: "September 24-26, 2026",
       events: "Full-Stack hackathon, Line Follower Robot, PPT Presentation",
       status: "Upcoming",
-      contact: "events@gcegaya.ac.in"
+      url: "https://unstop.com/college-fests?search=Gaya"
     },
     {
       title: "BCE Bakhtiyarpur Codestar 2026",
@@ -75,7 +74,7 @@ export default function HackathonHub() {
       date: "December 01-03, 2026",
       events: "24-Hour Coding Marathon, App Development",
       status: "Upcoming",
-      contact: "codestar@bcepatna.ac.in"
+      url: "https://unstop.com/college-fests?search=Bakhtiyarpur"
     }
   ];
 
@@ -190,7 +189,7 @@ export default function HackathonHub() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 font-['Inter'] relative overflow-hidden">
+    <div className="min-h-screen bg-slate-50 text-slate-900 font-['Inter'] relative overflow-hidden">
       <SEO 
         title="Bihar Engineering Hackathon Portal & Team Finder | Apna College Bihar"
         description="Discover active online hackathons and GEC techfests in Bihar. Find coding teammates across colleges, get SIH preparation templates, and access prototyping resources."
@@ -207,15 +206,15 @@ export default function HackathonHub() {
         <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">
           <Link to="/hub" className="hover:text-blue-500 transition-colors">Home</Link>
           <ChevronRight size={10} />
-          <span className="text-slate-300">Hackathon Portal</span>
+          <span className="text-slate-700">Hackathon Portal</span>
         </div>
 
         {/* Hero Header */}
-        <div className="bg-[#0f172a]/40 backdrop-blur-md border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-2xl mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="bg-white backdrop-blur-md border border-slate-200 p-6 md:p-8 rounded-[2rem] shadow-2xl mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
             <span className="px-2.5 py-1 bg-indigo-500/15 border border-indigo-500/20 text-indigo-400 rounded-lg text-[9px] font-black uppercase tracking-widest block w-fit mb-3">Innovation Hub</span>
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tighter text-white uppercase leading-none mb-3">Bihar Engineering Hackathon Hub</h1>
-            <p className="text-xs text-slate-400 font-semibold max-w-xl">Find teammates across Bihar GECs, register for coding fests, and master Smart India Hackathon (SIH) screening rounds.</p>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tighter text-slate-900 uppercase leading-none mb-3">Bihar Engineering Hackathon Hub</h1>
+            <p className="text-xs text-slate-500 font-semibold max-w-xl">Find teammates across Bihar GECs, register for coding fests, and master Smart India Hackathon (SIH) screening rounds.</p>
           </div>
           {activeTab === 'team' && (
             <button 
@@ -227,7 +226,7 @@ export default function HackathonHub() {
                   setShowForm(true);
                 }
               }} 
-              className="flex items-center gap-2 px-5 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20"
+              className="flex items-center gap-2 px-5 py-3.5 bg-blue-600 hover:bg-blue-500 text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20"
             >
               <Plus size={14} /> Post Teammate Request
             </button>
@@ -235,7 +234,7 @@ export default function HackathonHub() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex overflow-x-auto pb-1 mb-8 gap-2 border-b border-white/5 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
+        <div className="flex overflow-x-auto pb-1 mb-8 gap-2 border-b border-slate-200 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
           {tabs.map(tab => (
             <button
               key={tab.id}
@@ -243,7 +242,7 @@ export default function HackathonHub() {
               className={`flex items-center gap-2 px-6 py-4 text-xs font-black uppercase tracking-widest rounded-t-xl transition-all whitespace-nowrap border-b-2 ${
                 activeTab === tab.id 
                   ? 'bg-indigo-600/10 text-indigo-500 border-indigo-600' 
-                  : 'text-slate-400 border-transparent hover:text-white hover:bg-white/[0.02]'
+                  : 'text-slate-500 border-transparent hover:text-slate-900 hover:bg-slate-100'
               }`}
             >
               {tab.icon} {tab.name}
@@ -259,23 +258,23 @@ export default function HackathonHub() {
             <div className="space-y-8 animate-in fade-in duration-300">
               
               {/* Filter controls */}
-              <div className="bg-[#0f172a]/30 border border-white/5 p-4 rounded-2xl flex flex-col md:flex-row gap-4 items-center justify-between shadow-md">
+              <div className="bg-white border border-slate-200 p-4 rounded-2xl flex flex-col md:flex-row gap-4 items-center justify-between shadow-md">
                 <div className="relative w-full md:max-w-md">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
                   <input 
                     type="text" 
                     placeholder="Search hackathons, hosts..." 
-                    className="w-full bg-slate-900 border border-white/5 rounded-xl p-3.5 pl-12 text-xs text-slate-200 outline-none focus:border-indigo-500 transition-all"
+                    className="w-full bg-slate-100 border border-slate-200 rounded-xl p-3.5 pl-12 text-xs text-slate-800 outline-none focus:border-indigo-500 transition-all"
                     value={hkSearch}
                     onChange={e => setHkSearch(e.target.value)}
                   />
                 </div>
                 <div className="flex items-center gap-3 w-full md:w-auto">
-                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">Mode</label>
+                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Mode</label>
                   <select 
                     value={hkTypeFilter} 
                     onChange={e => setHkTypeFilter(e.target.value)}
-                    className="w-full md:w-44 bg-slate-900 border border-white/5 rounded-xl p-3.5 text-xs text-white uppercase font-black tracking-widest outline-none"
+                    className="w-full md:w-44 bg-slate-100 border border-slate-200 rounded-xl p-3.5 text-xs text-slate-900 uppercase font-black tracking-widest outline-none"
                   >
                     <option value="All">All Modes</option>
                     <option value="Online">Online</option>
@@ -287,37 +286,37 @@ export default function HackathonHub() {
 
               {/* Active Hackathons Grid */}
               <div>
-                <h2 className="text-lg font-black text-white uppercase tracking-wider mb-6 flex items-center gap-2">
+                <h2 className="text-lg font-black text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
                   <Calendar className="text-indigo-500" size={20} /> Active Online & National Hackathons
                 </h2>
                 
                 {loadingHackathons ? (
-                  <div className="p-20 text-center bg-slate-900/10 border border-white/5 rounded-[2rem] flex flex-col items-center justify-center">
+                  <div className="p-20 text-center bg-slate-100 border border-slate-200 rounded-[2rem] flex flex-col items-center justify-center">
                     <Loader2 size={32} className="text-indigo-500 animate-spin mb-4" />
                     <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Fetching live Hackathons...</p>
                   </div>
                 ) : filteredHackathons.length === 0 ? (
-                  <div className="p-16 text-center bg-slate-900/10 border border-white/5 rounded-[2rem] text-slate-500 text-xs font-bold uppercase tracking-wider">
+                  <div className="p-16 text-center bg-slate-100 border border-slate-200 rounded-[2rem] text-slate-500 text-xs font-bold uppercase tracking-wider">
                     No active hackathons found matching filters.
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredHackathons.map(hk => (
-                      <div key={hk.id} className="bg-[#0f172a]/30 border border-white/5 p-6 rounded-3xl flex flex-col justify-between hover:border-indigo-500/20 transition-all group shadow-lg">
+                      <div key={hk.id} className="bg-white border border-slate-200 p-6 rounded-3xl flex flex-col justify-between hover:border-indigo-500/20 transition-all group shadow-lg">
                         <div>
                           <div className="flex justify-between items-start gap-2 mb-4">
                             <span className="px-2 py-0.5 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded text-[8px] font-black uppercase tracking-wider">{hk.type}</span>
                             <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">{hk.source || 'Online'}</span>
                           </div>
-                          <h3 className="text-sm font-black text-white uppercase tracking-tight leading-snug mb-2 group-hover:text-indigo-400 transition-colors">{hk.title}</h3>
-                          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">Host: {hk.host}</p>
-                          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-3">Timeline: {hk.date}</p>
-                          <div className="p-3 bg-slate-900/50 rounded-xl border border-white/5 mb-4">
+                          <h3 className="text-sm font-black text-slate-900 uppercase tracking-tight leading-snug mb-2 group-hover:text-indigo-400 transition-colors">{hk.title}</h3>
+                          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1">Host: {hk.host}</p>
+                          <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-3">Timeline: {hk.date}</p>
+                          <div className="p-3 bg-slate-100 rounded-xl border border-slate-200 mb-4">
                             <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest block mb-0.5">Prizes & Awards</span>
                             <span className="text-xs font-black text-emerald-400 uppercase tracking-tight">{hk.prize}</span>
                           </div>
                         </div>
-                        <a href={hk.url} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 w-full py-3 bg-slate-900 hover:bg-indigo-600 text-slate-300 hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest border border-white/5 transition-all">
+                        <a href={hk.url} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 w-full py-3 bg-slate-100 hover:bg-indigo-600 text-slate-700 hover:text-slate-900 rounded-xl text-[9px] font-black uppercase tracking-widest border border-slate-200 transition-all">
                           Apply Now <ExternalLink size={12} />
                         </a>
                       </div>
@@ -327,26 +326,26 @@ export default function HackathonHub() {
               </div>
 
               {/* Bihar College Techfests */}
-              <div className="border-t border-white/5 pt-8">
-                <h2 className="text-lg font-black text-white uppercase tracking-wider mb-6 flex items-center gap-2">
+              <div className="border-t border-slate-200 pt-8">
+                <h2 className="text-lg font-black text-slate-900 uppercase tracking-wider mb-6 flex items-center gap-2">
                   <Building2 className="text-indigo-500" size={20} /> Bihar GEC Techfests & Coding Events
                 </h2>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {biharTechfests.map((fest, idx) => (
-                    <div key={idx} className="bg-[#0f172a]/30 border border-white/5 p-6 rounded-3xl space-y-4 hover:border-indigo-500/20 transition-all shadow-lg">
+                    <div key={idx} className="bg-white border border-slate-200 p-6 rounded-3xl space-y-4 hover:border-indigo-500/20 transition-all shadow-lg">
                       <div className="flex justify-between items-center">
-                        <h3 className="text-sm font-black text-white uppercase tracking-tight">{fest.title}</h3>
+                        <h3 className="text-sm font-black text-slate-900 uppercase tracking-tight">{fest.title}</h3>
                         <span className="px-2 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded text-[8px] font-black uppercase tracking-wider">{fest.status}</span>
                       </div>
-                      <div className="space-y-1.5 text-[10px] text-slate-400 font-semibold">
-                        <p className="uppercase tracking-wider">College: <strong className="text-slate-300">{fest.college}</strong></p>
-                        <p className="uppercase tracking-wider">Dates: <strong className="text-slate-300">{fest.date}</strong></p>
+                      <div className="space-y-1.5 text-[10px] text-slate-500 font-semibold">
+                        <p className="uppercase tracking-wider">College: <strong className="text-slate-700">{fest.college}</strong></p>
+                        <p className="uppercase tracking-wider">Dates: <strong className="text-slate-700">{fest.date}</strong></p>
                         <p className="uppercase tracking-wider leading-relaxed">Key Contests: <span className="text-indigo-400 font-bold">{fest.events}</span></p>
                       </div>
-                      <div className="pt-2 border-t border-white/5 flex items-center justify-between">
-                        <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Contact: {fest.contact}</span>
-                        <a href={`mailto:${fest.contact}`} className="text-[9px] font-black text-indigo-500 hover:text-indigo-400 uppercase tracking-widest flex items-center gap-1">Inquire <ChevronRight size={10} /></a>
+                      <div className="pt-2 border-t border-slate-200 flex items-center justify-between">
+                        <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Platform: Unstop</span>
+                        <a href={fest.url} target="_blank" rel="noreferrer" className="text-[9px] font-black text-indigo-500 hover:text-indigo-400 uppercase tracking-widest flex items-center gap-1">View Details <ChevronRight size={10} /></a>
                       </div>
                     </div>
                   ))}
@@ -361,23 +360,23 @@ export default function HackathonHub() {
             <div className="space-y-8 animate-in fade-in duration-300">
               
               {/* Filters */}
-              <div className="bg-[#0f172a]/30 border border-white/5 p-4 rounded-2xl flex flex-col md:flex-row gap-4 items-center justify-between shadow-md">
+              <div className="bg-white border border-slate-200 p-4 rounded-2xl flex flex-col md:flex-row gap-4 items-center justify-between shadow-md">
                 <div className="relative w-full md:max-w-md">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
                   <input 
                     type="text" 
                     placeholder="Search by skills, roles..." 
-                    className="w-full bg-slate-900 border border-white/5 rounded-xl p-3.5 pl-12 text-xs text-slate-200 outline-none focus:border-indigo-500 transition-all"
+                    className="w-full bg-slate-100 border border-slate-200 rounded-xl p-3.5 pl-12 text-xs text-slate-800 outline-none focus:border-indigo-500 transition-all"
                     value={teamSearch}
                     onChange={e => setTeamSearch(e.target.value)}
                   />
                 </div>
                 <div className="flex items-center gap-3 w-full md:w-auto">
-                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest whitespace-nowrap">College</label>
+                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">College</label>
                   <input 
                     type="text"
                     placeholder="e.g. MIT, BCE" 
-                    className="w-full md:w-44 bg-slate-900 border border-white/5 rounded-xl p-3.5 text-xs text-white uppercase font-black tracking-widest outline-none"
+                    className="w-full md:w-44 bg-slate-100 border border-slate-200 rounded-xl p-3.5 text-xs text-slate-900 uppercase font-black tracking-widest outline-none"
                     value={teamCollegeFilter === 'All' ? '' : teamCollegeFilter}
                     onChange={e => setTeamCollegeFilter(e.target.value || 'All')}
                   />
@@ -387,50 +386,50 @@ export default function HackathonHub() {
               {/* Requests Wall */}
               <div>
                 {loadingTeams ? (
-                  <div className="p-20 text-center bg-slate-900/10 border border-white/5 rounded-[2rem] flex flex-col items-center justify-center">
+                  <div className="p-20 text-center bg-slate-100 border border-slate-200 rounded-[2rem] flex flex-col items-center justify-center">
                     <Loader2 size={32} className="text-indigo-500 animate-spin mb-4" />
                     <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Loading Requests wall...</p>
                   </div>
                 ) : filteredTeams.length === 0 ? (
-                  <div className="p-16 text-center bg-slate-900/10 border border-white/5 rounded-[2rem] text-slate-500 text-xs font-bold uppercase tracking-wider">
+                  <div className="p-16 text-center bg-slate-100 border border-slate-200 rounded-[2rem] text-slate-500 text-xs font-bold uppercase tracking-wider">
                     No active teammate requests. Be the first to post!
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {filteredTeams.map(request => (
-                      <div key={request.id} className="bg-[#0f172a]/30 border border-white/5 p-6 rounded-3xl space-y-4 hover:border-indigo-500/20 transition-all shadow-lg relative overflow-hidden">
+                      <div key={request.id} className="bg-white border border-slate-200 p-6 rounded-3xl space-y-4 hover:border-indigo-500/20 transition-all shadow-lg relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-2xl"></div>
                         <div className="flex justify-between items-start gap-4">
                           <div>
-                            <h3 className="text-sm font-black text-white uppercase tracking-tight">{request.name}</h3>
+                            <h3 className="text-sm font-black text-slate-900 uppercase tracking-tight">{request.name}</h3>
                             <p className="text-[8px] font-black text-slate-500 uppercase tracking-widest mt-1">{request.college} • {request.branch || 'B.Tech'}</p>
                           </div>
                           <span className="px-2 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-lg text-[8px] font-black uppercase tracking-wider">Seeking Teammates</span>
                         </div>
 
                         <div className="space-y-3 pt-2">
-                          <div className="p-3 bg-slate-900/40 border border-white/5 rounded-xl">
+                          <div className="p-3 bg-slate-100 border border-slate-200 rounded-xl">
                             <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest block mb-1">My Skills</span>
-                            <span className="text-xs font-bold text-slate-200 uppercase tracking-tight">{request.skills}</span>
+                            <span className="text-xs font-bold text-slate-800 uppercase tracking-tight">{request.skills}</span>
                           </div>
 
-                          <div className="p-3 bg-slate-900/40 border border-white/5 rounded-xl border-l-2 border-l-indigo-500">
+                          <div className="p-3 bg-slate-100 border border-slate-200 rounded-xl border-l-2 border-l-indigo-500">
                             <span className="text-[7px] font-black text-slate-500 uppercase tracking-widest block mb-1">Role Needed</span>
                             <span className="text-xs font-bold text-indigo-400 uppercase tracking-tight">{request.roleNeeded}</span>
                           </div>
 
                           {request.desc && (
-                            <p className="text-xs text-slate-400 leading-relaxed font-semibold italic">"{request.desc}"</p>
+                            <p className="text-xs text-slate-500 leading-relaxed font-semibold italic">"{request.desc}"</p>
                           )}
                         </div>
 
-                        <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                          <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Connect: <strong className="text-slate-300 font-bold">{request.contact}</strong></span>
+                        <div className="pt-4 border-t border-slate-200 flex items-center justify-between">
+                          <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">Connect: <strong className="text-slate-700 font-bold">{request.contact}</strong></span>
                           <a 
                             href={request.contact.startsWith('http') ? request.contact : `https://t.me/${request.contact.replace('@', '')}`}
                             target="_blank" 
                             rel="noreferrer" 
-                            className="px-4 py-2 bg-slate-900 hover:bg-indigo-600 text-white rounded-lg text-[9px] font-black uppercase tracking-widest border border-white/5 transition-all"
+                            className="px-4 py-2 bg-slate-100 hover:bg-indigo-600 text-slate-900 rounded-lg text-[9px] font-black uppercase tracking-widest border border-slate-200 transition-all"
                           >
                             Ping Now
                           </a>
@@ -447,11 +446,11 @@ export default function HackathonHub() {
           {/* TAB 3: SIH Prep Corner */}
           {activeTab === 'sih' && (
             <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in duration-300">
-              <div className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-4">
-                <h2 className="text-lg font-black text-white uppercase tracking-wider flex items-center gap-2.5">
+              <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-4">
+                <h2 className="text-lg font-black text-slate-900 uppercase tracking-wider flex items-center gap-2.5">
                   <Award className="text-indigo-500" size={20} /> Smart India Hackathon Rules & Criteria
                 </h2>
-                <p className="text-slate-300 text-xs leading-relaxed font-semibold">
+                <p className="text-slate-700 text-xs leading-relaxed font-semibold">
                   Smart India Hackathon (SIH) is a nationwide initiative to provide students a platform to solve pressing problems of our daily lives. 
                 </p>
 
@@ -465,7 +464,7 @@ export default function HackathonHub() {
                   </div>
                 </div>
 
-                <ul className="space-y-3.5 text-xs text-slate-300 font-semibold pt-4">
+                <ul className="space-y-3.5 text-xs text-slate-700 font-semibold pt-4">
                   <li className="flex items-start gap-2.5">
                     <CheckCircle2 className="text-indigo-500 mt-0.5 shrink-0" size={16} />
                     <span><strong>Internal Screening:</strong> Each GEC college conducts a local internal screening hackathon. The local SPOC can submit a maximum of 30 teams (plus 5 waitlisted teams) for the National Round.</span>
@@ -478,11 +477,11 @@ export default function HackathonHub() {
               </div>
 
               {/* PPT Structure */}
-              <div className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
-                <h2 className="text-lg font-black text-white uppercase tracking-wider flex items-center gap-2.5">
+              <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
+                <h2 className="text-lg font-black text-slate-900 uppercase tracking-wider flex items-center gap-2.5">
                   <FileSpreadsheet className="text-indigo-500" size={20} /> Standard SIH Presentation Template
                 </h2>
-                <p className="text-slate-300 text-xs leading-relaxed font-semibold">
+                <p className="text-slate-700 text-xs leading-relaxed font-semibold">
                   Follow this structure to prepare your idea submission PPT for internal college screening. Keep it to a maximum of 6 slides.
                 </p>
 
@@ -495,11 +494,11 @@ export default function HackathonHub() {
                     { slide: "Slide 5", title: "Project Uniqueness", details: "Explain how your solution stands out from existing market alternatives." },
                     { slide: "Slide 6", title: "Team Contribution matrix", details: "Details of all 6 members and their specific contribution roles." }
                   ].map((s, i) => (
-                    <div key={i} className="flex gap-4 p-4 bg-slate-900/40 border border-white/5 rounded-xl">
+                    <div key={i} className="flex gap-4 p-4 bg-slate-100 border border-slate-200 rounded-xl">
                       <span className="text-[10px] font-black text-indigo-500 uppercase tracking-widest">{s.slide}</span>
                       <div>
-                        <h4 className="text-xs font-black text-white uppercase tracking-wider">{s.title}</h4>
-                        <p className="text-xs text-slate-400 mt-1 leading-relaxed font-semibold">{s.details}</p>
+                        <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider">{s.title}</h4>
+                        <p className="text-xs text-slate-500 mt-1 leading-relaxed font-semibold">{s.details}</p>
                       </div>
                     </div>
                   ))}
@@ -512,31 +511,31 @@ export default function HackathonHub() {
           {activeTab === 'resources' && (
             <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in duration-300">
               
-              <div className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
-                <h2 className="text-lg font-black text-white uppercase tracking-wider flex items-center gap-2.5">
+              <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
+                <h2 className="text-lg font-black text-slate-900 uppercase tracking-wider flex items-center gap-2.5">
                   <Code className="text-indigo-500" size={20} /> Developer Resource Packs
                 </h2>
                 
                 <div className="space-y-4">
-                  <div className="p-5 bg-slate-900/40 border border-white/5 rounded-2xl space-y-2">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">GitHub Student Developer Pack</span>
-                    <p className="text-xs text-slate-300 font-semibold leading-relaxed">
+                  <div className="p-5 bg-slate-100 border border-slate-200 rounded-2xl space-y-2">
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">GitHub Student Developer Pack</span>
+                    <p className="text-xs text-slate-700 font-semibold leading-relaxed">
                       Upload your official college ID card on the GitHub Education portal to unlock free access to GitHub Copilot, Namecheap domain credits, Canva Pro, Azure cloud, and various developer credits worth $1000+.
                     </p>
                   </div>
                   
-                  <div className="p-5 bg-slate-900/40 border border-white/5 rounded-2xl space-y-2">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Free Fast Hosting & Databases</span>
-                    <ul className="list-disc pl-4 text-xs text-slate-300 font-semibold space-y-1 pt-1">
+                  <div className="p-5 bg-slate-100 border border-slate-200 rounded-2xl space-y-2">
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Free Fast Hosting & Databases</span>
+                    <ul className="list-disc pl-4 text-xs text-slate-700 font-semibold space-y-1 pt-1">
                       <li><strong>Frontend Hosting:</strong> Vercel, Netlify, GitHub Pages</li>
                       <li><strong>Backend Hosting:</strong> Render (Free Tier), Koyeb</li>
                       <li><strong>Database:</strong> Supabase (PostgreSQL), Neon DB, MongoDB Atlas (Free M0 cluster)</li>
                     </ul>
                   </div>
 
-                  <div className="p-5 bg-slate-900/40 border border-white/5 rounded-2xl space-y-2">
-                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest block">Design & Assets Packs</span>
-                    <ul className="list-disc pl-4 text-xs text-slate-300 font-semibold space-y-1 pt-1">
+                  <div className="p-5 bg-slate-100 border border-slate-200 rounded-2xl space-y-2">
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Design & Assets Packs</span>
+                    <ul className="list-disc pl-4 text-xs text-slate-700 font-semibold space-y-1 pt-1">
                       <li><strong>Icons:</strong> Lucide Icons, FontAwesome</li>
                       <li><strong>Components:</strong> Tailwind UI, Shadcn UI, Bootstrap templates</li>
                       <li><strong>Animations:</strong> LottieFiles animations, Animate.css</li>
@@ -554,30 +553,30 @@ export default function HackathonHub() {
 
       {/* Team Request Posting Modal */}
       {showForm && (
-        <div className="fixed inset-0 z-50 bg-[#070b14]/90 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-[#0f172a] border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <h3 className="text-xl font-extrabold text-white uppercase tracking-tighter mb-1">Post Teammate Request</h3>
+        <div className="fixed inset-0 z-50 bg-slate-50/90 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 p-6 md:p-8 rounded-[2rem] shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <h3 className="text-xl font-extrabold text-slate-900 uppercase tracking-tighter mb-1">Post Teammate Request</h3>
             <p className="text-[9px] text-slate-500 font-black uppercase tracking-widest mb-6">Find developers and innovators across Bihar GECs</p>
 
             <form onSubmit={handleFormSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Your Name *</label>
+                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-wider block">Your Name *</label>
                   <input 
                     type="text" 
                     required 
-                    className="w-full bg-slate-900 border border-white/5 rounded-xl p-3 text-xs text-slate-200 outline-none focus:border-indigo-500" 
+                    className="w-full bg-slate-100 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 outline-none focus:border-indigo-500" 
                     value={formData.name} 
                     onChange={e => setFormData({ ...formData, name: e.target.value })} 
                   />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Branch *</label>
+                  <label className="text-[9px] font-black text-slate-500 uppercase tracking-wider block">Branch *</label>
                   <input 
                     type="text" 
                     placeholder="e.g. CSE, Civil" 
                     required 
-                    className="w-full bg-slate-900 border border-white/5 rounded-xl p-3 text-xs text-slate-200 outline-none focus:border-indigo-500" 
+                    className="w-full bg-slate-100 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 outline-none focus:border-indigo-500" 
                     value={formData.branch} 
                     onChange={e => setFormData({ ...formData, branch: e.target.value })} 
                   />
@@ -585,59 +584,59 @@ export default function HackathonHub() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">College *</label>
+                <label className="text-[9px] font-black text-slate-500 uppercase tracking-wider block">College *</label>
                 <input 
                   type="text" 
                   placeholder="e.g. MIT Muzaffarpur, GCE Gaya" 
                   required 
-                  className="w-full bg-slate-900 border border-white/5 rounded-xl p-3 text-xs text-slate-200 outline-none focus:border-indigo-500" 
+                  className="w-full bg-slate-100 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 outline-none focus:border-indigo-500" 
                   value={formData.college} 
                   onChange={e => setFormData({ ...formData, college: e.target.value })} 
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Your Skills *</label>
+                <label className="text-[9px] font-black text-slate-500 uppercase tracking-wider block">Your Skills *</label>
                 <input 
                   type="text" 
                   placeholder="e.g. HTML, CSS, JavaScript, React" 
                   required 
-                  className="w-full bg-slate-900 border border-white/5 rounded-xl p-3 text-xs text-slate-200 outline-none focus:border-indigo-500" 
+                  className="w-full bg-slate-100 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 outline-none focus:border-indigo-500" 
                   value={formData.skills} 
                   onChange={e => setFormData({ ...formData, skills: e.target.value })} 
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Role Needed / Teammate Profile *</label>
+                <label className="text-[9px] font-black text-slate-500 uppercase tracking-wider block">Role Needed / Teammate Profile *</label>
                 <input 
                   type="text" 
                   placeholder="e.g. Node.js backend developer / Python coder" 
                   required 
-                  className="w-full bg-slate-900 border border-white/5 rounded-xl p-3 text-xs text-slate-200 outline-none focus:border-indigo-500" 
+                  className="w-full bg-slate-100 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 outline-none focus:border-indigo-500" 
                   value={formData.roleNeeded} 
                   onChange={e => setFormData({ ...formData, roleNeeded: e.target.value })} 
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Contact Method (Telegram/WhatsApp Link) *</label>
+                <label className="text-[9px] font-black text-slate-500 uppercase tracking-wider block">Contact Method (Telegram/WhatsApp Link) *</label>
                 <input 
                   type="text" 
                   placeholder="e.g. @your_telegram_username" 
                   required 
-                  className="w-full bg-slate-900 border border-white/5 rounded-xl p-3 text-xs text-slate-200 outline-none focus:border-indigo-500" 
+                  className="w-full bg-slate-100 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 outline-none focus:border-indigo-500" 
                   value={formData.contact} 
                   onChange={e => setFormData({ ...formData, contact: e.target.value })} 
                 />
               </div>
 
               <div className="space-y-1">
-                <label className="text-[9px] font-black text-slate-400 uppercase tracking-wider block">Project Description / Brief Idea</label>
+                <label className="text-[9px] font-black text-slate-500 uppercase tracking-wider block">Project Description / Brief Idea</label>
                 <textarea 
                   rows={3} 
                   placeholder="Tell potential teammates about your idea or hackathon interest..." 
-                  className="w-full bg-slate-900 border border-white/5 rounded-xl p-3 text-xs text-slate-200 outline-none focus:border-indigo-500" 
+                  className="w-full bg-slate-100 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 outline-none focus:border-indigo-500" 
                   value={formData.desc} 
                   onChange={e => setFormData({ ...formData, desc: e.target.value })} 
                 />
@@ -647,14 +646,14 @@ export default function HackathonHub() {
                 <button 
                   type="button" 
                   onClick={() => setShowForm(false)} 
-                  className="flex-1 py-4 bg-slate-900 hover:bg-slate-800 text-slate-400 rounded-xl font-black text-[10px] uppercase tracking-widest border border-white/5"
+                  className="flex-1 py-4 bg-slate-100 hover:bg-slate-800 text-slate-500 rounded-xl font-black text-[10px] uppercase tracking-widest border border-slate-200"
                 >
                   Cancel
                 </button>
                 <button 
                   type="submit" 
                   disabled={submittingForm}
-                  className="flex-1 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-blue-500/20 disabled:opacity-50"
+                  className="flex-1 py-4 bg-blue-600 hover:bg-blue-500 text-slate-900 rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-blue-500/20 disabled:opacity-50"
                 >
                   {submittingForm ? 'Submitting...' : 'Post Request'}
                 </button>
