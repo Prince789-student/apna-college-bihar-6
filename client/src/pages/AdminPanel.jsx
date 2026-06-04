@@ -30,19 +30,20 @@ export default function AdminPanel() {
   const [uploading, setUploading] = useState(false);
 
   // ── UPLOAD STATE ──
-  const [docForm, setDocForm] = useState({ title: '', subject: '', category: 'NOTES_FOLDER', branch: 'CSE', semester: '1', parentId: 'root', file: null, externalUrl: '' });
+  const [docForm, setDocForm] = useState({ title: '', subject: '', selectedSubjectId: 'new', category: 'NOTES', branch: 'CSE', semester: '1', file: null, externalUrl: '' });
   const [newGroup, setNewGroup] = useState({ name: '', description: '', code: '' });
   const [currentFolder, setCurrentFolder] = useState(null);
   const [navHistory, setNavHistory] = useState([]);
 
-  // Get all subject folders (type: 'folder') for the currently selected branch and semester in the form
-  const availableFolders = React.useMemo(() => {
+  // Get all subject folders (type: 'folder') for the currently selected branch, semester, and category in the form
+  const availableSubjects = React.useMemo(() => {
     return docs.filter(d => 
       d.type === 'folder' && 
       d.branch === docForm.branch && 
-      String(d.semester) === String(docForm.semester)
+      String(d.semester) === String(docForm.semester) &&
+      d.category === docForm.category
     );
-  }, [docs, docForm.branch, docForm.semester]);
+  }, [docs, docForm.branch, docForm.semester, docForm.category]);
 
   // Access Control
   const isSuper = user?.role === ROLES.SUPER_ADMIN;
@@ -183,8 +184,7 @@ export default function AdminPanel() {
       setNavHistory([]);
       setDocForm(prev => ({ 
         ...prev, 
-        parentId: 'root', 
-        category: 'NOTES_FOLDER',
+        selectedSubjectId: 'new',
         subject: ''
       }));
     } else {
@@ -192,10 +192,10 @@ export default function AdminPanel() {
       setCurrentFolder(folder);
       setDocForm(prev => ({ 
         ...prev, 
-        parentId: folder.id,
+        selectedSubjectId: folder.id,
         branch: folder.branch || prev.branch,
         semester: String(folder.semester) || prev.semester,
-        category: folder.category || 'NOTES',
+        category: folder.category || prev.category,
         subject: folder.title || ''
       }));
     }
@@ -207,8 +207,8 @@ export default function AdminPanel() {
     setNavHistory([...navHistory]);
     setDocForm(prevForm => ({ 
       ...prevForm, 
-      parentId: prev ? prev.id : 'root',
-      category: prev ? (prev.category || 'NOTES') : 'NOTES_FOLDER',
+      selectedSubjectId: prev ? prev.id : 'new',
+      category: prev ? (prev.category || prevForm.category) : prevForm.category,
       subject: prev ? (prev.title || '') : ''
     }));
   };
@@ -232,57 +232,81 @@ export default function AdminPanel() {
 
   const handleUpload = async (e) => {
     e.preventDefault();
-    const { title, subject, category, branch, semester, parentId, file, externalUrl } = docForm;
+    const { title, subject, category, branch, semester, selectedSubjectId, file, externalUrl } = docForm;
     
     if (!title) { flash('Title required', 'err'); return; }
-    
-    const isFolder = category === 'NOTES_FOLDER' || category === 'PYQ_FOLDER';
+    if (!subject) { flash('Subject Name required', 'err'); return; }
     
     setUploading(true);
     try {
-      let finalUrl = '';
+      let finalUrl = externalUrl;
+      if (file) {
+        const timeout = setTimeout(() => {
+          setUploading(false);
+          flash('File Upload Timed Out! Use "Direct Link" as a bypass.', 'err');
+        }, 12000);
 
-      if (!isFolder) {
-        let fileUrl = externalUrl;
-        if (file) {
-          const timeout = setTimeout(() => {
-            setUploading(false);
-            flash('File Upload Timed Out! Use "Direct Link" as a bypass.', 'err');
-          }, 12000);
-
-          const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
-          const storageRef = ref(storage, `notes/${fileName}`);
-          const snapshot = await uploadBytes(storageRef, file);
-          clearTimeout(timeout);
-          fileUrl = await getDownloadURL(snapshot.ref);
-        }
-
-        if (!fileUrl) { flash('File or Direct Link required', 'err'); setUploading(false); return; }
-        finalUrl = fileUrl;
+        const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+        const storageRef = ref(storage, `notes/${fileName}`);
+        const snapshot = await uploadBytes(storageRef, file);
+        clearTimeout(timeout);
+        finalUrl = await getDownloadURL(snapshot.ref);
       }
 
-      const targetCategory = category === 'NOTES_FOLDER' ? 'NOTES' : (category === 'PYQ_FOLDER' ? 'PYQ' : category);
-      const targetType = isFolder ? 'folder' : 'file';
+      if (!finalUrl) { flash('File or Direct Link required', 'err'); setUploading(false); return; }
+
+      let parentFolderId = selectedSubjectId;
+
+      if (selectedSubjectId === 'new') {
+        const cleanSubject = subject.trim().toUpperCase();
+        const existingFld = docs.find(d => 
+          d.type === 'folder' && 
+          d.branch === branch && 
+          String(d.semester) === String(semester) && 
+          d.category === category && 
+          d.title?.trim().toUpperCase() === cleanSubject
+        );
+
+        if (existingFld) {
+          parentFolderId = existingFld.id;
+        } else {
+          const newFolderRef = await addDoc(collection(db, 'documents'), {
+            title: cleanSubject,
+            subject: cleanSubject,
+            category,
+            branch,
+            semester,
+            fileUrl: '',
+            type: 'folder',
+            parentId: 'root',
+            verified: true,
+            createdAt: serverTimestamp()
+          });
+          parentFolderId = newFolderRef.id;
+        }
+      }
+
+      const folderDoc = docs.find(d => d.id === parentFolderId) || { title: subject };
+      const finalSubject = folderDoc.title || subject;
 
       await addDoc(collection(db, 'documents'), {
         title,
-        subject: isFolder ? title : (subject || 'GENERAL'),
-        category: targetCategory,
-        branch: branch || '',
-        semester: semester || '',
+        subject: finalSubject.toUpperCase(),
+        category,
+        branch,
+        semester,
         fileUrl: finalUrl,
-        type: targetType,
-        parentId: parentId || 'root',
+        type: 'file',
+        parentId: parentFolderId,
         verified: true,
         createdAt: serverTimestamp()
       });
       
-      flash(isFolder ? 'Subject Folder created successfully! 📂' : 'Success! Document ready in Library! ✅');
+      flash('Success! Document ready in Library! ✅');
       
       setDocForm(prev => ({
         ...prev,
         title: '',
-        subject: prev.parentId !== 'root' ? prev.subject : '',
         file: null,
         externalUrl: ''
       }));
@@ -569,12 +593,11 @@ export default function AdminPanel() {
                         <select 
                           value={docForm.branch} 
                           onChange={e => {
-                            const newBranch = e.target.value;
                             setDocForm(prev => ({ 
                               ...prev, 
-                              branch: newBranch, 
-                              parentId: 'root',
-                              category: 'NOTES_FOLDER'
+                              branch: e.target.value, 
+                              selectedSubjectId: 'new',
+                              subject: ''
                             }));
                           }} 
                           className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none"
@@ -614,12 +637,11 @@ export default function AdminPanel() {
                         <select 
                           value={docForm.semester} 
                           onChange={e => {
-                            const newSem = e.target.value;
                             setDocForm(prev => ({ 
                               ...prev, 
-                              semester: newSem, 
-                              parentId: 'root',
-                              category: 'NOTES_FOLDER'
+                              semester: e.target.value, 
+                              selectedSubjectId: 'new',
+                              subject: ''
                             }));
                           }} 
                           className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none"
@@ -629,103 +651,95 @@ export default function AdminPanel() {
                      </div>
                   </div>
 
-                  {/* Destination Folder Selection */}
+                  {/* Category Selection */}
                   <div className="space-y-1">
-                     <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2">Destination Folder (Subject)</p>
+                     <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2">Category</p>
                      <select 
-                       value={docForm.parentId} 
+                       value={docForm.category} 
                        onChange={e => {
-                         const pId = e.target.value;
-                         let updatedForm = { ...docForm, parentId: pId };
-                         if (pId === 'root') {
-                           updatedForm.category = 'NOTES_FOLDER';
-                           updatedForm.subject = '';
-                         } else {
-                           const fld = docs.find(d => d.id === pId);
-                           updatedForm.category = fld?.category || 'NOTES';
-                           updatedForm.subject = fld?.title || '';
-                         }
-                         setDocForm(updatedForm);
+                         setDocForm(prev => ({ 
+                           ...prev, 
+                           category: e.target.value, 
+                           selectedSubjectId: 'new',
+                           subject: ''
+                         }));
+                       }} 
+                       className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none"
+                     >
+                       <option value="NOTES">📚 Notes Library</option>
+                       <option value="PYQ">📋 PYQ Library</option>
+                     </select>
+                  </div>
+
+                  {/* Subject Selector */}
+                  <div className="space-y-1">
+                     <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2">Subject Folder</p>
+                     <select 
+                       value={docForm.selectedSubjectId} 
+                       onChange={e => {
+                         const val = e.target.value;
+                         setDocForm(prev => ({ 
+                           ...prev, 
+                           selectedSubjectId: val,
+                           subject: val === 'new' ? '' : (docs.find(d => d.id === val)?.title || '')
+                         }));
                        }} 
                        className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none border-2 border-slate-200"
                      >
-                       <option value="root">📁 Root Level (Create New Subject Folder)</option>
-                       {availableFolders.map(f => (
+                       <option value="new">➕ Add New Subject Folder</option>
+                       {availableSubjects.map(f => (
                          <option key={f.id} value={f.id}>
-                           {f.category === 'PYQ' ? '📋' : '📚'} {f.title} ({f.category})
+                           📁 {f.title.toUpperCase()}
                          </option>
                        ))}
                      </select>
                   </div>
 
-                  {/* Category Selection */}
-                  <div className="space-y-1">
-                     <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2">Type of Upload</p>
-                     {docForm.parentId === 'root' ? (
-                       <select 
-                         value={docForm.category} 
-                         onChange={e => setDocForm({ ...docForm, category: e.target.value })} 
-                         className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none"
-                       >
-                         <option value="NOTES_FOLDER">📂 Create Notes Subject Folder</option>
-                         <option value="PYQ_FOLDER">📂 Create PYQ Subject Folder</option>
-                       </select>
-                     ) : (
-                       <select 
-                         value={docForm.category} 
-                         onChange={e => setDocForm({ ...docForm, category: e.target.value })} 
-                         className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none"
-                       >
-                         <option value="NOTES">📚 Notes File (PDF)</option>
-                         <option value="PYQ">📋 PYQ File (PDF)</option>
-                       </select>
-                     )}
-                  </div>
+                  {/* Subject Text Input (only if adding a new subject) */}
+                  {docForm.selectedSubjectId === 'new' && (
+                     <div className="space-y-1">
+                        <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2">New Subject Name</p>
+                        <input 
+                          value={docForm.subject} 
+                          onChange={e => setDocForm({ ...docForm, subject: e.target.value })} 
+                          placeholder="e.g. Python, Mathematics, DBMS" 
+                          className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none border-2 border-transparent focus:border-indigo-500" 
+                        />
+                     </div>
+                  )}
 
-                  {/* Inputs */}
-                  <div className="space-y-3">
+                  {/* Document Title */}
+                  <div className="space-y-1">
+                     <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest ml-2">File Title</p>
                      <input 
                        value={docForm.title} 
                        onChange={e => setDocForm({ ...docForm, title: e.target.value })} 
-                       placeholder={docForm.parentId === 'root' ? "Folder Name (e.g. Python, DBMS, Math)" : "Document Title (e.g. Chapter 1 Intro)"} 
+                       placeholder="e.g. Unit 1 Introduction, 2024 Question Paper" 
                        className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none border-2 border-transparent focus:border-indigo-500" 
                      />
-                     
-                     {docForm.parentId === 'root' && (
-                       <input 
-                         value={docForm.subject} 
-                         onChange={e => setDocForm({ ...docForm, subject: e.target.value })} 
-                         placeholder="Subject Identifier (e.g. DBMS)" 
-                         className="w-full bg-slate-100 p-4 rounded-2xl text-[12px] font-bold text-slate-900 outline-none border-2 border-transparent focus:border-indigo-500" 
-                       />
-                     )}
                   </div>
 
-                  {/* File Upload options only if NOT creating a folder */}
-                  {docForm.parentId !== 'root' && (
-                     <>
-                        <div className="p-4 bg-slate-100/50 rounded-2xl border border-slate-300/20">
-                           <p className="text-[9px] font-black text-slate-500 uppercase mb-3">Option 1: Direct Link (No Billing Needed)</p>
-                           <input value={docForm.externalUrl || ''} onChange={e=>setDocForm({...docForm, externalUrl:e.target.value, file:null})} placeholder="Paste Drive/URL Link here..." className="w-full bg-[#f8fafc] p-3 rounded-xl text-[11px] font-bold text-blue-400 outline-none border border-slate-200" />
-                        </div>
+                  {/* File Upload options */}
+                  <div className="p-4 bg-slate-100/50 rounded-2xl border border-slate-300/20">
+                     <p className="text-[9px] font-black text-slate-500 uppercase mb-3">Option 1: Direct Link (No Billing Needed)</p>
+                     <input value={docForm.externalUrl || ''} onChange={e=>setDocForm({...docForm, externalUrl:e.target.value, file:null})} placeholder="Paste Drive/URL Link here..." className="w-full bg-[#f8fafc] p-3 rounded-xl text-[11px] font-bold text-blue-400 outline-none border border-slate-200" />
+                  </div>
 
-                        <div className="text-center font-black text-slate-700 text-[10px]">— OR —</div>
+                  <div className="text-center font-black text-slate-700 text-[10px]">— OR —</div>
 
-                        <div className="p-4 bg-slate-100/50 rounded-2xl border border-slate-300/20">
-                          <p className="text-[9px] font-black text-slate-500 uppercase mb-3">Option 2: Internal Cloud Sync (Needs Billing)</p>
-                          <input type="file" accept=".pdf" onChange={e=>setDocForm({...docForm, file:e.target.files[0], externalUrl:''})} className="hidden" id="admin-up" />
-                          <label htmlFor="admin-up" className="flex items-center justify-center p-6 bg-[#f8fafc] border-2 border-dashed border-slate-200 hover:border-indigo-500 rounded-[2rem] cursor-pointer transition-all">
-                             <div className="text-center">
-                                <UploadCloud size={24} className="mx-auto text-slate-600 mb-2" />
-                                <p className="text-[10px] font-black text-slate-500 truncate">{docForm.file?.name || 'SYNC FILE'}</p>
-                             </div>
-                          </label>
-                        </div>
-                     </>
-                  )}
+                  <div className="p-4 bg-slate-100/50 rounded-2xl border border-slate-300/20">
+                    <p className="text-[9px] font-black text-slate-500 uppercase mb-3">Option 2: Internal Cloud Sync (Needs Billing)</p>
+                    <input type="file" accept=".pdf" onChange={e=>setDocForm({...docForm, file:e.target.files[0], externalUrl:''})} className="hidden" id="admin-up" />
+                    <label htmlFor="admin-up" className="flex items-center justify-center p-6 bg-[#f8fafc] border-2 border-dashed border-slate-200 hover:border-indigo-500 rounded-[2rem] cursor-pointer transition-all">
+                       <div className="text-center">
+                          <UploadCloud size={24} className="mx-auto text-slate-600 mb-2" />
+                          <p className="text-[10px] font-black text-slate-500 truncate">{docForm.file?.name || 'SYNC FILE'}</p>
+                       </div>
+                    </label>
+                  </div>
 
                   <button disabled={uploading} className="w-full py-5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-3xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-indigo-950/20 group">
-                     {uploading ? <Loader2 size={18} className="animate-spin" /> : <><RefreshCw size={18} className="group-hover:rotate-180 transition-transform duration-700"/> {docForm.parentId === 'root' ? 'Create Subject Folder' : 'Push to Folder'}</>}
+                     {uploading ? <Loader2 size={18} className="animate-spin" /> : <><RefreshCw size={18} className="group-hover:rotate-180 transition-transform duration-700"/> Push to Library</>}
                   </button>
                 </form>
               </div>
