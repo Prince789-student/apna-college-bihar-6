@@ -52,6 +52,7 @@ export default function StudyDashboard() {
     customMinutes, setCustomMinutes,
     customSeconds, setCustomSeconds,
     timerMode, setTimerMode,
+    overtimeActive, setOvertimeActive,
     saveGlobalSession,
     allowedPackages, setAllowedPackages,
     installedApps, fetchApps,
@@ -74,6 +75,11 @@ export default function StudyDashboard() {
   const [newSubjectName, setNewSubjectName] = useState('');
   const [newSubjectTarget, setNewSubjectTarget] = useState('2'); // Default to 2 hours target
   const [showSubjectManager, setShowSubjectManager] = useState(false);
+  const [selectedPlannerDate, setSelectedPlannerDate] = useState(new Date().toLocaleDateString('en-CA'));
+  const [openAddFormSubject, setOpenAddFormSubject] = useState(null);
+  const [inlineTaskText, setInlineTaskText] = useState('');
+  const [inlineTaskDuration, setInlineTaskDuration] = useState('');
+  const [activeStartTask, setActiveStartTask] = useState(null);
 
   const [isNative, setIsNative] = useState(() => {
     return Capacitor.isNativePlatform() || (typeof window !== 'undefined' && window.Capacitor && (window.Capacitor.isNativePlatform?.() || window.Capacitor.isPluginAvailable?.('AppBlocker'))) || Capacitor.isPluginAvailable?.('AppBlocker');
@@ -219,12 +225,12 @@ export default function StudyDashboard() {
     const unsubSess = onSnapshot(sessQuery, (snap) => {
       setSessions(snap.docs.map(d => d.data()));
     });
-    const taskQuery = query(collection(db, 'Tasks'), where('userId', '==', user.uid), where('date', '==', todayStr));
+    const taskQuery = query(collection(db, 'Tasks'), where('userId', '==', user.uid));
     const unsubTask = onSnapshot(taskQuery, (snap) => {
       setTasks(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     });
     return () => { unsubSess(); unsubTask(); };
-  }, [user, todayStr]);
+  }, [user]);
 
   const toggleApp = (pkg) => {
     const list = (allowedPackages || '').split(',').filter(Boolean);
@@ -317,6 +323,64 @@ export default function StudyDashboard() {
     setNewTaskDuration('');
     setNewTaskSubject('OTHERS');
   };
+
+  const addSubjectTask = async (subjectName) => {
+    if (!inlineTaskText.trim()) return;
+    try {
+      await addDoc(collection(db, 'Tasks'), {
+        userId: user.uid,
+        text: inlineTaskText.trim(),
+        subject: subjectName,
+        done: false,
+        date: selectedPlannerDate,
+        duration: inlineTaskDuration ? parseInt(inlineTaskDuration) : null,
+        createdAt: new Date().toISOString()
+      });
+      setInlineTaskText('');
+      setInlineTaskDuration('');
+      setOpenAddFormSubject(null);
+      toast.success("Task added to planner!");
+    } catch (e) {
+      toast.error("Failed to add task");
+    }
+  };
+
+  const startFocusSessionForTask = (task, mode) => {
+    setTab('timer');
+    setTimerSubject(task.subject || 'OTHERS');
+    setSelectedTaskId(task.id);
+    
+    if (mode === 'TIMER') {
+      setTimerMode('COUNTDOWN');
+      const minutes = task.duration || 60;
+      setTimerTime(minutes * 60);
+      setCustomMinutes(minutes);
+      setCustomSeconds(0);
+    } else {
+      setTimerMode('STOPWATCH');
+      setTimerTime(0);
+    }
+    
+    setTimerActive(true);
+    setActiveStartTask(null);
+  };
+
+  const weekDays = useMemo(() => {
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const mondayDiff = now.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+    const monday = new Date(now.getFullYear(), now.getMonth(), mondayDiff);
+    
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(monday.getTime());
+      d.setDate(monday.getDate() + i);
+      return d;
+    });
+  }, []);
+
+  const allSubjectList = useMemo(() => {
+    return [...subjects.map(s => s.subjectName), 'OTHERS'];
+  }, [subjects]);
 
   const tabTitles = {
     timer: 'Focus Timer',
@@ -512,6 +576,13 @@ export default function StudyDashboard() {
                 {Math.floor((timerTime % 3600) / 60).toString().padStart(2, '0')}:
                 {(timerTime % 60).toString().padStart(2, '0')}
               </h2>
+
+              {overtimeActive && (
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-red-50 text-red-600 border border-red-200 rounded-full animate-pulse mt-1">
+                  <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                  <span className="text-[9px] font-black uppercase tracking-widest">Overtime Active</span>
+                </div>
+              )}
               {/* Duration Picker */}
               {!timerActive && timerMode === 'COUNTDOWN' && (
                 <div className="flex items-center justify-center gap-4 bg-slate-50 p-5 rounded-2xl w-full">
@@ -730,53 +801,150 @@ export default function StudyDashboard() {
 
         {/* ─── TAB: STUDY PLAN ─── */}
         {tab === 'todo' && (
-          <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden animate-in fade-in duration-300">
             <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
               <div className="w-9 h-9 bg-purple-500 text-white rounded-xl flex items-center justify-center"><ClipboardList size={18} /></div>
-              <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Study Plan</h2>
-              <span className="ml-auto text-[8px] font-black bg-slate-100 text-slate-500 px-3 py-1 rounded-full uppercase">{tasks.filter(t => t.done).length}/{tasks.length} Done</span>
+              <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Study Planner</h2>
+              <span className="ml-auto text-[8px] font-black bg-slate-100 text-slate-500 px-3 py-1 rounded-full uppercase">
+                {tasks.filter(t => t.date === selectedPlannerDate && t.done).length} / {tasks.filter(t => t.date === selectedPlannerDate).length} Done
+              </span>
             </div>
-          <div className="p-4 space-y-4">
-            {/* Add Task */}
-            <div className="flex flex-col sm:flex-row gap-2">
-              <input value={newTask} onChange={e => setNewTask(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Add a task..." className="flex-1 bg-slate-50 rounded-xl px-4 py-3 text-sm font-bold outline-none border border-slate-200 focus:border-blue-400" />
-              <div className="flex gap-2">
-                <input 
-                  type="number" 
-                  value={newTaskDuration} 
-                  onChange={e => setNewTaskDuration(e.target.value)} 
-                  placeholder="Mins (opt)" 
-                  className="w-20 bg-slate-50 rounded-xl px-2 py-3 text-xs font-bold outline-none border border-slate-200 text-center" 
-                />
-                <select value={newTaskSubject} onChange={e => setNewTaskSubject(e.target.value)} className="bg-slate-50 rounded-xl px-3 py-3 text-[9px] font-black uppercase outline-none border border-slate-200 max-w-[90px]">
-                  <option value="OTHERS">Subject</option>
-                  {subjects.map(s => <option key={s.id} value={s.subjectName}>{s.subjectName}</option>)}
-                </select>
-                <button onClick={addTask} className="w-12 h-12 bg-blue-600 text-white rounded-xl flex items-center justify-center active:scale-95 transition-all"><Plus size={22} /></button>
-              </div>
+
+            {/* Week Navigation */}
+            <div className="flex justify-between items-center gap-1.5 overflow-x-auto pb-4 pt-3 border-b border-slate-100 px-6">
+              {weekDays.map(day => {
+                const dStr = day.toLocaleDateString('en-CA');
+                const isSelected = selectedPlannerDate === dStr;
+                const isToday = dStr === new Date().toLocaleDateString('en-CA');
+                
+                return (
+                  <button
+                    key={dStr}
+                    onClick={() => setSelectedPlannerDate(dStr)}
+                    className={`flex flex-col items-center p-3 rounded-2xl min-w-[55px] transition-all border ${isSelected ? 'bg-blue-600 border-blue-600 text-white shadow-md' : 'bg-slate-50 border-slate-200/50 text-slate-600 hover:bg-slate-100'}`}
+                  >
+                    <span className="text-[8px] font-black uppercase tracking-wider">
+                      {day.toLocaleDateString('en-US', { weekday: 'short' })}
+                    </span>
+                    <span className="text-xs font-[1000] mt-0.5">
+                      {day.getDate()}/{day.getMonth() + 1}
+                    </span>
+                    {isToday && (
+                      <span className={`text-[6px] font-black uppercase tracking-widest mt-1 px-1 rounded-full ${isSelected ? 'bg-white text-blue-600' : 'bg-blue-600 text-white'}`}>
+                        Today
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
-            {/* Task List */}
-            {tasks.length === 0 ? (
-              <div className="text-center py-8 text-slate-300"><ClipboardList size={32} className="mx-auto mb-2" /><p className="text-[10px] font-black uppercase tracking-widest">No tasks yet</p></div>
-            ) : (
-              <div className="space-y-2">
-                {tasks.map(task => (
-                  <div key={task.id} className={`flex items-center gap-3 p-4 rounded-2xl border transition-all ${task.done ? 'bg-emerald-50 border-emerald-100' : 'bg-slate-50 border-slate-100'}`}>
-                    <button onClick={async () => await updateDoc(doc(db, 'Tasks', task.id), { done: !task.done })} className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${task.done ? 'bg-emerald-500 text-white' : 'border-2 border-slate-300'}`}><CheckCircle2 size={14} /></button>
-                    <div className="flex-1 min-w-0">
-                      <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase ${task.done ? 'bg-slate-200 text-slate-400' : 'bg-blue-100 text-blue-600'}`}>{task.subject || 'OTHERS'}</span>
-                      <p className={`text-sm font-bold mt-0.5 ${task.done ? 'text-slate-400 line-through' : 'text-slate-900'}`}>
-                        {task.text} {task.duration ? <span className="text-xs font-normal text-slate-400 ml-1">({task.duration}m)</span> : ''}
-                      </p>
+
+            <div className="p-6 space-y-6">
+              {/* Grouped Subjects list */}
+              {allSubjectList.map(subName => {
+                const dayTasks = tasks.filter(t => t.date === selectedPlannerDate);
+                const subTasks = dayTasks.filter(t => (t.subject || 'OTHERS') === subName);
+                const isFormOpen = openAddFormSubject === subName;
+
+                return (
+                  <div key={subName} className="bg-slate-50/50 border border-slate-200/50 rounded-3xl p-5 space-y-4">
+                    <div className="flex justify-between items-center pb-2 border-b border-slate-200/40">
+                      <div className="flex items-center gap-2">
+                        <span className="w-1.5 h-3.5 bg-blue-600 rounded-full"></span>
+                        <h3 className="text-xs font-black text-slate-800 uppercase tracking-widest">{subName}</h3>
+                      </div>
+                      <button 
+                        onClick={() => {
+                          setOpenAddFormSubject(isFormOpen ? null : subName);
+                          setInlineTaskText('');
+                          setInlineTaskDuration('');
+                        }}
+                        className="p-1 text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                      >
+                        {isFormOpen ? <X size={16} /> : <Plus size={16} />}
+                      </button>
                     </div>
-                    <button onClick={async () => await deleteDoc(doc(db, 'Tasks', task.id))} className="text-slate-200 hover:text-red-500 p-1 flex-shrink-0"><Trash2 size={16} /></button>
+
+                    {/* Inline Task Form */}
+                    {isFormOpen && (
+                      <div className="bg-white border border-slate-200/60 rounded-2xl p-4 space-y-3 shadow-sm animate-in slide-in-from-top-2 duration-200">
+                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Add target for {subName}</p>
+                        <div className="flex flex-col sm:flex-row gap-2">
+                          <input 
+                            type="text" 
+                            value={inlineTaskText}
+                            onChange={e => setInlineTaskText(e.target.value)}
+                            placeholder="Target description"
+                            className="flex-1 bg-slate-50 border border-slate-200/50 rounded-xl px-3 py-2 text-xs font-bold outline-none focus:border-blue-400"
+                          />
+                          <div className="flex gap-2">
+                            <input 
+                              type="number" 
+                              value={inlineTaskDuration}
+                              onChange={e => setInlineTaskDuration(e.target.value)}
+                              placeholder="Mins"
+                              className="w-20 bg-slate-50 border border-slate-200/50 rounded-xl px-2 py-2 text-center text-xs font-bold outline-none"
+                            />
+                            <button 
+                              onClick={() => addSubjectTask(subName)}
+                              className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold active:scale-95 transition-all"
+                            >
+                              Add
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Task Cards */}
+                    <div className="space-y-2">
+                      {subTasks.map(task => (
+                        <div key={task.id} className={`flex items-center gap-3 p-4 bg-white rounded-2xl border transition-all ${task.done ? 'border-slate-100 opacity-60' : 'border-slate-200/60 shadow-sm'}`}>
+                          <button 
+                            onClick={async () => await updateDoc(doc(db, 'Tasks', task.id), { done: !task.done })} 
+                            className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${task.done ? 'bg-emerald-500 text-white border-emerald-500' : 'border-2 border-slate-300'}`}
+                          >
+                            {task.done && <CheckCircle2 size={14} className="text-white" />}
+                          </button>
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-xs font-bold ${task.done ? 'text-slate-400 line-through' : 'text-slate-900'}`}>
+                              {task.text}
+                            </p>
+                            {task.duration && (
+                              <span className="text-[9px] font-black text-slate-400 uppercase tracking-wider block mt-0.5">
+                                Target: {task.duration}m
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            {!task.done && (
+                              <button 
+                                onClick={() => setActiveStartTask(task)}
+                                className="p-2 bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white rounded-xl transition-all"
+                                title="Start Focus Session"
+                              >
+                                <Timer size={14} />
+                              </button>
+                            )}
+                            <button 
+                              onClick={async () => await deleteDoc(doc(db, 'Tasks', task.id))} 
+                              className="text-slate-300 hover:text-red-500 p-2 transition-colors"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      {subTasks.length === 0 && (
+                        <p className="text-[9px] text-slate-400 font-bold uppercase italic text-center py-2">No targets set for this day</p>
+                      )}
+                    </div>
                   </div>
-                ))}
-              </div>
-            )}
+                );
+              })}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
         {/* ─── TAB: STUDY NETWORK ─── */}
         {tab === 'network' && (
@@ -897,6 +1065,57 @@ export default function StudyDashboard() {
                 ))}
               </div>
               <button onClick={() => { updateDoc(doc(db, 'users', user.uid), { dailyGoal: Number(goals.daily), weeklyGoal: Number(goals.weekly), monthlyGoal: Number(goals.monthly) }); setShowGoalModal(false); }} className="w-full py-6 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl">Update Strategy</button>
+            </div>
+          </div>
+        )}
+        {/* Mode Selection Modal */}
+        {activeStartTask && (
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-300">
+            <div className="bg-white rounded-[3rem] p-8 w-full max-w-md shadow-2xl space-y-6 animate-in zoom-in-95">
+              <div className="text-center space-y-2">
+                <div className="w-12 h-12 bg-blue-600/10 text-blue-600 rounded-2xl flex items-center justify-center mx-auto">
+                  <Timer size={24} />
+                </div>
+                <h3 className="text-xl font-[1000] text-slate-900 uppercase tracking-tight">Choose Focus Mode</h3>
+                <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">
+                  Target: {activeStartTask.text} ({activeStartTask.subject || 'OTHERS'})
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={() => startFocusSessionForTask(activeStartTask, 'TIMER')}
+                  className="flex flex-col items-center justify-center p-6 bg-slate-50 hover:bg-blue-50 border-2 border-slate-200/60 hover:border-blue-500 rounded-3xl transition-all group active:scale-95 text-center"
+                >
+                  <Clock size={28} className="text-slate-400 group-hover:text-blue-600 mb-3 transition-colors" />
+                  <span className="text-xs font-black uppercase tracking-widest text-slate-800 group-hover:text-blue-600">Timer Mode</span>
+                  <span className="text-[8px] text-slate-400 mt-2 font-bold uppercase">
+                    {activeStartTask.duration ? `${activeStartTask.duration}m countdown` : '60m countdown'}
+                  </span>
+                  <span className="text-[7px] text-blue-500 font-bold uppercase mt-1 leading-normal">
+                    (Auto rollover to stopwatch on end)
+                  </span>
+                </button>
+
+                <button
+                  onClick={() => startFocusSessionForTask(activeStartTask, 'STOPWATCH')}
+                  className="flex flex-col items-center justify-center p-6 bg-slate-50 hover:bg-emerald-50 border-2 border-slate-200/60 hover:border-emerald-500 rounded-3xl transition-all group active:scale-95 text-center"
+                >
+                  <Activity size={28} className="text-slate-400 group-hover:text-emerald-600 mb-3 transition-colors" />
+                  <span className="text-xs font-black uppercase tracking-widest text-slate-800 group-hover:text-emerald-600">Stopwatch Mode</span>
+                  <span className="text-[8px] text-slate-400 mt-2 font-bold uppercase">Counts up from 00:00</span>
+                  <span className="text-[7px] text-emerald-500 font-bold uppercase mt-1 leading-normal">
+                    (Save manually when finished)
+                  </span>
+                </button>
+              </div>
+
+              <button
+                onClick={() => setActiveStartTask(null)}
+                className="w-full py-4 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl font-black text-xs uppercase tracking-widest active:scale-95 transition-all"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         )}

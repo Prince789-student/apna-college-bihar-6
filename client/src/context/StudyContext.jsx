@@ -29,6 +29,7 @@ export function StudyProvider({ children }) {
   const [customMinutes, setCustomMinutes] = useState(1);
   const [customSeconds, setCustomSeconds] = useState(0);
   const [timerMode, setTimerMode] = useState('COUNTDOWN');
+  const [overtimeActive, setOvertimeActive] = useState(false);
   const [focusBroken, _setFocusBroken] = useState(false);
   const [allowedPackages, _setAllowedPackages] = useState(() => getInitialState('allowedPackages', ''));
   const [installedApps, setInstalledApps] = useState([]);
@@ -107,6 +108,9 @@ export function StudyProvider({ children }) {
   };
 
   const setTimerActive = (val) => {
+    if (!val) {
+      setOvertimeActive(false);
+    }
     _setTimerActive(val);
     localStorage.setItem('timerActive', JSON.stringify(val));
     
@@ -174,8 +178,16 @@ export function StudyProvider({ children }) {
 
   const saveGlobalSession = async (manualTime = null) => {
     if (!user) return;
-    const timeToSave = manualTime || (timerMode === 'STOPWATCH' ? timerTime : (customMinutes * 60 + customSeconds - timerTime));
-    if (timeToSave < 5) { setTimerActive(false); return; }
+    const timeToSave = manualTime || (
+      overtimeActive 
+        ? (customMinutes * 60 + customSeconds + timerTime)
+        : (timerMode === 'STOPWATCH' ? timerTime : (customMinutes * 60 + customSeconds - timerTime))
+    );
+    if (timeToSave < 5) { 
+      setOvertimeActive(false);
+      setTimerActive(false); 
+      return; 
+    }
 
     try {
       const todayStr = new Date().toLocaleDateString('en-CA');
@@ -225,8 +237,12 @@ export function StudyProvider({ children }) {
         setSelectedTaskId('');
       }
       
+      setOvertimeActive(false);
       setTimerActive(false);
-    } catch (e) { console.error("Global Save Error:", e); }
+    } catch (e) { 
+      setOvertimeActive(false);
+      console.error("Global Save Error:", e); 
+    }
   };
 
   useEffect(() => {
@@ -251,18 +267,18 @@ export function StudyProvider({ children }) {
   useEffect(() => {
     if (timerActive) {
       timerRef.current = setInterval(() => {
-        setTimerTime(t => {
-          if (timerMode === 'COUNTDOWN') {
+        if (timerMode === 'COUNTDOWN') {
+          setTimerTime(t => {
             if (t <= 1) {
-              clearInterval(timerRef.current);
-              saveGlobalSession(customMinutes * 60 + customSeconds);
+              setTimerMode('STOPWATCH');
+              setOvertimeActive(true);
               return 0;
             }
             return t - 1;
-          } else {
-            return t + 1;
-          }
-        });
+          });
+        } else {
+          setTimerTime(t => t + 1);
+        }
       }, 1000);
     } else {
       clearInterval(timerRef.current);
@@ -283,6 +299,8 @@ export function StudyProvider({ children }) {
     setCustomSeconds,
     timerMode,
     setTimerMode,
+    overtimeActive,
+    setOvertimeActive,
     saveGlobalSession,
     focusBroken,
     setFocusBroken,
