@@ -324,8 +324,9 @@ export default function StudyDashboard() {
     }
 
     subjectBreakdown.sort((a, b) => b.sec - a.sec);
+    const totalScopeSec = subjectBreakdown.reduce((a, s) => a + s.sec, 0);
 
-    return { today, weekly, monthly, heatmap, subjectBreakdown };
+    return { today, weekly, monthly, heatmap, subjectBreakdown, totalScopeSec };
   }, [sessions, subjects, todayStr, timerActive, timerTime, timerMode, customHours, customMinutes, customSeconds, timerSubject, historyScope]);
 
   const groupedHistory = useMemo(() => {
@@ -776,8 +777,14 @@ export default function StudyDashboard() {
                   <button 
                     key={i} 
                     onClick={() => setSelectedHeatmapDay(isSelected ? null : d)}
-                    className="flex flex-col items-center gap-1.5 flex-1 focus:outline-none group"
+                    className="flex flex-col items-center gap-1.5 flex-1 focus:outline-none group relative"
                   >
+                    {isSelected && (
+                      <div className="absolute bottom-full mb-2 bg-slate-800 text-white text-[9px] font-black uppercase tracking-wider px-2 py-1.5 rounded-lg shadow-xl z-20 whitespace-nowrap animate-in fade-in zoom-in-95 duration-100">
+                        {formatDuration(d.sec)}
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-slate-800"></div>
+                      </div>
+                    )}
                     <div 
                       className={`w-full rounded-lg transition-all ${
                         d.isToday 
@@ -799,6 +806,9 @@ export default function StudyDashboard() {
                     }`}>
                       {d.day}
                     </span>
+                    {d.isToday && (
+                      <div className="w-8 h-1 bg-blue-600 rounded-full mt-0.5"></div>
+                    )}
                   </button>
                 );
               })}
@@ -821,7 +831,7 @@ export default function StudyDashboard() {
                 {stats.subjectBreakdown.map(sub => (
                   <div key={sub.name} className="space-y-1.5 px-2">
                     <div className="flex justify-between"><span className="text-[10px] font-black text-slate-700 uppercase tracking-wide">{sub.name}</span><span className="text-[10px] font-black text-slate-400">{formatDuration(sub.sec)}</span></div>
-                    <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-slate-800 rounded-full" style={{ width: `${(sub.sec / Math.max(1, stats.today)) * 100}%` }}></div></div>
+                    <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-slate-800 rounded-full" style={{ width: `${(sub.sec / Math.max(1, stats.totalScopeSec)) * 100}%` }}></div></div>
                   </div>
                 ))}
               </div>

@@ -198,8 +198,13 @@ export default function GroupDetail() {
   useEffect(() => {
     if (!group?.members?.length) return;
     const unsubMembers = onSnapshot(query(collection(db, 'users'), where('uid', 'in', group.members)), (snap) => {
-      const mData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      mData.sort((a, b) => (b.todayStudyTime || 0) - (a.todayStudyTime || 0));
+      const todayStr = new Date().toLocaleDateString('en-CA');
+      const mData = snap.docs.map(d => {
+        const uData = { id: d.id, ...d.data() };
+        uData.todayStudyTimeVal = uData.lastStudyDate === todayStr ? (uData.todayStudyTime || 0) : 0;
+        return uData;
+      });
+      mData.sort((a, b) => b.todayStudyTimeVal - a.todayStudyTimeVal);
       setMembers(mData);
     });
     return () => unsubMembers();
@@ -272,7 +277,10 @@ export default function GroupDetail() {
   const MemberCard = ({ member, index }) => {
     const isMe = member.id === user.uid;
     const isStudying = member.isStudying;
-    let displayTimeSec = member.todayStudyTime || 0;
+    const todayStr = new Date().toLocaleDateString('en-CA');
+    const todayStudyTime = member.lastStudyDate === todayStr ? (member.todayStudyTime || 0) : 0;
+    
+    let displayTimeSec = todayStudyTime;
     if (isMe && timerActive) {
       const elapsed = timerMode === 'COUNTDOWN' ? (customHours * 3600 + customMinutes * 60 + customSeconds - timerTime) : timerTime;
       displayTimeSec += elapsed;
@@ -319,7 +327,8 @@ export default function GroupDetail() {
   if (error) return <div className="text-red-500 font-black p-20 text-center uppercase tracking-widest">{error}</div>;
   if (!group || !user) return null;
 
-  const totalSec = members.reduce((a, m) => a + (m.todayStudyTime || 0), 0);
+  const todayStr = new Date().toLocaleDateString('en-CA');
+  const totalSec = members.reduce((a, m) => a + (m.lastStudyDate === todayStr ? (m.todayStudyTime || 0) : 0), 0);
   const totalHrs = (totalSec / 3600).toFixed(1);
   const progress = Math.min(100, (Number(totalHrs) / (group?.dailyGoal || 1)) * 100);
 
