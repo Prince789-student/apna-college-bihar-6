@@ -259,15 +259,15 @@ export default function GroupDetail() {
     }
     const studyTimeStr = formatHHMMSS(displayTimeSec);
     return (
-      <div onClick={() => setSelectedMember(member)} className={`relative flex flex-col items-center justify-center p-6 md:p-8 rounded-[2rem] border-2 transition-all cursor-pointer group hover:scale-105 ${isStudying ? 'bg-orange-50 border-orange-200 hover:border-orange-400 shadow-xl shadow-orange-500/10' : 'bg-white border-slate-200/80 hover:border-slate-300'}`}>
+      <div onClick={() => setSelectedMember(member)} className={`relative flex flex-col items-center justify-center p-6 md:p-8 rounded-[2rem] border-2 transition-all cursor-pointer group hover:scale-105 ${isStudying ? 'bg-emerald-50 border-emerald-200 hover:border-emerald-400 shadow-xl shadow-emerald-500/10' : 'bg-rose-50 border-rose-200 hover:border-rose-400 shadow-xl shadow-rose-500/5'}`}>
          <div className={`absolute top-4 left-4 text-[10px] font-black italic tracking-widest ${index < 3 ? 'text-amber-500' : 'text-slate-400'}`}>#{index + 1}</div>
          <div className="relative mb-4">
-           <div className={`w-16 h-16 md:w-20 md:h-20 rounded-[2rem] flex items-center justify-center transition-colors ${isStudying ? 'bg-orange-500/10 text-orange-500' : 'bg-slate-100 text-slate-300'}`}><Monitor size={32} /></div>
-           {isStudying && <div className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-orange-500 border-2 border-white rounded-full animate-pulse shadow-[0_0_10px_rgba(249,115,22,0.8)]"></div>}
+           <div className={`w-16 h-16 md:w-20 md:h-20 rounded-[2rem] flex items-center justify-center transition-colors ${isStudying ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}><Monitor size={32} /></div>
+           <div className={`absolute -top-1 -right-1 w-3.5 h-3.5 border-2 border-white rounded-full animate-pulse ${isStudying ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]' : 'bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.8)]'}`}></div>
            {!isStudying && <button onClick={(e) => { e.stopPropagation(); sendNudge(member); }} className="absolute -bottom-2 -right-2 w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center text-amber-500 hover:bg-amber-50 opacity-0 group-hover:opacity-100 shadow-sm"><BellRing size={14} /></button>}
          </div>
          <span className="font-[1000] text-slate-900 text-xs md:text-sm tracking-tight uppercase truncate w-full text-center mb-1">{member.name}</span>
-         <div className={`${isStudying ? 'text-orange-600' : 'text-slate-400'} font-[1000] text-sm md:text-base tracking-widest mt-1`}>{studyTimeStr}</div>
+         <div className={`${isStudying ? 'text-emerald-600' : 'text-rose-600'} font-[1000] text-sm md:text-base tracking-widest mt-1`}>{studyTimeStr}</div>
       </div>
     );
   };
@@ -404,66 +404,27 @@ export default function GroupDetail() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2 space-y-8">
-           <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center space-x-3">
-                 <div className="p-2 bg-amber-500 rounded-xl shadow-lg shadow-amber-900/20"><Trophy size={20} className="text-slate-900" /></div>
-                 <h2 className="text-xl font-black text-slate-900 uppercase tracking-tighter italic">Leaderboard Rank</h2>
-              </div>
-              <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 gap-1">
-                 <button onClick={() => setFilterMode('all')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${filterMode === 'all' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-950'}`}>All ({members.length})</button>
-                 <button onClick={() => setFilterMode('studying')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${filterMode === 'studying' ? 'bg-orange-500 text-white shadow-sm' : 'text-slate-500 hover:text-slate-950'}`}>Studying Now ({members.filter(m => m.isStudying).length})</button>
-              </div>
-           </div>
-           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-             {(() => {
-               const displayedMembers = filterMode === 'studying' ? members.filter(m => m.isStudying) : members;
-               return displayedMembers.length === 0 ? (
-                 <div className="col-span-full p-12 text-center text-slate-500 font-black text-xs italic">No matching scholars found</div>
-               ) : (
-                 displayedMembers.map((member, index) => <MemberCard key={member.id} member={member} index={index} />)
-               );
-             })()}
-           </div>
-        </div>
-
-        <div className="space-y-10">
-           <div className="bg-slate-900 rounded-[2.5rem] p-8 space-y-8 shadow-2xl relative overflow-hidden border border-slate-800">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl"></div>
-              <div className="flex justify-between items-start"><div><h3 className="text-xs font-black text-blue-500 uppercase tracking-[0.3em] mb-2">Network Objective</h3><p className="text-3xl font-black text-white tracking-tighter uppercase leading-none">Strategic Goal</p></div>{isAdmin && <button onClick={setGroupGoal} className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-all text-white/50 hover:text-white"><Shield size={14} /></button>}</div>
-              <div className="space-y-4"><div className="flex justify-between items-end"><span className="text-[10px] text-slate-500 font-black uppercase tracking-widest italic">Progress</span><span className="text-2xl font-black text-white tracking-tighter">{totalHrs} / {group?.dailyGoal || 1} <span className="text-[10px] text-slate-500">HRS</span></span></div><div className="h-3 bg-white/5 rounded-full overflow-hidden border border-white/5 p-0.5"><div className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(37,99,235,0.4)]" style={{ width: `${progress}%` }}></div></div></div>
-           </div>
-
-           <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 space-y-6 shadow-2xl">
-              <div className="flex items-center gap-3">
-                 <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl"><Clock size={18} /></div>
-                 <div>
-                    <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Your Daily Progress</h3>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Today's Total Focus Time</p>
-                 </div>
-              </div>
-              <div className="text-3xl font-[1000] text-slate-900 tracking-tighter">
-                {(() => {
-                  const myMember = members.find(m => m.id === user.uid);
-                  let myTime = myMember?.todayStudyTime || 0;
-                  if (timerActive) {
-                    const elapsed = timerMode === 'COUNTDOWN' ? (customMinutes * 60 + customSeconds - timerTime) : timerTime;
-                    myTime += elapsed;
-                  }
-                  return formatHHMMSS(myTime);
-                })()}
-              </div>
-           </div>
-           <div className="space-y-6">
-              <h3 className="text-sm font-black text-slate-900 uppercase tracking-[0.3em] italic flex items-center gap-2"><Clock size={16} className="text-blue-500" /> Operational Specs</h3>
-              <div className="bg-white border border-slate-200 rounded-3xl p-8 space-y-6 shadow-2xl">
-                 <div className="flex justify-between items-center border-b border-slate-200/50 pb-4"><span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">Protocol</span><span className="text-xs font-black text-blue-500 uppercase tracking-widest">Study Group</span></div>
-                 <div className="flex justify-between items-center border-b border-slate-200/50 pb-4"><span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">Capacity</span><span className="text-xs font-black text-slate-700 uppercase tracking-widest">{group.maxMembers || 150} Seats</span></div>
-                 <div className="flex justify-between items-center border-b border-slate-200/50 pb-4"><span className="text-[10px] text-slate-500 font-black uppercase tracking-widest">Status</span><span className="text-xs font-black text-emerald-500 uppercase tracking-widest flex items-center gap-2"><div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></div> Secure</span></div>
-              </div>
-           </div>
-        </div>
+      <div className="space-y-8">
+         <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center space-x-3">
+               <div className="p-2 bg-amber-500 rounded-xl shadow-lg shadow-amber-900/20"><Trophy size={20} className="text-slate-900" /></div>
+               <h2 className="text-xl font-black text-slate-900 uppercase tracking-tighter italic">Leaderboard Rank</h2>
+            </div>
+            <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 gap-1">
+               <button onClick={() => setFilterMode('all')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${filterMode === 'all' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-950'}`}>All ({members.length})</button>
+               <button onClick={() => setFilterMode('studying')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${filterMode === 'studying' ? 'bg-orange-500 text-white shadow-sm' : 'text-slate-500 hover:text-slate-950'}`}>Studying Now ({members.filter(m => m.isStudying).length})</button>
+            </div>
+         </div>
+         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+           {(() => {
+             const displayedMembers = filterMode === 'studying' ? members.filter(m => m.isStudying) : members;
+             return displayedMembers.length === 0 ? (
+               <div className="col-span-full p-12 text-center text-slate-500 font-black text-xs italic">No matching scholars found</div>
+             ) : (
+               displayedMembers.map((member, index) => <MemberCard key={member.id} member={member} index={index} />)
+             );
+           })()}
+         </div>
       </div>
 
       {selectedMember && (
