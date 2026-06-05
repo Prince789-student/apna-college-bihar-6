@@ -60,22 +60,43 @@ function LoadingScreen() {
   );
 }
 
-function GlobalPhonePrompt() {
+function GlobalProfilePrompt() {
   const { user, updateProfileData, logout } = useAuth();
+  const [name, setName] = useState('');
+  const [collegeName, setCollegeName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const needsPhone = user && (!user?.phone || user?.phone?.trim() === "" || user?.phone === "NOT LINKED");
+  useEffect(() => {
+    if (user) {
+      setName(user.name && user.name !== 'Scholar' ? user.name : '');
+      setCollegeName(user.collegeName || '');
+      setPhoneNumber(user.phone && user.phone !== 'NOT LINKED' ? user.phone : '');
+    }
+  }, [user]);
 
-  if (!needsPhone) return null;
+  const needsProfileUpdate = user && (
+    (!user?.phone || user?.phone?.trim() === "" || user?.phone === "NOT LINKED") ||
+    (!user?.name || user?.name?.trim() === "" || user?.name === "Scholar") ||
+    (!user?.collegeName || user?.collegeName?.trim() === "")
+  );
 
-  const handlePhoneSubmit = async (e) => {
+  if (!needsProfileUpdate) return null;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if(phoneNumber.length < 10) return toast.error("Enter a valid 10-digit number!");
+    if (!name.trim()) return toast.error("Please enter your name!");
+    if (!collegeName.trim()) return toast.error("Please enter your college name!");
+    if (phoneNumber.length < 10) return toast.error("Enter a valid 10-digit mobile number!");
+    
     setIsSubmitting(true);
     try {
-      await updateProfileData({ phone: phoneNumber });
-      toast.success("Mobile number linked securely!");
+      await updateProfileData({ 
+        name: name.trim(),
+        collegeName: collegeName.trim(),
+        phone: phoneNumber 
+      });
+      toast.success("Profile setup completed successfully!");
     } catch(err) {
       toast.error("Failed to save. Try again.");
     } finally {
@@ -91,16 +112,48 @@ function GlobalPhonePrompt() {
           <div className="p-4 bg-blue-600/10 rounded-full border border-blue-500/20 mb-6">
             <ShieldCheck className="text-blue-500 w-10 h-10" />
           </div>
-          <h2 className="text-2xl md:text-3xl font-[900] text-center text-slate-900 uppercase tracking-tighter mb-2">Security Check</h2>
-          <p className="text-slate-500 text-xs font-bold text-center mb-8">Please link your active mobile number to secure your college portal access.</p>
+          <h2 className="text-2xl md:text-3xl font-[900] text-center text-slate-900 uppercase tracking-tighter mb-2">Profile Setup</h2>
+          <p className="text-slate-500 text-xs font-bold text-center mb-6">Please complete your details to unlock and secure your college portal access.</p>
           
-          <form onSubmit={handlePhoneSubmit} className="w-full space-y-4">
-            <div className="relative group">
-              <Phone className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-400" size={18} />
-              <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0,10))} placeholder="10-DIGIT MOBILE NO." className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.5rem] p-5 pl-16 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-500" required />
+          <form onSubmit={handleSubmit} className="w-full space-y-4">
+            <div>
+              <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Full Name</label>
+              <input 
+                type="text" 
+                value={name} 
+                onChange={(e) => setName(e.target.value)} 
+                placeholder="YOUR FULL NAME" 
+                className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" 
+                required 
+              />
             </div>
-            <button type="submit" disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-500 text-white font-[1000] py-5 rounded-[1.8rem] shadow-[0_10px_40px_rgba(37,99,235,0.4)] transition-all active:scale-95 text-xs tracking-widest uppercase mt-4">
-              {isSubmitting ? "Updating..." : "Save & Continue"}
+            
+            <div>
+              <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">College Name</label>
+              <input 
+                type="text" 
+                value={collegeName} 
+                onChange={(e) => setCollegeName(e.target.value)} 
+                placeholder="YOUR COLLEGE NAME" 
+                className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" 
+                required 
+              />
+            </div>
+
+            <div>
+              <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Mobile Number</label>
+              <input 
+                type="tel" 
+                value={phoneNumber} 
+                onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0,10))} 
+                placeholder="10-DIGIT MOBILE NO." 
+                className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" 
+                required 
+              />
+            </div>
+
+            <button type="submit" disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-500 text-white font-[1000] py-4.5 rounded-[1.5rem] shadow-[0_10px_40px_rgba(37,99,235,0.4)] transition-all active:scale-95 text-xs tracking-widest uppercase mt-4">
+              {isSubmitting ? "Saving details..." : "Save & Continue"}
             </button>
           </form>
 
@@ -163,7 +216,7 @@ function App() {
     return (
       <>
         <Toaster position="top-right" />
-        <GlobalPhonePrompt />
+        <GlobalProfilePrompt />
         <React.Suspense fallback={<LoadingScreen />}>
           <Routes>
             {/* Public Routes */}
