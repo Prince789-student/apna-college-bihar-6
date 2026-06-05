@@ -475,26 +475,51 @@ function UgeacPredictor() {
   const sortedColleges = useMemo(() => [...colleges].sort((a,b) => a.name.localeCompare(b.name)), []);
   const initialCollege = collegeSlug ? colleges.find(c => c.short.toLowerCase().replace(/[\s\.]+/g, '-') === collegeSlug.toLowerCase()) : null;
 
+  const seoDetails = useMemo(() => {
+    if (collegeSlug && initialCollege) {
+      return {
+        title: `${initialCollege.name} | UGEAC Cutoff Rank 2025`,
+        description: `Check ${initialCollege.name} B.Tech admission cutoff ranks, fee structure, and seat matrix for UGEAC 2025.`,
+        keywords: `${initialCollege.short} Cutoff, ${initialCollege.name} admission, UGEAC Cutoff 2025, Bihar Engineering Cutoff`,
+        url: `https://www.apnacollegebihar.online/college/${collegeSlug}`
+      };
+    }
+
+    if (mode === 'predictor') {
+      return {
+        title: "UGEAC 2025 Rank Predictor & Category Ranks | Apna College Bihar",
+        description: "Estimate your UGEAC State Merit Rank, Category Rank, and Female Rank based on your JEE Main AIR.",
+        keywords: "UGEAC Rank Predictor, Bihar Engineering Rank Predictor, JEE Main to UGEAC, Category Rank Bihar",
+        url: "https://www.apnacollegebihar.online/ugeac-predictor?tab=predictor"
+      };
+    }
+
+    if (mode === 'guide') {
+      return {
+        title: "UGEAC 2025 Counselling Guide & Official Roadmap | Apna College Bihar",
+        description: "Complete official roadmap, eligibility criteria, category reservation matrix, and document checklist for Bihar Engineering admissions.",
+        keywords: "UGEAC Counselling Guide, Bihar Engineering Admission Roadmap, BCECEB Counselling Process, Document Checklist UGEAC",
+        url: "https://www.apnacollegebihar.online/ugeac-predictor?tab=guide"
+      };
+    }
+
+    // Default: finder (College Predictor)
+    return {
+      title: "UGEAC 2025 College Predictor & Cutoff Ranks | Apna College Bihar",
+      description: "Predict your engineering college in Bihar based on UGEAC rank with 2024-2025 official cutoff data.",
+      keywords: "UGEAC College Predictor, Bihar Engineering College Predictor, UGEAC Cutoff Ranks, BCE Bhagalpur Cutoff",
+      url: "https://www.apnacollegebihar.online/ugeac-predictor?tab=finder"
+    };
+  }, [collegeSlug, initialCollege, mode]);
+
   return (
     <div className="main-app-container">
       <SEO 
-        title="UGEAC College Predictor 2025 | Apna College Bihar" 
-        description="Predict your Bihar Engineering college based on your UGEAC Rank and JEE Main percentile."
+        title={seoDetails.title}
+        description={seoDetails.description}
+        keywords={seoDetails.keywords}
+        url={seoDetails.url}
       />
-      {collegeSlug && initialCollege ? (
-        <SEO 
-          title={`${initialCollege.name} | UGEAC Cutoff Rank 2025`}
-          description={`Check ${initialCollege.name} B.Tech admission cutoff ranks, fee structure, and seat matrix for UGEAC 2025.`}
-          keywords={`${initialCollege.short} Cutoff, ${initialCollege.name} admission, UGEAC Cutoff 2025, Bihar Engineering Cutoff`}
-          url={`https://www.apnacollegebihar.online/college/${collegeSlug}`}
-        />
-      ) : (
-        <SEO 
-          title="UGEAC 2025 College Predictor & Cutoff Ranks | Apna College Bihar"
-          description="Predict your engineering college in Bihar based on UGEAC rank with 2024-2025 official cutoff data."
-          url="https://www.apnacollegebihar.online/ugeac-predictor"
-        />
-      )}
       {loadingData ? (
         <div className="flex flex-col items-center justify-center p-20 glass-panel min-h-[400px]">
           <div className="relative w-20 h-20 mb-8">
