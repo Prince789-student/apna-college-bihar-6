@@ -100,7 +100,7 @@ export default function DashboardLayout() {
           );
           const snap = await getDocs(sessionsQuery);
           const isAwake = !snap.empty || timerActive;
-          const userName = user.name || 'Bhai';
+          const userName = user.name || 'Bihari Babu';
           let title = '';
           let body = '';
 
@@ -113,7 +113,7 @@ export default function DashboardLayout() {
           }
 
           toast.custom((t) => (
-            <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-md w-full bg-slate-900 text-white shadow-2xl rounded-[2rem] border border-slate-700/60 p-6 pointer-events-auto flex flex-col gap-3 font-['Inter']`}>
+            <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-md w-full bg-slate-900 text-white shadow-2xl rounded-[2rem] border border-slate-700/60 p-6 pointer-events-auto flex flex-col gap-3 font-['Inter'] z-[9999]`}>
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-2">
                   <span className="text-xl">🌅</span>
@@ -134,70 +134,8 @@ export default function DashboardLayout() {
         }
       }
 
-      // attendance alert check (6:00 AM)
-      if (curHour >= 6) {
-        const attKey = `attendance_alert_${todayStr}`;
-        if (!localStorage.getItem(attKey)) {
-          const FULL_DAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
-          const todayDay = FULL_DAYS[new Date().getDay()];
-          const todaySchedule = user.timetableV3?.[todayDay] || [];
-          const todaySubjects = todaySchedule.filter(c => c.subject && c.subject.trim() !== '').map(c => c.subject.trim().toLowerCase());
-
-          if (todaySubjects.length > 0) {
-            const attendanceList = user.attendance || [];
-            const alerts = [];
-
-            todaySubjects.forEach(subName => {
-              const record = attendanceList.find(a => a.name.trim().toLowerCase() === subName);
-              if (record) {
-                const percent = record.total > 0 ? Number(((record.present / record.total) * 100).toFixed(1)) : 0;
-                const getMarks = (p) => {
-                  if (p < 75) return 0;
-                  if (p <= 80) return 1;
-                  if (p <= 85) return 2;
-                  if (p <= 90) return 3;
-                  if (p <= 95) return 4;
-                  return 5;
-                };
-
-                if (percent < 75) {
-                  alerts.push({
-                    type: 'danger',
-                    text: `🚨 Critical: ${record.name} me attendance sirf ${percent}% hai (75% se niche)! College me back lag jayega, class lagao bidu! 😤🔥`
-                  });
-                } else {
-                  alerts.push({
-                    type: 'success',
-                    text: `🔥 Shabash Biru! ${record.name} me attendance ${percent}% hai. Sessional me +${getMarks(percent)} marks pakke hain tere! aise hi lagatar class karte raho! 💪✨`
-                  });
-                }
-              }
-            });
-
-            alerts.forEach((alert, idx) => {
-              setTimeout(() => {
-                toast(alert.text, {
-                  duration: 8000,
-                  icon: alert.type === 'danger' ? '🚨' : '🔥',
-                  style: { 
-                    background: alert.type === 'danger' ? '#fecaca' : '#d1fae5', 
-                    color: alert.type === 'danger' ? '#991b1b' : '#065f46', 
-                    fontWeight: '800', 
-                    fontSize: '11px',
-                    border: `1px solid ${alert.type === 'danger' ? '#fca5a5' : '#6ee7b7'}`
-                  }
-                });
-                if ('Notification' in window && Notification.permission === 'granted') {
-                  new Notification('Attendance Alert', { body: alert.text, icon: '/logo-acb.png' });
-                }
-              }, idx * 1000);
-            });
-          }
-          localStorage.setItem(attKey, 'true');
-        }
-      }
-
-      // class schedule alert (8:00 AM)
+      // class schedule alert (8:00 AM) - Always run before attendance warning
+      let timetableShown = false;
       if (curHour >= 8) {
         const ttKey = `timetable_alert_${todayStr}`;
         if (!localStorage.getItem(ttKey)) {
@@ -208,7 +146,7 @@ export default function DashboardLayout() {
 
           if (classes.length > 0) {
             const classListText = classes.map(c => `• ${c.startTime || ''}: ${c.subject}`).join('\n');
-            const text = `🗓️ Aaj ki Classes:\n${classListText}\nTime par pahunch jana, padhai shuru karo! 😉`;
+            const text = `🗓️ Aaj ki Classes:\n${classListText}\nTime par pahunch jana biru, padhai shuru karo! 😉`;
             
             toast(text, {
               duration: 8000,
@@ -220,32 +158,112 @@ export default function DashboardLayout() {
             }
           }
           localStorage.setItem(ttKey, 'true');
+          timetableShown = true;
         }
       }
 
-      // target setup alert (throttled once per day)
-      const targetKey = `target_check_${todayStr}`;
-      if (!localStorage.getItem(targetKey)) {
-        const tasksQuery = query(
-          collection(db, 'Tasks'),
-          where('userId', '==', user.uid),
-          where('date', '==', todayStr)
-        );
-        const snap = await getDocs(tasksQuery);
-        if (snap.empty) {
-          toast("🎯 Target Alert: Bhai, aaj ka study target set nahi kiya tune! Plan tab me ja aur subject targets set kar jaldi! 😤🔥", {
-            duration: 8000,
-            icon: '🎯',
-            style: { background: '#fffbeb', color: '#b45309', fontWeight: '800', fontSize: '11px', border: '1px solid #fde68a' }
-          });
-        } else {
-          toast(`🎯 Targets: Aaj ke ${snap.docs.length} targets scheduled hain tere! Chal birus, unhe complete karke phod de! 💪🔥`, {
-            duration: 8000,
-            icon: '✅',
-            style: { background: '#f0fdf4', color: '#166534', fontWeight: '800', fontSize: '11px', border: '1px solid #bbf7d0' }
-          });
+      // attendance alert check (6:00 AM) - Shown after timetable check
+      const triggerAttendance = () => {
+        if (curHour >= 6) {
+          const attKey = `attendance_alert_${todayStr}`;
+          if (!localStorage.getItem(attKey)) {
+            const FULL_DAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+            const todayDay = FULL_DAYS[new Date().getDay()];
+            const todaySchedule = user.timetableV3?.[todayDay] || [];
+            const todaySubjects = todaySchedule.filter(c => c.subject && c.subject.trim() !== '').map(c => c.subject.trim().toLowerCase());
+
+            if (todaySubjects.length > 0) {
+              const attendanceList = user.attendance || [];
+              const alerts = [];
+
+              todaySubjects.forEach(subName => {
+                const record = attendanceList.find(a => a.name.trim().toLowerCase() === subName);
+                if (record) {
+                  const percent = record.total > 0 ? Number(((record.present / record.total) * 100).toFixed(1)) : 0;
+                  const getMarks = (p) => {
+                    if (p < 75) return 0;
+                    if (p <= 80) return 1;
+                    if (p <= 85) return 2;
+                    if (p <= 90) return 3;
+                    if (p <= 95) return 4;
+                    return 5;
+                  };
+
+                  if (percent < 75) {
+                    alerts.push({
+                      type: 'danger',
+                      text: `🚨 Critical Attendance Alert: ${record.name} me attendance sirf ${percent}% hai (75% se niche)! College me back lag jayega biru, fatfat class lagao! 😤🔥`
+                    });
+                  } else {
+                    alerts.push({
+                      type: 'success',
+                      text: `🔥 Gazab Bhai! ${record.name} me attendance ${percent}% hai. Sessional me +${getMarks(percent)} number pakke hain tere! aise hi lagatar class karte raho! 💪✨`
+                    });
+                  }
+                }
+              });
+
+              alerts.forEach((alert, idx) => {
+                setTimeout(() => {
+                  toast(alert.text, {
+                    duration: 8000,
+                    icon: alert.type === 'danger' ? '🚨' : '🔥',
+                    style: { 
+                      background: alert.type === 'danger' ? '#fecaca' : '#d1fae5', 
+                      color: alert.type === 'danger' ? '#991b1b' : '#065f46', 
+                      fontWeight: '800', 
+                      fontSize: '11px',
+                      border: `1px solid ${alert.type === 'danger' ? '#fca5a5' : '#6ee7b7'}`
+                    }
+                  });
+                  if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('Attendance Alert', { body: alert.text, icon: '/logo-acb.png' });
+                  }
+                }, idx * 1000);
+              });
+            }
+            localStorage.setItem(attKey, 'true');
+          }
         }
-        localStorage.setItem(targetKey, 'true');
+      };
+
+      if (timetableShown) {
+        setTimeout(triggerAttendance, 2000); // Wait 2s if timetable was just shown
+      } else {
+        triggerAttendance();
+      }
+
+      // target setup alert (throttled once per day)
+      const triggerTargetAlert = async () => {
+        const targetKey = `target_check_${todayStr}`;
+        if (!localStorage.getItem(targetKey)) {
+          const tasksQuery = query(
+            collection(db, 'Tasks'),
+            where('userId', '==', user.uid),
+            where('date', '==', todayStr)
+          );
+          const snap = await getDocs(tasksQuery);
+          if (snap.empty) {
+            toast("🎯 Target Alert: Bhai, aaj ka study target set nahi kiya tune! Plan tab me ja aur subject targets set kar jaldi! 😤🔥", {
+              duration: 8000,
+              icon: '🎯',
+              style: { background: '#fffbeb', color: '#b45309', fontWeight: '800', fontSize: '11px', border: '1px solid #fde68a' }
+            });
+          } else {
+            toast(`🎯 Targets Setup: Aaj ke ${snap.docs.length} targets scheduled hain tere! Chal birus, unhe complete karke dikha de aaj! 💪🔥`, {
+              duration: 8000,
+              icon: '✅',
+              style: { background: '#f0fdf4', color: '#166534', fontWeight: '800', fontSize: '11px', border: '1px solid #bbf7d0' }
+            });
+          }
+          localStorage.setItem(targetKey, 'true');
+        }
+      };
+      
+      if (timetableShown) {
+        setTimeout(triggerTargetAlert, 4000);
+      } else {
+        setTimeout(triggerTargetAlert, 1500);
       }
     };
 
@@ -256,6 +274,20 @@ export default function DashboardLayout() {
     const runInactivityCheck = async () => {
       if (timerActive) return; // Currently studying, do not disturb
       const todayStr = new Date().toLocaleDateString('en-CA');
+      
+      // Minimum 3 Hours Check: If user already studied 3 hours today, do not nag them!
+      // 3 hours = 3 * 3600 = 10800 seconds
+      const sessionsQuery = query(
+        collection(db, 'StudySessions'),
+        where('userId', '==', user.uid),
+        where('date', '==', todayStr)
+      );
+      const sessionsSnap = await getDocs(sessionsQuery);
+      const totalSecsToday = sessionsSnap.docs.reduce((a, s) => a + (Number(s.data().duration) || 0), 0);
+      if (totalSecsToday >= 10800) {
+        return; // Target met, no notification needed
+      }
+
       const tasksQuery = query(
         collection(db, 'Tasks'),
         where('userId', '==', user.uid),
@@ -264,7 +296,7 @@ export default function DashboardLayout() {
       );
       const snap = await getDocs(tasksQuery);
       if (!snap.empty) {
-        const text = "📚 Bhai padh le, target complete karna hai, time waste mat kar! Padhoge likhoge banoge nawab, scroll karoge to banoge kharab! 😉🔥";
+        const text = "📚 Bhai padh le, target complete karna hai, time waste mat kar! Sapne free hain biru, par unki EMI roz ki mehnat se bharni padti hai! 😉🔥";
         toast(text, {
           duration: 9000,
           icon: '✍️',
