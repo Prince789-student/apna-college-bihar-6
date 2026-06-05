@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 import { Capacitor, registerPlugin } from '@capacitor/core';
 import {
   doc, getDoc, collection, query, where, getDocs,
@@ -71,6 +72,7 @@ export default function StudyDashboard() {
   const [newTaskSubject, setNewTaskSubject] = useState('OTHERS');
   const [newTaskDuration, setNewTaskDuration] = useState('');
   const [newSubjectName, setNewSubjectName] = useState('');
+  const [newSubjectTarget, setNewSubjectTarget] = useState('2'); // Default to 2 hours target
   const [showSubjectManager, setShowSubjectManager] = useState(false);
 
   const [isNative, setIsNative] = useState(() => {
@@ -94,10 +96,17 @@ export default function StudyDashboard() {
     try {
       const docRef = await addDoc(collection(db, 'Subjects'), {
         userId: user.uid,
-        subjectName: newSubjectName.trim().toUpperCase()
+        subjectName: newSubjectName.trim().toUpperCase(),
+        targetHours: Number(newSubjectTarget || 2)
       });
-      setSubjects([...subjects, { id: docRef.id, userId: user.uid, subjectName: newSubjectName.trim().toUpperCase() }]);
+      setSubjects([...subjects, { 
+        id: docRef.id, 
+        userId: user.uid, 
+        subjectName: newSubjectName.trim().toUpperCase(),
+        targetHours: Number(newSubjectTarget || 2)
+      }]);
       setNewSubjectName('');
+      setNewSubjectTarget('2');
       toast.success("Subject added successfully!");
     } catch(e) {
       toast.error("Failed to add subject");
@@ -111,6 +120,16 @@ export default function StudyDashboard() {
       toast.success("Subject deleted successfully!");
     } catch(e) {
       toast.error("Failed to delete subject");
+    }
+  };
+
+  const updateSubjectTarget = async (subId, target) => {
+    try {
+      await updateDoc(doc(db, 'Subjects', subId), { targetHours: Number(target) });
+      setSubjects(subjects.map(s => s.id === subId ? { ...s, targetHours: Number(target) } : s));
+      toast.success("Subject target updated!");
+    } catch (e) {
+      toast.error("Failed to update target");
     }
   };
 
@@ -270,6 +289,19 @@ export default function StudyDashboard() {
     return { today, weekly, monthly, heatmap, subjectBreakdown };
   }, [sessions, subjects, todayStr, timerActive, timerTime, timerMode, customMinutes, customSeconds, timerSubject]);
 
+  const activeSubjectObj = subjects.find(s => s.subjectName === timerSubject);
+
+  const activeSubjectTodaySec = useMemo(() => {
+    if (!activeSubjectObj) return 0;
+    let activeSec = 0;
+    if (timerActive && timerSubject === activeSubjectObj.subjectName) {
+      activeSec = timerMode === 'COUNTDOWN' ? (customMinutes * 60 + customSeconds - timerTime) : timerTime;
+    }
+    return sessions
+      .filter(s => s.date === todayStr && s.subject === activeSubjectObj.subjectName)
+      .reduce((a, s) => a + (Number(s.duration) || 0), 0) + activeSec;
+  }, [sessions, activeSubjectObj, timerActive, timerTime, timerMode, customMinutes, customSeconds, timerSubject, todayStr]);
+
   const getProgress = (sec, g) => (!g || g <= 0) ? 0 : Math.min(100, (sec / (g * 3600)) * 100).toFixed(0);
 
   const addTask = async () => {
@@ -365,43 +397,83 @@ export default function StudyDashboard() {
               <div className="flex items-center gap-2 w-full px-4 py-3 bg-slate-50 rounded-2xl border border-slate-200/50">
                 <BookOpen size={14} className="text-blue-500" />
                 <select value={timerSubject} onChange={e => setTimerSubject(e.target.value)} disabled={timerActive} className="bg-transparent text-[10px] font-black uppercase tracking-widest text-slate-900 outline-none flex-1">
-                  <option value="OTHERS">SELECT SUBJECT</option>
+                  <option value="OTHERS">CREATE / SELECT SUBJECT</option>
                   {subjects.map(s => <option key={s.id} value={s.subjectName}>{s.subjectName}</option>)}
                 </select>
                 <button 
                   onClick={() => setShowSubjectManager(!showSubjectManager)} 
                   disabled={timerActive}
                   className="p-1 hover:text-blue-600 text-slate-400 transition-colors"
-                  title="Manage Subjects"
+                  title="Create & Manage Subjects"
                 >
-                  <Settings size={16} />
+                  <Plus size={16} />
                 </button>
               </div>
 
               {/* Subject Manager Panel */}
               {showSubjectManager && (
                 <div className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl p-4 space-y-3">
-                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Manage Subjects</p>
-                  <div className="flex gap-2">
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Create & Manage Subjects</p>
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <input 
                       type="text" 
                       value={newSubjectName} 
                       onChange={e => setNewSubjectName(e.target.value)}
-                      placeholder="NEW SUBJECT NAME" 
+                      placeholder="SUBJECT NAME" 
                       className="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none"
                     />
-                    <button onClick={addSubject} className="bg-blue-600 text-white px-4 rounded-xl text-xs font-bold active:scale-95 transition-all">Add</button>
+                    <div className="flex gap-2 items-center">
+                      <input 
+                        type="number" 
+                        min="1"
+                        max="24"
+                        value={newSubjectTarget} 
+                        onChange={e => setNewSubjectTarget(e.target.value)}
+                        placeholder="GOAL (HRS)" 
+                        className="w-24 bg-white border border-slate-200 rounded-xl px-2 py-2 text-center text-xs font-bold outline-none"
+                      />
+                      <button onClick={addSubject} className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold active:scale-95 transition-all">Add</button>
+                    </div>
                   </div>
                   {subjects.length > 0 && (
                     <div className="max-h-32 overflow-y-auto space-y-1.5 pt-2 border-t border-slate-200/50">
                       {subjects.map(s => (
-                        <div key={s.id} className="flex justify-between items-center bg-white px-3 py-1.5 rounded-lg border border-slate-100">
-                          <span className="text-[10px] font-bold text-slate-700">{s.subjectName}</span>
+                        <div key={s.id} className="flex justify-between items-center bg-white px-3 py-1.5 rounded-lg border border-slate-100 gap-2">
+                          <span className="text-[10px] font-bold text-slate-700 uppercase flex-1">{s.subjectName}</span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[8px] font-black text-slate-400 uppercase">Target:</span>
+                            <input 
+                              type="number" 
+                              min="0"
+                              value={s.targetHours || 0}
+                              onChange={(e) => updateSubjectTarget(s.id, e.target.value)}
+                              className="w-10 bg-slate-100 rounded px-1.5 py-0.5 text-[10px] font-black text-center outline-none border border-slate-200/50"
+                            />
+                            <span className="text-[8px] font-black text-slate-400 uppercase">hrs</span>
+                          </div>
                           <button onClick={() => deleteSubject(s.id)} className="text-red-400 hover:text-red-600"><Trash2 size={12} /></button>
                         </div>
                       ))}
                     </div>
                   )}
+                </div>
+              )}
+
+              {/* Subject Goal Progress Tracker */}
+              {activeSubjectObj && (
+                <div className="w-full bg-blue-50/50 border border-blue-100 rounded-2xl p-4 space-y-2 animate-in fade-in duration-300">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest">Subject Goal: {activeSubjectObj.subjectName}</span>
+                    <span className="text-[10px] font-black text-blue-600 uppercase">
+                      {formatDuration(activeSubjectTodaySec)} / {activeSubjectObj.targetHours || 0} hrs
+                    </span>
+                  </div>
+                  <div className="w-full h-2 bg-slate-200/80 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-blue-600 rounded-full transition-all duration-500" 
+                      style={{ width: `${Math.min(100, (activeSubjectTodaySec / Math.max(1, (activeSubjectObj.targetHours || 0) * 3600)) * 100)}%` }}
+                    ></div>
+                  </div>
                 </div>
               )}
 
