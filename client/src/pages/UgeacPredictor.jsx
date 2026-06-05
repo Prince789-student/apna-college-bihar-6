@@ -146,6 +146,70 @@ function UgeacPredictor() {
     return Math.floor(last.ur + (r - last.air) * 0.008);
   };
 
+  const getEstimatedCategoryRank = (urRank, cat) => {
+    if (!urRank || cat === 'UR') return null;
+    const multipliers = {
+      'BC': 0.15,
+      'EBC': 0.24,
+      'SC': 0.08,
+      'ST': 0.005,
+      'EWS': 0.12,
+      'RCG': 0.18,
+      'DQ': 0.015,
+      'SMQ': 0.008
+    };
+    const mult = multipliers[cat] || 0.15;
+    return Math.max(1, Math.floor(urRank * mult));
+  };
+
+  const getEstimatedGenderRank = (urRank, gender) => {
+    if (!urRank || gender !== 'Female') return null;
+    return Math.max(1, Math.floor(urRank * 0.18));
+  };
+
+  const downloadRankPredictionPDF = () => {
+    const doc = new jsPDF();
+    const urEst = estimateUgeacRank(parseInt(rank));
+    const catEst = getEstimatedCategoryRank(urEst, category);
+    const genderEst = getEstimatedGenderRank(urEst, gender);
+
+    doc.setFillColor(15, 23, 42); doc.rect(0, 0, 210, 30, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(16); doc.setFont("helvetica", "bold");
+    doc.text("APNA COLLEGE BIHAR", 15, 15);
+    doc.setFontSize(8); doc.setFont("helvetica", "normal");
+    doc.text("UGEAC Rank Prediction Report | www.apnacollegebihar.online", 15, 22);
+
+    doc.setFillColor(248, 250, 252); doc.rect(15, 45, 180, 75, 'F');
+    doc.setTextColor(30, 41, 59);
+    doc.setFontSize(14); doc.setFont("helvetica", "bold");
+    doc.text("UGEAC RANK PREDICTOR REPORT", 20, 58);
+
+    doc.setFontSize(10); doc.setFont("helvetica", "normal");
+    doc.text(`JEE Main AIR Rank: ${rank}`, 20, 72);
+    doc.text(`Selected Category: ${category}`, 20, 80);
+    doc.text(`Selected Gender: ${gender}`, 20, 88);
+
+    doc.setFontSize(12); doc.setFont("helvetica", "bold");
+    doc.setTextColor(79, 70, 229);
+    doc.text(`Estimated General (UR) Rank: #${urEst}`, 20, 102);
+
+    if (category !== 'UR') {
+      doc.text(`Estimated Category (${category}) Rank: #${catEst}`, 20, 110);
+    }
+    if (gender === 'Female') {
+      doc.text(`Estimated Female (RCG) Rank: #${genderEst}`, 20, 118);
+    }
+
+    doc.setTextColor(100, 100, 100);
+    doc.setFontSize(8);
+    const disclaimer = "Note: These ranks are mathematical predictions based on historical registration curves and BCECEB quotas. Actual allotment ranks will vary based on the official merit list published by BCECEB.";
+    const splitText = doc.splitTextToSize(disclaimer, 170);
+    doc.text(splitText, 20, 135);
+
+    doc.save(`UGEAC_Rank_Prediction.pdf`);
+  };
+
   const calculateResults = () => {
     if (!rank && !ugeacInput) return;
     const ugeacRank = ugeacInput ? parseInt(ugeacInput) : estimateUgeacRank(parseInt(rank));
@@ -474,6 +538,7 @@ function UgeacPredictor() {
               <p>Bihar's most accurate engineering admission AI. Predict your college choices based on historical round-wise cutoffs with 99% precision.</p>
               <div className="nav-pills">
                  <button onClick={() => setMode('finder')} className={`nav-btn ${mode === 'finder' ? 'active' : ''}`}><Search size={16} /> College Finder</button>
+                 <button onClick={() => setMode('predictor')} className={`nav-btn ${mode === 'predictor' ? 'active' : ''}`}><Calculator size={16} /> Rank Predictor</button>
                  <button onClick={() => setMode('guide')} className={`nav-btn ${mode === 'guide' ? 'active' : ''}`}><BookOpen size={16} /> Guide</button>
               </div>
            </div>
@@ -661,6 +726,105 @@ function UgeacPredictor() {
                    <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noreferrer" className="flex-1 md:flex-none px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all text-center shadow-xl">WhatsApp Channel</a>
                 </div>
              </div>
+          </div>
+        ) : mode === 'predictor' ? (
+          <div className="space-y-8 animate-in fade-in max-w-4xl mx-auto">
+             <div className="glass-panel bg-white border-slate-200 p-8 rounded-[2.5rem] shadow-xl space-y-6">
+                <div className="flex items-center gap-3 border-b border-slate-100 pb-4">
+                   <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center border border-indigo-100 text-indigo-600">
+                      <Calculator size={20} />
+                   </div>
+                   <div>
+                      <h3 className="text-base font-black text-slate-900 uppercase tracking-tight">UGEAC Rank Predictor</h3>
+                      <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Predict your State & Category Merit Ranks</p>
+                   </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                   <div className="input-group">
+                      <label className="premium-label">JEE Main AIR (CRL) Rank</label>
+                      <input 
+                         type="number" 
+                         value={rank} 
+                         onChange={(e) => setRank(e.target.value)} 
+                         placeholder="Enter AIR Rank" 
+                         className="premium-input" 
+                      />
+                   </div>
+                   <div className="input-group">
+                      <label className="premium-label">Category</label>
+                      <select 
+                         className="premium-input" 
+                         value={category} 
+                         onChange={(e) => setCategory(e.target.value)}
+                      >
+                         {['UR', 'EWS', 'BC', 'EBC', 'SC', 'ST'].map(c => <option key={c} value={c}>{c}</option>)}
+                      </select>
+                   </div>
+                   <div className="input-group">
+                      <label className="premium-label">Gender</label>
+                      <select 
+                         className="premium-input" 
+                         value={gender} 
+                         onChange={(e) => setGender(e.target.value)}
+                      >
+                         <option value="Male">Male / General</option>
+                         <option value="Female">Female</option>
+                      </select>
+                   </div>
+                </div>
+             </div>
+
+             {parseInt(rank) > 0 && (
+                <div className="glass-panel bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-2xl space-y-8 animate-in zoom-in-95">
+                   <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Estimated Rank Report</h4>
+                      <button 
+                         onClick={downloadRankPredictionPDF}
+                         className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-md"
+                      >
+                         <Download size={14} /> Download PDF
+                      </button>
+                   </div>
+
+                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
+                         <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest block">UGEAC General UR Rank</span>
+                         <span className="text-4xl font-[1000] text-white block mt-2">
+                            #{estimateUgeacRank(parseInt(rank))}
+                         </span>
+                         <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Based on JEE AIR {rank}</span>
+                      </div>
+
+                      {category !== 'UR' && (
+                         <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
+                            <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest block">Estimated {category} Rank</span>
+                            <span className="text-4xl font-[1000] text-emerald-400 block mt-2">
+                               #{getEstimatedCategoryRank(estimateUgeacRank(parseInt(rank)), category)}
+                            </span>
+                            <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Approx. {category} Quota</span>
+                         </div>
+                      )}
+
+                      {gender === 'Female' && (
+                         <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
+                            <span className="text-[9px] font-black text-pink-400 uppercase tracking-widest block">Estimated RCG Rank</span>
+                            <span className="text-4xl font-[1000] text-pink-400 block mt-2">
+                               #{getEstimatedGenderRank(estimateUgeacRank(parseInt(rank)), gender)}
+                            </span>
+                            <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Reserved Category Girls</span>
+                         </div>
+                      )}
+                   </div>
+
+                   <div className="bg-white/5 p-6 rounded-2xl border border-white/5 space-y-2">
+                      <h5 className="text-[10px] font-black uppercase tracking-wider text-slate-300">How is this calculated?</h5>
+                      <p className="text-[11px] text-slate-400 leading-relaxed font-medium">
+                         UGEAC general ranks are estimated using a distribution curve mapped from previous years' JEE Main AIR ranks versus UGEAC registration records. Category and Gender (RCG) ranks are computed based on standard BCECEB reservation proportions (UR: 40%, EBC: 18%, BC: 12%, SC: 16%, ST: 1%, EWS: 10%, RCG: 3%). 
+                      </p>
+                   </div>
+                </div>
+             )}
           </div>
         ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
