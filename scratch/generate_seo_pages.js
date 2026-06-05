@@ -61,6 +61,55 @@ const normalizedMap = {
   "G.E.C. SAMASTIPUR": "Government Engineering College, Samastipur"
 };
 
+// Branch specific descriptions, faculty profiles and internal details
+function getBranchSpecificDetails(branchName, collegeShort) {
+  const normName = branchName.toLowerCase();
+  
+  if (normName.includes('computer') || normName.includes('cse') || normName.includes('it') || normName.includes('information')) {
+    return {
+      description: `B.Tech Computer Science & Engineering (CSE / IT) at ${collegeShort} stands as the premier engineering domain. The course curriculum is designed in alignment with modern industrial needs, focusing heavily on Software Engineering, Data Structures & Algorithms (DSA), Operating Systems, DBMS, Artificial Intelligence, and Computer Networks.`,
+      faculty: `The CSE faculty cohort consists of highly qualified teachers appointed via the Department of Science, Technology and Technical Education (DSTTE), Government of Bihar. Many professors hold Ph.D. or M.Tech credentials from leading institutions like IITs and NITs. They maintain standard office hours and run programming workshops to help students develop debugging skills.`,
+      labs: `The department boasts state-of-the-art computer labs equipped with high-speed internet connectivity, compilers for standard languages (C++, Java, Python), database engines, and software engineering tools. A dedicated programming club supports competitive coding and hackathon participation.`,
+      placements: `CSE graduates secure the highest placements in standard Bihar Central Pool Drives and campus recruitments. Key recruiters include major software organizations such as TCS, Wipro, Infosys, Tech Mahindra, and Cognizant, offering packages ranging from ₹3.6 LPA up to ₹15+ LPA.`
+    };
+  } else if (normName.includes('civil')) {
+    return {
+      description: `B.Tech Civil Engineering at ${collegeShort} provides comprehensive training in infrastructure design, geotechnical modeling, concrete construction, structural analysis, surveying, and fluid mechanics.`,
+      faculty: `The Civil engineering department features experienced professors who emphasize practical learning and site planning. Many faculty members are actively involved in consultancy projects for public works and municipal assessments, bringing actual field engineering insights directly to the classroom.`,
+      labs: `Practical labs include high-precision Concrete Technology setups, Soil Mechanics equipment, Surveying instruments (including Total Station and GPS systems), and Hydraulics lab structures. Fieldwork sessions are held regularly to ensure students get hands-on exposure.`,
+      placements: `Civil engineering graduates at ${collegeShort} primarily target prestigious state public services (BPSC AE, WRD, RCD, PHED) or core construction giants like L&T, Tata Projects, and regional infrastructure contracting agencies.`
+    };
+  } else if (normName.includes('mechanical')) {
+    return {
+      description: `B.Tech Mechanical Engineering at ${collegeShort} offers robust mechanical system fundamentals, covering Thermodynamics, Machine Design, Fluid Mechanics, Kinematics, Heat Transfer, and CAD/CAM modeling structures.`,
+      faculty: `The Mechanical department is staffed by seasoned academic instructors with research interests in thermal sciences, material sciences, and automation. Professors provide supportive mentoring for engineering design projects and technical events.`,
+      labs: `Lab facilities include a fully functional Workshop (Smithy, Carpentry, Fitting), Internal Combustion Engine labs, Machine Kinematics tools, Heat Transfer rigs, and CAD workstations equipped with standard industry drafting software.`,
+      placements: `Mechanical graduates consistently secure job offers in core industrial houses (like Tata Motors, L&T, Prism Cement), energy companies, or slide into software roles during central pool placement drives.`
+    };
+  } else if (normName.includes('electrical') || normName.includes('ee')) {
+    return {
+      description: `B.Tech Electrical Engineering at ${collegeShort} focuses on core power systems, control systems, electrical machinery, electrical measurements, microprocessors, and power distribution paradigms.`,
+      faculty: `The Electrical engineering division consists of highly qualified professors specializing in power electronics and smart grids. They mentor students closely on academic research projects, electrical circuits troubleshooting, and system simulation.`,
+      labs: `Students gain practical training in Electrical Machines labs (AC/DC motors and generators), Power System simulation setups, Electrical Measurements labs, and Microcontroller interfacing toolkits.`,
+      placements: `Graduates find placement options in State Electricity Boards, NTPC, Power Grid Corporation of India, core industrial firms, and software companies through DSTTE central pool recruitment drives.`
+    };
+  } else if (normName.includes('electronics') || normName.includes('ece')) {
+    return {
+      description: `B.Tech Electronics & Communication Engineering (ECE) at ${collegeShort} blends hardware circuit design with digital communications, focusing on VLSI Design, Embedded Systems, Signal Processing, and Antenna Design.`,
+      faculty: `The ECE faculty comprises modern research-oriented teachers with expertise in microelectronics and communication protocols. They guide students through circuit design, programming microcontrollers, and communication system simulations.`,
+      labs: `The department features fully equipped Digital Electronics labs, Analog Circuits testing benches, VLSI Design tools, and Microprocessor interfacing labs with modern oscilloscope setups.`,
+      placements: `ECE students target career paths in semiconductor firms, embedded software houses, telecom sector (Jio, Airtel), and major IT recruiters like TCS, Cognizant, and Wipro.`
+    };
+  } else {
+    return {
+      description: `B.Tech ${branchName} at ${collegeShort} offers specialized training in modern technological domains, focusing on practical learning and industry-relevant skill acquisition.`,
+      faculty: `Faculty members are highly qualified professionals appointed through standard government channels, providing excellent mentorship and technical support for academic progress.`,
+      labs: `Dedicated laboratory facilities are equipped with the necessary equipment and computational tools required for hands-on experimentation.`,
+      placements: `Graduates are eligible to compete in both core technical sector recruitment drives and major off-campus or central pool IT recruitment drives.`
+    };
+  }
+}
+
 // Helper to standardise paths and write files
 function writeSEOPage(fileName, htmlContent) {
   fs.writeFileSync(path.join('client/public', fileName), htmlContent, 'utf8');
@@ -323,6 +372,9 @@ function generateBranchCutoffPage(college, branch, year) {
     });
   }
 
+  // Get rich dynamic branch and faculty descriptions
+  const branchDetails = getBranchSpecificDetails(branch, college.short);
+
   const collegeSlug = college.short.toLowerCase().replace(/[\s\.]+/g, '-');
   const branchSlug = branch.toLowerCase().replace(/[^a-z0-9]+/g, '-');
   const fileName = `${collegeSlug}-${branchSlug}-cutoff-rank-${curYear}.html`;
@@ -382,6 +434,7 @@ function generateBranchCutoffPage(college, branch, year) {
     .info-card .num { font-size: 2rem; font-weight: 900; color: #2563eb; }
     .info-card .label { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
     .tag { display: inline-block; background: #f0fdf4; color: #166534; border-radius: 4px; padding: 2px 8px; font-size: 0.75rem; font-weight: 700; margin-left: 8px; }
+    .rich-info-section { background: white; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; margin: 24px 0; }
     footer { margin-top: 60px; padding-top: 24px; border-top: 2px solid #e2e8f0; text-align: center; color: #94a3b8; font-size: 0.8rem; }
     footer a { color: #64748b; }
     @media (max-width: 640px) { h1 { font-size: 1.5rem; } .nav { flex-wrap: wrap; } }
@@ -406,6 +459,20 @@ function generateBranchCutoffPage(college, branch, year) {
     <h3>🎯 Predict your B.Tech Branch Chances</h3>
     <p>Apna rank enter karein aur checks karein GCE, MIT, BCE college engineering branches matches.</p>
     <a class="cta-btn" href="/dashboard/ugeac-predictor">Predict Branch & College →</a>
+  </div>
+
+  <div class="rich-info-section">
+    <h2>🏢 Branch Internal Overview & Academics</h2>
+    <p>${branchDetails.description}</p>
+    
+    <h3>👨‍🏫 Faculty & Mentorship Profile</h3>
+    <p>${branchDetails.faculty}</p>
+    
+    <h3>🔬 Laboratory & Practical Infrastructure</h3>
+    <p>${branchDetails.labs}</p>
+
+    <h3>💼 Branch Placement Statistics</h3>
+    <p>${branchDetails.placements}</p>
   </div>
 
   <h2>Branch Seat Matrix Intake</h2>
