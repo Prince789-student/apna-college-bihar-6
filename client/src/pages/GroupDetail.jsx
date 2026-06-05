@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
-import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2, Video, Maximize2, Minimize2, ExternalLink, Settings2, Link2, Lock, Monitor, BellRing, X, Activity, MoreVertical, BarChart2 } from 'lucide-react';
-import { collection, query, where, onSnapshot, doc, updateDoc, arrayRemove, deleteDoc, addDoc, serverTimestamp } from 'firebase/firestore';
+import { Trophy, Users, Calendar, Hash, ArrowLeft, Clock, Shield, Trash2, Video, Maximize2, Minimize2, ExternalLink, Settings2, Link2, Lock, Monitor, BellRing, X, Activity, MoreVertical, BarChart2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { collection, query, where, onSnapshot, doc, updateDoc, arrayRemove, deleteDoc, addDoc, serverTimestamp, getDocs } from 'firebase/firestore';
 import { useStudy } from '../context/StudyContext';
 
 export default function GroupDetail() {
@@ -19,7 +19,169 @@ export default function GroupDetail() {
   const [isSettingLink, setIsSettingLink] = useState(false);
   const [newLink, setNewLink] = useState('');
   const [selectedMember, setSelectedMember] = useState(null);
+  const [sessions, setSessions] = useState([]);
+  const [loadingSessions, setLoadingSessions] = useState(false);
+  const [statsView, setStatsView] = useState('card'); // 'card' or 'stats'
+  const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString('en-CA'));
+  const [currentCalendarMonth, setCurrentCalendarMonth] = useState(new Date());
   const { timerActive, timerTime, timerMode, customMinutes, customSeconds } = useStudy();
+
+  useEffect(() => {
+    if (!selectedMember) {
+      setSessions([]);
+      setStatsView('card');
+      return;
+    }
+    setLoadingSessions(true);
+    const q = query(
+      collection(db, 'StudySessions'),
+      where('userId', '==', selectedMember.id)
+    );
+    const unsub = onSnapshot(q, (snap) => {
+      const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setSessions(data);
+      setLoadingSessions(false);
+    }, (err) => {
+      console.error(err);
+      setLoadingSessions(false);
+    });
+    return () => unsub();
+  }, [selectedMember]);
+
+  const getDayMetrics = (dateStr) => {
+    const daySessions = sessions.filter(s => s.date === dateStr);
+    
+    let totalTime = 0;
+    let maxFocus = 0;
+    let minStart = null;
+    let maxEnd = null;
+
+    daySessions.forEach(s => {
+      totalTime += s.duration || 0;
+      if ((s.duration || 0) > maxFocus) {
+        maxFocus = s.duration;
+      }
+      if (s.createdAt) {
+        const end = new Date(s.createdAt);
+        const start = new Date(end.getTime() - (s.duration || 0) * 1000);
+        if (!minStart || start < minStart) minStart = start;
+        if (!maxEnd || end > maxEnd) maxEnd = end;
+      }
+    });
+
+    const isMe = selectedMember?.id === user?.uid;
+    if (isMe && timerActive && dateStr === new Date().toLocaleDateString('en-CA')) {
+      const elapsed = timerMode === 'COUNTDOWN' ? (customMinutes * 60 + customSeconds - timerTime) : timerTime;
+      totalTime += elapsed;
+      if (elapsed > maxFocus) maxFocus = elapsed;
+      const now = new Date();
+      const start = new Date(now.getTime() - elapsed * 1000);
+      if (!minStart || start < minStart) minStart = start;
+      if (!maxEnd || now > maxEnd) maxEnd = now;
+    }
+
+    return {
+      totalTime,
+      maxFocus,
+      startTime: minStart ? minStart.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--',
+      endTime: maxEnd ? maxEnd.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--',
+      sessions: daySessions
+    };
+  };
+
+  const getCalendarDays = () => {
+    const year = currentCalendarMonth.getFullYear();
+    const month = currentCalendarMonth.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const startDayOfWeek = firstDay.getDay();
+    const startColumn = (startDayOfWeek === 0) ? 6 : startDayOfWeek - 1;
+    const totalDays = new Date(year, month + 1, 0).getDate();
+
+    const days = [];
+    for (let i = 0; i < startColumn; i++) {
+      days.push(null);
+    }
+    for (let d = 1; d <= totalDays; d++) {
+      const date = new Date(year, month, d);
+      const dateStr = date.toLocaleDateString('en-CA');
+      days.push({
+        dayNum: d,
+        dateStr,
+        metrics: getDayMetrics(dateStr)
+      });
+    }
+    return days;
+  };
+
+  const getSubjectBreakdown = (dateStr) => {
+    const daySessions = sessions.filter(s => s.date === dateStr);
+    const breakdown = {};
+    let total = 0;
+
+    daySessions.forEach(s => {
+      const sub = s.subject || 'OTHERS';
+      breakdown[sub] = (breakdown[sub] || 0) + (s.duration || 0);
+      total += s.duration || 0;
+    });
+
+    const isMe = selectedMember?.id === user?.uid;
+    if (isMe && timerActive && dateStr === new Date().toLocaleDateString('en-CA')) {
+      const elapsed = timerMode === 'COUNTDOWN' ? (customMinutes * 60 + customSeconds - timerTime) : timerTime;
+      const sub = timerSubject || 'OTHERS';
+      breakdown[sub] = (breakdown[sub] || 0) + elapsed;
+      total += elapsed;
+    }
+
+    return { breakdown, total };
+  };
+
+  const renderDonutChart = (breakdown, total) => {
+    if (total === 0) {
+      return (
+        <div className="w-24 h-24 rounded-full border-4 border-slate-100 flex items-center justify-center text-slate-300 font-bold text-[8px] uppercase text-center p-2">
+          No Sessions
+        </div>
+      );
+    }
+
+    const colors = ['#f97316', '#3b82f6', '#8b5cf6', '#10b981', '#ec4899', '#f59e0b'];
+    const entries = Object.entries(breakdown).sort((a, b) => b[1] - a[1]);
+    const circ = 2 * Math.PI * 30; // r=30
+    let accumulatedPercent = 0;
+
+    return (
+      <div className="relative w-28 h-28 flex items-center justify-center">
+        <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+          {entries.map(([subject, duration], idx) => {
+            const percentage = duration / total;
+            const strokeDash = percentage * circ;
+            const strokeDashOffset = -accumulatedPercent * circ;
+            accumulatedPercent += percentage;
+            const color = colors[idx % colors.length];
+
+            return (
+              <circle
+                key={subject}
+                cx="50"
+                cy="50"
+                r="30"
+                fill="transparent"
+                stroke={color}
+                strokeWidth="10"
+                strokeDasharray={`${strokeDash} ${circ - strokeDash}`}
+                strokeDashoffset={strokeDashOffset}
+                className="transition-all duration-500"
+              />
+            );
+          })}
+        </svg>
+        <div className="absolute flex flex-col items-center justify-center text-center">
+          <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest">Today</span>
+          <span className="text-[10px] font-[1000] text-slate-900 tracking-tighter">{formatHHMMSS(total)}</span>
+        </div>
+      </div>
+    );
+  };
 
   useEffect(() => {
     if (!groupId || !user) return;
@@ -306,16 +468,224 @@ export default function GroupDetail() {
 
       {selectedMember && (
         <div className="fixed inset-0 z-[300] flex items-end md:items-center justify-center bg-black/60 backdrop-blur-sm transition-all" onClick={() => setSelectedMember(null)}>
-          <div className="w-full md:w-[400px] bg-white rounded-t-[3rem] md:rounded-[3rem] p-8 shadow-2xl relative" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-4">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${selectedMember.isStudying ? 'bg-orange-500/10 text-orange-500' : 'bg-slate-100 text-slate-400'}`}><Monitor size={28} /></div>
-                <div><h3 className="text-xl font-[1000] text-slate-900 tracking-tighter uppercase">{selectedMember.name}</h3><p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Scholar</p></div>
+          <div 
+            className={`w-full ${statsView === 'stats' ? 'md:w-[600px]' : 'md:w-[420px]'} bg-white rounded-t-[3rem] md:rounded-[3rem] p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto transition-all duration-300`} 
+            onClick={e => e.stopPropagation()}
+          >
+            {statsView === 'card' ? (
+              /* View 1: bottom sheet card */
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${selectedMember.isStudying ? 'bg-orange-500/10 text-orange-500 animate-pulse' : 'bg-slate-100 text-slate-400'}`}>
+                      <Monitor size={28} />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-[1000] text-slate-900 tracking-tighter uppercase">{selectedMember.name}</h3>
+                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                        {selectedMember.isStudying ? 'Currently Studying' : 'Offline'}
+                      </p>
+                    </div>
+                  </div>
+                  <button onClick={() => setSelectedMember(null)} className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-400 rounded-xl transition-all">
+                    <X size={20} />
+                  </button>
+                </div>
+
+                {/* Today's total study time */}
+                <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 text-white space-y-2 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-blue-600/10 rounded-full blur-2xl"></div>
+                  <span className="block text-[10px] font-black uppercase tracking-widest text-slate-400">Today's Focus Time</span>
+                  <div className="text-3xl font-[1000] tracking-tighter">
+                    {(() => {
+                      const metrics = getDayMetrics(new Date().toLocaleDateString('en-CA'));
+                      return formatHHMMSS(metrics.totalTime);
+                    })()}
+                  </div>
+                </div>
+
+                {/* Today's session metrics */}
+                <div className="grid grid-cols-2 gap-4">
+                  {(() => {
+                    const metrics = getDayMetrics(new Date().toLocaleDateString('en-CA'));
+                    return (
+                      <>
+                        <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4">
+                          <span className="block text-[8px] font-black uppercase tracking-widest text-slate-400 mb-1">Start Time</span>
+                          <span className="text-sm font-extrabold text-slate-800">{metrics.startTime}</span>
+                        </div>
+                        <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4">
+                          <span className="block text-[8px] font-black uppercase tracking-widest text-slate-400 mb-1">End Time</span>
+                          <span className="text-sm font-extrabold text-slate-800">{metrics.endTime}</span>
+                        </div>
+                        <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 col-span-2">
+                          <span className="block text-[8px] font-black uppercase tracking-widest text-slate-400 mb-1">Max Continuous Focus</span>
+                          <span className="text-sm font-extrabold text-slate-800">{formatHHMMSS(metrics.maxFocus)}</span>
+                        </div>
+                      </>
+                    );
+                  })()}
+                </div>
+
+                {/* Joined Date */}
+                <div className="text-center text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                  Joined on {selectedMember.createdAt ? (selectedMember.createdAt.toDate ? selectedMember.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : new Date(selectedMember.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })) : 'May 31, 2026'}
+                </div>
+
+                {/* Buttons */}
+                <div className="flex gap-4">
+                  <button onClick={() => sendNudge()} className="flex-1 flex items-center justify-center gap-2 py-4 bg-orange-50 hover:bg-orange-100 text-orange-600 rounded-2xl font-black text-xs uppercase tracking-widest transition-all">
+                    <BellRing size={16} /> Nudge
+                  </button>
+                  <button onClick={() => { setStatsView('stats'); setSelectedDate(new Date().toLocaleDateString('en-CA')); }} className="flex-1 flex items-center justify-center gap-2 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-blue-600/20">
+                    <BarChart2 size={16} /> Statistics
+                  </button>
+                </div>
               </div>
-              <button onClick={() => setSelectedMember(null)} className="p-2 bg-slate-100 text-slate-400 rounded-xl"><X size={20} /></button>
-            </div>
-            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6 mb-8 space-y-6"><div className="flex items-center justify-between"><div><span className="block text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Today's Focus</span><span className="text-3xl font-[1000] text-slate-900 tracking-tighter">{formatHHMMSS(selectedMember.todayStudyTime)}</span></div></div></div>
-            <div className="flex gap-4"><button onClick={() => sendNudge()} className="flex-1 flex items-center justify-center gap-2 py-4 bg-orange-50 text-orange-600 rounded-2xl font-black text-xs uppercase tracking-widest transition-all"><BellRing size={16} /> Nudge</button></div>
+            ) : (
+              /* View 2: detailed statistics */
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <button onClick={() => setStatsView('card')} className="flex items-center gap-1.5 text-slate-400 hover:text-slate-900 transition-colors">
+                    <ArrowLeft size={16} />
+                    <span className="text-[10px] font-black uppercase tracking-widest">Back</span>
+                  </button>
+                  <h3 className="text-sm font-[1000] text-slate-900 tracking-tighter uppercase">{selectedMember.name}'s Stats</h3>
+                  <button onClick={() => setSelectedMember(null)} className="p-1 bg-slate-100 hover:bg-slate-200 text-slate-400 rounded-lg transition-all">
+                    <X size={16} />
+                  </button>
+                </div>
+
+                {/* Month Selector */}
+                <div className="flex items-center justify-between bg-slate-50 border border-slate-100 rounded-2xl px-4 py-2">
+                  <button 
+                    onClick={() => setCurrentCalendarMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))}
+                    className="p-1.5 hover:bg-white rounded-lg transition-all text-slate-600"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <span className="text-xs font-black uppercase tracking-widest text-slate-800">
+                    {currentCalendarMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                  </span>
+                  <button 
+                    onClick={() => setCurrentCalendarMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))}
+                    className="p-1.5 hover:bg-white rounded-lg transition-all text-slate-600"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+
+                {/* Calendar Grid */}
+                <div className="space-y-2">
+                  <div className="grid grid-cols-7 gap-1.5 text-center text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                    <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                  </div>
+                  <div className="grid grid-cols-7 gap-1.5">
+                    {getCalendarDays().map((day, idx) => {
+                      if (!day) return <div key={`empty-${idx}`} className="aspect-square"></div>;
+                      const hasStudy = day.metrics.totalTime > 0;
+                      let intensityClass = 'bg-slate-50 border-slate-100/50 text-slate-300 hover:bg-slate-100';
+                      if (hasStudy) {
+                        if (day.metrics.totalTime <= 7200) intensityClass = 'bg-orange-50 border-orange-100 text-orange-600 font-bold hover:bg-orange-100';
+                        else if (day.metrics.totalTime <= 18000) intensityClass = 'bg-orange-200 border-orange-300 text-orange-800 font-extrabold hover:bg-orange-300';
+                        else intensityClass = 'bg-orange-500 border-orange-600 text-white font-black hover:bg-orange-600 shadow-[0_4px_10px_rgba(249,115,22,0.2)]';
+                      }
+
+                      const isSelected = selectedDate === day.dateStr;
+
+                      return (
+                        <button
+                          key={day.dateStr}
+                          onClick={() => setSelectedDate(day.dateStr)}
+                          className={`aspect-square rounded-xl border flex flex-col items-center justify-center p-1 transition-all ${intensityClass} ${isSelected ? 'ring-2 ring-blue-500 ring-offset-2 scale-95' : ''}`}
+                        >
+                          <span className="text-[10px] leading-none">{day.dayNum}</span>
+                          {hasStudy && (
+                            <span className="text-[6px] tracking-tight mt-0.5 leading-none">
+                              {Math.floor(day.metrics.totalTime / 3600)}h
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Selected Date Details */}
+                <div className="border-t border-slate-100 pt-6 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                      {new Date(selectedDate).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+                    </span>
+                    <span className="text-xs font-[1000] text-blue-600 uppercase tracking-widest">Selected Day</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    {/* Metrics list */}
+                    <div className="space-y-3">
+                      {(() => {
+                        const dayStats = getDayMetrics(selectedDate);
+                        return (
+                          <>
+                            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Total Focus</span>
+                              <span className="text-sm font-extrabold text-slate-800">{formatHHMMSS(dayStats.totalTime)}</span>
+                            </div>
+                            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Max Session</span>
+                              <span className="text-sm font-extrabold text-slate-800">{formatHHMMSS(dayStats.maxFocus)}</span>
+                            </div>
+                            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Start Time</span>
+                              <span className="text-sm font-extrabold text-slate-800">{dayStats.startTime}</span>
+                            </div>
+                            <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">End Time</span>
+                              <span className="text-sm font-extrabold text-slate-800">{dayStats.endTime}</span>
+                            </div>
+                          </>
+                        );
+                      })()}
+                    </div>
+
+                    {/* Donut Chart & Legend */}
+                    <div className="flex items-center gap-4 bg-slate-50 border border-slate-100 rounded-3xl p-4 justify-center md:justify-start">
+                      {(() => {
+                        const { breakdown, total } = getSubjectBreakdown(selectedDate);
+                        const colors = ['#f97316', '#3b82f6', '#8b5cf6', '#10b981', '#ec4899', '#f59e0b'];
+                        return (
+                          <>
+                            {renderDonutChart(breakdown, total)}
+                            {total > 0 && (
+                              <div className="flex-1 space-y-1.5">
+                                {Object.entries(breakdown).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([subject, duration], idx) => {
+                                  const pct = Math.round((duration / total) * 100);
+                                  return (
+                                    <div key={subject} className="flex items-center gap-1.5 text-[8px] font-black uppercase tracking-wider text-slate-600">
+                                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: colors[idx % colors.length] }}></div>
+                                      <span className="truncate max-w-[60px]">{subject}</span>
+                                      <span className="text-slate-400 ml-auto">{pct}%</span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Back to Quick Info */}
+                <button 
+                  onClick={() => setStatsView('card')}
+                  className="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all"
+                >
+                  Quick Profile Info
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
