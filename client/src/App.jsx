@@ -123,6 +123,13 @@ function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const isNative = Capacitor.isNativePlatform();
 
+  // Parse standalone param and save to session storage to persist it across navigations
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('standalone') === 'true') {
+    sessionStorage.setItem('standalone', 'true');
+  }
+  const isStandalone = isNative || (sessionStorage.getItem('standalone') === 'true');
+
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
@@ -160,7 +167,7 @@ function App() {
         <React.Suspense fallback={<LoadingScreen />}>
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={isNative || (new URLSearchParams(window.location.search).get('standalone') === 'true') ? <AppHub /> : <Home />} />
+            <Route path="/" element={isStandalone ? <AppHub /> : <Home />} />
             <Route path="/hub" element={<AppHub />} />
             <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
