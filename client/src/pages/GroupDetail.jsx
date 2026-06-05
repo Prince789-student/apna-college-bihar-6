@@ -15,9 +15,8 @@ export default function GroupDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [isMeetingOpen, setIsMeetingOpen] = useState(false);
-  const [isSettingLink, setIsSettingLink] = useState(false);
-  const [newLink, setNewLink] = useState('');
-  const [selectedMember, setSelectedMember] = useState(null);
+  const [filterMode, setFilterMode] = useState('all'); // 'all' or 'studying'
+  const { timerActive, timerTime, timerMode, customMinutes, customSeconds } = useStudy();
 
   useEffect(() => {
     if (!groupId || !user) return;
@@ -86,7 +85,6 @@ export default function GroupDetail() {
   };
 
   const MemberCard = ({ member, index }) => {
-    const { timerActive, timerTime, timerMode, customMinutes, customSeconds } = useStudy();
     const isMe = member.id === user.uid;
     const isStudying = member.isStudying;
     let displayTimeSec = member.todayStudyTime || 0;
@@ -132,7 +130,17 @@ export default function GroupDetail() {
                       {group.createdAt?.toDate ? group.createdAt.toDate().toLocaleDateString() : new Date(group.createdAt).toLocaleDateString()}
                     </span>
                   </div>
-                 <div className="flex items-center gap-2 bg-blue-600/10 text-blue-600 px-3 py-1.5 rounded-xl border border-blue-500/20"><Hash size={12} /><span className="text-[10px] font-black tracking-widest uppercase">ID: {group.code}</span></div>
+                  <div className="flex items-center gap-2 bg-blue-600/10 text-blue-600 px-3 py-1.5 rounded-xl border border-blue-500/20"><Hash size={12} /><span className="text-[10px] font-black tracking-widest uppercase">ID: {group.code}</span></div>
+                  <button 
+                    onClick={() => {
+                      const joinLink = `${window.location.origin}/groups?join=${group.code}`;
+                      navigator.clipboard.writeText(joinLink);
+                      alert('Invite link copied to clipboard!');
+                    }} 
+                    className="flex items-center gap-2 bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 px-3 py-1.5 rounded-xl border border-emerald-500/20 transition-all font-black text-[10px] uppercase tracking-widest"
+                  >
+                    <Link2 size={12} /> Share Invite Link
+                  </button>
               </div>
            </div>
         </div>
@@ -233,8 +241,26 @@ export default function GroupDetail() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
         <div className="lg:col-span-2 space-y-8">
-           <div className="flex items-center space-x-3"><div className="p-2 bg-amber-500 rounded-xl shadow-lg shadow-amber-900/20"><Trophy size={20} className="text-slate-900" /></div><h2 className="text-xl font-black text-slate-900 uppercase tracking-tighter italic">Leaderboard Rank</h2></div>
-           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">{members.length === 0 ? <div className="col-span-full p-12 text-center text-slate-500 font-black text-xs italic">No data synced</div> : members.map((member, index) => <MemberCard key={member.id} member={member} index={index} />)}</div>
+           <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center space-x-3">
+                 <div className="p-2 bg-amber-500 rounded-xl shadow-lg shadow-amber-900/20"><Trophy size={20} className="text-slate-900" /></div>
+                 <h2 className="text-xl font-black text-slate-900 uppercase tracking-tighter italic">Leaderboard Rank</h2>
+              </div>
+              <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 gap-1">
+                 <button onClick={() => setFilterMode('all')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${filterMode === 'all' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-950'}`}>All ({members.length})</button>
+                 <button onClick={() => setFilterMode('studying')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${filterMode === 'studying' ? 'bg-orange-500 text-white shadow-sm' : 'text-slate-500 hover:text-slate-950'}`}>Studying Now ({members.filter(m => m.isStudying).length})</button>
+              </div>
+           </div>
+           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+             {(() => {
+               const displayedMembers = filterMode === 'studying' ? members.filter(m => m.isStudying) : members;
+               return displayedMembers.length === 0 ? (
+                 <div className="col-span-full p-12 text-center text-slate-500 font-black text-xs italic">No matching scholars found</div>
+               ) : (
+                 displayedMembers.map((member, index) => <MemberCard key={member.id} member={member} index={index} />)
+               );
+             })()}
+           </div>
         </div>
 
         <div className="space-y-10">
@@ -242,6 +268,27 @@ export default function GroupDetail() {
               <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl"></div>
               <div className="flex justify-between items-start"><div><h3 className="text-xs font-black text-blue-500 uppercase tracking-[0.3em] mb-2">Network Objective</h3><p className="text-3xl font-black text-white tracking-tighter uppercase leading-none">Strategic Goal</p></div>{isAdmin && <button onClick={setGroupGoal} className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-all text-white/50 hover:text-white"><Shield size={14} /></button>}</div>
               <div className="space-y-4"><div className="flex justify-between items-end"><span className="text-[10px] text-slate-500 font-black uppercase tracking-widest italic">Progress</span><span className="text-2xl font-black text-white tracking-tighter">{totalHrs} / {group?.dailyGoal || 1} <span className="text-[10px] text-slate-500">HRS</span></span></div><div className="h-3 bg-white/5 rounded-full overflow-hidden border border-white/5 p-0.5"><div className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 rounded-full transition-all duration-1000 shadow-[0_0_15px_rgba(37,99,235,0.4)]" style={{ width: `${progress}%` }}></div></div></div>
+           </div>
+
+           <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 space-y-6 shadow-2xl">
+              <div className="flex items-center gap-3">
+                 <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl"><Clock size={18} /></div>
+                 <div>
+                    <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Your Daily Progress</h3>
+                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Today's Total Focus Time</p>
+                 </div>
+              </div>
+              <div className="text-3xl font-[1000] text-slate-900 tracking-tighter">
+                {(() => {
+                  const myMember = members.find(m => m.id === user.uid);
+                  let myTime = myMember?.todayStudyTime || 0;
+                  if (timerActive) {
+                    const elapsed = timerMode === 'COUNTDOWN' ? (customMinutes * 60 + customSeconds - timerTime) : timerTime;
+                    myTime += elapsed;
+                  }
+                  return formatHHMMSS(myTime);
+                })()}
+              </div>
            </div>
            <div className="space-y-6">
               <h3 className="text-sm font-black text-slate-900 uppercase tracking-[0.3em] italic flex items-center gap-2"><Clock size={16} className="text-blue-500" /> Operational Specs</h3>

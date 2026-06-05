@@ -12,7 +12,7 @@ import {
   arrayUnion, arrayRemove, serverTimestamp, setDoc,
   increment, limit, orderBy, deleteDoc
 } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 
 const genCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -30,6 +30,47 @@ export default function Group() {
   const [createMsg, setCreateMsg] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newGroupData, setNewGroupData] = useState({ name: '', description: '', meetingLink: '' });
+
+  const location = useLocation();
+
+  // Handle invite link auto-join
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const code = params.get('join');
+    if (code && user) {
+      const autoJoin = async () => {
+        try {
+          const cleanCode = code.toUpperCase().trim();
+          const q = query(collection(db, 'groups'), where('code', '==', cleanCode));
+          const snap = await getDocs(q);
+          if (snap.empty) {
+            setCreateMsg({ type: 'err', text: 'Invalid group invite link!' });
+            return;
+          }
+          const gDoc = snap.docs[0];
+          const gData = gDoc.data();
+          if (gData.members.includes(user.uid)) {
+            navigate(`/groups/${gDoc.id}`);
+            return;
+          }
+          if (gData.memberCount >= (gData.maxMembers || 150)) {
+            setCreateMsg({ type: 'err', text: 'Group is full!' });
+            return;
+          }
+          await updateDoc(doc(db, 'groups', gDoc.id), {
+            members: arrayUnion(user.uid),
+            memberCount: increment(1)
+          });
+          setCreateMsg({ type: 'ok', text: `Successfully joined ${gData.name}!` });
+          navigate(`/groups/${gDoc.id}`);
+        } catch (e) {
+          console.error(e);
+          setCreateMsg({ type: 'err', text: 'Failed to auto-join group.' });
+        }
+      };
+      autoJoin();
+    }
+  }, [location.search, user]);
 
   // Fetch groups
   useEffect(() => {
@@ -202,11 +243,12 @@ export default function Group() {
                 </p>
                 <div className="flex items-center justify-between pt-4 border-t border-slate-200/50">
                    <button onClick={() => {
-                     navigator.clipboard.writeText(g.code);
-                     setCreateMsg({ type: 'ok', text: `Code ${g.code} copied!` });
+                     const inviteLink = `${window.location.origin}/groups?join=${g.code}`;
+                     navigator.clipboard.writeText(inviteLink);
+                     setCreateMsg({ type: 'ok', text: 'Invite link copied to clipboard!' });
                      setTimeout(() => setCreateMsg(null), 2000);
                    }} className="flex items-center gap-2 text-[10px] font-black text-blue-500 uppercase hover:text-blue-400 transition-all">
-                     <Copy size={12}/> Code: {g.code}
+                     <Copy size={12}/> Invite Link
                    </button>
                    <button 
                      onClick={() => navigate(`/groups/${g.id}`)}
