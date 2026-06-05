@@ -53,7 +53,9 @@ export default function AppHub() {
     {
       title: "🧭 COUNSELLING",
       items: [
-        { name: 'UGEAC 2025', icon: <Send size={24} />, path: '/ugeac-predictor?standalone=true', color: 'text-amber-400' },
+        { name: 'College Predictor', icon: <Send size={24} />, path: '/ugeac-predictor?standalone=true&tab=finder', color: 'text-amber-400' },
+        { name: 'Rank Predictor', icon: <Calculator size={24} />, path: '/ugeac-predictor?standalone=true&tab=predictor', color: 'text-indigo-400' },
+        { name: 'Counselling Guide', icon: <BookOpen size={24} />, path: '/ugeac-predictor?standalone=true&tab=guide', color: 'text-emerald-400' },
       ]
     },
     {

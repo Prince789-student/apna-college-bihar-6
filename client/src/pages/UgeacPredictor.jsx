@@ -3,12 +3,13 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import '../UgeacPredictor.css';
 import { colleges } from '../UgeacData';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus, Minus, Layers, Search, Zap, Filter, LayoutGrid, Download, X, Calculator } from 'lucide-react';
 import SEO from '../components/SEO';
 
 function UgeacPredictor() {
   const { collegeSlug } = useParams();
+  const location = useLocation();
   
   const [rank, setRank] = useState('');
   const [ugeacInput, setUgeacInput] = useState('');
@@ -16,7 +17,12 @@ function UgeacPredictor() {
   const [gender, setGender] = useState('Male');
   const [catInput, setCatInput] = useState('');
   
-  const [mode, setMode] = useState('finder'); // finder, guide
+  const [mode, setMode] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    if (tab === 'predictor' || tab === 'guide' || tab === 'finder') return tab;
+    return 'finder';
+  });
   const [targetColleges, setTargetColleges] = useState([]);
   const [targetBranches, setTargetBranches] = useState([]);
   const [choices, setChoices] = useState([]); 
@@ -56,6 +62,14 @@ function UgeacPredictor() {
   useEffect(() => {
     if (category === 'UR') setCatInput('');
   }, [category]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const tab = params.get('tab');
+    if (tab === 'predictor' || tab === 'guide' || tab === 'finder') {
+      setMode(tab);
+    }
+  }, [location.search]);
 
   const normalizedMap = useMemo(() => ({
     "B.C.E. BHAGALPUR": "BCE Bhagalpur",
@@ -846,6 +860,23 @@ function UgeacPredictor() {
                            <div className="w-1/2 text-2xl font-[1000] text-indigo-600 tracking-tighter">#{ugeacInput || estimateUgeacRank(parseInt(rank)) || 0}</div>
                         </div>
                     </div>
+
+                    {parseInt(rank) > 0 && (category !== 'UR' || gender === 'Female') && (
+                       <div className="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100/50 space-y-2 text-xs font-semibold animate-in fade-in">
+                         {category !== 'UR' && (
+                           <div className="flex justify-between items-center text-slate-700">
+                             <span className="text-slate-500 font-bold uppercase tracking-wider text-[9px]">Est. {category} Rank:</span>
+                             <span className="font-extrabold text-indigo-600">#{getEstimatedCategoryRank(estimateUgeacRank(parseInt(rank)), category)}</span>
+                           </div>
+                         )}
+                         {gender === 'Female' && (
+                           <div className="flex justify-between items-center text-slate-700">
+                             <span className="text-slate-500 font-bold uppercase tracking-wider text-[9px]">Est. RCG (Female) Rank:</span>
+                             <span className="font-extrabold text-pink-600">#{getEstimatedGenderRank(estimateUgeacRank(parseInt(rank)), gender)}</span>
+                           </div>
+                         )}
+                       </div>
+                    )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                        <div className="input-group">
