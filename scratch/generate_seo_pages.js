@@ -3,14 +3,15 @@ const path = require('path');
 
 const data = JSON.parse(fs.readFileSync('client/public/data/cutoffs.json', 'utf8'));
 
-const targetColleges = [
-  { name: 'BCE Bhagalpur', short: 'BCE Bhagalpur', slug: 'bce-bhagalpur', location: 'Bhagalpur', estd: 1960, seats: '~420' },
-  { name: 'MIT Muzaffarpur', short: 'MIT Muzaffarpur', slug: 'mit-muzaffarpur', location: 'Muzaffarpur', estd: 1954, seats: '~420' },
-  { name: 'GCE Gaya', short: 'GCE Gaya', slug: 'gce-gaya', location: 'Gaya', estd: 2008, seats: '~420' },
-  { name: 'DCE Darbhanga', short: 'DCE Darbhanga', slug: 'dce-darbhanga', location: 'Darbhanga', estd: 2008, seats: '~420' },
-  { name: 'MCE Motihari', short: 'MCE Motihari', slug: 'mce-motihari', location: 'Motihari', estd: 1980, seats: '~420' },
-  { name: 'LNJPIT Chapra', short: 'LNJPIT Chapra', slug: 'lnjpit-chapra', location: 'Chapra', estd: 2012, seats: '~420' }
-];
+// Load colleges dynamically from UgeacData.js
+let ugeacDataContent = fs.readFileSync('client/src/UgeacData.js', 'utf8');
+ugeacDataContent = ugeacDataContent.replace('export const colleges =', 'const colleges =');
+ugeacDataContent += '\nmodule.exports = { colleges };';
+
+// Write temp file
+fs.writeFileSync('scratch/temp_ugeac_data.js', ugeacDataContent, 'utf8');
+const { colleges } = require('./temp_ugeac_data.js');
+fs.unlinkSync('scratch/temp_ugeac_data.js');
 
 function generateHTML(college, year) {
   const is2025 = (year === 2025);
@@ -18,10 +19,60 @@ function generateHTML(college, year) {
   const nextYear = is2025 ? '2026' : '2025';
   const otherYear = is2025 ? '2024' : '2025';
   
+  // Standardized normalization map for filtering data
+  const normalizedMap = {
+    "B.C.E. BHAGALPUR": "BCE Bhagalpur",
+    "M.I.T. MUZAFFARPUR": "MIT Muzaffarpur",
+    "B.C.E. BAKHTIYARPUR": "BCE Bakhtiyarpur",
+    "G.C.E. GAYA": "GCE Gaya",
+    "D.C.E. DARBHANGA": "DCE Darbhanga",
+    "NALANDA COLLEGE. OF ENGG,CHANDI": "Nalanda College of Engineering, Chandi",
+    "NCE CHANDI": "Nalanda College of Engineering, Chandi",
+    "M..C.E. MOTIHARI": "MCE Motihari",
+    "MCE MOTIHARI": "MCE Motihari",
+    "P.C.E. PURNEA": "Purnea College of Engineering",
+    "PURNEA COLLEGE OF ENGINEERING": "Purnea College of Engineering",
+    "S.C.E. SAHARSA": "Saharsa College of Engineering",
+    "SAHARSA COLLEGE OF ENGINEERING": "Saharsa College of Engineering",
+    "S.C.E. SUPAUL": "Supaul College of Engineering",
+    "SUPAUL COLLEGE OF ENGINEERING": "Supaul College of Engineering",
+    "S.C.E. SASARAM": "SCE Sasaram",
+    "B.P.M.C.E. MADHEPURA": "B.P.M.C.E. Madhepura",
+    "S.I.T. SITAMARHI": "SIT Sitamarhi",
+    "R.R.S.D.C.E. BEGUSARAI": "RRSDCE Begusarai",
+    "LNJPIT CHAPRA": "LNJPIT Chapra",
+    "KCE KATIHAR": "K.C.E. Katihar",
+    "G.E.C. BANKA": "Government Engineering College, Banka",
+    "G.E.C. VAISHALI": "Government Engineering College, Vaishali",
+    "G.E.C. JAMUI": "Government Engineering College, Jamui",
+    "G.E.C. NAWADA": "Government Engineering College, Nawada",
+    "G.E.C. KISHANGANJ": "Government Engineering College, Kishanganj",
+    "G.E.C. ARARIA": "Shri Phanishwar Renu Engineering College, Araria",
+    "G.E.C. MUNGER": "Government Engineering College, Munger",
+    "G.E.C. SHEOHAR": "Government Engineering College, Sheohar",
+    "G.E.C. BETTIAH": "Government Engineering College, West Champaran",
+    "G.E.C. WEST CHAMPARAN": "Government Engineering College, West Champaran",
+    "G.E.C. AURANGABAD": "Government Engineering College, Aurangabad",
+    "G.E.C. KAIMUR": "Government Engineering College, Kaimur",
+    "G.E.C. GOPALGANJ": "Government Engineering College, Gopalganj",
+    "G.E.C. MADHUBANI": "Government Engineering College, Madhubani",
+    "G.E.C. SIWAN": "Government Engineering College, Siwan",
+    "G.E.C. JEHANABAD": "Government Engineering College, Jehanabad",
+    "G.E.C. ARWAL": "Government Engineering College, Arwal",
+    "G.E.C. KHAGARIA": "Government Engineering College, Khagaria",
+    "G.E.C. BUXAR": "Government Engineering College, Buxar",
+    "G.E.C. BHOJPUR": "Government Engineering College, Bhojpur",
+    "G.E.C. SHEIKHPURA": "Government Engineering College, Sheikhpura",
+    "G.E.C. LAKHISARAI": "Government Engineering College, Lakhisarai",
+    "G.E.C. SAMASTIPUR": "Government Engineering College, Samastipur"
+  };
+
   // Filter data
   const yearCutoffs = is2025 ? data.cutoffs2025 : data.cutoffs2024;
   const collegeCutoffs = yearCutoffs.filter(c => {
-    return c.collegeShort?.toLowerCase().replace(/[\s\.]+/g, '') === college.short.toLowerCase().replace(/[\s\.]+/g, '');
+    const key = c.collegeShort?.toUpperCase().trim();
+    const formalName = normalizedMap[key] || c.collegeShort;
+    return formalName === college.name || c.collegeShort === college.short || c.collegeShort === college.name;
   });
 
   // Sort by branch, category, seatType
@@ -33,7 +84,7 @@ function generateHTML(college, year) {
 
   let tableRows = '';
   if (collegeCutoffs.length === 0) {
-    tableRows = `<tr><td colspan="5" style="text-align: center; color: #94a3b8;">No data available for this year.</td></tr>`;
+    tableRows = `<tr><td colspan="5" style="text-align: center; color: #94a3b8; padding: 24px;">No official round allotment cutoff data available for this year yet. Use our Predictor tool for general estimations.</td></tr>`;
   } else {
     collegeCutoffs.forEach(row => {
       const seatTypeLabel = (row.seatType || row.seat_type || 'General') === 'Female' ? 'Female (F)' : 'General / Male';
@@ -52,9 +103,14 @@ function generateHTML(college, year) {
     });
   }
 
+  const collegeSlug = college.short.toLowerCase().replace(/[\s\.]+/g, '-');
   const title = `${college.name} Cutoff Rank ${curYear} | Branch & Category-wise — Apna College Bihar`;
   const description = `${college.name} (${college.short}) UGEAC B.Tech cutoff rank for ${curYear}. Branch-wise and Category-wise (UR, EBC, BC, SC, ST) opening & closing ranks for Male and Female candidates.`;
   const keywords = `${college.short} cutoff rank ${curYear}, ${college.name} cutoff ${curYear}, ${college.short} ${curYear} closing rank, UGEAC ${curYear} ${college.short}, bihar engineering college ${college.location} cutoff`;
+
+  const totalSeats = college.seats || '~360-420';
+  const estd = college.estd ? `Estd ${college.estd}` : 'Govt';
+  const location = college.location || 'Bihar';
 
   const htmlContent = `<!DOCTYPE html>
 <html lang="en">
@@ -64,14 +120,14 @@ function generateHTML(college, year) {
   <title>${title}</title>
   <meta name="description" content="${description}" />
   <meta name="keywords" content="${keywords}" />
-  <link rel="canonical" href="https://www.apnacollegebihar.online/${college.slug}-cutoff-rank-${curYear}.html" />
+  <link rel="canonical" href="https://www.apnacollegebihar.online/${collegeSlug}-cutoff-rank-${curYear}.html" />
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
   <meta name="author" content="Apna College Bihar" />
   <meta name="geo.region" content="IN-BR" />
   <link rel="icon" href="/logo-acb.png" />
   <!-- Open Graph -->
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://www.apnacollegebihar.online/${college.slug}-cutoff-rank-${curYear}.html" />
+  <meta property="og:url" content="https://www.apnacollegebihar.online/${collegeSlug}-cutoff-rank-${curYear}.html" />
   <meta property="og:title" content="${college.short} Cutoff Rank ${curYear} | Branch-wise Closing Rank" />
   <meta property="og:description" content="${college.name} UGEAC ${curYear} cutoff ranks branch-wise, category-wise for Male and Female candidates." />
   <meta property="og:site_name" content="Apna College Bihar" />
@@ -83,22 +139,22 @@ function generateHTML(college, year) {
     "@graph": [
       {
         "@type": "Article",
-        "@id": "https://www.apnacollegebihar.online/${college.slug}-cutoff-rank-${curYear}.html#article",
+        "@id": "https://www.apnacollegebihar.online/${collegeSlug}-cutoff-rank-${curYear}.html#article",
         "headline": "${college.name} Cutoff Rank ${curYear} — Branch-wise & Category-wise Closing Ranks",
         "description": "Complete UGEAC ${curYear} cutoff ranks for ${college.name} — branch-wise and category-wise details.",
-        "url": "https://www.apnacollegebihar.online/${college.slug}-cutoff-rank-${curYear}.html",
+        "url": "https://www.apnacollegebihar.online/${collegeSlug}-cutoff-rank-${curYear}.html",
         "datePublished": "${curYear}-06-01",
         "dateModified": "${curYear}-06-02",
         "author": { "@type": "Organization", "name": "Apna College Bihar" },
         "publisher": { "@type": "Organization", "name": "Apna College Bihar", "url": "https://www.apnacollegebihar.online" },
-        "mainEntityOfPage": "https://www.apnacollegebihar.online/${college.slug}-cutoff-rank-${curYear}.html"
+        "mainEntityOfPage": "https://www.apnacollegebihar.online/${collegeSlug}-cutoff-rank-${curYear}.html"
       },
       {
         "@type": "BreadcrumbList",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.apnacollegebihar.online/" },
           { "@type": "ListItem", "position": 2, "name": "UGEAC ${curYear} Cutoffs", "item": "https://www.apnacollegebihar.online/ugeac-2025-cutoff-rank-all-colleges.html" },
-          { "@type": "ListItem", "position": 3, "name": "${college.short} Cutoff ${curYear}", "item": "https://www.apnacollegebihar.online/${college.slug}-cutoff-rank-${curYear}.html" }
+          { "@type": "ListItem", "position": 3, "name": "${college.short} Cutoff ${curYear}", "item": "https://www.apnacollegebihar.online/${collegeSlug}-cutoff-rank-${curYear}.html" }
         ]
       },
       {
@@ -117,7 +173,7 @@ function generateHTML(college, year) {
             "name": "${college.short} mein total intake kitni hai?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "${college.name} ${college.location} mein lagbhag ${college.seats} B.Tech seats hain jo state UGEAC counselling ke through fill hoti hain."
+              "text": "${college.name} ${location} mein lagbhag ${totalSeats} B.Tech seats hain jo state UGEAC counselling ke through fill hoti hain."
             }
           }
         ]
@@ -193,9 +249,9 @@ function generateHTML(college, year) {
   </div>
 
   <div class="info-grid">
-    <div class="info-card"><div class="num">${college.seats}</div><div class="label">Total Seats</div></div>
-    <div class="info-card"><div class="num">Estd ${college.estd}</div><div class="label">Establishment Year</div></div>
-    <div class="info-card"><div class="num">${college.location}</div><div class="label">Location, Bihar</div></div>
+    <div class="info-card"><div class="num">${totalSeats}</div><div class="label">Total Seats</div></div>
+    <div class="info-card"><div class="num">${estd}</div><div class="label">Establishment Year</div></div>
+    <div class="info-card"><div class="num">${location}</div><div class="label">Location, Bihar</div></div>
     <div class="info-card"><div class="num">BEU</div><div class="label">Affiliation University</div></div>
   </div>
 
@@ -228,7 +284,7 @@ function generateHTML(college, year) {
   <h2>Related Resources — Apna College Bihar</h2>
   <div class="links-grid">
     <div class="link-card">
-      <a href="/${college.slug}-cutoff-rank-${otherYear}.html">🏆 View ${college.short} Cutoff ${otherYear}</a>
+      <a href="/${collegeSlug}-cutoff-rank-${otherYear}.html">🏆 View ${college.short} Cutoff ${otherYear}</a>
       <p>Compare the branch closing ranks with year ${otherYear} dataset.</p>
     </div>
     <div class="link-card">
@@ -253,19 +309,20 @@ function generateHTML(college, year) {
   return htmlContent;
 }
 
-// Generate pages
-targetColleges.forEach(col => {
+// Generate pages for ALL colleges in the UgeacData list
+colleges.forEach(col => {
   [2024, 2025].forEach(year => {
     const html = generateHTML(col, year);
+    const collegeSlug = col.short.toLowerCase().replace(/[\s\.]+/g, '-');
     
     // Write to client/public
-    const clientPath = path.join('client/public', `${col.slug}-cutoff-rank-${year}.html`);
+    const clientPath = path.join('client/public', `${collegeSlug}-cutoff-rank-${year}.html`);
     fs.writeFileSync(clientPath, html, 'utf8');
     
     // Write to server/public
-    const serverPath = path.join('server/public', `${col.slug}-cutoff-rank-${year}.html`);
+    const serverPath = path.join('server/public', `${collegeSlug}-cutoff-rank-${year}.html`);
     fs.writeFileSync(serverPath, html, 'utf8');
-    
-    console.log(`Generated: ${clientPath} and ${serverPath}`);
   });
 });
+
+console.log(`Successfully generated cutoff pages for all ${colleges.length} colleges for both 2024 and 2025!`);
