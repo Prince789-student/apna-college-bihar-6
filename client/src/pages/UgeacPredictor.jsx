@@ -181,11 +181,18 @@ function UgeacPredictor() {
     return Math.max(1, Math.floor(urRank * 0.18));
   };
 
+  const getEstimatedCategoryFemaleRank = (urRank, cat, gender) => {
+    if (!urRank || cat === 'UR' || gender !== 'Female') return null;
+    const catRank = getEstimatedCategoryRank(urRank, cat);
+    return Math.max(1, Math.floor(catRank * 0.18));
+  };
+
   const downloadRankPredictionPDF = () => {
     const doc = new jsPDF();
     const urEst = estimateUgeacRank(parseInt(rank));
     const catEst = getEstimatedCategoryRank(urEst, category);
     const genderEst = getEstimatedGenderRank(urEst, gender);
+    const catFemaleEst = getEstimatedCategoryFemaleRank(urEst, category, gender);
 
     doc.setFillColor(15, 23, 42); doc.rect(0, 0, 210, 30, 'F');
     doc.setTextColor(255, 255, 255);
@@ -194,7 +201,7 @@ function UgeacPredictor() {
     doc.setFontSize(8); doc.setFont("helvetica", "normal");
     doc.text("UGEAC Rank Prediction Report | www.apnacollegebihar.online", 15, 22);
 
-    doc.setFillColor(248, 250, 252); doc.rect(15, 45, 180, 75, 'F');
+    doc.setFillColor(248, 250, 252); doc.rect(15, 45, 180, 85, 'F');
     doc.setTextColor(30, 41, 59);
     doc.setFontSize(14); doc.setFont("helvetica", "bold");
     doc.text("UGEAC RANK PREDICTOR REPORT", 20, 58);
@@ -213,13 +220,16 @@ function UgeacPredictor() {
     }
     if (gender === 'Female') {
       doc.text(`Estimated Female (RCG) Rank: #${genderEst}`, 20, 118);
+      if (category !== 'UR') {
+        doc.text(`Estimated Category Female (${category}-F) Rank: #${catFemaleEst}`, 20, 126);
+      }
     }
 
     doc.setTextColor(100, 100, 100);
     doc.setFontSize(8);
     const disclaimer = "Note: These ranks are mathematical predictions based on historical registration curves and BCECEB quotas. Actual allotment ranks will vary based on the official merit list published by BCECEB.";
     const splitText = doc.splitTextToSize(disclaimer, 170);
-    doc.text(splitText, 20, 135);
+    doc.text(splitText, 20, 142);
 
     doc.save(`UGEAC_Rank_Prediction.pdf`);
   };
@@ -801,7 +811,7 @@ function UgeacPredictor() {
                       </button>
                    </div>
 
-                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                       <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
                          <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest block">UGEAC General UR Rank</span>
                          <span className="text-4xl font-[1000] text-white block mt-2">
@@ -827,6 +837,16 @@ function UgeacPredictor() {
                                #{getEstimatedGenderRank(estimateUgeacRank(parseInt(rank)), gender)}
                             </span>
                             <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Reserved Category Girls</span>
+                         </div>
+                      )}
+
+                      {category !== 'UR' && gender === 'Female' && (
+                         <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
+                            <span className="text-[9px] font-black text-rose-400 uppercase tracking-widest block">Estimated {category}-F Rank</span>
+                            <span className="text-4xl font-[1000] text-rose-400 block mt-2">
+                               #{getEstimatedCategoryFemaleRank(estimateUgeacRank(parseInt(rank)), category, gender)}
+                            </span>
+                            <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Approx. {category} Female Quota</span>
                          </div>
                       )}
                    </div>
@@ -873,6 +893,12 @@ function UgeacPredictor() {
                            <div className="flex justify-between items-center text-slate-700">
                              <span className="text-slate-500 font-bold uppercase tracking-wider text-[9px]">Est. RCG (Female) Rank:</span>
                              <span className="font-extrabold text-pink-600">#{getEstimatedGenderRank(estimateUgeacRank(parseInt(rank)), gender)}</span>
+                           </div>
+                         )}
+                         {category !== 'UR' && gender === 'Female' && (
+                           <div className="flex justify-between items-center text-slate-700">
+                             <span className="text-slate-500 font-bold uppercase tracking-wider text-[9px]">Est. {category}-Female Rank:</span>
+                             <span className="font-extrabold text-rose-600">#{getEstimatedCategoryFemaleRank(estimateUgeacRank(parseInt(rank)), category, gender)}</span>
                            </div>
                          )}
                        </div>

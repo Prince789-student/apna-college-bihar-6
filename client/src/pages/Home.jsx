@@ -450,7 +450,9 @@ export default function Home() {
             {
               title: "🧭 COUNSELLING",
               items: [
-                { title: "UGEAC 2025", ic: <Send className="text-amber-500"/>, d: "Rank predictor based on official Bihar cutoff data.", link: "/ugeac-predictor?standalone=true" },
+                { title: "College Predictor", ic: <Send className="text-amber-500"/>, d: "Predict college allotment based on UGEAC rank.", link: "/ugeac-predictor?standalone=true&tab=finder" },
+                { title: "Rank Predictor", ic: <Calculator className="text-indigo-500"/>, d: "Calculate estimated State & Category ranks.", link: "/ugeac-predictor?standalone=true&tab=predictor" },
+                { title: "Counselling Guide", ic: <BookOpen className="text-emerald-500"/>, d: "Official admission roadmap & documents guide.", link: "/ugeac-predictor?standalone=true&tab=guide" },
               ]
             },
             {
