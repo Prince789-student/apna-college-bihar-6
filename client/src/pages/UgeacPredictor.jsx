@@ -3,6 +3,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import '../UgeacPredictor.css';
 import { colleges } from '../UgeacData';
+import { getLogoBase64, applyPremiumBranding, brandFullDocument } from '../utils/pdfHelper';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus, Minus, Layers, Search, Zap, Filter, LayoutGrid, Download, X, Calculator } from 'lucide-react';
 import SEO from '../components/SEO';
@@ -187,49 +188,51 @@ function UgeacPredictor() {
     return Math.max(1, Math.floor(catRank * 0.18));
   };
 
-  const downloadRankPredictionPDF = () => {
+  const downloadRankPredictionPDF = async () => {
     const doc = new jsPDF();
+    const logoBase = await getLogoBase64();
     const urEst = estimateUgeacRank(parseInt(rank));
     const catEst = getEstimatedCategoryRank(urEst, category);
     const genderEst = getEstimatedGenderRank(urEst, gender);
     const catFemaleEst = getEstimatedCategoryFemaleRank(urEst, category, gender);
 
-    doc.setFillColor(15, 23, 42); doc.rect(0, 0, 210, 30, 'F');
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(16); doc.setFont("helvetica", "bold");
-    doc.text("APNA COLLEGE BIHAR", 15, 15);
-    doc.setFontSize(8); doc.setFont("helvetica", "normal");
-    doc.text("UGEAC Rank Prediction Report | www.apnacollegebihar.online", 15, 22);
+    // Main Card Box (y starts at 38, header ends at 26)
+    doc.setFillColor(248, 250, 252);
+    doc.rect(15, 38, 180, 88, 'F');
+    doc.setDrawColor(226, 232, 240);
+    doc.rect(15, 38, 180, 88, 'S');
 
-    doc.setFillColor(248, 250, 252); doc.rect(15, 45, 180, 85, 'F');
-    doc.setTextColor(30, 41, 59);
-    doc.setFontSize(14); doc.setFont("helvetica", "bold");
-    doc.text("UGEAC RANK PREDICTOR REPORT", 20, 58);
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(13); doc.setFont("helvetica", "bold");
+    doc.text("ESTIMATED RANK PREDICTION REPORT", 20, 50);
 
-    doc.setFontSize(10); doc.setFont("helvetica", "normal");
-    doc.text(`JEE Main AIR Rank: ${rank}`, 20, 72);
-    doc.text(`Selected Category: ${category}`, 20, 80);
-    doc.text(`Selected Gender: ${gender}`, 20, 88);
+    doc.setFontSize(9); doc.setFont("helvetica", "normal");
+    doc.text(`JEE Main AIR (CRL) Rank: ${rank}`, 20, 62);
+    doc.text(`Selected Category: ${category}`, 20, 69);
+    doc.text(`Selected Gender: ${gender}`, 20, 76);
 
-    doc.setFontSize(12); doc.setFont("helvetica", "bold");
+    doc.setFontSize(11); doc.setFont("helvetica", "bold");
     doc.setTextColor(79, 70, 229);
-    doc.text(`Estimated General (UR) Rank: #${urEst}`, 20, 102);
+    doc.text(`Estimated General (UR) Rank: #${urEst}`, 20, 88);
 
     if (category !== 'UR') {
-      doc.text(`Estimated Category (${category}) Rank: #${catEst}`, 20, 110);
+      doc.text(`Estimated Category (${category}) Rank: #${catEst}`, 20, 96);
     }
     if (gender === 'Female') {
-      doc.text(`Estimated Female (RCG) Rank: #${genderEst}`, 20, 118);
+      doc.text(`Estimated Female (RCG) Rank: #${genderEst}`, 20, 104);
       if (category !== 'UR') {
-        doc.text(`Estimated Category Female (${category}-F) Rank: #${catFemaleEst}`, 20, 126);
+        doc.text(`Estimated Category Female (${category}-F) Rank: #${catFemaleEst}`, 20, 112);
       }
     }
 
-    doc.setTextColor(100, 100, 100);
-    doc.setFontSize(8);
-    const disclaimer = "Note: These ranks are mathematical predictions based on historical registration curves and BCECEB quotas. Actual allotment ranks will vary based on the official merit list published by BCECEB.";
+    doc.setTextColor(100, 116, 139);
+    doc.setFontSize(7.5);
+    const disclaimer = "Disclaimer: These ranks are mathematical predictions based on historical registration curves and BCECEB quotas. Actual allotment ranks will vary based on the official merit list published by BCECEB.";
     const splitText = doc.splitTextToSize(disclaimer, 170);
-    doc.text(splitText, 20, 142);
+    doc.text(splitText, 20, 135);
+
+    // Apply standard watermark, header, footer on page 1
+    applyPremiumBranding(doc, "Rank Prediction", 1, 1, logoBase);
 
     doc.save(`UGEAC_Rank_Prediction.pdf`);
   };
@@ -400,53 +403,28 @@ function UgeacPredictor() {
 
   const downloadResultsPDF = async () => {
     const doc = new jsPDF();
-    
-    // Load Logo
-    let logoData = null;
-    try {
-      const resp = await fetch('/logo-acb.png?v=99');
-      if (resp.ok) {
-        const blob = await resp.blob();
-        logoData = await new Promise(r => {
-          const reader = new FileReader();
-          reader.onloadend = () => r(reader.result);
-          reader.readAsDataURL(blob);
-        });
-      }
-    } catch(e) {
-      console.warn("Logo load failed", e);
-    }
-
-    const drawHeader = (doc) => {
-      doc.setFillColor(15, 23, 42); doc.rect(0, 0, 210, 30, 'F');
-      if (logoData) {
-        try { doc.addImage(logoData, 'JPEG', 15, 8, 14, 14); } catch(e) {}
-      }
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(16); doc.setFont("helvetica", "bold");
-      doc.text("APNA COLLEGE BIHAR", logoData ? 34 : 15, 15);
-      doc.setFontSize(8); doc.setFont("helvetica", "normal");
-      doc.text("Official Counseling & Admission Support Portal | www.apnacollegebihar.online", logoData ? 34 : 15, 22);
-    };
+    const logoData = await getLogoBase64();
 
     // --- PAGE 1 ---
-    drawHeader(doc);
-    
-    // Candidate Info
-    doc.setFillColor(248, 250, 252); doc.rect(15, 40, 180, 25, 'F');
+    // Candidate Info Box
+    doc.setFillColor(248, 250, 252);
+    doc.rect(15, 38, 180, 22, 'F');
+    doc.setDrawColor(226, 232, 240);
+    doc.rect(15, 38, 180, 22, 'S');
+
     doc.setTextColor(30, 41, 59);
-    doc.setFontSize(9); doc.setFont("helvetica", "bold");
-    doc.text(`JEE Rank: ${rank || 'N/A'}`, 20, 50);
-    doc.text(`UGEAC Rank: ${results.calculatedRank}`, 70, 50);
-    doc.text(`Category: ${category}`, 120, 50);
-    doc.text(`Gender: ${gender}`, 160, 50);
+    doc.setFontSize(8.5); doc.setFont("helvetica", "bold");
+    doc.text(`JEE Rank: ${rank || 'N/A'}`, 20, 47);
+    doc.text(`UGEAC Rank: ${results.calculatedRank}`, 70, 47);
+    doc.text(`Category: ${category}`, 120, 47);
+    doc.text(`Gender: ${gender}`, 160, 47);
 
     // Platform Intro
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(14); doc.setFont("helvetica", "bold");
-    doc.text("About Apna College Bihar", 15, 80);
+    doc.setFontSize(12); doc.setFont("helvetica", "bold");
+    doc.text("About Apna College Bihar", 15, 70);
     
-    doc.setFontSize(10); doc.setFont("helvetica", "normal");
+    doc.setFontSize(9.5); doc.setFont("helvetica", "normal");
     doc.setTextColor(50, 50, 50);
     const aboutText = "Welcome to Apna College Bihar, the state's most trusted and data-driven admission counseling platform. " +
     "Our mission is to help Bihar's engineering aspirants make informed decisions by providing high-precision UGEAC " +
@@ -459,56 +437,37 @@ function UgeacPredictor() {
     "Disclaimer: This report provides probability-based predictions using past data. Final allotments depend on the official BCECEB counseling process.";
     
     const splitText = doc.splitTextToSize(aboutText, 180);
-    doc.text(splitText, 15, 90);
+    doc.text(splitText, 15, 78);
 
-    let currentY = 90 + (splitText.length * 5) + 10;
+    let currentY = 78 + (splitText.length * 4.5) + 8;
 
     // Mock Allotment
     if (results.mockAllotment) {
-      doc.setFillColor(238, 242, 255); doc.rect(15, currentY, 180, 20, 'F');
+      doc.setFillColor(238, 242, 255); doc.rect(15, currentY, 180, 18, 'F');
+      doc.setDrawColor(226, 232, 240); doc.rect(15, currentY, 180, 18, 'S');
       doc.setTextColor(79, 70, 229);
-      doc.setFontSize(10); doc.setFont("helvetica", "bold");
-      doc.text("PREDICTED ALLOTMENT:", 20, currentY + 8);
-      doc.setTextColor(0, 0, 0);
-      doc.setFontSize(12);
-      doc.text(`${results.mockAllotment.choice.collegeName} - ${results.mockAllotment.choice.branch}`, 20, currentY + 16);
+      doc.setFontSize(8.5); doc.setFont("helvetica", "bold");
+      doc.text("PREDICTED ALLOTMENT:", 20, currentY + 6);
+      doc.setTextColor(15, 23, 42);
+      doc.setFontSize(10.5);
+      doc.text(`${results.mockAllotment.choice.collegeName} - ${results.mockAllotment.choice.branch}`, 20, currentY + 13);
     }
 
     // --- PAGE 2+ (Results Table) ---
     doc.addPage();
     
     autoTable(doc, {
-      startY: 40,
+      startY: 32,
       head: [['#', 'Institute Name', 'Branch', 'Category', 'Your Rank', '2024 OR', '2024 CR', '2025 OR', '2025 CR', 'Status']],
       body: results.all.map((r, i) => [i+1, r.college.name, r.branch, `${r.cat}${r.seatType === 'Female' ? ' (F)' : ''}`, `#${r.myCompRank}`, r.opening24, r.cutoff24, r.opening25, r.cutoff25, r.chance]),
       theme: 'striped',
       headStyles: { fillColor: [79, 70, 229], fontSize: 8 },
       styles: { fontSize: 7 },
-      margin: { left: 15, right: 15, top: 40 },
-      didDrawPage: (data) => {
-        drawHeader(doc);
-      }
+      margin: { left: 15, right: 15, top: 32, bottom: 25 },
     });
 
-    // Watermark & Footer
-    const pageCount = doc.internal.getNumberOfPages();
-    for(let i = 1; i <= pageCount; i++) {
-        doc.setPage(i);
-        
-        // Watermark
-        doc.saveGraphicsState();
-        doc.setGState(new doc.GState({opacity: 0.05}));
-        doc.setFontSize(50);
-        doc.setTextColor(150, 150, 150);
-        doc.text("APNA COLLEGE BIHAR", 105, 150, { align: 'center', angle: 45 });
-        doc.restoreGraphicsState();
-
-        doc.setFontSize(8);
-        doc.setTextColor(150, 150, 150);
-        doc.text("Join our Telegram/WhatsApp for Live Counseling Help", 15, doc.internal.pageSize.height - 15);
-        doc.text("© 2026 APNA COLLEGE BIHAR.", 15, doc.internal.pageSize.height - 10);
-        doc.text(`Page ${i} of ${pageCount}`, 180, doc.internal.pageSize.height - 10);
-    }
+    // Brand all pages in the PDF document
+    brandFullDocument(doc, "Counselling Report", logoData);
     
     doc.save(`UGEAC_Analysis_2025.pdf`);
   };
