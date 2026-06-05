@@ -881,7 +881,7 @@ export default function StudyDashboard() {
               {showSubjectManager && (
                 <div className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl p-4 mt-3 space-y-3 animate-in slide-in-from-top-2 duration-200">
                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Create & Manage Subjects</p>
-                  <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="flex gap-2">
                     <input 
                       type="text" 
                       value={newSubjectName} 
@@ -889,35 +889,13 @@ export default function StudyDashboard() {
                       placeholder="SUBJECT NAME" 
                       className="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none"
                     />
-                    <div className="flex gap-2 items-center">
-                      <input 
-                        type="number" 
-                        min="1"
-                        max="24"
-                        value={newSubjectTarget} 
-                        onChange={e => setNewSubjectTarget(e.target.value)}
-                        placeholder="GOAL (HRS)" 
-                        className="w-24 bg-white border border-slate-200 rounded-xl px-2 py-2 text-center text-xs font-bold outline-none"
-                      />
-                      <button onClick={addSubject} className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold active:scale-95 transition-all">Add</button>
-                    </div>
+                    <button onClick={addSubject} className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold active:scale-95 transition-all">Add</button>
                   </div>
                   {subjects.length > 0 && (
                     <div className="max-h-32 overflow-y-auto space-y-1.5 pt-2 border-t border-slate-200/50">
                       {subjects.map(s => (
                         <div key={s.id} className="flex justify-between items-center bg-white px-3 py-1.5 rounded-lg border border-slate-100 gap-2">
                           <span className="text-[10px] font-bold text-slate-700 uppercase flex-1">{s.subjectName}</span>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[8px] font-black text-slate-400 uppercase">Target:</span>
-                            <input 
-                              type="number" 
-                              min="0"
-                              value={s.targetHours || 0}
-                              onChange={(e) => updateSubjectTarget(s.id, e.target.value)}
-                              className="w-10 bg-slate-100 rounded px-1.5 py-0.5 text-[10px] font-black text-center outline-none border border-slate-200/50"
-                            />
-                            <span className="text-[8px] font-black text-slate-400 uppercase">hrs</span>
-                          </div>
                           <button onClick={() => deleteSubject(s.id)} className="text-red-400 hover:text-red-600"><Trash2 size={12} /></button>
                         </div>
                       ))}
@@ -957,7 +935,7 @@ export default function StudyDashboard() {
                     {isFormOpen && (
                       <div className="bg-white border border-slate-200/60 rounded-2xl p-4 space-y-3 shadow-sm animate-in slide-in-from-top-2 duration-200">
                         <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Add target for {subName}</p>
-                        <div className="flex flex-col sm:flex-row gap-2">
+                        <div className="flex gap-2">
                           <input 
                             type="text" 
                             value={inlineTaskText}
@@ -965,21 +943,12 @@ export default function StudyDashboard() {
                             placeholder="Target description"
                             className="flex-1 bg-slate-50 border border-slate-200/50 rounded-xl px-3 py-2 text-xs font-bold outline-none focus:border-blue-400"
                           />
-                          <div className="flex gap-2">
-                            <input 
-                              type="number" 
-                              value={inlineTaskDuration}
-                              onChange={e => setInlineTaskDuration(e.target.value)}
-                              placeholder="Mins"
-                              className="w-20 bg-slate-50 border border-slate-200/50 rounded-xl px-2 py-2 text-center text-xs font-bold outline-none"
-                            />
-                            <button 
-                              onClick={() => addSubjectTask(subName)}
-                              className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold active:scale-95 transition-all"
-                            >
-                              Add
-                            </button>
-                          </div>
+                          <button 
+                            onClick={() => addSubjectTask(subName)}
+                            className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold active:scale-95 transition-all"
+                          >
+                            Add
+                          </button>
                         </div>
                       </div>
                     )}
