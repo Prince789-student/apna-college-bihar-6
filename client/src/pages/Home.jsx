@@ -169,8 +169,8 @@ export default function Home() {
              <span className="text-[10px] font-black uppercase tracking-widest">v2.0 Performance Hub is Live</span>
            </div>
            
-           <h1 className="text-4xl md:text-7xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.9] md:leading-[0.8] mb-6">
-                   Apna College <span className="text-blue-500">Bihar</span>
+           <h1 className="text-4xl md:text-7xl font-[1000] text-blue-500 tracking-tighter uppercase leading-[0.9] md:leading-[0.8] mb-6">
+                   Apna College Bihar
                 </h1>
                 <p className="text-slate-500 text-[10px] md:text-sm font-black uppercase tracking-[0.2em] md:tracking-[0.4em] mb-2 max-w-xl mx-auto">
                    #1 BEU Academic & Bihar Engineering Counselling Hub
