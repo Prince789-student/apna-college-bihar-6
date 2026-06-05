@@ -99,7 +99,8 @@ export default function DashboardLayout() {
             where('date', '==', todayStr)
           );
           const snap = await getDocs(sessionsQuery);
-          const isAwake = !snap.empty || timerActive;
+          // If they have studied today, OR timer is active, OR it's 8 AM or later, they are awake!
+          const isAwake = !snap.empty || timerActive || curHour >= 8;
           const userName = user.name || 'Bihari Babu';
           let title = '';
           let body = '';
