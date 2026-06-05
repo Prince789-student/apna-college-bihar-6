@@ -16,6 +16,9 @@ export default function GroupDetail() {
   const [error, setError] = useState('');
   const [isMeetingOpen, setIsMeetingOpen] = useState(false);
   const [filterMode, setFilterMode] = useState('all'); // 'all' or 'studying'
+  const [isSettingLink, setIsSettingLink] = useState(false);
+  const [newLink, setNewLink] = useState('');
+  const [selectedMember, setSelectedMember] = useState(null);
   const { timerActive, timerTime, timerMode, customMinutes, customSeconds } = useStudy();
 
   useEffect(() => {
