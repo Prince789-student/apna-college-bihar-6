@@ -410,10 +410,6 @@ export default function GroupDetail() {
                <div className="p-2 bg-amber-500 rounded-xl shadow-lg shadow-amber-900/20"><Trophy size={20} className="text-slate-900" /></div>
                <h2 className="text-xl font-black text-slate-900 uppercase tracking-tighter italic">Leaderboard Rank</h2>
             </div>
-            <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 gap-1">
-               <button onClick={() => setFilterMode('all')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${filterMode === 'all' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-950'}`}>All ({members.length})</button>
-               <button onClick={() => setFilterMode('studying')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all ${filterMode === 'studying' ? 'bg-orange-500 text-white shadow-sm' : 'text-slate-500 hover:text-slate-950'}`}>Studying Now ({members.filter(m => m.isStudying).length})</button>
-            </div>
          </div>
          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
            {(() => {
