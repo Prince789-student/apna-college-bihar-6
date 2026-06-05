@@ -48,6 +48,7 @@ const UgeacInfo = React.lazy(() => import('./pages/UgeacInfo'));
 const SubjectPage = React.lazy(() => import('./pages/SubjectPage'));
 const HackathonHub = React.lazy(() => import('./pages/HackathonHub'));
 const SitemapDirectory = React.lazy(() => import('./pages/SitemapDirectory'));
+const CompareColleges = React.lazy(() => import('./pages/CompareColleges'));
 
 function LoadingScreen() {
   return (
@@ -201,6 +202,8 @@ function App() {
             <Route path="/subject/:subjectSlug" element={<SubjectPage />} />
             <Route path="/subject/:subjectSlug/:section" element={<SubjectPage />} />
             <Route path="/hackathons" element={<HackathonHub />} />
+            <Route path="/compare" element={<CompareColleges />} />
+            <Route path="/compare/:college1VsCollege2" element={<CompareColleges />} />
             {/* BEU Tool SEO Routes – Attendance, Timetable, CGPA, Result */}
             <Route path="/beu/:tool" element={<BeuToolSEO />} />
             <Route path="/beu/:tool/:keyword" element={<BeuToolSEO />} />

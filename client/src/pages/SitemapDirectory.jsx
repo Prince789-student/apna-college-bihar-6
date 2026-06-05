@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { colleges } from '../UgeacData';
-import { Building2, Cpu, Grid, Hammer, Info, Link2, BookOpen } from 'lucide-react';
+import { Building2, Cpu, Grid, Hammer, Info, Link2, BookOpen, ArrowRight } from 'lucide-react';
 import SEO from '../components/SEO';
 
 const branches = [
@@ -299,6 +299,26 @@ export default function SitemapDirectory() {
             <a href="/bihar-engineering-counselling-2025.html" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Counselling Guide</a>
             <a href="/ugeac-2025-choice-filling.html" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Choice Filling Strategy</a>
             <a href="/beu-syllabus-download-bihar-engineering.html" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Syllabus PDF Hub</a>
+          </div>
+        </section>
+
+        {/* Section 6: College Comparisons */}
+        <section className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
+          <h2 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2.5">
+            <Link2 className="text-blue-500" size={24} /> Head-to-Head College Comparisons
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <a href="/compare/mit-muzaffarpur-vs-bce-bhagalpur.html" className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300">MIT Muzaffarpur vs BCE Bhagalpur</a>
+            <a href="/compare/mit-muzaffarpur-vs-bce-bakhtiyarpur.html" className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300">MIT Muzaffarpur vs BCE Bakhtiyarpur</a>
+            <a href="/compare/mit-muzaffarpur-vs-gce-gaya.html" className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300">MIT Muzaffarpur vs GCE Gaya</a>
+            <a href="/compare/bce-bhagalpur-vs-gce-gaya.html" className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300">BCE Bhagalpur vs GCE Gaya</a>
+            <a href="/compare/nce-chandi-vs-lnjpit-chapra.html" className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300">NCE Chandi vs LNJPIT Chapra</a>
+            <a href="/compare/mce-motihari-vs-dce-darbhanga.html" className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300">MCE Motihari vs DCE Darbhanga</a>
+          </div>
+          <div className="text-center pt-2">
+            <Link to="/compare" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest border border-blue-500/20 transition-all">
+              Interactive Comparison Tool <ArrowRight size={12} />
+            </Link>
           </div>
         </section>
       </div>
