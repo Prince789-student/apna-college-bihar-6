@@ -176,7 +176,7 @@ function App() {
           <Route path="/delete-account" element={<DeleteAccount />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/directory" element={<SitemapDirectory />} />
+          <Route path="/directory" element={isStandalone ? <Navigate to="/" replace /> : <SitemapDirectory />} />
 
           {/* Public Dashboard Routes (For SEO & Direct Sharing) */}
           <Route element={<DashboardLayout />}>
