@@ -517,13 +517,24 @@ function UgeacPredictor() {
                     </div>
                  </div>
               </div>
-              <h1>UGEAC <span className="highlight-text">PREDICTOR</span></h1>
-              <p>Bihar's most accurate engineering admission AI. Predict your college choices based on historical round-wise cutoffs with 99% precision.</p>
-              <div className="nav-pills">
-                 <button onClick={() => setMode('finder')} className={`nav-btn ${mode === 'finder' ? 'active' : ''}`}><Search size={16} /> College Finder</button>
-                 <button onClick={() => setMode('predictor')} className={`nav-btn ${mode === 'predictor' ? 'active' : ''}`}><Calculator size={16} /> Rank Predictor</button>
-                 <button onClick={() => setMode('guide')} className={`nav-btn ${mode === 'guide' ? 'active' : ''}`}><BookOpen size={16} /> Guide</button>
-              </div>
+              {mode === 'finder' && (
+                 <>
+                    <h1>UGEAC COLLEGE <span className="highlight-text">FINDER</span></h1>
+                    <p>Predict your Bihar Engineering college admission chances based on 2024-2025 round-wise cutoff data.</p>
+                 </>
+              )}
+              {mode === 'predictor' && (
+                 <>
+                    <h1>UGEAC RANK <span className="highlight-text">PREDICTOR</span></h1>
+                    <p>Estimate your UGEAC State Merit Rank, Category Rank, and Female Rank based on your JEE Main AIR.</p>
+                 </>
+              )}
+              {mode === 'guide' && (
+                 <>
+                    <h1>UGEAC COUNSELLING <span className="highlight-text">GUIDE</span></h1>
+                    <p>Complete official roadmap, eligibility criteria, category reservation matrix, and document checklist for Bihar Engineering admissions.</p>
+                 </>
+              )}
            </div>
         </header>
         {mode === 'guide' ? (
