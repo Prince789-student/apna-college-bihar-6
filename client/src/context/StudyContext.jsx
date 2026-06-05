@@ -24,9 +24,10 @@ export function StudyProvider({ children }) {
   };
 
   const [timerActive, _setTimerActive] = useState(false);
-  const [timerTime, setTimerTime] = useState(60);
+  const [timerTime, setTimerTime] = useState(0);
   const [timerSubject, setTimerSubject] = useState('OTHERS');
-  const [customMinutes, setCustomMinutes] = useState(1);
+  const [customHours, setCustomHours] = useState(0);
+  const [customMinutes, setCustomMinutes] = useState(0);
   const [customSeconds, setCustomSeconds] = useState(0);
   const [timerMode, setTimerMode] = useState('COUNTDOWN');
   const [overtimeActive, setOvertimeActive] = useState(false);
@@ -169,19 +170,19 @@ export function StudyProvider({ children }) {
   useEffect(() => {
     if (!timerActive) {
       if (timerMode === 'COUNTDOWN') {
-        setTimerTime(customMinutes * 60 + customSeconds);
+        setTimerTime(customHours * 3600 + customMinutes * 60 + customSeconds);
       } else {
         setTimerTime(0);
       }
     }
-  }, [timerMode, customMinutes, customSeconds, timerActive]);
+  }, [timerMode, customHours, customMinutes, customSeconds, timerActive]);
 
   const saveGlobalSession = async (manualTime = null) => {
     if (!user) return;
     const timeToSave = manualTime || (
       overtimeActive 
-        ? (customMinutes * 60 + customSeconds + timerTime)
-        : (timerMode === 'STOPWATCH' ? timerTime : (customMinutes * 60 + customSeconds - timerTime))
+        ? (customHours * 3600 + customMinutes * 60 + customSeconds + timerTime)
+        : (timerMode === 'STOPWATCH' ? timerTime : (customHours * 3600 + customMinutes * 60 - timerTime))
     );
     if (timeToSave < 5) { 
       setOvertimeActive(false);
@@ -284,7 +285,7 @@ export function StudyProvider({ children }) {
       clearInterval(timerRef.current);
     }
     return () => clearInterval(timerRef.current);
-  }, [timerActive, timerMode, user, customMinutes, customSeconds, selectedTaskId]);
+  }, [timerActive, timerMode, user, customHours, customMinutes, customSeconds, selectedTaskId]);
 
   const value = {
     timerActive,
@@ -293,6 +294,8 @@ export function StudyProvider({ children }) {
     setTimerTime,
     timerSubject,
     setTimerSubject,
+    customHours,
+    setCustomHours,
     customMinutes,
     setCustomMinutes,
     customSeconds,

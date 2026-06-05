@@ -49,6 +49,7 @@ export default function StudyDashboard() {
     timerActive, setTimerActive,
     timerTime, setTimerTime,
     timerSubject, setTimerSubject,
+    customHours, setCustomHours,
     customMinutes, setCustomMinutes,
     customSeconds, setCustomSeconds,
     timerMode, setTimerMode,
@@ -80,6 +81,19 @@ export default function StudyDashboard() {
   const [inlineTaskText, setInlineTaskText] = useState('');
   const [inlineTaskDuration, setInlineTaskDuration] = useState('');
   const [activeStartTask, setActiveStartTask] = useState(null);
+  const [historyScope, setHistoryScope] = useState('day');
+  const [modalHours, setModalHours] = useState(0);
+  const [modalMinutes, setModalMinutes] = useState(0);
+  const [modalSeconds, setModalSeconds] = useState(0);
+
+  useEffect(() => {
+    if (activeStartTask) {
+      const dur = activeStartTask.duration || 60;
+      setModalHours(Math.floor(dur / 60));
+      setModalMinutes(dur % 60);
+      setModalSeconds(0);
+    }
+  }, [activeStartTask]);
 
   const [isNative, setIsNative] = useState(() => {
     return Capacitor.isNativePlatform() || (typeof window !== 'undefined' && window.Capacitor && (window.Capacitor.isNativePlatform?.() || window.Capacitor.isPluginAvailable?.('AppBlocker'))) || Capacitor.isPluginAvailable?.('AppBlocker');
@@ -249,7 +263,7 @@ export default function StudyDashboard() {
   const stats = useMemo(() => {
     let activeSec = 0;
     if (timerActive) {
-      activeSec = timerMode === 'COUNTDOWN' ? (customMinutes * 60 + customSeconds - timerTime) : timerTime;
+      activeSec = timerMode === 'COUNTDOWN' ? (customHours * 3600 + customMinutes * 60 + customSeconds - timerTime) : timerTime;
     }
 
     const today = sessions.filter(s => s.date === todayStr).reduce((a, s) => a + (Number(s.duration) || 0), 0) + activeSec;
@@ -293,7 +307,46 @@ export default function StudyDashboard() {
     subjectBreakdown.sort((a, b) => b.sec - a.sec);
 
     return { today, weekly, monthly, heatmap, subjectBreakdown };
-  }, [sessions, subjects, todayStr, timerActive, timerTime, timerMode, customMinutes, customSeconds, timerSubject]);
+  }, [sessions, subjects, todayStr, timerActive, timerTime, timerMode, customHours, customMinutes, customSeconds, timerSubject]);
+
+  const groupedHistory = useMemo(() => {
+    let activeSec = 0;
+    if (timerActive) {
+      activeSec = timerMode === 'COUNTDOWN' ? (customHours * 3600 + customMinutes * 60 + customSeconds - timerTime) : timerTime;
+    }
+
+    const allSessions = [...sessions];
+    if (timerActive && activeSec > 0) {
+      allSessions.push({
+        date: todayStr,
+        duration: activeSec,
+        subject: timerSubject || 'OTHERS'
+      });
+    }
+
+    const groups = {};
+
+    allSessions.forEach(s => {
+      let key = '';
+      if (historyScope === 'day') {
+        key = s.date;
+      } else if (historyScope === 'week') {
+        const date = new Date(s.date);
+        const day = date.getDay();
+        const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+        const monday = new Date(date.setDate(diff));
+        key = monday.toLocaleDateString('en-CA');
+      } else {
+        key = s.date.substring(0, 7);
+      }
+
+      groups[key] = (groups[key] || 0) + (Number(s.duration) || 0);
+    });
+
+    return Object.entries(groups)
+      .map(([key, sec]) => ({ key, sec }))
+      .sort((a, b) => b.key.localeCompare(a.key));
+  }, [sessions, historyScope, timerActive, timerTime, timerMode, customHours, customMinutes, customSeconds, timerSubject, todayStr]);
 
   const activeSubjectObj = subjects.find(s => s.subjectName === timerSubject);
 
@@ -352,10 +405,11 @@ export default function StudyDashboard() {
     
     if (mode === 'TIMER') {
       setTimerMode('COUNTDOWN');
-      const minutes = task.duration || 60;
-      setTimerTime(minutes * 60);
-      setCustomMinutes(minutes);
-      setCustomSeconds(0);
+      const totalSecs = (modalHours * 3600) + (modalMinutes * 60) + modalSeconds;
+      setTimerTime(totalSecs);
+      setCustomHours(modalHours);
+      setCustomMinutes(modalMinutes);
+      setCustomSeconds(modalSeconds);
     } else {
       setTimerMode('STOPWATCH');
       setTimerTime(0);
@@ -457,90 +511,6 @@ export default function StudyDashboard() {
                 ))}
               </div>
 
-              {/* Subject Selector */}
-              <div className="flex items-center gap-2 w-full px-4 py-3 bg-slate-50 rounded-2xl border border-slate-200/50">
-                <BookOpen size={14} className="text-blue-500" />
-                <select value={timerSubject} onChange={e => setTimerSubject(e.target.value)} disabled={timerActive} className="bg-transparent text-[10px] font-black uppercase tracking-widest text-slate-900 outline-none flex-1">
-                  <option value="OTHERS">CREATE / SELECT SUBJECT</option>
-                  {subjects.map(s => <option key={s.id} value={s.subjectName}>{s.subjectName}</option>)}
-                </select>
-                <button 
-                  onClick={() => setShowSubjectManager(!showSubjectManager)} 
-                  disabled={timerActive}
-                  className="p-1 hover:text-blue-600 text-slate-400 transition-colors"
-                  title="Create & Manage Subjects"
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-
-              {/* Subject Manager Panel */}
-              {showSubjectManager && (
-                <div className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl p-4 space-y-3">
-                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Create & Manage Subjects</p>
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <input 
-                      type="text" 
-                      value={newSubjectName} 
-                      onChange={e => setNewSubjectName(e.target.value)}
-                      placeholder="SUBJECT NAME" 
-                      className="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none"
-                    />
-                    <div className="flex gap-2 items-center">
-                      <input 
-                        type="number" 
-                        min="1"
-                        max="24"
-                        value={newSubjectTarget} 
-                        onChange={e => setNewSubjectTarget(e.target.value)}
-                        placeholder="GOAL (HRS)" 
-                        className="w-24 bg-white border border-slate-200 rounded-xl px-2 py-2 text-center text-xs font-bold outline-none"
-                      />
-                      <button onClick={addSubject} className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold active:scale-95 transition-all">Add</button>
-                    </div>
-                  </div>
-                  {subjects.length > 0 && (
-                    <div className="max-h-32 overflow-y-auto space-y-1.5 pt-2 border-t border-slate-200/50">
-                      {subjects.map(s => (
-                        <div key={s.id} className="flex justify-between items-center bg-white px-3 py-1.5 rounded-lg border border-slate-100 gap-2">
-                          <span className="text-[10px] font-bold text-slate-700 uppercase flex-1">{s.subjectName}</span>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-[8px] font-black text-slate-400 uppercase">Target:</span>
-                            <input 
-                              type="number" 
-                              min="0"
-                              value={s.targetHours || 0}
-                              onChange={(e) => updateSubjectTarget(s.id, e.target.value)}
-                              className="w-10 bg-slate-100 rounded px-1.5 py-0.5 text-[10px] font-black text-center outline-none border border-slate-200/50"
-                            />
-                            <span className="text-[8px] font-black text-slate-400 uppercase">hrs</span>
-                          </div>
-                          <button onClick={() => deleteSubject(s.id)} className="text-red-400 hover:text-red-600"><Trash2 size={12} /></button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Subject Goal Progress Tracker */}
-              {activeSubjectObj && (
-                <div className="w-full bg-blue-50/50 border border-blue-100 rounded-2xl p-4 space-y-2 animate-in fade-in duration-300">
-                  <div className="flex justify-between items-center">
-                    <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest">Subject Goal: {activeSubjectObj.subjectName}</span>
-                    <span className="text-[10px] font-black text-blue-600 uppercase">
-                      {formatDuration(activeSubjectTodaySec)} / {activeSubjectObj.targetHours || 0} hrs
-                    </span>
-                  </div>
-                  <div className="w-full h-2 bg-slate-200/80 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-blue-600 rounded-full transition-all duration-500" 
-                      style={{ width: `${Math.min(100, (activeSubjectTodaySec / Math.max(1, (activeSubjectObj.targetHours || 0) * 3600)) * 100)}%` }}
-                    ></div>
-                  </div>
-                </div>
-              )}
-
               {/* Task Selector for Focus */}
               <div className="flex items-center gap-2 w-full px-4 py-3 bg-slate-50 rounded-2xl border border-slate-200/50">
                 <ClipboardList size={14} className="text-blue-500" />
@@ -554,7 +524,8 @@ export default function StudyDashboard() {
                       setTimerSubject(task.subject || 'OTHERS');
                       if (task.duration && !timerActive && timerMode === 'COUNTDOWN') {
                         setTimerTime(task.duration * 60);
-                        setCustomMinutes(task.duration);
+                        setCustomHours(Math.floor(task.duration / 60));
+                        setCustomMinutes(task.duration % 60);
                         setCustomSeconds(0);
                       }
                     }
@@ -570,9 +541,10 @@ export default function StudyDashboard() {
                   ))}
                 </select>
               </div>
+
               {/* Timer Display */}
               <h2 className="text-7xl font-[1000] text-slate-900 tracking-tighter tabular-nums leading-none">
-                {Math.floor(timerTime / 3600) > 0 ? `${Math.floor(timerTime / 3600).toString().padStart(2, '0')}:` : ''}
+                {Math.floor(timerTime / 3600).toString().padStart(2, '0')}:
                 {Math.floor((timerTime % 3600) / 60).toString().padStart(2, '0')}:
                 {(timerTime % 60).toString().padStart(2, '0')}
               </h2>
@@ -587,12 +559,17 @@ export default function StudyDashboard() {
               {!timerActive && timerMode === 'COUNTDOWN' && (
                 <div className="flex items-center justify-center gap-4 bg-slate-50 p-5 rounded-2xl w-full">
                   <div className="flex flex-col items-center gap-1">
-                    <input type="number" min="0" max="599" value={customMinutes} onChange={e => setCustomMinutes(Math.max(0, parseInt(e.target.value) || 0))} className="w-20 bg-white border-2 border-slate-200 rounded-xl p-3 text-center font-black text-2xl outline-none focus:border-blue-500" />
+                    <input type="number" min="0" max="23" value={customHours} onChange={e => setCustomHours(Math.max(0, parseInt(e.target.value) || 0))} className="w-16 bg-white border-2 border-slate-200 rounded-xl p-3 text-center font-black text-xl outline-none focus:border-blue-500" />
+                    <span className="text-[9px] font-black text-slate-400 uppercase">Hr</span>
+                  </div>
+                  <span className="text-xl font-black text-slate-300 mb-4">:</span>
+                  <div className="flex flex-col items-center gap-1">
+                    <input type="number" min="0" max="59" value={customMinutes} onChange={e => setCustomMinutes(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))} className="w-16 bg-white border-2 border-slate-200 rounded-xl p-3 text-center font-black text-xl outline-none focus:border-blue-500" />
                     <span className="text-[9px] font-black text-slate-400 uppercase">Min</span>
                   </div>
-                  <span className="text-2xl font-black text-slate-300 mb-4">:</span>
+                  <span className="text-xl font-black text-slate-300 mb-4">:</span>
                   <div className="flex flex-col items-center gap-1">
-                    <input type="number" min="0" max="59" value={customSeconds} onChange={e => setCustomSeconds(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))} className="w-20 bg-white border-2 border-slate-200 rounded-xl p-3 text-center font-black text-2xl outline-none focus:border-blue-500" />
+                    <input type="number" min="0" max="59" value={customSeconds} onChange={e => setCustomSeconds(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))} className="w-16 bg-white border-2 border-slate-200 rounded-xl p-3 text-center font-black text-xl outline-none focus:border-blue-500" />
                     <span className="text-[9px] font-black text-slate-400 uppercase">Sec</span>
                   </div>
                 </div>
@@ -795,6 +772,50 @@ export default function StudyDashboard() {
                 ))}
               </div>
             )}
+
+            {/* Focus History section */}
+            <div className="space-y-3 pt-4 border-t border-slate-100">
+              <div className="flex justify-between items-center px-2">
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Focus History</p>
+                <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+                  {['day', 'week', 'month'].map(scope => (
+                    <button
+                      key={scope}
+                      onClick={() => setHistoryScope(scope)}
+                      className={`px-3 py-1 rounded-md text-[8px] font-black uppercase tracking-wider transition-all ${historyScope === scope ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}
+                    >
+                      {scope}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-2 px-2 max-h-60 overflow-y-auto custom-scrollbar">
+                {groupedHistory.map(item => {
+                  let displayKey = item.key;
+                  if (historyScope === 'day') {
+                    displayKey = new Date(item.key).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+                  } else if (historyScope === 'week') {
+                    const monday = new Date(item.key);
+                    const sunday = new Date(monday);
+                    sunday.setDate(monday.getDate() + 6);
+                    displayKey = `${monday.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${sunday.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+                  } else if (historyScope === 'month') {
+                    displayKey = new Date(item.key + '-02').toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+                  }
+
+                  return (
+                    <div key={item.key} className="flex justify-between items-center p-3 bg-slate-50 border border-slate-200/40 rounded-xl">
+                      <span className="text-[10px] font-black text-slate-700 uppercase tracking-wide">{displayKey}</span>
+                      <span className="text-xs font-[1000] text-blue-600">{formatDuration(item.sec)}</span>
+                    </div>
+                  );
+                })}
+                {groupedHistory.length === 0 && (
+                  <p className="text-[9px] text-slate-400 font-bold uppercase italic text-center py-4">No focus sessions recorded</p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -816,6 +837,9 @@ export default function StudyDashboard() {
                 const dStr = day.toLocaleDateString('en-CA');
                 const isSelected = selectedPlannerDate === dStr;
                 const isToday = dStr === new Date().toLocaleDateString('en-CA');
+                const dayTasks = tasks.filter(t => t.date === dStr);
+                const completedCount = dayTasks.filter(t => t.done).length;
+                const totalCount = dayTasks.length;
                 
                 return (
                   <button
@@ -829,6 +853,9 @@ export default function StudyDashboard() {
                     <span className="text-xs font-[1000] mt-0.5">
                       {day.getDate()}/{day.getMonth() + 1}
                     </span>
+                    <span className="text-[8px] font-black mt-1">
+                      {completedCount}/{totalCount}
+                    </span>
                     {isToday && (
                       <span className={`text-[6px] font-black uppercase tracking-widest mt-1 px-1 rounded-full ${isSelected ? 'bg-white text-blue-600' : 'bg-blue-600 text-white'}`}>
                         Today
@@ -837,6 +864,67 @@ export default function StudyDashboard() {
                   </button>
                 );
               })}
+            </div>
+
+            <div className="px-6 pt-4">
+              <button 
+                onClick={() => setShowSubjectManager(!showSubjectManager)}
+                className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100/80 border border-slate-200/60 rounded-2xl text-[10px] font-black uppercase tracking-widest text-blue-600 transition-all"
+              >
+                <span className="flex items-center gap-2">
+                  <BookOpen size={14} />
+                  Manage Subjects ({subjects.length})
+                </span>
+                <Plus size={14} className={`transition-transform duration-200 ${showSubjectManager ? 'rotate-45' : ''}`} />
+              </button>
+
+              {showSubjectManager && (
+                <div className="w-full bg-slate-50 border border-slate-200/80 rounded-2xl p-4 mt-3 space-y-3 animate-in slide-in-from-top-2 duration-200">
+                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Create & Manage Subjects</p>
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <input 
+                      type="text" 
+                      value={newSubjectName} 
+                      onChange={e => setNewSubjectName(e.target.value)}
+                      placeholder="SUBJECT NAME" 
+                      className="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold outline-none"
+                    />
+                    <div className="flex gap-2 items-center">
+                      <input 
+                        type="number" 
+                        min="1"
+                        max="24"
+                        value={newSubjectTarget} 
+                        onChange={e => setNewSubjectTarget(e.target.value)}
+                        placeholder="GOAL (HRS)" 
+                        className="w-24 bg-white border border-slate-200 rounded-xl px-2 py-2 text-center text-xs font-bold outline-none"
+                      />
+                      <button onClick={addSubject} className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-xl text-xs font-bold active:scale-95 transition-all">Add</button>
+                    </div>
+                  </div>
+                  {subjects.length > 0 && (
+                    <div className="max-h-32 overflow-y-auto space-y-1.5 pt-2 border-t border-slate-200/50">
+                      {subjects.map(s => (
+                        <div key={s.id} className="flex justify-between items-center bg-white px-3 py-1.5 rounded-lg border border-slate-100 gap-2">
+                          <span className="text-[10px] font-bold text-slate-700 uppercase flex-1">{s.subjectName}</span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[8px] font-black text-slate-400 uppercase">Target:</span>
+                            <input 
+                              type="number" 
+                              min="0"
+                              value={s.targetHours || 0}
+                              onChange={(e) => updateSubjectTarget(s.id, e.target.value)}
+                              className="w-10 bg-slate-100 rounded px-1.5 py-0.5 text-[10px] font-black text-center outline-none border border-slate-200/50"
+                            />
+                            <span className="text-[8px] font-black text-slate-400 uppercase">hrs</span>
+                          </div>
+                          <button onClick={() => deleteSubject(s.id)} className="text-red-400 hover:text-red-600"><Trash2 size={12} /></button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             <div className="p-6 space-y-6">
@@ -965,9 +1053,9 @@ export default function StudyDashboard() {
                 <p className="text-[8px] text-slate-400">days</p>
               </div>
               <div className="bg-slate-50 p-4 rounded-2xl text-center">
-                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Total Focus</p>
-                <p className="text-2xl font-[1000] text-slate-900 mt-1">{formatDuration(stats.weekly)}</p>
-                <p className="text-[8px] text-slate-400">this week</p>
+                <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Today's Focus</p>
+                <p className="text-2xl font-[1000] text-slate-900 mt-1">{formatDuration(stats.today)}</p>
+                <p className="text-[8px] text-slate-400">today</p>
               </div>
             </div>
           </div>
@@ -1082,6 +1170,26 @@ export default function StudyDashboard() {
                 </p>
               </div>
 
+              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/50 space-y-2">
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest text-center">Configure Timer Duration</p>
+                <div className="flex items-center justify-center gap-2">
+                  <div className="flex flex-col items-center">
+                    <input type="number" min="0" max="23" value={modalHours} onChange={e => setModalHours(Math.max(0, parseInt(e.target.value) || 0))} className="w-12 bg-white border border-slate-200 rounded-lg p-1.5 text-center font-black text-sm outline-none focus:border-blue-500" />
+                    <span className="text-[7px] font-black text-slate-400 uppercase mt-0.5">Hr</span>
+                  </div>
+                  <span className="text-sm font-black text-slate-300">:</span>
+                  <div className="flex flex-col items-center">
+                    <input type="number" min="0" max="59" value={modalMinutes} onChange={e => setModalMinutes(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))} className="w-12 bg-white border border-slate-200 rounded-lg p-1.5 text-center font-black text-sm outline-none focus:border-blue-500" />
+                    <span className="text-[7px] font-black text-slate-400 uppercase mt-0.5">Min</span>
+                  </div>
+                  <span className="text-sm font-black text-slate-300">:</span>
+                  <div className="flex flex-col items-center">
+                    <input type="number" min="0" max="59" value={modalSeconds} onChange={e => setModalSeconds(Math.min(59, Math.max(0, parseInt(e.target.value) || 0)))} className="w-12 bg-white border border-slate-200 rounded-lg p-1.5 text-center font-black text-sm outline-none focus:border-blue-500" />
+                    <span className="text-[7px] font-black text-slate-400 uppercase mt-0.5">Sec</span>
+                  </div>
+                </div>
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <button
                   onClick={() => startFocusSessionForTask(activeStartTask, 'TIMER')}
@@ -1090,7 +1198,7 @@ export default function StudyDashboard() {
                   <Clock size={28} className="text-slate-400 group-hover:text-blue-600 mb-3 transition-colors" />
                   <span className="text-xs font-black uppercase tracking-widest text-slate-800 group-hover:text-blue-600">Timer Mode</span>
                   <span className="text-[8px] text-slate-400 mt-2 font-bold uppercase">
-                    {activeStartTask.duration ? `${activeStartTask.duration}m countdown` : '60m countdown'}
+                    Use config above
                   </span>
                   <span className="text-[7px] text-blue-500 font-bold uppercase mt-1 leading-normal">
                     (Auto rollover to stopwatch on end)

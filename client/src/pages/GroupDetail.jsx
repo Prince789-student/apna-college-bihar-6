@@ -24,7 +24,7 @@ export default function GroupDetail() {
   const [statsView, setStatsView] = useState('card'); // 'card' or 'stats'
   const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString('en-CA'));
   const [currentCalendarMonth, setCurrentCalendarMonth] = useState(new Date());
-  const { timerActive, timerTime, timerMode, customMinutes, customSeconds } = useStudy();
+  const { timerActive, timerTime, timerMode, customHours, customMinutes, customSeconds } = useStudy();
 
   useEffect(() => {
     if (!selectedMember) {
@@ -249,25 +249,68 @@ export default function GroupDetail() {
     if (!targetMember) setSelectedMember(null);
   };
 
+  const StudyIcon = ({ className, active }) => (
+    <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      {/* Lamp */}
+      <path d="M12 40v-8a4 4 0 0 1 4-4h4" />
+      <path d="M18 24a4 4 0 0 1 4 4" className={active ? "stroke-amber-400" : "stroke-slate-300"} />
+      {/* Student Head */}
+      <circle cx="38" cy="18" r="6" />
+      {/* Student Body (sitting) */}
+      <path d="M28 40v-8a6 6 0 0 1 6-6h8a6 6 0 0 1 6 6v8" />
+      {/* Laptop/Monitor */}
+      <path d="M20 40l3-8h8l2 8" />
+      {/* Table */}
+      <path d="M6 40h52" />
+      <path d="M14 40v14" />
+      <path d="M50 40v14" />
+      {/* Chair back */}
+      <path d="M48 34v12M42 46h10" />
+    </svg>
+  );
+
   const MemberCard = ({ member, index }) => {
     const isMe = member.id === user.uid;
     const isStudying = member.isStudying;
     let displayTimeSec = member.todayStudyTime || 0;
     if (isMe && timerActive) {
-      const elapsed = timerMode === 'COUNTDOWN' ? (customMinutes * 60 + customSeconds - timerTime) : timerTime;
+      const elapsed = timerMode === 'COUNTDOWN' ? (customHours * 3600 + customMinutes * 60 + customSeconds - timerTime) : timerTime;
       displayTimeSec += elapsed;
     }
     const studyTimeStr = formatHHMMSS(displayTimeSec);
     return (
-      <div onClick={() => setSelectedMember(member)} className={`relative flex flex-col items-center justify-center p-6 md:p-8 rounded-[2rem] border-2 transition-all cursor-pointer group hover:scale-105 ${isStudying ? 'bg-emerald-50 border-emerald-200 hover:border-emerald-400 shadow-xl shadow-emerald-500/10' : 'bg-rose-50 border-rose-200 hover:border-rose-400 shadow-xl shadow-rose-500/5'}`}>
+      <div 
+        onClick={() => setSelectedMember(member)} 
+        className={`relative flex flex-col items-center justify-center p-6 md:p-8 rounded-[2rem] border-2 transition-all cursor-pointer group hover:scale-105 ${
+          isStudying 
+            ? 'bg-orange-50/60 border-orange-200/80 hover:border-orange-400/80 shadow-xl shadow-orange-500/5' 
+            : 'bg-slate-50/50 border-slate-200/40 hover:border-slate-300 shadow-sm'
+        }`}
+      >
          <div className={`absolute top-4 left-4 text-[10px] font-black italic tracking-widest ${index < 3 ? 'text-amber-500' : 'text-slate-400'}`}>#{index + 1}</div>
          <div className="relative mb-4">
-           <div className={`w-16 h-16 md:w-20 md:h-20 rounded-[2rem] flex items-center justify-center transition-colors ${isStudying ? 'bg-emerald-500/10 text-emerald-500' : 'bg-rose-500/10 text-rose-500'}`}><Monitor size={32} /></div>
-           <div className={`absolute -top-1 -right-1 w-3.5 h-3.5 border-2 border-white rounded-full animate-pulse ${isStudying ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]' : 'bg-rose-500 shadow-[0_0_10px_rgba(244,63,94,0.8)]'}`}></div>
-           {!isStudying && <button onClick={(e) => { e.stopPropagation(); sendNudge(member); }} className="absolute -bottom-2 -right-2 w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center text-amber-500 hover:bg-amber-50 opacity-0 group-hover:opacity-100 shadow-sm"><BellRing size={14} /></button>}
+           <div className={`w-16 h-16 md:w-20 md:h-20 rounded-[2rem] flex items-center justify-center transition-colors ${
+             isStudying ? 'bg-orange-500/10 text-orange-500' : 'bg-slate-100 text-slate-300'
+           }`}>
+             <StudyIcon className="w-10 h-10" active={isStudying} />
+           </div>
+           <div className={`absolute -top-1 -right-1 w-3.5 h-3.5 border-2 border-white rounded-full animate-pulse ${
+             isStudying ? 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.8)]' : 'bg-slate-300'
+           }`}></div>
+           {!isStudying && (
+             <button 
+               onClick={(e) => { e.stopPropagation(); sendNudge(member); }} 
+               className="absolute -bottom-2 -right-2 w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center text-amber-500 hover:bg-amber-50 opacity-0 group-hover:opacity-100 shadow-sm"
+               title="Nudge user to study"
+             >
+               <BellRing size={14} />
+             </button>
+           )}
          </div>
          <span className="font-[1000] text-slate-900 text-xs md:text-sm tracking-tight uppercase truncate w-full text-center mb-1">{member.name}</span>
-         <div className={`${isStudying ? 'text-emerald-600' : 'text-rose-600'} font-[1000] text-sm md:text-base tracking-widest mt-1`}>{studyTimeStr}</div>
+         <div className={`${isStudying ? 'text-orange-600' : 'text-slate-400'} font-[1000] text-sm md:text-base tracking-widest mt-1`}>
+           {studyTimeStr}
+         </div>
       </div>
     );
   };
