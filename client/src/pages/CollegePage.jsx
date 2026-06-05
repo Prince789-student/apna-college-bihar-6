@@ -99,6 +99,103 @@ export function getCollegeBySlug(slug) {
   return null;
 }
 
+// Helper function to return branch specific descriptions dynamically
+function getBranchSpecificDetails(branchName, collegeShort) {
+  const normName = branchName.toLowerCase();
+  
+  if (normName.includes('computer') || normName.includes('cse') || normName.includes('it') || normName.includes('information')) {
+    return {
+      description: `B.Tech Computer Science & Engineering (CSE / IT) at ${collegeShort} stands as the premier engineering domain. The course curriculum is designed in alignment with modern industrial needs, focusing heavily on Software Engineering, Data Structures & Algorithms (DSA), Operating Systems, DBMS, Artificial Intelligence, and Computer Networks.`,
+      faculty: `The CSE faculty cohort consists of highly qualified teachers appointed via the Department of Science, Technology and Technical Education (DSTTE), Government of Bihar. Many professors hold Ph.D. or M.Tech credentials from leading institutions like IITs and NITs. They maintain standard office hours and run programming workshops to help students develop debugging skills.`,
+      labs: `The department boasts state-of-the-art computer labs equipped with high-speed internet connectivity, compilers for standard languages (C++, Java, Python), database engines, and software engineering tools. A dedicated programming club supports competitive coding and hackathon participation.`,
+      placements: `CSE graduates secure the highest placements in standard Bihar Central Pool Drives and campus recruitments. Key recruiters include major software organizations such as TCS, Wipro, Infosys, Tech Mahindra, and Cognizant, offering packages ranging from ₹3.6 LPA up to ₹15+ LPA.`
+    };
+  } else if (normName.includes('civil')) {
+    return {
+      description: `B.Tech Civil Engineering at ${collegeShort} provides comprehensive training in infrastructure design, geotechnical modeling, concrete construction, structural analysis, surveying, and fluid mechanics.`,
+      faculty: `The Civil engineering department features experienced professors who emphasize practical learning and site planning. Many faculty members are actively involved in consultancy projects for public works and municipal assessments, bringing actual field engineering insights directly to the classroom.`,
+      labs: `Practical labs include high-precision Concrete Technology setups, Soil Mechanics equipment, Surveying instruments (including Total Station and GPS systems), and Hydraulics lab structures. Fieldwork sessions are held regularly to ensure students get hands-on exposure.`,
+      placements: `Civil engineering graduates at ${collegeShort} primarily target prestigious state public services (BPSC AE, WRD, RCD, PHED) or core construction giants like L&T, Tata Projects, and regional infrastructure contracting agencies.`
+    };
+  } else if (normName.includes('mechanical')) {
+    return {
+      description: `B.Tech Mechanical Engineering at ${collegeShort} offers robust mechanical system fundamentals, covering Thermodynamics, Machine Design, Fluid Mechanics, Kinematics, Heat Transfer, and CAD/CAM modeling structures.`,
+      faculty: `The Mechanical department is staffed by seasoned academic instructors with research interests in thermal sciences, material sciences, and automation. Professors provide supportive mentoring for engineering design projects and technical events.`,
+      labs: `Lab facilities include a fully functional Workshop (Smithy, Carpentry, Fitting), Internal Combustion Engine labs, Machine Kinematics tools, Heat Transfer rigs, and CAD workstations equipped with standard industry drafting software.`,
+      placements: `Mechanical graduates consistently secure job offers in core industrial houses (like Tata Motors, L&T, Prism Cement), energy companies, or slide into software roles during central pool placement drives.`
+    };
+  } else if (normName.includes('electrical') || normName.includes('ee')) {
+    return {
+      description: `B.Tech Electrical Engineering at ${collegeShort} focuses on core power systems, control systems, electrical machinery, electrical measurements, microprocessors, and power distribution paradigms.`,
+      faculty: `The Electrical engineering division consists of highly qualified professors specializing in power electronics and smart grids. They mentor students closely on academic research projects, electrical circuits troubleshooting, and system simulation.`,
+      labs: `Students gain practical training in Electrical Machines labs (AC/DC motors and generators), Power System simulation setups, Electrical Measurements labs, and Microcontroller interfacing toolkits.`,
+      placements: `Graduates find placement options in State Electricity Boards, NTPC, Power Grid Corporation of India, core industrial firms, and software companies through DSTTE central pool recruitment drives.`
+    };
+  } else if (normName.includes('electronics') || normName.includes('ece')) {
+    return {
+      description: `B.Tech Electronics & Communication Engineering (ECE) at ${collegeShort} blends hardware circuit design with digital communications, focusing on VLSI Design, Embedded Systems, Signal Processing, and Antenna Design.`,
+      faculty: `The ECE faculty comprises modern research-oriented teachers with expertise in microelectronics and communication protocols. They guide students through circuit design, programming microcontrollers, and communication system simulations.`,
+      labs: `The department features fully equipped Digital Electronics labs, Analog Circuits testing benches, VLSI Design tools, and Microprocessor interfacing labs with modern oscilloscope setups.`,
+      placements: `ECE students target career paths in semiconductor firms, embedded software houses, telecom sector (Jio, Airtel), and major IT recruiters like TCS, Cognizant, and Wipro.`
+    };
+  } else {
+    return {
+      description: `B.Tech ${branchName} at ${collegeShort} offers specialized training in modern technological domains, focusing on practical learning and industry-relevant skill acquisition.`,
+      faculty: `Faculty members are highly qualified professionals appointed through standard government channels, providing excellent mentorship and technical support for academic progress.`,
+      labs: `Dedicated laboratory facilities are equipped with the necessary equipment and computational tools required for hands-on experimentation.`,
+      placements: `Graduates are eligible to compete in both core technical sector recruitment drives and major off-campus or central pool IT recruitment drives.`
+    };
+  }
+}
+
+function BranchDetailSection({ college }) {
+  const branchesList = college.branches || ["Civil", "Mechanical", "Electrical", "Electronics & Communication", "Computer Science"];
+  const [activeBranch, setActiveBranch] = useState(branchesList[0]);
+
+  const details = useMemo(() => getBranchSpecificDetails(activeBranch, college.short), [activeBranch, college.short]);
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap gap-2.5">
+        {branchesList.map((branch, i) => (
+          <button 
+            key={i} 
+            onClick={() => setActiveBranch(branch)}
+            className={`px-4 py-3 border rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
+              activeBranch === branch 
+                ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20' 
+                : 'bg-slate-900/80 border-white/5 text-slate-300 hover:text-white hover:bg-slate-800'
+            }`}
+          >
+            {branch}
+          </button>
+        ))}
+      </div>
+
+      <div className="p-6 bg-slate-950/40 border border-white/5 rounded-2xl space-y-6 animate-in fade-in duration-200">
+        <div>
+          <h3 className="text-xs font-black text-blue-400 uppercase tracking-widest mb-2">Branch Overview</h3>
+          <p className="text-slate-300 text-xs leading-relaxed font-medium">{details.description}</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">🔬 Laboratory Infrastructure</h4>
+            <p className="text-slate-400 text-xs leading-relaxed">{details.labs}</p>
+          </div>
+          <div>
+            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">👨‍🏫 Faculty Standards</h4>
+            <p className="text-slate-400 text-xs leading-relaxed">{details.faculty}</p>
+          </div>
+        </div>
+        <div>
+          <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">💼 Placement Trends</h4>
+          <p className="text-slate-400 text-xs leading-relaxed">{details.placements}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function CollegePage() {
   const { collegeSlug, section } = useParams();
   const navigate = useNavigate();
@@ -366,16 +463,11 @@ export default function CollegePage() {
               <div className="space-y-8 animate-in fade-in duration-300">
                 <div className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl">
                   <h2 className="text-lg font-black text-white uppercase tracking-wider mb-2 flex items-center gap-2.5">
-                    <GraduationCap className="text-blue-500" size={20} /> Available Branches
+                    <GraduationCap className="text-blue-500" size={20} /> Available Branches & Specializations Details
                   </h2>
-                  <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-6">Offered B.Tech Specializations in {college.short}</p>
-                  <div className="flex flex-wrap gap-2.5">
-                    {(college.branches || ["Civil", "Mechanical", "Electrical", "Electronics & Communication", "Computer Science"]).map((branch, i) => (
-                      <span key={i} className="px-4 py-3 bg-slate-900/80 border border-white/5 text-slate-300 rounded-xl text-[10px] font-black uppercase tracking-wider">
-                        {branch}
-                      </span>
-                    ))}
-                  </div>
+                  <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-6">Select a branch to view detailed academics, laboratory setups, faculty profiles, and placement insights</p>
+                  
+                  <BranchDetailSection college={college} />
                 </div>
 
                 {/* Seat Matrix Table */}
