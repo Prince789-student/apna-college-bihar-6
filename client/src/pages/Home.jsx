@@ -38,7 +38,7 @@ export default function Home() {
   // (We match from imports all the way down to the profile menu)
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center font-['Inter'] relative overflow-hidden">
+    <div className="min-h-screen bg-[#f8fafc] font-['Inter'] relative overflow-hidden">
       <SEO 
         title="Apna College Bihar"
         description="Bihar Engineering Counselling 2025 - UGEAC College Predictor, Cutoff Ranks, B.Tech Notes, PYQ Papers & CGPA Calculator. Official resource for Bihar Engineering students."
