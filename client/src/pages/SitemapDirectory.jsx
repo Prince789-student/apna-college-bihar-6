@@ -321,6 +321,24 @@ export default function SitemapDirectory() {
             </Link>
           </div>
         </section>
+
+        {/* Section 7: Colleges by JEE Main Percentile */}
+        <section className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
+          <h2 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2.5">
+            <Building2 className="text-blue-500" size={24} /> Colleges by JEE Main Percentile
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {[95, 90, 85, 80, 75, 70, 65, 60, 55, 50].map(p => (
+              <a 
+                key={p} 
+                href={`/colleges-at-${p}-percentile-in-bihar.html`} 
+                className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300 hover:text-white transition-all"
+              >
+                Colleges at {p} Percentile
+              </a>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );
