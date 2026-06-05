@@ -82,6 +82,7 @@ export default function StudyDashboard() {
   const [inlineTaskDuration, setInlineTaskDuration] = useState('');
   const [activeStartTask, setActiveStartTask] = useState(null);
   const [historyScope, setHistoryScope] = useState('day');
+  const [selectedHeatmapDay, setSelectedHeatmapDay] = useState(null);
   const [modalHours, setModalHours] = useState(0);
   const [modalMinutes, setModalMinutes] = useState(0);
   const [modalSeconds, setModalSeconds] = useState(0);
@@ -286,17 +287,35 @@ export default function StudyDashboard() {
       return {
         day: d.toLocaleDateString('en-US', { weekday: 'short' }),
         sec: daySec,
-        isToday: dStr === todayStr
+        isToday: dStr === todayStr,
+        dateStr: dStr
       };
     });
 
     const subjectNames = subjects.map(s => s.subjectName);
+
+    // Calculate dates filter for Subject Focus based on historyScope:
+    // day -> last 7 days (this week)
+    // week -> last 30 days (this month)
+    // month -> last 365 days (this year)
+    const filterLimitDate = new Date();
+    if (historyScope === 'day') {
+      filterLimitDate.setDate(filterLimitDate.getDate() - 7);
+    } else if (historyScope === 'week') {
+      filterLimitDate.setDate(filterLimitDate.getDate() - 30);
+    } else {
+      filterLimitDate.setDate(filterLimitDate.getDate() - 365);
+    }
+    const filterLimitStr = filterLimitDate.toLocaleDateString('en-CA');
+
+    const filteredSessions = sessions.filter(s => s.date >= filterLimitStr);
+
     const subjectBreakdown = subjects.map(sub => ({
       name: sub.subjectName,
-      sec: sessions.filter(s => s.subject === sub.subjectName).reduce((a, s) => a + (Number(s.duration) || 0), 0) + (timerSubject === sub.subjectName ? activeSec : 0)
+      sec: filteredSessions.filter(s => s.subject === sub.subjectName).reduce((a, s) => a + (Number(s.duration) || 0), 0) + (timerSubject === sub.subjectName ? activeSec : 0)
     })).filter(s => s.sec > 0);
 
-    const otherSec = sessions
+    const otherSec = filteredSessions
       .filter(s => !subjectNames.includes(s.subject))
       .reduce((a, s) => a + (Number(s.duration) || 0), 0) + (timerSubject === 'OTHERS' ? activeSec : 0);
 
@@ -307,7 +326,7 @@ export default function StudyDashboard() {
     subjectBreakdown.sort((a, b) => b.sec - a.sec);
 
     return { today, weekly, monthly, heatmap, subjectBreakdown };
-  }, [sessions, subjects, todayStr, timerActive, timerTime, timerMode, customHours, customMinutes, customSeconds, timerSubject]);
+  }, [sessions, subjects, todayStr, timerActive, timerTime, timerMode, customHours, customMinutes, customSeconds, timerSubject, historyScope]);
 
   const groupedHistory = useMemo(() => {
     let activeSec = 0;
@@ -752,14 +771,49 @@ export default function StudyDashboard() {
             <div className="flex items-end justify-between gap-2 h-20 px-2">
               {stats.heatmap.map((d, i) => {
                 const maxH = Math.max(1, ...stats.heatmap.map(x => x.sec));
+                const isSelected = selectedHeatmapDay?.dateStr === d.dateStr;
                 return (
-                  <div key={i} className="flex flex-col items-center gap-1.5 flex-1">
-                    <div className={`w-full rounded-lg transition-all ${d.isToday ? 'bg-blue-600' : d.sec > 0 ? 'bg-slate-300' : 'bg-slate-100'}`} style={{ height: `${Math.max(8, (d.sec / maxH) * 56)}px` }}></div>
-                    <span className={`text-[8px] font-black uppercase ${d.isToday ? 'text-blue-600' : 'text-slate-300'}`}>{d.day}</span>
-                  </div>
+                  <button 
+                    key={i} 
+                    onClick={() => setSelectedHeatmapDay(isSelected ? null : d)}
+                    className="flex flex-col items-center gap-1.5 flex-1 focus:outline-none group"
+                  >
+                    <div 
+                      className={`w-full rounded-lg transition-all ${
+                        d.isToday 
+                          ? 'bg-blue-600 shadow-md shadow-blue-500/20' 
+                          : isSelected
+                            ? 'bg-blue-400'
+                            : d.sec > 0 
+                              ? 'bg-slate-400 group-hover:bg-slate-500' 
+                              : 'bg-slate-100 group-hover:bg-slate-200'
+                      }`} 
+                      style={{ height: `${Math.max(8, (d.sec / maxH) * 56)}px` }}
+                    ></div>
+                    <span className={`text-[8px] font-black uppercase transition-colors ${
+                      d.isToday 
+                        ? 'text-blue-600' 
+                        : isSelected
+                          ? 'text-blue-400 font-[1000]'
+                          : 'text-slate-300 group-hover:text-slate-500'
+                    }`}>
+                      {d.day}
+                    </span>
+                  </button>
                 );
               })}
             </div>
+
+            {selectedHeatmapDay && (
+              <div className="bg-slate-50 border border-slate-200/50 rounded-2xl p-3 text-center animate-in slide-in-from-top-1 duration-200 mx-2">
+                <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
+                  Focus on {new Date(selectedHeatmapDay.dateStr + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+                </p>
+                <p className="text-sm font-[1000] text-blue-600 mt-0.5">
+                  {formatDuration(selectedHeatmapDay.sec)}
+                </p>
+              </div>
+            )}
             {/* Subject Breakdown */}
             {stats.subjectBreakdown.length > 0 && (
               <div className="space-y-3 pt-2">
