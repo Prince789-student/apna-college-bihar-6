@@ -84,6 +84,7 @@ export default function StudyDashboard() {
   const [activeStartTask, setActiveStartTask] = useState(null);
   const [historyScope, setHistoryScope] = useState('week');
   const [historyRefDate, setHistoryRefDate] = useState(new Date());
+  const [selectedHistoryDetailDate, setSelectedHistoryDetailDate] = useState(null);
   const [selectedHeatmapDay, setSelectedHeatmapDay] = useState(null);
   const [modalHours, setModalHours] = useState(0);
   const [modalMinutes, setModalMinutes] = useState(0);
@@ -481,6 +482,50 @@ export default function StudyDashboard() {
       };
     });
   }, [historyRefDate, historySessions]);
+
+  const historyTotalDuration = useMemo(() => {
+    if (historyScope === 'week') {
+      return weekDaysForHistory.reduce((acc, d) => acc + d.sec, 0);
+    } else if (historyScope === 'month') {
+      return monthDaysForHistory
+        .filter(d => d.isCurrentMonth)
+        .reduce((acc, d) => acc + d.sec, 0);
+    } else {
+      return yearMonthsForHistory.reduce((acc, m) => acc + m.sec, 0);
+    }
+  }, [historyScope, weekDaysForHistory, monthDaysForHistory, yearMonthsForHistory]);
+
+  const dailyDetailData = useMemo(() => {
+    if (!selectedHistoryDetailDate) return null;
+    const dStr = selectedHistoryDetailDate;
+    
+    // Filter sessions on this day
+    const daySessions = historySessions.filter(s => s.date === dStr);
+    const totalDuration = daySessions.reduce((acc, s) => acc + (Number(s.duration) || 0), 0);
+    
+    // Filter tasks on this day
+    const dayTasks = tasks.filter(t => t.date === dStr);
+    const completedTasksCount = dayTasks.filter(t => t.done).length;
+    const totalTasksCount = dayTasks.length;
+    
+    // Format date beautifully
+    const formattedDate = new Date(dStr + 'T00:00:00').toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    });
+    
+    return {
+      dateStr: dStr,
+      formattedDate,
+      sessions: daySessions,
+      totalDuration,
+      tasks: dayTasks,
+      completedTasksCount,
+      totalTasksCount
+    };
+  }, [selectedHistoryDetailDate, historySessions, tasks]);
 
   const groupedHistory = []; // Kept for compatibility but not rendered
 
@@ -971,14 +1016,21 @@ export default function StudyDashboard() {
               </div>
 
               {/* Navigation Bar */}
-              <div className="flex items-center justify-between bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200/50 mx-2">
-                <button onClick={handlePrevHistory} className="p-1 hover:bg-slate-200 rounded-lg transition-colors text-slate-600">
-                  <ChevronLeft size={16} />
-                </button>
-                <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">{historyHeaderTitle}</span>
-                <button onClick={handleNextHistory} className="p-1 hover:bg-slate-200 rounded-lg transition-colors text-slate-600">
-                  <ChevronRight size={16} />
-                </button>
+              <div className="flex flex-col gap-1.5 bg-slate-50 p-3 md:p-4 rounded-2xl border border-slate-200/50 mx-2">
+                <div className="flex items-center justify-between">
+                  <button onClick={handlePrevHistory} className="p-1 hover:bg-slate-200 rounded-lg transition-colors text-slate-600">
+                    <ChevronLeft size={16} />
+                  </button>
+                  <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">{historyHeaderTitle}</span>
+                  <button onClick={handleNextHistory} className="p-1 hover:bg-slate-200 rounded-lg transition-colors text-slate-600">
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+                <div className="text-center">
+                  <span className="text-[9px] font-black bg-blue-600 text-white px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                    Total Focus: {formatDuration(historyTotalDuration)}
+                  </span>
+                </div>
               </div>
 
               {/* Render View Grid */}
@@ -986,13 +1038,21 @@ export default function StudyDashboard() {
                 {historyScope === 'week' && (
                   <div className="grid grid-cols-7 gap-1.5 pt-1">
                     {weekDaysForHistory.map(day => (
-                      <div key={day.dateStr} className={`flex flex-col items-center p-2 rounded-xl border transition-all ${day.isToday ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-slate-50 border-slate-200/50 text-slate-600'}`}>
+                      <button 
+                        key={day.dateStr} 
+                        onClick={() => setSelectedHistoryDetailDate(day.dateStr)}
+                        className={`flex flex-col items-center p-2 rounded-xl border transition-all hover:scale-105 active:scale-95 text-center ${
+                          day.isToday 
+                            ? 'bg-blue-50 border-blue-200 text-blue-700 font-bold' 
+                            : 'bg-slate-50 border-slate-200/50 text-slate-600 hover:border-slate-300'
+                        }`}
+                      >
                         <span className="text-[7px] font-black uppercase tracking-wider">{day.name}</span>
                         <span className="text-xs font-[1000] mt-0.5">{day.dateNum}</span>
                         <span className={`text-[8px] font-bold mt-1.5 px-1 py-0.5 rounded-md leading-tight text-center ${day.sec > 0 ? 'bg-blue-600 text-white font-[1000] shadow-sm' : 'bg-slate-200 text-slate-400'}`}>
                           {formatDuration(day.sec)}
                         </span>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 )}
@@ -1005,27 +1065,34 @@ export default function StudyDashboard() {
                       ))}
                     </div>
                     <div className="grid grid-cols-7 gap-1">
-                      {monthDaysForHistory.map((cell, idx) => (
-                        <div 
-                          key={idx} 
-                          className={`flex flex-col items-center justify-between p-1.5 min-h-[44px] rounded-xl border text-center transition-all ${
-                            !cell.isCurrentMonth 
-                              ? 'opacity-20 border-transparent bg-transparent' 
-                              : cell.isToday 
-                                ? 'bg-blue-50 border-blue-300 text-blue-700' 
-                                : 'bg-slate-50 border-slate-200/40 hover:border-slate-300 text-slate-700'
-                          }`}
-                        >
-                          <span className="text-[8px] font-black">{cell.dateNum}</span>
-                          {cell.sec > 0 ? (
-                            <span className="text-[7px] font-[1000] bg-blue-600 text-white px-1 py-0.5 rounded leading-none scale-90 origin-bottom">
-                              {formatDuration(cell.sec)}
-                            </span>
-                          ) : (
-                            <span className="text-[7px] text-slate-300">-</span>
-                          )}
-                        </div>
-                      ))}
+                      {monthDaysForHistory.map((cell, idx) => {
+                        const isBtn = cell.isCurrentMonth;
+                        const Comp = isBtn ? 'button' : 'div';
+                        return (
+                          <Comp 
+                            key={idx}
+                            onClick={isBtn ? () => setSelectedHistoryDetailDate(cell.dateStr) : undefined}
+                            className={`flex flex-col items-center justify-between p-1.5 min-h-[44px] rounded-xl border text-center transition-all ${
+                              isBtn ? 'hover:scale-105 active:scale-95 hover:border-slate-300' : ''
+                            } ${
+                              !cell.isCurrentMonth 
+                                ? 'opacity-20 border-transparent bg-transparent' 
+                                : cell.isToday 
+                                  ? 'bg-blue-50 border-blue-300 text-blue-700' 
+                                  : 'bg-slate-50 border-slate-200/40 text-slate-700'
+                            }`}
+                          >
+                            <span className="text-[8px] font-black">{cell.dateNum}</span>
+                            {cell.sec > 0 ? (
+                              <span className="text-[7px] font-[1000] bg-blue-600 text-white px-1 py-0.5 rounded leading-none scale-90 origin-bottom">
+                                {formatDuration(cell.sec)}
+                              </span>
+                            ) : (
+                              <span className="text-[7px] text-slate-300">-</span>
+                            )}
+                          </Comp>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -1421,6 +1488,98 @@ export default function StudyDashboard() {
               >
                 Cancel
               </button>
+            </div>
+          </div>
+        )}
+
+        {/* Daily History Details Modal */}
+        {selectedHistoryDetailDate && dailyDetailData && (
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-300">
+            <div className="bg-white rounded-[3rem] p-6 md:p-8 w-full max-w-md shadow-2xl flex flex-col max-h-[85vh] overflow-hidden animate-in zoom-in-95">
+              
+              {/* Header */}
+              <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 bg-blue-600/10 text-blue-600 rounded-xl">
+                    <Calendar size={18} />
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-[1000] text-slate-400 uppercase tracking-widest leading-none">Day Summary</h3>
+                    <p className="text-[11px] font-black text-slate-800 uppercase tracking-tight mt-1.5">{dailyDetailData.formattedDate}</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setSelectedHistoryDetailDate(null)}
+                  className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-xl transition-all"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+
+              {/* Scrollable Body */}
+              <div className="flex-1 overflow-y-auto py-5 space-y-5 custom-scrollbar">
+                
+                {/* Stats Summary Card */}
+                <div className="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200/50">
+                  <div className="text-center p-2 bg-white rounded-xl border border-slate-100 shadow-sm">
+                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-wider block">Focus Time</span>
+                    <span className="text-lg font-[1000] text-blue-600 block mt-1">{formatDuration(dailyDetailData.totalDuration)}</span>
+                  </div>
+                  <div className="text-center p-2 bg-white rounded-xl border border-slate-100 shadow-sm">
+                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-wider block">Tasks Completed</span>
+                    <span className="text-lg font-[1000] text-emerald-600 block mt-1">{dailyDetailData.completedTasksCount} / {dailyDetailData.totalTasksCount}</span>
+                  </div>
+                </div>
+
+                {/* Focus Sessions list */}
+                <div className="space-y-2.5">
+                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Completed Focus Sessions</h4>
+                  <div className="space-y-1.5 max-h-40 overflow-y-auto custom-scrollbar">
+                    {dailyDetailData.sessions.map((sess, idx) => (
+                      <div key={idx} className="flex justify-between items-center p-3 bg-slate-50 border border-slate-200/40 rounded-xl">
+                        <span className="text-[10px] font-black text-slate-700 uppercase tracking-wide">{sess.subject}</span>
+                        <span className="text-xs font-[1000] text-blue-600">{formatDuration(sess.duration)}</span>
+                      </div>
+                    ))}
+                    {dailyDetailData.sessions.length === 0 && (
+                      <p className="text-[9px] text-slate-400 font-bold uppercase italic text-center py-3">No focus sessions completed on this day</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Tasks list */}
+                <div className="space-y-2.5">
+                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Planned Study Tasks</h4>
+                  <div className="space-y-1.5 max-h-40 overflow-y-auto custom-scrollbar">
+                    {dailyDetailData.tasks.map(task => (
+                      <div key={task.id} className="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200/40 rounded-xl">
+                        <div className={`w-5 h-5 rounded-lg flex items-center justify-center flex-shrink-0 border transition-all ${task.done ? 'bg-emerald-500 text-white border-emerald-500' : 'border-2 border-slate-300'}`}>
+                          {task.done && <CheckCircle2 size={12} className="text-white" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className={`text-[11px] font-bold truncate ${task.done ? 'text-slate-400 line-through' : 'text-slate-800'}`}>{task.text}</p>
+                          <span className="text-[8px] font-black text-slate-400 uppercase tracking-wider block mt-0.5">{task.subject || 'OTHERS'}</span>
+                        </div>
+                      </div>
+                    ))}
+                    {dailyDetailData.tasks.length === 0 && (
+                      <p className="text-[9px] text-slate-400 font-bold uppercase italic text-center py-3">No targets set for this day</p>
+                    )}
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Close Button */}
+              <div className="pt-4 border-t border-slate-100">
+                <button 
+                  onClick={() => setSelectedHistoryDetailDate(null)}
+                  className="w-full py-4 bg-slate-900 text-white hover:bg-slate-800 rounded-2xl font-black text-xs uppercase tracking-widest transition-all active:scale-95 shadow-lg shadow-slate-900/10"
+                >
+                  Close
+                </button>
+              </div>
+
             </div>
           </div>
         )}
