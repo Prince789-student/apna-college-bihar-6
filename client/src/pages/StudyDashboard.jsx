@@ -15,7 +15,8 @@ import {
   LayoutDashboard, Settings, Trash2, Trophy,
   ArrowRight, ClipboardList,
   CheckCircle2, Shield, Timer, AlertTriangle,
-  BookOpen, Activity, Calendar, Users, Search, X
+  BookOpen, Activity, Calendar, Users, Search, X,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 // ── Helpers ──
@@ -81,7 +82,8 @@ export default function StudyDashboard() {
   const [inlineTaskText, setInlineTaskText] = useState('');
   const [inlineTaskDuration, setInlineTaskDuration] = useState('');
   const [activeStartTask, setActiveStartTask] = useState(null);
-  const [historyScope, setHistoryScope] = useState('day');
+  const [historyScope, setHistoryScope] = useState('week');
+  const [historyRefDate, setHistoryRefDate] = useState(new Date());
   const [selectedHeatmapDay, setSelectedHeatmapDay] = useState(null);
   const [modalHours, setModalHours] = useState(0);
   const [modalMinutes, setModalMinutes] = useState(0);
@@ -295,17 +297,15 @@ export default function StudyDashboard() {
     const subjectNames = subjects.map(s => s.subjectName);
 
     // Calculate dates filter for Subject Focus based on historyScope:
-    // day -> last 7 days (this week)
-    // week -> last 30 days (this month)
-    // month -> last 365 days (this year)
     const filterLimitDate = new Date();
-    if (historyScope === 'day') {
+    if (historyScope === 'week') {
       filterLimitDate.setDate(filterLimitDate.getDate() - 7);
-    } else if (historyScope === 'week') {
+    } else if (historyScope === 'month') {
       filterLimitDate.setDate(filterLimitDate.getDate() - 30);
     } else {
       filterLimitDate.setDate(filterLimitDate.getDate() - 365);
-    }
+    };
+    
     const filterLimitStr = filterLimitDate.toLocaleDateString('en-CA');
 
     const filteredSessions = sessions.filter(s => s.date >= filterLimitStr);
@@ -329,44 +329,160 @@ export default function StudyDashboard() {
     return { today, weekly, monthly, heatmap, subjectBreakdown, totalScopeSec };
   }, [sessions, subjects, todayStr, timerActive, timerTime, timerMode, customHours, customMinutes, customSeconds, timerSubject, historyScope]);
 
-  const groupedHistory = useMemo(() => {
+   const historySessions = useMemo(() => {
     let activeSec = 0;
     if (timerActive) {
       activeSec = timerMode === 'COUNTDOWN' ? (customHours * 3600 + customMinutes * 60 + customSeconds - timerTime) : timerTime;
     }
-
-    const allSessions = [...sessions];
+    const all = [...sessions];
     if (timerActive && activeSec > 0) {
-      allSessions.push({
+      all.push({
         date: todayStr,
         duration: activeSec,
         subject: timerSubject || 'OTHERS'
       });
     }
+    return all;
+  }, [sessions, timerActive, timerTime, timerMode, customHours, customMinutes, customSeconds, timerSubject, todayStr]);
 
-    const groups = {};
+  const handlePrevHistory = () => {
+    const nextD = new Date(historyRefDate);
+    if (historyScope === 'week') {
+      nextD.setDate(nextD.getDate() - 7);
+    } else if (historyScope === 'month') {
+      nextD.setMonth(nextD.getMonth() - 1);
+    } else if (historyScope === 'year') {
+      nextD.setFullYear(nextD.getFullYear() - 1);
+    }
+    setHistoryRefDate(nextD);
+  };
 
-    allSessions.forEach(s => {
-      let key = '';
-      if (historyScope === 'day') {
-        key = s.date;
-      } else if (historyScope === 'week') {
-        const date = new Date(s.date);
-        const day = date.getDay();
-        const diff = date.getDate() - day + (day === 0 ? -6 : 1);
-        const monday = new Date(date.setDate(diff));
-        key = monday.toLocaleDateString('en-CA');
-      } else {
-        key = s.date.substring(0, 7);
-      }
+  const handleNextHistory = () => {
+    const nextD = new Date(historyRefDate);
+    if (historyScope === 'week') {
+      nextD.setDate(nextD.getDate() + 7);
+    } else if (historyScope === 'month') {
+      nextD.setMonth(nextD.getMonth() + 1);
+    } else if (historyScope === 'year') {
+      nextD.setFullYear(nextD.getFullYear() + 1);
+    }
+    setHistoryRefDate(nextD);
+  };
 
-      groups[key] = (groups[key] || 0) + (Number(s.duration) || 0);
+  const historyHeaderTitle = useMemo(() => {
+    if (historyScope === 'week') {
+      const temp = new Date(historyRefDate);
+      const day = temp.getDay();
+      const diff = temp.getDate() - day + (day === 0 ? -6 : 1);
+      const monday = new Date(temp.setDate(diff));
+      const sunday = new Date(monday.getTime());
+      sunday.setDate(monday.getDate() + 6);
+      
+      const options = { month: 'short', day: 'numeric' };
+      return `${monday.toLocaleDateString('en-US', options)} - ${sunday.toLocaleDateString('en-US', { ...options, year: 'numeric' })}`;
+    } else if (historyScope === 'month') {
+      return historyRefDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    } else {
+      return `Year ${historyRefDate.getFullYear()}`;
+    }
+  }, [historyRefDate, historyScope]);
+
+  const weekDaysForHistory = useMemo(() => {
+    const temp = new Date(historyRefDate);
+    const day = temp.getDay();
+    const diff = temp.getDate() - day + (day === 0 ? -6 : 1);
+    const monday = new Date(temp.setDate(diff));
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(monday.getTime());
+      d.setDate(monday.getDate() + i);
+      const dStr = d.toLocaleDateString('en-CA');
+      const sec = historySessions.filter(s => s.date === dStr).reduce((acc, s) => acc + (Number(s.duration) || 0), 0);
+      return {
+        name: d.toLocaleDateString('en-US', { weekday: 'short' }),
+        dateNum: d.getDate(),
+        dateStr: dStr,
+        sec,
+        isToday: dStr === todayStr
+      };
     });
+  }, [historyRefDate, historySessions, todayStr]);
 
-    return Object.entries(groups)
-      .map(([key, sec]) => ({ key, sec }))
-      .sort((a, b) => b.key.localeCompare(a.key));
-  }, [sessions, historyScope, timerActive, timerTime, timerMode, customHours, customMinutes, customSeconds, timerSubject, todayStr]);
+  const monthDaysForHistory = useMemo(() => {
+    const year = historyRefDate.getFullYear();
+    const month = historyRefDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    
+    let startDay = firstDay.getDay() - 1;
+    if (startDay === -1) startDay = 6;
+    
+    const totalDays = lastDay.getDate();
+    const cells = [];
+    
+    // Prev Month padding
+    const prevMonthLast = new Date(year, month, 0).getDate();
+    for (let i = startDay - 1; i >= 0; i--) {
+      const d = new Date(year, month - 1, prevMonthLast - i);
+      const dStr = d.toLocaleDateString('en-CA');
+      const sec = historySessions.filter(s => s.date === dStr).reduce((acc, s) => acc + (Number(s.duration) || 0), 0);
+      cells.push({
+        dateNum: d.getDate(),
+        dateStr: dStr,
+        isCurrentMonth: false,
+        sec,
+        isToday: dStr === todayStr
+      });
+    }
+    
+    // Current month
+    for (let i = 1; i <= totalDays; i++) {
+      const d = new Date(year, month, i);
+      const dStr = d.toLocaleDateString('en-CA');
+      const sec = historySessions.filter(s => s.date === dStr).reduce((acc, s) => acc + (Number(s.duration) || 0), 0);
+      cells.push({
+        dateNum: i,
+        dateStr: dStr,
+        isCurrentMonth: true,
+        sec,
+        isToday: dStr === todayStr
+      });
+    }
+    
+    // Next month padding
+    const totalCells = cells.length <= 35 ? 35 : 42;
+    const nextNeeded = totalCells - cells.length;
+    for (let i = 1; i <= nextNeeded; i++) {
+      const d = new Date(year, month + 1, i);
+      const dStr = d.toLocaleDateString('en-CA');
+      const sec = historySessions.filter(s => s.date === dStr).reduce((acc, s) => acc + (Number(s.duration) || 0), 0);
+      cells.push({
+        dateNum: i,
+        dateStr: dStr,
+        isCurrentMonth: false,
+        sec,
+        isToday: dStr === todayStr
+      });
+    }
+    return cells;
+  }, [historyRefDate, historySessions, todayStr]);
+
+  const yearMonthsForHistory = useMemo(() => {
+    const year = historyRefDate.getFullYear();
+    return Array.from({ length: 12 }, (_, i) => {
+      const mStr = `${year}-${(i + 1).toString().padStart(2, '0')}`;
+      const sec = historySessions
+        .filter(s => s.date.startsWith(mStr))
+        .reduce((acc, s) => acc + (Number(s.duration) || 0), 0);
+      return {
+        name: new Date(year, i, 1).toLocaleDateString('en-US', { month: 'short' }),
+        fullName: new Date(year, i, 1).toLocaleDateString('en-US', { month: 'long' }),
+        mStr,
+        sec
+      };
+    });
+  }, [historyRefDate, historySessions]);
+
+  const groupedHistory = []; // Kept for compatibility but not rendered
 
   const activeSubjectObj = subjects.find(s => s.subjectName === timerSubject);
 
@@ -554,7 +670,7 @@ export default function StudyDashboard() {
                   className="bg-transparent text-[10px] font-black uppercase tracking-widest text-slate-900 outline-none flex-1"
                 >
                   <option value="">SELECT TASK TO FOCUS ON (OPTIONAL)</option>
-                  {tasks.filter(t => !t.done).map(t => (
+                  {tasks.filter(t => !t.done && t.date === todayStr).map(t => (
                     <option key={t.id} value={t.id}>
                       {t.text} {t.duration ? `(${t.duration}m)` : ''}
                     </option>
@@ -842,7 +958,7 @@ export default function StudyDashboard() {
               <div className="flex justify-between items-center px-2">
                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Focus History</p>
                 <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-                  {['day', 'week', 'month'].map(scope => (
+                  {['week', 'month', 'year'].map(scope => (
                     <button
                       key={scope}
                       onClick={() => setHistoryScope(scope)}
@@ -854,29 +970,77 @@ export default function StudyDashboard() {
                 </div>
               </div>
 
-              <div className="space-y-2 px-2 max-h-60 overflow-y-auto custom-scrollbar">
-                {groupedHistory.map(item => {
-                  let displayKey = item.key;
-                  if (historyScope === 'day') {
-                    displayKey = new Date(item.key).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
-                  } else if (historyScope === 'week') {
-                    const monday = new Date(item.key);
-                    const sunday = new Date(monday);
-                    sunday.setDate(monday.getDate() + 6);
-                    displayKey = `${monday.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${sunday.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
-                  } else if (historyScope === 'month') {
-                    displayKey = new Date(item.key + '-02').toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-                  }
+              {/* Navigation Bar */}
+              <div className="flex items-center justify-between bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200/50 mx-2">
+                <button onClick={handlePrevHistory} className="p-1 hover:bg-slate-200 rounded-lg transition-colors text-slate-600">
+                  <ChevronLeft size={16} />
+                </button>
+                <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">{historyHeaderTitle}</span>
+                <button onClick={handleNextHistory} className="p-1 hover:bg-slate-200 rounded-lg transition-colors text-slate-600">
+                  <ChevronRight size={16} />
+                </button>
+              </div>
 
-                  return (
-                    <div key={item.key} className="flex justify-between items-center p-3 bg-slate-50 border border-slate-200/40 rounded-xl">
-                      <span className="text-[10px] font-black text-slate-700 uppercase tracking-wide">{displayKey}</span>
-                      <span className="text-xs font-[1000] text-blue-600">{formatDuration(item.sec)}</span>
+              {/* Render View Grid */}
+              <div className="px-2">
+                {historyScope === 'week' && (
+                  <div className="grid grid-cols-7 gap-1.5 pt-1">
+                    {weekDaysForHistory.map(day => (
+                      <div key={day.dateStr} className={`flex flex-col items-center p-2 rounded-xl border transition-all ${day.isToday ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-slate-50 border-slate-200/50 text-slate-600'}`}>
+                        <span className="text-[7px] font-black uppercase tracking-wider">{day.name}</span>
+                        <span className="text-xs font-[1000] mt-0.5">{day.dateNum}</span>
+                        <span className={`text-[8px] font-bold mt-1.5 px-1 py-0.5 rounded-md leading-tight text-center ${day.sec > 0 ? 'bg-blue-600 text-white font-[1000] shadow-sm' : 'bg-slate-200 text-slate-400'}`}>
+                          {formatDuration(day.sec)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {historyScope === 'month' && (
+                  <div className="pt-1">
+                    <div className="grid grid-cols-7 gap-1 text-center mb-1.5">
+                      {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((lbl, idx) => (
+                        <span key={idx} className="text-[8px] font-black text-slate-400">{lbl}</span>
+                      ))}
                     </div>
-                  );
-                })}
-                {groupedHistory.length === 0 && (
-                  <p className="text-[9px] text-slate-400 font-bold uppercase italic text-center py-4">No focus sessions recorded</p>
+                    <div className="grid grid-cols-7 gap-1">
+                      {monthDaysForHistory.map((cell, idx) => (
+                        <div 
+                          key={idx} 
+                          className={`flex flex-col items-center justify-between p-1.5 min-h-[44px] rounded-xl border text-center transition-all ${
+                            !cell.isCurrentMonth 
+                              ? 'opacity-20 border-transparent bg-transparent' 
+                              : cell.isToday 
+                                ? 'bg-blue-50 border-blue-300 text-blue-700' 
+                                : 'bg-slate-50 border-slate-200/40 hover:border-slate-300 text-slate-700'
+                          }`}
+                        >
+                          <span className="text-[8px] font-black">{cell.dateNum}</span>
+                          {cell.sec > 0 ? (
+                            <span className="text-[7px] font-[1000] bg-blue-600 text-white px-1 py-0.5 rounded leading-none scale-90 origin-bottom">
+                              {formatDuration(cell.sec)}
+                            </span>
+                          ) : (
+                            <span className="text-[7px] text-slate-300">-</span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {historyScope === 'year' && (
+                  <div className="grid grid-cols-3 gap-2.5 pt-1">
+                    {yearMonthsForHistory.map(m => (
+                      <div key={m.mStr} className="flex flex-col justify-between p-3.5 bg-slate-50 border border-slate-200/40 rounded-2xl hover:border-slate-300 transition-all">
+                        <span className="text-[10px] font-black text-slate-700 uppercase tracking-wide">{m.name}</span>
+                        <span className={`text-xs font-[1000] mt-2 ${m.sec > 0 ? 'text-blue-600' : 'text-slate-400'}`}>
+                          {formatDuration(m.sec)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 )}
               </div>
             </div>
