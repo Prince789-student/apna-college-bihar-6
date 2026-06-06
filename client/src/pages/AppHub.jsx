@@ -58,12 +58,7 @@ export default function AppHub() {
         { name: 'Counselling Guide', icon: <BookOpen size={24} />, path: '/ugeac-predictor?standalone=true&tab=guide', color: 'text-emerald-400' },
       ]
     },
-    {
-      title: "💼 CAREER OPTIONS",
-      items: [
-        { name: 'Hackathon Hub', icon: <Award size={24} />, path: '/hackathons', color: 'text-purple-400' },
-      ]
-    },
+
     {
       title: "🌐 IMPORTANT WEBSITES",
       items: [
