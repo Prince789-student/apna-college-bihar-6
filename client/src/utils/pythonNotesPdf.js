@@ -1,16 +1,8 @@
 import jsPDF from 'jspdf';
 import { getLogoBase64 } from './pdfHelper';
 
-// Topic notes formatted as detailed questions and answers in notebook style
+// Topic notes formatted in notebook style
 const NOTEBOOK_SECTIONS = [
-  {
-    type: "question",
-    text: "QUESTION 1: Define the following Python fundamentals: identifiers, keywords, variables and expressions."
-  },
-  {
-    type: "answer",
-    text: "Answer:"
-  },
   {
     type: "topic",
     title: "1. Identifiers",
@@ -49,14 +41,6 @@ const NOTEBOOK_SECTIONS = [
       "price = 25.5    # float variable",
       "is_pass = True  # boolean variable"
     ]
-  },
-  {
-    type: "question",
-    text: "QUESTION 2: Explain different categories of Operators in Python with clear examples and truth tables."
-  },
-  {
-    type: "answer",
-    text: "Answer:"
   },
   {
     type: "topic",
@@ -180,7 +164,7 @@ export async function generatePythonUnit1Notes() {
     pdfDoc.setFontSize(16);
     pdfDoc.text("APNA COLLEGE BIHAR", 26, 12);
 
-    // Page No and Date boxes on top-right
+    // Page No box on top-right (no Date box)
     pdfDoc.setDrawColor(220, 38, 38); // Red boxes
     pdfDoc.setLineWidth(0.4);
     
@@ -190,10 +174,6 @@ export async function generatePythonUnit1Notes() {
     pdfDoc.setFontSize(9);
     pdfDoc.setTextColor(220, 38, 38);
     pdfDoc.text(`Page No.      ${pNum}`, 157, 8);
-
-    // Date box
-    pdfDoc.rect(155, 12, 43, 6);
-    pdfDoc.text("Date :    /    /    ", 157, 16.5);
 
     // Horizontal double line separator below header
     pdfDoc.setDrawColor(79, 70, 229); // Indigo line
@@ -206,6 +186,12 @@ export async function generatePythonUnit1Notes() {
     pdfDoc.setFontSize(12);
     pdfDoc.setTextColor(109, 40, 217); // Purple
     pdfDoc.text("Chapter - Python Unit 1 : Input and Output", 26, 28.5);
+
+    // Footer at the bottom
+    pdfDoc.setFont('courier', 'bolditalic');
+    pdfDoc.setFontSize(9);
+    pdfDoc.setTextColor(148, 163, 184); // Soft grey
+    pdfDoc.text("BEU - Apna College Bihar", pageWidth / 2, pageHeight - 6, { align: 'center' });
   };
 
   // Start with first page
