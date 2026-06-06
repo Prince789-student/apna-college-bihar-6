@@ -139,8 +139,8 @@ export async function generatePythonUnit1Notes() {
 
   // Draw lined notebook page
   const drawNotebookPage = (pdfDoc, pNum) => {
-    // 1. Draw warm notebook paper background
-    pdfDoc.setFillColor(254, 254, 252);
+    // 1. Draw white notebook paper background
+    pdfDoc.setFillColor(255, 255, 255);
     pdfDoc.rect(0, 0, pageWidth, pageHeight, 'F');
 
     // 2. Draw vertical red margin lines on the left
@@ -177,22 +177,22 @@ export async function generatePythonUnit1Notes() {
     }
 
     // 5. Draw Header Branding (Matches user's request)
-    // Logo on the top-right
+    // Logo on the top-left
     if (logoBase64) {
-      pdfDoc.addImage(logoBase64, 'PNG', pageWidth - 20, 4, 11, 11);
+      pdfDoc.addImage(logoBase64, 'PNG', 12, 4, 11, 11);
     }
 
-    // Brand title on the top-left
+    // Brand title next to logo on the left
     pdfDoc.setTextColor(31, 41, 55); // Slate-800
     pdfDoc.setFont('helvetica', 'bold');
     pdfDoc.setFontSize(15);
     pdfDoc.text("APNA COLLEGE BIHAR", 26, 11);
 
-    // Page number on top-right, next to the logo
+    // Page number on the top-right
     pdfDoc.setFont('courier', 'bolditalic');
     pdfDoc.setFontSize(10);
     pdfDoc.setTextColor(220, 38, 38); // Red for handwritten page indicator
-    pdfDoc.text(`Page - ${String(pNum).padStart(2, '0')}`, pageWidth - 48, 11);
+    pdfDoc.text(`Page - ${String(pNum).padStart(2, '0')}`, pageWidth - 32, 11);
 
     // Horizontal double line separator below header
     pdfDoc.setDrawColor(79, 70, 229); // Indigo line
