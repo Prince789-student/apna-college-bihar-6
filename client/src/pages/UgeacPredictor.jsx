@@ -192,7 +192,8 @@ function UgeacPredictor() {
   const downloadRankPredictionPDF = async () => {
     const doc = new jsPDF();
     const logoBase = await getLogoBase64();
-    const urRank = ugeacInput ? parseInt(ugeacInput) : 0;
+    const jeeCrl = ugeacInput ? parseInt(ugeacInput) : 0;
+    const urRank = estimateUgeacRank(jeeCrl);
     const catEst = getEstimatedCategoryRank(urRank, category);
     const genderEst = getEstimatedGenderRank(urRank, gender);
     const catFemaleEst = getEstimatedCategoryFemaleRank(urRank, category, gender);
@@ -208,13 +209,13 @@ function UgeacPredictor() {
     doc.text("ESTIMATED RANK PREDICTION REPORT", 20, 50);
 
     doc.setFontSize(9); doc.setFont("helvetica", "normal");
-    doc.text(`UGEAC General UR Rank: ${ugeacInput || 'N/A'}`, 20, 62);
+    doc.text(`JEE Main CRL Rank: ${jeeCrl || 'N/A'}`, 20, 62);
     doc.text(`Selected Category: ${category}`, 20, 69);
     doc.text(`Selected Gender: ${gender}`, 20, 76);
 
     doc.setFontSize(11); doc.setFont("helvetica", "bold");
     doc.setTextColor(79, 70, 229);
-    doc.text(`General (UR) Rank: #${urRank}`, 20, 88);
+    doc.text(`Estimated General (UR) Rank: #${urRank}`, 20, 88);
 
     if (category !== 'UR') {
       doc.text(`Estimated Category (${category}) Rank: #${catEst}`, 20, 96);
@@ -792,16 +793,17 @@ function UgeacPredictor() {
                       <h3 className="text-base font-black text-slate-900 uppercase tracking-tight">UGEAC Rank Predictor</h3>
                       <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Predict your State & Category Merit Ranks</p>
                    </div>
-                </div>                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="input-group">
-                       <label className="premium-label">UGEAC State Rank (UR)</label>
-                       <input 
-                          type="number" 
-                          value={ugeacInput} 
-                          onChange={(e) => setUgeacInput(e.target.value)} 
-                          placeholder="Enter UGEAC UR Rank" 
-                          className="premium-input" 
-                       />
+                       <label className="premium-label">JEE Main CRL Rank</label>
+                        <input 
+                           type="number" 
+                           value={ugeacInput} 
+                           onChange={(e) => setUgeacInput(e.target.value)} 
+                           placeholder="Enter JEE Main CRL Rank" 
+                           className="premium-input" 
+                        />
                     </div>
                     <div className="input-group">
                        <label className="premium-label">Category</label>
@@ -828,65 +830,85 @@ function UgeacPredictor() {
               </div>
 
               {parseInt(ugeacInput) > 0 && (
-                 <div className="glass-panel bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-2xl space-y-8 animate-in zoom-in-95">
-                    <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                       <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Estimated Rank Report</h4>
-                       <button 
-                          onClick={downloadRankPredictionPDF}
-                          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-md"
-                       >
-                          <Download size={14} /> Download PDF
-                       </button>
-                    </div>
+                  <div className="glass-panel text-white p-8 rounded-[2.5rem] shadow-2xl space-y-8 animate-in zoom-in-95" style={{ background: '#0f172a' }}>
+                     <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Estimated Rank Report</h4>
+                        <div className="flex items-center gap-3">
+                           <button 
+                              onClick={() => {
+                                 const predictedUr = estimateUgeacRank(parseInt(ugeacInput));
+                                 const predictedCat = getEstimatedCategoryRank(predictedUr, category);
+                                 const predictedRcg = getEstimatedGenderRank(predictedUr, gender);
+                                 const predictedCatFemale = getEstimatedCategoryFemaleRank(predictedUr, category, gender);
+                                 
+                                 setUgeacInput(predictedUr.toString());
+                                 if (category !== 'UR') setCatInput(predictedCat.toString());
+                                 if (gender === 'Female') setRcgInput(predictedRcg.toString());
+                                 if (category !== 'UR' && gender === 'Female') setCatFemaleInput(predictedCatFemale.toString());
+                                 
+                                 setMode('finder');
+                              }}
+                              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-md"
+                           >
+                              <CheckCircle2 size={14} /> Use Rank in Predictor
+                           </button>
+                           <button 
+                              onClick={downloadRankPredictionPDF}
+                              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-md"
+                           >
+                              <Download size={14} /> Download PDF
+                           </button>
+                        </div>
+                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                       <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
-                          <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest block">UGEAC General UR Rank</span>
-                          <span className="text-4xl font-[1000] text-white block mt-2">
-                             #{parseInt(ugeacInput)}
-                          </span>
-                          <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Your Entered UR Rank</span>
-                       </div>
+                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
+                           <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest block">Estimated UGEAC UR Rank</span>
+                           <span className="text-4xl font-[1000] text-white block mt-2">
+                              #{estimateUgeacRank(parseInt(ugeacInput))}
+                           </span>
+                           <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Predicted from JEE CRL</span>
+                        </div>
 
-                       {category !== 'UR' && (
-                          <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
-                             <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest block">Estimated {category} Rank</span>
-                             <span className="text-4xl font-[1000] text-emerald-400 block mt-2">
-                                #{getEstimatedCategoryRank(parseInt(ugeacInput), category)}
-                             </span>
-                             <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Approx. {category} Quota</span>
-                          </div>
-                       )}
+                        {category !== 'UR' && (
+                           <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
+                              <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest block">Estimated {category} Rank</span>
+                              <span className="text-4xl font-[1000] text-emerald-400 block mt-2">
+                                 #{getEstimatedCategoryRank(estimateUgeacRank(parseInt(ugeacInput)), category)}
+                              </span>
+                              <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Approx. {category} Quota</span>
+                           </div>
+                        )}
 
-                       {gender === 'Female' && (
-                          <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
-                             <span className="text-[9px] font-black text-pink-400 uppercase tracking-widest block">Estimated RCG Rank</span>
-                             <span className="text-4xl font-[1000] text-pink-400 block mt-2">
-                                #{getEstimatedGenderRank(parseInt(ugeacInput), gender)}
-                             </span>
-                             <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Reserved Category Girls</span>
-                          </div>
-                       )}
+                        {gender === 'Female' && (
+                           <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
+                              <span className="text-[9px] font-black text-pink-400 uppercase tracking-widest block">Estimated RCG Rank</span>
+                              <span className="text-4xl font-[1000] text-pink-400 block mt-2">
+                                 #{getEstimatedGenderRank(estimateUgeacRank(parseInt(ugeacInput)), gender)}
+                              </span>
+                              <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Reserved Category Girls</span>
+                           </div>
+                        )}
 
-                       {category !== 'UR' && gender === 'Female' && (
-                          <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
-                             <span className="text-[9px] font-black text-rose-400 uppercase tracking-widest block">Estimated {category}-F Rank</span>
-                             <span className="text-4xl font-[1000] text-rose-400 block mt-2">
-                                #{getEstimatedCategoryFemaleRank(parseInt(ugeacInput), category, gender)}
-                             </span>
-                             <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Approx. {category} Female Quota</span>
-                          </div>
-                       )}
-                    </div>
+                        {category !== 'UR' && gender === 'Female' && (
+                           <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
+                              <span className="text-[9px] font-black text-rose-400 uppercase tracking-widest block">Estimated {category}-F Rank</span>
+                              <span className="text-4xl font-[1000] text-rose-400 block mt-2">
+                                 #{getEstimatedCategoryFemaleRank(estimateUgeacRank(parseInt(ugeacInput)), category, gender)}
+                              </span>
+                              <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Approx. {category} Female Quota</span>
+                           </div>
+                        )}
+                     </div>
 
-                    <div className="bg-white/5 p-6 rounded-2xl border border-white/5 space-y-2">
-                       <h5 className="text-[10px] font-black uppercase tracking-wider text-slate-300">How is this calculated?</h5>
-                       <p className="text-[11px] text-slate-400 leading-relaxed font-medium">
-                          Category and Gender (RCG) ranks are estimated based on standard BCECEB reservation proportions (UR: 40%, EBC: 18%, BC: 12%, SC: 16%, ST: 1%, EWS: 10%, RCG: 3%). 
-                       </p>
-                    </div>
-                 </div>
-              )}
+                     <div className="bg-white/5 p-6 rounded-2xl border border-white/5 space-y-2">
+                        <h5 className="text-[10px] font-black uppercase tracking-wider text-slate-300">How is this calculated?</h5>
+                        <p className="text-[11px] text-slate-400 leading-relaxed font-medium">
+                           Category and Gender (RCG) ranks are estimated based on standard BCECEB reservation proportions (UR: 40%, EBC: 18%, BC: 12%, SC: 16%, ST: 1%, EWS: 10%, RCG: 3%). 
+                        </p>
+                     </div>
+                  </div>
+               )}
           </div>
         ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -913,6 +935,19 @@ function UgeacPredictor() {
                          onChange={(e) => setUgeacInput(e.target.value)} 
                          required 
                        />
+                       <div className="flex justify-between items-center mt-1.5">
+                         <span className="text-[8px] text-slate-400 font-bold uppercase tracking-wide">Must be UGEAC State UR Merit Rank</span>
+                         <button 
+                           type="button"
+                           onClick={() => {
+                             setUgeacInput('');
+                             setMode('predictor');
+                           }} 
+                           className="text-[9px] font-black text-indigo-600 hover:text-indigo-855 uppercase tracking-widest flex items-center gap-1 transition-all"
+                         >
+                           <Calculator size={10} /> Predict UGEAC Rank using JEE CRL
+                         </button>
+                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
