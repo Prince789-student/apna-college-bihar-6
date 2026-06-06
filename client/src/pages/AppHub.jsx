@@ -154,33 +154,29 @@ export default function AppHub() {
         </div>
       </div>
 
-      <div className="w-full max-w-2xl bg-white border border-slate-200 rounded-[2.5rem] shadow-xl overflow-hidden flex flex-col mb-6">
-        
-        {/* Render Categories */}
-        <div className="p-6 space-y-8">
-          {categories.map((cat, idx) => (
-            <div key={idx}>
-              <h3 className="text-xs font-[1000] text-slate-800 uppercase tracking-[0.2em] mb-4 text-center">
-                {cat.title}
-              </h3>
-              <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                {cat.items.map((f, i) => (
-                  <button 
-                    key={i} 
-                    onClick={() => handleFeatureClick(f)}
-                    className="aspect-[4/3] bg-slate-50 border border-slate-200/60 rounded-2xl flex flex-col items-center justify-center gap-2 active:scale-95 transition-all hover:bg-slate-100 hover:border-slate-300 shadow-sm group relative overflow-hidden"
-                  >
-                    <div className={`${f.color} group-hover:scale-110 transition-transform relative z-10`}>{f.icon}</div>
-                    <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-wider text-slate-700 text-center px-1 leading-tight relative z-10">{f.name}</span>
-                  </button>
-                ))}
-              </div>
+      <div className="w-full max-w-2xl space-y-6 mb-6">
+        {categories.map((cat, idx) => (
+          <div key={idx} className="bg-white border border-slate-200 rounded-[2.5rem] shadow-sm p-6">
+            <h3 className="text-xs font-[1000] text-slate-800 uppercase tracking-[0.2em] mb-4 text-center">
+              {cat.title}
+            </h3>
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+              {cat.items.map((f, i) => (
+                <button 
+                  key={i} 
+                  onClick={() => handleFeatureClick(f)}
+                  className="aspect-[4/3] bg-slate-50 border border-slate-200/60 rounded-2xl flex flex-col items-center justify-center gap-2 active:scale-95 transition-all hover:bg-slate-100 hover:border-slate-300 shadow-sm group relative overflow-hidden"
+                >
+                  <div className={`${f.color} group-hover:scale-110 transition-transform relative z-10`}>{f.icon}</div>
+                  <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-wider text-slate-700 text-center px-1 leading-tight relative z-10">{f.name}</span>
+                </button>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
 
         {/* Social Channels */}
-        <div className="p-6 pt-0 flex flex-col gap-4 border-t border-slate-100 mt-2">
+        <div className="bg-white border border-slate-200 rounded-[2.5rem] shadow-sm p-6">
           <div className="flex gap-3">
             <button 
               onClick={() => window.open('https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a', '_blank')}
