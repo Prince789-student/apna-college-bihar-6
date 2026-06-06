@@ -220,7 +220,7 @@ function App() {
         <React.Suspense fallback={<LoadingScreen />}>
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={isStandalone ? <AppHub /> : <Home />} />
+            <Route path="/" element={isNative ? <AppHub /> : <Home />} />
             <Route path="/hub" element={<AppHub />} />
             <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
