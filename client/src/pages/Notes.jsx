@@ -79,6 +79,10 @@ export default function Notes() {
   }, []);
 
   const handleAction = (url, callback) => {
+    if (url === 'generate-python-unit1') {
+      import('../utils/pythonNotesPdf').then(m => m.generatePythonUnit1Notes());
+      return;
+    }
     if (!url || url.includes('localhost')) {
       alert('Bhai, ye file link abhi active nahi hai. Admin se sampark karein.');
       return;
@@ -92,18 +96,47 @@ export default function Notes() {
   // Subject folders at branch+sem level (parentId='root', branch=branch, semester=sem)
   const subjectFolders = useMemo(() => {
     if (!branch || !sem) return [];
-    return docs.filter(d =>
+    const list = docs.filter(d =>
       d.type === 'folder' &&
       (d.parentId === 'root' || !d.parentId) &&
       d.branch === branch.id &&
       String(d.semester) === String(sem) &&
       (d.category === 'NOTES' || !d.category)
     );
+    // Dynamic injection of Python for CSE Sem 2
+    if (branch.id === 'CSE' && String(sem) === '2') {
+      if (!list.some(x => x.title === 'PROGRAMMING IN PYTHON')) {
+        list.push({
+          id: 'python_mock_folder',
+          title: 'PROGRAMMING IN PYTHON',
+          branch: 'CSE',
+          semester: 2,
+          type: 'folder',
+          parentId: 'root',
+          category: 'NOTES'
+        });
+      }
+    }
+    return list;
   }, [docs, branch, sem]);
 
   // Files inside selected folder
   const folderFiles = useMemo(() => {
     if (!folder) return [];
+    if (folder.id === 'python_mock_folder') {
+      return [
+        {
+          id: 'python_unit1_notes',
+          title: 'Unit 1: Input and Output (Handwritten Notes)',
+          subject: 'PROGRAMMING IN PYTHON',
+          semester: 2,
+          type: 'file',
+          parentId: 'python_mock_folder',
+          category: 'NOTES',
+          fileUrl: 'generate-python-unit1'
+        }
+      ];
+    }
     return docs.filter(d =>
       d.parentId === folder.id &&
       (d.category === 'NOTES' || d.type === 'folder')
