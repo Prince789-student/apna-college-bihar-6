@@ -34,7 +34,30 @@ const NOTEBOOK_SECTIONS = [
   {
     type: "topic",
     title: "3. Variables",
-    definition: "Variables are containers used to store data values. In Python, variables are created when you assign a value to them.",
+    definition: "A variable in Python is a named memory location (reference pointer) used to store data values. It is created the moment you assign a value to it, without any declaration.",
+    rulesTitle: "Key Characteristics of Variables:",
+    rules: [
+      "No Declaration Needed: Unlike C/C++ or Java, Python has no command to declare a variable. It is created automatically when assigned.",
+      "Dynamic Typing: Variables do not have a fixed data type. A variable can store an integer, and later store a string (e.g. x = 10 then x = 'Hi').",
+      "Case-Sensitive: Variables are case-sensitive. For example, 'val', 'Val', and 'VAL' are three completely different variables.",
+      "Memory Reference: Python variables act as pointers that point to the memory address of an object (value), rather than storing the actual value."
+    ],
+    subsections: [
+      {
+        title: "1. Variable Re-assignment (Dynamic Type):",
+        bullets: [
+          "x = 10       -> Here x stores an Integer",
+          "x = \"Patna\"  -> Same x now stores a String value"
+        ]
+      },
+      {
+        title: "2. Multiple Assignment in Single Line:",
+        bullets: [
+          "a = b = c = 50       -> Assigns same value 50 to a, b, and c",
+          "x, y, z = 5, 10, 15  -> Assigns x=5, y=10, z=15 respectively"
+        ]
+      }
+    ],
     examples: [
       "a = 10          # integer variable",
       "name = \"Ravi\"   # string variable",
@@ -133,47 +156,43 @@ export async function generatePythonUnit1Notes() {
       pdfDoc.line(0, y, pageWidth, y);
     }
 
-    // 4. Center Watermark Logo
+    // 4. Center Watermark (Logo and Name grouped together in center)
     if (logoBase64) {
       pdfDoc.saveGraphicsState();
       try {
         const gState = new pdfDoc.GState({ opacity: 0.04 });
         pdfDoc.setGState(gState);
-        pdfDoc.addImage(logoBase64, 'PNG', pageWidth / 2 - 45, pageHeight / 2 - 45, 90, 90);
+        // Logo in the middle
+        pdfDoc.addImage(logoBase64, 'PNG', pageWidth / 2 - 40, pageHeight / 2 - 45, 80, 80);
         
-        // Faded bottom watermark text
+        // Faded text directly below the center logo
         pdfDoc.setTextColor(148, 163, 184);
         pdfDoc.setFont('helvetica', 'bold');
-        pdfDoc.setFontSize(28);
-        pdfDoc.text("APNA COLLEGE BIHAR", pageWidth / 2, pageHeight - 35, { align: 'center' });
+        pdfDoc.setFontSize(26);
+        pdfDoc.text("APNA COLLEGE BIHAR", pageWidth / 2, pageHeight / 2 + 45, { align: 'center' });
       } catch (e) {
         console.warn("Watermark error:", e);
       }
       pdfDoc.restoreGraphicsState();
     }
 
-    // 5. Draw Header Branding (Matches exactly the layout in user's image)
-    // Logo in top-left
+    // 5. Draw Header Branding (Matches user's request)
+    // Logo on the top-right
     if (logoBase64) {
-      pdfDoc.addImage(logoBase64, 'PNG', 12, 4, 11, 11);
+      pdfDoc.addImage(logoBase64, 'PNG', pageWidth - 20, 4, 11, 11);
     }
 
-    // Brand title next to logo
+    // Brand title on the top-left
     pdfDoc.setTextColor(31, 41, 55); // Slate-800
     pdfDoc.setFont('helvetica', 'bold');
-    pdfDoc.setFontSize(16);
-    pdfDoc.text("APNA COLLEGE BIHAR", 26, 12);
+    pdfDoc.setFontSize(15);
+    pdfDoc.text("APNA COLLEGE BIHAR", 26, 11);
 
-    // Page No box on top-right (no Date box)
-    pdfDoc.setDrawColor(220, 38, 38); // Red boxes
-    pdfDoc.setLineWidth(0.4);
-    
-    // Page No box
-    pdfDoc.rect(155, 4, 43, 6);
-    pdfDoc.setFont('courier', 'italic');
-    pdfDoc.setFontSize(9);
-    pdfDoc.setTextColor(220, 38, 38);
-    pdfDoc.text(`Page No.      ${pNum}`, 157, 8);
+    // Page number on top-right, next to the logo
+    pdfDoc.setFont('courier', 'bolditalic');
+    pdfDoc.setFontSize(10);
+    pdfDoc.setTextColor(220, 38, 38); // Red for handwritten page indicator
+    pdfDoc.text(`Page - ${String(pNum).padStart(2, '0')}`, pageWidth - 48, 11);
 
     // Horizontal double line separator below header
     pdfDoc.setDrawColor(79, 70, 229); // Indigo line
@@ -181,13 +200,15 @@ export async function generatePythonUnit1Notes() {
     pdfDoc.line(5, 23.5, pageWidth - 5, 23.5);
     pdfDoc.line(5, 24.2, pageWidth - 5, 24.2);
 
-    // Subtitle below divider
-    pdfDoc.setFont('courier', 'bolditalic');
-    pdfDoc.setFontSize(12);
-    pdfDoc.setTextColor(109, 40, 217); // Purple
-    pdfDoc.text("Chapter - Python Unit 1 : Input and Output", 26, 28.5);
+    // 6. Subtitle: ONLY on the first page
+    if (pNum === 1) {
+      pdfDoc.setFont('courier', 'bolditalic');
+      pdfDoc.setFontSize(12);
+      pdfDoc.setTextColor(109, 40, 217); // Purple
+      pdfDoc.text("Chapter - Python Unit 1 : Input and Output", 26, 28.5);
+    }
 
-    // Footer at the bottom
+    // 7. Footer at the bottom of every page
     pdfDoc.setFont('courier', 'bolditalic');
     pdfDoc.setFontSize(9);
     pdfDoc.setTextColor(148, 163, 184); // Soft grey
@@ -196,7 +217,8 @@ export async function generatePythonUnit1Notes() {
 
   // Start with first page
   drawNotebookPage(doc, pageNum);
-  currentY = 37;
+  currentY = 37; // Page 1 starts lower due to subtitle
+
 
   const checkPageBreak = (neededLines = 1) => {
     const spaceNeeded = neededLines * lineSpacing;
@@ -204,7 +226,7 @@ export async function generatePythonUnit1Notes() {
       doc.addPage();
       pageNum++;
       drawNotebookPage(doc, pageNum);
-      currentY = 37;
+      currentY = 29; // Starts higher on subsequent pages since there's no subtitle
     }
   };
 
