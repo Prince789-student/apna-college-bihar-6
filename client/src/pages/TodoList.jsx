@@ -12,6 +12,25 @@ export default function TodoList() {
 
   useEffect(() => { if (user) fetchTasks(); }, [user]);
 
+  useEffect(() => {
+    const syncTargets = async () => {
+      try {
+        const { Capacitor } = await import('@capacitor/core');
+        if (Capacitor.isNativePlatform()) {
+          const plugin = Capacitor.Plugins && Capacitor.Plugins.DailyNotificationPlugin;
+          if (plugin) {
+            await plugin.saveTargetsForNotification({
+              targetsJson: JSON.stringify(tasks.map(t => ({ text: t.text, done: t.done })))
+            });
+          }
+        }
+      } catch (e) {
+        console.error("Error syncing targets for notification:", e);
+      }
+    };
+    syncTargets();
+  }, [tasks]);
+
   const fetchTasks = async () => {
     setLoading(true);
     try {

@@ -18,7 +18,6 @@ import java.util.Calendar;
 public class BootReceiver extends BroadcastReceiver {
 
     private static final String TAG = "BootReceiver";
-    private static final int ALARM_REQUEST_CODE = 2001;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -26,21 +25,36 @@ public class BootReceiver extends BroadcastReceiver {
         if (Intent.ACTION_BOOT_COMPLETED.equals(action) ||
             "android.intent.action.QUICKBOOT_POWERON".equals(action)) {
 
-            Log.d(TAG, "Boot completed — rescheduling daily notification alarm");
-            scheduleDailyAlarm(context, 8, 0); // Reschedule at 8:00 AM daily
+            Log.d(TAG, "Boot completed — rescheduling all daily alarms");
+            scheduleAllAlarms(context);
         }
     }
 
-    static void scheduleDailyAlarm(Context context, int hour, int minute) {
+    static void scheduleAllAlarms(Context context) {
+        // Schedule each of the 5 alarms
+        // 1. 6:00 AM (target_morning) -> Request Code 6000
+        scheduleSpecificAlarm(context, 6, 0, 6000, "target_morning");
+        // 2. 8:00 AM (timetable) -> Request Code 8000
+        scheduleSpecificAlarm(context, 8, 0, 8000, "timetable");
+        // 3. 8:30 AM (attendance) -> Request Code 8300
+        scheduleSpecificAlarm(context, 8, 30, 8300, "attendance");
+        // 4. 10:30 PM / 22:30 (target_night) -> Request Code 2230
+        scheduleSpecificAlarm(context, 22, 30, 2230, "target_night");
+        // 5. 11:00 PM / 23:00 (good_night) -> Request Code 2300
+        scheduleSpecificAlarm(context, 23, 0, 2300, "good_night");
+    }
+
+    private static void scheduleSpecificAlarm(Context context, int hour, int minute, int requestCode, String alarmType) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
         Intent alarmIntent = new Intent(context, DailyNotificationReceiver.class);
         alarmIntent.setAction("com.apnacollegebihar.DAILY_NOTIFICATION");
+        alarmIntent.putExtra("alarm_type", alarmType);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
             context,
-            ALARM_REQUEST_CODE,
+            requestCode,
             alarmIntent,
             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
@@ -70,6 +84,6 @@ public class BootReceiver extends BroadcastReceiver {
                 pendingIntent
             );
         }
-        Log.d(TAG, "Daily alarm rescheduled for " + hour + ":" + minute);
+        Log.d(TAG, "Alarm " + alarmType + " scheduled for " + hour + ":" + minute + " (Request Code: " + requestCode + ")");
     }
 }

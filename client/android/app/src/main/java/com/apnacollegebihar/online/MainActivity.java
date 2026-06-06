@@ -19,7 +19,7 @@ public class MainActivity extends BridgeActivity {
             requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 100);
         }
 
-        // Schedule the daily notification alarm at 8:00 AM (if not already scheduled)
-        BootReceiver.scheduleDailyAlarm(this, 8, 0);
+        // Schedule all five daily alarms (if not already scheduled)
+        BootReceiver.scheduleAllAlarms(this);
     }
 }
