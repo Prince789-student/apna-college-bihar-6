@@ -555,7 +555,7 @@ export default function Home() {
             </div>
          </div>
          <div className="mt-20 pt-10 border-t border-slate-900 flex flex-col md:flex-row items-center justify-between gap-6">
-            <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">GEC SHEIKHPURA - APNA COLLEGE BIHAR</p>
+            <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">BEU - APNA COLLEGE BIHAR</p>
             <div className="flex items-center gap-3">
               <span className="text-[8px] font-black text-slate-700 uppercase tracking-widest">Powered by Bihar Scholarly Community</span>
             </div>

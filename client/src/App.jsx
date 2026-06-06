@@ -172,7 +172,7 @@ function GlobalProfilePrompt() {
 
 function App() {
   const { user, loading: authLoading } = useAuth();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const isNative = Capacitor.isNativePlatform();
 
@@ -205,7 +205,7 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a0f1d] flex flex-col items-center justify-center">
+      <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center">
         <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
         <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest animate-pulse">Initializing Hub...</p>
       </div>
