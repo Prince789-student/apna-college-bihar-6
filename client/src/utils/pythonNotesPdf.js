@@ -134,33 +134,21 @@ export async function generatePythonUnit1Notes() {
   const logoBase64 = await getLogoBase64();
 
   let pageNum = 1;
-  const lineSpacing = 8;
+  const lineSpacing = 7; // Slightly tighter for professional standard
   let currentY = 32;
+  const marginX = 20; // Standard professional margin
 
-  // Draw lined notebook page
+  // Draw clean professional page layout
   const drawNotebookPage = (pdfDoc, pNum) => {
-    // 1. Draw white notebook paper background
+    // 1. Draw plain white background
     pdfDoc.setFillColor(255, 255, 255);
     pdfDoc.rect(0, 0, pageWidth, pageHeight, 'F');
 
-    // 2. Draw vertical red margin lines on the left
-    pdfDoc.setDrawColor(248, 113, 113); // Soft red
-    pdfDoc.setLineWidth(0.4);
-    pdfDoc.line(22, 0, 22, pageHeight);
-    pdfDoc.line(22.8, 0, 22.8, pageHeight);
-
-    // 3. Draw horizontal blue ruling lines
-    pdfDoc.setDrawColor(191, 219, 254); // Soft blue
-    pdfDoc.setLineWidth(0.3);
-    for (let y = 30; y < pageHeight - 10; y += lineSpacing) {
-      pdfDoc.line(0, y, pageWidth, y);
-    }
-
-    // 4. Center Watermark (Logo and Name grouped together in center)
+    // 2. Center Watermark (Logo and Name grouped together in center)
     if (logoBase64) {
       pdfDoc.saveGraphicsState();
       try {
-        const gState = new pdfDoc.GState({ opacity: 0.04 });
+        const gState = new pdfDoc.GState({ opacity: 0.03 });
         pdfDoc.setGState(gState);
         // Logo in the middle
         pdfDoc.addImage(logoBase64, 'PNG', pageWidth / 2 - 40, pageHeight / 2 - 45, 80, 80);
@@ -176,49 +164,47 @@ export async function generatePythonUnit1Notes() {
       pdfDoc.restoreGraphicsState();
     }
 
-    // 5. Draw Header Branding (Matches user's request)
+    // 3. Draw Header Branding
     // Logo on the top-left
     if (logoBase64) {
-      pdfDoc.addImage(logoBase64, 'PNG', 12, 4, 11, 11);
+      pdfDoc.addImage(logoBase64, 'PNG', marginX, 5, 10, 10);
     }
 
     // Brand title next to logo on the left
-    pdfDoc.setTextColor(31, 41, 55); // Slate-800
+    pdfDoc.setTextColor(15, 23, 42); // slate-900
     pdfDoc.setFont('helvetica', 'bold');
-    pdfDoc.setFontSize(15);
-    pdfDoc.text("APNA COLLEGE BIHAR", 26, 11);
+    pdfDoc.setFontSize(14);
+    pdfDoc.text("APNA COLLEGE BIHAR", marginX + 12, 11.5);
 
     // Page number on the top-right
-    pdfDoc.setFont('courier', 'bolditalic');
-    pdfDoc.setFontSize(10);
-    pdfDoc.setTextColor(220, 38, 38); // Red for handwritten page indicator
-    pdfDoc.text(`Page - ${String(pNum).padStart(2, '0')}`, pageWidth - 32, 11);
+    pdfDoc.setFont('helvetica', 'bold');
+    pdfDoc.setFontSize(9.5);
+    pdfDoc.setTextColor(71, 85, 105); // slate-600
+    pdfDoc.text(`Page - ${String(pNum).padStart(2, '0')}`, pageWidth - marginX - 18, 11.5);
 
-    // Horizontal double line separator below header
-    pdfDoc.setDrawColor(79, 70, 229); // Indigo line
+    // Horizontal thin divider below header
+    pdfDoc.setDrawColor(226, 232, 240); // slate-200
     pdfDoc.setLineWidth(0.5);
-    pdfDoc.line(5, 23.5, pageWidth - 5, 23.5);
-    pdfDoc.line(5, 24.2, pageWidth - 5, 24.2);
+    pdfDoc.line(marginX, 18, pageWidth - marginX, 18);
 
-    // 6. Subtitle: ONLY on the first page
+    // 4. Subtitle: ONLY on the first page
     if (pNum === 1) {
-      pdfDoc.setFont('courier', 'bolditalic');
-      pdfDoc.setFontSize(12);
-      pdfDoc.setTextColor(109, 40, 217); // Purple
-      pdfDoc.text("Chapter - Python Unit 1 : Input and Output", 26, 28.5);
+      pdfDoc.setFont('helvetica', 'bold');
+      pdfDoc.setFontSize(11);
+      pdfDoc.setTextColor(79, 70, 229); // Indigo
+      pdfDoc.text("Chapter - Python Unit 1 : Input and Output", marginX, 24);
     }
 
-    // 7. Footer at the bottom of every page
-    pdfDoc.setFont('courier', 'bolditalic');
-    pdfDoc.setFontSize(9);
+    // 5. Footer at the bottom of every page
+    pdfDoc.setFont('helvetica', 'normal');
+    pdfDoc.setFontSize(8.5);
     pdfDoc.setTextColor(148, 163, 184); // Soft grey
-    pdfDoc.text("BEU - Apna College Bihar", pageWidth / 2, pageHeight - 6, { align: 'center' });
+    pdfDoc.text("BEU - Apna College Bihar", pageWidth / 2, pageHeight - 8, { align: 'center' });
   };
 
   // Start with first page
   drawNotebookPage(doc, pageNum);
-  currentY = 37; // Page 1 starts lower due to subtitle
-
+  currentY = 32; // Page 1 starts lower due to subtitle
 
   const checkPageBreak = (neededLines = 1) => {
     const spaceNeeded = neededLines * lineSpacing;
@@ -226,7 +212,7 @@ export async function generatePythonUnit1Notes() {
       doc.addPage();
       pageNum++;
       drawNotebookPage(doc, pageNum);
-      currentY = 29; // Starts higher on subsequent pages since there's no subtitle
+      currentY = 24; // Starts higher on subsequent pages since there's no subtitle
     }
   };
 
@@ -234,179 +220,183 @@ export async function generatePythonUnit1Notes() {
   for (const sec of NOTEBOOK_SECTIONS) {
     if (sec.type === "question") {
       checkPageBreak(3);
-      doc.setFont('courier', 'bolditalic');
+      doc.setFont('helvetica', 'bold');
       doc.setFontSize(10.5);
       doc.setTextColor(220, 38, 38); // Red for Question
       
-      const splitText = doc.splitTextToSize(sec.text, pageWidth - 35);
+      const splitText = doc.splitTextToSize(sec.text, pageWidth - (2 * marginX));
       for (const segment of splitText) {
         checkPageBreak(1);
-        doc.text(segment, 26, currentY - 1.5);
+        doc.text(segment, marginX, currentY);
         currentY += lineSpacing;
       }
     } 
     
     else if (sec.type === "answer") {
       checkPageBreak(1.5);
-      doc.setFont('courier', 'bolditalic');
+      doc.setFont('helvetica', 'bold');
       doc.setFontSize(10.5);
       doc.setTextColor(5, 150, 105); // Green for Answer
-      doc.text(sec.text, 26, currentY - 1.5);
-      doc.line(26, currentY, 41, currentY); // underline Answer
-      currentY += lineSpacing;
+      doc.text(sec.text, marginX, currentY);
+      doc.line(marginX, currentY + 1, marginX + doc.getTextWidth(sec.text), currentY + 1); // clean underline
+      currentY += lineSpacing + 2;
     } 
     
     else if (sec.type === "topic") {
       // Title
-      checkPageBreak(1.5);
-      doc.setFont('courier', 'bolditalic');
-      doc.setFontSize(10.5);
+      checkPageBreak(2);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
       doc.setTextColor(29, 78, 216); // Blue for topic title
-      doc.text(sec.title, 26, currentY - 1.5);
-      doc.line(26, currentY, 26 + doc.getTextWidth(sec.title), currentY); // underline
-      currentY += lineSpacing;
+      doc.text(sec.title, marginX, currentY);
+      doc.line(marginX, currentY + 1, marginX + doc.getTextWidth(sec.title), currentY + 1); // Underline
+      currentY += lineSpacing + 2;
 
       // Definition Box
       if (sec.definition) {
-        const descLines = doc.splitTextToSize(sec.definition, pageWidth - 72);
-        const boxHeight = Math.max(1, descLines.length) * lineSpacing;
+        const descLines = doc.splitTextToSize(sec.definition, pageWidth - (2 * marginX) - 30);
+        const boxHeight = Math.max(1, descLines.length) * lineSpacing + 4;
         
-        checkPageBreak(descLines.length + 1);
+        checkPageBreak(descLines.length + 2);
 
-        // Draw outer borders for definition box
-        doc.setDrawColor(29, 78, 216); // Blue box borders
-        doc.setLineWidth(0.4);
-        doc.rect(26, currentY - 6.5, pageWidth - 42, boxHeight);
-        doc.line(60, currentY - 6.5, 60, currentY - 6.5 + boxHeight); // vertical separator inside box
+        // Draw clean light blue definition container box
+        doc.setFillColor(243, 244, 246); // slate-100 grey background
+        doc.rect(marginX, currentY - 5, pageWidth - (2 * marginX), boxHeight, 'F');
+        doc.setDrawColor(209, 213, 219); // grey border
+        doc.setLineWidth(0.3);
+        doc.rect(marginX, currentY - 5, pageWidth - (2 * marginX), boxHeight, 'S');
 
         // Label Cell "Definition:"
-        doc.setFont('courier', 'bolditalic');
+        doc.setFont('helvetica', 'bold');
         doc.setTextColor(220, 38, 38); // Red
-        doc.text("Definition:", 28, currentY - 1.5);
+        doc.text("Definition:", marginX + 3, currentY);
 
         // Content Cell text
-        doc.setFont('courier', 'italic');
+        doc.setFont('helvetica', 'normal');
         doc.setTextColor(31, 41, 55); // Dark text
         let tempY = currentY;
         for (const segment of descLines) {
-          doc.text(segment, 62, tempY - 1.5);
+          doc.text(segment, marginX + 26, tempY);
           tempY += lineSpacing;
         }
 
-        currentY += boxHeight;
+        currentY += boxHeight + 2;
       }
 
       // Rules Section
       if (sec.rulesTitle) {
         checkPageBreak(1.5);
-        doc.setFont('courier', 'bolditalic');
+        doc.setFont('helvetica', 'bold');
         doc.setTextColor(220, 38, 38); // Red
-        doc.text(sec.rulesTitle, 28, currentY - 1.5);
+        doc.text(sec.rulesTitle, marginX, currentY);
         currentY += lineSpacing;
 
-        doc.setFont('courier', 'italic');
+        doc.setFont('helvetica', 'normal');
         doc.setTextColor(31, 41, 55);
         for (const rule of sec.rules) {
           checkPageBreak(1.5);
           // Draw a small custom bullet point
           doc.setFillColor(29, 78, 216);
-          doc.circle(30, currentY - 3, 0.6, 'F');
+          doc.circle(marginX + 2, currentY - 1.2, 0.6, 'F');
           
-          const splitRule = doc.splitTextToSize(rule, pageWidth - 45);
-          let firstSeg = true;
+          const splitRule = doc.splitTextToSize(rule, pageWidth - (2 * marginX) - 8);
           for (const segment of splitRule) {
             checkPageBreak(1);
-            doc.text(segment, 33, currentY - 1.5);
+            doc.text(segment, marginX + 5, currentY);
             currentY += lineSpacing;
           }
         }
+        currentY += 2;
       }
 
       // Examples / Details list
       if (sec.examples) {
         checkPageBreak(1.5);
-        doc.setFont('courier', 'bolditalic');
+        doc.setFont('helvetica', 'bold');
         doc.setTextColor(5, 150, 105); // Green for Examples
-        doc.text("Examples:", 28, currentY - 1.5);
+        doc.text("Examples:", marginX, currentY);
         currentY += lineSpacing;
 
-        doc.setFont('courier', 'italic');
+        doc.setFont('helvetica', 'normal');
         doc.setTextColor(31, 41, 55);
         for (const ex of sec.examples) {
           checkPageBreak(1.5);
-          doc.text(ex, 30, currentY - 1.5);
+          doc.text(ex, marginX + 4, currentY);
           currentY += lineSpacing;
         }
+        currentY += 2;
       }
 
       // Single block text examples (like in Keywords)
       if (sec.examplesText) {
         checkPageBreak(2.5);
-        doc.setFont('courier', 'bolditalic');
+        doc.setFont('helvetica', 'bold');
         doc.setTextColor(5, 150, 105); // Green
-        doc.text("Examples:", 28, currentY - 1.5);
+        doc.text("Examples:", marginX, currentY);
         
-        doc.setFont('courier', 'italic');
+        doc.setFont('helvetica', 'normal');
         doc.setTextColor(31, 41, 55);
-        const splitExs = doc.splitTextToSize(sec.examplesText, pageWidth - 55);
+        const splitExs = doc.splitTextToSize(sec.examplesText, pageWidth - (2 * marginX) - 22);
         let tempY = currentY;
         splitExs.forEach((segment, sIdx) => {
           checkPageBreak(1);
-          doc.text(segment, sIdx === 0 ? 50 : 28, tempY - 1.5);
+          doc.text(segment, sIdx === 0 ? marginX + 22 : marginX, tempY);
           tempY += lineSpacing;
         });
-        currentY = tempY;
+        currentY = tempY + 2;
       }
 
       // Notes
       if (sec.note) {
         checkPageBreak(2);
-        doc.setFont('courier', 'bolditalic');
+        doc.setFont('helvetica', 'bold');
         doc.setTextColor(220, 38, 38); // Red
-        doc.text("Note:", 28, currentY - 1.5);
+        doc.text("Note:", marginX, currentY);
 
-        doc.setFont('courier', 'italic');
+        doc.setFont('helvetica', 'normal');
         doc.setTextColor(71, 85, 105); // Slate
-        const splitNote = doc.splitTextToSize(sec.note, pageWidth - 45);
+        const splitNote = doc.splitTextToSize(sec.note, pageWidth - (2 * marginX) - 13);
         let tempY = currentY;
         splitNote.forEach((segment, sIdx) => {
           checkPageBreak(1);
-          doc.text(segment, sIdx === 0 ? 41 : 28, tempY - 1.5);
+          doc.text(segment, sIdx === 0 ? marginX + 13 : marginX, tempY);
           tempY += lineSpacing;
         });
-        currentY = tempY;
+        currentY = tempY + 2;
       }
 
-      // Code blocks
+      // Code blocks (monospaced Courier is standard for code blocks)
       if (sec.code) {
         checkPageBreak(sec.code.length + 1);
-        doc.setFont('courier', 'bolditalic');
+        doc.setFont('courier', 'bold');
         doc.setTextColor(31, 41, 55);
         for (const cLine of sec.code) {
           checkPageBreak(1);
-          doc.text(cLine, 28, currentY - 1.5);
+          doc.text(cLine, marginX + 2, currentY);
           currentY += lineSpacing;
         }
+        currentY += 2;
       }
 
       // Subsections (for Operators details)
       if (sec.subsections) {
         for (const sub of sec.subsections) {
           checkPageBreak(2);
-          doc.setFont('courier', 'bolditalic');
+          doc.setFont('helvetica', 'bold');
           doc.setTextColor(109, 40, 217); // Purple
-          doc.text(sub.title, 28, currentY - 1.5);
+          doc.text(sub.title, marginX, currentY);
           currentY += lineSpacing;
 
-          doc.setFont('courier', 'italic');
+          doc.setFont('helvetica', 'normal');
           doc.setTextColor(31, 41, 55);
           for (const bullet of sub.bullets) {
             checkPageBreak(1.5);
             doc.setFillColor(29, 78, 216);
-            doc.circle(32, currentY - 3, 0.5, 'F');
-            doc.text(bullet, 35, currentY - 1.5);
+            doc.circle(marginX + 3, currentY - 1.2, 0.5, 'F');
+            doc.text(bullet, marginX + 6, currentY);
             currentY += lineSpacing;
           }
+          currentY += 2;
         }
       }
     }
