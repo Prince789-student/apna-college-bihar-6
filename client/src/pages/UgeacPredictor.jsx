@@ -812,7 +812,7 @@ function UgeacPredictor() {
                           value={category} 
                           onChange={(e) => setCategory(e.target.value)}
                        >
-                          {['UR', 'EWS', 'BC', 'EBC', 'SC', 'ST'].map(c => <option key={c} value={c}>{c}</option>)}
+                          {['UR', 'EWS', 'BC', 'EBC', 'SC', 'ST', 'RCG', 'DQ', 'SMQ'].map(c => <option key={c} value={c}>{c}</option>)}
                        </select>
                     </div>
                     <div className="input-group">
