@@ -132,7 +132,7 @@ export default function Timetable() {
       // Collect unique subjects for Attendance Sync
       const uniqueSubjects = new Set();
       Object.values(schedule).flat().forEach(cls => {
-        if (cls.subject && cls.subject.trim()) {
+        if (cls.subject && cls.subject.trim() && !cls.isRecess && cls.subject.toUpperCase() !== 'LUNCH / RECESS') {
           uniqueSubjects.add(cls.subject.trim());
         }
       });
@@ -200,7 +200,10 @@ export default function Timetable() {
       id: Date.now().toString(), 
       startTime: defaultStart, 
       endTime: defaultEnd, 
-      subject: '' 
+      subject: '',
+      facultyName: '',
+      roomNumber: '',
+      isRecess: false
     });
     setSchedule(newSchedule);
     setSaved(false);
@@ -294,8 +297,8 @@ export default function Timetable() {
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center py-4">No Classes</p>
                   ) : (
                     classes.map((cls, idx) => (
-                      <div key={cls.id} className="flex gap-2 relative group">
-                        <div className="flex flex-col gap-1 flex-shrink-0">
+                      <div key={cls.id} className="flex gap-2.5 relative group items-start bg-white p-3 rounded-2xl border border-slate-200/50 shadow-sm">
+                        <div className="flex flex-col gap-1.5 flex-shrink-0">
                           <TimePickerAMPM
                             label="Start"
                             value={cls.startTime || '08:00'}
@@ -309,20 +312,70 @@ export default function Timetable() {
                             onChange={(val) => updateClass(day, cls.id, 'endTime', val)}
                           />
                         </div>
-                        <div className="flex-1 relative flex items-center">
-                          <input 
-                            type="text"
-                            placeholder="Subject Name"
-                            value={cls.subject}
-                            onChange={(e) => updateClass(day, cls.id, 'subject', e.target.value)}
-                            className={`w-full text-xs font-bold px-3 py-3 rounded-xl border outline-none transition-all pr-8 h-full ${isToday ? 'bg-white border-indigo-100 focus:border-indigo-400' : 'bg-white border-slate-200 focus:border-slate-400'}`}
-                          />
-                          <button 
-                            onClick={() => deleteClass(day, cls.id)}
-                            className="absolute right-2 p-1 text-slate-300 hover:text-red-500 transition-colors rounded-md hover:bg-red-50"
-                          >
-                            <X size={14} />
-                          </button>
+                        <div className="flex-1 flex flex-col gap-2">
+                          <div className="flex items-center justify-between gap-2">
+                            <label className="flex items-center gap-1.5 cursor-pointer shrink-0">
+                              <input
+                                type="checkbox"
+                                checked={cls.isRecess || false}
+                                onChange={(e) => {
+                                  const checked = e.target.checked;
+                                  updateClass(day, cls.id, 'isRecess', checked);
+                                  if (checked) {
+                                    updateClass(day, cls.id, 'subject', 'LUNCH / RECESS');
+                                    updateClass(day, cls.id, 'facultyName', '');
+                                    updateClass(day, cls.id, 'roomNumber', '');
+                                  } else {
+                                    updateClass(day, cls.id, 'subject', '');
+                                  }
+                                }}
+                                className="w-3.5 h-3.5 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500"
+                              />
+                              <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Lunch/Recess</span>
+                            </label>
+                            <button 
+                              onClick={() => deleteClass(day, cls.id)}
+                              className="p-1 text-slate-300 hover:text-red-500 transition-colors rounded-md hover:bg-red-50"
+                            >
+                              <X size={14} />
+                            </button>
+                          </div>
+                          
+                          <div className="relative flex items-center">
+                            <input 
+                              type="text"
+                              placeholder={cls.isRecess ? "LUNCH / RECESS" : "Subject Name"}
+                              value={cls.subject}
+                              disabled={cls.isRecess}
+                              onChange={(e) => updateClass(day, cls.id, 'subject', e.target.value)}
+                              className={`w-full text-xs font-bold px-3 py-2 rounded-xl border outline-none transition-all pr-8 ${isToday ? 'bg-white border-indigo-100 focus:border-indigo-400' : 'bg-white border-slate-200 focus:border-slate-400'}`}
+                            />
+                          </div>
+
+                          {!cls.isRecess && (
+                            <div className="grid grid-cols-2 gap-2 animate-in fade-in duration-200">
+                              <div className="flex flex-col gap-0.5">
+                                <span className="text-[8px] font-black uppercase tracking-wider text-slate-400">Faculty</span>
+                                <input 
+                                  type="text"
+                                  placeholder="Faculty Name"
+                                  value={cls.facultyName || ''}
+                                  onChange={(e) => updateClass(day, cls.id, 'facultyName', e.target.value)}
+                                  className={`w-full text-[10px] font-bold px-2.5 py-1.5 rounded-lg border outline-none transition-all ${isToday ? 'bg-white border-indigo-100 focus:border-indigo-400' : 'bg-white border-slate-200 focus:border-slate-400'}`}
+                                />
+                              </div>
+                              <div className="flex flex-col gap-0.5">
+                                <span className="text-[8px] font-black uppercase tracking-wider text-slate-400">Room</span>
+                                <input 
+                                  type="text"
+                                  placeholder="Room Number"
+                                  value={cls.roomNumber || ''}
+                                  onChange={(e) => updateClass(day, cls.id, 'roomNumber', e.target.value)}
+                                  className={`w-full text-[10px] font-bold px-2.5 py-1.5 rounded-lg border outline-none transition-all ${isToday ? 'bg-white border-indigo-100 focus:border-indigo-400' : 'bg-white border-slate-200 focus:border-slate-400'}`}
+                                />
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))

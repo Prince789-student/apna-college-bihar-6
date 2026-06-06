@@ -32,15 +32,6 @@ export default function BeuResult() {
           </div>
         </div>
 
-        {/* Security Warning */}
-        <div className="p-4 bg-orange-50 border border-orange-200 rounded-2xl flex items-start gap-3">
-          <AlertTriangle size={18} className="text-orange-500 shrink-0 mt-0.5" />
-          <div className="leading-relaxed text-xs text-orange-800">
-            <span className="font-black uppercase tracking-wide">Security Notice:</span> BEU University ne nayi security (Google ReCAPTCHA) lagayi hai taaki koi bot aapka result na dekh sake. Isliye hume directly official website hi embed karni padi hai. 
-            <br/><br/>
-            Apna Registration Number direct niche wale box me enter karke result dekhein!
-          </div>
-        </div>
 
         {/* Official Portal Iframe */}
         <div className="bg-white rounded-[2rem] border border-slate-200 shadow-xl overflow-hidden relative" style={{ height: '700px' }}>
