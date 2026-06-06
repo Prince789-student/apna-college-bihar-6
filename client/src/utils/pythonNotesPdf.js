@@ -1,267 +1,121 @@
 import jsPDF from 'jspdf';
+import { getLogoBase64 } from './pdfHelper';
 
-// Beautiful detailed handwritten notes content for Python Unit 1
-const UNIT1_TOPICS = [
+// Topic notes formatted as detailed questions and answers in notebook style
+const NOTEBOOK_SECTIONS = [
   {
-    title: "1. Identifiers in Python",
-    content: [
-      "What is an Identifier?",
-      "An identifier is a name used to identify a variable, function, class, or any other object in a Python program.",
-      "In simple words, it is the name we give to something in a program so we can use it later.",
-      "",
-      "Example:",
-      "  name = \"Prince\"   --> 'name' is an identifier",
-      "  age = 18           --> 'age' is an identifier",
-      "  college = \"GEC\"    --> 'college' is an identifier",
-      "",
-      "Rules for Identifiers:",
-      "1. Must start with a letter (a-z, A-Z) or an underscore (_). Can NOT start with a number.",
-      "   - Correct: name, _age",
-      "   - Wrong: 1name, 2age",
-      "2. Can contain letters, numbers, and underscores. Special characters (like @, $, %, -) are NOT allowed.",
-      "   - Correct: student1, roll_no",
-      "   - Wrong: student@1, roll-no",
-      "3. Spaces are not allowed.",
-      "   - Correct: student_name",
-      "   - Wrong: student name",
-      "4. Keywords cannot be used as identifiers (e.g. if, for, while, class).",
-      "5. Python is Case Sensitive (e.g. 'name' and 'Name' are two different identifiers)."
+    type: "question",
+    text: "QUESTION 1: Define the following Python fundamentals: identifiers, keywords, variables and expressions."
+  },
+  {
+    type: "answer",
+    text: "Answer:"
+  },
+  {
+    type: "topic",
+    title: "1. Identifiers",
+    definition: "An identifier is a name given to entities like variables, functions, classes, modules etc. in a Python program. It helps to identify them uniquely.",
+    rulesTitle: "Rules for Identifiers:",
+    rules: [
+      "It can contain letters (a-z, A-Z), digits (0-9) and underscore (_).",
+      "It must start with a letter or an underscore.",
+      "It cannot start with a digit.",
+      "It is case-sensitive (name and Name are different).",
+      "It cannot be a Python keyword."
+    ],
+    examples: [
+      "valid   -> my_var, _count, Total1, student_name",
+      "invalid -> 1name, my-var, class, for"
     ]
   },
   {
-    title: "2. Keywords in Python",
-    content: [
-      "What are Keywords?",
-      "Keywords are special reserved words in Python that have predefined meanings. They are used by Python to perform specific tasks. We cannot use them as variable names or identifiers.",
-      "",
-      "Example: if, for, while, break, continue, def, class, return, import, True, False, None, etc.",
-      "",
-      "Key Points for Exams:",
-      "- Keywords tell Python what action to perform (e.g., 'for' starts a loop, 'if' makes decisions).",
-      "- You can print all keywords in Python using:",
-      "  import keyword",
-      "  print(keyword.kwlist)",
-      "- Keywords are reserved and cannot be reassigned. Writing 'for = 10' will throw a SyntaxError."
+    type: "topic",
+    title: "2. Keywords",
+    definition: "Keywords are reserved words in Python that have special meaning and cannot be used as identifiers (variable names, function names etc.).",
+    examplesText: "False, None, True, and, as, assert, break, class, continue, def, del, elif, else, except, finally, for, from, global, if, import, in, is, lambda, nonlocal, not, or, pass, raise, return, try, while, with, yield.",
+    note: "Keywords may change in future versions, so it is better to check using keyword module.",
+    code: [
+      "Check keywords: >>> import keyword",
+      "                >>> keyword.kwlist"
     ]
   },
   {
-    title: "3. Statements and Expressions",
-    content: [
-      "What is an Expression?",
-      "An expression is a combination of values, variables, and operators that produces a result. Anything Python can evaluate and reduce to a single value is an expression.",
-      "  Examples: 5 + 3 (produces 8), a + b, age > 18 (produces True/False).",
-      "",
-      "What is a Statement?",
-      "A statement is an instruction that Python executes. It tells Python to perform an action.",
-      "  Examples: x = 10 (Assignment Statement), print(\"Hello\") (Print Statement), loops and conditionals.",
-      "",
-      "Comparison Table:",
-      "  - Expression: Produces a value | Example: 5 + 3",
-      "  - Statement: Performs an action | Example: x = 5 + 3"
+    type: "topic",
+    title: "3. Variables",
+    definition: "Variables are containers used to store data values. In Python, variables are created when you assign a value to them.",
+    examples: [
+      "a = 10          # integer variable",
+      "name = \"Ravi\"   # string variable",
+      "price = 25.5    # float variable",
+      "is_pass = True  # boolean variable"
     ]
   },
   {
-    title: "4. Variables in Python",
-    content: [
-      "What is a Variable?",
-      "A variable is a named memory location used to store data values. Think of it as a labeled container or box where you store information that can be modified during program execution.",
-      "",
-      "Syntax:",
-      "  variable_name = value",
-      "  e.g. x = 100",
-      "",
-      "Key Features:",
-      "- Variable values can be changed during execution.",
-      "- Multiple variable assignment: a, b, c = 10, 20, 30",
-      "- Assigning same value: x = y = z = 100",
-      "- Python is dynamically typed (type is detected automatically; no need to declare it)."
-    ]
+    type: "question",
+    text: "QUESTION 2: Explain different categories of Operators in Python with clear examples and truth tables."
   },
   {
-    title: "5. Operators in Python",
-    content: [
-      "Definition of Operators:",
-      "-------------------------",
-      "An OPERATOR is a special symbol that tells the computer to perform mathematical or logical manipulations on data values (OPERANDS).",
-      "  Example: in 'x = a + b', 'a' and 'b' are OPERANDS, '+' is the OPERATOR, and '=' is the assignment operator.",
-      "",
-      "CATEGORIES OF OPERATORS IN PYTHON (Exam-oriented details):",
-      "",
-      "1. ARITHMETIC OPERATORS (Used for mathematical computations):",
-      "   - Addition (+): Adds operands. Also performs string concatenation.",
-      "     e.g. 5 + 3 = 8 | 'Hi ' * 3 = 'Hi Hi Hi'",
-      "   - Subtraction (-): Subtracts right operand from left operand.",
-      "     e.g. 10 - 4 = 6",
-      "   - Multiplication (*): Multiplies operands. Also repeats strings.",
-      "     e.g. 4 * 5 = 20 | 'Hi ' * 3 = 'Hi Hi Hi'",
-      "   - Division (/): Performs division and ALWAYS returns a float.",
-      "     e.g. 10 / 2 = 5.0 | 7 / 2 = 3.5",
-      "   - Floor Division (//): Divides and rounds down to the nearest integer.",
-      "     e.g. 7 // 2 = 3 | -7 // 2 = -4",
-      "   - Modulus (%): Returns the remainder of division (useful for even/odd checks).",
-      "     e.g. 10 % 3 = 1 | 8 % 2 = 0",
-      "   - Exponent (**): Calculates power (right operand is the exponent).",
-      "     e.g. 2 ** 3 = 8",
-      "",
-      "2. COMPARISON (RELATIONAL) OPERATORS (Compares values and returns bool):",
-      "   - Equal to (==): True if values are equal (e.g. 5 == 5 is True)",
-      "   - Not equal to (!=): True if values are different (e.g. 5 != 3 is True)",
-      "   - Greater than (>), Less than (<)",
-      "   - Greater than or equal to (>=), Less than or equal to (<=)",
-      "",
-      "3. LOGICAL OPERATORS (Used to combine conditional statements):",
-      "   - and: Returns True only if BOTH conditions are True.",
-      "     e.g. True and False -> False",
-      "   - or: Returns True if AT LEAST ONE condition is True.",
-      "     e.g. True or False -> True",
-      "   - not: Reverses the logical state (negates).",
-      "     e.g. not True -> False",
-      "",
-      "4. ASSIGNMENT OPERATORS (Used to store and update values):",
-      "   - '=': Simple assignment (e.g. x = 10)",
-      "   - Shorthand operators: +=, -=, *=, /=, //=, %=, **=",
-      "     e.g. 'x += 5' is equivalent to 'x = x + 5'",
-      "",
-      "5. IDENTITY OPERATORS (Compares memory addresses, not values):",
-      "   - is: True if both variables point to the SAME object in memory.",
-      "   - is not: True if variables point to different objects.",
-      "     e.g. a = [1, 2]; b = a -> a is b is True",
-      "          a = [1, 2]; b = [1, 2] -> a is b is False (same values, different memory addresses)",
-      "",
-      "6. MEMBERSHIP OPERATORS (Checks if a value is present in a sequence):",
-      "   - in: True if element is found in string, list, tuple, etc.",
-      "   - not in: True if element is NOT found.",
-      "     e.g. 'P' in 'Python' -> True | 'Z' not in 'Python' -> True",
-      "",
-      "7. BITWISE OPERATORS (Operates on binary bits 0 and 1):",
-      "   - & (AND), | (OR), ^ (XOR), ~ (NOT), << (Left Shift), >> (Right Shift)",
-      "     e.g. 5 (0101) & 3 (0011) = 1 (0001)",
-      "",
-      "CRITICAL EXAM DIFFERENCE: '=' vs '=='",
-      "  - '=' is the ASSIGNMENT operator, used to store a value in a variable (e.g. x = 10).",
-      "  - '==' is the COMPARISON operator, used to check equality between two values (e.g. x == 10)."
-    ]
+    type: "answer",
+    text: "Answer:"
   },
   {
-    title: "6. Operator Precedence & Associativity",
-    content: [
-      "Precedence: Decides which operator is executed first when an expression has multiple operators.",
-      "  Example: 10 + 5 * 2 results in 20, not 30, because '*' has higher precedence than '+'.",
-      "  Parentheses () always have the highest priority.",
-      "",
-      "Associativity: Decides the direction of evaluation (Left to Right or Right to Left) when operators have the SAME precedence.",
-      "  - Left to Right: +, -, *, /, //, %  (e.g. 10 - 5 + 2 -> 5 + 2 = 7)",
-      "  - Right to Left: Exponent (**)     (e.g. 2 ** 3 ** 2 -> 2 ** 9 = 512)"
-    ]
-  },
-  {
-    title: "7. Data Types in Python",
-    content: [
-      "Every value in Python has a data type. Python automatically detects it.",
-      "",
-      "Categories & Examples:",
-      "- Numeric: int (10, -5), float (3.14, 2.0), complex (2+3j)",
-      "- Boolean: bool (True, False)",
-      "- Sequence: str (\"Hello\"), list ([1,2,3]), tuple ((1,2,3))",
-      "- Set: set ({1,2,3})",
-      "- Mapping: dict ({\"name\": \"Prince\"})",
-      "- NoneType: None (represents empty or no value)",
-      "",
-      "Mutable vs Immutable:",
-      "  - Mutable (can be changed): list, set, dict",
-      "  - Immutable (cannot be changed): int, float, str, tuple"
-    ]
-  },
-  {
-    title: "8. Indentation in Python",
-    content: [
-      "Indentation refers to the spaces or tabs at the beginning of a line of code.",
-      "Unlike C/C++/Java which use braces {} to define code blocks, Python uses indentation.",
-      "",
-      "Key Rules:",
-      "- Standard practice is 4 spaces.",
-      "- All lines inside the same block must have the same indentation level.",
-      "- Mixing tabs and spaces will throw an IndentationError.",
-      "- Indentation makes Python code highly readable and structured."
-    ]
-  },
-  {
-    title: "9. Comments in Python",
-    content: [
-      "Comments are explanatory text ignored by Python interpreter during execution.",
-      "",
-      "Types of Comments:",
-      "1. Single-Line: Starts with # symbol",
-      "   e.g. # This is a comment",
-      "2. Inline: Comment at the end of a line of code",
-      "   e.g. x = 10  # Store value",
-      "3. Multi-Line: Using multiple # symbols or triple quotes (''' or \"\"\") as docstrings."
-    ]
-  },
-  {
-    title: "10. Reading Input",
-    content: [
-      "We use the input() function to take input from the user.",
-      "Syntax: variable = input(\"Prompt Message\")",
-      "",
-      "CRITICAL POINT:",
-      "  input() ALWAYS returns a string. If you need numerical calculations, you must explicitly convert it (Type Casting).",
-      "",
-      "Examples:",
-      "  age = int(input(\"Enter age: \"))     --> converts string to integer",
-      "  price = float(input(\"Enter price: \")) --> converts string to float",
-      "  a, b = map(int, input().split())     --> read multiple space-separated integers"
-    ]
-  },
-  {
-    title: "11. Print Output",
-    content: [
-      "We use the print() function to display output on the screen.",
-      "Examples:",
-      "  print(\"Hello World\")",
-      "  print(100)",
-      "  print(\"Name:\", name, \"Age:\", age)",
-      "",
-      "Control parameters:",
-      "  - sep: separator between items (default is space ' ')",
-      "  - end: character printed at the end of statement (default is newline '\\n')"
-    ]
-  },
-  {
-    title: "12. Type Conversions",
-    content: [
-      "1. Implicit Type Conversion (Coercion):",
-      "   Python automatically converts one data type to another without user intervention.",
-      "   e.g. x = 10 (int) + 5.5 (float) -> x becomes 15.5 (float) to avoid data loss.",
-      "",
-      "2. Explicit Type Conversion (Type Casting):",
-      "   User manually converts the data type using built-in constructor functions:",
-      "   - int(), float(), str(), list(), tuple(), set(), dict()"
-    ]
-  },
-  {
-    title: "13. type() Function and is Operator",
-    content: [
-      "type() function: Used to check the data type of any object.",
-      "  e.g. print(type(10))     --> Output: <class 'int'>",
-      "       print(type(\"acb\"))  --> Output: <class 'str'>",
-      "",
-      "is operator: Identity operator that checks if two variables refer to the SAME object in memory.",
-      "  - '==' compares values.",
-      "  - 'is' compares memory address (identity).",
-      "  e.g. x = [1, 2], y = [1, 2] -> x == y is True, but x is y is False (different objects in memory)."
-    ]
-  },
-  {
-    title: "14. Dynamic and Strongly Typed Language",
-    content: [
-      "Dynamic Typing:",
-      "You don't need to specify variable data types beforehand. The type is bound to the value at runtime.",
-      "  e.g. x = 10 (int), then x = \"Hello\" (str) is perfectly valid.",
-      "",
-      "Strong Typing:",
-      "Python enforces strict type matching. It won't perform unsafe implicit conversions.",
-      "  e.g. \"Age: \" + 18 will raise a TypeError. You must write: \"Age: \" + str(18)."
+    type: "topic",
+    title: "4. Operators",
+    definition: "An operator is a symbol that performs operations on values and variables (operands). Python supports various categories of operators.",
+    subsections: [
+      {
+        title: "1. Arithmetic Operators (For calculations):",
+        bullets: [
+          "+ (Addition)      : Adds values (e.g. 5 + 3 = 8)",
+          "- (Subtraction)   : Subtracts values (e.g. 5 - 3 = 2)",
+          "* (Multiplication) : Multiplies values (e.g. 5 * 3 = 15)",
+          "/ (Division)       : Divides and returns float (e.g. 10 / 2 = 5.0)",
+          "// (Floor Div)     : Divides and removes decimals (e.g. 10 // 3 = 3)",
+          "% (Modulus)       : Returns remainder of division (e.g. 10 % 3 = 1)",
+          "** (Exponent)     : Power calculations (e.g. 2 ** 3 = 8)"
+        ]
+      },
+      {
+        title: "2. Comparison Operators (Compares values & returns True/False):",
+        bullets: [
+          "== (Equal to)      : Checks if values are equal (e.g. 5 == 5 -> True)",
+          "!= (Not equal to)  : Checks if different (e.g. 5 != 3 -> True)",
+          "> (Greater than)   : e.g. 10 > 5 -> True",
+          "< (Less than)      : e.g. 5 < 10 -> True",
+          ">=, <=             : Greater than/Less than or equal to"
+        ]
+      },
+      {
+        title: "3. Assignment Operators (Store & update values):",
+        bullets: [
+          "=  (Assignment)    : Assigns value (e.g. x = 10)",
+          "+= (Add & Assign)   : x += 5 is equivalent to x = x + 5",
+          "-=, *=, /=, %=      : Subtract, multiply, divide, modulus & assign"
+        ]
+      },
+      {
+        title: "4. Logical Operators (Combine conditions):",
+        bullets: [
+          "and : Returns True only if BOTH conditions are True",
+          "or  : Returns True if AT LEAST ONE condition is True",
+          "not : Negates the boolean result (not True -> False)"
+        ]
+      },
+      {
+        title: "5. Identity Operators (Compares memory addresses):",
+        bullets: [
+          "is     : True if variables refer to the SAME object in memory",
+          "is not : True if variables refer to DIFFERENT objects",
+          "Note   : 'a = [1,2]' & 'b = [1,2]' -> a == b is True, but a is b is False"
+        ]
+      },
+      {
+        title: "6. Membership Operators (Search in sequences):",
+        bullets: [
+          "in     : True if element exists in string/list (e.g. 'P' in 'Python')",
+          "not in : True if element does not exist (e.g. 'Z' not in 'Python')"
+        ]
+      }
     ]
   }
 ];
@@ -270,122 +124,286 @@ export async function generatePythonUnit1Notes() {
   const doc = new jsPDF('p', 'mm', 'a4');
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
-  const marginX = 30; // Leave space for vertical red margin line at X=25
-  const lineSpacing = 8; // Notebook line height
+  const logoBase64 = await getLogoBase64();
 
-  let currentY = 32;
   let pageNum = 1;
+  const lineSpacing = 8;
+  let currentY = 32;
 
-  // Function to draw lined notebook background
+  // Draw lined notebook page
   const drawNotebookPage = (pdfDoc, pNum) => {
-    // 1. Draw warm cream background
-    pdfDoc.setFillColor(255, 253, 240);
+    // 1. Draw warm notebook paper background
+    pdfDoc.setFillColor(254, 254, 252);
     pdfDoc.rect(0, 0, pageWidth, pageHeight, 'F');
 
-    // 2. Draw vertical red margin line
-    pdfDoc.setDrawColor(255, 77, 77); // Red
-    pdfDoc.setLineWidth(0.6);
-    pdfDoc.line(25, 0, 25, pageHeight);
-    pdfDoc.line(25.8, 0, 25.8, pageHeight); // double margin line
+    // 2. Draw vertical red margin lines on the left
+    pdfDoc.setDrawColor(248, 113, 113); // Soft red
+    pdfDoc.setLineWidth(0.4);
+    pdfDoc.line(22, 0, 22, pageHeight);
+    pdfDoc.line(22.8, 0, 22.8, pageHeight);
 
-    // 3. Draw horizontal blue lines
-    pdfDoc.setDrawColor(173, 216, 230); // Light blue
-    pdfDoc.setLineWidth(0.35);
-    for (let y = 30; y < pageHeight - 15; y += lineSpacing) {
+    // 3. Draw horizontal blue ruling lines
+    pdfDoc.setDrawColor(191, 219, 254); // Soft blue
+    pdfDoc.setLineWidth(0.3);
+    for (let y = 30; y < pageHeight - 10; y += lineSpacing) {
       pdfDoc.line(0, y, pageWidth, y);
     }
 
-    // 4. Page Header Branding in the top margin area
-    pdfDoc.setTextColor(79, 70, 229); // indigo
-    pdfDoc.setFont('courier', 'bolditalic');
-    pdfDoc.setFontSize(10);
-    pdfDoc.text("ACB - HANDWRITTEN CLASSROOM NOTES", 30, 15);
-    pdfDoc.setTextColor(148, 163, 184);
-    pdfDoc.text("CSE SEM-2: PYTHON PROGRAMMING", 30, 21);
+    // 4. Center Watermark Logo
+    if (logoBase64) {
+      pdfDoc.saveGraphicsState();
+      try {
+        const gState = new pdfDoc.GState({ opacity: 0.04 });
+        pdfDoc.setGState(gState);
+        pdfDoc.addImage(logoBase64, 'PNG', pageWidth / 2 - 45, pageHeight / 2 - 45, 90, 90);
+        
+        // Faded bottom watermark text
+        pdfDoc.setTextColor(148, 163, 184);
+        pdfDoc.setFont('helvetica', 'bold');
+        pdfDoc.setFontSize(28);
+        pdfDoc.text("APNA COLLEGE BIHAR", pageWidth / 2, pageHeight - 35, { align: 'center' });
+      } catch (e) {
+        console.warn("Watermark error:", e);
+      }
+      pdfDoc.restoreGraphicsState();
+    }
 
-    // Date/Page details on top right
-    pdfDoc.setTextColor(100, 116, 139);
-    pdfDoc.text(`PAGE: ${pNum}`, pageWidth - 35, 15);
-    pdfDoc.text("DATE: 06/06/2026", pageWidth - 50, 21);
+    // 5. Draw Header Branding (Matches exactly the layout in user's image)
+    // Logo in top-left
+    if (logoBase64) {
+      pdfDoc.addImage(logoBase64, 'PNG', 12, 4, 11, 11);
+    }
 
-    // Draw a divider line for the top margin
-    pdfDoc.setDrawColor(239, 68, 68); // Red top line
+    // Brand title next to logo
+    pdfDoc.setTextColor(31, 41, 55); // Slate-800
+    pdfDoc.setFont('helvetica', 'bold');
+    pdfDoc.setFontSize(16);
+    pdfDoc.text("APNA COLLEGE BIHAR", 26, 12);
+
+    // Page No and Date boxes on top-right
+    pdfDoc.setDrawColor(220, 38, 38); // Red boxes
+    pdfDoc.setLineWidth(0.4);
+    
+    // Page No box
+    pdfDoc.rect(155, 4, 43, 6);
+    pdfDoc.setFont('courier', 'italic');
+    pdfDoc.setFontSize(9);
+    pdfDoc.setTextColor(220, 38, 38);
+    pdfDoc.text(`Page No.      ${pNum}`, 157, 8);
+
+    // Date box
+    pdfDoc.rect(155, 12, 43, 6);
+    pdfDoc.text("Date :    /    /    ", 157, 16.5);
+
+    // Horizontal double line separator below header
+    pdfDoc.setDrawColor(79, 70, 229); // Indigo line
     pdfDoc.setLineWidth(0.5);
-    pdfDoc.line(0, 26, pageWidth, 26);
+    pdfDoc.line(5, 23.5, pageWidth - 5, 23.5);
+    pdfDoc.line(5, 24.2, pageWidth - 5, 24.2);
+
+    // Subtitle below divider
+    pdfDoc.setFont('courier', 'bolditalic');
+    pdfDoc.setFontSize(12);
+    pdfDoc.setTextColor(109, 40, 217); // Purple
+    pdfDoc.text("Chapter - Python Unit 1 : Input and Output", 26, 28.5);
   };
 
-  // Draw first page background
+  // Start with first page
   drawNotebookPage(doc, pageNum);
+  currentY = 37;
 
-  // Write Title
-  doc.setFont('courier', 'bolditalic');
-  doc.setFontSize(18);
-  doc.setTextColor(31, 41, 55); // slate-800
-  doc.text("UNIT 1: INPUT AND OUTPUT", 40, 38);
-  doc.line(40, 40, 128, 40); // underline
-  currentY = 48;
-
-  // Loop through topics and draw content
-  for (const topic of UNIT1_TOPICS) {
-    // Check if we need a page break before the heading
-    if (currentY + 20 > pageHeight - 20) {
+  const checkPageBreak = (neededLines = 1) => {
+    const spaceNeeded = neededLines * lineSpacing;
+    if (currentY + spaceNeeded > pageHeight - 15) {
       doc.addPage();
       pageNum++;
       drawNotebookPage(doc, pageNum);
-      currentY = 36;
+      currentY = 37;
     }
+  };
 
-    // Draw topic heading
-    doc.setFont('courier', 'bolditalic');
-    doc.setFontSize(12);
-    doc.setTextColor(79, 70, 229); // Indigo for headings
-    doc.text(topic.title, marginX, currentY);
-    currentY += lineSpacing;
-
-    // Draw topic content lines
-    doc.setFont('courier', 'italic');
-    doc.setFontSize(10);
-    doc.setTextColor(17, 24, 39); // Dark grey text
-
-    for (const line of topic.content) {
-      // Check if we need page break
-      if (currentY > pageHeight - 20) {
-        doc.addPage();
-        pageNum++;
-        drawNotebookPage(doc, pageNum);
-        currentY = 36;
-        
-        // Re-apply content styling
-        doc.setFont('courier', 'italic');
-        doc.setFontSize(10);
-        doc.setTextColor(17, 24, 39);
-      }
-
-      // Check if line is empty (skip or just spacing)
-      if (line.trim() !== "") {
-        // Wrap text to fit page width
-        const splitText = doc.splitTextToSize(line, pageWidth - marginX - 15);
-        for (const segment of splitText) {
-          if (currentY > pageHeight - 20) {
-            doc.addPage();
-            pageNum++;
-            drawNotebookPage(doc, pageNum);
-            currentY = 36;
-            doc.setFont('courier', 'italic');
-            doc.setFontSize(10);
-            doc.setTextColor(17, 24, 39);
-          }
-          doc.text(segment, marginX + (line.startsWith("  ") ? 5 : 0), currentY - 1.5); // align slightly above line
-          currentY += lineSpacing;
-        }
-      } else {
+  // Render notes sections
+  for (const sec of NOTEBOOK_SECTIONS) {
+    if (sec.type === "question") {
+      checkPageBreak(3);
+      doc.setFont('courier', 'bolditalic');
+      doc.setFontSize(10.5);
+      doc.setTextColor(220, 38, 38); // Red for Question
+      
+      const splitText = doc.splitTextToSize(sec.text, pageWidth - 35);
+      for (const segment of splitText) {
+        checkPageBreak(1);
+        doc.text(segment, 26, currentY - 1.5);
         currentY += lineSpacing;
       }
-    }
+    } 
     
-    currentY += lineSpacing; // add space between topics
+    else if (sec.type === "answer") {
+      checkPageBreak(1.5);
+      doc.setFont('courier', 'bolditalic');
+      doc.setFontSize(10.5);
+      doc.setTextColor(5, 150, 105); // Green for Answer
+      doc.text(sec.text, 26, currentY - 1.5);
+      doc.line(26, currentY, 41, currentY); // underline Answer
+      currentY += lineSpacing;
+    } 
+    
+    else if (sec.type === "topic") {
+      // Title
+      checkPageBreak(1.5);
+      doc.setFont('courier', 'bolditalic');
+      doc.setFontSize(10.5);
+      doc.setTextColor(29, 78, 216); // Blue for topic title
+      doc.text(sec.title, 26, currentY - 1.5);
+      doc.line(26, currentY, 26 + doc.getTextWidth(sec.title), currentY); // underline
+      currentY += lineSpacing;
+
+      // Definition Box
+      if (sec.definition) {
+        const descLines = doc.splitTextToSize(sec.definition, pageWidth - 72);
+        const boxHeight = Math.max(1, descLines.length) * lineSpacing;
+        
+        checkPageBreak(descLines.length + 1);
+
+        // Draw outer borders for definition box
+        doc.setDrawColor(29, 78, 216); // Blue box borders
+        doc.setLineWidth(0.4);
+        doc.rect(26, currentY - 6.5, pageWidth - 42, boxHeight);
+        doc.line(60, currentY - 6.5, 60, currentY - 6.5 + boxHeight); // vertical separator inside box
+
+        // Label Cell "Definition:"
+        doc.setFont('courier', 'bolditalic');
+        doc.setTextColor(220, 38, 38); // Red
+        doc.text("Definition:", 28, currentY - 1.5);
+
+        // Content Cell text
+        doc.setFont('courier', 'italic');
+        doc.setTextColor(31, 41, 55); // Dark text
+        let tempY = currentY;
+        for (const segment of descLines) {
+          doc.text(segment, 62, tempY - 1.5);
+          tempY += lineSpacing;
+        }
+
+        currentY += boxHeight;
+      }
+
+      // Rules Section
+      if (sec.rulesTitle) {
+        checkPageBreak(1.5);
+        doc.setFont('courier', 'bolditalic');
+        doc.setTextColor(220, 38, 38); // Red
+        doc.text(sec.rulesTitle, 28, currentY - 1.5);
+        currentY += lineSpacing;
+
+        doc.setFont('courier', 'italic');
+        doc.setTextColor(31, 41, 55);
+        for (const rule of sec.rules) {
+          checkPageBreak(1.5);
+          // Draw a small custom bullet point
+          doc.setFillColor(29, 78, 216);
+          doc.circle(30, currentY - 3, 0.6, 'F');
+          
+          const splitRule = doc.splitTextToSize(rule, pageWidth - 45);
+          let firstSeg = true;
+          for (const segment of splitRule) {
+            checkPageBreak(1);
+            doc.text(segment, 33, currentY - 1.5);
+            currentY += lineSpacing;
+          }
+        }
+      }
+
+      // Examples / Details list
+      if (sec.examples) {
+        checkPageBreak(1.5);
+        doc.setFont('courier', 'bolditalic');
+        doc.setTextColor(5, 150, 105); // Green for Examples
+        doc.text("Examples:", 28, currentY - 1.5);
+        currentY += lineSpacing;
+
+        doc.setFont('courier', 'italic');
+        doc.setTextColor(31, 41, 55);
+        for (const ex of sec.examples) {
+          checkPageBreak(1.5);
+          doc.text(ex, 30, currentY - 1.5);
+          currentY += lineSpacing;
+        }
+      }
+
+      // Single block text examples (like in Keywords)
+      if (sec.examplesText) {
+        checkPageBreak(2.5);
+        doc.setFont('courier', 'bolditalic');
+        doc.setTextColor(5, 150, 105); // Green
+        doc.text("Examples:", 28, currentY - 1.5);
+        
+        doc.setFont('courier', 'italic');
+        doc.setTextColor(31, 41, 55);
+        const splitExs = doc.splitTextToSize(sec.examplesText, pageWidth - 55);
+        let tempY = currentY;
+        splitExs.forEach((segment, sIdx) => {
+          checkPageBreak(1);
+          doc.text(segment, sIdx === 0 ? 50 : 28, tempY - 1.5);
+          tempY += lineSpacing;
+        });
+        currentY = tempY;
+      }
+
+      // Notes
+      if (sec.note) {
+        checkPageBreak(2);
+        doc.setFont('courier', 'bolditalic');
+        doc.setTextColor(220, 38, 38); // Red
+        doc.text("Note:", 28, currentY - 1.5);
+
+        doc.setFont('courier', 'italic');
+        doc.setTextColor(71, 85, 105); // Slate
+        const splitNote = doc.splitTextToSize(sec.note, pageWidth - 45);
+        let tempY = currentY;
+        splitNote.forEach((segment, sIdx) => {
+          checkPageBreak(1);
+          doc.text(segment, sIdx === 0 ? 41 : 28, tempY - 1.5);
+          tempY += lineSpacing;
+        });
+        currentY = tempY;
+      }
+
+      // Code blocks
+      if (sec.code) {
+        checkPageBreak(sec.code.length + 1);
+        doc.setFont('courier', 'bolditalic');
+        doc.setTextColor(31, 41, 55);
+        for (const cLine of sec.code) {
+          checkPageBreak(1);
+          doc.text(cLine, 28, currentY - 1.5);
+          currentY += lineSpacing;
+        }
+      }
+
+      // Subsections (for Operators details)
+      if (sec.subsections) {
+        for (const sub of sec.subsections) {
+          checkPageBreak(2);
+          doc.setFont('courier', 'bolditalic');
+          doc.setTextColor(109, 40, 217); // Purple
+          doc.text(sub.title, 28, currentY - 1.5);
+          currentY += lineSpacing;
+
+          doc.setFont('courier', 'italic');
+          doc.setTextColor(31, 41, 55);
+          for (const bullet of sub.bullets) {
+            checkPageBreak(1.5);
+            doc.setFillColor(29, 78, 216);
+            doc.circle(32, currentY - 3, 0.5, 'F');
+            doc.text(bullet, 35, currentY - 1.5);
+            currentY += lineSpacing;
+          }
+        }
+      }
+    }
   }
 
-  // Save the document
+  // Save PDF
   doc.save("ACB_Python_Unit1_Handwritten_Notes.pdf");
 }
