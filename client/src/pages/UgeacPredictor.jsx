@@ -12,11 +12,12 @@ function UgeacPredictor() {
   const { collegeSlug } = useParams();
   const location = useLocation();
   
-  const [rank, setRank] = useState('');
   const [ugeacInput, setUgeacInput] = useState('');
   const [category, setCategory] = useState('UR');
   const [gender, setGender] = useState('Male');
   const [catInput, setCatInput] = useState('');
+  const [rcgInput, setRcgInput] = useState('');
+  const [catFemaleInput, setCatFemaleInput] = useState('');
   
   const [mode, setMode] = useState(() => {
     const params = new URLSearchParams(window.location.search);
@@ -191,10 +192,10 @@ function UgeacPredictor() {
   const downloadRankPredictionPDF = async () => {
     const doc = new jsPDF();
     const logoBase = await getLogoBase64();
-    const urEst = estimateUgeacRank(parseInt(rank));
-    const catEst = getEstimatedCategoryRank(urEst, category);
-    const genderEst = getEstimatedGenderRank(urEst, gender);
-    const catFemaleEst = getEstimatedCategoryFemaleRank(urEst, category, gender);
+    const urRank = ugeacInput ? parseInt(ugeacInput) : 0;
+    const catEst = getEstimatedCategoryRank(urRank, category);
+    const genderEst = getEstimatedGenderRank(urRank, gender);
+    const catFemaleEst = getEstimatedCategoryFemaleRank(urRank, category, gender);
 
     // Main Card Box (y starts at 38, header ends at 26)
     doc.setFillColor(248, 250, 252);
@@ -207,13 +208,13 @@ function UgeacPredictor() {
     doc.text("ESTIMATED RANK PREDICTION REPORT", 20, 50);
 
     doc.setFontSize(9); doc.setFont("helvetica", "normal");
-    doc.text(`JEE Main AIR (CRL) Rank: ${rank}`, 20, 62);
+    doc.text(`UGEAC General UR Rank: ${ugeacInput || 'N/A'}`, 20, 62);
     doc.text(`Selected Category: ${category}`, 20, 69);
     doc.text(`Selected Gender: ${gender}`, 20, 76);
 
     doc.setFontSize(11); doc.setFont("helvetica", "bold");
     doc.setTextColor(79, 70, 229);
-    doc.text(`Estimated General (UR) Rank: #${urEst}`, 20, 88);
+    doc.text(`General (UR) Rank: #${urRank}`, 20, 88);
 
     if (category !== 'UR') {
       doc.text(`Estimated Category (${category}) Rank: #${catEst}`, 20, 96);
@@ -238,8 +239,24 @@ function UgeacPredictor() {
   };
 
   const calculateResults = () => {
-    if (!rank && !ugeacInput) return;
-    const ugeacRank = ugeacInput ? parseInt(ugeacInput) : estimateUgeacRank(parseInt(rank));
+    if (!ugeacInput) {
+      toast.error("Please enter your UGEAC State Rank");
+      return;
+    }
+    if (category !== 'UR' && !catInput) {
+      toast.error(`Please enter your ${category} Category Rank`);
+      return;
+    }
+    if (gender === 'Female' && !rcgInput) {
+      toast.error("Please enter your RCG Rank");
+      return;
+    }
+    if (gender === 'Female' && category !== 'UR' && !catFemaleInput) {
+      toast.error(`Please enter your ${category} Female Rank`);
+      return;
+    }
+
+    const ugeacRank = parseInt(ugeacInput);
     const eligibleCategories = ['UR'];
     if (category !== 'UR') eligibleCategories.push(category);
     if (gender === 'Female' && !eligibleCategories.includes('RCG')) eligibleCategories.push('RCG');
@@ -259,8 +276,26 @@ function UgeacPredictor() {
         const collegeInfo = colleges.find(c => c.id === d.collegeId);
         if (!collegeInfo) return;
 
-        const ratio = { 'EBC': 0.239, 'BC': 0.388, 'SC': 0.065, 'ST': 0.003, 'EWS': 0.227 }[d.category] || 1;
-        const compRank = (d.category === category && catInput) ? parseInt(catInput) : (d.category === 'UR' ? ugeacRank : Math.floor(ugeacRank * ratio));
+        // Determine compRank
+        let compRank = ugeacRank;
+        if (d.category === 'RCG') {
+          compRank = rcgInput ? parseInt(rcgInput) : Math.floor(ugeacRank * 0.18);
+        } else if (d.category === category) {
+          if (d.seatType === 'Female' && gender === 'Female') {
+            compRank = catFemaleInput ? parseInt(catFemaleInput) : Math.floor(parseInt(catInput) * 0.18);
+          } else {
+            compRank = parseInt(catInput);
+          }
+        } else if (d.category === 'UR') {
+          if (d.seatType === 'Female' && gender === 'Female') {
+            compRank = rcgInput ? parseInt(rcgInput) : Math.floor(ugeacRank * 0.18);
+          } else {
+            compRank = ugeacRank;
+          }
+        } else {
+          const ratio = { 'EBC': 0.239, 'BC': 0.388, 'SC': 0.065, 'ST': 0.003, 'EWS': 0.227 }[d.category] || 1;
+          compRank = Math.floor(ugeacRank * ratio);
+        }
         
         const cut24 = map2024.get(key), cut25 = map2025.get(key);
         const latestClosing = cut25 ? cut25.closing : (cut24 ? cut24.closing : 99999);
@@ -414,8 +449,8 @@ function UgeacPredictor() {
 
     doc.setTextColor(30, 41, 59);
     doc.setFontSize(8.5); doc.setFont("helvetica", "bold");
-    doc.text(`JEE Rank: ${rank || 'N/A'}`, 20, 47);
-    doc.text(`UGEAC Rank: ${results.calculatedRank}`, 70, 47);
+    doc.text(`UR State Rank: ${ugeacInput || 'N/A'}`, 20, 47);
+    doc.text(`Category Rank: ${catInput || 'N/A'}`, 70, 47);
     doc.text(`Category: ${category}`, 120, 47);
     doc.text(`Gender: ${gender}`, 160, 47);
 
@@ -757,103 +792,101 @@ function UgeacPredictor() {
                       <h3 className="text-base font-black text-slate-900 uppercase tracking-tight">UGEAC Rank Predictor</h3>
                       <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Predict your State & Category Merit Ranks</p>
                    </div>
-                </div>
+                </div>                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="input-group">
+                       <label className="premium-label">UGEAC State Rank (UR)</label>
+                       <input 
+                          type="number" 
+                          value={ugeacInput} 
+                          onChange={(e) => setUgeacInput(e.target.value)} 
+                          placeholder="Enter UGEAC UR Rank" 
+                          className="premium-input" 
+                       />
+                    </div>
+                    <div className="input-group">
+                       <label className="premium-label">Category</label>
+                       <select 
+                          className="premium-input" 
+                          value={category} 
+                          onChange={(e) => setCategory(e.target.value)}
+                       >
+                          {['UR', 'EWS', 'BC', 'EBC', 'SC', 'ST'].map(c => <option key={c} value={c}>{c}</option>)}
+                       </select>
+                    </div>
+                    <div className="input-group">
+                       <label className="premium-label">Gender</label>
+                       <select 
+                          className="premium-input" 
+                          value={gender} 
+                          onChange={(e) => setGender(e.target.value)}
+                       >
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                       </select>
+                    </div>
+                 </div>
+              </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                   <div className="input-group">
-                      <label className="premium-label">JEE Main AIR (CRL) Rank</label>
-                      <input 
-                         type="number" 
-                         value={rank} 
-                         onChange={(e) => setRank(e.target.value)} 
-                         placeholder="Enter AIR Rank" 
-                         className="premium-input" 
-                      />
-                   </div>
-                   <div className="input-group">
-                      <label className="premium-label">Category</label>
-                      <select 
-                         className="premium-input" 
-                         value={category} 
-                         onChange={(e) => setCategory(e.target.value)}
-                      >
-                         {['UR', 'EWS', 'BC', 'EBC', 'SC', 'ST'].map(c => <option key={c} value={c}>{c}</option>)}
-                      </select>
-                   </div>
-                   <div className="input-group">
-                      <label className="premium-label">Gender</label>
-                      <select 
-                         className="premium-input" 
-                         value={gender} 
-                         onChange={(e) => setGender(e.target.value)}
-                      >
-                         <option value="Male">Male / General</option>
-                         <option value="Female">Female</option>
-                      </select>
-                   </div>
-                </div>
-             </div>
+              {parseInt(ugeacInput) > 0 && (
+                 <div className="glass-panel bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-2xl space-y-8 animate-in zoom-in-95">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                       <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Estimated Rank Report</h4>
+                       <button 
+                          onClick={downloadRankPredictionPDF}
+                          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-md"
+                       >
+                          <Download size={14} /> Download PDF
+                       </button>
+                    </div>
 
-             {parseInt(rank) > 0 && (
-                <div className="glass-panel bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-2xl space-y-8 animate-in zoom-in-95">
-                   <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-400">Estimated Rank Report</h4>
-                      <button 
-                         onClick={downloadRankPredictionPDF}
-                         className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-md"
-                      >
-                         <Download size={14} /> Download PDF
-                      </button>
-                   </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                       <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
+                          <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest block">UGEAC General UR Rank</span>
+                          <span className="text-4xl font-[1000] text-white block mt-2">
+                             #{parseInt(ugeacInput)}
+                          </span>
+                          <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Your Entered UR Rank</span>
+                       </div>
 
-                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                      <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
-                         <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest block">UGEAC General UR Rank</span>
-                         <span className="text-4xl font-[1000] text-white block mt-2">
-                            #{estimateUgeacRank(parseInt(rank))}
-                         </span>
-                         <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Based on JEE AIR {rank}</span>
-                      </div>
+                       {category !== 'UR' && (
+                          <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
+                             <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest block">Estimated {category} Rank</span>
+                             <span className="text-4xl font-[1000] text-emerald-400 block mt-2">
+                                #{getEstimatedCategoryRank(parseInt(ugeacInput), category)}
+                             </span>
+                             <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Approx. {category} Quota</span>
+                          </div>
+                       )}
 
-                      {category !== 'UR' && (
-                         <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
-                            <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest block">Estimated {category} Rank</span>
-                            <span className="text-4xl font-[1000] text-emerald-400 block mt-2">
-                               #{getEstimatedCategoryRank(estimateUgeacRank(parseInt(rank)), category)}
-                            </span>
-                            <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Approx. {category} Quota</span>
-                         </div>
-                      )}
+                       {gender === 'Female' && (
+                          <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
+                             <span className="text-[9px] font-black text-pink-400 uppercase tracking-widest block">Estimated RCG Rank</span>
+                             <span className="text-4xl font-[1000] text-pink-400 block mt-2">
+                                #{getEstimatedGenderRank(parseInt(ugeacInput), gender)}
+                             </span>
+                             <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Reserved Category Girls</span>
+                          </div>
+                       )}
 
-                      {gender === 'Female' && (
-                         <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
-                            <span className="text-[9px] font-black text-pink-400 uppercase tracking-widest block">Estimated RCG Rank</span>
-                            <span className="text-4xl font-[1000] text-pink-400 block mt-2">
-                               #{getEstimatedGenderRank(estimateUgeacRank(parseInt(rank)), gender)}
-                            </span>
-                            <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Reserved Category Girls</span>
-                         </div>
-                      )}
+                       {category !== 'UR' && gender === 'Female' && (
+                          <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
+                             <span className="text-[9px] font-black text-rose-400 uppercase tracking-widest block">Estimated {category}-F Rank</span>
+                             <span className="text-4xl font-[1000] text-rose-400 block mt-2">
+                                #{getEstimatedCategoryFemaleRank(parseInt(ugeacInput), category, gender)}
+                             </span>
+                             <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Approx. {category} Female Quota</span>
+                          </div>
+                       )}
+                    </div>
 
-                      {category !== 'UR' && gender === 'Female' && (
-                         <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-center space-y-2 relative overflow-hidden group">
-                            <span className="text-[9px] font-black text-rose-400 uppercase tracking-widest block">Estimated {category}-F Rank</span>
-                            <span className="text-4xl font-[1000] text-rose-400 block mt-2">
-                               #{getEstimatedCategoryFemaleRank(estimateUgeacRank(parseInt(rank)), category, gender)}
-                            </span>
-                            <span className="text-[8px] text-slate-500 font-bold uppercase tracking-wide block">Approx. {category} Female Quota</span>
-                         </div>
-                      )}
-                   </div>
-
-                   <div className="bg-white/5 p-6 rounded-2xl border border-white/5 space-y-2">
-                      <h5 className="text-[10px] font-black uppercase tracking-wider text-slate-300">How is this calculated?</h5>
-                      <p className="text-[11px] text-slate-400 leading-relaxed font-medium">
-                         UGEAC general ranks are estimated using a distribution curve mapped from previous years' JEE Main AIR ranks versus UGEAC registration records. Category and Gender (RCG) ranks are computed based on standard BCECEB reservation proportions (UR: 40%, EBC: 18%, BC: 12%, SC: 16%, ST: 1%, EWS: 10%, RCG: 3%). 
-                      </p>
-                   </div>
-                </div>
-             )}
+                    <div className="bg-white/5 p-6 rounded-2xl border border-white/5 space-y-2">
+                       <h5 className="text-[10px] font-black uppercase tracking-wider text-slate-300">How is this calculated?</h5>
+                       <p className="text-[11px] text-slate-400 leading-relaxed font-medium">
+                          Category and Gender (RCG) ranks are estimated based on standard BCECEB reservation proportions (UR: 40%, EBC: 18%, BC: 12%, SC: 16%, ST: 1%, EWS: 10%, RCG: 3%). 
+                       </p>
+                    </div>
+                 </div>
+              )}
           </div>
         ) : (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -861,80 +894,105 @@ function UgeacPredictor() {
               {/* Profile & Controls */}
               <section className="glass-panel border-indigo-500/20">
                  <h2 className="section-title text-indigo-600"><Calculator size={18} /> Candidate Info</h2>
-                 
-                 <div className="space-y-6">
-                    {/* Rank Converter Insight */}
-                    <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                        <div className="flex items-center justify-between mb-4">
-                           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">JEE AIR Rank</span>
-                           <span className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">{ugeacInput ? 'Manual UGEAC' : 'Est. UGEAC'}</span>
-                        </div>
-                        <div className="flex items-center gap-4">
-                           <input type="number" value={rank} onChange={(e) => setRank(e.target.value)} className="w-1/2 bg-transparent border-b border-slate-200 text-xl font-black text-slate-900 outline-none focus:border-indigo-500 transition-colors" placeholder="0" />
-                           <div className="w-px h-8 bg-slate-200"></div>
-                           <div className="w-1/2 text-2xl font-[1000] text-indigo-600 tracking-tighter">#{ugeacInput || estimateUgeacRank(parseInt(rank)) || 0}</div>
-                        </div>
+                                 <div className="space-y-6">
+                    {/* Information Guide Card */}
+                    <div className="flex items-start gap-2.5 p-3.5 bg-indigo-50 border border-indigo-100 rounded-2xl shadow-sm">
+                      <Info size={16} className="text-indigo-600 shrink-0 mt-0.5" />
+                      <p className="text-[10px] text-indigo-750 font-bold uppercase tracking-wider leading-relaxed">
+                        Enter your UGEAC State Merit Rank (UR Rank) and Category Rank to calculate college admission chances.
+                      </p>
                     </div>
 
-                    {parseInt(rank) > 0 && (category !== 'UR' || gender === 'Female') && (
-                       <div className="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100/50 space-y-2 text-xs font-semibold animate-in fade-in">
-                         {category !== 'UR' && (
-                           <div className="flex justify-between items-center text-slate-700">
-                             <span className="text-slate-500 font-bold uppercase tracking-wider text-[9px]">Est. {category} Rank:</span>
-                             <span className="font-extrabold text-indigo-600">#{getEstimatedCategoryRank(estimateUgeacRank(parseInt(rank)), category)}</span>
-                           </div>
-                         )}
-                         {gender === 'Female' && (
-                           <div className="flex justify-between items-center text-slate-700">
-                             <span className="text-slate-500 font-bold uppercase tracking-wider text-[9px]">Est. RCG (Female) Rank:</span>
-                             <span className="font-extrabold text-pink-600">#{getEstimatedGenderRank(estimateUgeacRank(parseInt(rank)), gender)}</span>
-                           </div>
-                         )}
-                         {category !== 'UR' && gender === 'Female' && (
-                           <div className="flex justify-between items-center text-slate-700">
-                             <span className="text-slate-500 font-bold uppercase tracking-wider text-[9px]">Est. {category}-Female Rank:</span>
-                             <span className="font-extrabold text-rose-600">#{getEstimatedCategoryFemaleRank(estimateUgeacRank(parseInt(rank)), category, gender)}</span>
-                           </div>
-                         )}
-                       </div>
-                    )}
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                       <div className="input-group">
-                          <label className="premium-label">UGEAC State Rank (UR)</label>
-                          <input type="number" className="premium-input" placeholder="Overall Merit" value={ugeacInput} onChange={(e) => setUgeacInput(e.target.value)} />
-                       </div>
-                       {category !== 'UR' && (
-                         <div className="input-group animate-in slide-in-from-top-2">
-                            <label className="premium-label">{category} Category Rank</label>
-                            <input type="number" className="premium-input border-emerald-500/30" placeholder="Optional" value={catInput} onChange={(e) => setCatInput(e.target.value)} />
-                         </div>
-                       )}
+                    <div className="input-group">
+                       <label className="premium-label">UGEAC State Rank (UR) *</label>
+                       <input 
+                         type="number" 
+                         className="premium-input" 
+                         placeholder="Enter UR Rank" 
+                         value={ugeacInput} 
+                         onChange={(e) => setUgeacInput(e.target.value)} 
+                         required 
+                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                        <div className="input-group">
                           <label className="premium-label">Category</label>
-                          <select className="premium-input" value={category} onChange={(e) => setCategory(e.target.value)}>
+                          <select className="premium-input" value={category} onChange={(e) => {
+                            const cat = e.target.value;
+                            setCategory(cat);
+                            if (cat === 'UR') {
+                              setCatInput('');
+                              setCatFemaleInput('');
+                            }
+                          }}>
                              {['UR', 'EWS', 'BC', 'EBC', 'SC', 'ST', 'RCG', 'DQ', 'SMQ'].map(c => <option key={c} value={c}>{c}</option>)}
                           </select>
                        </div>
                        <div className="input-group">
                           <label className="premium-label">Gender</label>
-                          <select className="premium-input" value={gender} onChange={(e) => setGender(e.target.value)}>
+                          <select className="premium-input" value={gender} onChange={(e) => {
+                            const gen = e.target.value;
+                            setGender(gen);
+                            if (gen !== 'Female') {
+                              setRcgInput('');
+                              setCatFemaleInput('');
+                            }
+                          }}>
                              <option value="Male">Male</option>
                              <option value="Female">Female</option>
                           </select>
                        </div>
                     </div>
 
-                    <button onClick={calculateResults} className="btn-primary group">
-                      <Zap size={18} className="group-hover:fill-current transition-all" /> 
-                      {mode === 'wizard' ? 'Run Allotment Engine' : 'Calculate Chances'}
-                    </button>
-                 </div>
-              </section>
+                    {category !== 'UR' && (
+                      <div className="input-group animate-in slide-in-from-top-2">
+                         <label className="premium-label">{category} Category Rank *</label>
+                         <input 
+                           type="number" 
+                           className="premium-input border-emerald-500/30" 
+                           placeholder={`Enter ${category} Rank`} 
+                           value={catInput} 
+                           onChange={(e) => setCatInput(e.target.value)} 
+                           required 
+                         />
+                      </div>
+                    )}
 
+                    {gender === 'Female' && (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-in slide-in-from-top-2">
+                        <div className="input-group">
+                          <label className="premium-label">RCG Rank *</label>
+                          <input 
+                            type="number" 
+                            className="premium-input border-pink-500/30" 
+                            placeholder={ugeacInput ? `Est: ${Math.floor(parseInt(ugeacInput) * 0.18)}` : "Enter RCG Rank"} 
+                            value={rcgInput} 
+                            onChange={(e) => setRcgInput(e.target.value)} 
+                            required 
+                          />
+                        </div>
+                        {category !== 'UR' && (
+                          <div className="input-group">
+                            <label className="premium-label">{category} Female Rank *</label>
+                            <input 
+                              type="number" 
+                              className="premium-input border-rose-500/30" 
+                              placeholder={catInput ? `Est: ${Math.floor(parseInt(catInput) * 0.18)}` : `Enter ${category}-F Rank`} 
+                              value={catFemaleInput} 
+                              onChange={(e) => setCatFemaleInput(e.target.value)} 
+                              required 
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
+                     <button onClick={calculateResults} className="btn-primary group mt-6 w-full">
+                       <Zap size={18} className="group-hover:fill-current transition-all" /> 
+                       {mode === 'wizard' ? 'Run Allotment Engine' : 'Calculate Chances'}
+                     </button>
+                  </div>
+               </section>
               {(mode === 'finder' || mode === 'wizard') && (
                 <section className="glass-panel animate-in fade-in">
                    <h2 className="section-title"><Filter size={18} /> Multi-Filters</h2>
