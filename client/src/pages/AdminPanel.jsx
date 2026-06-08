@@ -13,6 +13,8 @@ import {
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '../context/AuthContext';
+import { isValidPDF } from '../utils/validation';
+import LoadingOverlay from '../components/LoadingOverlay';
 
 export default function AdminPanel() {
   const { user, ROLES, loading: authLoading } = useAuth();
@@ -29,7 +31,8 @@ export default function AdminPanel() {
   const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '', useAdSense: false, adSlot: '' });
   const [msg, setMsg] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
+const [uploading, setUploading] = useState(false);
+  const [loadingOverlayVisible, setLoadingOverlayVisible] = useState(false);
 
   // ── UPLOAD STATE ──
   const [docForm, setDocForm] = useState({ title: '', subject: '', selectedSubjectId: 'new', category: 'NOTES', branch: 'CSE', semester: '1', file: null, externalUrl: '' });
@@ -281,86 +284,96 @@ export default function AdminPanel() {
     flash('Broadcast Removed');
   };
   const handleUpload = async (e) => {
-    e.preventDefault();
-    const { title, subject, category, branch, semester, selectedSubjectId, file, externalUrl } = docForm;
-    
-    if (!title) { flash('Title required', 'err'); return; }
-    if (!subject) { flash('Subject Name required', 'err'); return; }
-    
-    setUploading(true);
-    try {
-      let finalUrl = externalUrl;
-      if (file) {
-        const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
-        const storageRef = ref(storage, `notes/${fileName}`);
-        const snapshot = await uploadBytes(storageRef, file);
-        finalUrl = await getDownloadURL(snapshot.ref);
-      }
+  e.preventDefault();
+  const { title, subject, category, branch, semester, selectedSubjectId, file, externalUrl } = docForm;
 
-      if (!finalUrl) { flash('File or Direct Link required', 'err'); setUploading(false); return; }
+  // Basic field validation
+  if (!title) { flash('Title required', 'err'); return; }
+  if (selectedSubjectId === 'new' && !subject) { flash('Subject Name required', 'err'); return; }
 
-      let parentFolderId = selectedSubjectId;
-
-      if (selectedSubjectId === 'new') {
-        const cleanSubject = subject.trim().toUpperCase();
-        const existingFld = docs.find(d => 
-          d.type === 'folder' && 
-          d.branch === branch && 
-          String(d.semester) === String(semester) && 
-          d.category === category && 
-          d.title?.trim().toUpperCase() === cleanSubject
-        );
-
-        if (existingFld) {
-          parentFolderId = existingFld.id;
-        } else {
-          const newFolderRef = await addDoc(collection(db, 'documents'), {
-            title: cleanSubject,
-            subject: cleanSubject,
-            category,
-            branch,
-            semester,
-            fileUrl: '',
-            type: 'folder',
-            parentId: 'root',
-            verified: true,
-            createdAt: serverTimestamp()
-          });
-          parentFolderId = newFolderRef.id;
-        }
-      }
-
-      const folderDoc = docs.find(d => d.id === parentFolderId) || { title: subject };
-      const finalSubject = folderDoc.title || subject;
-
-      await addDoc(collection(db, 'documents'), {
-        title,
-        subject: finalSubject.toUpperCase(),
-        category,
-        branch,
-        semester,
-        fileUrl: finalUrl,
-        type: 'file',
-        parentId: parentFolderId,
-        verified: true,
-        createdAt: serverTimestamp()
-      });
-      
-      flash('Success! Document ready in Library! ✅');
-      
-      setDocForm(prev => ({
-        ...prev,
-        title: '',
-        file: null,
-        externalUrl: ''
-      }));
-    } catch (err) { 
-       console.error("DEPLOY ERROR:", err);
-       flash('Deployment failed: ' + err.message, 'err'); 
-    } finally {
-       setUploading(false);
+  // File validation (if a file is selected)
+  if (file) {
+    // Use utility to validate PDF size and type
+    if (!isValidPDF(file)) {
+      flash('Invalid PDF file. Ensure it is a .pdf and under 10 MB.', 'err');
+      return;
     }
-  };
+  }
+
+  // Debug logging
+  console.log('Uploading notes:', { title, subject, category, branch, semester, selectedSubjectId, file, externalUrl });
+
+  setLoadingOverlayVisible(true);
+  setUploading(true);
+  try {
+    let finalUrl = externalUrl;
+    if (file) {
+      const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+      const storageRef = ref(storage, `notes/${fileName}`);
+      const snapshot = await uploadBytes(storageRef, file);
+      finalUrl = await getDownloadURL(snapshot.ref);
+    }
+    if (!finalUrl) { flash('File or Direct Link required', 'err'); return; }
+
+    let parentFolderId = selectedSubjectId;
+    if (selectedSubjectId === 'new') {
+      const cleanSubject = subject.trim().toUpperCase();
+      const existingFld = docs.find(d =>
+        d.type === 'folder' &&
+        d.branch === branch &&
+        String(d.semester) === String(semester) &&
+        d.category === category &&
+        d.title?.trim().toUpperCase() === cleanSubject
+      );
+      if (existingFld) {
+        parentFolderId = existingFld.id;
+      } else {
+        const newFolderRef = await addDoc(collection(db, 'documents'), {
+          title: cleanSubject,
+          subject: cleanSubject,
+          category,
+          branch,
+          semester,
+          fileUrl: '',
+          type: 'folder',
+          parentId: 'root',
+          verified: true,
+          createdAt: serverTimestamp()
+        });
+        parentFolderId = newFolderRef.id;
+      }
+    }
+
+
+    const folderDoc = docs.find(d => d.id === parentFolderId) || { title: subject };
+    const finalSubject = folderDoc.title || subject;
+    await addDoc(collection(db, 'documents'), {
+      title,
+      subject: finalSubject.toUpperCase(),
+      category,
+      branch,
+      semester,
+      fileUrl: finalUrl,
+      type: 'file',
+      parentId: parentFolderId,
+      verified: true,
+      createdAt: serverTimestamp()
+    });
+    flash('Success! Document ready in Library! ✅');
+    setDocForm(prev => ({
+      ...prev,
+      title: '',
+      file: null,
+      externalUrl: ''
+    }));
+  } catch (err) {
+    console.error('DEPLOY ERROR:', err);
+    flash('Deployment failed: ' + err.message, 'err');
+  } finally {
+    setUploading(false);
+    setLoadingOverlayVisible(false);
+  }
+};
 
   const handleAdUpload = async (e) => {
     e.preventDefault();
@@ -430,10 +443,16 @@ export default function AdminPanel() {
     </div>
   );
 
-  // if (!isAdmin) return <div className="text-center py-20 text-slate-500 font-bold uppercase tracking-widest">Unauthorized Access</div>;
+  
+if (!isAdmin) return (
+    <div className="text-center py-20 text-slate-500 font-bold uppercase tracking-widest">
+      Unauthorized Access
+    </div>
+  );
 
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-0 pb-12 space-y-6 animate-in fade-in duration-700">
+      <LoadingOverlay visible={loadingOverlayVisible} />
       
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-[#f8fafc] p-5 md:p-6 border border-slate-200/80 rounded-[2rem] shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-red-600/5 rounded-full blur-[100px] pointer-events-none"></div>
@@ -824,7 +843,7 @@ export default function AdminPanel() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {docs.filter(d => d.verified && (currentFolder ? d.parentId === currentFolder.id : (!d.parentId || d.parentId === 'root'))).map(d => (
+                  {docs.filter(d => (currentFolder ? d.parentId === currentFolder.id : (!d.parentId || d.parentId === 'root'))).map(d => (
                     <div key={d.id} className={`p-5 rounded-3xl border border-slate-200/50 hover:border-indigo-500/20 transition-all flex justify-between items-center group ${d.type==='folder'?'bg-amber-50/50':'bg-slate-100/40'}`}>
                         <div className="flex items-center gap-4 min-w-0 pr-2 cursor-pointer flex-1" onClick={() => d.type === 'folder' && navigateTo(d)}>
                            <div className={`p-2 rounded-xl ${d.type==='folder'?'bg-amber-600/10 text-amber-600':'bg-indigo-600/10 text-indigo-600'}`}>
@@ -832,7 +851,7 @@ export default function AdminPanel() {
                            </div>
                            <div className="min-w-0">
                               <p className="text-[12px] font-black text-slate-900 uppercase truncate">{d.title}</p>
-                              <p className="text-[8px] font-bold text-slate-600 uppercase tracking-widest mt-1">{d.subject} · {d.category}</p>
+                              <p className="text-[8px] font-bold text-slate-600 uppercase tracking-widest mt-1">{d.subject} · {d.category} {!d.verified && <span className="ml-1 text-amber-500">⏳ UNVERIFIED</span>}</p>
                            </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -843,7 +862,7 @@ export default function AdminPanel() {
                         </div>
                     </div>
                   ))}
-                  {docs.filter(d => d.verified && (currentFolder ? d.parentId === currentFolder.id : (!d.parentId || d.parentId === 'root'))).length === 0 && (
+                  {docs.filter(d => (currentFolder ? d.parentId === currentFolder.id : (!d.parentId || d.parentId === 'root'))).length === 0 && (
                     <div className="col-span-full py-10 text-center">
                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Empty Directory</p>
                     </div>

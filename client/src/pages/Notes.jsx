@@ -103,43 +103,30 @@ export default function Notes() {
       String(d.semester) === String(sem) &&
       (d.category === 'NOTES' || !d.category)
     );
-    // Dynamic injection of Python for CSE Sem 2
-    if (branch.id === 'CSE' && String(sem) === '2') {
-      if (!list.some(x => x.title === 'PROGRAMMING IN PYTHON')) {
-        list.push({
-          id: 'python_mock_folder',
-          title: 'PROGRAMMING IN PYTHON',
-          branch: 'CSE',
-          semester: 2,
-          type: 'folder',
-          parentId: 'root',
-          category: 'NOTES'
-        });
-      }
-    }
+
     return list;
+  }, [docs, branch, sem]);
+
+  // Orphan files: notes at root level that don't belong to any folder
+  const looseFiles = useMemo(() => {
+    if (!branch || !sem) return [];
+    return docs.filter(d =>
+      d.type !== 'folder' &&
+      (!d.parentId || d.parentId === 'root') &&
+      d.branch === branch.id &&
+      String(d.semester) === String(sem) &&
+      (d.category === 'NOTES' || !d.category) &&
+      d.fileUrl
+    );
   }, [docs, branch, sem]);
 
   // Files inside selected folder
   const folderFiles = useMemo(() => {
     if (!folder) return [];
-    if (folder.id === 'python_mock_folder') {
-      return [
-        {
-          id: 'python_unit1_notes',
-          title: 'Unit 1: Input and Output (Handwritten Notes)',
-          subject: 'PROGRAMMING IN PYTHON',
-          semester: 2,
-          type: 'file',
-          parentId: 'python_mock_folder',
-          category: 'NOTES',
-          fileUrl: 'generate-python-unit1'
-        }
-      ];
-    }
+
     return docs.filter(d =>
       d.parentId === folder.id &&
-      (d.category === 'NOTES' || d.type === 'folder')
+      (d.category === 'NOTES' || !d.category || d.type === 'folder')
     );
   }, [docs, folder]);
 
@@ -359,11 +346,11 @@ export default function Notes() {
           </div>
           {loading ? (
             <div className="py-16 text-center"><p className="text-slate-400 font-black uppercase tracking-widest animate-pulse text-sm">Loading subjects...</p></div>
-          ) : subjectFolders.length === 0 ? (
+          ) : subjectFolders.length === 0 && looseFiles.length === 0 ? (
             <div className="py-16 text-center bg-white rounded-[2rem] border border-dashed border-slate-200">
               <div className="text-4xl mb-3">📂</div>
-              <p className="text-slate-800 font-black text-base uppercase tracking-tight">No subjects yet</p>
-              <p className="text-slate-400 text-xs font-bold mt-1">Admin panel se {branch.short} Sem {sem} ke subject folders banao</p>
+              <p className="text-slate-800 font-black text-base uppercase tracking-tight">Coming Soon!</p>
+              <p className="text-slate-400 text-xs font-bold mt-1">Wait bruh! Jald hi notes upload honge. Stay tuned!</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
@@ -382,6 +369,10 @@ export default function Notes() {
                     Open Notes <ArrowRight size={10} />
                   </div>
                 </button>
+              ))}
+              {/* Orphan files not inside any folder */}
+              {looseFiles.map(d => (
+                <FileCard key={d.id} d={d} onAction={handleAction} accentColor="indigo" />
               ))}
             </div>
           )}

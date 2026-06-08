@@ -315,8 +315,8 @@ export default function PYQ() {
           ) : subjectFolders.length === 0 ? (
             <div className="py-16 text-center bg-white rounded-[2rem] border border-dashed border-slate-200">
               <div className="text-4xl mb-3">📂</div>
-              <p className="text-slate-800 font-black text-base uppercase tracking-tight">No subjects yet</p>
-              <p className="text-slate-400 text-xs font-bold mt-1">Admin panel se {branch.short} Sem {sem} ke PYQ subject folders banao</p>
+              <p className="text-slate-800 font-black text-base uppercase tracking-tight">Coming Soon!</p>
+              <p className="text-slate-400 text-xs font-bold mt-1">Wait bruh! Jald hi PYQs upload honge. Stay tuned!</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
