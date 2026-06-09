@@ -90,9 +90,9 @@ export default function Home() {
              <span className="text-sm md:text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">APNA COLLEGE BIHAR</span>
              <span className="text-[6px] md:text-[7px] text-blue-500 font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mt-0.5 md:mt-1 block">OFFICIAL STUDY ENGINE</span>
            </div>
-           <Link to="/" className="hidden md:inline-block ml-4 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Home</Link>
         </div>
         <div className="hidden md:flex items-center gap-6">
+           <Link to="/" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Home</Link>
             {featureCategories.map((category, idx) => (
               <div key={category.title} className="relative">
                 <button
