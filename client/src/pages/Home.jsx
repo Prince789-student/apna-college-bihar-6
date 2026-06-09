@@ -4,7 +4,7 @@ import {
   BookOpen, Calculator, Timer, Users, 
   ArrowRight, CheckCircle, GraduationCap, 
   Globe, Shield, Zap, Flame, Send, Youtube,
-  User, LogOut, ChevronDown, LayoutDashboard, Bell, Download, MessageCircle, ShieldCheck, Calendar, Sparkles, UserCheck, Briefcase, Award, Landmark, FileText, Library, ExternalLink, Link2
+  User, LogOut, LayoutDashboard, Bell, Download, MessageCircle, ShieldCheck, Calendar, Sparkles, UserCheck, Briefcase, Award, Landmark, FileText, Library, ExternalLink, Link2
 } from 'lucide-react';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -16,7 +16,6 @@ export default function Home() {
   const { user, loading, logout } = useAuth();
   const [stats, setStats] = useState({ users: 5000, docs: 100, groups: 24 });
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [activeFeatureIndex, setActiveFeatureIndex] = useState(null);
 
   const joinDate = user?.metadata?.creationTime 
     ? new Date(user.metadata.creationTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
