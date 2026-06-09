@@ -53,21 +53,9 @@ export default function Home() {
         { name: 'College Predictor', path: '/ugeac-predictor?tab=finder', icon: <Send size={16} /> },
         { name: 'Rank Predictor', path: '/ugeac-predictor?tab=predictor', icon: <Calculator size={16} /> },
         { name: 'Counselling Guide', path: '/ugeac-predictor?tab=guide', icon: <BookOpen size={16} /> },
-        { name: 'Compare Colleges', path: '/compare', icon: <Landmark size={16} /> },
-        { name: 'Percentile Predictor', path: '/percentile-predictor', icon: <Sparkles size={16} /> },
-        { name: 'College Directory', path: '/directory', icon: <Briefcase size={16} /> },
       ],
     },
-    {
-      title: 'Community',
-      items: [
-        { name: 'App Hub', path: '/hub', icon: <LayoutDashboard size={16} /> },
-        { name: 'Hackathons', path: '/hackathons', icon: <Zap size={16} /> },
-        { name: 'Search Library', path: '/search/beu-notes', icon: <ExternalLink size={16} /> },
-        { name: 'About ACB', path: '/about', icon: <ShieldCheck size={16} /> },
-        { name: 'Contact', path: '/contact', icon: <MessageCircle size={16} /> },
-      ],
-    },
+    // Community removed per request
   ];
 
   useEffect(() => {
@@ -134,8 +122,7 @@ export default function Home() {
                 )}
               </div>
             ))}
-           <Link to="/about" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">About</Link>
-           <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Contact</Link>
+           <Link to="/" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Home</Link>
         </div>
         <div className="flex items-center gap-3 md:gap-4">
            {loading ? (
