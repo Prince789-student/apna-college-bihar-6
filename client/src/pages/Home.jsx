@@ -284,6 +284,10 @@ export default function Home() {
                    Bihar ke engineering students ke liye complete solution — BEU semester notes download karein, UGEAC rank se apna college predict karein, aur counselling ki saari updates ek jagah paayein.
                 </p>
 
+            <div className="max-w-2xl mx-auto mb-10">
+              <GlobalSearch />
+            </div>
+
             <div className="pt-8 max-w-2xl mx-auto mb-16 flex flex-col sm:flex-row items-center justify-center gap-4">
               <a href="#features" className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95 flex items-center gap-2">
                 Access Study Hub <ArrowRight size={16} />
@@ -578,15 +582,36 @@ export default function Home() {
                 <div className="h-px flex-1 bg-slate-200"></div>
               </h3>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
-                 {cat.items.map((f, i) => (
-                   <Link key={i} to={f.link} target={f.link.startsWith('http') ? '_blank' : '_self'} className="group p-4 md:p-6 bg-white border border-slate-200/80 rounded-2xl md:rounded-3xl hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left shadow-sm flex flex-col h-full">
-                      <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center mb-4 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform shrink-0">
+                 {cat.items.map((f, i) => {
+                   const isExternal = f.link.startsWith('http');
+                   return isExternal ? (
+                     <a
+                       key={i}
+                       href={f.link}
+                       target="_blank"
+                       rel="noreferrer"
+                       className="group p-4 md:p-6 bg-white border border-slate-200/80 rounded-2xl md:rounded-3xl hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left shadow-sm flex flex-col h-full"
+                     >
+                       <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center mb-4 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform shrink-0">
                          {React.cloneElement(f.ic, { size: 18 })}
-                      </div>
-                      <h4 className="text-[10px] md:text-sm font-black text-slate-900 uppercase mb-2 tracking-tighter leading-none">{f.title}</h4>
-                      <p className="hidden md:block text-slate-500 font-medium leading-relaxed text-xs mt-auto">{f.d}</p>
-                   </Link>
-                 ))}
+                       </div>
+                       <h4 className="text-[10px] md:text-sm font-black text-slate-900 uppercase mb-2 tracking-tighter leading-none">{f.title}</h4>
+                       <p className="hidden md:block text-slate-500 font-medium leading-relaxed text-xs mt-auto">{f.d}</p>
+                     </a>
+                   ) : (
+                     <Link
+                       key={i}
+                       to={f.link}
+                       className="group p-4 md:p-6 bg-white border border-slate-200/80 rounded-2xl md:rounded-3xl hover:border-blue-500/50 hover:bg-slate-50 transition-all duration-500 hover:-translate-y-2 text-left shadow-sm flex flex-col h-full"
+                     >
+                       <div className="w-10 h-10 bg-slate-100 rounded-xl flex items-center justify-center mb-4 border border-slate-200 shadow-inner group-hover:scale-110 transition-transform shrink-0">
+                         {React.cloneElement(f.ic, { size: 18 })}
+                       </div>
+                       <h4 className="text-[10px] md:text-sm font-black text-slate-900 uppercase mb-2 tracking-tighter leading-none">{f.title}</h4>
+                       <p className="hidden md:block text-slate-500 font-medium leading-relaxed text-xs mt-auto">{f.d}</p>
+                     </Link>
+                   );
+                 })}
               </div>
             </div>
           ))}
