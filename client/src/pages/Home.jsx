@@ -104,14 +104,35 @@ export default function Home() {
            </div>
         </div>
         <div className="hidden md:flex items-center gap-6">
-            {featureCategories.map((category) => (
-              <Link
-                key={category.title}
-                to="#features"
-                className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors"
-              >
-                {category.title}
-              </Link>
+            {featureCategories.map((category, idx) => (
+              <div key={category.title} className="relative">
+                <button
+                  onClick={() => setActiveFeatureIndex(activeFeatureIndex === idx ? null : idx)}
+                  className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors"
+                >
+                  {category.title}
+                  <ChevronDown size={12} className={`transition-transform duration-200 ${activeFeatureIndex === idx ? 'rotate-180' : ''}`} />
+                </button>
+
+                {activeFeatureIndex === idx && (
+                  <>
+                    <div className="fixed inset-0 z-[1900]" onClick={() => setActiveFeatureIndex(null)} />
+                    <div className="absolute left-0 mt-3 w-56 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-2xl shadow-2xl p-2 z-[2000] animate-in fade-in duration-150 origin-top-left">
+                      {category.items.map((it) => (
+                        <Link
+                          key={it.name}
+                          to={it.path}
+                          className="flex items-center gap-3 w-full p-3 hover:bg-blue-50 text-slate-700 hover:text-blue-600 rounded-xl transition-all font-bold"
+                          onClick={() => setActiveFeatureIndex(null)}
+                        >
+                          <span className="w-4 h-4 text-slate-500">{it.icon}</span>
+                          <span className="text-[12px] font-black uppercase tracking-tight">{it.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
             ))}
            <Link to="/about" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">About</Link>
            <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Contact</Link>
