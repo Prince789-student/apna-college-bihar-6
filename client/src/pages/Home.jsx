@@ -103,7 +103,10 @@ export default function Home() {
              <span className="text-[6px] md:text-[7px] text-blue-500 font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mt-0.5 md:mt-1 block">OFFICIAL STUDY ENGINE</span>
            </div>
         </div>
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden xl:flex items-center gap-6">
+           <div className="w-[360px]">
+             <GlobalSearch />
+           </div>
            {featureCategories.map((category, index) => (
              <div
                key={category.title}
@@ -270,10 +273,6 @@ export default function Home() {
                 <p className="text-slate-400 text-xs md:text-sm font-medium mb-12 max-w-2xl mx-auto leading-relaxed">
                    Bihar ke engineering students ke liye complete solution — BEU semester notes download karein, UGEAC rank se apna college predict karein, aur counselling ki saari updates ek jagah paayein.
                 </p>
-
-            <div className="max-w-2xl mx-auto mb-10">
-              <GlobalSearch />
-            </div>
 
             <div className="pt-8 max-w-2xl mx-auto mb-16 flex flex-col sm:flex-row items-center justify-center gap-4">
               <a href="#features" className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-blue-900/20 active:scale-95 flex items-center gap-2">
