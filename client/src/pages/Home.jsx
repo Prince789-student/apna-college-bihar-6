@@ -10,7 +10,7 @@ import { collection, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
-import GlobalSearch from '../components/GlobalSearch';
+
 
 export default function Home() {
   const { user, loading, logout } = useAuth();
@@ -272,7 +272,9 @@ export default function Home() {
                 </p>
 
             <div className="max-w-2xl mx-auto mb-10">
-              <GlobalSearch />
+              <div className="text-slate-600 text-sm font-medium">
+                Get instant access to BEU notes, PYQ papers, counselling guides, and more.
+              </div>
             </div>
 
             <div className="pt-8 max-w-2xl mx-auto mb-16 flex flex-col sm:flex-row items-center justify-center gap-4">
