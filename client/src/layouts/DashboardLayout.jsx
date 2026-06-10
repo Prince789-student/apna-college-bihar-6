@@ -601,7 +601,8 @@ export default function DashboardLayout() {
           <Outlet />
         </div>
 
-        {/* Global Footer */}
+        {/* Global Footer - Only on website, not in native app */}
+        {!isNative && (
         <footer className="shrink-0 bg-slate-900 text-slate-400 py-12 px-6 lg:px-12 rounded-t-[2rem] md:rounded-t-[3rem] mt-12 w-full pb-32 lg:pb-12 border-t-[8px] border-blue-600">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             <div>
@@ -638,6 +639,7 @@ export default function DashboardLayout() {
             <p className="text-[8px] font-bold text-slate-600 tracking-wider">Made with <span className="text-red-500">❤️</span> for Bihar Engineering Students</p>
           </div>
         </footer>
+        )}
       </main>
 
       {/* Mobile Drawer Overlay */}

@@ -267,9 +267,16 @@ public class AppBlockerService extends AccessibilityService {
             boolean isSettings = packageName.contains("settings") || packageName.equals("com.android.settings");
             boolean isBlockedSettings = isSettings && (isActive && timerRunning);
 
-            // Package installer is only blocked if the blocker is active and the timer is running (prevents uninstallation)
-            boolean isInstaller = packageName.contains("packageinstaller");
-            boolean isBlockedInstaller = isInstaller && (isActive && timerRunning);
+            // Package installer & uninstall dialogs — blocked when timer is running (even without blocker)
+            // This prevents uninstallation of our app during any active study session
+            boolean isInstaller = packageName.contains("packageinstaller") ||
+                    packageName.contains("vending") ||   // Play Store uninstall
+                    packageName.equals("com.google.android.packageinstaller") ||
+                    packageName.equals("com.miui.packageinstaller") ||   // MIUI
+                    packageName.equals("com.samsung.android.packageinstaller") || // Samsung
+                    packageName.equals("com.oneplus.packageinstaller");   // OnePlus
+            // Block installer when timer is running, regardless of whether blocker is enabled
+            boolean isBlockedInstaller = isInstaller && timerRunning;
 
             // Get whitelisted packages
             Set<String> allowed = getAllowedPackages();
