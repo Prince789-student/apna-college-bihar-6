@@ -315,6 +315,7 @@
            width: 0 !important;
         }
      </style>
+  <script type="module" crossorigin src="/assets/index.js"></script>
 </head>
 
 <body class="bg-slate-50 font-sans antialiased text-slate-900">
@@ -385,42 +386,7 @@
          <li><a href="/bihar-engineering-counselling-2025.html">Bihar Engineering Counselling Guide</a></li>
       </ul>
    </noscript>
-   <script>
-      (function() {
-         // Intercept internal anchor clicks and route via History API
-         document.addEventListener('click', function (e) {
-            try {
-               const a = e.target.closest && e.target.closest('a');
-               if (!a) return;
-               const href = a.getAttribute && a.getAttribute('href');
-               if (!href) return;
-               // Only intercept same-origin internal links that start with '/'
-               if (
-                  href.startsWith('/') &&
-                  !a.hasAttribute('download') &&
-                  a.target !== '_blank' &&
-                  !href.startsWith('//')
-               ) {
-                  // Allow hash-only anchors to behave normally
-                  if (href.startsWith('#')) return;
-                  e.preventDefault();
-                  try {
-                     if (window.location.pathname + window.location.search !== href) {
-                        history.pushState({}, '', href);
-                     }
-                     window.dispatchEvent(new PopStateEvent('popstate'));
-                  } catch (err) {
-                     // Fallback to full navigation on error
-                     window.location.href = href;
-                  }
-               }
-            } catch (err) {
-               /* ignore */
-            }
-         }, false);
-      })();
-   </script>
-   <script type="module" src="/src/main.jsx"></script>
+   
 </body>
 
 </html>
