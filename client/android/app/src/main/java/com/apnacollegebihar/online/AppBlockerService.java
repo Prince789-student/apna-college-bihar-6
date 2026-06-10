@@ -52,30 +52,37 @@ public class AppBlockerService extends AccessibilityService {
         Log.d(TAG, "Cleared last launched package");
     }
 
+    // Flag to prevent double-launch on initial app startup
+    private static volatile boolean sLaunchedOnConnection = false;
+
     @Override
     protected void onServiceConnected() {
         super.onServiceConnected();
         Log.d(TAG, "AppBlockerService Connected and running!");
         loadSettingsFromPreferences();
 
-        // Auto-launch on boot / service connection if countdown focus is active
-        long now = System.currentTimeMillis();
-        if (sIsActive && sCountdownEnd > now) {
-            Log.d(TAG, "Active countdown detected on service connection. Force launching main activity.");
-            try {
-                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
-                if (launchIntent != null) {
-                    launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    startActivity(launchIntent);
+        // Auto-launch on boot ONLY if focus is active, with a delay to avoid
+        // interfering with the initial app load (which caused the reload bug).
+        final long now = System.currentTimeMillis();
+        if (sIsActive && sCountdownEnd > now && !sLaunchedOnConnection) {
+            sLaunchedOnConnection = true;
+            Log.d(TAG, "Active countdown detected. Scheduling deferred launch in 3s.");
+            new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+                try {
+                    // Only launch if we are truly not in the foreground
+                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+                    if (launchIntent != null) {
+                        launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(launchIntent);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to launch main activity on service connected", e);
                 }
-            } catch (Exception e) {
-                Log.e(TAG, "Failed to launch main activity on service connected", e);
-            }
+            }, 3000); // 3 second delay prevents double-load on initial open
+        } else {
+            // Reset flag when no active session, so next session works correctly
+            sLaunchedOnConnection = false;
         }
-
-        try {
-            Toast.makeText(this, "ACB Focus Mode: Service Started!", Toast.LENGTH_SHORT).show();
-        } catch (Exception ignored) {}
     }
 
     public void loadSettingsFromPreferences() {

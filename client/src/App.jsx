@@ -13,7 +13,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 
 // Pages (Lazy Loaded)
-const Home = React.lazy(() => import('./pages/Home'));
+const HomeOverview = React.lazy(() => import('./pages/HomeOverview'));
 const AppHub = React.lazy(() => import('./pages/AppHub'));
 const Login = React.lazy(() => import('./pages/Login'));
 const Signup = React.lazy(() => import('./pages/Signup'));
@@ -220,7 +220,6 @@ function App() {
         <React.Suspense fallback={<LoadingScreen />}>
           <Routes>
             {/* Public Routes */}
-            <Route path="/" element={isNative ? <AppHub /> : <Home />} />
             <Route path="/hub" element={<AppHub />} />
             <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
@@ -233,6 +232,7 @@ function App() {
 
           {/* Public Dashboard Routes (For SEO & Direct Sharing) */}
           <Route element={<DashboardLayout />}>
+            <Route path="/" element={isNative ? <AppHub /> : <HomeOverview />} />
             <Route path="/search/:keyword" element={<SearchSEO />} />
             <Route path="/notes" element={<Notes />} />
             <Route path="/notes/:branchId/:semesterId" element={<Notes />} />

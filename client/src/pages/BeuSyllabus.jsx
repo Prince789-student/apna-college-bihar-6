@@ -84,6 +84,54 @@ function cleanSyllabusText(rawText) {
 }
 
 // ─── Parse markdown syllabus text into structured subjects and units with topics ───
+
+function cleanTitleStr(s) {
+  let res = s.replace(/[^\x20-\x7E]/g, '');
+  res = res.replace(/["'”]/g, '');
+  const firstAlpha = res.search(/[A-Za-z0-9]/);
+  if (firstAlpha !== -1) res = res.substring(firstAlpha);
+  return res.trim();
+}
+
+function splitIntoTopics(text) {
+  if (!text || text.length < 5) return [];
+  if (text.split('. ').length > 2) {
+    const s = text.split('. ').filter(x => x.trim().length > 5).map(x => x.trim().replace(/\.$/, ''));
+    if (s.length > 0) return s;
+  }
+  let t = text.trim();
+  t = t.replace(/\.\s*$/, '');
+  const parts = [];
+  let depth = 0;
+  let current = '';
+  for (let i = 0; i < t.length; i++) {
+    const ch = t[i];
+    if (ch === '(' || ch === '[') depth++;
+    if (ch === ')' || ch === ']') depth--;
+    if (depth === 0 && (ch === ',' || ch === ';')) {
+      if (current.trim().length > 3) parts.push(current.trim());
+      current = '';
+    } else {
+      current += ch;
+    }
+  }
+  if (current.trim().length > 3) parts.push(current.trim());
+  return parts;
+}
+
+
+function getSubjectCredit(courseCode, title) {
+  if (/LAB/i.test(title) || /P$/i.test(courseCode || '')) {
+    if (/graphics|design/i.test(title)) return '3';
+    if (/workshop/i.test(title)) return '2';
+    return '1.5';
+  }
+  if (/math|physics|chemistry|programming/i.test(title)) return '4';
+  if (/english/i.test(title)) return '3';
+  if (/web design|python/i.test(title)) return '3'; // theory
+  return '3';
+}
+
 function parseSyllabusIntoSubjects(rawText) {
   if (!rawText) return [];
   const cleaned = cleanSyllabusText(rawText);
@@ -101,7 +149,7 @@ function parseSyllabusIntoSubjects(rawText) {
     let hasExplicitUnits = false;
     for (const line of lines) {
       const trimmed = line.trim();
-      if (/^#{3,4}\s*📌?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
+      if (/^#{3,4}\s*(?:📌)?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
           /^UNIT\s+\d/i.test(trimmed) || 
           /^Module\s+\d/i.test(trimmed) || 
           /^#{3,4}\s*Module\s+\d/i.test(trimmed)) {
@@ -137,7 +185,7 @@ function parseSyllabusIntoSubjects(rawText) {
       }
 
       // Check for Unit header
-      const isExplicitUnit = /^#{3,4}\s*📌?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
+      const isExplicitUnit = /^#{3,4}\s*(?:📌)?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
                              /^UNIT\s+\d/i.test(trimmed) || 
                              /^Module\s+\d/i.test(trimmed) || 
                              /^#{3,4}\s*Module\s+\d/i.test(trimmed);
@@ -155,7 +203,8 @@ function parseSyllabusIntoSubjects(rawText) {
         let remainingText = '';
 
         if (isExplicitUnit) {
-          title = trimmed.replace(/^#+\s*📌?\s*/, '').replace(/^UNIT\s+/i, 'Unit ').trim();
+          title = trimmed.replace(/^#+\s*(?:📌)?\s*/, '').replace(/^UNIT\s+/i, 'Unit ').trim();
+          title = title.replace(/\s*\d+\s*(?:hrs?|hours?)\s*$/i, '');
         } else if (isNumberedUnit) {
           const match = trimmed.match(/^\d+\s*\\?\.\s*\*\*(.+?)\*\*/);
           const num = match[0].match(/\d+/)[0];
@@ -207,7 +256,7 @@ function parseSyllabusIntoSubjects(rawText) {
               const scanLine = lines[scanIdx].trim();
               if (!scanLine) { scanIdx++; continue; }
               
-              const isNextUnit = /^#{3,4}\s*📌?\s*Unit[-–\s_—]*\d/i.test(scanLine) || 
+              const isNextUnit = /^#{3,4}\s*(?:📌)?\s*Unit[-–\s_—]*\d/i.test(scanLine) || 
                                  /^UNIT\s+\d/i.test(scanLine) || 
                                  /^Module\s+\d/i.test(scanLine) || 
                                  /^#{3,4}\s*Module\s+\d/i.test(scanLine);
@@ -318,7 +367,8 @@ function parseSyllabusIntoSubjects(rawText) {
           continue;
         }
         if (tr.length > 15 && !/^\d+\s+\d+\s+\d+/.test(tr)) {
-          const text = tr.replace(/\*\*/g, '').trim();
+          let text = tr.replace(/\*\*/g, '').trim();
+          text = text.replace(/^:?\s*\d+\s*(?:hrs?|hours?)\s*/i, '').trim();
           if (defaultUnit.topics.length > 0 && !defaultUnit.topics[defaultUnit.topics.length - 1].isHeading) {
             defaultUnit.topics[defaultUnit.topics.length - 1].text += ' ' + text;
           } else {
@@ -332,7 +382,33 @@ function parseSyllabusIntoSubjects(rawText) {
     }
   }
 
-  return subjects;
+  
+  for (const subject of subjects) {
+    if (subject.title) {
+      subject.title = cleanTitleStr(subject.title);
+    }
+    for (const unit of subject.units) {
+      const newTopics = [];
+      for (const topic of unit.topics) {
+        if (topic.isHeading) {
+          newTopics.push(topic);
+        } else {
+          const splits = splitIntoTopics(topic.text);
+          for (const sp of splits) {
+            newTopics.push({ text: sp, isHeading: false });
+          }
+        }
+      }
+      unit.topics = newTopics;
+    }
+  }
+    return subjects.sort((a, b) => {
+    const aIsLab = /LAB/i.test(a.title) || /P$/i.test(a.courseCode);
+    const bIsLab = /LAB/i.test(b.title) || /P$/i.test(b.courseCode);
+    if (aIsLab && !bIsLab) return 1;
+    if (!aIsLab && bIsLab) return -1;
+    return 0;
+  });
 }
 
 // ─── Single Topic Row Component ───────────────────────────────────────────────
@@ -340,6 +416,7 @@ function TopicRow({ topic, doneKey, subjectName, onToggle }) {
   const [done, setDone] = React.useState(() => {
     try { return JSON.parse(localStorage.getItem(doneKey) || 'false'); } catch { return false; }
   });
+  const [showVideo, setShowVideo] = React.useState(false);
 
   const toggleDone = () => {
     const next = !done;
@@ -359,44 +436,42 @@ function TopicRow({ topic, doneKey, subjectName, onToggle }) {
   const ytQuery = encodeURIComponent(`${topic.text} ${subjectName} BEU B.Tech in Hindi`);
 
   return (
-    <div className={`flex flex-col md:flex-row md:items-center justify-between gap-3 px-4 py-3.5 border-b border-slate-100 group transition-all ${done ? 'bg-emerald-50/50' : 'hover:bg-slate-50'}`}>
-      {/* Left part: Checkbox + Text */}
-      <div className="flex items-start gap-3 flex-1 min-w-0">
-        <button 
-          onClick={toggleDone} 
-          className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${done ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300 hover:border-emerald-400'}`}
-        >
-          {done && <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="white" strokeWidth="2"><polyline points="1,6 4,9 11,3"/></svg>}
-        </button>
-
-        <p className={`text-[13px] md:text-sm font-semibold leading-relaxed ${done ? 'line-through text-slate-400' : 'text-slate-800'}`}>
-          {topic.text}
-        </p>
+    <div className={`flex flex-col px-4 py-3.5 border-b border-slate-100 group transition-all ${done ? 'bg-emerald-50/50' : 'hover:bg-slate-50'}`}>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="flex items-start gap-3 flex-1 min-w-0">
+          <button 
+            onClick={toggleDone} 
+            className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${done ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300 hover:border-emerald-400'}`}
+          >
+            {done && <svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="white" strokeWidth="2"><polyline points="1,6 4,9 11,3"/></svg>}
+          </button>
+          <p className={`text-[13px] md:text-sm font-semibold leading-relaxed ${done ? 'line-through text-slate-400' : 'text-slate-800'}`}>
+            {topic.text}
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-1.5 pl-8 md:pl-0 flex-shrink-0 opacity-90 md:opacity-60 md:group-hover:opacity-100 transition-opacity">
+                    <a
+            href={`https://www.youtube.com/results?search_query=${ytQuery}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 md:px-2 md:py-1 bg-red-50 hover:bg-red-600 text-red-600 hover:text-white rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm"
+          >
+            <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+            YouTube
+          </a>
+          <button
+            onClick={toggleDone}
+            className={`px-2.5 py-1.5 md:px-2 md:py-1 rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm ${done ? 'bg-emerald-500 text-white' : 'bg-slate-100 hover:bg-emerald-500 text-slate-500 hover:text-white'}`}
+          >
+            {done ? '✓ Done' : 'Mark Done'}
+          </button>
+        </div>
       </div>
-
-      {/* Right/Bottom part: Action Buttons */}
-      <div className="flex flex-wrap items-center gap-1.5 pl-8 md:pl-0 flex-shrink-0 opacity-90 md:opacity-60 md:group-hover:opacity-100 transition-opacity">
-        <a
-          href={`https://www.youtube.com/results?search_query=${ytQuery}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1.5 px-2.5 py-1.5 md:px-2 md:py-1 bg-red-50 hover:bg-red-600 text-red-600 hover:text-white rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm"
-        >
-          <svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-          YouTube
-        </a>
-        <button
-          onClick={toggleDone}
-          className={`px-2.5 py-1.5 md:px-2 md:py-1 rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm ${done ? 'bg-emerald-500 text-white' : 'bg-slate-100 hover:bg-emerald-500 text-slate-500 hover:text-white'}`}
-        >
-          {done ? '✓ Done' : 'Mark Done'}
-        </button>
-      </div>
+      
     </div>
   );
 }
 
-// ─── Unit Accordion Component ──────────────────────────────────────────────────
 function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, onToggle }) {
   const [open, setOpen] = React.useState(unitIndex === 0);
   const [tick, setTick] = React.useState(0);
@@ -647,7 +722,7 @@ export default function BeuSyllabus() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 -mt-10 relative z-20">
+      <div className="max-w-4xl mx-auto px-2 md:px-4 -mt-8 md:-mt-10 relative z-20">
 
         {/* Controls */}
         <div className="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100 mb-6 flex flex-col md:flex-row gap-4">
@@ -691,7 +766,7 @@ export default function BeuSyllabus() {
 
         {/* Content Area */}
         <div className="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden min-h-[400px]">
-          <div className="p-6 bg-slate-50 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
+          <div className="p-4 md:p-6 bg-slate-50 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">
                 {branches.find(b => b.id === selectedBranch)?.label}
@@ -734,7 +809,7 @@ export default function BeuSyllabus() {
                         </h3>
                         {subject.courseCode && (
                           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
-                            Course Code: {subject.courseCode}
+                            Course Code: {subject.courseCode} • Credits: {getSubjectCredit(subject.courseCode, subject.title)}
                           </p>
                         )}
                       </div>

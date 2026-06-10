@@ -1,0 +1,310 @@
+// Track online/offline status
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Disable duplicate local phone modal
+    setPhoneModalOpen(false);
+
+    // Setup push notifications:
+    // - On NATIVE app (Android): skip web push — native app uses DailyNotificationPlugin
+    //   which sends notifications directly to the phone tray via Android AlarmManager.
+    // - On WEB (browser): use Firebase Web Push (Chrome notifications).
+    const setupNotifications = async () => {
+      if (!user || !isOnline) return;
+      if (isNative) {
+        // Native Android: notifications handled by DailyNotificationPlugin.java
+        // No web push needed — notifications go to phone tray automatically.
+        return;
+      }
+      // Web only: Firebase web push
+      if (!messaging) return;
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+          const token = await getToken(messaging, { vapidKey: VAPID_KEY });
+          if (token) {
+            await updateDoc(doc(db, 'users', user.uid), { fcmToken: token });
+          }
+        }
+      } catch (err) {
+        console.error('Push notification setup failed:', err);
+      }
+    };
+    setupNotifications();
+  }, [user, isOnline, isNative]);
+
+  // Unified Notification Manager Effect
+  useEffect(() => {
+    if (!user || !user.uid || !isOnline) return;
+
+    // 1. Real-time Nudges Listener
+    const sessionStart = new Date();
+    const nudgeQuery = query(
+      collection(db, 'nudges'),
+      where('toUserId', '==', user.uid),
+      where('timestamp', '>=', sessionStart)
+    );
+    const unsubNudge = onSnapshot(nudgeQuery, (snap) => {
+      snap.docChanges().forEach((change) => {
+        if (change.type === 'added') {
+          const nudge = change.doc.data();
+          const text = `📚 ${nudge.fromUserName || 'Scholar'} says: padh lo padh lo kam dega!`;
+          toast(text, {
+            duration: 6000,
+            icon: '💡',
+            style: { background: '#1e293b', color: '#f8fafc', fontWeight: '800', fontSize: '12px' }
+          });
+          if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification('Study Nudge 📚', { body: text, icon: '/logo-acb.png' });
+          }
+        }
+      });
+    });
+
+    // 2. Scheduled Checkers — ONLY on native app, skip on website
+    if (!isNative) return () => unsubNudge(); // Web: keep nudges only, skip all scheduled toasts
+    const runScheduledChecks = async () => {
+      const todayStr = new Date().toLocaleDateString('en-CA');
+      const curHour = new Date().getHours();
+
+      // morning greeting check (5:00 AM)
+      if (curHour >= 5) {
+        const morningKey = `morning_greeting_${todayStr}`;
+        if (!localStorage.getItem(morningKey)) {
+          const sessionsQuery = query(
+            collection(db, 'StudySessions'),
+            where('userId', '==', user.uid),
+            where('date', '==', todayStr)
+          );
+          const snap = await getDocs(sessionsQuery);
+          // If they have studied today, OR timer is active, OR it's 8 AM or later, they are awake!
+          const isAwake = !snap.empty || timerActive || curHour >= 8;
+          const userName = user.name || 'Bihari Babu';
+          let title = '';
+          let body = '';
+
+          if (!isAwake) {
+            title = `Good Morning Bhai ${userName} ☀️`;
+            body = `Uth ja bidu 😄, kitna soyega?\n\nNaya din hai, naya chance hai. Kal jo nahi hua uska tension chhod, aaj jo kar sakta hai uspar focus kar.\n\nChai ☕ pi, fresh ho, aur lag ja apne kaam par. Thoda-thoda karke hi bade sapne pure hote hain.\n\nAur haan, mobile scroll karne se pehle apna target yaad kar lena. 😏\n\nChal bhai, aaj ka din phod dete hain. 💪🔥\nGood Morning, have a great day! 🌞✨`;
+          } else {
+            title = `Good Morning Biru 🌞`;
+            body = `Subah-subah yaad aa gaya ki duniya mein ek banda aur hai jo bade-bade sapne dekhta hai aur phir unhe pura karne ki koshish bhi karta hai. 😄\n\nAaj ka mission simple hai:\n\nBakchodi limited 😜\nMehnat unlimited 💪\nTension zero 😌\n\nAur haan, agar aaj motivation na mile to yaad rakhna — sapne free hain, lekin unki EMI roz ki mehnat se bharni padti hai. 😅\n\nDin mast jaye bhai, kuch aisa karna ki raat ko lage ki aaj ka din waste nahi gaya. ❤️✨`;
+          }
+
+          toast.custom((t) => (
+            <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-md w-full bg-slate-900 text-white shadow-2xl rounded-[2rem] border border-slate-700/60 p-6 pointer-events-auto flex flex-col gap-3 font-['Inter'] z-[9999]`}>
+              <div className="flex justify-between items-start">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">🌅</span>
+                  <h4 className="text-xs font-black uppercase tracking-wider text-amber-400">{title}</h4>
+                </div>
+                <button onClick={() => toast.dismiss(t.id)} className="text-slate-400 hover:text-white text-[10px] font-black uppercase tracking-widest bg-white/10 px-2.5 py-1 rounded-lg">Close</button>
+              </div>
+              <p className="text-[10px] font-bold uppercase tracking-wider leading-relaxed whitespace-pre-line text-slate-300">
+                {body}
+              </p>
+            </div>
+          ), { duration: 15000 });
+
+          if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification(title, { body: body.replace(/\n\n/g, ' '), icon: '/logo-acb.png' });
+          }
+          localStorage.setItem(morningKey, 'true');
+        }
+      }
+
+      // class schedule alert (8:00 AM) - Always run before attendance warning
+      let timetableShown = false;
+      if (curHour >= 8) {
+        const ttKey = `timetable_alert_${todayStr}`;
+        if (!localStorage.getItem(ttKey)) {
+          const FULL_DAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+          const todayDay = FULL_DAYS[new Date().getDay()];
+          const todaySchedule = user.timetableV3?.[todayDay] || [];
+          const classes = todaySchedule.filter(c => c.subject && c.subject.trim() !== '');
+
+          if (classes.length > 0) {
+            const classListText = classes.map(c => `• ${c.startTime || ''}: ${c.subject}`).join('\n');
+            const text = `🗓️ Aaj ki Classes:\n${classListText}\nTime par pahunch jana biru, padhai shuru karo! 😉`;
+            
+            toast(text, {
+              duration: 8000,
+              icon: '🗓️',
+              style: { background: '#f8fafc', color: '#0f172a', fontWeight: '800', fontSize: '11px', border: '1px solid #e2e8f0' }
+            });
+            if ('Notification' in window && Notification.permission === 'granted') {
+              new Notification('Timetable Classes Alert', { body: text, icon: '/logo-acb.png' });
+            }
+          }
+          localStorage.setItem(ttKey, 'true');
+          timetableShown = true;
+        }
+      }
+
+      // attendance alert check (6:00 AM) - Shown after timetable check
+      const triggerAttendance = () => {
+        if (curHour >= 6) {
+          const attKey = `attendance_alert_${todayStr}`;
+          if (!localStorage.getItem(attKey)) {
+            const FULL_DAYS = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+            const todayDay = FULL_DAYS[new Date().getDay()];
+            const todaySchedule = user.timetableV3?.[todayDay] || [];
+            const todaySubjects = todaySchedule.filter(c => c.subject && c.subject.trim() !== '').map(c => c.subject.trim().toLowerCase());
+
+            if (todaySubjects.length > 0) {
+              const attendanceList = user.attendance || [];
+              const alerts = [];
+
+              todaySubjects.forEach(subName => {
+                const record = attendanceList.find(a => a.name.trim().toLowerCase() === subName);
+                if (record) {
+                  const percent = record.total > 0 ? Number(((record.present / record.total) * 100).toFixed(1)) : 0;
+                  const getMarks = (p) => {
+                    if (p < 75) return 0;
+                    if (p <= 80) return 1;
+                    if (p <= 85) return 2;
+                    if (p <= 90) return 3;
+                    if (p <= 95) return 4;
+                    return 5;
+                  };
+
+                  if (percent < 75) {
+                    alerts.push({
+                      type: 'danger',
+                      text: `🚨 Critical Attendance Alert: ${record.name} me attendance sirf ${percent}% hai (75% se niche)! College me back lag jayega biru, fatfat class lagao! 😤🔥`
+                    });
+                  } else {
+                    alerts.push({
+                      type: 'success',
+                      text: `🔥 Gazab Bhai! ${record.name} me attendance ${percent}% hai. Sessional me +${getMarks(percent)} number pakke hain tere! aise hi lagatar class karte raho! 💪✨`
+                    });
+                  }
+                }
+              });
+
+              alerts.forEach((alert, idx) => {
+                setTimeout(() => {
+                  toast(alert.text, {
+                    duration: 8000,
+                    icon: alert.type === 'danger' ? '🚨' : '🔥',
+                    style: { 
+                      background: alert.type === 'danger' ? '#fecaca' : '#d1fae5', 
+                      color: alert.type === 'danger' ? '#991b1b' : '#065f46', 
+                      fontWeight: '800', 
+                      fontSize: '11px',
+                      border: `1px solid ${alert.type === 'danger' ? '#fca5a5' : '#6ee7b7'}`
+                    }
+                  });
+                  if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('Attendance Alert', { body: alert.text, icon: '/logo-acb.png' });
+                  }
+                }, idx * 1000);
+              });
+            }
+            localStorage.setItem(attKey, 'true');
+          }
+        }
+      };
+
+      if (timetableShown) {
+        setTimeout(triggerAttendance, 2000); // Wait 2s if timetable was just shown
+      } else {
+        triggerAttendance();
+      }
+
+      // target setup alert (throttled once per day)
+      const triggerTargetAlert = async () => {
+        const targetKey = `target_check_${todayStr}`;
+        if (!localStorage.getItem(targetKey)) {
+          const tasksQuery = query(
+            collection(db, 'Tasks'),
+            where('userId', '==', user.uid),
+            where('date', '==', todayStr)
+          );
+          const snap = await getDocs(tasksQuery);
+          if (snap.empty) {
+            toast("🎯 Target Alert: Bhai, aaj ka study target set nahi kiya tune! Plan tab me ja aur subject targets set kar jaldi! 😤🔥", {
+              duration: 8000,
+              icon: '🎯',
+              style: { background: '#fffbeb', color: '#b45309', fontWeight: '800', fontSize: '11px', border: '1px solid #fde68a' }
+            });
+          } else {
+            toast(`🎯 Targets Setup: Aaj ke ${snap.docs.length} targets scheduled hain tere! Chal birus, unhe complete karke dikha de aaj! 💪🔥`, {
+              duration: 8000,
+              icon: '✅',
+              style: { background: '#f0fdf4', color: '#166534', fontWeight: '800', fontSize: '11px', border: '1px solid #bbf7d0' }
+            });
+          }
+          localStorage.setItem(targetKey, 'true');
+        }
+      };
+      
+      if (timetableShown) {
+        setTimeout(triggerTargetAlert, 4000);
+      } else {
+        setTimeout(triggerTargetAlert, 1500);
+      }
+    };
+
+    // Run scheduled checks on mount
+    runScheduledChecks();
+
+    // 3. Periodic "Bhai Padh Le" Inactivity Check (every 15 minutes)
+    const runInactivityCheck = async () => {
+      if (timerActive) return; // Currently studying, do not disturb
+      const todayStr = new Date().toLocaleDateString('en-CA');
+      
+      // Minimum 3 Hours Check: If user already studied 3 hours today, do not nag them!
+      // 3 hours = 3 * 3600 = 10800 seconds
+      const sessionsQuery = query(
+        collection(db, 'StudySessions'),
+        where('userId', '==', user.uid),
+        where('date', '==', todayStr)
+      );
+      const sessionsSnap = await getDocs(sessionsQuery);
+      const totalSecsToday = sessionsSnap.docs.reduce((a, s) => a + (Number(s.data().duration) || 0), 0);
+      if (totalSecsToday >= 10800) {
+        return; // Target met, no notification needed
+      }
+
+      const tasksQuery = query(
+        collection(db, 'Tasks'),
+        where('userId', '==', user.uid),
+        where('date', '==', todayStr),
+        where('done', '==', false)
+      );
+      const snap = await getDocs(tasksQuery);
+      if (!snap.empty) {
+        const text = "📚 Bhai padh le, target complete karna hai, time waste mat kar! Sapne free hain biru, par unki EMI roz ki mehnat se bharni padti hai! 😉🔥";
+        toast(text, {
+          duration: 9000,
+          icon: '✍️',
+          style: { background: '#fff1f2', color: '#be123c', fontWeight: '900', fontSize: '11px', border: '1px solid #fecdd3' }
+        });
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification('Padhai Remainder! 📚', { body: text, icon: '/logo-acb.png' });
+        }
+      }
+    };
+
+    // Run first check after 2 minutes to not annoy on initial log, then every 15 minutes
+    const initialReminderTimer = setTimeout(runInactivityCheck, 120000);
+    const intervalId = setInterval(runInactivityCheck, 900000);
+
+    return () => {
+      unsubNudge();
+      clearTimeout(initialReminderTimer);
+      clearInterval(intervalId);
+    };
+  }, [user, timerActive, isOnline]);
+
+  

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+﻿import React, { useState, useMemo, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import '../UgeacPredictor.css';
@@ -505,7 +505,7 @@ function UgeacPredictor() {
     // Brand all pages in the PDF document
     brandFullDocument(doc, "Counselling Report", logoData);
     
-    doc.save(`UGEAC_Analysis_2025.pdf`);
+    doc.save(`UGEAC_Analysis_2026.pdf`);
   };
 
   const sortedColleges = useMemo(() => [...colleges].sort((a,b) => a.name.localeCompare(b.name)), []);
@@ -514,16 +514,16 @@ function UgeacPredictor() {
   const seoDetails = useMemo(() => {
     if (collegeSlug && initialCollege) {
       return {
-        title: `${initialCollege.name} | UGEAC Cutoff Rank 2025`,
+        title: `${initialCollege.name} | UGEAC Cutoff Rank 2026`,
         description: `Check ${initialCollege.name} B.Tech admission cutoff ranks, fee structure, and seat matrix for UGEAC 2025.`,
-        keywords: `${initialCollege.short} Cutoff, ${initialCollege.name} admission, UGEAC Cutoff 2025, Bihar Engineering Cutoff`,
+        keywords: `${initialCollege.short} Cutoff, ${initialCollege.name} admission, UGEAC Cutoff 2026, Bihar Engineering Cutoff`,
         url: `https://www.apnacollegebihar.online/college/${collegeSlug}`
       };
     }
 
     if (mode === 'predictor') {
       return {
-        title: "UGEAC 2025 Rank Predictor & Category Ranks | Apna College Bihar",
+        title: "UGEAC 2026 Rank Predictor & Category Ranks | Apna College Bihar",
         description: "Estimate your UGEAC State Merit Rank, Category Rank, and Female Rank based on your JEE Main AIR.",
         keywords: "UGEAC Rank Predictor, Bihar Engineering Rank Predictor, JEE Main to UGEAC, Category Rank Bihar",
         url: "https://www.apnacollegebihar.online/ugeac-predictor?tab=predictor"
@@ -532,7 +532,7 @@ function UgeacPredictor() {
 
     if (mode === 'guide') {
       return {
-        title: "UGEAC 2025 Counselling Guide & Official Roadmap | Apna College Bihar",
+        title: "UGEAC 2026 Counselling Guide & Official Roadmap | Apna College Bihar",
         description: "Complete official roadmap, eligibility criteria, category reservation matrix, and document checklist for Bihar Engineering admissions.",
         keywords: "UGEAC Counselling Guide, Bihar Engineering Admission Roadmap, BCECEB Counselling Process, Document Checklist UGEAC",
         url: "https://www.apnacollegebihar.online/ugeac-predictor?tab=guide"
@@ -541,8 +541,8 @@ function UgeacPredictor() {
 
     // Default: finder (College Predictor)
     return {
-      title: "UGEAC 2025 College Predictor & Cutoff Ranks | Apna College Bihar",
-      description: "Predict your engineering college in Bihar based on UGEAC rank with 2024-2025 official cutoff data.",
+      title: "UGEAC 2026 College Predictor & Cutoff Ranks | Apna College Bihar",
+      description: "Predict your engineering college in Bihar based on UGEAC rank with 2025-2026 official cutoff data.",
       keywords: "UGEAC College Predictor, Bihar Engineering College Predictor, UGEAC Cutoff Ranks, BCE Bhagalpur Cutoff",
       url: "https://www.apnacollegebihar.online/ugeac-predictor?tab=finder"
     };
@@ -581,7 +581,7 @@ function UgeacPredictor() {
               {mode === 'finder' && (
                  <>
                     <h1>UGEAC COLLEGE <span className="highlight-text">FINDER</span></h1>
-                    <p>Predict your Bihar Engineering college admission chances based on 2024-2025 round-wise cutoff data.</p>
+                    <p>Predict your Bihar Engineering college admission chances based on 2025-2026 round-wise cutoff data.</p>
                  </>
               )}
               {mode === 'predictor' && (
@@ -680,12 +680,12 @@ function UgeacPredictor() {
                       <div className="grid grid-cols-2 gap-4 mt-6">
                          <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl text-center space-y-2 shadow-sm">
                             <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">General / BC / EBC</span>
-                            <span className="text-3xl font-[1000] text-slate-900 block">₹1200</span>
+                            <span className="text-3xl font-[1000] text-slate-900 block">â‚¹1200</span>
                             <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-widest block">Net Banking / UPI / Card</span>
                          </div>
                          <div className="bg-slate-50 border border-slate-100 p-6 rounded-2xl text-center space-y-2 shadow-sm">
                             <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">SC / ST / DQ (PwD)</span>
-                            <span className="text-3xl font-[1000] text-indigo-600 block">₹600</span>
+                            <span className="text-3xl font-[1000] text-indigo-600 block">â‚¹600</span>
                             <span className="text-[9px] font-bold text-indigo-600 uppercase tracking-widest block">Net Banking / UPI / Card</span>
                          </div>
                       </div>
@@ -1440,3 +1440,5 @@ function UgeacPredictor() {
 }
 
 export default UgeacPredictor;
+
+

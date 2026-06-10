@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   BookOpen, HelpCircle, FileText, CheckCircle2, ChevronRight, 
@@ -7,14 +7,14 @@ import {
 import SEO from '../components/SEO';
 
 const ugeacPages = {
-  'cutoff-2025': {
-    title: "UGEAC Cutoff Rank 2025 | Overall Closing Ranks Bihar Engineering",
-    description: "Official BCECEB UGEAC 2025 cutoff ranks for all 38 Bihar Government Engineering Colleges. Check branch-wise and category-wise opening & closing ranks.",
-    heading: "UGEAC 2025 Cutoff Ranks Analysis",
+  'cutoff-2026': {
+    title: "UGEAC Cutoff Rank 2026 | Overall Closing Ranks Bihar Engineering",
+    description: "Official BCECEB UGEAC 2026 cutoff ranks for all 38 Bihar Government Engineering Colleges. Check branch-wise and category-wise opening & closing ranks.",
+    heading: "UGEAC 2026 Cutoff Ranks Analysis",
     content: (
       <div className="space-y-6">
         <p className="text-slate-300 text-sm leading-relaxed font-semibold">
-          The Bihar government engineering colleges cutoff ranks for UGEAC 2025 vary significantly based on institutional tier and branch popularity. Top-tier colleges like MIT Muzaffarpur and BCE Bhagalpur have competitive cutoffs, particularly for Computer Science & Engineering (CSE).
+          The Bihar government engineering colleges cutoff ranks for UGEAC 2026 vary significantly based on institutional tier and branch popularity. Top-tier colleges like MIT Muzaffarpur and BCE Bhagalpur have competitive cutoffs, particularly for Computer Science & Engineering (CSE).
         </p>
         
         <div className="p-6 bg-slate-900/50 border border-white/5 rounded-2xl space-y-4">
@@ -63,7 +63,7 @@ const ugeacPages = {
 
         <div className="p-6 bg-blue-500/5 border border-blue-500/10 rounded-2xl">
           <h4 className="text-xs font-black text-white uppercase tracking-wider mb-2">Want to predict your college options?</h4>
-          <p className="text-xs text-slate-300 mb-4">Use our advanced UGEAC college predictor to evaluate your options using actual 2024 and 2025 cutoff datasets.</p>
+          <p className="text-xs text-slate-300 mb-4">Use our advanced UGEAC college predictor to evaluate your options using actual 2024 and 2026 cutoff datasets.</p>
           <Link to="/ugeac-predictor" className="inline-flex items-center gap-2 text-xs font-black text-blue-500 hover:text-blue-400 uppercase tracking-widest">
             Launch Predictor Tool <ChevronRight size={14} />
           </Link>
@@ -72,7 +72,7 @@ const ugeacPages = {
     )
   },
   'choice-filling-guide': {
-    title: "UGEAC Choice Filling Strategy 2025 | College Locking Guide",
+    title: "UGEAC Choice Filling Strategy 2026 | College Locking Guide",
     description: "Master the UGEAC choice filling process. Learn how to arrange colleges, prioritize branches, and lock choices to secure the best possible engineering seat.",
     heading: "UGEAC Choice Filling Strategy & Guide",
     content: (
@@ -111,8 +111,8 @@ const ugeacPages = {
     )
   },
   'seat-allotment': {
-    title: "UGEAC Seat Allotment Result 2025 | Check Allotment status",
-    description: "Track UGEAC 2025 Round 1, Round 2, and Mop-Up seat allotment results. Get step-by-step instructions on checking allotment status and upgrading options.",
+    title: "UGEAC Seat Allotment Result 2026 | Check Allotment status",
+    description: "Track UGEAC 2026 Round 1, Round 2, and Mop-Up seat allotment results. Get step-by-step instructions on checking allotment status and upgrading options.",
     heading: "UGEAC Seat Allotment Results Guide",
     content: (
       <div className="space-y-6">
@@ -145,8 +145,8 @@ const ugeacPages = {
     )
   },
   'merit-list': {
-    title: "UGEAC Merit List 2025 | BCECEB Rank Card download",
-    description: "Check the official BCECE Board UGEAC 2025 merit list and download your state rank card. Understand the relationship between JEE Main percentile and state ranks.",
+    title: "UGEAC Merit List 2026 | BCECEB Rank Card download",
+    description: "Check the official BCECE Board UGEAC 2026 merit list and download your state rank card. Understand the relationship between JEE Main percentile and state ranks.",
     heading: "UGEAC Merit List & State Ranks",
     content: (
       <div className="space-y-6">
@@ -163,7 +163,7 @@ const ugeacPages = {
             </li>
             <li className="flex items-start gap-2.5">
               <span className="text-blue-500 font-black">2.</span>
-              <span>Click on "Download Rank Card of UGEAC-2025".</span>
+              <span>Click on "Download Rank Card of UGEAC-2026".</span>
             </li>
             <li className="flex items-start gap-2.5">
               <span className="text-blue-500 font-black">3.</span>
@@ -175,8 +175,8 @@ const ugeacPages = {
     )
   },
   'counselling-process': {
-    title: "UGEAC Counselling Process 2025 | Step-by-Step guide",
-    description: "Step-by-step roadmap for UGEAC 2025 Bihar Engineering Counselling. Learn about registration, choice locking, seat allotment, and admission procedures.",
+    title: "UGEAC Counselling Process 2026 | Step-by-Step guide",
+    description: "Step-by-step roadmap for UGEAC 2026 Bihar Engineering Counselling. Learn about registration, choice locking, seat allotment, and admission procedures.",
     heading: "BCECE UGEAC Counselling Roadmap",
     content: (
       <div className="space-y-6">
@@ -186,7 +186,7 @@ const ugeacPages = {
 
         <div className="space-y-4">
           {[
-            { num: "1", title: "Online Registration & Payment", desc: "Register on BCECEB portal and pay the counseling fees (₹1200 for Gen/BC/EBC, ₹600 for SC/ST/DQ)." },
+            { num: "1", title: "Online Registration & Payment", desc: "Register on BCECEB portal and pay the counseling fees (â‚¹1200 for Gen/BC/EBC, â‚¹600 for SC/ST/DQ)." },
             { num: "2", title: "Merit List Publication", desc: "Download the UGEAC merit list containing state ranks based on JEE Main score." },
             { num: "3", title: "Online Option Entry (Choice Filling)", desc: "Lock preferences of colleges and branches on the counselling portal." },
             { num: "4", title: "Seat Allocation & Verification", desc: "Check allotment results, report to designated nodal centers for physical verification of documents." },
@@ -205,8 +205,8 @@ const ugeacPages = {
     )
   },
   'document-verification': {
-    title: "UGEAC Document Verification Checklist 2025 | Nodal Centres",
-    description: "Find the list of documents required for UGEAC 2025 physical verification. Get information on Nodal reporting centres and verification procedures.",
+    title: "UGEAC Document Verification Checklist 2026 | Nodal Centres",
+    description: "Find the list of documents required for UGEAC 2026 physical verification. Get information on Nodal reporting centres and verification procedures.",
     heading: "UGEAC Document Verification Guide",
     content: (
       <div className="space-y-6">
@@ -220,8 +220,8 @@ const ugeacPages = {
           </h3>
           <ul className="space-y-3.5 text-xs text-slate-300 font-semibold">
             <li className="flex items-center gap-3"><CheckCircle2 className="text-emerald-500 shrink-0" size={14} /> Printed Copy of Online filled Application Form (Part-A & Part-B)</li>
-            <li className="flex items-center gap-3"><CheckCircle2 className="text-emerald-500 shrink-0" size={14} /> UGEAC 2025 Rank Card</li>
-            <li className="flex items-center gap-3"><CheckCircle2 className="text-emerald-500 shrink-0" size={14} /> JEE Main 2025 Admit Card and Score Card</li>
+            <li className="flex items-center gap-3"><CheckCircle2 className="text-emerald-500 shrink-0" size={14} /> UGEAC 2026 Rank Card</li>
+            <li className="flex items-center gap-3"><CheckCircle2 className="text-emerald-500 shrink-0" size={14} /> JEE Main 2026 Admit Card and Score Card</li>
             <li className="flex items-center gap-3"><CheckCircle2 className="text-emerald-500 shrink-0" size={14} /> Class 10th Certificate & Marksheet (Age Proof)</li>
             <li className="flex items-center gap-3"><CheckCircle2 className="text-emerald-500 shrink-0" size={14} /> Class 12th Certificate & Marksheet</li>
             <li className="flex items-center gap-3"><CheckCircle2 className="text-emerald-500 shrink-0" size={14} /> Domicile (Permanent Residence) Certificate of Bihar</li>
@@ -322,3 +322,4 @@ export default function UgeacInfo() {
     </div>
   );
 }
+
