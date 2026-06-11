@@ -390,6 +390,31 @@ export default function PYQ() {
         </div>
       </div>
 
+      {/* ── Educational SEO Content ── */}
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 mx-auto prose prose-slate max-w-none shadow-sm mb-8">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">BEU Previous Year Question Papers (PYQs)</h2>
+        <p>
+          Welcome to the most comprehensive collection of <strong>Bihar Engineering University (BEU) Previous Year Question (PYQ) papers</strong>. Passing engineering exams in Bihar heavily relies on understanding the exam pattern, and there is no better way to do this than analyzing the actual University papers from the past 5-10 years.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">Why are PYQs Important for BEU Exams?</h3>
+        <p>
+          Unlike continuous internal assessments, the End Semester Exams (70 Marks) conducted by BEU follow a highly structured pattern. Historically, a significant percentage of questions—sometimes up to 40%—are repeated from past years or follow the exact same derivation/numerical model. Solving PYQs guarantees that you will clear the passing threshold (25 marks) with ease.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">How to Download BEU PYQ PDFs?</h3>
+        <ul>
+          <li>Select your specific Engineering Branch (e.g., CSE, Civil, ECE).</li>
+          <li>Choose your current Semester (Sem 1 to 8).</li>
+          <li>Open the Subject folder to access year-wise question papers.</li>
+          <li>Click the Download icon to save the official university question paper PDF directly to your device.</li>
+        </ul>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">Are these Official BCECEB/BEU Papers?</h3>
+        <p>
+          Yes! All papers available in our directory are original question papers distributed during the BEU End Semester Examinations. They are collected directly from students across all 38 Government Engineering Colleges in Bihar. We constantly update our database after every exam cycle.
+        </p>
+      </div>
 
     </div>
   );

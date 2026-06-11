@@ -1437,6 +1437,33 @@ function UgeacPredictor() {
         </div>
       )}
       
+      {/* ── Educational SEO Content ── */}
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 mx-auto max-w-4xl prose prose-slate max-w-none shadow-sm mb-12">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">UGEAC College Predictor: How it Works</h2>
+        <p>
+          The <strong>UGEAC College Predictor</strong> is an advanced tool designed specifically for Bihar Engineering aspirants. It uses official cutoff data from previous counseling years (2024 and 2025) released by BCECEB to estimate your chances of admission into various Government Engineering Colleges (GECs) in Bihar based on your JEE Main AIR (All India Rank).
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">How to Use the UGEAC Rank Predictor?</h3>
+        <ul>
+          <li><strong>Step 1:</strong> Enter your JEE Main CRL (Common Rank List) rank. Do not enter your JEE Category rank here.</li>
+          <li><strong>Step 2:</strong> Select your Reservation Category (UR, BC, EBC, SC, ST, EWS, RCG, DQ) as per your Bihar Domicile certificate.</li>
+          <li><strong>Step 3:</strong> Select your Gender. Female candidates automatically qualify for the 33% horizontal reservation under the RCG (Reserve Category Girls) quota.</li>
+          <li><strong>Step 4:</strong> Click "Calculate Results". The algorithm will convert your JEE Main AIR into an estimated UGEAC State Rank and Category Rank.</li>
+        </ul>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">Accuracy of the Predictions</h3>
+        <p>
+          While our predictor uses highly accurate mathematical interpolation based on the historical UGEAC rank vs. JEE Main rank curve, please note that the exact ranks fluctuate every year depending on the total number of registrations. We categorize your chances into <strong>High, Medium, and Low</strong> to give you a realistic expectation during choice filling.
+        </p>
+        
+        <h3 className="text-xl font-bold mt-8 mb-4">Frequently Asked Questions (FAQs)</h3>
+        <p><strong>Q: What is UGEAC?</strong><br/>
+        A: UGEAC stands for Undergraduate Engineering Admission Counselling. It is the centralized counseling process conducted by BCECEB for admission to B.Tech courses in Bihar's government and private engineering colleges based on JEE Main scores.</p>
+        <p><strong>Q: Is Bihar Domicile necessary for UGEAC?</strong><br/>
+        A: Yes, only candidates who are permanent residents of Bihar or whose parents are government employees posted in Bihar are eligible for state quota seats through UGEAC.</p>
+      </div>
+
       <Footer />
     </div>
   );

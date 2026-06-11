@@ -116,6 +116,30 @@ export default function About() {
           </div>
         </div>
 
+        {/* EEAT & Editorial Policy */}
+        <div className="bg-white border border-slate-200 rounded-[3rem] p-10 md:p-14 shadow-sm space-y-8 relative overflow-hidden group hover:border-indigo-500/50 transition-all">
+          <div className="flex flex-col md:flex-row gap-8">
+            <div className="flex-1 space-y-4">
+              <div className="flex items-center gap-3 text-indigo-600">
+                <BookOpen size={28} />
+                <h2 className="text-xl font-[1000] uppercase tracking-tight text-slate-900">Editorial Policy & Quality Assurance</h2>
+              </div>
+              <p className="text-xs md:text-sm font-medium text-slate-600 leading-relaxed pt-2">
+                At Apna College Bihar, we enforce strict editorial guidelines. All our educational content, including BEU notes, syllabus breakdowns, and counselling guides, is meticulously curated, fact-checked, and reviewed by subject matter experts. We rely exclusively on official data released by Bihar Engineering University (BEU) and BCECEB to guarantee 100% accuracy and reliability.
+              </p>
+            </div>
+            <div className="flex-1 space-y-4">
+              <div className="flex items-center gap-3 text-emerald-600">
+                <Shield size={28} />
+                <h2 className="text-xl font-[1000] uppercase tracking-tight text-slate-900">Our Commitment to Students</h2>
+              </div>
+              <p className="text-xs md:text-sm font-medium text-slate-600 leading-relaxed pt-2">
+                Our platform is committed to neutrality and objectivity. We do not promote bias towards any specific private engineering college. Our predictive tools and counselling advice are rooted in raw data analytics and historical counseling trends, ensuring that every engineering aspirant in Bihar receives trustworthy, data-driven academic support.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Community & Dev Info */}
         <div className="bg-white border border-slate-200 rounded-[3rem] p-10 md:p-14 shadow-sm text-center space-y-6 relative overflow-hidden">
           <div className="w-16 h-16 bg-blue-600 text-white rounded-[2rem] flex items-center justify-center mx-auto shadow-md">

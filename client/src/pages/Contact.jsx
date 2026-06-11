@@ -139,6 +139,17 @@ export default function Contact() {
               Loading…
             </iframe>
           </div>
+          <div className="space-y-8">
+            {/* Editorial Mission Statement (EEAT) */}
+            <div className="p-6 bg-white border border-slate-200 rounded-[2rem] shadow-sm space-y-3">
+              <div className="flex items-center gap-2 text-indigo-600 mb-2">
+                <CheckCircle2 size={20} />
+                <h3 className="text-sm font-[1000] uppercase tracking-tight text-slate-900">Our Editorial Mission</h3>
+              </div>
+              <p className="text-xs font-medium text-slate-600 leading-relaxed">
+                Apna College Bihar is committed to providing accurate, unbiased, and highly reliable educational resources. Our support team is trained to provide guidance based exclusively on official BEU and BCECEB documentation. If you find any discrepancies in our notes, syllabus, or predictors, please report them using the form. Our editorial team reviews and rectifies reported inaccuracies within 48 hours to maintain the highest standards of academic integrity.
+              </p>
+            </div>
 
           {/* FAQ Accordion */}
           <div className="space-y-6">
@@ -191,6 +202,7 @@ export default function Contact() {
           <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">BEU - APNA COLLEGE BIHAR</p>
           <p className="text-[9px] font-bold text-slate-500">Committed to 100% Student Satisfaction & Academic Excellence</p>
         </div>
+      </div>
       </div>
     </div>
   );

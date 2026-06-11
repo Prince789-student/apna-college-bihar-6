@@ -610,6 +610,43 @@ export default function BeuCgpa() {
           </div>
         </div>
       )}
+      {/* ── Educational Guide / SEO Content ─── */}
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 prose prose-slate max-w-none">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">How to Calculate BEU CGPA & SGPA?</h2>
+        <p>
+          The <strong>Bihar Engineering University (BEU)</strong> follows a strict Choice Based Credit System (CBCS). Under this system, each subject you study in your B.Tech course is assigned specific credits. Your overall performance is measured using SGPA (Semester Grade Point Average) and CGPA (Cumulative Grade Point Average).
+        </p>
+        
+        <h3 className="text-xl font-bold mt-8 mb-4">BEU Grading Formula Explained</h3>
+        <p>
+          Your SGPA is calculated by dividing the total grade points earned in a semester by the total credits attempted in that semester. The formula is:
+        </p>
+        <blockquote className="bg-slate-50 border-l-4 border-blue-600 p-4 rounded-r-xl my-4 font-mono text-sm text-slate-700">
+          SGPA = Σ (Course Credits × Grade Points) / Σ (Course Credits)
+        </blockquote>
+        <p>
+          To calculate your <strong>overall CGPA</strong>, you average the SGPA of all completed semesters, weighted by their respective credits. This CGPA Calculator automates this complex process for you, taking into account the exact BEU grading scale.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">How to Convert BEU CGPA to Percentage?</h3>
+        <p>
+          One of the most frequently asked questions by Bihar Engineering students during placements or higher education applications is how to convert their CGPA into a percentage. According to standard AICTE and BEU guidelines, the approximate conversion formula is:
+        </p>
+        <blockquote className="bg-slate-50 border-l-4 border-emerald-600 p-4 rounded-r-xl my-4 font-mono text-sm text-slate-700">
+          Percentage = (CGPA - 0.75) × 10
+        </blockquote>
+        <p>
+          Alternatively, some companies accept a direct multiplication by 9.5. Always check with your college's training and placement cell for the exact conversion certificate if required by recruiters like TCS, Wipro, or for GATE counseling.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">Passing Criteria & Backlog Rules</h3>
+        <p>
+          To pass a theory subject in BEU, you must secure a minimum of <strong>35% marks overall</strong> (Internal + External), AND a minimum of <strong>25 out of 70 marks</strong> specifically in your End Semester University Examination. Failing to meet either of these criteria will result in an 'F' grade, meaning you have a backlog in that subject.
+        </p>
+        <p>
+          If you get a backlog, you will need to re-appear for the End Semester exam for that subject in the subsequent semester or during special backlog examinations conducted by the university.
+        </p>
+      </div>
     </div>
   );
 }

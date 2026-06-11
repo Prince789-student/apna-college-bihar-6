@@ -428,6 +428,31 @@ export default function Notes() {
         </div>
       </div>
 
+      {/* ── Educational SEO Content ── */}
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 mx-auto prose prose-slate max-w-none shadow-sm mb-8">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Bihar Engineering University (BEU) B.Tech Notes</h2>
+        <p>
+          Welcome to the largest, most organized, and free repository of <strong>B.Tech Notes for Bihar Engineering University (BEU)</strong>. Whether you are studying Computer Science, Civil Engineering, Mechanical, or Electrical, our platform provides completely free access to chapter-wise handwritten and digital notes strictly aligned with the latest AICTE and BEU Syllabus.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">Why Follow the BEU Official Syllabus for Notes?</h3>
+        <p>
+          BEU standardizes the curriculum across all 38+ Government Engineering Colleges in Bihar. Relying on random internet notes can be dangerous because they might not cover the specific modules required for your End Semester Examinations. Our team meticulously curates notes from college toppers and faculties to ensure they exactly match the <strong>BEU Module-wise breakdown</strong>.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">How to Download BEU Notes in PDF?</h3>
+        <ul>
+          <li>Select your specific Branch (e.g., CSE, Civil, ECE).</li>
+          <li>Choose your current Semester (Sem 1 to 8).</li>
+          <li>Select the Subject folder you want to study.</li>
+          <li>Click the Download icon to save the high-quality PDF directly to your device for offline reading.</li>
+        </ul>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">Are these Notes Sufficient for End Semester Exams?</h3>
+        <p>
+          Yes! To maximize your SGPA/CGPA, we recommend combining these notes with our <strong>Previous Year Questions (PYQs)</strong> section. While notes build your conceptual foundation, solving PYQs is the ultimate hack to predict the exam pattern. Many questions in BEU exams are repeated from previous years.
+        </p>
+      </div>
 
     </div>
   );

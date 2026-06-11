@@ -18,6 +18,7 @@ import GlobalSearch from '../components/GlobalSearch';
 import Footer from '../components/Footer';
 import CountUp from '../components/CountUp';
 import Reveal from '../components/Reveal';
+import HomeEducationalGuide from '../components/HomeEducationalGuide';
 
 export default function Home() {
   const { user, loading, logout } = useAuth();
@@ -519,6 +520,8 @@ export default function Home() {
           </div>
         </Reveal>
       </section>
+
+      <HomeEducationalGuide />
 
       {/* ═══════════════════════════════════════════ */}
       {/* ── 9. FINAL CTA ── */}
