@@ -8,6 +8,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
 import GlobalSearch from '../components/GlobalSearch';
+import Footer from '../components/Footer';
 
 export default function AppHub() {
   const { user, logout } = useAuth();
@@ -196,17 +197,7 @@ export default function AppHub() {
         </div>
       </div>
 
-      {/* Footer Attribution & Policy Links */}
-      <div className="text-center space-y-3">
-        <div className="flex items-center justify-center gap-4 text-[9px] font-bold text-slate-500 uppercase tracking-wider">
-          <Link to="/privacy-policy" className="hover:text-blue-600 transition-colors">Privacy Policy</Link>
-          <span>•</span>
-          <Link to="/terms" className="hover:text-blue-600 transition-colors">Terms of Service</Link>
-          <span>•</span>
-          <Link to="/delete-account" className="hover:text-red-500 transition-colors">Delete Account</Link>
-        </div>
-        <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.4em]">BEU - APNA COLLEGE BIHAR</p>
-      </div>
+      <Footer />
     </div>
   );
 }

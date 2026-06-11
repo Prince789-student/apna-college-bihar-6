@@ -1,4 +1,4 @@
-﻿import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import '../UgeacPredictor.css';
@@ -7,6 +7,7 @@ import { getLogoBase64, applyPremiumBranding, brandFullDocument } from '../utils
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus, Minus, Layers, Search, Zap, Filter, LayoutGrid, Download, X, Calculator } from 'lucide-react';
 import SEO from '../components/SEO';
+import Footer from '../components/Footer';
 
 function UgeacPredictor() {
   const { collegeSlug } = useParams();
@@ -1435,6 +1436,8 @@ function UgeacPredictor() {
           </div>
         </div>
       )}
+      
+      <Footer />
     </div>
   );
 }

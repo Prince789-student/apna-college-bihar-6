@@ -13,6 +13,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 
 // Pages (Lazy Loaded)
+const Home = React.lazy(() => import('./pages/Home'));
 const HomeOverview = React.lazy(() => import('./pages/HomeOverview'));
 const AppHub = React.lazy(() => import('./pages/AppHub'));
 const Login = React.lazy(() => import('./pages/Login'));
@@ -42,12 +43,13 @@ const Contact = React.lazy(() => import('./pages/Contact'));
 const SearchSEO = React.lazy(() => import('./pages/SearchSEO'));
 const BeuToolSEO = React.lazy(() => import('./pages/BeuToolSEO'));
 const FeatureSEO = React.lazy(() => import('./pages/FeatureSEO'));
-const CollegePage = React.lazy(() => import('./pages/CollegePage'));
+const CollegeProfile = React.lazy(() => import('./pages/CollegeProfile'));
 const BranchHub = React.lazy(() => import('./pages/BranchHub'));
 const UgeacInfo = React.lazy(() => import('./pages/UgeacInfo'));
 const SubjectPage = React.lazy(() => import('./pages/SubjectPage'));
 const HackathonHub = React.lazy(() => import('./pages/HackathonHub'));
 const SitemapDirectory = React.lazy(() => import('./pages/SitemapDirectory'));
+const CollegeDirectory = React.lazy(() => import('./pages/CollegeDirectory'));
 const CompareColleges = React.lazy(() => import('./pages/CompareColleges'));
 const PercentilePredictor = React.lazy(() => import('./pages/PercentilePredictor'));
 
@@ -231,6 +233,9 @@ function App() {
           <Route path="/directory" element={isStandalone ? <Navigate to="/" replace /> : <SitemapDirectory />} />
 
           {/* Public Dashboard Routes (For SEO & Direct Sharing) */}
+          {/* Landing page for non-logged-in web visitors */}
+          {!user && !isNative && <Route path="/" element={<Home />} />}
+
           <Route element={<DashboardLayout />}>
             <Route path="/" element={isNative ? <AppHub /> : <HomeOverview />} />
             <Route path="/search/:keyword" element={<SearchSEO />} />
@@ -255,8 +260,9 @@ function App() {
             <Route path="/beu-result" element={<BeuResult />} />
             <Route path="/syllabus" element={<BeuSyllabus />} />
             <Route path="/syllabus/:branchId" element={<BeuSyllabus />} />
-            <Route path="/college/:collegeSlug" element={<CollegePage />} />
-            <Route path="/college/:collegeSlug/:section" element={<CollegePage />} />
+            <Route path="/colleges" element={<CollegeDirectory />} />
+            <Route path="/college/:collegeSlug" element={<CollegeProfile />} />
+            <Route path="/college/:collegeSlug/:section" element={<CollegeProfile />} />
             <Route path="/branch/:branchId" element={<BranchHub />} />
             <Route path="/branch/:branchId/:section" element={<BranchHub />} />
             <Route path="/ugeac/:page" element={<UgeacInfo />} />
