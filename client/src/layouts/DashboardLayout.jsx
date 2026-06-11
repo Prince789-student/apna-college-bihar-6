@@ -3,8 +3,11 @@ import { Outlet, useLocation, useNavigate, Link } from 'react-router-dom';
 import { ChevronLeft, Shield, Timer, X, LayoutDashboard, Library, BookOpen, Calendar, Clock, FileText, GraduationCap, Calculator, User, LogOut, Menu, UserCheck, Flame, Send, ChevronDown, Globe, Award, Link2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStudy } from '../context/StudyContext';
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, registerPlugin } from '@capacitor/core';
+import { LocalNotifications } from '@capacitor/local-notifications';
 import { getToken } from 'firebase/messaging';
+
+const AppBlocker = registerPlugin('AppBlocker');
 import { doc, updateDoc, collection, query, where, onSnapshot, getDocs } from 'firebase/firestore';
 import { messaging, VAPID_KEY, db } from '../firebase';
 import SEO from '../components/SEO';
@@ -253,19 +256,29 @@ export default function DashboardLayout() {
 
               alerts.forEach((alert, idx) => {
                 setTimeout(() => {
-                  toast(alert.text, {
-                    duration: 8000,
-                    icon: alert.type === 'danger' ? '🚨' : '🔥',
-                    style: { 
-                      background: alert.type === 'danger' ? '#fecaca' : '#d1fae5', 
-                      color: alert.type === 'danger' ? '#991b1b' : '#065f46', 
-                      fontWeight: '800', 
-                      fontSize: '11px',
-                      border: `1px solid ${alert.type === 'danger' ? '#fca5a5' : '#6ee7b7'}`
+                  if (isNative) {
+                    LocalNotifications.schedule({
+                      notifications: [{
+                        title: "Attendance Alert",
+                        body: alert.text,
+                        id: new Date().getTime() % 100000 + idx
+                      }]
+                    });
+                  } else {
+                    toast(alert.text, {
+                      duration: 8000,
+                      icon: alert.type === 'danger' ? '🚨' : '🔥',
+                      style: { 
+                        background: alert.type === 'danger' ? '#fecaca' : '#d1fae5', 
+                        color: alert.type === 'danger' ? '#991b1b' : '#065f46', 
+                        fontWeight: '800', 
+                        fontSize: '11px',
+                        border: `1px solid ${alert.type === 'danger' ? '#fca5a5' : '#6ee7b7'}`
+                      }
+                    });
+                    if ('Notification' in window && Notification.permission === 'granted') {
+                      new Notification('Attendance Alert', { body: alert.text, icon: '/logo-acb.png' });
                     }
-                  });
-                  if ('Notification' in window && Notification.permission === 'granted') {
-                    new Notification('Attendance Alert', { body: alert.text, icon: '/logo-acb.png' });
                   }
                 }, idx * 1000);
               });
@@ -292,17 +305,31 @@ export default function DashboardLayout() {
           );
           const snap = await getDocs(tasksQuery);
           if (snap.empty) {
-            toast("🎯 Target Alert: Bhai, aaj ka study target set nahi kiya tune! Plan tab me ja aur subject targets set kar jaldi! 😤🔥", {
-              duration: 8000,
-              icon: '🎯',
-              style: { background: '#fffbeb', color: '#b45309', fontWeight: '800', fontSize: '11px', border: '1px solid #fde68a' }
-            });
+            const text = "🎯 Target Alert: Bhai, aaj ka study target set nahi kiya tune! Plan tab me ja aur subject targets set kar jaldi! 😤🔥";
+            if (isNative) {
+              LocalNotifications.schedule({
+                notifications: [{ title: "Target Alert", body: text, id: new Date().getTime() % 100000 }]
+              });
+            } else {
+              toast(text, {
+                duration: 8000,
+                icon: '🎯',
+                style: { background: '#fffbeb', color: '#b45309', fontWeight: '800', fontSize: '11px', border: '1px solid #fde68a' }
+              });
+            }
           } else {
-            toast(`🎯 Targets Setup: Aaj ke ${snap.docs.length} targets scheduled hain tere! Chal birus, unhe complete karke dikha de aaj! 💪🔥`, {
-              duration: 8000,
-              icon: '✅',
-              style: { background: '#f0fdf4', color: '#166534', fontWeight: '800', fontSize: '11px', border: '1px solid #bbf7d0' }
-            });
+            const text = `🎯 Targets Setup: Aaj ke ${snap.docs.length} targets scheduled hain tere! Chal birus, unhe complete karke dikha de aaj! 💪🔥`;
+            if (isNative) {
+              LocalNotifications.schedule({
+                notifications: [{ title: "Targets Setup", body: text, id: new Date().getTime() % 100000 }]
+              });
+            } else {
+              toast(text, {
+                duration: 8000,
+                icon: '✅',
+                style: { background: '#f0fdf4', color: '#166534', fontWeight: '800', fontSize: '11px', border: '1px solid #bbf7d0' }
+              });
+            }
           }
           localStorage.setItem(targetKey, 'true');
         }
@@ -345,13 +372,19 @@ export default function DashboardLayout() {
       const snap = await getDocs(tasksQuery);
       if (!snap.empty) {
         const text = "📚 Bhai padh le, target complete karna hai, time waste mat kar! Sapne free hain biru, par unki EMI roz ki mehnat se bharni padti hai! 😉🔥";
-        toast(text, {
-          duration: 9000,
-          icon: '✍️',
-          style: { background: '#fff1f2', color: '#be123c', fontWeight: '900', fontSize: '11px', border: '1px solid #fecdd3' }
-        });
-        if ('Notification' in window && Notification.permission === 'granted') {
-          new Notification('Padhai Remainder! 📚', { body: text, icon: '/logo-acb.png' });
+        if (isNative) {
+          LocalNotifications.schedule({
+            notifications: [{ title: "Padhai Remainder! 📚", body: text, id: new Date().getTime() % 100000 }]
+          });
+        } else {
+          toast(text, {
+            duration: 9000,
+            icon: '✍️',
+            style: { background: '#fff1f2', color: '#be123c', fontWeight: '900', fontSize: '11px', border: '1px solid #fecdd3' }
+          });
+          if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification('Padhai Remainder! 📚', { body: text, icon: '/logo-acb.png' });
+          }
         }
       }
     };
@@ -377,26 +410,41 @@ export default function DashboardLayout() {
     catch (err) { console.error(err); } finally { setIsUpdating(false); }
   };
 
+  useEffect(() => {
+    if (isNative) {
+      AppBlocker.setBlockerActive({ active: timerActive }).catch(console.error);
+      if (timerActive) {
+        AppBlocker.lockApp().catch(console.error);
+      } else {
+        AppBlocker.unlockApp().catch(console.error);
+      }
+    }
+  }, [timerActive, isNative]);
+
+  useEffect(() => {
+    if (isNative) {
+      LocalNotifications.requestPermissions().catch(console.error);
+    }
+  }, [isNative]);
+
   const joinDate = user?.metadata?.creationTime 
     ? new Date(user.metadata.creationTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
     : 'Recently';
 
-  const FloatingTimer = () => {
+  const HeaderTimer = () => {
     const { timerActive, timerTime } = useStudy();
-    const [isMinimized, setIsMinimized] = useState(false);
     if (!timerActive || location.pathname === '/study') return null;
     const m = Math.floor((timerTime % 3600) / 60);
     const sec = timerTime % 60;
     return (
-      <div className={`fixed bottom-24 right-6 md:bottom-10 md:right-10 z-[100] transition-all duration-500 transform ${isMinimized ? 'translate-x-[70%]' : ''}`}>
-        <div className="bg-slate-900 border border-slate-700 p-1.5 rounded-[2rem] shadow-2xl flex items-center gap-4 group">
-          <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center animate-pulse"><Timer size={20} className="text-white" /></div>
-          <div className={`flex items-center gap-4 pr-6 ${isMinimized ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'}`}>
-            <div><p className="text-[8px] font-black text-blue-400 uppercase tracking-widest leading-none mb-1">Live Focus</p><p className="text-xl font-black text-white tabular-nums tracking-tighter">{m.toString().padStart(2, '0')}:{sec.toString().padStart(2, '0')}</p></div>
-            <button onClick={() => navigate('/study')} className="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-white text-[9px] font-black uppercase tracking-widest">Resume</button>
-          </div>
-          <button onClick={() => setIsMinimized(!isMinimized)} className="p-2 text-slate-500 hover:text-white">{isMinimized ? <ChevronLeft size={16} /> : <X size={16} />}</button>
-        </div>
+      <div 
+        onClick={() => navigate('/study')}
+        className="flex items-center gap-2 px-3 md:px-4 py-2 md:py-2.5 bg-slate-900 border border-slate-700 hover:border-blue-500/50 rounded-xl md:rounded-2xl cursor-pointer hover:bg-slate-800 transition-all shadow-lg active:scale-95 group animate-pulse"
+      >
+        <Timer size={14} className="text-blue-500 group-hover:text-white transition-colors" />
+        <span className="text-[10px] md:text-xs font-black text-white tabular-nums tracking-tighter">
+          {m.toString().padStart(2, '0')}:{sec.toString().padStart(2, '0')}
+        </span>
       </div>
     );
   };
@@ -512,17 +560,19 @@ export default function DashboardLayout() {
              {loading ? (
                <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
              ) : user ? (
-               <div className="flex items-center gap-4">
-                 <div className="relative hidden lg:block">
+               <div className="flex items-center gap-2 md:gap-4">
+                 <HeaderTimer />
+                 
+                 <div className={`relative ${isNative ? 'hidden' : 'block'}`}>
                    <a 
                      href="/ApnaCollegeBihar_Stable.apk"
                      download="ApnaCollegeBihar_Stable.apk"
-                     className="flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
+                     className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
                    >
-                     Download APK
+                     <span className="hidden md:inline">Download</span> APK
                    </a>
-                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
-                     Latest APK
+                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[6px] md:text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
+                     New
                    </span>
                  </div>
                  <div className="relative">
@@ -571,16 +621,18 @@ export default function DashboardLayout() {
                </div>
              ) : (
                <div className="flex items-center gap-2 md:gap-4">
-                 <div className="relative hidden lg:block">
+                 <HeaderTimer />
+
+                 <div className={`relative ${isNative ? 'hidden' : 'block'}`}>
                    <a 
                      href="/ApnaCollegeBihar_Stable.apk"
                      download="ApnaCollegeBihar_Stable.apk"
-                     className="flex items-center gap-2 px-5 py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
+                     className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
                    >
-                     Download APK
+                     <span className="hidden md:inline">Download</span> APK
                    </a>
-                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
-                     Latest APK
+                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[6px] md:text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
+                     New
                    </span>
                  </div>
                  <Link to="/login" className="hidden md:block px-4 py-2.5 md:px-5 md:py-3 text-slate-600 hover:text-slate-900 font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-colors">
@@ -681,21 +733,21 @@ export default function DashboardLayout() {
       {/* Verification Modal */}
       {isPhoneModalOpen && isOnline && <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-slate-50/80 backdrop-blur-xl"><div className="w-full max-w-md bg-white border border-slate-200 rounded-[3rem] p-10 text-center space-y-8 shadow-2xl relative overflow-hidden"><div className="inline-flex p-5 bg-blue-600/20 text-blue-500 rounded-3xl"><Shield size={32} /></div><h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Security Update</h2><p className="text-slate-500 text-sm">Please link your active mobile number to secure your college portal access.</p><form onSubmit={handlePhoneSubmit} className="space-y-6"><div className="flex gap-2"><div className="bg-slate-100 px-4 py-4 rounded-2xl text-xs font-black">+91</div><input type="tel" maxLength={10} value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} placeholder="10-DIGIT MOBILE NO." className="flex-1 bg-slate-100 rounded-2xl p-4 text-sm font-black outline-none" /></div><button type="submit" className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest transition-all">Save & Continue</button></form></div></div>}
 
-      <FloatingTimer />
-
-      {/* Mobile Bottom Navigation Bar */}
-      <nav className="lg:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-slate-200 pb-safe z-[150] flex items-center justify-around px-2 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
-         <BottomNavItem to="/" icon={LayoutDashboard} label="Home" />
-         <BottomNavItem to="/timetable" icon={Calendar} label="Time" />
-         <BottomNavItem to="/syllabus" icon={Library} label="Syllabus" />
-         <BottomNavItem to="/notes" icon={BookOpen} label="Notes" />
-         <button onClick={() => setMobileMenuOpen(true)} className="flex flex-col items-center justify-center gap-1 flex-1 py-2 text-slate-400 hover:text-slate-900 group">
-            <div className="p-1.5 rounded-xl transition-all group-hover:bg-slate-100">
-              <Menu size={20} strokeWidth={2.5} />
-            </div>
-            <span className="text-[8px] font-black uppercase tracking-widest group-hover:text-slate-900">Menu</span>
-         </button>
-      </nav>
+      {/* Mobile Bottom Navigation Bar - Only for Native App */}
+      {isNative && (
+        <nav className="lg:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-slate-200 pb-safe z-[150] flex items-center justify-around px-2 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+           <BottomNavItem to="/" icon={LayoutDashboard} label="Home" />
+           <BottomNavItem to="/timetable" icon={Calendar} label="Time" />
+           <BottomNavItem to="/syllabus" icon={Library} label="Syllabus" />
+           <BottomNavItem to="/notes" icon={BookOpen} label="Notes" />
+           <button onClick={() => setMobileMenuOpen(true)} className="flex flex-col items-center justify-center gap-1 flex-1 py-2 text-slate-400 hover:text-slate-900 group">
+              <div className="p-1.5 rounded-xl transition-all group-hover:bg-slate-100">
+                <Menu size={20} strokeWidth={2.5} />
+              </div>
+              <span className="text-[8px] font-black uppercase tracking-widest group-hover:text-slate-900">Menu</span>
+           </button>
+        </nav>
+      )}
     </div>
   );
 }

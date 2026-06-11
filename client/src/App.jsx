@@ -90,16 +90,16 @@ function GlobalProfilePrompt() {
     if (!name.trim()) return toast.error("Please enter your name!");
     if (!collegeName.trim()) return toast.error("Please enter your college name!");
     if (phoneNumber.length < 10) return toast.error("Enter a valid 10-digit mobile number!");
-    
+
     setIsSubmitting(true);
     try {
-      await updateProfileData({ 
+      await updateProfileData({
         name: name.trim(),
         collegeName: collegeName.trim(),
-        phone: phoneNumber 
+        phone: phoneNumber
       });
       toast.success("Profile setup completed successfully!");
-    } catch(err) {
+    } catch (err) {
       toast.error("Failed to save. Try again.");
     } finally {
       setIsSubmitting(false);
@@ -116,41 +116,41 @@ function GlobalProfilePrompt() {
           </div>
           <h2 className="text-2xl md:text-3xl font-[900] text-center text-slate-900 uppercase tracking-tighter mb-2">Profile Setup</h2>
           <p className="text-slate-500 text-xs font-bold text-center mb-6">Please complete your details to unlock and secure your college portal access.</p>
-          
+
           <form onSubmit={handleSubmit} className="w-full space-y-4">
             <div>
               <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Full Name</label>
-              <input 
-                type="text" 
-                value={name} 
-                onChange={(e) => setName(e.target.value)} 
-                placeholder="YOUR FULL NAME" 
-                className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" 
-                required 
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="YOUR FULL NAME"
+                className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400"
+                required
               />
             </div>
-            
+
             <div>
               <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">College Name</label>
-              <input 
-                type="text" 
-                value={collegeName} 
-                onChange={(e) => setCollegeName(e.target.value)} 
-                placeholder="YOUR COLLEGE NAME" 
-                className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" 
-                required 
+              <input
+                type="text"
+                value={collegeName}
+                onChange={(e) => setCollegeName(e.target.value)}
+                placeholder="YOUR COLLEGE NAME"
+                className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400"
+                required
               />
             </div>
 
             <div>
               <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Mobile Number</label>
-              <input 
-                type="tel" 
-                value={phoneNumber} 
-                onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0,10))} 
-                placeholder="10-DIGIT MOBILE NO." 
-                className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" 
-                required 
+              <input
+                type="tel"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                placeholder="10-DIGIT MOBILE NO."
+                className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400"
+                required
               />
             </div>
 
@@ -159,8 +159,8 @@ function GlobalProfilePrompt() {
             </button>
           </form>
 
-          <button 
-            onClick={() => logout()} 
+          <button
+            onClick={() => logout()}
             className="mt-6 text-red-400 hover:text-red-500 text-[9px] font-black uppercase tracking-widest transition-colors"
           >
             Sign out from this account
@@ -224,88 +224,88 @@ function App() {
             {/* Public Routes */}
             <Route path="/hub" element={<AppHub />} />
             <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/delete-account" element={<DeleteAccount />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/directory" element={isStandalone ? <Navigate to="/" replace /> : <SitemapDirectory />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/delete-account" element={<DeleteAccount />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/directory" element={isStandalone ? <Navigate to="/" replace /> : <SitemapDirectory />} />
 
-          {/* Public Dashboard Routes (For SEO & Direct Sharing) */}
-          {/* Landing page for non-logged-in web visitors */}
-          {!user && !isNative && <Route path="/" element={<Home />} />}
+            {/* Public Dashboard Routes (For SEO & Direct Sharing) */}
+            {/* Landing page for non-logged-in web visitors */}
+            {!user && !isNative && <Route path="/" element={<Home />} />}
 
-          <Route element={<DashboardLayout />}>
-            <Route path="/" element={isNative ? <AppHub /> : <HomeOverview />} />
-            <Route path="/search/:keyword" element={<SearchSEO />} />
-            <Route path="/notes" element={<Notes />} />
-            <Route path="/notes/:branchId/:semesterId" element={<Notes />} />
-            <Route path="/notes/:branchId" element={<Notes />} />
-            <Route path="/pyq" element={<PYQ />} />
-            <Route path="/pyq/:branchId/:semesterId" element={<PYQ />} />
-            <Route path="/pyq/:branchId" element={<PYQ />} />
-            <Route path="/attendance" element={<Attendance />} />
-            <Route path="/timetable" element={<Timetable />} />
-            <Route path="/study" element={<StudyDashboard />} />
-            <Route path="/study-resources" element={<StudyResources />} />
-            <Route path="/calculator" element={<ScientificCalc />} />
-            <Route path="/groups" element={<Group />} />
-            <Route path="/groups/:groupId" element={<GroupDetail />} />
-            <Route path="/achievements" element={<Achievements />} />
-            <Route path="/extras" element={<Extras />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/cgpa" element={<BeuCgpa />} />
-            <Route path="/ugeac-predictor" element={<UgeacPredictor />} />
-            <Route path="/beu-result" element={<BeuResult />} />
-            <Route path="/syllabus" element={<BeuSyllabus />} />
-            <Route path="/syllabus/:branchId" element={<BeuSyllabus />} />
-            <Route path="/colleges" element={<CollegeDirectory />} />
-            <Route path="/college/:collegeSlug" element={<CollegeProfile />} />
-            <Route path="/college/:collegeSlug/:section" element={<CollegeProfile />} />
-            <Route path="/branch/:branchId" element={<BranchHub />} />
-            <Route path="/branch/:branchId/:section" element={<BranchHub />} />
-            <Route path="/ugeac/:page" element={<UgeacInfo />} />
-            <Route path="/subject/:subjectSlug" element={<SubjectPage />} />
-            <Route path="/subject/:subjectSlug/:section" element={<SubjectPage />} />
-            <Route path="/hackathons" element={<HackathonHub />} />
-            <Route path="/compare" element={<CompareColleges />} />
-            <Route path="/compare/:college1VsCollege2" element={<CompareColleges />} />
-            <Route path="/percentile-predictor" element={<PercentilePredictor />} />
-            {/* BEU Tool SEO Routes – Attendance, Timetable, CGPA, Result */}
-            <Route path="/beu/:tool" element={<BeuToolSEO />} />
-            <Route path="/beu/:tool/:keyword" element={<BeuToolSEO />} />
-            {/* Feature SEO Routes – Study Timer, Groups, Calculator, etc. */}
-            <Route path="/feature/:feature" element={<FeatureSEO />} />
-            <Route path="/feature/:feature/:keyword" element={<FeatureSEO />} />
-          </Route>
-
-          {/* Protected Dashboard Routes */}
-          <Route element={<ProtectedRoute />}>
             <Route element={<DashboardLayout />}>
-              <Route path="/" element={<Navigate to="/" replace />} />
-              {/* Admin Routes */}
-              <Route element={<AdminRoute />}>
-                <Route path="/dashboard/admin" element={<AdminPanel />} />
+              <Route path="/" element={isNative ? <AppHub /> : <HomeOverview />} />
+              <Route path="/search/:keyword" element={<SearchSEO />} />
+              <Route path="/notes" element={<Notes />} />
+              <Route path="/notes/:branchId/:semesterId" element={<Notes />} />
+              <Route path="/notes/:branchId" element={<Notes />} />
+              <Route path="/pyq" element={<PYQ />} />
+              <Route path="/pyq/:branchId/:semesterId" element={<PYQ />} />
+              <Route path="/pyq/:branchId" element={<PYQ />} />
+              <Route path="/attendance" element={<Attendance />} />
+              <Route path="/timetable" element={<Timetable />} />
+              <Route path="/study" element={<StudyDashboard />} />
+              <Route path="/study-resources" element={<StudyResources />} />
+              <Route path="/calculator" element={<ScientificCalc />} />
+              <Route path="/groups" element={<Group />} />
+              <Route path="/groups/:groupId" element={<GroupDetail />} />
+              <Route path="/achievements" element={<Achievements />} />
+              <Route path="/extras" element={<Extras />} />
+              <Route path="/calendar" element={<Calendar />} />
+              <Route path="/cgpa" element={<BeuCgpa />} />
+              <Route path="/ugeac-predictor" element={<UgeacPredictor />} />
+              <Route path="/beu-result" element={<BeuResult />} />
+              <Route path="/syllabus" element={<BeuSyllabus />} />
+              <Route path="/syllabus/:branchId" element={<BeuSyllabus />} />
+              <Route path="/colleges" element={<CollegeDirectory />} />
+              <Route path="/college/:collegeSlug" element={<CollegeProfile />} />
+              <Route path="/college/:collegeSlug/:section" element={<CollegeProfile />} />
+              <Route path="/branch/:branchId" element={<BranchHub />} />
+              <Route path="/branch/:branchId/:section" element={<BranchHub />} />
+              <Route path="/ugeac/:page" element={<UgeacInfo />} />
+              <Route path="/subject/:subjectSlug" element={<SubjectPage />} />
+              <Route path="/subject/:subjectSlug/:section" element={<SubjectPage />} />
+              <Route path="/hackathons" element={<HackathonHub />} />
+              <Route path="/compare" element={<CompareColleges />} />
+              <Route path="/compare/:college1VsCollege2" element={<CompareColleges />} />
+              <Route path="/percentile-predictor" element={<PercentilePredictor />} />
+              {/* BEU Tool SEO Routes – Attendance, Timetable, CGPA, Result */}
+              <Route path="/beu/:tool" element={<BeuToolSEO />} />
+              <Route path="/beu/:tool/:keyword" element={<BeuToolSEO />} />
+              {/* Feature SEO Routes – Study Timer, Groups, Calculator, etc. */}
+              <Route path="/feature/:feature" element={<FeatureSEO />} />
+              <Route path="/feature/:feature/:keyword" element={<FeatureSEO />} />
+            </Route>
+
+            {/* Protected Dashboard Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route element={<DashboardLayout />}>
+                <Route path="/" element={<Navigate to="/" replace />} />
+                {/* Admin Routes */}
+                <Route element={<AdminRoute />}>
+                  <Route path="/dashboard/admin" element={<AdminPanel />} />
+                </Route>
               </Route>
             </Route>
-          </Route>
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </React.Suspense>
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </React.Suspense>
       </>
     );
   } catch (error) {
     console.error("App Crash:", error);
     return (
-        <div className="min-h-screen bg-[#0a0f1d] flex flex-col items-center justify-center p-10 text-center">
-          <div className="w-16 h-16 bg-red-600/20 text-red-500 rounded-2xl flex items-center justify-center mb-6"><AlertTriangle size={32} /></div>
-          <h2 className="text-xl font-black text-white uppercase tracking-tighter mb-2">Interface Error</h2>
-          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-relaxed mb-8">Something went wrong while initializing the hub. Please try restarting the app.</p>
-          <button onClick={() => setLoading(true)} className="px-8 py-4 bg-white text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">Retry Hub</button>
-        </div>
+      <div className="min-h-screen bg-[#0a0f1d] flex flex-col items-center justify-center p-10 text-center">
+        <div className="w-16 h-16 bg-red-600/20 text-red-500 rounded-2xl flex items-center justify-center mb-6"><AlertTriangle size={32} /></div>
+        <h2 className="text-xl font-black text-white uppercase tracking-tighter mb-2">Interface Error</h2>
+        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-relaxed mb-8">Something went wrong while initializing the hub. Please try restarting the app.</p>
+        <button onClick={() => setLoading(true)} className="px-8 py-4 bg-white text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">Retry Hub</button>
+      </div>
     );
   }
 }
