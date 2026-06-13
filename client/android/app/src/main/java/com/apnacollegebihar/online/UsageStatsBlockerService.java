@@ -16,9 +16,10 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
+import android.media.MediaPlayer;
+import android.support.v4.media.session.MediaSessionCompat;
 
 import androidx.core.app.NotificationCompat;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
@@ -33,6 +34,8 @@ public class UsageStatsBlockerService extends Service {
     private UsageStatsManager usageStatsManager;
     private String myPackageName;
     private String launcherPackageName;
+    private MediaSessionCompat mediaSession;
+    private MediaPlayer mediaPlayer;
 
     // Keys that match @capacitor/preferences
     private static final String PREFS_NAME = "CapacitorStorage";
@@ -65,12 +68,29 @@ public class UsageStatsBlockerService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
 
+        // Initialize MediaSession to trick Android 13+ Task Manager
+        mediaSession = new MediaSessionCompat(this, "UsageStatsBlockerMedia");
+        mediaSession.setActive(true);
+
+        // Start playing silent audio to satisfy Android 14 requirements
+        try {
+            mediaPlayer = MediaPlayer.create(this, R.raw.silent);
+            if (mediaPlayer != null) {
+                mediaPlayer.setLooping(true);
+                mediaPlayer.start();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to start media player", e);
+        }
+
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Study Focus Mode Active")
                 .setContentText("Blocking distractions...")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
+                        .setMediaSession(mediaSession.getSessionToken()))
                 .build();
 
         startForeground(1001, notification);
@@ -87,6 +107,17 @@ public class UsageStatsBlockerService extends Service {
         if (timer != null) {
             timer.cancel();
             timer = null;
+        }
+
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+
+        if (mediaSession != null) {
+            mediaSession.release();
+            mediaSession = null;
         }
     }
 
