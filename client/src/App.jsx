@@ -174,7 +174,7 @@ function GlobalProfilePrompt() {
 
 function App() {
   const { user, loading: authLoading } = useAuth();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const isNative = Capacitor.isNativePlatform();
 
