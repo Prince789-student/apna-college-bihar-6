@@ -27,6 +27,7 @@ export default function Home() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(null);
   const [announcements, setAnnouncements] = useState([]);
+  const [beuNotices, setBeuNotices] = useState([]);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [scrolled, setScrolled] = useState(false);
 
@@ -147,7 +148,12 @@ export default function Home() {
     const unsubGroups = onSnapshot(collection(db, 'groups'), (snap) => {
       setStats(s => ({ ...s, groups: snap.size }));
     });
-    return () => { unsubUsers(); unsubDocs(); unsubGroups(); };
+    const qNotices = query(collection(db, 'beu_notifications'), orderBy('id', 'desc'), limit(3));
+    const unsubNotices = onSnapshot(qNotices, (snap) => {
+      setBeuNotices(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+
+    return () => { unsubUsers(); unsubDocs(); unsubGroups(); unsubNotices(); };
   }, []);
 
 
@@ -255,6 +261,63 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════ */}
+      {/* ── 1.5. BEU NOTIFICATIONS ── */}
+      {/* ═══════════════════════════════════════════ */}
+      {beuNotices.length > 0 && (
+        <section className="py-8 bg-slate-50 border-y border-slate-200">
+          <div className="container mx-auto px-6 md:px-16 max-w-5xl">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-red-50 text-red-600 rounded-xl flex items-center justify-center border border-red-100 shadow-sm">
+                  <span className="text-xl">🔥</span>
+                </div>
+                <div>
+                  <h2 className="text-xl md:text-2xl font-[1000] text-slate-900 tracking-tighter uppercase">Latest BEU Notifications</h2>
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Official Updates from Bihar Engineering University</p>
+                </div>
+              </div>
+              <Link to="/notifications" className="hidden md:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-blue-600 hover:text-blue-700 transition-colors group">
+                View All <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3">
+              {beuNotices.map((notice) => (
+                <a
+                  key={notice.id}
+                  href={notice.pdfUrl || `https://beu-bih.ac.in/uploads/notice/${encodeURIComponent(notice.link)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block p-4 md:p-5 bg-white border border-slate-200 hover:border-blue-300 rounded-2xl shadow-sm hover:shadow-md transition-all group"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="px-2 py-1 bg-red-600 text-white text-[9px] font-black uppercase tracking-widest rounded-md animate-pulse">NEW</span>
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                          <Calendar size={12} /> {new Date(notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </span>
+                      </div>
+                      <h3 className="text-sm md:text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
+                        {notice.board}
+                      </h3>
+                    </div>
+                    <div className="w-10 h-10 shrink-0 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ArrowUpRight size={18} />
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+
+            <Link to="/notifications" className="mt-4 md:hidden flex items-center justify-center gap-2 w-full p-4 bg-white border border-slate-200 rounded-xl text-[11px] font-black uppercase tracking-widest text-blue-600 hover:bg-slate-50 transition-colors">
+              View All Notifications <ArrowRight size={14} />
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* ═══════════════════════════════════════════ */}
       {/* ── 2. SMART SEARCH SECTION ── */}

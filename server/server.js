@@ -26,6 +26,10 @@ startDailyCron();
 const { startHackathonCron } = require('./cron/hackathonFetcher');
 startHackathonCron();
 
+// Start BEU Notification Scraper
+const { initScraper } = require('./services/beuScraper');
+initScraper();
+
 // 1. ABSOLUTE PRIORITY: APK DOWNLOAD ROUTE
 // This must be BEFORE any other middleware to avoid SPA interception
 app.get('/api/download-apk', (req, res) => {

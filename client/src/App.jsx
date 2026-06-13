@@ -16,6 +16,7 @@ import AdminRoute from './components/AdminRoute';
 const Home = React.lazy(() => import('./pages/Home'));
 const HomeOverview = React.lazy(() => import('./pages/HomeOverview'));
 const AppHub = React.lazy(() => import('./pages/AppHub'));
+const Notifications = React.lazy(() => import('./pages/Notifications'));
 const Login = React.lazy(() => import('./pages/Login'));
 const Signup = React.lazy(() => import('./pages/Signup'));
 const UgeacPredictor = React.lazy(() => import('./pages/UgeacPredictor'));
@@ -236,6 +237,7 @@ function App() {
             
             <Route element={<DashboardLayout />}>
               <Route path="/" element={<Home />} />
+              <Route path="/notifications" element={<Notifications />} />
               <Route path="/search/:keyword" element={<SearchSEO />} />
               <Route path="/notes" element={<Notes />} />
               <Route path="/notes/:branchId/:semesterId" element={<Notes />} />
