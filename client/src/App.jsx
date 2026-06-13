@@ -233,9 +233,9 @@ function App() {
             <Route path="/directory" element={isStandalone ? <Navigate to="/" replace /> : <SitemapDirectory />} />
 
             {/* Landing page for all visitors (web and mobile app) */}
-            <Route path="/" element={<Home />} />
-
+            
             <Route element={<DashboardLayout />}>
+              <Route path="/" element={<Home />} />
               <Route path="/search/:keyword" element={<SearchSEO />} />
               <Route path="/notes" element={<Notes />} />
               <Route path="/notes/:branchId/:semesterId" element={<Notes />} />
