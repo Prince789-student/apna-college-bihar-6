@@ -1,8 +1,28 @@
 import React from 'react';
+import { Capacitor } from '@capacitor/core';
 import { Link } from 'react-router-dom';
 import { Send, Youtube, Mail, Heart } from 'lucide-react';
 
 export default function Footer() {
+  const isNative = Capacitor.isNativePlatform();
+
+  if (isNative) {
+    return (
+      <footer className="shrink-0 bg-transparent text-slate-500 py-8 px-6 mt-4 w-full">
+        <div className="flex justify-center gap-6 mb-6">
+          <Link to="/about" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">About</Link>
+          <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Contact</Link>
+          <Link to="/privacy-policy" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Privacy</Link>
+          <Link to="/terms" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Terms</Link>
+        </div>
+        <div className="text-center flex flex-col items-center justify-center gap-2">
+          <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">&copy; {new Date().getFullYear()} Apna College Bihar.</p>
+          <p className="text-[10px] font-bold text-slate-500 tracking-wider">Made with <span className="text-red-500">❤️</span> for BEU STUDENTS</p>
+        </div>
+      </footer>
+    );
+  }
+
   return (
     <footer className="relative bg-white pt-20 pb-8 px-6 md:px-16 mt-auto">
       <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-slate-300 to-transparent"></div>
