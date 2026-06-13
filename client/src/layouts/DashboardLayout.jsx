@@ -524,8 +524,8 @@ export default function DashboardLayout() {
           {/* Logo & Brand */}
           <div className="flex items-center gap-2 md:gap-3 group cursor-pointer" onClick={() => navigate('/')}>
             <img src="/logo-acb.png?v=99" alt="Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl object-cover shadow-sm group-hover:scale-105 transition-transform" />
-            <div className="block">
-              <span className="text-sm md:text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none">Apna College Bihar</span>
+            <div className="block min-w-0">
+              <span className="text-[11px] sm:text-sm md:text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none truncate">Apna College Bihar</span>
               <span className="text-[6px] md:text-[7px] text-blue-500 font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mt-0.5 md:mt-1 block">Official App</span>
             </div>
           </div>
@@ -649,16 +649,16 @@ export default function DashboardLayout() {
                  <Link to="/login" className="hidden md:block px-4 py-2.5 md:px-5 md:py-3 text-slate-600 hover:text-slate-900 font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-colors">
                    Login
                  </Link>
-                 <Link to="/signup" className="px-4 py-2.5 md:px-6 md:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-blue-500/30 active:scale-95">
+                 <Link to="/signup" className="px-3 py-2 md:px-6 md:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl md:rounded-2xl font-black text-[8px] md:text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-blue-500/30 active:scale-95 shrink-0">
                    Sign Up
                  </Link>
                </div>
              )}
                 <button 
                   onClick={() => setMobileMenuOpen(true)} 
-                  className="lg:hidden p-2.5 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors ml-1"
+                  className="flex lg:hidden items-center justify-center p-2.5 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors ml-1 shrink-0"
                 >
-                  <Menu size={20} />
+                  <Menu size={24} />
                 </button>
           </div>
         </div>
