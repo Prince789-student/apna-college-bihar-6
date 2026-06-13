@@ -33,6 +33,7 @@ export function StudyProvider({ children }) {
   const [overtimeActive, setOvertimeActive] = useState(false);
   const [focusBroken, _setFocusBroken] = useState(false);
   const [allowedPackages, _setAllowedPackages] = useState(() => getInitialState('allowedPackages', ''));
+  const [lockMode, _setLockMode] = useState(() => getInitialState('lockMode', 'NORMAL'));
   const [installedApps, setInstalledApps] = useState([]);
   const [selectedTaskId, setSelectedTaskId] = useState('');
   const timerRef = useRef(null);
@@ -108,6 +109,14 @@ export function StudyProvider({ children }) {
     }
   };
 
+  const setLockMode = (val) => {
+    _setLockMode(val);
+    localStorage.setItem('lockMode', JSON.stringify(val));
+    if (isNativeApp()) {
+      Preferences.set({ key: 'lockMode', value: val });
+    }
+  };
+
   const setTimerActive = (val) => {
     if (!val) {
       setOvertimeActive(false);
@@ -162,6 +171,7 @@ export function StudyProvider({ children }) {
     const handleStorageChange = (e) => {
       if (e.key === 'timerActive') _setTimerActive(JSON.parse(e.newValue));
       if (e.key === 'focusBroken') _setFocusBroken(JSON.parse(e.newValue));
+      if (e.key === 'lockMode') _setLockMode(JSON.parse(e.newValue));
     };
     window.addEventListener('storage', handleStorageChange);
     return () => window.removeEventListener('storage', handleStorageChange);
@@ -309,6 +319,8 @@ export function StudyProvider({ children }) {
     setFocusBroken,
     allowedPackages,
     setAllowedPackages,
+    lockMode,
+    setLockMode,
     installedApps,
     fetchApps,
     selectedTaskId,
@@ -321,11 +333,11 @@ export function StudyProvider({ children }) {
         }
       } catch (e) { console.error(e); }
     },
-    openAccessibilitySettings: async () => {
+    openUsageAccessSettings: async () => {
       if (!isNativeApp()) return;
       try {
-        if (AppBlocker && AppBlocker.openAccessibilitySettings) {
-          await AppBlocker.openAccessibilitySettings();
+        if (AppBlocker && AppBlocker.requestUsageStatsPermission) {
+          await AppBlocker.requestUsageStatsPermission();
         }
       } catch (e) { console.error(e); }
     }

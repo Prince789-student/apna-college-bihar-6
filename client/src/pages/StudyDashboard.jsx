@@ -57,8 +57,9 @@ export default function StudyDashboard() {
     overtimeActive, setOvertimeActive,
     saveGlobalSession,
     allowedPackages, setAllowedPackages,
+    lockMode, setLockMode,
     installedApps, fetchApps,
-    launchApp, openAccessibilitySettings,
+    launchApp, openUsageAccessSettings,
     selectedTaskId, setSelectedTaskId
   } = useStudy();
 
@@ -157,21 +158,17 @@ export default function StudyDashboard() {
     }
   };
 
-  const [isAccessibilityEnabled, setIsAccessibilityEnabled] = useState(false);
+  const [isUsageStatsEnabled, setIsUsageStatsEnabled] = useState(false);
   const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
 
-  const openAccessibility = async () => {
+  const openUsageStats = async () => {
     if (!isNative) {
       toast.error("Please download our app to use this feature!");
       return;
     }
     try {
-      if (AppBlocker && AppBlocker.testPlugin) {
-        const test = await AppBlocker.testPlugin();
-        console.log("Plugin Test:", test);
-      }
-      if (AppBlocker && AppBlocker.openAccessibilitySettings) {
-        await AppBlocker.openAccessibilitySettings();
+      if (AppBlocker && AppBlocker.requestUsageStatsPermission) {
+        await AppBlocker.requestUsageStatsPermission();
       }
     } catch (e) {
       console.log("Plugin Error:", e);
@@ -196,9 +193,9 @@ export default function StudyDashboard() {
 
   const checkPermissions = async () => {
     try {
-      if (AppBlocker && AppBlocker.checkAccessibility) {
-        const { enabled } = await AppBlocker.checkAccessibility();
-        setIsAccessibilityEnabled(enabled);
+      if (AppBlocker && AppBlocker.checkUsageStatsPermission) {
+        const { granted } = await AppBlocker.checkUsageStatsPermission();
+        setIsUsageStatsEnabled(granted);
       }
       if (AppBlocker && AppBlocker.checkOverlayPermission) {
         const { granted } = await AppBlocker.checkOverlayPermission();
@@ -759,6 +756,10 @@ export default function StudyDashboard() {
               {!timerActive ? (
                 <div className="flex gap-3 w-full">
                   <button onClick={() => {
+                    if (isNative && lockMode === 'NORMAL' && !isUsageStatsEnabled) {
+                      alert("Please enable Usage Access permission first to use Normal Mode App Blocker.");
+                      return;
+                    }
                     setTimerActive(true);
                   }} className="w-full py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2">
                     <Shield size={16} /> Start Focus
@@ -801,33 +802,58 @@ export default function StudyDashboard() {
                 </div>
 
                 <div className="space-y-3 pt-2">
-                  {/* Accessibility Button */}
-                  <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200/60 shadow-sm">
-                    <div className="flex items-center gap-3">
-                      <AlertTriangle size={18} className={isAccessibilityEnabled ? "text-emerald-500" : "text-amber-500"} />
-                      <div>
-                        <p className="text-[11px] font-[1000] text-slate-800 uppercase tracking-tight">Accessibility Service</p>
-                        <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Blocks distracting apps</p>
-                      </div>
-                    </div>
-                    <button 
-                      onClick={openAccessibility}
-                      className={`px-4 py-2.5 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isAccessibilityEnabled ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-blue-600 hover:bg-blue-50 text-white shadow-lg active:scale-95'}`}
+                  {/* Mode Toggle */}
+                  <div className="flex bg-slate-200/50 p-1.5 rounded-xl border border-slate-200/60 shadow-sm relative overflow-hidden">
+                    {timerActive && <div className="absolute inset-0 z-10 bg-transparent cursor-not-allowed" onClick={() => alert("Cannot change mode while session is active")} />}
+                    <button
+                      onClick={() => !timerActive && setLockMode('STRICT')}
+                      className={`flex-1 flex flex-col items-center justify-center py-2.5 rounded-lg transition-all ${lockMode === 'STRICT' ? 'bg-white shadow-md border border-slate-200 text-slate-900 scale-100' : 'text-slate-500 hover:text-slate-700 scale-95 opacity-80'}`}
                     >
-                      {isAccessibilityEnabled ? 'Enabled' : 'Enable'}
+                      <span className="text-[10px] font-black uppercase tracking-widest leading-none">Strict</span>
+                      <span className="text-[7px] font-bold uppercase mt-1">Screen Pinned</span>
+                    </button>
+                    <button
+                      onClick={() => !timerActive && setLockMode('NORMAL')}
+                      className={`flex-1 flex flex-col items-center justify-center py-2.5 rounded-lg transition-all ${lockMode === 'NORMAL' ? 'bg-white shadow-md border border-slate-200 text-slate-900 scale-100' : 'text-slate-500 hover:text-slate-700 scale-95 opacity-80'}`}
+                    >
+                      <span className="text-[10px] font-black uppercase tracking-widest leading-none">Normal</span>
+                      <span className="text-[7px] font-bold uppercase mt-1">Allow Apps</span>
                     </button>
                   </div>
 
-                  {/* Whitelist Button */}
+                  {/* Usage Stats Button (Only shown in Normal Mode) */}
+                  {lockMode === 'NORMAL' && (
+                    <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200/60 shadow-sm animate-in fade-in slide-in-from-top-2">
+                      <div className="flex items-center gap-3">
+                        <AlertTriangle size={18} className={isUsageStatsEnabled ? "text-emerald-500" : "text-amber-500"} />
+                        <div>
+                          <p className="text-[11px] font-[1000] text-slate-800 uppercase tracking-tight">Usage Access</p>
+                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Required for tracking</p>
+                        </div>
+                      </div>
+                      <button 
+                        onClick={openUsageStats}
+                        className={`px-4 py-2.5 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isUsageStatsEnabled ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-blue-600 hover:bg-blue-50 text-white shadow-lg active:scale-95'}`}
+                      >
+                        {isUsageStatsEnabled ? 'Enabled' : 'Enable'}
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Whitelist Button (Only applicable in Normal mode) */}
                   <button 
                     onClick={() => {
+                      if (lockMode === 'STRICT') {
+                        alert("Whitelist is disabled in Strict Mode (Screen Pinning does not allow other apps). Switch to Normal Mode to use whitelist.");
+                        return;
+                      }
                       if (timerActive && timerMode === 'COUNTDOWN') {
                         alert("Focus Session is Locked! You cannot modify allowed apps during an active countdown session.");
                         return;
                       }
                       setShowWhitelist(true);
                     }}
-                    className={`w-full mt-2 flex items-center justify-between p-5 rounded-2xl transition-all active:scale-95 shadow-xl group ${timerActive && timerMode === 'COUNTDOWN' ? 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60' : 'bg-slate-900 hover:bg-slate-800 text-white'}`}
+                    className={`w-full mt-2 flex items-center justify-between p-5 rounded-2xl transition-all active:scale-95 shadow-xl group ${lockMode === 'STRICT' || (timerActive && timerMode === 'COUNTDOWN') ? 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60' : 'bg-slate-900 hover:bg-slate-800 text-white'}`}
                   >
                     <div className="flex items-center gap-4">
                       <div className="p-2 bg-white/10 rounded-xl text-blue-400 group-hover:scale-110 transition-transform">

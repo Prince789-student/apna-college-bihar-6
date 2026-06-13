@@ -117,16 +117,10 @@ public class AppBlockerPlugin extends Plugin {
 
         long endTime = System.currentTimeMillis() + (minutes * 60 * 1000L);
 
-        // Store as String (consistent with @capacitor/preferences JSON serialization)
-        // @capacitor/preferences stores values as JSON strings, so "true" and "1234567890"
         SharedPreferences.Editor editor = getPrefs().edit();
         editor.putString(KEY_IS_ACTIVE, "true");
         editor.putString(KEY_COUNTDOWN_END, String.valueOf(endTime));
         editor.apply();
-
-        // Update in-memory static fields on the service (same process)
-        AppBlockerService.sIsActive = true;
-        AppBlockerService.sCountdownEnd = endTime;
 
         Log.d(TAG, "startCountdown: endTime=" + endTime + ", minutes=" + minutes);
 
@@ -142,8 +136,8 @@ public class AppBlockerPlugin extends Plugin {
         editor.putString(KEY_COUNTDOWN_END, "0");
         editor.apply();
 
-        AppBlockerService.sIsActive = false;
-        AppBlockerService.sCountdownEnd = 0;
+        Intent serviceIntent = new Intent(getContext(), UsageStatsBlockerService.class);
+        getContext().stopService(serviceIntent);
 
         Log.d(TAG, "stopBlocker called");
         call.resolve();
@@ -162,7 +156,17 @@ public class AppBlockerPlugin extends Plugin {
         editor.putString(KEY_IS_ACTIVE, active ? "true" : "false");
         editor.apply();
 
-        AppBlockerService.sIsActive = active;
+        if (active) {
+            Intent serviceIntent = new Intent(getContext(), UsageStatsBlockerService.class);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                getContext().startForegroundService(serviceIntent);
+            } else {
+                getContext().startService(serviceIntent);
+            }
+        } else {
+            Intent serviceIntent = new Intent(getContext(), UsageStatsBlockerService.class);
+            getContext().stopService(serviceIntent);
+        }
 
         Log.d(TAG, "setBlockerActive: " + active);
         call.resolve();
@@ -187,7 +191,6 @@ public class AppBlockerPlugin extends Plugin {
                 }
             }
 
-            // Store as comma-separated string (compatible with service reading)
             StringBuilder sb = new StringBuilder();
             for (String pkg : allowedSet) {
                 if (sb.length() > 0) sb.append(",");
@@ -197,12 +200,6 @@ public class AppBlockerPlugin extends Plugin {
             SharedPreferences.Editor editor = getPrefs().edit();
             editor.putString(KEY_ALLOWED_PACKAGES, sb.toString());
             editor.apply();
-
-            // Update in-memory set on service
-            synchronized (AppBlockerService.sAllowedPackages) {
-                AppBlockerService.sAllowedPackages.clear();
-                AppBlockerService.sAllowedPackages.addAll(allowedSet);
-            }
 
             Log.d(TAG, "setAllowedPackages: " + sb.toString());
             call.resolve();
@@ -215,42 +212,47 @@ public class AppBlockerPlugin extends Plugin {
 
     @PluginMethod
     public void openAccessibilitySettings(PluginCall call) {
-        Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getContext().startActivity(intent);
+        // Kept for backwards compatibility if needed, but we use openUsageAccessSettings now
         call.resolve();
     }
 
     @PluginMethod
     public void checkAccessibility(PluginCall call) {
-        String service = getContext().getPackageName() + "/" + AppBlockerService.class.getCanonicalName();
-        int accessibilityEnabled = 0;
-        try {
-            accessibilityEnabled = Settings.Secure.getInt(
-                getContext().getContentResolver(),
-                android.provider.Settings.Secure.ACCESSIBILITY_ENABLED
-            );
-        } catch (Settings.SettingNotFoundException e) {
-            // ignore
-        }
-
-        boolean isEnabled = false;
-        if (accessibilityEnabled == 1) {
-            String settingValue = Settings.Secure.getString(
-                getContext().getContentResolver(),
-                Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-            );
-            if (settingValue != null) {
-                isEnabled = settingValue.toLowerCase().contains(service.toLowerCase());
-            }
-        }
-
-        Log.d(TAG, "checkAccessibility: enabled=" + isEnabled + " service=" + service);
-
+        // Return true to avoid breaking old UI code expecting this
         JSObject ret = new JSObject();
-        ret.put("enabled", isEnabled);
+        ret.put("enabled", true);
         call.resolve(ret);
     }
+
+    @PluginMethod
+    public void checkUsageStatsPermission(PluginCall call) {
+        boolean granted = false;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            android.app.AppOpsManager appOps = (android.app.AppOpsManager) getContext()
+                    .getSystemService(Context.APP_OPS_SERVICE);
+            int mode = appOps.checkOpNoThrow(android.app.AppOpsManager.OPSTR_GET_USAGE_STATS,
+                    android.os.Process.myUid(), getContext().getPackageName());
+            granted = (mode == android.app.AppOpsManager.MODE_ALLOWED);
+        } else {
+            granted = true; // Not required below Lollipop
+        }
+
+        JSObject ret = new JSObject();
+        ret.put("granted", granted);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void requestUsageStatsPermission(PluginCall call) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getContext().startActivity(intent);
+        }
+        call.resolve();
+    }
+
+
 
     @PluginMethod
     public void checkOverlayPermission(PluginCall call) {
@@ -301,9 +303,6 @@ public class AppBlockerPlugin extends Plugin {
             editor.putString("_cap_lastLaunchedTime", String.valueOf(System.currentTimeMillis()));
             editor.apply();
 
-            // Update in-memory static fields on service too
-            AppBlockerService.sLastLaunchedPackage = packageName;
-            AppBlockerService.sLastLaunchedTime = System.currentTimeMillis();
 
             Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
             if (intent != null) {

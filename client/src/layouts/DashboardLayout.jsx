@@ -402,6 +402,8 @@ export default function DashboardLayout() {
 
   
 
+  const { timerActive, lockMode } = useStudy();
+
   const handlePhoneSubmit = async (e) => {
     e.preventDefault();
     if (phone.length < 10) return;
@@ -412,14 +414,18 @@ export default function DashboardLayout() {
 
   useEffect(() => {
     if (isNative) {
-      AppBlocker.setBlockerActive({ active: timerActive }).catch(console.error);
       if (timerActive) {
-        AppBlocker.lockApp().catch(console.error);
+        if (lockMode === 'STRICT') {
+          AppBlocker.lockApp().catch(console.error);
+        } else {
+          // Normal mode handled by UsageStatsBlockerService starting inside StudyContext
+          AppBlocker.unlockApp().catch(console.error);
+        }
       } else {
         AppBlocker.unlockApp().catch(console.error);
       }
     }
-  }, [timerActive, isNative]);
+  }, [timerActive, lockMode, isNative]);
 
   useEffect(() => {
     if (isNative) {
@@ -653,9 +659,8 @@ export default function DashboardLayout() {
           <Outlet />
         </div>
 
-        {/* Global Footer - Only on website, not in native app */}
-        {!isNative && (
-        <footer className="shrink-0 bg-slate-900 text-slate-400 py-12 px-6 lg:px-12 rounded-t-[2rem] md:rounded-t-[3rem] mt-12 w-full pb-32 lg:pb-12 border-t-[8px] border-blue-600">
+        {/* Global Footer - Shown on all platforms now */}
+        <footer className="shrink-0 bg-slate-900 text-slate-400 py-12 px-6 lg:px-12 rounded-t-[2rem] md:rounded-t-[3rem] mt-12 w-full border-t-[8px] border-blue-600">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-3 mb-4">
@@ -691,7 +696,6 @@ export default function DashboardLayout() {
             <p className="text-[8px] font-bold text-slate-600 tracking-wider">Made with <span className="text-red-500">❤️</span> for Bihar Engineering Students</p>
           </div>
         </footer>
-        )}
       </main>
 
       {/* Mobile Drawer Overlay */}
@@ -732,22 +736,6 @@ export default function DashboardLayout() {
       
       {/* Verification Modal */}
       {isPhoneModalOpen && isOnline && <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-slate-50/80 backdrop-blur-xl"><div className="w-full max-w-md bg-white border border-slate-200 rounded-[3rem] p-10 text-center space-y-8 shadow-2xl relative overflow-hidden"><div className="inline-flex p-5 bg-blue-600/20 text-blue-500 rounded-3xl"><Shield size={32} /></div><h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Security Update</h2><p className="text-slate-500 text-sm">Please link your active mobile number to secure your college portal access.</p><form onSubmit={handlePhoneSubmit} className="space-y-6"><div className="flex gap-2"><div className="bg-slate-100 px-4 py-4 rounded-2xl text-xs font-black">+91</div><input type="tel" maxLength={10} value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} placeholder="10-DIGIT MOBILE NO." className="flex-1 bg-slate-100 rounded-2xl p-4 text-sm font-black outline-none" /></div><button type="submit" className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest transition-all">Save & Continue</button></form></div></div>}
-
-      {/* Mobile Bottom Navigation Bar - Only for Native App */}
-      {isNative && (
-        <nav className="lg:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t border-slate-200 pb-safe z-[150] flex items-center justify-around px-2 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
-           <BottomNavItem to="/" icon={LayoutDashboard} label="Home" />
-           <BottomNavItem to="/timetable" icon={Calendar} label="Time" />
-           <BottomNavItem to="/syllabus" icon={Library} label="Syllabus" />
-           <BottomNavItem to="/notes" icon={BookOpen} label="Notes" />
-           <button onClick={() => setMobileMenuOpen(true)} className="flex flex-col items-center justify-center gap-1 flex-1 py-2 text-slate-400 hover:text-slate-900 group">
-              <div className="p-1.5 rounded-xl transition-all group-hover:bg-slate-100">
-                <Menu size={20} strokeWidth={2.5} />
-              </div>
-              <span className="text-[8px] font-black uppercase tracking-widest group-hover:text-slate-900">Menu</span>
-           </button>
-        </nav>
-      )}
     </div>
   );
 }
