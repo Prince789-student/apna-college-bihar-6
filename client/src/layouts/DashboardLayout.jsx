@@ -22,7 +22,7 @@ export default function DashboardLayout() {
   const [isPhoneModalOpen, setPhoneModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const { timerActive } = useStudy();
+  const { timerActive, lockMode } = useStudy();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(null);
@@ -398,11 +398,8 @@ export default function DashboardLayout() {
       clearTimeout(initialReminderTimer);
       clearInterval(intervalId);
     };
-  }, [user, timerActive, isOnline]);
+  }, [user, timerActive, isOnline, lockMode]);
 
-  
-
-  const { timerActive, lockMode } = useStudy();
 
   const handlePhoneSubmit = async (e) => {
     e.preventDefault();
