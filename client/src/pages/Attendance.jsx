@@ -36,11 +36,7 @@ const HOLIDAYS_2026 = [
 export default function Attendance() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [subjects, setSubjects] = useState([
-    { name: 'Mathematics', present: 0, total: 0 },
-    { name: 'Physics', present: 0, total: 0 },
-    { name: 'Computer Science', present: 0, total: 0 },
-  ]);
+  const [subjects, setSubjects] = useState([]);
   const [dailyLog, setDailyLog] = useState({});
   const [activeTab, setActiveTab] = useState('subjects'); // 'subjects', 'daily', 'holidays'
   const [loading, setLoading] = useState(true);
