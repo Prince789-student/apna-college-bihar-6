@@ -163,7 +163,7 @@ public class UsageStatsBlockerService extends Service {
             return;
         }
 
-        boolean timerRunning = countdownEnd > now;
+        boolean timerRunning = isBlockerActive;
 
         // Apps that are always ignored to prevent system crashes
         boolean isSystemIgnored =
