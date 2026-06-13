@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /backend/
+Disallow: /uploads/
+Disallow: /assets/*.pdf
 
 Sitemap: https://www.apnacollegebihar.online/sitemap.xml
