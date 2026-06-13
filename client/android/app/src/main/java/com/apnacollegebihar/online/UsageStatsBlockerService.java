@@ -168,10 +168,6 @@ public class UsageStatsBlockerService extends Service {
         // Apps that are always ignored to prevent system crashes
         boolean isSystemIgnored =
                 foregroundApp.equals(myPackageName) ||
-                foregroundApp.equals(launcherPackageName) ||
-                foregroundApp.contains("launcher") ||
-                foregroundApp.contains(".home") ||
-                foregroundApp.contains("systemui") ||
                 foregroundApp.equals("android") ||
                 foregroundApp.equals("com.android.phone") ||
                 foregroundApp.equals("com.android.server.telecom") ||

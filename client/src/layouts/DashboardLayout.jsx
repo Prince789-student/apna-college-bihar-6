@@ -4,6 +4,7 @@ import { ChevronLeft, Shield, Timer, X, LayoutDashboard, Library, BookOpen, Cale
 import { useAuth } from '../context/AuthContext';
 import { useStudy } from '../context/StudyContext';
 import { Capacitor, registerPlugin } from '@capacitor/core';
+import { App } from '@capacitor/app';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { getToken } from 'firebase/messaging';
 
@@ -412,15 +413,21 @@ export default function DashboardLayout() {
   useEffect(() => {
     if (isNative) {
       if (timerActive) {
-        if (lockMode === 'STRICT') {
-          AppBlocker.lockApp().catch(console.error);
-        } else {
-          // Normal mode handled by UsageStatsBlockerService starting inside StudyContext
-          AppBlocker.unlockApp().catch(console.error);
-        }
+        AppBlocker.lockApp().catch(console.error);
       } else {
         AppBlocker.unlockApp().catch(console.error);
       }
+
+      // Re-lock the app when returning from a whitelisted app
+      const appStateListener = App.addListener('appStateChange', ({ isActive }) => {
+        if (isActive && timerActive) {
+          AppBlocker.lockApp().catch(console.error);
+        }
+      });
+
+      return () => {
+        appStateListener.then(listener => listener.remove());
+      };
     }
   }, [timerActive, lockMode, isNative]);
 
