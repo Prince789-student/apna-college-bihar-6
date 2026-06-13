@@ -821,22 +821,40 @@ export default function StudyDashboard() {
                     </button>
                   </div>
 
-                  {/* Usage Stats Button (Only shown in Normal Mode) */}
+                  {/* Permissions (Only shown in Normal Mode) */}
                   {lockMode === 'NORMAL' && (
-                    <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200/60 shadow-sm animate-in fade-in slide-in-from-top-2">
-                      <div className="flex items-center gap-3">
-                        <AlertTriangle size={18} className={isUsageStatsEnabled ? "text-emerald-500" : "text-amber-500"} />
-                        <div>
-                          <p className="text-[11px] font-[1000] text-slate-800 uppercase tracking-tight">Usage Access</p>
-                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Required for tracking</p>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200/60 shadow-sm animate-in fade-in slide-in-from-top-2">
+                        <div className="flex items-center gap-3">
+                          <AlertTriangle size={18} className={isUsageStatsEnabled ? "text-emerald-500" : "text-amber-500"} />
+                          <div>
+                            <p className="text-[11px] font-[1000] text-slate-800 uppercase tracking-tight">Usage Access</p>
+                            <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Required for tracking</p>
+                          </div>
                         </div>
+                        <button 
+                          onClick={openUsageStats}
+                          className={`px-4 py-2.5 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isUsageStatsEnabled ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-blue-600 hover:bg-blue-50 text-white shadow-lg active:scale-95'}`}
+                        >
+                          {isUsageStatsEnabled ? 'Enabled' : 'Enable'}
+                        </button>
                       </div>
-                      <button 
-                        onClick={openUsageStats}
-                        className={`px-4 py-2.5 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isUsageStatsEnabled ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-blue-600 hover:bg-blue-50 text-white shadow-lg active:scale-95'}`}
-                      >
-                        {isUsageStatsEnabled ? 'Enabled' : 'Enable'}
-                      </button>
+                      
+                      <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200/60 shadow-sm animate-in fade-in slide-in-from-top-2">
+                        <div className="flex items-center gap-3">
+                          <AlertTriangle size={18} className={isOverlayEnabled ? "text-emerald-500" : "text-amber-500"} />
+                          <div>
+                            <p className="text-[11px] font-[1000] text-slate-800 uppercase tracking-tight">Overlay Access</p>
+                            <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Required to block apps</p>
+                          </div>
+                        </div>
+                        <button 
+                          onClick={openOverlay}
+                          className={`px-4 py-2.5 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isOverlayEnabled ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-blue-600 hover:bg-blue-50 text-white shadow-lg active:scale-95'}`}
+                        >
+                          {isOverlayEnabled ? 'Enabled' : 'Enable'}
+                        </button>
+                      </div>
                     </div>
                   )}
 

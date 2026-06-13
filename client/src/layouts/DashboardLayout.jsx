@@ -658,16 +658,16 @@ export default function DashboardLayout() {
 
         {/* Global Footer */}
         {isNative ? (
-          <footer className="shrink-0 bg-slate-900 text-slate-400 py-8 px-6 mt-8 w-full border-t-[4px] border-blue-600 rounded-t-[2rem]">
+          <footer className="shrink-0 bg-transparent text-slate-500 py-8 px-6 mt-4 w-full">
             <div className="flex justify-center gap-6 mb-6">
-              <Link to="/about" className="text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">About</Link>
-              <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">Contact</Link>
-              <Link to="/privacy-policy" className="text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">Privacy</Link>
-              <Link to="/terms" className="text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors">Terms</Link>
+              <Link to="/about" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">About</Link>
+              <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Contact</Link>
+              <Link to="/privacy-policy" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Privacy</Link>
+              <Link to="/terms" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Terms</Link>
             </div>
             <div className="text-center flex flex-col items-center justify-center gap-2">
-              <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">&copy; {new Date().getFullYear()} Apna College Bihar.</p>
-              <p className="text-[10px] font-bold text-slate-400 tracking-wider">Made with <span className="text-red-500">❤️</span> for BEU STUDENTS</p>
+              <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">&copy; {new Date().getFullYear()} Apna College Bihar.</p>
+              <p className="text-[10px] font-bold text-slate-500 tracking-wider">Made with <span className="text-red-500">❤️</span> for BEU STUDENTS</p>
             </div>
           </footer>
         ) : (
