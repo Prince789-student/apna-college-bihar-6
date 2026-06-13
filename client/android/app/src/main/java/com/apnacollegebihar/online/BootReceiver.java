@@ -27,6 +27,30 @@ public class BootReceiver extends BroadcastReceiver {
 
             Log.d(TAG, "Boot completed — rescheduling all daily alarms");
             scheduleAllAlarms(context);
+
+            // Restart app and blocker if a focus session was active before reboot
+            try {
+                android.content.SharedPreferences prefs = context.getSharedPreferences("CapacitorStorage", Context.MODE_PRIVATE);
+                String valActive = prefs.getString("_cap_isBlockerActive", "false");
+                if ("true".equalsIgnoreCase(valActive.trim())) {
+                    Log.d(TAG, "Blocker was active before reboot! Relaunching app and service.");
+                    
+                    // 1. Start the blocker service directly so it acts immediately
+                    Intent serviceIntent = new Intent(context, UsageStatsBlockerService.class);
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        context.startForegroundService(serviceIntent);
+                    } else {
+                        context.startService(serviceIntent);
+                    }
+
+                    // 2. Launch the app to re-pin the screen
+                    Intent launchIntent = new Intent(context, MainActivity.class);
+                    launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    context.startActivity(launchIntent);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -35,6 +35,28 @@ public class UserUnlockReceiver extends BroadcastReceiver {
         if (Intent.ACTION_USER_PRESENT.equals(intent.getAction())) {
             Log.d(TAG, "User unlocked phone screen");
 
+            // Check if timer was running and restart app instantly
+            try {
+                SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                String valActive = prefs.getString("_cap_isBlockerActive", "false");
+                if ("true".equalsIgnoreCase(valActive.trim())) {
+                    Log.d(TAG, "Blocker was active! Relaunching app instantly on unlock.");
+                    
+                    Intent serviceIntent = new Intent(context, UsageStatsBlockerService.class);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        context.startForegroundService(serviceIntent);
+                    } else {
+                        context.startService(serviceIntent);
+                    }
+
+                    Intent launchIntent = new Intent(context, MainActivity.class);
+                    launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    context.startActivity(launchIntent);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             Calendar cal = Calendar.getInstance();
             int hour = cal.get(Calendar.HOUR_OF_DAY);
 
