@@ -30,23 +30,10 @@ export default function Home() {
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [scrolled, setScrolled] = useState(false);
 
-  // Force Desktop View on Home page only
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
-
-    const metaViewport = document.querySelector('meta[name=viewport]');
-    const originalViewport = metaViewport ? metaViewport.getAttribute('content') : 'width=device-width, initial-scale=1.0';
-    if (metaViewport && !window.Capacitor?.isNativePlatform?.()) {
-      metaViewport.setAttribute('content', 'width=1024');
-    }
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (metaViewport) {
-        metaViewport.setAttribute('content', originalViewport);
-      }
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const joinDate = user?.metadata?.creationTime 
