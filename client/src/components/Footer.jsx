@@ -1,7 +1,7 @@
 import React from 'react';
 import { Capacitor } from '@capacitor/core';
 import { Link } from 'react-router-dom';
-import { Send, Youtube, Mail, Heart } from 'lucide-react';
+import { Send, Youtube, Mail, Heart, MessageCircle } from 'lucide-react';
 
 export default function Footer() {
   const isNative = Capacitor.isNativePlatform();
@@ -42,14 +42,14 @@ export default function Footer() {
            </p>
            
            <div className="flex gap-3 pt-2">
+              <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-emerald-600 hover:bg-emerald-600 hover:text-white hover:-translate-y-1 border border-slate-200 transition-all shadow-sm hover:shadow-lg group">
+                <MessageCircle size={20} className="group-hover:scale-110 transition-transform" />
+              </a>
               <a href="https://t.me/apnacollegebihar" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-[#0088cc] hover:bg-[#0088cc] hover:text-white hover:-translate-y-1 border border-slate-200 transition-all shadow-sm hover:shadow-lg group">
                 <Send size={20} className="group-hover:scale-110 transition-transform" />
               </a>
               <a href="https://youtube.com/@apnacollegebihar" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-red-600 hover:bg-red-600 hover:text-white hover:-translate-y-1 border border-slate-200 transition-all shadow-sm hover:shadow-lg group">
                 <Youtube size={20} className="group-hover:scale-110 transition-transform" />
-              </a>
-              <a href="mailto:apnacollegebihar@gmail.com" className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-slate-600 hover:bg-slate-800 hover:text-white hover:-translate-y-1 border border-slate-200 transition-all shadow-sm hover:shadow-lg group">
-                <Mail size={20} className="group-hover:scale-110 transition-transform" />
               </a>
            </div>
         </div>
@@ -70,6 +70,7 @@ export default function Footer() {
            <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-900">Company</h4>
            <div className="flex flex-col gap-4">
               <Link to="/about" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">About Us</Link>
+              <Link to="/author" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Creator & Author</Link>
               <Link to="/contact" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Contact Us</Link>
               <Link to="/directory" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Sitemap</Link>
            </div>
@@ -81,7 +82,7 @@ export default function Footer() {
            <div className="flex flex-col gap-4">
               <Link to="/privacy-policy" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Privacy Policy</Link>
               <Link to="/terms" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Terms & Conditions</Link>
-              <Link to="/disclaimer" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Disclaimer</Link>
+              <Link to="/delete-account" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Delete Account</Link>
            </div>
         </div>
       </div>

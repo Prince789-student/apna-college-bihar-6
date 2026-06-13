@@ -15,6 +15,7 @@ import AdminRoute from './components/AdminRoute';
 // Pages (Lazy Loaded)
 const Home = React.lazy(() => import('./pages/Home'));
 const HomeOverview = React.lazy(() => import('./pages/HomeOverview'));
+const Author = React.lazy(() => import('./pages/Author'));
 const AppHub = React.lazy(() => import('./pages/AppHub'));
 const Notifications = React.lazy(() => import('./pages/Notifications'));
 const Login = React.lazy(() => import('./pages/Login'));
@@ -230,13 +231,15 @@ function App() {
             <Route path="/terms" element={<Terms />} />
             <Route path="/delete-account" element={<DeleteAccount />} />
             <Route path="/about" element={<About />} />
+            <Route path="/author" element={<Author />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/directory" element={isStandalone ? <Navigate to="/" replace /> : <SitemapDirectory />} />
 
             {/* Landing page for all visitors (web and mobile app) */}
             
+            {isNative && <Route path="/" element={<AppHub />} />}
             <Route element={<DashboardLayout />}>
-              <Route path="/" element={<Home />} />
+              {!isNative && <Route path="/" element={<Home />} />}
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/search/:keyword" element={<SearchSEO />} />
               <Route path="/notes" element={<Notes />} />

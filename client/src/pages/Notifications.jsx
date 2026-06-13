@@ -10,7 +10,7 @@ export default function Notifications() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const qNotices = query(collection(db, 'beu_notifications'), orderBy('id', 'desc'));
+    const qNotices = query(collection(db, 'beu_notifications'), orderBy('noticedate', 'desc'));
     const unsub = onSnapshot(qNotices, (snap) => {
       setNotices(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
       setLoading(false);
@@ -70,7 +70,7 @@ export default function Notifications() {
             filteredNotices.map((notice) => (
               <a
                 key={notice.id}
-                href={notice.pdfUrl || `https://beu-bih.ac.in/uploads/notice/${encodeURIComponent(notice.link)}`}
+                href={notice.pdfUrl || `https://beu-bih.ac.in/backend/${encodeURIComponent(notice.link)}`}
                 target="_blank"
                 rel="noreferrer"
                 className="block p-5 bg-white border border-slate-200 hover:border-blue-400 rounded-2xl shadow-sm hover:shadow-lg transition-all group relative overflow-hidden"

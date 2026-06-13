@@ -3,17 +3,28 @@ import { useNavigate, Link } from 'react-router-dom';
 import { 
   Send, BookOpen, GraduationCap, Timer, 
   Users, Calculator, Globe, UserCheck, 
-  Calendar, LogIn, LogOut, MessageCircle, Youtube, User, Trash2, ShieldCheck, Smartphone, ExternalLink, Briefcase, Award, GraduationCap as Cap2, Landmark, FileText, Library, Link2
+  Calendar, LogIn, LogOut, MessageCircle, Youtube, User, Trash2, ShieldCheck, Smartphone, ExternalLink, Briefcase, Award, GraduationCap as Cap2, Landmark, FileText, Library, Link2, ArrowRight
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
 import GlobalSearch from '../components/GlobalSearch';
 import Footer from '../components/Footer';
+import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase';
 
 export default function AppHub() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [beuNotices, setBeuNotices] = useState([]);
+
+  React.useEffect(() => {
+    const qNotices = query(collection(db, 'beu_notifications'), orderBy('noticedate', 'desc'), limit(3));
+    const unsubNotices = onSnapshot(qNotices, (snap) => {
+      setBeuNotices(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+    return () => { unsubNotices(); };
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -156,6 +167,49 @@ export default function AppHub() {
       </div>
 
       <div className="w-full max-w-2xl space-y-6 mb-6">
+        
+        {/* Latest BEU Notifications */}
+        {beuNotices.length > 0 && (
+          <div className="bg-white border border-slate-200 rounded-[2.5rem] shadow-sm p-6 overflow-hidden relative">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-red-50 text-red-600 rounded-xl flex items-center justify-center border border-red-100 shadow-sm">
+                  <span className="text-xl">🔥</span>
+                </div>
+                <div>
+                  <h2 className="text-sm font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Latest BEU Notices</h2>
+                  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">Official Updates</p>
+                </div>
+              </div>
+              <Link to="/notifications" className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">
+                View All <ArrowRight size={12} />
+              </Link>
+            </div>
+            
+            <div className="space-y-3">
+              {beuNotices.map((notice) => (
+                <a
+                  key={notice.id}
+                  href={notice.pdfUrl || `https://beu-bih.ac.in/backend/${encodeURIComponent(notice.link)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex flex-col p-4 bg-slate-50 border border-slate-100 hover:border-blue-200 rounded-2xl transition-all group"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="px-2 py-1 bg-red-600 text-white text-[8px] font-black uppercase tracking-widest rounded-md animate-pulse">NEW</span>
+                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
+                      <Calendar size={10} /> {new Date(notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </span>
+                  </div>
+                  <h3 className="text-xs font-bold text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-2">
+                    {notice.board}
+                  </h3>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
         {categories.map((cat, idx) => (
           <div key={idx} className="bg-white border border-slate-200 rounded-[2.5rem] shadow-sm p-6">
             <h3 className="text-xs font-[1000] text-slate-800 uppercase tracking-[0.2em] mb-4 text-center">

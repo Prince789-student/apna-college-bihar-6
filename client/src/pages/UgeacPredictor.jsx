@@ -1463,8 +1463,6 @@ function UgeacPredictor() {
         <p><strong>Q: Is Bihar Domicile necessary for UGEAC?</strong><br/>
         A: Yes, only candidates who are permanent residents of Bihar or whose parents are government employees posted in Bihar are eligible for state quota seats through UGEAC.</p>
       </div>
-
-      <Footer />
     </div>
   );
 }

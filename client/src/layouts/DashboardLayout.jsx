@@ -12,6 +12,7 @@ const AppBlocker = registerPlugin('AppBlocker');
 import { doc, updateDoc, collection, query, where, onSnapshot, getDocs } from 'firebase/firestore';
 import { messaging, VAPID_KEY, db } from '../firebase';
 import SEO from '../components/SEO';
+import Footer from '../components/Footer';
 import { toast } from 'react-hot-toast';
 
 export default function DashboardLayout() {
@@ -659,62 +660,12 @@ export default function DashboardLayout() {
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto custom-scrollbar relative z-10 bg-[#f8fafc] flex flex-col">
-        <div className="w-full grow shrink-0 pb-24 lg:pb-8 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto min-h-[80vh]">
+        <div className={`w-full grow shrink-0 pb-24 lg:pb-8 min-h-[80vh] ${location.pathname === '/' ? '' : 'p-4 md:p-6 lg:p-8 max-w-7xl mx-auto'}`}>
           <Outlet />
         </div>
 
         {/* Global Footer */}
-        {isNative ? (
-          <footer className="shrink-0 bg-transparent text-slate-500 py-8 px-6 mt-4 w-full">
-            <div className="flex justify-center gap-6 mb-6">
-              <Link to="/about" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">About</Link>
-              <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Contact</Link>
-              <Link to="/privacy-policy" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Privacy</Link>
-              <Link to="/terms" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Terms</Link>
-            </div>
-            <div className="text-center flex flex-col items-center justify-center gap-2">
-              <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">&copy; {new Date().getFullYear()} Apna College Bihar.</p>
-              <p className="text-[10px] font-bold text-slate-500 tracking-wider">Made with <span className="text-red-500">❤️</span> for BEU STUDENTS</p>
-            </div>
-          </footer>
-        ) : (
-          <footer className="shrink-0 bg-slate-900 text-slate-400 py-12 px-6 lg:px-12 rounded-t-[2rem] md:rounded-t-[3rem] mt-12 w-full border-t-[8px] border-blue-600">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-              <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <img src="/logo-acb.png?v=99" alt="Logo" className="w-10 h-10 rounded-xl object-cover shadow-sm bg-white p-0.5" />
-                  <span className="text-xl font-[1000] tracking-tighter uppercase text-white leading-none">Apna College Bihar</span>
-                </div>
-                <p className="text-xs font-medium max-w-xs mb-4 leading-relaxed">The ultimate study engine and counselling companion for Bihar Engineering students. Building the future of BEU together.</p>
-                <div className="flex items-center gap-3">
-                  <a href="#" className="p-2.5 bg-white/5 hover:bg-blue-600 text-slate-300 hover:text-white rounded-xl transition-all"><Globe size={18} /></a>
-                  <a href="#" className="p-2.5 bg-white/5 hover:bg-blue-600 text-slate-300 hover:text-white rounded-xl transition-all"><Shield size={18} /></a>
-                  <a href="#" className="p-2.5 bg-white/5 hover:bg-blue-600 text-slate-300 hover:text-white rounded-xl transition-all"><Send size={18} /></a>
-                </div>
-              </div>
-              <div>
-                <h4 className="text-white font-black uppercase tracking-widest text-xs mb-6 flex items-center gap-2"><Link2 size={16} className="text-blue-500" /> Quick Links</h4>
-                <ul className="space-y-3 text-xs font-bold uppercase tracking-wider">
-                  <li><Link to="/about" className="hover:text-blue-400 transition-colors flex items-center gap-2"><ChevronLeft size={12} className="text-slate-600" /> About Us</Link></li>
-                  <li><Link to="/contact" className="hover:text-blue-400 transition-colors flex items-center gap-2"><ChevronLeft size={12} className="text-slate-600" /> Contact Support</Link></li>
-                  <li><Link to="/privacy-policy" className="hover:text-blue-400 transition-colors flex items-center gap-2"><ChevronLeft size={12} className="text-slate-600" /> Privacy Policy</Link></li>
-                  <li><Link to="/terms" className="hover:text-blue-400 transition-colors flex items-center gap-2"><ChevronLeft size={12} className="text-slate-600" /> Terms of Service</Link></li>
-                </ul>
-              </div>
-              <div>
-                <h4 className="text-white font-black uppercase tracking-widest text-xs mb-6 flex items-center gap-2"><ArrowRight size={16} className="text-blue-500" /> Get the App</h4>
-                <p className="text-xs font-medium leading-relaxed mb-6">Download the official Android app for push notifications and a native experience.</p>
-                <a href="/ApnaCollegeBihar_Stable.apk" download className="inline-flex items-center gap-3 px-6 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20 active:scale-95">
-                  Download APK <ArrowRight size={16} />
-                </a>
-              </div>
-            </div>
-            <div className="max-w-7xl mx-auto pt-8 border-t border-white/10 text-center flex flex-col items-center justify-center gap-2">
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">&copy; {new Date().getFullYear()} Apna College Bihar. All rights reserved.</p>
-              <p className="text-[8px] font-bold text-slate-600 tracking-wider">Made with <span className="text-red-500">❤️</span> for BEU STUDENTS</p>
-            </div>
-          </footer>
-        )}
+        <Footer />
       </main>
 
       {/* Mobile Drawer Overlay */}

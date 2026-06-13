@@ -42,7 +42,7 @@ async function fetchAndSaveNotices() {
                     link: notice.link,
                     createdAt: admin.firestore.FieldValue.serverTimestamp(),
                     // Save standard pdf link directly
-                    pdfUrl: `https://beu-bih.ac.in/uploads/notice/${encodeURIComponent(notice.link)}`
+                    pdfUrl: `https://beu-bih.ac.in/backend/${encodeURIComponent(notice.link)}`
                 });
                 addedCount++;
             }

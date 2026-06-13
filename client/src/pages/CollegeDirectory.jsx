@@ -145,8 +145,6 @@ export default function CollegeDirectory() {
           )}
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

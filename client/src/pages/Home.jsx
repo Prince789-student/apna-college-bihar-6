@@ -15,7 +15,6 @@ import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
 import GlobalSearch from '../components/GlobalSearch';
-import Footer from '../components/Footer';
 import CountUp from '../components/CountUp';
 import Reveal from '../components/Reveal';
 import HomeEducationalGuide from '../components/HomeEducationalGuide';
@@ -148,7 +147,7 @@ export default function Home() {
     const unsubGroups = onSnapshot(collection(db, 'groups'), (snap) => {
       setStats(s => ({ ...s, groups: snap.size }));
     });
-    const qNotices = query(collection(db, 'beu_notifications'), orderBy('id', 'desc'), limit(3));
+    const qNotices = query(collection(db, 'beu_notifications'), orderBy('noticedate', 'desc'), limit(3));
     const unsubNotices = onSnapshot(qNotices, (snap) => {
       setBeuNotices(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     });
@@ -287,7 +286,7 @@ export default function Home() {
               {beuNotices.map((notice) => (
                 <a
                   key={notice.id}
-                  href={notice.pdfUrl || `https://beu-bih.ac.in/uploads/notice/${encodeURIComponent(notice.link)}`}
+                  href={notice.pdfUrl || `https://beu-bih.ac.in/backend/${encodeURIComponent(notice.link)}`}
                   target="_blank"
                   rel="noreferrer"
                   className="block p-4 md:p-5 bg-white border border-slate-200 hover:border-blue-300 rounded-2xl shadow-sm hover:shadow-md transition-all group"
@@ -514,7 +513,6 @@ export default function Home() {
         </Reveal>
       </section>
 
-      <Footer />
     </div>
   );
 }
