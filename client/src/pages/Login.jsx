@@ -19,7 +19,7 @@ export default function Login() {
         localStorage.removeItem('lastPath');
         navigate(lastPath, { replace: true });
       } else {
-        navigate('/', { replace: true });
+        navigate('/dashboard', { replace: true });
       }
     }
   }, [user, authLoading, navigate]);
@@ -36,7 +36,7 @@ export default function Login() {
         localStorage.removeItem('lastPath');
         navigate(lastPath);
       } else {
-        navigate('/');
+        navigate('/dashboard');
       }
     } catch (err) {
       setError(err.message || 'Google login failed. Please try again.');

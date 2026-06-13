@@ -232,12 +232,11 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/directory" element={isStandalone ? <Navigate to="/" replace /> : <SitemapDirectory />} />
 
-            {/* Public Dashboard Routes (For SEO & Direct Sharing) */}
-            {/* Landing page for non-logged-in web visitors */}
-            {!user && !isNative && <Route path="/" element={<Home />} />}
+            {/* Landing page for web visitors (logged in or out) */}
+            <Route path="/" element={isNative ? <Navigate to="/dashboard" replace /> : <Home />} />
 
             <Route element={<DashboardLayout />}>
-              <Route path="/" element={isNative ? <AppHub /> : <HomeOverview />} />
+              <Route path="/dashboard" element={isNative ? <AppHub /> : <HomeOverview />} />
               <Route path="/search/:keyword" element={<SearchSEO />} />
               <Route path="/notes" element={<Notes />} />
               <Route path="/notes/:branchId/:semesterId" element={<Notes />} />

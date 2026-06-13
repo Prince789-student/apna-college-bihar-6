@@ -8,7 +8,8 @@ import {
   ShieldCheck, Calendar, Sparkles, FileText, Library, 
   Star, ChevronRight, Search, MapPin, Target, 
   RefreshCw, Heart, Building2, Award, Mail,
-  Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight
+  Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight,
+  LayoutDashboard
 } from 'lucide-react';
 import { collection, onSnapshot, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -210,11 +211,17 @@ export default function Home() {
              <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
            ) : user ? (
              <div className="flex items-center gap-4">
-               <div className="relative">
+               <div className="relative flex items-center gap-2">
+                 <Link 
+                   to="/dashboard"
+                   className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-md shadow-blue-500/20"
+                 >
+                   Go to Dashboard
+                 </Link>
                  <a 
                    href="/ApnaCollegeBihar_Stable.apk"
                    download="ApnaCollegeBihar_Stable.apk"
-                   className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-100 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                   className="hidden lg:flex items-center gap-2 px-5 py-2.5 bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-100 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
                  >
                    Download App
                  </a>
@@ -303,13 +310,21 @@ export default function Home() {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-              <a 
-                href="/ApnaCollegeBihar_Stable.apk" 
-                download="ApnaCollegeBihar_Stable.apk" 
-                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-xl shadow-blue-600/20 hover:shadow-2xl hover:shadow-blue-600/30 hover:-translate-y-0.5 flex items-center justify-center gap-2"
-              >
-                <Download size={18} /> Download App
-              </a>
+              {user ? (
+                <Link 
+                  to="/dashboard" 
+                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-xl shadow-blue-600/20 hover:shadow-2xl hover:shadow-blue-600/30 hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                >
+                  <LayoutDashboard size={18} /> Open My Dashboard
+                </Link>
+              ) : (
+                <Link 
+                  to="/signup" 
+                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-xl shadow-blue-600/20 hover:shadow-2xl hover:shadow-blue-600/30 hover:-translate-y-0.5 flex items-center justify-center gap-2"
+                >
+                  Get Started Now <ArrowRight size={18} />
+                </Link>
+              )}
               <a 
                 href="#resources" 
                 className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
