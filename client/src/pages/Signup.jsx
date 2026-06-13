@@ -19,7 +19,7 @@ export default function Signup() {
         localStorage.removeItem('lastPath');
         navigate(lastPath, { replace: true });
       } else {
-        navigate('/dashboard', { replace: true });
+        navigate('/', { replace: true });
       }
     }
   }, [user, authLoading, navigate]);
@@ -36,7 +36,7 @@ export default function Signup() {
         localStorage.removeItem('lastPath');
         navigate(lastPath);
       } else {
-        navigate('/dashboard');
+        navigate('/');
       }
     } catch (err) {
       setError(err.message || 'Google signup failed.');

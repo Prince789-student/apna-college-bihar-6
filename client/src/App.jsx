@@ -233,10 +233,9 @@ function App() {
             <Route path="/directory" element={isStandalone ? <Navigate to="/" replace /> : <SitemapDirectory />} />
 
             {/* Landing page for web visitors (logged in or out) */}
-            <Route path="/" element={isNative ? <Navigate to="/dashboard" replace /> : <Home />} />
+            <Route path="/" element={isNative ? <Navigate to="/hub" replace /> : <Home />} />
 
             <Route element={<DashboardLayout />}>
-              <Route path="/dashboard" element={isNative ? <AppHub /> : <HomeOverview />} />
               <Route path="/search/:keyword" element={<SearchSEO />} />
               <Route path="/notes" element={<Notes />} />
               <Route path="/notes/:branchId/:semesterId" element={<Notes />} />
