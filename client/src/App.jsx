@@ -232,8 +232,8 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/directory" element={isStandalone ? <Navigate to="/" replace /> : <SitemapDirectory />} />
 
-            {/* Landing page for web visitors (logged in or out) */}
-            <Route path="/" element={isNative ? <Navigate to="/hub" replace /> : <Home />} />
+            {/* Landing page for all visitors (web and mobile app) */}
+            <Route path="/" element={<Home />} />
 
             <Route element={<DashboardLayout />}>
               <Route path="/search/:keyword" element={<SearchSEO />} />
