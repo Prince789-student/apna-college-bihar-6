@@ -328,6 +328,9 @@ export function StudyProvider({ children }) {
     launchApp: async (pkg) => {
       if (!isNativeApp()) return;
       try {
+        if (AppBlocker && AppBlocker.unlockApp) {
+          await AppBlocker.unlockApp(); // temporarily unlock to allow launch
+        }
         if (AppBlocker && AppBlocker.launchApp) {
           await AppBlocker.launchApp({ packageName: pkg });
         }
