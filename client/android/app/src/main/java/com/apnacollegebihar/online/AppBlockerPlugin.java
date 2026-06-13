@@ -281,6 +281,55 @@ public class AppBlockerPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void checkAdminRights(PluginCall call) {
+        try {
+            android.app.admin.DevicePolicyManager dpm = (android.app.admin.DevicePolicyManager) getContext().getSystemService(Context.DEVICE_POLICY_SERVICE);
+            android.content.ComponentName adminComponent = new android.content.ComponentName(getContext(), StudyDeviceAdminReceiver.class);
+            
+            boolean active = dpm.isAdminActive(adminComponent);
+            JSObject ret = new JSObject();
+            ret.put("granted", active);
+            call.resolve(ret);
+        } catch (Exception e) {
+            call.reject(e.getMessage());
+        }
+    }
+
+    @PluginMethod
+    public void requestAdminRights(PluginCall call) {
+        try {
+            android.app.admin.DevicePolicyManager dpm = (android.app.admin.DevicePolicyManager) getContext().getSystemService(Context.DEVICE_POLICY_SERVICE);
+            android.content.ComponentName adminComponent = new android.content.ComponentName(getContext(), StudyDeviceAdminReceiver.class);
+
+            if (!dpm.isAdminActive(adminComponent)) {
+                Intent intent = new Intent(android.app.admin.DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
+                intent.putExtra(android.app.admin.DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
+                intent.putExtra(android.app.admin.DevicePolicyManager.EXTRA_ADD_EXPLANATION, "We need Device Administrator access to ensure strict focus mode and prevent app uninstallation during your study sessions.");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(intent);
+            }
+            call.resolve();
+        } catch (Exception e) {
+            call.reject(e.getMessage());
+        }
+    }
+
+    @PluginMethod
+    public void removeAdminRights(PluginCall call) {
+        try {
+            android.app.admin.DevicePolicyManager dpm = (android.app.admin.DevicePolicyManager) getContext().getSystemService(Context.DEVICE_POLICY_SERVICE);
+            android.content.ComponentName adminComponent = new android.content.ComponentName(getContext(), StudyDeviceAdminReceiver.class);
+            
+            if (dpm.isAdminActive(adminComponent)) {
+                dpm.removeActiveAdmin(adminComponent);
+            }
+            call.resolve();
+        } catch (Exception e) {
+            call.reject(e.getMessage());
+        }
+    }
+
+    @PluginMethod
     public void testPlugin(PluginCall call) {
         Log.d(TAG, "testPlugin called - plugin is working!");
         JSObject ret = new JSObject();

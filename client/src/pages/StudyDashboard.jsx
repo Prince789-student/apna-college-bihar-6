@@ -160,6 +160,19 @@ export default function StudyDashboard() {
 
   const [isUsageStatsEnabled, setIsUsageStatsEnabled] = useState(false);
   const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
+  const [isAdminEnabled, setIsAdminEnabled] = useState(false);
+
+  const openAdminSettings = async () => {
+    if (!isNative) return;
+    try {
+      if (AppBlocker && AppBlocker.requestAdminRights) {
+        await AppBlocker.requestAdminRights();
+      }
+    } catch (e) {
+      console.log(e);
+      alert(JSON.stringify(e));
+    }
+  };
 
   const openUsageStats = async () => {
     if (!isNative) {
@@ -200,6 +213,10 @@ export default function StudyDashboard() {
       if (AppBlocker && AppBlocker.checkOverlayPermission) {
         const { granted } = await AppBlocker.checkOverlayPermission();
         setIsOverlayEnabled(granted);
+      }
+      if (AppBlocker && AppBlocker.checkAdminRights) {
+        const { granted } = await AppBlocker.checkAdminRights();
+        setIsAdminEnabled(granted);
       }
     } catch (err) { console.error("Permission Check Failed:", err); }
   };
@@ -760,6 +777,10 @@ export default function StudyDashboard() {
                       alert("Please enable Usage Access permission first to use Normal Mode App Blocker.");
                       return;
                     }
+                    if (isNative && lockMode === 'STRICT' && (!isUsageStatsEnabled || !isOverlayEnabled || !isAdminEnabled)) {
+                      alert("Strict Mode requires all permissions: Usage Access, Overlay, and Device Admin. Please enable them below.");
+                      return;
+                    }
                     setTimerActive(true);
                   }} className="w-full py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2">
                     <Shield size={16} /> Start Focus
@@ -801,6 +822,11 @@ export default function StudyDashboard() {
                   </div>
                 </div>
 
+                <div className="flex gap-2 w-full pt-2">
+                  <button onClick={() => setLockMode('NORMAL')} className={`flex-1 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${lockMode === 'NORMAL' ? 'bg-blue-600 text-white shadow-lg' : 'bg-white text-slate-500 border border-slate-200'}`}>NORMAL MODE</button>
+                  <button onClick={() => setLockMode('STRICT')} className={`flex-1 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${lockMode === 'STRICT' ? 'bg-red-600 text-white shadow-lg' : 'bg-white text-slate-500 border border-slate-200'}`}>STRICT MODE</button>
+                </div>
+
                 <div className="space-y-3 pt-2">
                   {/* Permissions */}
                   <div className="space-y-2">
@@ -835,6 +861,24 @@ export default function StudyDashboard() {
                         {isOverlayEnabled ? 'Enabled' : 'Enable'}
                       </button>
                     </div>
+
+                    {lockMode === 'STRICT' && (
+                      <div className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-200/60 shadow-sm animate-in fade-in slide-in-from-top-2">
+                        <div className="flex items-center gap-3">
+                          <Shield size={18} className={isAdminEnabled ? "text-emerald-500" : "text-amber-500"} />
+                          <div>
+                            <p className="text-[11px] font-[1000] text-slate-800 uppercase tracking-tight">Device Admin</p>
+                            <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Required for Strict Mode</p>
+                          </div>
+                        </div>
+                        <button 
+                          onClick={openAdminSettings}
+                          className={`px-4 py-2.5 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isAdminEnabled ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-red-600 hover:bg-red-50 text-white shadow-lg active:scale-95'}`}
+                        >
+                          {isAdminEnabled ? 'Enabled' : 'Enable'}
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   {/* Whitelist Button */}
