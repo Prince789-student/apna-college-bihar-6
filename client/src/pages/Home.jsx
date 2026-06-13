@@ -251,6 +251,15 @@ export default function Home() {
                           <p className="text-[10px] font-bold text-slate-900 truncate">{user.email}</p>
                        </div>
                        <div className="space-y-1">
+                          {user?.email === 'prince86944@gmail.com' && (
+                            <Link 
+                              to="/dashboard/admin"
+                              className="flex items-center gap-3 w-full p-3 hover:bg-indigo-50 text-slate-700 hover:text-indigo-600 rounded-2xl transition-all group"
+                            >
+                               <ShieldCheck size={16} />
+                               <span className="text-[11px] font-black uppercase tracking-widest">Admin Panel</span>
+                            </Link>
+                          )}
                           <button 
                             onClick={() => logout()}
                             className="flex items-center gap-3 w-full p-3 hover:bg-red-50 text-slate-500 hover:text-red-600 rounded-2xl transition-all group"
