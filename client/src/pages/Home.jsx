@@ -30,11 +30,11 @@ export default function Home() {
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [scrolled, setScrolled] = useState(false);
 
+  // Force Desktop View on Home page only
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
-    
-    // Force Desktop View on Home page only
+
     const metaViewport = document.querySelector('meta[name=viewport]');
     const originalViewport = metaViewport ? metaViewport.getAttribute('content') : 'width=device-width, initial-scale=1.0';
     if (metaViewport && !window.Capacitor?.isNativePlatform?.()) {
@@ -227,7 +227,7 @@ export default function Home() {
                  <a 
                    href="/ApnaCollegeBihar_Stable.apk"
                    download="ApnaCollegeBihar_Stable.apk"
-                   className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-100 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                   className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-100 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
                  >
                    Download App
                  </a>
@@ -278,12 +278,12 @@ export default function Home() {
                <a 
                  href="/ApnaCollegeBihar_Stable.apk"
                  download="ApnaCollegeBihar_Stable.apk"
-                 className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
+                 className="hidden lg:flex items-center gap-2 px-5 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all"
                >
                  Download App
                </a>
                <Link to="/login" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors hidden sm:block">Login</Link>
-               <Link to="/signup" className="px-4 md:px-5 py-2 md:py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-blue-600/20">Sign Up</Link>
+               <Link to="/signup" className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-blue-600/20">Sign Up</Link>
              </div>
            )}
         </div>
@@ -383,7 +383,82 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ═══════════════════════════════════════════ */}
+      {/* ── 2. SMART SEARCH SECTION ── */}
+      {/* ═══════════════════════════════════════════ */}
+      <section className="py-8 bg-white border-y border-slate-200 relative z-20 shadow-sm">
+        <div className="container mx-auto px-6 md:px-16">
+          <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-6">
+            <h2 className="text-lg font-[1000] text-slate-900 uppercase tracking-tight whitespace-nowrap hidden md:block">Quick Search:</h2>
+            <div className="w-full">
+              <GlobalSearch placeholder="Search Notes, PYQs, Colleges, Syllabus..." />
+            </div>
+          </div>
+        </div>
+      </section>
 
+      {/* ═══════════════════════════════════════════ */}
+      {/* ── 3. REAL STATS ── */}
+      {/* ═══════════════════════════════════════════ */}
+      <section className="py-16 px-6 md:px-16 bg-slate-50">
+        <Reveal>
+          <div className="container mx-auto max-w-6xl">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+              {[
+                { value: stats.docs || 500, suffix: '+', label: 'Notes Available', icon: <BookOpen size={24} />, color: 'text-indigo-600', bg: 'bg-white', border: 'border-slate-200' },
+                { value: stats.docs || 1000, suffix: '+', label: 'PYQs Available', icon: <FileText size={24} />, color: 'text-purple-600', bg: 'bg-white', border: 'border-slate-200' },
+                { value: 8, suffix: '', label: 'Semesters Covered', icon: <Layers size={24} />, color: 'text-emerald-600', bg: 'bg-white', border: 'border-slate-200' },
+              ].map((stat, idx) => (
+                <div key={idx} className={`p-6 rounded-3xl border ${stat.bg} ${stat.border} text-center flex flex-col items-center justify-center transition-all hover:-translate-y-2 hover:shadow-xl shadow-sm group`}>
+                  <div className={`w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 shadow-sm border border-slate-100 ${stat.color} group-hover:scale-110 transition-transform`}>
+                    {stat.icon}
+                  </div>
+                  <p className="text-3xl font-[1000] text-slate-900 tracking-tighter">
+                    <CountUp end={stat.value} suffix={stat.suffix} duration={1500} />
+                  </p>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-600 mt-1">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* ═══════════════════════════════════════════ */}
+      {/* ── 4. WHY CHOOSE APNA COLLEGE BIHAR ── */}
+      {/* ═══════════════════════════════════════════ */}
+      <section className="py-20 px-6 md:px-16 bg-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 to-transparent"></div>
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10"></div>
+        <Reveal delay={100}>
+          <div className="container mx-auto relative z-10 max-w-6xl">
+            <div className="text-center mb-16">
+              <span className="text-blue-400 font-black uppercase tracking-[0.4em] text-[10px]">Platform Features</span>
+              <h2 className="text-3xl md:text-5xl font-[1000] tracking-tighter uppercase text-white mt-4">
+                Why Choose Us
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+              {[
+                { title: 'Complete Study Resources', desc: 'Detailed notes, important questions, and PYQs for every BEU subject.', icon: <Database /> },
+                { title: 'UGEAC Support', desc: 'Predictors and guides to navigate the BCECEB admission process.', icon: <Target /> },
+                { title: 'One Platform Solution', desc: 'From syllabus tracking to CGPA calculation, everything in one place.', icon: <Zap /> },
+              ].map((feature, idx) => (
+                <div key={idx} className="bg-slate-800/50 border border-slate-700/50 p-8 rounded-3xl backdrop-blur-sm hover:bg-slate-800 transition-colors flex items-start gap-5 group">
+                  <div className="w-14 h-14 bg-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:text-blue-300 transition-transform">
+                    {feature.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-[900] text-white uppercase tracking-tight mb-2 group-hover:text-blue-400 transition-colors">{feature.title}</h3>
+                    <p className="text-slate-400 text-sm font-medium leading-relaxed">{feature.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </section>
 
       {/* ═══════════════════════════════════════════ */}
       {/* ── 5. POPULAR RESOURCES ── */}
@@ -427,7 +502,81 @@ export default function Home() {
         </Reveal>
       </section>
 
+      {/* ═══════════════════════════════════════════ */}
+      {/* ── 8. FAQ SECTION ── */}
+      {/* ═══════════════════════════════════════════ */}
+      <section className="py-20 px-6 md:px-16 bg-slate-50">
+        <Reveal delay={100}>
+          <div className="container mx-auto max-w-4xl">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-[1000] tracking-tighter uppercase text-slate-900">
+                Frequently Asked Questions
+              </h2>
+            </div>
 
+            <div className="space-y-4">
+              {faqs.map((faq, i) => (
+                <div key={i} className="bg-white border border-slate-200 rounded-2xl overflow-hidden transition-shadow duration-300 hover:shadow-md">
+                  <button
+                    onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
+                    className="w-full flex items-center justify-between p-6 text-left transition-colors hover:bg-slate-50/50 outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                  >
+                    <h3 className="text-sm md:text-base font-[900] text-slate-900 pr-4">{faq.q}</h3>
+                    <div className={`relative w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-500 ${
+                      openFaqIndex === i ? 'bg-blue-600 text-white rotate-180' : 'bg-slate-100 border border-slate-200 text-slate-500'
+                    }`}>
+                      <Plus size={16} className={`absolute transition-all duration-300 ${openFaqIndex === i ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`} />
+                      <Minus size={16} className={`absolute transition-all duration-300 ${openFaqIndex === i ? 'opacity-100 scale-100' : 'opacity-0 scale-50 -rotate-90'}`} />
+                    </div>
+                  </button>
+                  <div className={`grid transition-all duration-300 ease-in-out ${openFaqIndex === i ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                    <div className="overflow-hidden">
+                      <p className="px-6 pb-6 text-slate-600 text-sm leading-relaxed font-medium border-t border-slate-100 pt-4">
+                        {faq.a}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      <HomeEducationalGuide />
+
+      {/* ═══════════════════════════════════════════ */}
+      {/* ── 9. FINAL CTA ── */}
+      {/* ═══════════════════════════════════════════ */}
+      <section className="py-20 px-6 md:px-16 bg-white">
+        <Reveal delay={150}>
+          <div className="container mx-auto max-w-5xl">
+            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[3rem] p-10 md:p-20 text-center relative overflow-hidden shadow-2xl">
+              <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20"></div>
+              <div className="relative z-10">
+                <h2 className="text-3xl md:text-5xl font-[1000] text-white tracking-tighter uppercase leading-tight mb-10">
+                  Ready To Ace Your Semester?
+                </h2>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
+                  <a 
+                    href="/ApnaCollegeBihar_Stable.apk" 
+                    download="ApnaCollegeBihar_Stable.apk" 
+                    className="w-full sm:w-auto px-10 py-5 bg-white hover:bg-slate-50 text-blue-600 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2 hover:-translate-y-1 hover:shadow-2xl"
+                  >
+                    <Download size={20} /> Download App
+                  </a>
+                  <Link 
+                    to="/notes" 
+                    className="w-full sm:w-auto px-10 py-5 bg-blue-800/40 hover:bg-blue-800/60 text-white border border-blue-400/30 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2 hover:-translate-y-1 hover:bg-blue-800/70"
+                  >
+                    Explore Resources <ArrowRight size={20} />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </section>
 
       <Footer />
     </div>
