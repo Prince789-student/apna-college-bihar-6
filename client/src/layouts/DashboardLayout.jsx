@@ -574,7 +574,7 @@ export default function DashboardLayout() {
                <div className="flex items-center gap-2 md:gap-4">
                  <HeaderTimer />
                  
-                 <div className={`relative ${isNative ? 'hidden' : 'block'}`}>
+                 <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
                    <a 
                      href="/ApnaCollegeBihar_Stable.apk"
                      download="ApnaCollegeBihar_Stable.apk"
@@ -634,7 +634,7 @@ export default function DashboardLayout() {
                <div className="flex items-center gap-2 md:gap-4">
                  <HeaderTimer />
 
-                 <div className={`relative ${isNative ? 'hidden' : 'block'}`}>
+                 <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
                    <a 
                      href="/ApnaCollegeBihar_Stable.apk"
                      download="ApnaCollegeBihar_Stable.apk"
@@ -654,6 +654,12 @@ export default function DashboardLayout() {
                  </Link>
                </div>
              )}
+                <button 
+                  onClick={() => setMobileMenuOpen(true)} 
+                  className="lg:hidden p-2.5 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors ml-1"
+                >
+                  <Menu size={20} />
+                </button>
           </div>
         </div>
       </header>
