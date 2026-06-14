@@ -517,11 +517,27 @@ export default function DashboardLayout() {
     <div className="flex flex-col h-screen bg-[#f8fafc] overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30 relative">
       <SEO title={pageTitle} />
 
+      {/* Global Native Header (for App only) */}
+      {isNative && (
+        <header className="bg-white border-b border-slate-200 shadow-sm z-[200] shrink-0 sticky top-0 px-4 py-3 flex items-center justify-between">
+          <button onClick={() => navigate(-1)} className="p-2.5 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors active:scale-95 flex items-center justify-center">
+            <ChevronLeft size={20} strokeWidth={3} />
+          </button>
+          <div className="flex items-center justify-center">
+            <span className="text-[12px] font-black tracking-widest uppercase text-slate-900 truncate px-2">{pageTitle}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <HeaderTimer />
+          </div>
+        </header>
+      )}
+
       {/* Top Header Navigation (Desktop) & Top Bar (Mobile) */}
-      <header className="bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-sm z-[200] shrink-0 sticky top-0">
-        <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-3 md:py-4 flex items-center justify-between">
-          
-          {/* Logo & Brand */}
+      {!isNative && (
+        <header className="bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-sm z-[200] shrink-0 sticky top-0">
+          <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-3 md:py-4 flex items-center justify-between">
+            
+            {/* Logo & Brand */}
           <div className="flex items-center gap-2 md:gap-3 group cursor-pointer" onClick={() => navigate('/')}>
             <img src="/logo-acb.png?v=99" alt="Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl object-cover shadow-sm group-hover:scale-105 transition-transform" />
             <div className="block min-w-0">
@@ -663,6 +679,7 @@ export default function DashboardLayout() {
           </div>
         </div>
       </header>
+      )}
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto custom-scrollbar relative z-10 bg-[#f8fafc] flex flex-col">

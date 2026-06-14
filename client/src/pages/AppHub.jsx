@@ -251,7 +251,8 @@ export default function AppHub() {
         </div>
       </div>
 
-      {/* Footer removed to prevent duplication */}
+      {/* Global Footer */}
+      <Footer />
     </div>
   );
 }

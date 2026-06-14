@@ -34,7 +34,8 @@ public class AppBlockerPlugin extends Plugin {
     // Keys are stored WITH the _cap_ prefix by the Capacitor Preferences plugin
     private static final String PREFS_NAME = "CapacitorStorage";
 
-    // These keys match what @capacitor/preferences stores (it auto-prefixes with _cap_)
+    // These keys match what @capacitor/preferences stores (it auto-prefixes with
+    // _cap_)
     private static final String KEY_IS_ACTIVE = "_cap_isBlockerActive";
     private static final String KEY_COUNTDOWN_END = "_cap_countdownEndTime";
     private static final String KEY_ALLOWED_PACKAGES = "_cap_allowedPackages";
@@ -66,7 +67,7 @@ public class AppBlockerPlugin extends Plugin {
                             JSObject appObj = new JSObject();
                             appObj.put("name", info.loadLabel(pm).toString());
                             appObj.put("packageName", pkg);
-                            
+
                             // Fetch icon and convert to base64
                             try {
                                 Drawable icon = info.loadIcon(pm);
@@ -89,7 +90,7 @@ public class AppBlockerPlugin extends Plugin {
                             } catch (Exception ignored) {
                                 appObj.put("icon", "");
                             }
-                            
+
                             retApps.put(appObj);
                         }
                     }
@@ -193,7 +194,8 @@ public class AppBlockerPlugin extends Plugin {
 
             StringBuilder sb = new StringBuilder();
             for (String pkg : allowedSet) {
-                if (sb.length() > 0) sb.append(",");
+                if (sb.length() > 0)
+                    sb.append(",");
                 sb.append(pkg);
             }
 
@@ -212,7 +214,8 @@ public class AppBlockerPlugin extends Plugin {
 
     @PluginMethod
     public void openAccessibilitySettings(PluginCall call) {
-        // Kept for backwards compatibility if needed, but we use openUsageAccessSettings now
+        // Kept for backwards compatibility if needed, but we use
+        // openUsageAccessSettings now
         call.resolve();
     }
 
@@ -252,8 +255,6 @@ public class AppBlockerPlugin extends Plugin {
         call.resolve();
     }
 
-
-
     @PluginMethod
     public void checkOverlayPermission(PluginCall call) {
         boolean granted = true;
@@ -271,64 +272,12 @@ public class AppBlockerPlugin extends Plugin {
     public void requestOverlayPermission(PluginCall call) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             Intent intent = new Intent(
-                Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                android.net.Uri.parse("package:" + getContext().getPackageName())
-            );
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    android.net.Uri.parse("package:" + getContext().getPackageName()));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             getContext().startActivity(intent);
         }
         call.resolve();
-    }
-
-    @PluginMethod
-    public void checkAdminRights(PluginCall call) {
-        try {
-            android.app.admin.DevicePolicyManager dpm = (android.app.admin.DevicePolicyManager) getContext().getSystemService(Context.DEVICE_POLICY_SERVICE);
-            android.content.ComponentName adminComponent = new android.content.ComponentName(getContext(), StudyDeviceAdminReceiver.class);
-            
-            boolean active = dpm.isAdminActive(adminComponent);
-            JSObject ret = new JSObject();
-            ret.put("granted", active);
-            call.resolve(ret);
-        } catch (Exception e) {
-            call.reject(e.getMessage());
-        }
-    }
-
-    @PluginMethod
-    public void requestAdminRights(PluginCall call) {
-        try {
-            android.app.admin.DevicePolicyManager dpm = (android.app.admin.DevicePolicyManager) getContext().getSystemService(Context.DEVICE_POLICY_SERVICE);
-            android.content.ComponentName adminComponent = new android.content.ComponentName(getContext(), StudyDeviceAdminReceiver.class);
-
-            if (!dpm.isAdminActive(adminComponent)) {
-                Intent intent = new Intent(android.app.admin.DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-                intent.putExtra(android.app.admin.DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
-                intent.putExtra(android.app.admin.DevicePolicyManager.EXTRA_ADD_EXPLANATION, "We need Device Administrator access to ensure strict focus mode and prevent app uninstallation during your study sessions.");
-                
-                getActivity().runOnUiThread(() -> {
-                    getActivity().startActivity(intent);
-                });
-            }
-            call.resolve();
-        } catch (Exception e) {
-            call.reject(e.getMessage());
-        }
-    }
-
-    @PluginMethod
-    public void removeAdminRights(PluginCall call) {
-        try {
-            android.app.admin.DevicePolicyManager dpm = (android.app.admin.DevicePolicyManager) getContext().getSystemService(Context.DEVICE_POLICY_SERVICE);
-            android.content.ComponentName adminComponent = new android.content.ComponentName(getContext(), StudyDeviceAdminReceiver.class);
-            
-            if (dpm.isAdminActive(adminComponent)) {
-                dpm.removeActiveAdmin(adminComponent);
-            }
-            call.resolve();
-        } catch (Exception e) {
-            call.reject(e.getMessage());
-        }
     }
 
     @PluginMethod
@@ -353,7 +302,6 @@ public class AppBlockerPlugin extends Plugin {
             editor.putString("_cap_lastLaunchedPackage", packageName);
             editor.putString("_cap_lastLaunchedTime", String.valueOf(System.currentTimeMillis()));
             editor.apply();
-
 
             Intent intent = getContext().getPackageManager().getLaunchIntentForPackage(packageName);
             if (intent != null) {
