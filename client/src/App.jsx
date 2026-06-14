@@ -43,6 +43,8 @@ const DeleteAccount = React.lazy(() => import('./pages/DeleteAccount'));
 const About = React.lazy(() => import('./pages/About'));
 const Contact = React.lazy(() => import('./pages/Contact'));
 const SearchSEO = React.lazy(() => import('./pages/SearchSEO'));
+const DMCAPolicy = React.lazy(() => import('./pages/DMCAPolicy'));
+const Disclaimer = React.lazy(() => import('./pages/Disclaimer'));
 const BeuToolSEO = React.lazy(() => import('./pages/BeuToolSEO'));
 const FeatureSEO = React.lazy(() => import('./pages/FeatureSEO'));
 const CollegeProfile = React.lazy(() => import('./pages/CollegeProfile'));
