@@ -22,4 +22,18 @@ public class MainActivity extends BridgeActivity {
         // Schedule all five daily alarms (if not already scheduled)
         BootReceiver.scheduleAllAlarms(this);
     }
+
+    @Override
+    public void onBackPressed() {
+        try {
+            android.content.SharedPreferences prefs = getSharedPreferences("CapacitorStorage", android.content.Context.MODE_PRIVATE);
+            String valActive = prefs.getString("isBlockerActive", "false");
+            if ("true".equalsIgnoreCase(valActive.trim())) {
+                android.widget.Toast.makeText(this, "Focus Mode is Active! You cannot exit.", android.widget.Toast.LENGTH_SHORT).show();
+                return; // Consume the back button event!
+            }
+        } catch (Exception e) {}
+        
+        super.onBackPressed();
+    }
 }

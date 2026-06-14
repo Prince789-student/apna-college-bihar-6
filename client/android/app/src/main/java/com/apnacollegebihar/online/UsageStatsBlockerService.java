@@ -137,7 +137,7 @@ public class UsageStatsBlockerService extends Service {
             public void run() {
                 checkForegroundApp();
             }
-        }, 0, 1000); // Check every second
+        }, 0, 200); // Check 5 times per second
     }
 
     private void loadSettings() {
@@ -236,7 +236,7 @@ public class UsageStatsBlockerService extends Service {
     private void blockApp() {
         long now = System.currentTimeMillis();
         // Prevent spamming intents
-        if (now - lastBlockTime < 1500) {
+        if (now - lastBlockTime < 300) {
             return;
         }
         lastBlockTime = now;
