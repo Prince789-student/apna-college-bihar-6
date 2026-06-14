@@ -138,24 +138,17 @@ export default function AppHub() {
                     </div>
                     
                     {(user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN') && (
-                      <Link 
-                        to="/dashboard/admin" 
-                        className="w-full py-2.5 bg-blue-600/10 hover:bg-blue-600 border border-blue-500/20 text-blue-600 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 mb-1.5 shadow-sm"
-                      >
-                        <ShieldCheck size={14} /> Admin Panel
-                      </Link>
-                    )}
-                    
                     <Link 
-                      to="/delete-account" 
-                      className="w-full py-2.5 bg-orange-500/10 hover:bg-orange-500 text-orange-600 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 mb-1.5"
+                      to="/dashboard/admin" 
+                      className="w-full py-2.5 bg-blue-600/10 hover:bg-blue-600 border border-blue-500/20 text-blue-600 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 mb-1.5 shadow-sm"
                     >
-                      <Trash2 size={14} /> Delete Account
+                      <ShieldCheck size={14} /> Admin Panel
                     </Link>
-                    <button 
-                      onClick={handleLogout} 
-                      className="w-full py-2.5 bg-red-500/10 hover:bg-red-500 text-red-600 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
-                    >
+                  )}
+                  <button 
+                    onClick={handleLogout} 
+                    className="w-full py-2.5 bg-red-500/10 hover:bg-red-500 text-red-600 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
+                  >
                       <LogOut size={14} /> Logout
                     </button>
                   </div>

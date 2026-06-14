@@ -76,7 +76,6 @@ export function StudyProvider({ children }) {
           } else {
             // Clean up expired focus session
             if (AppBlocker && AppBlocker.stopBlocker) await AppBlocker.stopBlocker();
-            if (AppBlocker && AppBlocker.removeAdminRights) await AppBlocker.removeAdminRights();
             await Preferences.set({ key: 'isBlockerActive', value: 'false' });
             await Preferences.set({ key: 'countdownEndTime', value: '0' });
             localStorage.setItem('timerActive', 'false');
@@ -154,7 +153,6 @@ export function StudyProvider({ children }) {
           Preferences.set({ key: 'isBlockerActive', value: 'true' });
         } else {
           if (AppBlocker && AppBlocker.stopBlocker) AppBlocker.stopBlocker();
-          if (AppBlocker && AppBlocker.removeAdminRights) AppBlocker.removeAdminRights();
           Preferences.set({ key: 'isBlockerActive', value: 'false' });
           Preferences.set({ key: 'countdownEndTime', value: '0' });
         }
