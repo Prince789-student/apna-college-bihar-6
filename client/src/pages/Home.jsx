@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { 
-  BookOpen, Calculator, Timer, Users, 
-  ArrowRight, CheckCircle, GraduationCap, 
+import {
+  BookOpen, Calculator, Timer, Users,
+  ArrowRight, CheckCircle, GraduationCap,
   Globe, Shield, Zap, Send, Youtube,
-  User, LogOut, ChevronDown, Download, MessageCircle, 
-  ShieldCheck, Calendar, Sparkles, FileText, Library, 
-  Star, ChevronRight, Search, MapPin, Target, 
+  User, LogOut, ChevronDown, Download, MessageCircle,
+  ShieldCheck, Calendar, Sparkles, FileText, Library,
+  Star, ChevronRight, Search, MapPin, Target,
   RefreshCw, Heart, Building2, Award, Mail,
   Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight
 } from 'lucide-react';
@@ -36,7 +36,7 @@ export default function Home() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const joinDate = user?.metadata?.creationTime 
+  const joinDate = user?.metadata?.creationTime
     ? new Date(user.metadata.creationTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
     : 'Recently';
 
@@ -139,7 +139,7 @@ export default function Home() {
   // ── Data Fetching ──
   useEffect(() => {
     const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
-      setStats(s => ({ ...s, users: snap.size })); 
+      setStats(s => ({ ...s, users: snap.size }));
     });
     const unsubDocs = onSnapshot(collection(db, 'documents'), (snap) => {
       setStats(s => ({ ...s, docs: snap.size }));
@@ -158,7 +158,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] font-['Inter'] relative overflow-hidden">
-      <SEO 
+      <SEO
         title="Bihar's Largest Engineering Student Platform | Apna College Bihar"
         description="Official hub for Bihar engineering students. Free BEU Notes, PYQs, Syllabus, UGEAC Predictor, CGPA Calculator and counselling guidance for 38+ engineering colleges."
         keywords="BEU notes, Bihar engineering college, UGEAC 2026 predictor, B.Tech PYQ papers, Bihar college cutoff, CGPA calculator BEU, Apna College Bihar, Bihar engineering counselling, MIT Muzaffarpur, BCE Bhagalpur"
@@ -203,15 +203,15 @@ export default function Home() {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-              <a 
-                href="/ApnaCollegeBihar_Stable.apk" 
-                download="ApnaCollegeBihar_Stable.apk" 
+              <a
+                href="/ApnaCollegeBihar_v4.apk"
+                download="ApnaCollegeBihar_v4.apk"
                 className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-xl shadow-blue-600/20 hover:shadow-2xl hover:shadow-blue-600/30 hover:-translate-y-0.5 flex items-center justify-center gap-2"
               >
                 <Download size={18} /> Download App
               </a>
-              <a 
-                href="#resources" 
+              <a
+                href="#resources"
                 className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
               >
                 Explore Resources <ArrowRight size={16} className="text-slate-400 group-hover:text-blue-600 transition-colors group-hover:translate-x-1" />
@@ -457,9 +457,8 @@ export default function Home() {
                     className="w-full flex items-center justify-between p-6 text-left transition-colors hover:bg-slate-50/50 outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                   >
                     <h3 className="text-sm md:text-base font-[900] text-slate-900 pr-4">{faq.q}</h3>
-                    <div className={`relative w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-500 ${
-                      openFaqIndex === i ? 'bg-blue-600 text-white rotate-180' : 'bg-slate-100 border border-slate-200 text-slate-500'
-                    }`}>
+                    <div className={`relative w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-500 ${openFaqIndex === i ? 'bg-blue-600 text-white rotate-180' : 'bg-slate-100 border border-slate-200 text-slate-500'
+                      }`}>
                       <Plus size={16} className={`absolute transition-all duration-300 ${openFaqIndex === i ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`} />
                       <Minus size={16} className={`absolute transition-all duration-300 ${openFaqIndex === i ? 'opacity-100 scale-100' : 'opacity-0 scale-50 -rotate-90'}`} />
                     </div>
@@ -493,15 +492,15 @@ export default function Home() {
                   Ready To Ace Your Semester?
                 </h2>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-                  <a 
-                    href="/ApnaCollegeBihar_Stable.apk?v=3" 
-                    download="ApnaCollegeBihar_Stable.apk" 
+                  <a
+                    href="/ApnaCollegeBihar_v4.apk"
+                    download="ApnaCollegeBihar_v4.apk"
                     className="w-full sm:w-auto px-10 py-5 bg-white hover:bg-slate-50 text-blue-600 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2 hover:-translate-y-1 hover:shadow-2xl"
                   >
                     <Download size={20} /> Download App
                   </a>
-                  <Link 
-                    to="/notes" 
+                  <Link
+                    to="/notes"
                     className="w-full sm:w-auto px-10 py-5 bg-blue-800/40 hover:bg-blue-800/60 text-white border border-blue-400/30 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2 hover:-translate-y-1 hover:bg-blue-800/70"
                   >
                     Explore Resources <ArrowRight size={20} />
