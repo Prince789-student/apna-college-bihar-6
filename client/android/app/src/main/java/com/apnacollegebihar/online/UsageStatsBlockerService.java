@@ -88,6 +88,7 @@ public class UsageStatsBlockerService extends Service {
                 .setContentText("Blocking distractions...")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentIntent(pendingIntent)
+                .setOngoing(true)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                         .setMediaSession(mediaSession.getSessionToken()))

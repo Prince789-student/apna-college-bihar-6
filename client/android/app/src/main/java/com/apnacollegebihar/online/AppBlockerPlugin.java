@@ -305,8 +305,10 @@ public class AppBlockerPlugin extends Plugin {
                 Intent intent = new Intent(android.app.admin.DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
                 intent.putExtra(android.app.admin.DevicePolicyManager.EXTRA_DEVICE_ADMIN, adminComponent);
                 intent.putExtra(android.app.admin.DevicePolicyManager.EXTRA_ADD_EXPLANATION, "We need Device Administrator access to ensure strict focus mode and prevent app uninstallation during your study sessions.");
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getContext().startActivity(intent);
+                
+                getActivity().runOnUiThread(() -> {
+                    getActivity().startActivity(intent);
+                });
             }
             call.resolve();
         } catch (Exception e) {

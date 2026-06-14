@@ -265,6 +265,14 @@ export default function StudyDashboard() {
   }, [user]);
 
   const toggleApp = (pkg) => {
+    if (timerActive && lockMode === 'STRICT') {
+      alert("Strict Mode Active! You cannot modify allowed apps during an active session.");
+      return;
+    }
+    if (timerActive && timerMode === 'COUNTDOWN') {
+      alert("Focus Session is Locked! You cannot modify allowed apps during an active countdown session.");
+      return;
+    }
     const list = (allowedPackages || '').split(',').filter(Boolean);
     if (list.includes(pkg)) {
       setAllowedPackages(list.filter(p => p !== pkg).join(','));
