@@ -9,14 +9,7 @@ export default defineConfig({
     drop: ['console', 'debugger'],
   },
   build: {
-    emptyOutDir: true,
-    rollupOptions: {
-      output: {
-        entryFileNames: 'assets/[name].js',
-        chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]'
-      }
-    }
+    emptyOutDir: true
   },
   server: {
     proxy: {
