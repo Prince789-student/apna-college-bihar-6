@@ -1,0 +1,41 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Profiles Collection: Users can only read and write their own profile
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    
+    // Notes and PYQs: Anyone authenticated can read, but no one can write (only Admin can via backend)
+    match /notes/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Block all client-side writes
+    }
+    
+    match /pyqs/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+    
+    match /colleges/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+
+    // Default rule: Deny everything else
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

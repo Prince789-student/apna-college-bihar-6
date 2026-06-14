@@ -204,8 +204,8 @@ export default function Home() {
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
               <a
-                href="https://github.com/Prince789-student/apna-college-bihar-6/raw/main/client/public/ApnaCollegeBihar_v10.apk"
-                download="ApnaCollegeBihar_v10.apk"
+                href="https://github.com/Prince789-student/apna-college-bihar-6/raw/main/client/public/ApnaCollegeBihar_v11.apk"
+                download="ApnaCollegeBihar_v11.apk"
                 className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-xl shadow-blue-600/20 hover:shadow-2xl hover:shadow-blue-600/30 hover:-translate-y-0.5 flex items-center justify-center gap-2"
               >
                 <Download size={18} /> Download App
@@ -493,8 +493,8 @@ export default function Home() {
                 </h2>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
                   <a
-                    href="https://github.com/Prince789-student/apna-college-bihar-6/raw/main/client/public/ApnaCollegeBihar_v10.apk"
-                    download="ApnaCollegeBihar_v10.apk"
+                    href="https://github.com/Prince789-student/apna-college-bihar-6/raw/main/client/public/ApnaCollegeBihar_v11.apk"
+                    download="ApnaCollegeBihar_v11.apk"
                     className="w-full sm:w-auto px-10 py-5 bg-white hover:bg-slate-50 text-blue-600 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2 hover:-translate-y-1 hover:shadow-2xl"
                   >
                     <Download size={20} /> Download App

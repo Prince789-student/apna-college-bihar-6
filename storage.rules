@@ -1,0 +1,41 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      // Assuming admins have a custom claim `admin: true` 
+      // or we just restrict writes to a specific admin uid if you prefer
+      // For now, only authenticated users can upload profile pics
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    // Public Assets: Readable by everyone, writable by no one (except admin SDK)
+    match /assets/{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Profile Images: Users can read all, but only write their own
+    match /profiles/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // PDFs / Resources: Authenticated read, no client write
+    match /resources/{allPaths=**} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+
+    // Default block
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

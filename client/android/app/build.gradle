@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 
+Properties localProperties = new Properties()
+if (project.rootProject.file('local.properties').exists()) {
+    localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+}
+
 android {
     namespace = "com.apnacollegebihar.online"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -19,9 +24,9 @@ android {
     signingConfigs {
         release {
             storeFile file("../my-release-key.jks")
-            storePassword "12345678"
+            storePassword localProperties.getProperty('keystore.password', '')
             keyAlias "my-alias"
-            keyPassword "12345678"
+            keyPassword localProperties.getProperty('key.password', '')
         }
     }
     buildTypes {
