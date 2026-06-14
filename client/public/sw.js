@@ -7,7 +7,7 @@
 //    - EVERYTHING ELSE → Network-First
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_VERSION = 'acb-v24';
+const CACHE_VERSION = 'acb-v25';
 const STATIC_CACHE  = `${CACHE_VERSION}-static`;
 const DATA_CACHE    = `${CACHE_VERSION}-data`;
 const OFFLINE_URL   = '/offline.html';
