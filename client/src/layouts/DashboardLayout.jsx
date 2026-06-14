@@ -647,7 +647,7 @@ export default function DashboardLayout() {
                                 setShowProfileMenu(false);
                                 const shareData = {
                                   title: 'Apna College Bihar App - No More Distractions!',
-                                  text: '📱 Padhai ke waqt Instagram/Reels se distract ho jate ho? Apna College Bihar ka official App try karo! Isme "Strict Study Blocker" hai jo focus time me baaki sab block kar deta hai. Saare Notes, PYQs ek jagah par! Download now: ',
+                                  text: '📱 Padhai ke waqt Instagram/Reels se distract hote ho? Apna College Bihar App try karo! Isme "Strict Study Blocker" hai!\n\nSteps:\n1. App Download karke Dashboard me jao.\n2. Niche "Focus Mode" on karo.\n3. Timer set karo aur padhai shuru! (Baki saare apps block ho jayenge)\n\nSaare Notes aur PYQs bhi yahi milenge!\nDownload now: ',
                                   url: 'https://apna-college-bihar-6.onrender.com/ApnaCollegeBihar_v9.apk'
                                 };
                                 try {
