@@ -162,45 +162,31 @@ export default function StudyDashboard() {
   const [isOverlayEnabled, setIsOverlayEnabled] = useState(false);
   const [isAdminEnabled, setIsAdminEnabled] = useState(false);
 
-  const openAdminSettings = async () => {
-    if (!isNative) return;
+  const [disclosureModal, setDisclosureModal] = useState({ isOpen: false, type: null });
+
+  const handleRequestPermission = (type) => {
+    if (!isNative) {
+      import('react-hot-toast').then(m => m.toast.error("Please download our app to use this feature!"));
+      return;
+    }
+    setDisclosureModal({ isOpen: true, type });
+  };
+
+  const confirmPermission = async () => {
+    const { type } = disclosureModal;
+    setDisclosureModal({ isOpen: false, type: null });
+    
     try {
-      if (AppBlocker && AppBlocker.requestAdminRights) {
+      if (type === 'admin' && AppBlocker && AppBlocker.requestAdminRights) {
         await AppBlocker.requestAdminRights();
-      }
-    } catch (e) {
-      console.log(e);
-      alert(JSON.stringify(e));
-    }
-  };
-
-  const openUsageStats = async () => {
-    if (!isNative) {
-      toast.error("Please download our app to use this feature!");
-      return;
-    }
-    try {
-      if (AppBlocker && AppBlocker.requestUsageStatsPermission) {
+      } else if (type === 'usage' && AppBlocker && AppBlocker.requestUsageStatsPermission) {
         await AppBlocker.requestUsageStatsPermission();
-      }
-    } catch (e) {
-      console.log("Plugin Error:", e);
-      alert("AppBlocker Plugin Error: " + JSON.stringify(e));
-    }
-  };
-
-  const openOverlay = async () => {
-    if (!isNative) {
-      toast.error("Please download our app to use this feature!");
-      return;
-    }
-    try {
-      if (AppBlocker && AppBlocker.requestOverlayPermission) {
+      } else if (type === 'overlay' && AppBlocker && AppBlocker.requestOverlayPermission) {
         await AppBlocker.requestOverlayPermission();
       }
     } catch (e) {
       console.log(e);
-      alert(JSON.stringify(e));
+      alert("Permission error: " + JSON.stringify(e));
     }
   };
 
@@ -847,7 +833,7 @@ export default function StudyDashboard() {
                         </div>
                       </div>
                       <button 
-                        onClick={openUsageStats}
+                        onClick={() => handleRequestPermission('usage')}
                         className={`px-4 py-2.5 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isUsageStatsEnabled ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-blue-600 hover:bg-blue-50 text-white shadow-lg active:scale-95'}`}
                       >
                         {isUsageStatsEnabled ? 'Enabled' : 'Enable'}
@@ -863,7 +849,7 @@ export default function StudyDashboard() {
                         </div>
                       </div>
                       <button 
-                        onClick={openOverlay}
+                        onClick={() => handleRequestPermission('overlay')}
                         className={`px-4 py-2.5 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isOverlayEnabled ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-blue-600 hover:bg-blue-50 text-white shadow-lg active:scale-95'}`}
                       >
                         {isOverlayEnabled ? 'Enabled' : 'Enable'}
@@ -880,7 +866,7 @@ export default function StudyDashboard() {
                           </div>
                         </div>
                         <button 
-                          onClick={openAdminSettings}
+                          onClick={() => handleRequestPermission('admin')}
                           className={`px-4 py-2.5 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isAdminEnabled ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-red-600 hover:bg-red-50 text-white shadow-lg active:scale-95'}`}
                         >
                           {isAdminEnabled ? 'Enabled' : 'Enable'}
@@ -1637,6 +1623,56 @@ export default function StudyDashboard() {
             </div>
           </div>
         )}
+        {/* Prominent Disclosure Modal for Permissions */}
+        {disclosureModal.isOpen && (
+          <div className="fixed inset-0 z-[1000] flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-300">
+            <div className="bg-white rounded-[2rem] p-6 w-full max-w-sm shadow-2xl flex flex-col animate-in zoom-in-95">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                  <Shield size={24} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Permission Required</h3>
+                  <p className="text-[10px] text-slate-500 font-bold uppercase mt-0.5">Data Usage Disclosure</p>
+                </div>
+              </div>
+              
+              <div className="text-[11px] text-slate-600 font-medium leading-relaxed mb-6 space-y-3">
+                {disclosureModal.type === 'usage' && (
+                  <p>
+                    <strong className="text-slate-900">Usage Access:</strong> Apna College Bihar collects information about the apps you open (Usage Stats) to detect and block distracting applications while Focus Mode is active. This data is processed locally on your device and is <strong className="text-blue-600">NOT</strong> sent to our servers.
+                  </p>
+                )}
+                {disclosureModal.type === 'overlay' && (
+                  <p>
+                    <strong className="text-slate-900">Display Over Other Apps:</strong> Apna College Bihar requires permission to display over other apps in order to show the Study Blocker screen when you attempt to open a restricted application during a focus session.
+                  </p>
+                )}
+                {disclosureModal.type === 'admin' && (
+                  <p>
+                    <strong className="text-slate-900">Device Administrator:</strong> Apna College Bihar requires Device Administrator privileges strictly to prevent the uninstallation of this app while a Study Session is active. We do not use these privileges to wipe data or change passwords.
+                  </p>
+                )}
+              </div>
+
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setDisclosureModal({ isOpen: false, type: null })}
+                  className="flex-1 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-black text-[10px] uppercase tracking-widest transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={confirmPermission}
+                  className="flex-1 py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-md shadow-blue-600/20"
+                >
+                  I Agree & Continue
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

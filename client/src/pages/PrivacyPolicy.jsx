@@ -68,9 +68,24 @@ export default function PrivacyPolicy() {
           </div>
 
           <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-4">
+            <div className="flex items-center gap-3 text-indigo-600">
+              <Shield size={24} />
+              <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">3. Special Android Permissions & Data Usage</h2>
+            </div>
+            <p className="text-xs font-medium text-slate-700 leading-relaxed">
+              Our mobile application includes a "Strict Study Blocker" to prevent distractions. To enable this, the app explicitly requests the following sensitive permissions, subject to your explicit consent:
+            </p>
+            <ul className="space-y-3 text-xs text-slate-600 pl-4 list-disc font-medium">
+              <li><strong className="text-slate-900">Usage Access (PACKAGE_USAGE_STATS):</strong> Used locally on your device to determine which applications you are currently opening. This allows us to instantly block access to restricted apps during a study session. <strong className="text-slate-900">We do NOT transmit your app usage history to our servers or any third parties.</strong></li>
+              <li><strong className="text-slate-900">Display Over Other Apps (SYSTEM_ALERT_WINDOW):</strong> Used strictly to draw a "Study Focus" overlay screen on top of distracting applications, preventing you from using them until your study timer is completed.</li>
+              <li><strong className="text-slate-900">Device Administrator (BIND_DEVICE_ADMIN):</strong> Used solely to temporarily prevent the uninstallation of the app while a strict focus session is active, helping you maintain self-control. It is never used to modify device passwords or wipe data.</li>
+            </ul>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-4">
             <div className="flex items-center gap-3 text-orange-600">
               <Eye size={24} />
-              <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">3. Data Sharing & Security</h2>
+              <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">4. Data Sharing & Security</h2>
             </div>
             <p className="text-xs font-medium text-slate-700 leading-relaxed">
               We take your privacy seriously. Apna College Bihar does <strong className="text-slate-900">NOT</strong> sell, rent, or trade student personal information to any commercial third parties.
@@ -83,7 +98,7 @@ export default function PrivacyPolicy() {
           <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-4">
             <div className="flex items-center gap-3 text-rose-600">
               <FileText size={24} />
-              <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">4. Your Rights & Account Deletion</h2>
+              <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">5. Your Rights & Account Deletion</h2>
             </div>
             <p className="text-xs font-medium text-slate-700 leading-relaxed">
               In strict accordance with Google Play Data Safety guidelines, you have total ownership of your account and personal data.

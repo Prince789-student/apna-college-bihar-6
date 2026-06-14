@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate, Link } from 'react-router-dom';
-import { ChevronLeft, Shield, Timer, X, LayoutDashboard, Library, BookOpen, Calendar, Clock, FileText, GraduationCap, Calculator, User, LogOut, Menu, UserCheck, Flame, Send, ChevronDown, Globe, Award, Link2, ArrowRight } from 'lucide-react';
+import { ChevronLeft, Shield, Timer, X, LayoutDashboard, Library, BookOpen, Calendar, Clock, FileText, GraduationCap, Calculator, User, LogOut, Menu, UserCheck, Flame, Send, ChevronDown, Globe, Award, Link2, ArrowRight, UserX } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStudy } from '../context/StudyContext';
 import { Capacitor, registerPlugin } from '@capacitor/core';
@@ -648,7 +648,7 @@ export default function DashboardLayout() {
                                 const shareData = {
                                   title: 'Apna College Bihar App - No More Distractions!',
                                   text: '📱 Padhai ke waqt Instagram/Reels se distract hote ho? Apna College Bihar App try karo! Isme "Strict Study Blocker" hai!\n\nSteps:\n1. App Download karke Dashboard me jao.\n2. Niche "Focus Mode" on karo.\n3. Timer set karo aur padhai shuru! (Baki saare apps block ho jayenge)\n\nSaare Notes aur PYQs bhi yahi milenge!\nDownload now: ',
-                                  url: 'https://apna-college-bihar-6.onrender.com/ApnaCollegeBihar_v9.apk'
+                                  url: 'https://apna-college-bihar-6.onrender.com/ApnaCollegeBihar_v10.apk'
                                 };
                                 try {
                                   if (navigator.share) {
@@ -668,6 +668,16 @@ export default function DashboardLayout() {
                                </div>
                                <span className="text-[10px] font-black uppercase tracking-widest">Share App Link</span>
                             </button>
+                            <Link 
+                              to="/delete-account"
+                              onClick={() => setShowProfileMenu(false)}
+                              className="flex items-center gap-3 w-full p-3 hover:bg-orange-50 text-slate-500 hover:text-orange-600 rounded-2xl transition-all group"
+                            >
+                               <div className="p-2 bg-slate-100 group-hover:bg-orange-600/10 rounded-xl transition-colors">
+                                 <UserX size={14} />
+                               </div>
+                               <span className="text-[10px] font-black uppercase tracking-widest">Delete Account</span>
+                            </Link>
                             <button 
                               onClick={() => logout()}
                               className="flex items-center gap-3 w-full p-3 hover:bg-red-50 text-slate-500 hover:text-red-600 rounded-2xl transition-all group"
