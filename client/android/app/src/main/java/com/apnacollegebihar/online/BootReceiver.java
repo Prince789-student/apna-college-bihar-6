@@ -31,7 +31,7 @@ public class BootReceiver extends BroadcastReceiver {
             // Restart app and blocker if a focus session was active before reboot
             try {
                 android.content.SharedPreferences prefs = context.getSharedPreferences("CapacitorStorage", Context.MODE_PRIVATE);
-                String valActive = prefs.getString("_cap_isBlockerActive", "false");
+                String valActive = prefs.getString("isBlockerActive", "false");
                 if ("true".equalsIgnoreCase(valActive.trim())) {
                     Log.d(TAG, "Blocker was active before reboot! Relaunching app and service.");
                     
