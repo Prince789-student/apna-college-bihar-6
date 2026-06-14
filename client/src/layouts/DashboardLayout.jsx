@@ -631,6 +631,17 @@ export default function DashboardLayout() {
                          </div>
                          
                          <div className="space-y-1">
+                            {(user?.email === 'prince8694@gmail.com' || user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN') && (
+                              <Link 
+                                to="/dashboard/admin"
+                                className="flex items-center gap-3 w-full p-3 hover:bg-blue-50 text-blue-600 rounded-2xl transition-all group"
+                              >
+                                 <div className="p-2 bg-blue-50 group-hover:bg-blue-100 rounded-xl transition-colors">
+                                   <Shield size={14} />
+                                 </div>
+                                 <span className="text-[10px] font-black uppercase tracking-widest">Admin Panel</span>
+                              </Link>
+                            )}
                             <button 
                               onClick={() => logout()}
                               className="flex items-center gap-3 w-full p-3 hover:bg-red-50 text-slate-500 hover:text-red-600 rounded-2xl transition-all group"
