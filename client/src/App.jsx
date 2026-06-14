@@ -4,6 +4,7 @@ import { Toaster, toast } from 'react-hot-toast';
 import { AlertTriangle, Shield, Phone, ShieldCheck } from 'lucide-react';
 import { useAuth } from './context/AuthContext';
 import { Capacitor } from '@capacitor/core';
+import { AdMob } from '@capacitor-community/admob';
 
 // Layouts
 import DashboardLayout from './layouts/DashboardLayout';
@@ -194,6 +195,12 @@ function App() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    if (isNative) {
+      AdMob.initialize().catch(console.error);
+    }
+  }, [isNative]);
 
   useEffect(() => {
     // Safety timeout: Never stay loading more than 5 seconds

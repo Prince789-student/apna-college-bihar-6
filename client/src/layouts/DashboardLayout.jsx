@@ -6,6 +6,7 @@ import { useStudy } from '../context/StudyContext';
 import { Capacitor, registerPlugin } from '@capacitor/core';
 import { App } from '@capacitor/app';
 import { LocalNotifications } from '@capacitor/local-notifications';
+import { AdMob, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
 import { getToken } from 'firebase/messaging';
 
 const AppBlocker = registerPlugin('AppBlocker');
@@ -29,6 +30,29 @@ export default function DashboardLayout() {
   
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(null);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+
+  useEffect(() => {
+    if (isNative) {
+      const showBanner = async () => {
+        try {
+          await AdMob.showBanner({
+            adId: 'ca-app-pub-3940256099942544/6300978111', // Test Banner ID
+            adSize: BannerAdSize.BANNER,
+            position: BannerAdPosition.BOTTOM_CENTER,
+            margin: 0,
+            isTesting: true,
+          });
+        } catch (e) {
+          console.error('AdMob Banner error', e);
+        }
+      };
+      showBanner();
+
+      return () => {
+        AdMob.hideBanner().catch(console.error);
+      };
+    }
+  }, [isNative]);
 
   const featureCategories = [
     {
@@ -592,8 +616,8 @@ export default function DashboardLayout() {
                  
                  <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
                    <a 
-                     href="/ApnaCollegeBihar_v13.apk"
-                     download="ApnaCollegeBihar_v13.apk"
+                     href="/ApnaCollegeBihar_v14.apk"
+                     download="ApnaCollegeBihar_v14.apk"
                      className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
                    >
                      <span className="hidden md:inline">Download</span> APK
@@ -648,7 +672,7 @@ export default function DashboardLayout() {
                                 const shareData = {
                                   title: 'Apna College Bihar App - No More Distractions!',
                                   text: '📱 Padhai ke waqt Instagram/Reels se distract hote ho? Apna College Bihar App try karo! Isme "Strict Study Blocker" hai!\n\nSteps:\n1. App Download karke Dashboard me jao.\n2. Niche "Focus Mode" on karo.\n3. Timer set karo aur padhai shuru! (Baki saare apps block ho jayenge)\n\nSaare Notes aur PYQs bhi yahi milenge!\nDownload now: ',
-                                  url: 'https://apnacollegebihar.online/ApnaCollegeBihar_v13.apk'
+                                  url: 'https://apnacollegebihar.online/ApnaCollegeBihar_v14.apk'
                                 };
                                 try {
                                   if (navigator.share) {
@@ -690,8 +714,8 @@ export default function DashboardLayout() {
 
                  <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
                    <a 
-                     href="/ApnaCollegeBihar_v13.apk"
-                     download="ApnaCollegeBihar_v13.apk"
+                     href="/ApnaCollegeBihar_v14.apk"
+                     download="ApnaCollegeBihar_v14.apk"
                      className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
                    >
                      <span className="hidden md:inline">Download</span> APK
