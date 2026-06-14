@@ -49,9 +49,10 @@
 
 
 
-        <receiver android:name=".BootReceiver" android:enabled="true" android:exported="true">
+        <receiver android:name=".BootReceiver" android:enabled="true" android:exported="true" android:directBootAware="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
@@ -59,6 +60,7 @@
         <!-- Device Administrator Receiver for App Blocker -->
         <receiver android:name=".StudyDeviceAdminReceiver"
             android:permission="android.permission.BIND_DEVICE_ADMIN"
+            android:directBootAware="true"
             android:exported="true">
             <meta-data android:name="android.app.device_admin"
                 android:resource="@xml/device_admin" />
@@ -72,6 +74,7 @@
             android:name=".UsageStatsBlockerService"
             android:foregroundServiceType="mediaPlayback"
             android:stopWithTask="false"
+            android:directBootAware="true"
             android:exported="false">
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="Detects foreground app to enforce study focus mode"/>
         </service>

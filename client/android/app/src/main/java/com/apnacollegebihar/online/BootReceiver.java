@@ -23,15 +23,28 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (Intent.ACTION_BOOT_COMPLETED.equals(action) ||
+            "android.intent.action.LOCKED_BOOT_COMPLETED".equals(action) ||
             "android.intent.action.QUICKBOOT_POWERON".equals(action)) {
 
-            Log.d(TAG, "Boot completed — rescheduling all daily alarms");
+            Log.d(TAG, "Boot completed or Locked Boot completed - rescheduling alarms and checking blocker");
             scheduleAllAlarms(context);
 
             // Restart app and blocker if a focus session was active before reboot
             try {
-                android.content.SharedPreferences prefs = context.getSharedPreferences("CapacitorStorage", Context.MODE_PRIVATE);
-                String valActive = prefs.getString("isBlockerActive", "false");
+                Context deviceContext;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    deviceContext = context.createDeviceProtectedStorageContext();
+                } else {
+                    deviceContext = context;
+                }
+                android.content.SharedPreferences dPrefs = deviceContext.getSharedPreferences("DeviceProtectedStorage", Context.MODE_PRIVATE);
+                String valActive = dPrefs.getString("isBlockerActive", "false");
+                
+                // Fallback to CapacitorStorage if not found in DeviceProtectedStorage (for compatibility with existing sessions)
+                if ("false".equals(valActive)) {
+                    android.content.SharedPreferences prefs = context.getSharedPreferences("CapacitorStorage", Context.MODE_PRIVATE);
+                    valActive = prefs.getString("isBlockerActive", "false");
+                }
                 if ("true".equalsIgnoreCase(valActive.trim())) {
                     Log.d(TAG, "Blocker was active before reboot! Relaunching app and service.");
                     

@@ -156,6 +156,17 @@ public class AppBlockerPlugin extends Plugin {
         editor.putString(KEY_IS_ACTIVE, active ? "true" : "false");
         editor.apply();
 
+        // Also save to DeviceProtectedStorage for Direct Boot!
+        Context deviceContext;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            deviceContext = getContext().createDeviceProtectedStorageContext();
+        } else {
+            deviceContext = getContext();
+        }
+        SharedPreferences.Editor dEditor = deviceContext.getSharedPreferences("DeviceProtectedStorage", Context.MODE_PRIVATE).edit();
+        dEditor.putString("isBlockerActive", active ? "true" : "false");
+        dEditor.apply();
+
         if (active) {
             Intent serviceIntent = new Intent(getContext(), UsageStatsBlockerService.class);
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -400,3 +411,4 @@ public class AppBlockerPlugin extends Plugin {
         }
     }
 }
+
