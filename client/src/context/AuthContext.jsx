@@ -49,7 +49,7 @@ export function AuthProvider({ children }) {
       const docRef = doc(db, "users", u.uid);
       const userDoc = await getDoc(docRef);
       
-      const isFounder = u.email === 'prince86944@gmail.com';
+      const isFounder = u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com';
       
       if (userDoc.exists()) {
         const userData = userDoc.data();
@@ -83,7 +83,7 @@ export function AuthProvider({ children }) {
         uid: u.uid,
         email: u.email,
         name: u.displayName || 'Scholar',
-        role: u.email === 'prince86944@gmail.com' ? ROLES.SUPER_ADMIN : ROLES.STUDENT
+        role: u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com' ? ROLES.SUPER_ADMIN : ROLES.STUDENT
       });
     } finally {
       isSyncing.current = false;
