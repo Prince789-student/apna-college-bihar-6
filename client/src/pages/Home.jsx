@@ -494,7 +494,7 @@ export default function Home() {
                 </h2>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
                   <a 
-                    href="/ApnaCollegeBihar_Stable.apk" 
+                    href="/ApnaCollegeBihar_Stable.apk?v=3" 
                     download="ApnaCollegeBihar_Stable.apk" 
                     className="w-full sm:w-auto px-10 py-5 bg-white hover:bg-slate-50 text-blue-600 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2 hover:-translate-y-1 hover:shadow-2xl"
                   >
