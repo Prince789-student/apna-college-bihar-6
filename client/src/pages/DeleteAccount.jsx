@@ -37,10 +37,21 @@ export default function DeleteAccount() {
       }
     } catch (err) {
       console.error("Account deletion error:", err);
+      if (err.code === 'auth/admin-restricted-operation') {
+        // Fallback to manual request since admin blocked client-side deletion
+        try {
+          await logout();
+          setSubmitted(true);
+        } catch (e) {
+          setError("Failed to submit request.");
+        }
+        return;
+      }
+
       if (err.code === 'auth/requires-recent-login') {
         setError("For security reasons, please log out and log back in before deleting your account.");
       } else {
-        setError("Failed to delete account directly: " + err.message + ". You can submit a deletion request below.");
+        setError("Failed to delete account directly: " + err.message + ". Please log out and submit a manual request below.");
       }
     } finally {
       setLoading(false);
@@ -169,6 +180,20 @@ export default function DeleteAccount() {
                     <Trash2 size={16} /> Submit Deletion Request
                   </button>
                 </form>
+              </div>
+            )}
+            
+            {user && error && error.includes("manual request") && (
+              <div className="pt-6 border-t border-slate-200 mt-6">
+                <button
+                  onClick={async () => {
+                     await logout();
+                     setError('');
+                  }}
+                  className="w-full py-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-black text-xs uppercase tracking-widest shadow-sm transition-all"
+                >
+                  Log Out to Submit Manual Request
+                </button>
               </div>
             )}
           </div>
