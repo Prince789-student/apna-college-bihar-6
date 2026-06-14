@@ -643,6 +643,32 @@ export default function DashboardLayout() {
                               </Link>
                             )}
                             <button 
+                              onClick={async () => {
+                                setShowProfileMenu(false);
+                                const shareData = {
+                                  title: 'Apna College Bihar App',
+                                  text: 'Bhai, ye Apna College Bihar ka official app download kar! Notes, PYQs aur distraction-free study ke liye best hai:',
+                                  url: 'https://apna-college-bihar-6.onrender.com/ApnaCollegeBihar_v9.apk'
+                                };
+                                try {
+                                  if (navigator.share) {
+                                    await navigator.share(shareData);
+                                  } else {
+                                    await navigator.clipboard.writeText(shareData.text + " " + shareData.url);
+                                    import('react-hot-toast').then(m => m.toast.success("App link copied to clipboard!"));
+                                  }
+                                } catch (err) {
+                                  console.log("Error sharing:", err);
+                                }
+                              }}
+                              className="flex items-center gap-3 w-full p-3 hover:bg-emerald-50 text-slate-500 hover:text-emerald-600 rounded-2xl transition-all group"
+                            >
+                               <div className="p-2 bg-slate-100 group-hover:bg-emerald-600/10 rounded-xl transition-colors">
+                                 <Send size={14} />
+                               </div>
+                               <span className="text-[10px] font-black uppercase tracking-widest">Share App Link</span>
+                            </button>
+                            <button 
                               onClick={() => logout()}
                               className="flex items-center gap-3 w-full p-3 hover:bg-red-50 text-slate-500 hover:text-red-600 rounded-2xl transition-all group"
                             >
