@@ -71,6 +71,7 @@ function GlobalProfilePrompt() {
   const { user, updateProfileData, logout } = useAuth();
   const [name, setName] = useState('');
   const [collegeName, setCollegeName] = useState('');
+  const [district, setDistrict] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -78,6 +79,7 @@ function GlobalProfilePrompt() {
     if (user) {
       setName(user.name && user.name !== 'Scholar' ? user.name : '');
       setCollegeName(user.collegeName || '');
+      setDistrict(user.district || '');
       setPhoneNumber(user.phone && user.phone !== 'NOT LINKED' ? user.phone : '');
     }
   }, [user]);
@@ -85,7 +87,8 @@ function GlobalProfilePrompt() {
   const needsProfileUpdate = user && (
     (!user?.phone || user?.phone?.trim() === "" || user?.phone === "NOT LINKED") ||
     (!user?.name || user?.name?.trim() === "" || user?.name === "Scholar") ||
-    (!user?.collegeName || user?.collegeName?.trim() === "")
+    (!user?.collegeName || user?.collegeName?.trim() === "") ||
+    (!user?.district || user?.district?.trim() === "")
   );
 
   if (!needsProfileUpdate) return null;
@@ -94,6 +97,7 @@ function GlobalProfilePrompt() {
     e.preventDefault();
     if (!name.trim()) return toast.error("Please enter your name!");
     if (!collegeName.trim()) return toast.error("Please enter your college name!");
+    if (!district.trim()) return toast.error("Please enter your district name!");
     if (phoneNumber.length < 10) return toast.error("Enter a valid 10-digit mobile number!");
 
     setIsSubmitting(true);
@@ -101,6 +105,7 @@ function GlobalProfilePrompt() {
       await updateProfileData({
         name: name.trim(),
         collegeName: collegeName.trim(),
+        district: district.trim(),
         phone: phoneNumber
       });
       toast.success("Profile setup completed successfully!");
@@ -142,6 +147,18 @@ function GlobalProfilePrompt() {
                 value={collegeName}
                 onChange={(e) => setCollegeName(e.target.value)}
                 placeholder="YOUR COLLEGE NAME"
+                className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">District</label>
+              <input
+                type="text"
+                value={district}
+                onChange={(e) => setDistrict(e.target.value)}
+                placeholder="YOUR DISTRICT NAME"
                 className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400"
                 required
               />
