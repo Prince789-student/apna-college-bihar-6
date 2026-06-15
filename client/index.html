@@ -14,7 +14,9 @@
       if ('serviceWorker' in navigator) {
         // Skip SW registration inside Capacitor native app
         const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
-        if (!isNative) {
+        if (isNative) {
+          document.documentElement.classList.add('native-app');
+        } else {
           window.addEventListener('load', () => {
             navigator.serviceWorker.register('/sw.js')
               .then(reg => {
@@ -336,6 +338,10 @@
             max-width: 100vw !important;
             overflow-x: hidden !important;
             overflow-y: auto !important;
+         }
+
+         /* Disable selection only for Native app */
+         html.native-app, html.native-app body, html.native-app #root {
             -webkit-user-select: none;
             -khtml-user-select: none;
             -moz-user-select: none;
