@@ -128,8 +128,10 @@ export function AuthProvider({ children }) {
         throw new Error('Native Google Login failed');
       } catch (err) {
         console.error("Native Google Login Error:", err);
-        // Fallback to redirect instead of popup to prevent opening external Chrome browser
-        return await signInWithRedirect(auth, googleProvider);
+        // Fallback to popup. cordova-plugin-inappbrowser will keep it inside the app.
+        const res = await signInWithPopup(auth, googleProvider);
+        await syncProfile(res.user);
+        return res.user;
       }
     } else {
       try {

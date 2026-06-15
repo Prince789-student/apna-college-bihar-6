@@ -19,6 +19,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "axios": "^1.16.1",
     "cheerio": "^1.2.0",
+    "cordova-plugin-inappbrowser": "^6.0.1",
     "firebase": "^12.11.0",
     "jimp": "^0.16.13",
     "jspdf": "^4.2.1",
