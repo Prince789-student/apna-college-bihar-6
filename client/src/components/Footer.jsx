@@ -9,11 +9,13 @@ export default function Footer() {
   if (isNative) {
     return (
       <footer className="shrink-0 bg-transparent text-slate-500 py-8 px-6 mt-4 w-full">
-        <div className="flex justify-center gap-6 mb-6">
+        <div className="flex flex-wrap justify-center gap-4 px-4 mb-6">
           <Link to="/about" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">About</Link>
           <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Contact</Link>
           <Link to="/privacy-policy" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Privacy</Link>
           <Link to="/terms" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Terms</Link>
+          <Link to="/dmca" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">DMCA</Link>
+          <Link to="/disclaimer" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Disclaimer</Link>
         </div>
         <div className="text-center flex flex-col items-center justify-center gap-2">
           <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">&copy; {new Date().getFullYear()} Apna College Bihar.</p>

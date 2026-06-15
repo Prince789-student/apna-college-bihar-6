@@ -876,27 +876,23 @@ export default function StudyDashboard() {
                   </div>
 
                   {/* Whitelist Button */}
-                  <button 
-                    onClick={() => {
-                      if (timerActive && timerMode === 'COUNTDOWN') {
-                        alert("Focus Session is Locked! You cannot modify allowed apps during an active countdown session.");
-                        return;
-                      }
-                      setShowWhitelist(true);
-                    }}
-                    className={`w-full mt-2 flex items-center justify-between p-5 rounded-2xl transition-all active:scale-95 shadow-xl group ${timerActive && timerMode === 'COUNTDOWN' ? 'bg-slate-200 text-slate-400 cursor-not-allowed opacity-60' : 'bg-slate-900 hover:bg-slate-800 text-white'}`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="p-2 bg-white/10 rounded-xl text-blue-400 group-hover:scale-110 transition-transform">
-                        <Activity size={18} />
+                  {!timerActive && (
+                    <button 
+                      onClick={() => setShowWhitelist(true)}
+                      className="w-full mt-2 flex items-center justify-between p-5 rounded-2xl transition-all active:scale-95 shadow-xl group bg-slate-900 hover:bg-slate-800 text-white"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 bg-white/10 rounded-xl text-blue-400 group-hover:scale-110 transition-transform">
+                          <Activity size={18} />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-[11px] font-[1000] uppercase tracking-tight leading-none">Configure Whitelist</p>
+                          <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest mt-1.5">{(allowedPackages || '').split(',').filter(Boolean).length} Apps Allowed</p>
+                        </div>
                       </div>
-                      <div className="text-left">
-                        <p className="text-[11px] font-[1000] uppercase tracking-tight leading-none">Configure Whitelist</p>
-                        <p className="text-[8px] text-slate-400 font-bold uppercase tracking-widest mt-1.5">{(allowedPackages || '').split(',').filter(Boolean).length} Apps Allowed</p>
-                      </div>
-                    </div>
-                    <ArrowRight size={18} className="text-slate-400 group-hover:translate-x-1 transition-transform" />
-                  </button>
+                      <ArrowRight size={18} className="text-slate-400 group-hover:translate-x-1 transition-transform" />
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
