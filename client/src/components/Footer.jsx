@@ -11,6 +11,7 @@ export default function Footer() {
       <footer className="shrink-0 bg-transparent text-slate-500 py-8 px-6 mt-4 w-full">
         <div className="flex flex-wrap justify-center gap-4 px-4 mb-6">
           <Link to="/about" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">About</Link>
+          <Link to="/author" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Author</Link>
           <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Contact</Link>
           <Link to="/privacy-policy" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Privacy</Link>
           <Link to="/terms" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Terms</Link>

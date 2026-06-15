@@ -57,9 +57,18 @@ public class AppBlockerPlugin extends Plugin {
 
                     String myPkg = getContext().getPackageName();
 
+                    Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                    mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    List<ResolveInfo> resolveInfos = pm.queryIntentActivities(mainIntent, 0);
+                    
+                    Set<String> launcherPackages = new HashSet<>();
+                    for (ResolveInfo resolveInfo : resolveInfos) {
+                        launcherPackages.add(resolveInfo.activityInfo.packageName);
+                    }
+
                     for (android.content.pm.ApplicationInfo info : packages) {
-                        // Exclude system apps and our own app
-                        if ((info.flags & android.content.pm.ApplicationInfo.FLAG_SYSTEM) == 0 && !info.packageName.equals(myPkg)) {
+                        // Include apps that have a launcher icon, and exclude our own app
+                        if (launcherPackages.contains(info.packageName) && !info.packageName.equals(myPkg)) {
                             JSObject appObj = new JSObject();
                             appObj.put("name", pm.getApplicationLabel(info).toString());
                             appObj.put("packageName", info.packageName);
