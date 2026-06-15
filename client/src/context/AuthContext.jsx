@@ -128,9 +128,6 @@ export function AuthProvider({ children }) {
         throw new Error('Native Google Login failed');
       } catch (err) {
         console.error("Native Google Login Error:", err);
-        // Alert the error so we can see what's wrong with Native Login (e.g., missing SHA-1)
-        alert("Native Login Error: " + err.message);
-        
         // Fallback to popup. cordova-plugin-inappbrowser will keep it inside the app.
         const res = await signInWithPopup(auth, googleProvider);
         await syncProfile(res.user);
