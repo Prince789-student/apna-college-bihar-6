@@ -1187,7 +1187,7 @@ function UgeacPredictor() {
                                       <div className="branch-name">{branchMapping[item.branch] || item.branch}</div>
                                    </td>
                                    <td className="text-center" data-label="Category">
-                                      <span className="cat-badge px-3 py-1 bg-slate-800 text-slate-300 rounded-xl text-[11px] font-bold border border-white/5">
+                                      <span className="cat-badge px-3 py-1.5 bg-slate-800 text-slate-300 rounded-xl text-[13px] font-bold border border-white/5">
                                         {item.cat} {item.seatType === 'Female' ? '(F)' : ''}
                                       </span>
                                    </td>
@@ -1198,22 +1198,22 @@ function UgeacPredictor() {
                                       </div>
                                    </td>
                                    <td className="text-center" data-label="2024 OR">
-                                      <span className="text-[11px] font-bold text-slate-500 font-mono">{item.opening24}</span>
+                                      <span className="text-[13px] font-bold text-slate-500 font-mono">{item.opening24}</span>
                                    </td>
                                    <td className="text-center" data-label="2024 CR">
-                                      <span className="text-[11px] font-black text-slate-900 font-mono">{item.cutoff24}</span>
+                                      <span className="text-[14px] font-black text-slate-900 font-mono">{item.cutoff24}</span>
                                    </td>
                                    <td className="text-center" data-label="2025 OR">
-                                      <span className="text-[11px] font-bold text-slate-500 font-mono">{item.opening25}</span>
+                                      <span className="text-[13px] font-bold text-slate-500 font-mono">{item.opening25}</span>
                                    </td>
                                    <td className="text-center" data-label="2025 CR">
-                                      <span className="text-[13px] font-[1000] text-indigo-700 font-mono">{item.cutoff25}</span>
+                                      <span className="text-[16px] font-[1000] text-indigo-700 font-mono">{item.cutoff25}</span>
                                    </td>
                                    <td className="text-center" data-label="Admission Chance">
                                       <span className={`chance-badge chance-${item.chance} flex flex-col items-center py-2 px-4 rounded-2xl min-w-[110px]`}>
                                         <div className="flex items-center gap-2 mb-1">
-                                           <div className={`w-2 h-2 rounded-full ${item.chance === 'High' ? 'bg-emerald-400 animate-pulse' : item.chance === 'Medium' ? 'bg-amber-400' : 'bg-rose-400'}`}></div>
-                                           <span className="text-[11px] font-black">{item.chance}</span>
+                                           <div className={`w-2.5 h-2.5 rounded-full ${item.chance === 'High' ? 'bg-emerald-400 animate-pulse' : item.chance === 'Medium' ? 'bg-amber-400' : 'bg-rose-400'}`}></div>
+                                           <span className="text-[13px] font-black">{item.chance}</span>
                                         </div>
                                       </span>
                                    </td>
