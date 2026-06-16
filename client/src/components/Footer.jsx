@@ -10,8 +10,6 @@ export default function Footer() {
     return (
       <footer className="shrink-0 bg-transparent text-slate-500 py-8 px-6 mt-4 w-full">
         <div className="flex flex-wrap justify-center gap-4 px-4 mb-6">
-          <Link to="/about" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">About</Link>
-          <Link to="/author" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Author</Link>
           <Link to="/contact" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Contact</Link>
           <Link to="/privacy-policy" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Privacy</Link>
           <Link to="/terms" className="text-[10px] font-black uppercase tracking-widest hover:text-blue-600 transition-colors">Terms</Link>
@@ -72,8 +70,6 @@ export default function Footer() {
         <div className="space-y-6">
            <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-900">Company</h4>
            <div className="flex flex-col gap-4">
-              <Link to="/about" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">About Us</Link>
-              <Link to="/author" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Creator & Author</Link>
               <Link to="/contact" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Contact Us</Link>
               <Link to="/directory" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Sitemap</Link>
            </div>
