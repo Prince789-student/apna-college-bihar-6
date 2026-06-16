@@ -59,16 +59,26 @@ public class AppBlockerPlugin extends Plugin {
 
                     String myPkg = getContext().getPackageName();
 
-                    for (android.content.pm.ApplicationInfo info : packages) {
-                        // Exclude system apps and our own app
-                        if ((info.flags & android.content.pm.ApplicationInfo.FLAG_SYSTEM) == 0
-                                && !info.packageName.equals(myPkg)) {
-                            JSObject appObj = new JSObject();
-                            appObj.put("name", pm.getApplicationLabel(info).toString());
-                            appObj.put("packageName", info.packageName);
+                    Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+                    mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                    List<android.content.pm.ResolveInfo> resolveInfos = pm.queryIntentActivities(mainIntent, 0);
+                    
+                    Set<String> addedPackages = new HashSet<>();
 
-                            // Fetch icon and convert to base64
+                    for (android.content.pm.ResolveInfo resolveInfo : resolveInfos) {
+                        String packageName = resolveInfo.activityInfo.packageName;
+                        
+                        // Exclude our own app and avoid duplicates
+                        if (!packageName.equals(myPkg) && !addedPackages.contains(packageName)) {
+                            addedPackages.add(packageName);
+                            
                             try {
+                                android.content.pm.ApplicationInfo info = pm.getApplicationInfo(packageName, 0);
+                                JSObject appObj = new JSObject();
+                                appObj.put("name", pm.getApplicationLabel(info).toString());
+                                appObj.put("packageName", packageName);
+
+                                // Fetch icon and convert to base64
                                 Drawable icon = pm.getApplicationIcon(info);
                                 int width = icon.getIntrinsicWidth() > 0 ? icon.getIntrinsicWidth() : 96;
                                 int height = icon.getIntrinsicHeight() > 0 ? icon.getIntrinsicHeight() : 96;
@@ -81,16 +91,16 @@ public class AppBlockerPlugin extends Plugin {
                                 icon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
                                 icon.draw(canvas);
 
-                                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                                java.io.ByteArrayOutputStream outputStream = new java.io.ByteArrayOutputStream();
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
                                 byte[] byteArray = outputStream.toByteArray();
-                                String base64Icon = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+                                String base64Icon = android.util.Base64.encodeToString(byteArray, android.util.Base64.NO_WRAP);
                                 appObj.put("icon", "data:image/png;base64," + base64Icon);
-                            } catch (Exception ignored) {
-                                appObj.put("icon", "");
-                            }
 
-                            retApps.put(appObj);
+                                retApps.put(appObj);
+                            } catch (Exception ignored) {
+                                // Ignore apps we can't load info for
+                            }
                         }
                     }
 
