@@ -45,13 +45,19 @@ function cleanDir(dir) {
     });
 }
 
+const assetsDestDir = path.join(destDir, 'assets');
+
 function syncBuild() {
     try {
         console.log('Syncing build assets...');
-        if (fs.existsSync(destDir)) {
-            cleanDir(destDir);
+        // Only clean the assets folder so we don't delete root HTML files
+        if (fs.existsSync(assetsDestDir)) {
+            cleanDir(assetsDestDir);
         }
-        fs.mkdirSync(destDir, { recursive: true });
+        // Then copy from dist to public
+        if (!fs.existsSync(destDir)) {
+            fs.mkdirSync(destDir, { recursive: true });
+        }
         copyRecursiveSync(srcDir, destDir);
         console.log('Build assets synced to server/public successfully!');
     } catch (err) {
