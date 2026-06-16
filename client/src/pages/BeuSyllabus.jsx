@@ -121,14 +121,17 @@ function splitIntoTopics(text) {
 
 
 function getSubjectCredit(courseCode, title) {
+  if (/SPORTS|YOGA|NCC|NSS|SWACHH|SWATCH|INDIAN KNOWLEDGE/i.test(title)) return '0';
   if (/LAB/i.test(title) || /P$/i.test(courseCode || '')) {
-    if (/graphics|design/i.test(title)) return '3';
-    if (/workshop/i.test(title)) return '2';
-    return '1.5';
+    if (/graphics|design/i.test(title)) return '1.5';
+    if (/workshop/i.test(title)) return '1.5';
+    if (/programming|java|python|web|data structure|os/i.test(title)) return '2';
+    return '1';
   }
-  if (/math|physics|chemistry|programming/i.test(title)) return '4';
-  if (/english/i.test(title)) return '3';
-  if (/web design|python/i.test(title)) return '3'; // theory
+  if (/math|mechanics/i.test(title)) return '4';
+  if (/physics|chemistry/i.test(title)) return '3';
+  if (/english/i.test(title)) return '2';
+  if (/workshop/i.test(title)) return '2';
   return '3';
 }
 

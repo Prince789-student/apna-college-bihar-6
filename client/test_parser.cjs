@@ -159,7 +159,7 @@ function parseSyllabusIntoSubjects(rawText) {
     let hasExplicitUnits = false;
     for (const line of lines) {
       const trimmed = line.trim();
-      if (/^#{3,4}\s*📌?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
+      if (/^#{3,4}\s*(?:📌)?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
           /^UNIT\s+\d/i.test(trimmed) || 
           /^Module\s+\d/i.test(trimmed) || 
           /^#{3,4}\s*Module\s+\d/i.test(trimmed)) {
@@ -195,7 +195,7 @@ function parseSyllabusIntoSubjects(rawText) {
       }
 
       // Check for Unit header
-      const isExplicitUnit = /^#{3,4}\s*📌?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
+      const isExplicitUnit = /^#{3,4}\s*(?:📌)?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
                              /^UNIT\s+\d/i.test(trimmed) || 
                              /^Module\s+\d/i.test(trimmed) || 
                              /^#{3,4}\s*Module\s+\d/i.test(trimmed);
@@ -213,7 +213,7 @@ function parseSyllabusIntoSubjects(rawText) {
         let remainingText = '';
 
         if (isExplicitUnit) {
-          title = trimmed.replace(/^#+\s*📌?\s*/, '').replace(/^UNIT\s+/i, 'Unit ').trim();
+          title = trimmed.replace(/^#+\s*(?:📌)?\s*/, '').replace(/^UNIT\s+/i, 'Unit ').trim();
           title = title.replace(/\s*\d+\s*(?:hrs?|hours?)\s*$/i, '');
         } else if (isNumberedUnit) {
           const match = trimmed.match(/^\d+\s*\\?\.\s*\*\*(.+?)\*\*/);
@@ -266,7 +266,7 @@ function parseSyllabusIntoSubjects(rawText) {
               const scanLine = lines[scanIdx].trim();
               if (!scanLine) { scanIdx++; continue; }
               
-              const isNextUnit = /^#{3,4}\s*📌?\s*Unit[-–\s_—]*\d/i.test(scanLine) || 
+              const isNextUnit = /^#{3,4}\s*(?:📌)?\s*Unit[-–\s_—]*\d/i.test(scanLine) || 
                                  /^UNIT\s+\d/i.test(scanLine) || 
                                  /^Module\s+\d/i.test(scanLine) || 
                                  /^#{3,4}\s*Module\s+\d/i.test(scanLine);

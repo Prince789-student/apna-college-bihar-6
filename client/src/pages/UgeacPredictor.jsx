@@ -150,6 +150,17 @@ function UgeacPredictor() {
       .catch(err => { console.error(err); setLoadingData(false); });
   }, []);
 
+  const collegeToBranchesMap = useMemo(() => {
+    const map = {};
+    if (ugeacData) {
+       [...(ugeacData.data2024 || []), ...(ugeacData.data2025 || [])].forEach(d => {
+           if (!map[d.collegeId]) map[d.collegeId] = new Set();
+           map[d.collegeId].add(d.branch);
+       });
+    }
+    return map;
+  }, [ugeacData]);
+
   const UGEAC_RANK_MAP = [{"ur":4,"air":28003},{"ur":13,"air":50299},{"ur":70,"air":81272},{"ur":109,"air":92809},{"ur":156,"air":100028},{"ur":215,"air":109032},{"ur":333,"air":127662},{"ur":436,"air":140082},{"ur":525,"air":150732},{"ur":617,"air":162821},{"ur":716,"air":171028},{"ur":816,"air":181269},{"ur":914,"air":188077},{"ur":1012,"air":197425},{"ur":1115,"air":209122},{"ur":1209,"air":219690},{"ur":1307,"air":229952},{"ur":1404,"air":238780},{"ur":1507,"air":247321},{"ur":1601,"air":257341},{"ur":1714,"air":268036},{"ur":1821,"air":278080},{"ur":1930,"air":288768},{"ur":2041,"air":297962},{"ur":2137,"air":306613},{"ur":2243,"air":315619},{"ur":2333,"air":323379},{"ur":2425,"air":330324},{"ur":2522,"air":339013},{"ur":2615,"air":347652},{"ur":2711,"air":355967},{"ur":2808,"air":364892},{"ur":2901,"air":373625},{"ur":3003,"air":383352},{"ur":3101,"air":392168},{"ur":3207,"air":402310},{"ur":3308,"air":413189},{"ur":3400,"air":421323},{"ur":3501,"air":430878},{"ur":3596,"air":440370},{"ur":3693,"air":449449},{"ur":3795,"air":458443},{"ur":3894,"air":467591},{"ur":3992,"air":476591},{"ur":4089,"air":484050},{"ur":4184,"air":492240},{"ur":4288,"air":501868},{"ur":4377,"air":508894},{"ur":4474,"air":518100},{"ur":4581,"air":529594},{"ur":4680,"air":542092},{"ur":4776,"air":550964},{"ur":4876,"air":559448},{"ur":4966,"air":568797},{"ur":5056,"air":577816},{"ur":5153,"air":587447},{"ur":5257,"air":597045},{"ur":5353,"air":606934},{"ur":5441,"air":620541},{"ur":5542,"air":630524},{"ur":5641,"air":641360},{"ur":5737,"air":651370},{"ur":5843,"air":661098},{"ur":5946,"air":673598},{"ur":6056,"air":686974},{"ur":6159,"air":697844},{"ur":6256,"air":707967},{"ur":6366,"air":720052},{"ur":6468,"air":732511},{"ur":6582,"air":743681},{"ur":6692,"air":757517},{"ur":6800,"air":768611},{"ur":6919,"air":781525},{"ur":7036,"air":795064},{"ur":7141,"air":806823},{"ur":7245,"air":819493},{"ur":7360,"air":833200},{"ur":7466,"air":848290},{"ur":7570,"air":859488},{"ur":7686,"air":874752},{"ur":7797,"air":888309},{"ur":7912,"air":903348},{"ur":8026,"air":920910},{"ur":8130,"air":933806},{"ur":8229,"air":948876},{"ur":8334,"air":965845},{"ur":8428,"air":978036},{"ur":8531,"air":993492},{"ur":8643,"air":1010934},{"ur":8749,"air":1024049},{"ur":8852,"air":1040387},{"ur":8951,"air":1055816},{"ur":9057,"air":1070983},{"ur":9161,"air":1091239},{"ur":9269,"air":1108363},{"ur":9364,"air":1126814},{"ur":9469,"air":1145041},{"ur":9577,"air":1167857},{"ur":9674,"air":1183901},{"ur":9771,"air":1197906},{"ur":9873,"air":1219504},{"ur":9967,"air":1242227}];
 
   const estimateUgeacRank = (r) => {
@@ -166,11 +177,11 @@ function UgeacPredictor() {
   const getEstimatedCategoryRank = (urRank, cat) => {
     if (!urRank || cat === 'UR') return null;
     const multipliers = {
-      'BC': 0.15,
-      'EBC': 0.24,
-      'SC': 0.08,
-      'ST': 0.005,
-      'EWS': 0.12,
+      'BC': 0.388,
+      'EBC': 0.239,
+      'SC': 0.065,
+      'ST': 0.003,
+      'EWS': 0.227,
       'RCG': 0.18,
       'DQ': 0.015,
       'SMQ': 0.008
@@ -282,17 +293,17 @@ function UgeacPredictor() {
         let compRank = ugeacRank;
         if (d.category === 'RCG') {
           compRank = rcgInput ? parseInt(rcgInput) : Math.floor(ugeacRank * 0.18);
-        } else if (d.category === category) {
-          if (d.seatType === 'Female' && gender === 'Female') {
-            compRank = catFemaleInput ? parseInt(catFemaleInput) : Math.floor(parseInt(catInput) * 0.18);
-          } else {
-            compRank = parseInt(catInput);
-          }
         } else if (d.category === 'UR') {
           if (d.seatType === 'Female' && gender === 'Female') {
             compRank = rcgInput ? parseInt(rcgInput) : Math.floor(ugeacRank * 0.18);
           } else {
             compRank = ugeacRank;
+          }
+        } else if (d.category === category) {
+          if (d.seatType === 'Female' && gender === 'Female') {
+            compRank = catFemaleInput ? parseInt(catFemaleInput) : Math.floor(parseInt(catInput) * 0.18);
+          } else {
+            compRank = parseInt(catInput);
           }
         } else {
           const ratio = { 'EBC': 0.239, 'BC': 0.388, 'SC': 0.065, 'ST': 0.003, 'EWS': 0.227 }[d.category] || 1;
@@ -1286,7 +1297,15 @@ function UgeacPredictor() {
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[40vh] overflow-y-auto pr-4 custom-scrollbar">
-              {sortedColleges.filter(c => c.name.toLowerCase().includes(finderCollegeSearch.toLowerCase())).map(c => (
+              {sortedColleges
+                .filter(c => c.name.toLowerCase().includes(finderCollegeSearch.toLowerCase()))
+                .filter(c => {
+                   if (targetBranches.length === 0) return true;
+                   const cBranches = collegeToBranchesMap[c.id];
+                   if (!cBranches) return false;
+                   return targetBranches.some(b => cBranches.has(b));
+                })
+                .map(c => (
                 <label key={c.id} className={`flex items-center gap-4 p-4 rounded-2xl cursor-pointer border-2 transition-all group ${targetColleges.includes(c.id) ? 'bg-indigo-50 border-indigo-500/50' : 'bg-white border-slate-100 hover:border-indigo-200'}`}>
                   <input type="checkbox" className="hidden" checked={targetColleges.includes(c.id)} onChange={(e) => e.target.checked ? setTargetColleges([...targetColleges, c.id]) : setTargetColleges(targetColleges.filter(id => id !== c.id))} />
                   <div className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all ${targetColleges.includes(c.id) ? 'bg-indigo-600 border-indigo-600' : 'border-slate-200'}`}>
@@ -1333,7 +1352,15 @@ function UgeacPredictor() {
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[40vh] overflow-y-auto pr-4 custom-scrollbar">
-              {ugeacData.branches.map(b => (
+              {ugeacData.branches
+                .filter(b => {
+                   if (targetColleges.length === 0) return true;
+                   return targetColleges.some(cid => {
+                       const cBranches = collegeToBranchesMap[cid];
+                       return cBranches && cBranches.has(b);
+                   });
+                })
+                .map(b => (
                 <label key={b} className={`flex items-center gap-4 p-4 rounded-2xl cursor-pointer border-2 transition-all group ${targetBranches.includes(b) ? 'bg-indigo-50 border-indigo-500/50' : 'bg-white border-slate-100 hover:border-indigo-200'}`}>
                   <input type="checkbox" className="hidden" checked={targetBranches.includes(b)} onChange={(e) => e.target.checked ? setTargetBranches([...targetBranches, b]) : setTargetBranches(targetBranches.filter(id => id !== b))} />
                   <div className={`w-5 h-5 rounded-lg border-2 flex items-center justify-center transition-all ${targetBranches.includes(b) ? 'bg-indigo-600 border-indigo-600' : 'border-slate-200'}`}>
