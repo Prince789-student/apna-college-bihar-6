@@ -200,7 +200,6 @@ public class UsageStatsBlockerService extends Service {
         // Apps that are always ignored to prevent system crashes
         boolean isSystemIgnored =
                 foregroundApp.equals(myPackageName) ||
-                foregroundApp.equals(launcherPackageName) ||
                 foregroundApp.equals("com.android.systemui") ||
                 foregroundApp.equals("com.google.android.permissioncontroller") ||
                 foregroundApp.equals("com.android.permissioncontroller") ||

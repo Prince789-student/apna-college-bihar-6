@@ -397,33 +397,14 @@ public class AppBlockerPlugin extends Plugin {
 
     @PluginMethod
     public void lockApp(PluginCall call) {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(() -> {
-                try {
-                    getActivity().startLockTask();
-                    call.resolve();
-                } catch (Exception e) {
-                    call.reject("Failed to lock task: " + e.getMessage());
-                }
-            });
-        } else {
-            call.reject("Activity is null");
-        }
+        // Disabled screen pinning to avoid device locking issues.
+        // We now rely solely on UsageStatsBlockerService to keep the user in the app.
+        call.resolve();
     }
 
     @PluginMethod
     public void unlockApp(PluginCall call) {
-        if (getActivity() != null) {
-            getActivity().runOnUiThread(() -> {
-                try {
-                    getActivity().stopLockTask();
-                    call.resolve();
-                } catch (Exception e) {
-                    call.reject("Failed to unlock task: " + e.getMessage());
-                }
-            });
-        } else {
-            call.reject("Activity is null");
-        }
+        // Disabled screen pinning to avoid device locking issues.
+        call.resolve();
     }
 }
