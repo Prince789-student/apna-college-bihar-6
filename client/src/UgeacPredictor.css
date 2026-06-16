@@ -231,7 +231,7 @@ body {
   border: 1px solid var(--slate-200);
   border-radius: 1.5rem;
   overflow-y: auto;
-  max-height: 75vh;
+  max-height: none;
   box-shadow: var(--shadow-md);
   position: relative;
 }

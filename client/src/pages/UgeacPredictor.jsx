@@ -29,7 +29,7 @@ function UgeacPredictor() {
   const [targetColleges, setTargetColleges] = useState([]);
   const [targetBranches, setTargetBranches] = useState([]);
   const [choices, setChoices] = useState([]); 
-  const [visibleCount, setVisibleCount] = useState(50);
+  const [visibleCount, setVisibleCount] = useState(1000);
   const [finderPriority, setFinderPriority] = useState('college'); // college or branch
 
   const [ugeacData, setUgeacData] = useState({ data2024: [], data2025: [], branches: [] });
@@ -311,12 +311,14 @@ function UgeacPredictor() {
         }
         
         const cut24 = map2024.get(key), cut25 = map2025.get(key);
-        const latestClosing = cut25 ? cut25.closing : (cut24 ? cut24.closing : 99999);
+        const closing24 = cut24 ? cut24.closing : 0;
+        const closing25 = cut25 ? cut25.closing : 0;
+        const maxClosing = Math.max(closing24, closing25) || 99999;
         
         let chance = 'No';
-        if (compRank <= latestClosing) chance = 'High';
-        else if (compRank <= latestClosing * 1.1) chance = 'Medium';
-        else if (compRank <= latestClosing * 1.25) chance = 'Low';
+        if (compRank <= maxClosing) chance = 'High';
+        else if (compRank <= maxClosing * 1.1) chance = 'Medium';
+        else if (compRank <= maxClosing * 1.25) chance = 'Low';
 
         if (!seen.has(key) || (cut25 && cut25 === d)) {
           const seatInfo = seatMatrix.find(s => s.college === collegeInfo.name && s.branch === d.branch);
@@ -1188,7 +1190,7 @@ function UgeacPredictor() {
                                    </td>
                                    <td className="text-center" data-label="Category">
                                       <span className="cat-badge px-3 py-1.5 bg-slate-800 text-slate-300 rounded-xl text-[13px] font-bold border border-white/5">
-                                        {item.cat} {item.seatType === 'Female' ? '(F)' : ''}
+                                        {item.cat} {item.seatType === 'Female' ? '(F)' : ''} Seat
                                       </span>
                                    </td>
                                    <td className="text-center" data-label="Your Rank">
