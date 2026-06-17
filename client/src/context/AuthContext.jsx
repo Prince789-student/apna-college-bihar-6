@@ -205,8 +205,24 @@ export function AuthProvider({ children }) {
   // 5. Profile Update
   async function updateProfileData(data) {
     if (!user) return;
-    await updateDoc(doc(db, "users", user.uid), data);
-    setUser(prev => ({ ...prev, ...data }));
+    
+    const updatedUser = { ...user, ...data };
+    
+    try {
+      if (navigator.onLine) {
+        await updateDoc(doc(db, "users", user.uid), data);
+      } else {
+        // If offline, don't await because it might hang until online.
+        // Firestore will queue this write in IndexedDB automatically.
+        updateDoc(doc(db, "users", user.uid), data).catch(console.error);
+      }
+    } catch (err) {
+      console.warn("Error updating profile in firestore:", err);
+    }
+    
+    setUser(updatedUser);
+    // CRITICAL FIX: Update cache so it doesn't revert when offline
+    localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ ...updatedUser, uid: user.uid }));
   }
 
   // 6. Logout — clears localStorage cache too
