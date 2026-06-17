@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { Capacitor, registerPlugin } from '@capacitor/core';
 import {
@@ -654,7 +654,22 @@ export default function StudyDashboard() {
             Focus Active
           </span>
         )}
-      </div>
+      </div>      {/* Guest Login Banner — only shown when not logged in */}
+      {!user && (
+        <div className="flex items-center gap-3 bg-blue-50 border border-blue-200/80 rounded-2xl px-4 py-3 mb-2">
+          <div className="w-8 h-8 bg-blue-600/10 text-blue-600 rounded-xl flex items-center justify-center shrink-0">
+            <Shield size={16} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[10px] font-black text-blue-900 uppercase tracking-widest leading-none">Login to Track Sessions</p>
+            <p className="text-[9px] text-blue-500 font-bold mt-0.5">Timer visible hai — login karo sessions save karne ke liye</p>
+          </div>
+          <Link to="/login" className="shrink-0 px-3 py-1.5 bg-blue-600 text-white text-[9px] font-black rounded-xl uppercase tracking-widest active:scale-95 transition-all">
+            Login
+          </Link>
+        </div>
+      )}
+
 
       {/* ── STICKY 4-TAB BAR ── */}
       <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-lg pb-3 pt-1">
@@ -767,6 +782,11 @@ export default function StudyDashboard() {
               {!timerActive ? (
                 <div className="flex gap-3 w-full">
                   <button onClick={() => {
+                    // Login gate — only for timer start
+                    if (!user) {
+                      navigate('/login', { state: { from: '/study' } });
+                      return;
+                    }
                     if (isNative && lockMode === 'NORMAL' && !isUsageStatsEnabled) {
                       alert("Please enable Usage Access permission first to use Normal Mode App Blocker.");
                       return;
@@ -777,7 +797,7 @@ export default function StudyDashboard() {
                     }
                     setTimerActive(true);
                   }} className="w-full py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-[1000] text-xs uppercase tracking-widest shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2">
-                    <Shield size={16} /> Start Focus
+                    <Shield size={16} /> {user ? 'Start Focus' : 'Login to Start'}
                   </button>
                 </div>
               ) : (

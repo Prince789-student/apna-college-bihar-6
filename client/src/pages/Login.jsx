@@ -29,6 +29,9 @@ export default function Login() {
       setLoading(true);
       setError('');
       await googleLogin();
+      // NOTE: On mobile/tablet, googleLogin() calls signInWithRedirect()
+      // which redirects the page to Google — code below won't run on mobile.
+      // On desktop (popup), it returns the user directly.
       toast.success('Welcome back to the Hub!');
       
       const lastPath = localStorage.getItem('lastPath');
@@ -39,8 +42,11 @@ export default function Login() {
         navigate('/');
       }
     } catch (err) {
-      setError(err.message || 'Google login failed. Please try again.');
-      toast.error('Google login failed.');
+      // auth/popup-blocked is handled inside googleLogin() — won't reach here
+      if (err.code !== 'auth/popup-blocked') {
+        setError(err.message || 'Google login failed. Please try again.');
+        toast.error('Login failed. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
@@ -85,7 +91,12 @@ export default function Login() {
               className="w-full flex items-center justify-center gap-4 py-5 bg-white hover:bg-slate-50 active:scale-95 text-slate-900 font-[1000] rounded-[1.8rem] text-xs uppercase tracking-widest shadow-lg border border-slate-200 transition-all disabled:opacity-60 group"
             >
               <Chrome className="text-blue-600 group-hover:rotate-12 transition-transform" size={20} />
-              {loading ? 'Authenticating...' : 'Login with Google'}
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></span>
+                  Redirecting to Google...
+                </span>
+              ) : 'Login with Google'}
               {!loading && <ArrowRight size={16} className="opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all" />}
             </button>
             

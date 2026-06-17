@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, RecaptchaVerifier, signInWithPhoneNumber, browserLocalPersistence, setPersistence } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getMessaging, isSupported } from "firebase/messaging";
 
@@ -25,6 +25,25 @@ export { auth };
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();
+// Add basic profile scope (required for name/email)
+googleProvider.addScope('profile');
+googleProvider.addScope('email');
+// Force account selection every time (important for shared devices)
+googleProvider.setCustomParameters({
+  prompt: 'select_account'
+});
+
+// Enable Firestore offline persistence
+// Data will be cached in IndexedDB (~2-5MB) so app works offline
+enableIndexedDbPersistence(db).catch((err) => {
+  if (err.code === 'failed-precondition') {
+    // Multiple browser tabs open — persistence only works in one tab at a time
+    console.warn('[Firestore] Offline persistence limited: multiple tabs open');
+  } else if (err.code === 'unimplemented') {
+    // Browser doesn't support IndexedDB (very rare)
+    console.warn('[Firestore] Offline persistence not supported in this browser');
+  }
+});
 
 export { RecaptchaVerifier, signInWithPhoneNumber };
 

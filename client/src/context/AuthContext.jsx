@@ -23,6 +23,9 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
+// Cache key for storing user profile data locally
+const USER_CACHE_KEY = 'acb_user_cache';
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,8 +46,21 @@ export function AuthProvider({ children }) {
     if (isSyncing.current) return;
     isSyncing.current = true;
 
-    console.log("[AUTH] Syncing profile for:", u.email);
+    // Step 1: Try localStorage cache immediately (works offline, instant)
+    try {
+      const cachedRaw = localStorage.getItem(USER_CACHE_KEY);
+      if (cachedRaw) {
+        const cachedData = JSON.parse(cachedRaw);
+        if (cachedData.uid === u.uid) {
+          // Instantly set user from cache — no network needed
+          setUser({ ...u, ...cachedData });
+        }
+      }
+    } catch (cacheErr) {
+      // Cache read failed — not critical, continue
+    }
 
+    // Step 2: Try Firestore for fresh data (requires internet)
     try {
       const docRef = doc(db, "users", u.uid);
       const userDoc = await getDoc(docRef);
@@ -55,12 +71,16 @@ export function AuthProvider({ children }) {
         const userData = userDoc.data();
         console.log("[AUTH] Existing user data found:", userData.role);
         
+        let finalData;
         if (isFounder && userData.role !== ROLES.SUPER_ADMIN) {
            await updateDoc(docRef, { role: ROLES.SUPER_ADMIN });
-           setUser({ ...u, ...userData, role: ROLES.SUPER_ADMIN });
+           finalData = { ...u, ...userData, role: ROLES.SUPER_ADMIN };
         } else {
-           setUser({ ...u, ...userData });
+           finalData = { ...u, ...userData };
         }
+        setUser(finalData);
+        // Step 3: Update localStorage cache with fresh Firestore data
+        localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ ...userData, uid: u.uid }));
       } else {
         console.log("[AUTH] No existing profile. Creating new entry...");
         const data = {
@@ -74,17 +94,28 @@ export function AuthProvider({ children }) {
           lastGroupCreateDate: null
         };
         await setDoc(docRef, data);
-        setUser({ ...u, ...data });
+        const newUserData = { ...u, ...data };
+        setUser(newUserData);
+        // Cache the new profile
+        localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ ...data, uid: u.uid }));
       }
     } catch (err) {
-      console.error("[AUTH] Profile sync critical failure:", err);
-      // Fallback: set basic user info even if firestore fails
-      setUser({
-        uid: u.uid,
-        email: u.email,
-        name: u.displayName || 'Scholar',
-        role: u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com' ? ROLES.SUPER_ADMIN : ROLES.STUDENT
-      });
+      console.warn("[AUTH] Firestore sync failed (possibly offline):", err.code || err.message);
+      // Fallback: check if we already set user from cache above
+      // If not (no cache existed), set basic user info from Firebase Auth
+      const cachedRaw = localStorage.getItem(USER_CACHE_KEY);
+      const hasCacheForUser = cachedRaw && JSON.parse(cachedRaw).uid === u.uid;
+      if (!hasCacheForUser) {
+        // No cache available — set minimal user info so they stay logged in
+        const isFounder = u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com';
+        setUser({
+          uid: u.uid,
+          email: u.email,
+          name: u.displayName || 'Scholar',
+          role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT
+        });
+      }
+      // If cache existed, user is already set from Step 1 — do nothing here
     } finally {
       isSyncing.current = false;
     }
@@ -112,11 +143,15 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  // 3. Google Login — Native bottom sheet on Android, popup on Web
+  // 3. Google Login — Smart strategy:
+  //    Native Android App  → FirebaseAuthentication plugin (bottom sheet)
+  //    Web (Desktop/Tablet) → Try signInWithPopup first (keeps user in app)
+  //                         → If popup blocked, fallback to signInWithRedirect
   async function googleLogin() {
     const isNative = Capacitor.isNativePlatform();
     
     if (isNative) {
+      // Native Android app — use native Google Sign-In bottom sheet
       try {
         const result = await FirebaseAuthentication.signInWithGoogle();
         if (result?.credential?.idToken) {
@@ -125,25 +160,35 @@ export function AuthProvider({ children }) {
           await syncProfile(res.user);
           return res.user;
         }
-        throw new Error('Native Google Login failed');
+        throw new Error('Native Google Login failed — no idToken');
       } catch (err) {
         console.error("Native Google Login Error:", err);
-        // Fallback to popup. cordova-plugin-inappbrowser will keep it inside the app.
-        const res = await signInWithPopup(auth, googleProvider);
-        await syncProfile(res.user);
-        return res.user;
+        // Fallback: popup inside WebView
+        try {
+           const res = await signInWithPopup(auth, googleProvider);
+           await syncProfile(res.user);
+           return res.user;
+        } catch (popupErr) {
+           setLoading(true);
+           googleProvider.setCustomParameters({ prompt: 'select_account' });
+           return await signInWithRedirect(auth, googleProvider);
+        }
       }
-    } else {
-      try {
-        // ALWAYS try Popup first. It's much more stable for state management.
-        const res = await signInWithPopup(auth, googleProvider);
-        await syncProfile(res.user);
-        return res.user;
-      } catch (err) {
-        console.warn("Popup failed or blocked, falling back to Redirect...", err);
-        // Fallback to redirect only if popup is blocked or fails
+    }
+
+    // Web browser — try popup first (best UX, stays in app)
+    try {
+      const res = await signInWithPopup(auth, googleProvider);
+      await syncProfile(res.user);
+      return res.user;
+    } catch (err) {
+      if (err.code === 'auth/popup-blocked' || err.code === 'auth/popup-closed-by-user') {
+        console.warn("[AUTH] Popup blocked, falling back to redirect...");
+        setLoading(true);
+        googleProvider.setCustomParameters({ prompt: 'select_account' });
         return await signInWithRedirect(auth, googleProvider);
       }
+      throw err; // Re-throw other errors
     }
   }
 
@@ -164,8 +209,9 @@ export function AuthProvider({ children }) {
     setUser(prev => ({ ...prev, ...data }));
   }
 
-  // 6. Logout
+  // 6. Logout — clears localStorage cache too
   function logout() {
+    localStorage.removeItem(USER_CACHE_KEY);
     return signOut(auth);
   }
 
@@ -178,6 +224,8 @@ export function AuthProvider({ children }) {
         if (u) {
           await syncProfile(u);
         } else {
+          // User is genuinely signed out — clear cache
+          localStorage.removeItem(USER_CACHE_KEY);
           setUser(null);
         }
       } catch (err) {
@@ -189,18 +237,34 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  // Handle Redirect Results (for mobile web stability)
+  // Handle Redirect Results (for mobile/tablet web login)
+  // This runs on EVERY page load — if user came back from Google login, this handles it
   useEffect(() => {
-    getRedirectResult(auth)
-      .then(async (result) => {
+    const handleRedirectResult = async () => {
+      try {
+        setLoading(true);
+        const result = await getRedirectResult(auth);
         if (result?.user) {
-          console.log("[AUTH] Redirect result success:", result.user.email);
+          console.log("[AUTH] Redirect login success:", result.user.email);
           await syncProfile(result.user);
+          // Clear any stored redirect path
+          const lastPath = localStorage.getItem('lastPath');
+          if (lastPath) {
+            localStorage.removeItem('lastPath');
+            // Navigate to saved path
+            window.location.replace(lastPath);
+          }
         }
-      })
-      .catch((error) => {
-        console.error("[AUTH] Redirect result error:", error);
-      });
+      } catch (error) {
+        console.error("[AUTH] Redirect result error:", error.code, error.message);
+        // Common errors:
+        // auth/account-exists-with-different-credential — user has another login method
+        // auth/web-storage-unsupported — browser blocks storage
+      } finally {
+        setLoading(false);
+      }
+    };
+    handleRedirectResult();
   }, []);
 
   const value = {

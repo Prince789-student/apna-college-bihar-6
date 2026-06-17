@@ -4,6 +4,8 @@ import { doc, updateDoc, addDoc, collection, getDoc } from 'firebase/firestore';
 import { useAuth } from './AuthContext';
 import { Preferences } from '@capacitor/preferences';
 import { Capacitor, registerPlugin } from '@capacitor/core';
+import { toast } from 'react-hot-toast';
+import { queueOfflineSession, flushOfflineQueue, getOfflineQueueCount } from '../utils/offlineQueue';
 
 const AppBlocker = registerPlugin('AppBlocker');
 
@@ -200,16 +202,41 @@ export function StudyProvider({ children }) {
       return; 
     }
 
-    try {
-      const todayStr = new Date().toLocaleDateString('en-CA');
-      await addDoc(collection(db, 'StudySessions'), {
-        userId: user.uid,
-        userName: user.name || 'Scholar',
-        subject: timerSubject,
-        duration: timeToSave,
-        date: todayStr,
-        createdAt: new Date().toISOString()
+    const todayStr = new Date().toLocaleDateString('en-CA');
+    const sessionData = {
+      userId: user.uid,
+      userName: user.name || 'Scholar',
+      subject: timerSubject,
+      duration: timeToSave,
+      date: todayStr,
+      createdAt: new Date().toISOString()
+    };
+
+    // ── OFFLINE CHECK ────────────────────────────────────────
+    if (!navigator.onLine) {
+      queueOfflineSession(sessionData);
+      toast('💾 Session saved locally. Will sync when online!', {
+        duration: 4000,
+        style: { background: '#1e293b', color: '#f8fafc', fontWeight: '800', fontSize: '12px' }
       });
+      setOvertimeActive(false);
+      setTimerActive(false);
+      return;
+    }
+    // ─────────────────────────────────────────────────────────
+
+    try {
+      // First, flush any pending offline sessions
+      const pendingCount = getOfflineQueueCount();
+      if (pendingCount > 0) {
+        flushOfflineQueue(db, user.uid).then(flushed => {
+          if (flushed > 0) {
+            toast.success(`${flushed} offline session(s) synced!`, { duration: 3000 });
+          }
+        }).catch(() => {});
+      }
+
+      await addDoc(collection(db, 'StudySessions'), sessionData);
       const userRef = doc(db, 'users', user.uid);
       const uSnap = await getDoc(userRef);
       if (uSnap.exists()) {
@@ -252,7 +279,13 @@ export function StudyProvider({ children }) {
       setTimerActive(false);
     } catch (e) { 
       setOvertimeActive(false);
-      console.error("Global Save Error:", e); 
+      console.error("Global Save Error:", e);
+      // Network error during save — queue it locally
+      queueOfflineSession(sessionData);
+      toast('📱 Network error. Session saved locally.', {
+        duration: 4000,
+        style: { background: '#1e293b', color: '#f8fafc', fontWeight: '800', fontSize: '12px' }
+      });
     }
   };
 
@@ -260,6 +293,25 @@ export function StudyProvider({ children }) {
     if (!user) return;
     updateDoc(doc(db, 'users', user.uid), { isStudying: timerActive }).catch(() => {});
   }, [timerActive, user]);
+
+  // Auto-sync offline sessions when internet comes back
+  useEffect(() => {
+    if (!user) return;
+    const handleOnline = async () => {
+      const pending = getOfflineQueueCount();
+      if (pending === 0) return;
+      try {
+        const flushed = await flushOfflineQueue(db, user.uid);
+        if (flushed > 0) {
+          toast.success(`✅ ${flushed} offline session(s) synced to cloud!`, { duration: 4000 });
+        }
+      } catch (err) {
+        console.error('[StudyContext] Auto-sync failed:', err);
+      }
+    };
+    window.addEventListener('online', handleOnline);
+    return () => window.removeEventListener('online', handleOnline);
+  }, [user]);
 
   useEffect(() => {
     const handleBeforeUnload = (e) => {

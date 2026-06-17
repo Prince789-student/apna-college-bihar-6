@@ -220,10 +220,10 @@ function App() {
   }, [isNative]);
 
   useEffect(() => {
-    // Safety timeout: Never stay loading more than 5 seconds
+    // Safety timeout: Never stay loading more than 1.5 seconds
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 5000);
+    }, 1500);
 
     if (!authLoading) {
       setLoading(false);

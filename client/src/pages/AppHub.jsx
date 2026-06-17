@@ -83,15 +83,21 @@ export default function AppHub() {
     }
   ];
 
+  // Only these paths require login — all others are freely accessible
+  const LOGIN_REQUIRED_PATHS = ['/study', '/groups', '/achievements'];
+
   const handleFeatureClick = (f) => {
     if (f.external) {
       window.open(f.path, '_blank');
+      return;
+    }
+    // Extract base path (remove query params like ?standalone=true)
+    const basePath = f.path.split('?')[0];
+    const needsLogin = LOGIN_REQUIRED_PATHS.some(p => basePath.startsWith(p));
+    if (needsLogin && !user) {
+      navigate('/login', { state: { from: f.path } });
     } else {
-      if (!user) {
-        navigate('/login', { state: { from: f.path } });
-      } else {
-        navigate(f.path);
-      }
+      navigate(f.path);
     }
   };
 
