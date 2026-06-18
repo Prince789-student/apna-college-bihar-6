@@ -348,10 +348,11 @@ export default function Home() {
       <section className="py-16 px-6 md:px-16 bg-slate-50">
         <Reveal>
           <div className="container mx-auto max-w-6xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {[
                 { value: stats.notes, suffix: '+', label: 'Notes Available', icon: <BookOpen size={24} />, color: 'text-indigo-600', bg: 'bg-white', border: 'border-slate-200' },
                 { value: stats.pyqs, suffix: '+', label: 'PYQs Available', icon: <FileText size={24} />, color: 'text-purple-600', bg: 'bg-white', border: 'border-slate-200' },
+                { value: stats.users, suffix: '+', label: 'Active Users', icon: <Users size={24} />, color: 'text-blue-600', bg: 'bg-white', border: 'border-slate-200' },
                 { value: 8, suffix: '', label: 'Semesters Covered', icon: <Layers size={24} />, color: 'text-emerald-600', bg: 'bg-white', border: 'border-slate-200' },
               ].map((stat, idx) => (
                 <div key={idx} className={`p-6 rounded-3xl border ${stat.bg} ${stat.border} text-center flex flex-col items-center justify-center transition-all hover:-translate-y-2 hover:shadow-xl shadow-sm group`}>
