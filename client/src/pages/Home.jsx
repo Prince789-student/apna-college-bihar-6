@@ -10,7 +10,7 @@ import {
   RefreshCw, Heart, Building2, Award, Mail,
   Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight
 } from 'lucide-react';
-import { collection, onSnapshot, query, orderBy, limit } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, limit, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
@@ -22,7 +22,7 @@ import HomeEducationalGuide from '../components/HomeEducationalGuide';
 export default function Home() {
   const { user, loading, logout } = useAuth();
   const navigate = useNavigate();
-  const [stats, setStats] = useState({ users: 0, docs: 0, groups: 0 });
+  const [stats, setStats] = useState({ users: 0, notes: 0, pyqs: 0, groups: 0 });
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(null);
   const [announcements, setAnnouncements] = useState([]);
@@ -141,8 +141,18 @@ export default function Home() {
     const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
       setStats(s => ({ ...s, users: snap.size }));
     });
-    const unsubDocs = onSnapshot(collection(db, 'documents'), (snap) => {
-      setStats(s => ({ ...s, docs: snap.size }));
+    const qDocs = query(collection(db, 'documents'), where('type', '==', 'file'));
+    const unsubDocs = onSnapshot(qDocs, (snap) => {
+      const uniqueNotes = new Set();
+      const uniquePYQs = new Set();
+      snap.forEach(doc => {
+        const data = doc.data();
+        if (data.fileUrl) {
+          if (data.category === 'NOTES') uniqueNotes.add(data.fileUrl);
+          if (data.category === 'PYQ') uniquePYQs.add(data.fileUrl);
+        }
+      });
+      setStats(s => ({ ...s, notes: uniqueNotes.size, pyqs: uniquePYQs.size }));
     });
     const unsubGroups = onSnapshot(collection(db, 'groups'), (snap) => {
       setStats(s => ({ ...s, groups: snap.size }));
@@ -340,8 +350,8 @@ export default function Home() {
           <div className="container mx-auto max-w-6xl">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
               {[
-                { value: stats.docs || 500, suffix: '+', label: 'Notes Available', icon: <BookOpen size={24} />, color: 'text-indigo-600', bg: 'bg-white', border: 'border-slate-200' },
-                { value: stats.docs || 1000, suffix: '+', label: 'PYQs Available', icon: <FileText size={24} />, color: 'text-purple-600', bg: 'bg-white', border: 'border-slate-200' },
+                { value: stats.notes, suffix: '+', label: 'Notes Available', icon: <BookOpen size={24} />, color: 'text-indigo-600', bg: 'bg-white', border: 'border-slate-200' },
+                { value: stats.pyqs, suffix: '+', label: 'PYQs Available', icon: <FileText size={24} />, color: 'text-purple-600', bg: 'bg-white', border: 'border-slate-200' },
                 { value: 8, suffix: '', label: 'Semesters Covered', icon: <Layers size={24} />, color: 'text-emerald-600', bg: 'bg-white', border: 'border-slate-200' },
               ].map((stat, idx) => (
                 <div key={idx} className={`p-6 rounded-3xl border ${stat.bg} ${stat.border} text-center flex flex-col items-center justify-center transition-all hover:-translate-y-2 hover:shadow-xl shadow-sm group`}>
