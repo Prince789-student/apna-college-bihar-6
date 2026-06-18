@@ -138,6 +138,18 @@ export default function Home() {
 
   // ── Data Fetching ──
   useEffect(() => {
+    // FORCE CLEAR STUBBORN SERVICE WORKER CACHES
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
+      });
+      caches.keys().then(keys => {
+        keys.forEach(key => caches.delete(key));
+      });
+    }
+
     const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
       setStats(s => ({ ...s, users: snap.size }));
     });
