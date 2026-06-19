@@ -466,6 +466,41 @@ for (const kw of plannerKeywords) urls.push(`/feature/personal-manager/${kw}`);
 for (const kw of studyResourceKeywords) urls.push(`/feature/study-resources/${kw}`);
 for (const kw of ugeacKeywords) urls.push(`/search/${kw}`);
 
+// ── Syllabus SEO Keywords (Maximized) ───────────────────────────────
+for (const branch of branches) {
+  // General Branch Syllabus
+  urls.push(`/search/beu-${branch}-syllabus`);
+  urls.push(`/search/beu-btech-${branch}-syllabus`);
+  urls.push(`/search/bihar-engineering-${branch}-syllabus`);
+  urls.push(`/search/beu-${branch}-syllabus-pdf-download`);
+  urls.push(`/search/apna-college-bihar-${branch}-syllabus`);
+
+  // Semester Specific Branch Syllabus
+  for (const sem of semesters) {
+    urls.push(`/search/beu-${sem}-sem-${branch}-syllabus`);
+    urls.push(`/search/beu-btech-${sem}-sem-${branch}-syllabus`);
+    urls.push(`/search/bihar-engineering-${sem}-sem-${branch}-syllabus`);
+    urls.push(`/search/beu-${sem}-semester-${branch}-syllabus-pdf`);
+  }
+}
+
+// Global Syllabus Keywords
+const globalSyllabusKeywords = [
+  'beu-syllabus',
+  'beu-btech-syllabus',
+  'bihar-engineering-university-syllabus',
+  'beu-syllabus-pdf-download',
+  'beu-syllabus-2026',
+  'beu-new-syllabus-2026',
+  'beu-btech-1st-year-syllabus',
+  'bcece-engineering-syllabus',
+  'aku-to-beu-syllabus-change'
+];
+
+for (const kw of globalSyllabusKeywords) {
+  urls.push(`/search/${kw}`);
+}
+
 let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 `;
