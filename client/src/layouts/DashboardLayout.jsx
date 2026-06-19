@@ -30,6 +30,7 @@ export default function DashboardLayout() {
   
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(null);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showSupportModal, setShowSupportModal] = useState(false);
 
   useEffect(() => {
     if (isNative) {
@@ -545,7 +546,10 @@ export default function DashboardLayout() {
 
   return (
     <div className="flex flex-col h-screen bg-[#f8fafc] overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30 relative">
-      <SEO title={pageTitle} />
+      <SEO 
+        title={pageTitle} 
+        url={window.location.href} 
+      />
 
       {/* Global Native Header (for App only) */}
       {isNative && (
@@ -657,11 +661,7 @@ export default function DashboardLayout() {
                             <div className="flex items-center justify-center gap-1 text-[8px] text-slate-500 mt-1.5 font-bold">
                               <Calendar size={10} className="text-blue-500" />
                               <span>Joined: <strong className="text-slate-900">{joinDate}</strong></span>
-                            </div>
-                         </div>
-                         
-                         <div className="space-y-1">
-                            {(user?.email === 'prince8694@gmail.com' || user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN') && (
+                                {(user?.email === 'prince8694@gmail.com' || user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN') && (
                               <Link 
                                 to="/dashboard/admin"
                                 className="flex items-center gap-3 w-full p-3 hover:bg-blue-50 text-blue-600 rounded-2xl transition-all group"
@@ -672,6 +672,22 @@ export default function DashboardLayout() {
                                  <span className="text-[10px] font-black uppercase tracking-widest">Admin Panel</span>
                               </Link>
                             )}
+                            
+                            {!isNative && (
+                              <button 
+                                onClick={() => {
+                                  setShowProfileMenu(false);
+                                  setShowSupportModal(true);
+                                }}
+                                className="flex items-center gap-3 w-full p-3 hover:bg-indigo-50 text-indigo-600 rounded-2xl transition-all group"
+                              >
+                                 <div className="p-2 bg-indigo-50 group-hover:bg-indigo-100 rounded-xl transition-colors">
+                                   <Award size={14} />
+                                 </div>
+                                 <span className="text-[10px] font-black uppercase tracking-widest">Support Us / Donate</span>
+                              </button>
+                            )}
+
                             <button 
                               onClick={async () => {
                                 setShowProfileMenu(false);
@@ -786,6 +802,26 @@ export default function DashboardLayout() {
                </div>
              </div>
           ))}
+
+          {!isNative && (
+            <div className="px-3 pt-4 border-t border-slate-100">
+               <button 
+                 onClick={() => {
+                   setMobileMenuOpen(false);
+                   setShowSupportModal(true);
+                 }}
+                 className="flex items-center gap-3 w-full p-3 hover:bg-indigo-50 text-indigo-600 rounded-2xl transition-all group border border-indigo-100 bg-indigo-50/50"
+               >
+                  <div className="p-2 bg-white rounded-xl shadow-sm">
+                    <Award size={16} className="text-indigo-600" />
+                  </div>
+                  <div className="text-left">
+                    <span className="text-[11px] font-black uppercase tracking-widest block text-indigo-700">Support Us</span>
+                    <span className="text-[8px] font-bold text-indigo-500 uppercase tracking-wider">Help maintain server cost</span>
+                  </div>
+               </button>
+            </div>
+          )}
         </div>
 
         <div className="p-4 border-t border-slate-100 bg-slate-50">
@@ -797,6 +833,65 @@ export default function DashboardLayout() {
       
       {/* Verification Modal */}
       {isPhoneModalOpen && isOnline && <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-slate-50/80 backdrop-blur-xl"><div className="w-full max-w-md bg-white border border-slate-200 rounded-[3rem] p-10 text-center space-y-8 shadow-2xl relative overflow-hidden"><div className="inline-flex p-5 bg-blue-600/20 text-blue-500 rounded-3xl"><Shield size={32} /></div><h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Security Update</h2><p className="text-slate-500 text-sm">Please link your active mobile number to secure your college portal access.</p><form onSubmit={handlePhoneSubmit} className="space-y-6"><div className="flex gap-2"><div className="bg-slate-100 px-4 py-4 rounded-2xl text-xs font-black">+91</div><input type="tel" maxLength={10} value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} placeholder="10-DIGIT MOBILE NO." className="flex-1 bg-slate-100 rounded-2xl p-4 text-sm font-black outline-none" /></div><button type="submit" className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest transition-all">Save & Continue</button></form></div></div>}
+
+      {/* Support / Payment Scanner Modal (Frontend Only) */}
+      {showSupportModal && !isNative && (
+        <div className="fixed inset-0 z-[5000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-sm bg-white rounded-[2rem] shadow-2xl relative overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+            <div className="bg-gradient-to-r from-indigo-600 to-blue-600 p-6 text-center relative">
+              <button 
+                onClick={() => setShowSupportModal(false)}
+                className="absolute top-4 right-4 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-xl transition-colors"
+              >
+                <X size={16} strokeWidth={3} />
+              </button>
+              <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
+                <Award size={28} className="text-white" />
+              </div>
+              <h3 className="text-lg font-black text-white uppercase tracking-wider mb-1">Support Our Team</h3>
+              <p className="text-indigo-100 text-[10px] font-bold uppercase tracking-widest">Help us pay server bills!</p>
+            </div>
+            
+            <div className="p-6 flex flex-col items-center">
+              <p className="text-xs text-slate-500 text-center font-medium mb-6 leading-relaxed">
+                Apna College Bihar is 100% free. If this platform helped you, consider treating the developer to a coffee! ☕
+              </p>
+              
+              <div className="p-2 bg-slate-50 border-2 border-dashed border-indigo-200 rounded-3xl mb-4">
+                {/* Fallback placeholder QR if image is missing. User can replace the image at /scanner-qr.jpg */}
+                <div className="w-48 h-48 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative group flex items-center justify-center flex-col gap-2">
+                  <img 
+                    src="/scanner-qr.jpg" 
+                    alt="Payment QR Code" 
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                    className="w-full h-full object-contain p-2"
+                  />
+                  <div className="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center hidden">
+                    <span className="text-xs font-bold text-slate-400">QR Code Image</span>
+                    <span className="text-[9px] text-slate-400 uppercase">(Place scanner-qr.jpg in public folder)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-indigo-50 px-4 py-3 rounded-2xl w-full flex items-center justify-between group cursor-copy" onClick={() => {
+                navigator.clipboard.writeText("apnacollegebihar@upi");
+                toast.success("UPI ID Copied!");
+              }}>
+                <div>
+                  <p className="text-[9px] font-black uppercase text-indigo-500 mb-0.5">UPI ID (Tap to Copy)</p>
+                  <p className="text-sm font-bold text-slate-900">apnacollegebihar@upi</p>
+                </div>
+                <div className="p-2 bg-indigo-100 text-indigo-600 rounded-xl group-hover:scale-110 transition-transform">
+                  <Link2 size={16} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

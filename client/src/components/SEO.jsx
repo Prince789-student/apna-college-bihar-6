@@ -11,26 +11,6 @@ export default function SEO({
 }) {
   const fullTitle = title.includes("Apna College Bihar") ? title : `${title} | Apna College Bihar`;
 
-  React.useEffect(() => {
-    document.title = fullTitle;
-    
-    // Dynamically update description meta if exists
-    const descMeta = document.querySelector('meta[name="description"]');
-    if (descMeta) {
-      descMeta.setAttribute('content', description);
-    }
-    
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) {
-      ogTitle.setAttribute('content', fullTitle);
-    }
-
-    const ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc) {
-      ogDesc.setAttribute('content', description);
-    }
-  }, [fullTitle, description]);
-
   return (
     <Helmet>
       {/* Standard Meta */}
@@ -38,7 +18,7 @@ export default function SEO({
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="robots" content="index, follow" />
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
       <meta name="author" content="Apna College Bihar" />
       <link rel="canonical" href={url} />
 
@@ -49,6 +29,7 @@ export default function SEO({
       <meta property="og:description" content={description} />
       <meta property="og:site_name" content="Apna College Bihar" />
       <meta property="og:image" content={image} />
+      <meta property="og:locale" content="en_IN" />
 
       {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
