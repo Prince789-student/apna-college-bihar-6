@@ -197,12 +197,16 @@ function GlobalCounsellingPopup() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // Show popup unconditionally after 0.5 seconds for testing
-    const timer = setTimeout(() => setIsOpen(true), 500);
-    return () => clearTimeout(timer);
+    // Show popup once per session (not on every refresh)
+    const hasSeenPopup = sessionStorage.getItem('ugeacPopupSeen');
+    if (!hasSeenPopup) {
+      const timer = setTimeout(() => setIsOpen(true), 1500);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   const handleClose = () => {
+    sessionStorage.setItem('ugeacPopupSeen', 'true');
     setIsOpen(false);
   };
 

@@ -3,7 +3,6 @@
 # https://www.apnacollegebihar.online
 # ==========================================
 
-# Allow all major search engine bots
 User-agent: Googlebot
 Allow: /
 
@@ -19,12 +18,10 @@ Allow: /
 User-agent: *
 Allow: /
 
-# Block private/admin areas
+# Block private/admin areas only
 Disallow: /dashboard/admin
 Disallow: /backend/
 Disallow: /uploads/
-Disallow: /login
-Disallow: /signup
 
 # Sitemap location
 Sitemap: https://www.apnacollegebihar.online/sitemap.xml
