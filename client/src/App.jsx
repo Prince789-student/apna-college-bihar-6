@@ -193,6 +193,59 @@ function GlobalProfilePrompt() {
   );
 }
 
+function GlobalCounsellingPopup() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    // Show popup unconditionally after 0.5 seconds for testing
+    const timer = setTimeout(() => setIsOpen(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-[99998] bg-[#0a0f1d]/80 backdrop-blur-sm flex items-center justify-center p-4 font-['Inter'] animate-in fade-in duration-300">
+      <div className="bg-white border border-slate-200/50 p-6 md:p-8 rounded-[2rem] shadow-2xl max-w-[650px] w-full relative overflow-hidden group">
+        <button onClick={handleClose} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-slate-100 rounded-full text-slate-500 hover:bg-slate-200 hover:text-slate-900 transition-colors z-20 font-black text-lg">
+          ×
+        </button>
+        <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/10 blur-[50px] rounded-full pointer-events-none"></div>
+        <div className="relative z-10 flex flex-col items-center">
+          <h2 className="text-xl md:text-3xl font-[900] text-center text-slate-900 uppercase tracking-tighter mb-2">🎯 FREE UGEAC Counselling</h2>
+          <p className="text-slate-500 text-[11px] md:text-xs font-bold text-center mb-6 leading-relaxed">Register now for 100% Free Expert Guidance and secure the best Bihar Engineering College based on your JEE Rank!</p>
+          
+          <div className="w-full h-[65vh] max-h-[550px] rounded-[1.5rem] overflow-hidden border-2 border-indigo-50 bg-slate-50 shadow-inner relative">
+            <div className="absolute inset-0 flex items-center justify-center -z-10">
+              <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+            <iframe 
+              src="https://docs.google.com/forms/d/e/1FAIpQLSeAnJ1-KOeiLnXZ8E6lk2TLwOTQi0LOOO4oHM8VWMxkhHE2fQ/viewform?embedded=true" 
+              width="100%" 
+              height="100%" 
+              frameBorder="0" 
+              marginHeight="0" 
+              marginWidth="0"
+              title="UGEAC Counselling Form"
+              className="relative z-10 bg-transparent"
+            >
+              Loading…
+            </iframe>
+          </div>
+          
+          <button onClick={handleClose} className="mt-6 text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-slate-600 transition-colors active:scale-95">
+            Maybe Later / Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 function App() {
   const { user, loading: authLoading } = useAuth();
@@ -246,6 +299,7 @@ function App() {
     return (
       <>
         <Toaster position="top-right" />
+        <GlobalCounsellingPopup />
         <GlobalProfilePrompt />
         <React.Suspense fallback={<LoadingScreen />}>
           <Routes>
