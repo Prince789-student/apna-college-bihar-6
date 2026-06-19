@@ -4,11 +4,24 @@
 <head>
    <meta charset="UTF-8" />
    <base href="/" />
-   <!-- Preconnect for speed -->
+   <!-- Preconnect + DNS Prefetch for all external services -->
    <link rel="preconnect" href="https://fonts.googleapis.com" />
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
    <link rel="preconnect" href="https://www.googletagmanager.com" />
-   
+   <link rel="preconnect" href="https://firestore.googleapis.com" />
+   <link rel="preconnect" href="https://firebase.googleapis.com" />
+   <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+   <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+
+   <!-- Preload critical font for LCP improvement -->
+   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" />
+
+   <!-- Apple / PWA Icons -->
+   <link rel="apple-touch-icon" sizes="180x180" href="/logo-acb.png" />
+   <link rel="apple-touch-icon" sizes="152x152" href="/logo-acb.png" />
+
+
    <!-- Cache managed by Vercel headers (see vercel.json) -->
    
    <!-- Cache headers managed server-side for better SEO crawling -->
@@ -235,6 +248,35 @@
            "text": "Bihar ke top government engineering colleges mein BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya, DCE Darbhanga, MCE Motihari aur LNJPIT Chapra shamil hain."
          }
        }
+     ]
+   }
+    </script>
+
+   <!-- SiteLinksSearchBox + BreadcrumbList + HowTo Rich Schemas -->
+   <script type="application/ld+json">
+   {
+     "@context": "https://schema.org",
+     "@type": "BreadcrumbList",
+     "itemListElement": [
+       {"@type":"ListItem","position":1,"name":"Home","item":"https://www.apnacollegebihar.online/"},
+       {"@type":"ListItem","position":2,"name":"UGEAC 2026 Predictor","item":"https://www.apnacollegebihar.online/ugeac-predictor"},
+       {"@type":"ListItem","position":3,"name":"BEU Notes","item":"https://www.apnacollegebihar.online/notes"},
+       {"@type":"ListItem","position":4,"name":"College Directory","item":"https://www.apnacollegebihar.online/directory"}
+     ]
+   }
+   </script>
+
+   <script type="application/ld+json">
+   {
+     "@context": "https://schema.org",
+     "@type": "HowTo",
+     "name": "UGEAC 2026 College Predictor ka use kaise karein",
+     "description": "Bihar Engineering admission mein apna college predict karein JEE Main rank se",
+     "totalTime": "PT5M",
+     "step": [
+       {"@type":"HowToStep","position":1,"name":"JEE Main CRL Rank Daalein","text":"Apna JEE Main 2026 All India Rank daalo — ye automatically UGEAC State Rank mein convert hoga."},
+       {"@type":"HowToStep","position":2,"name":"Category Select Karein","text":"UR, BC, EBC, SC, ST, EWS mein se apni category choose karo."},
+       {"@type":"HowToStep","position":3,"name":"College Finder Chalao","text":"'Find My College' button dabao aur result mein High/Medium/Low chance colleges dekho."}
      ]
    }
    </script>
