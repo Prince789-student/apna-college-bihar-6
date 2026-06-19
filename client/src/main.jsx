@@ -10,6 +10,18 @@ const rootEl = document.getElementById('root');
 if (!rootEl) {
   console.error("[CRITICAL] Could not find #root element!");
 } else {
+  // FORCE CLEAR STUBBORN SERVICE WORKER CACHES GLOBALLY
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+    caches.keys().then(keys => {
+      keys.forEach(key => caches.delete(key));
+    });
+  }
+
   try {
     const root = ReactDOM.createRoot(rootEl);
     root.render(

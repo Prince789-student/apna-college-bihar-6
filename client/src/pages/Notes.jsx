@@ -103,8 +103,7 @@ export default function Notes() {
       String(d.semester) === String(sem) &&
       (d.category === 'NOTES' || !d.category)
     );
-
-    return list.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    return list.sort((a, b) => (a.title || '').localeCompare(b.title || '', undefined, { numeric: true }));
   }, [docs, branch, sem]);
 
   // Orphan files: notes at root level that don't belong to any folder
@@ -117,7 +116,7 @@ export default function Notes() {
       String(d.semester) === String(sem) &&
       (d.category === 'NOTES' || !d.category) &&
       d.fileUrl
-    ).sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    ).sort((a, b) => (a.title || '').localeCompare(b.title || '', undefined, { numeric: true }));
   }, [docs, branch, sem]);
 
   // Files inside selected folder
@@ -127,7 +126,7 @@ export default function Notes() {
     return docs.filter(d =>
       d.parentId === folder.id &&
       (d.category === 'NOTES' || !d.category || d.type === 'folder')
-    ).sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+    ).sort((a, b) => (a.title || '').localeCompare(b.title || '', undefined, { numeric: true }));
   }, [docs, folder]);
 
   // Search across all NOTES files
