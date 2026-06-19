@@ -296,6 +296,20 @@ const focusTimerKeywords = [
   'beu-study-session-tracker',
   'engineering-focus-session',
   'productivity-timer-students',
+  'best-pomodoro-timer-for-engineering-students',
+  'free-online-study-timer-with-breaks',
+  'how-to-focus-on-studies-for-long-hours',
+  'pomodoro-50-10-timer',
+  'beu-exam-preparation-tracker',
+  'bihar-engineering-study-planner-timer',
+  'btech-semester-exam-study-timer',
+  'gate-exam-preparation-timer-online',
+  'study-timer-app-for-pc-free',
+  'pomodoro-tracker-for-btech-students',
+  'online-stopwatch-for-studying',
+  'aesthetic-study-timer-online',
+  'deep-focus-timer-for-coding',
+  'programming-session-focus-timer'
 ];
 
 // App Blocker Keywords
@@ -313,6 +327,15 @@ const appBlockerKeywords = [
   'apna-college-bihar-app-download-2026',
   'free-study-app-engineering-students',
   'beu-student-app-android',
+  'best-app-blocker-for-studying-free',
+  'how-to-block-instagram-while-studying',
+  'distraction-free-study-app-for-android',
+  'beu-btech-app-download',
+  'apna-college-bihar-official-app',
+  'bihar-engineering-notes-app-download',
+  'pomodoro-app-blocker-combined',
+  'digital-wellbeing-for-students',
+  'screen-time-tracker-for-students'
 ];
 
 // Study Groups / Network Keywords
@@ -329,6 +352,14 @@ const studyGroupKeywords = [
   'beu-student-network-online',
   'engineering-peer-learning-group',
   'study-group-chat-engineering',
+  'btech-students-whatsapp-group-link-bihar',
+  'beu-telegram-group-link-2026',
+  'bihar-engineering-students-community',
+  'how-to-find-study-partner-for-gate',
+  'online-collaboration-tool-for-engineering-projects',
+  'beu-cse-students-group',
+  'bcece-engineering-discussion-forum',
+  'apna-college-bihar-student-community'
 ];
 
 // Scientific Calculator Keywords
@@ -347,6 +378,12 @@ const calculatorKeywords = [
   'physics-formula-calculator-engineering',
   'fourier-series-calculator',
   'laplace-transform-calculator',
+  'btech-maths-3-calculator',
+  'eigen-value-and-eigen-vector-calculator',
+  'partial-fraction-calculator-with-steps',
+  'differential-equation-solver-for-engineering',
+  'unit-converter-for-engineering-students',
+  'cgpa-to-percentage-calculator-beu-online'
 ];
 
 // Personal Manager / Study Planner Keywords
@@ -363,6 +400,13 @@ const plannerKeywords = [
   'study-habit-tracker-beu',
   'engineering-goal-tracker',
   'semester-goal-planner-beu',
+  'how-to-manage-time-in-engineering',
+  'btech-daily-routine-planner',
+  'beu-mid-sem-exam-planner',
+  'digital-planner-for-btech-students-free',
+  'task-management-for-engineering-assignments',
+  'study-timetable-maker-online',
+  'apna-college-bihar-personal-manager'
 ];
 
 // Study Resources Keywords
@@ -376,6 +420,14 @@ const studyResourceKeywords = [
   'engineering-study-material-links',
   'beu-student-resource-hub',
   'engineering-exam-resources-free',
+  'best-youtube-channels-for-btech-1st-year',
+  'beu-btech-notes-pdf-download-2026',
+  'where-to-download-engineering-books-for-free',
+  'beu-pyq-with-solutions-pdf',
+  'bihar-engineering-university-study-material',
+  'apna-college-bihar-notes-download',
+  'beu-organizer-pdf-download-free',
+  'btech-cse-study-material-free'
 ];
 
 // UGEAC / College Predictor Keywords
@@ -395,6 +447,15 @@ const ugeacKeywords = [
   'mit-muzaffarpur-cutoff-2026',
   'bce-bhagalpur-cutoff-2026',
   'gce-gaya-cutoff-2026',
+  'how-to-apply-for-ugeac-2026',
+  'ugeac-registration-date-2026',
+  'bceceb-ugeac-counselling-dates-2026',
+  'documents-required-for-ugeac-counselling-2026',
+  'top-10-engineering-colleges-in-bihar-under-ugeac',
+  'ugeac-mock-allotment-result-2026',
+  'can-i-get-cse-in-mit-muzaffarpur',
+  'ugeac-fee-structure-2026',
+  'bihar-engineering-admission-through-jee-main-2026'
 ];
 
 for (const kw of focusTimerKeywords) urls.push(`/feature/focus-timer/${kw}`);
