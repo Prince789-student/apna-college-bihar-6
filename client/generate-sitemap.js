@@ -191,8 +191,8 @@ const attendanceKeywords = [
 
 // Timetable Keywords
 const timetableKeywords = [
-  'beu-timetable-2025',
-  'beu-exam-schedule-2025',
+  'beu-timetable-2026',
+  'beu-exam-schedule-2026',
   'beu-class-timetable',
   'bihar-engineering-timetable',
   'beu-semester-schedule',
@@ -204,7 +204,7 @@ const timetableKeywords = [
   'beu-sem1-timetable', 'beu-sem2-timetable', 'beu-sem3-timetable',
   'beu-sem4-timetable', 'beu-sem5-timetable', 'beu-sem6-timetable',
   'beu-sem7-timetable', 'beu-sem8-timetable',
-  'beu-exam-date-sheet-2025',
+  'beu-exam-date-sheet-2026',
   'beu-practical-schedule',
   'beu-internal-exam-timetable',
   'bihar-engineering-university-exam-schedule',
@@ -228,8 +228,8 @@ const cgpaKeywords = [
   'beu-sem1-cgpa', 'beu-sem2-cgpa', 'beu-sem3-cgpa',
   'beu-sem4-cgpa', 'beu-sem5-cgpa', 'beu-sem6-cgpa',
   'beu-sem7-cgpa', 'beu-sem8-cgpa',
-  'beu-cgpa-2025',
-  'beu-sgpa-2025',
+  'beu-cgpa-2026',
+  'beu-sgpa-2026',
   'how-to-calculate-cgpa-beu',
   'beu-grade-point-average',
   'beu-percentage-to-cgpa',
@@ -241,7 +241,7 @@ const cgpaKeywords = [
 
 // Result Keywords
 const resultKeywords = [
-  'beu-result-2025',
+  'beu-result-2026',
   'bihar-engineering-result',
   'beu-exam-result',
   'beu-result-marksheet',
@@ -250,16 +250,16 @@ const resultKeywords = [
   'beu-result-sem7', 'beu-result-sem8',
   'beu-result-cse', 'beu-result-civil', 'beu-result-mechanical',
   'beu-result-electrical', 'beu-result-ece',
-  'bihar-engineering-university-result-2025',
-  'beu-back-result-2025',
+  'bihar-engineering-university-result-2026',
+  'beu-back-result-2026',
   'beu-supplementary-result',
-  'beu-result-link-2025',
+  'beu-result-link-2026',
   'beu-marksheet-download',
-  'mit-muzaffarpur-result-2025',
-  'bce-bhagalpur-result-2025',
-  'gce-gaya-result-2025',
-  'beu-rank-list-2025',
-  'beu-merit-list-2025',
+  'mit-muzaffarpur-result-2026',
+  'bce-bhagalpur-result-2026',
+  'gce-gaya-result-2026',
+  'beu-rank-list-2026',
+  'beu-merit-list-2026',
 ];
 
 for (const kw of attendanceKeywords) urls.push(`/beu/attendance/${kw}`);
@@ -310,7 +310,7 @@ const appBlockerKeywords = [
   'focus-app-for-bihar-engineering',
   'block-apps-while-studying',
   'student-productivity-app-android',
-  'apna-college-bihar-app-download-2025',
+  'apna-college-bihar-app-download-2026',
   'free-study-app-engineering-students',
   'beu-student-app-android',
 ];
@@ -380,21 +380,21 @@ const studyResourceKeywords = [
 
 // UGEAC / College Predictor Keywords
 const ugeacKeywords = [
-  'ugeac-2025-college-predictor',
-  'ugeac-rank-predictor-2025',
-  'ugeac-cutoff-rank-2025',
+  'ugeac-2026-college-predictor',
+  'ugeac-rank-predictor-2026',
+  'ugeac-cutoff-rank-2026',
   'bihar-engineering-college-predictor',
-  'bcece-college-predictor-2025',
-  'ugeac-seat-allotment-2025',
-  'ugeac-choice-filling-guide-2025',
-  'ugeac-counselling-process-2025',
-  'ugeac-2025-application-form',
-  'ugeac-merit-list-2025',
-  'ugeac-rank-vs-college-2025',
+  'bcece-college-predictor-2026',
+  'ugeac-seat-allotment-2026',
+  'ugeac-choice-filling-guide-2026',
+  'ugeac-counselling-process-2026',
+  'ugeac-2026-application-form',
+  'ugeac-merit-list-2026',
+  'ugeac-rank-vs-college-2026',
   'best-engineering-college-bihar-ugeac',
-  'mit-muzaffarpur-cutoff-2025',
-  'bce-bhagalpur-cutoff-2025',
-  'gce-gaya-cutoff-2025',
+  'mit-muzaffarpur-cutoff-2026',
+  'bce-bhagalpur-cutoff-2026',
+  'gce-gaya-cutoff-2026',
 ];
 
 for (const kw of focusTimerKeywords) urls.push(`/feature/focus-timer/${kw}`);

@@ -111,7 +111,7 @@ export default function PremiumAds({ type = 'BANNER' }) {
          
          <div className="flex items-center gap-6 relative z-10 flex-col md:flex-row text-center md:text-left">
             <div className="w-14 h-14 bg-slate-100/50 backdrop-blur-xl border border-slate-300/30 rounded-2xl flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-500">
-               {current.icon || (current.imageUrl ? <img src={current.imageUrl} className="w-full h-full object-cover rounded-2xl" /> : <Bell size={24} className="text-blue-400" />)}
+               {current.icon || (current.imageUrl ? <img src={current.imageUrl} alt={current.title || "Advertisement"} className="w-full h-full object-cover rounded-2xl" /> : <Bell size={24} className="text-blue-400" />)}
             </div>
             <div className="space-y-3">
                <div className="flex items-center justify-center md:justify-start gap-2">
