@@ -3260,4 +3260,65 @@
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
+
+  <!-- React App Routes – Important Pages -->
+  <url><loc>https://www.apnacollegebihar.online/ugeac-predictor</loc><changefreq>weekly</changefreq><priority>1.00</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/percentile-predictor</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/colleges</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/compare</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/cgpa</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/beu-result</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/syllabus</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/notes</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/pyq</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/attendance</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/hackathons</loc><changefreq>weekly</changefreq><priority>0.80</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/calculator</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/about</loc><changefreq>monthly</changefreq><priority>0.70</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/contact</loc><changefreq>monthly</changefreq><priority>0.70</priority></url>
+
+  <!-- BEU Tool SEO Routes -->
+  <url><loc>https://www.apnacollegebihar.online/beu/attendance</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/beu/cgpa</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/beu/timetable</loc><changefreq>weekly</changefreq><priority>0.80</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/beu/result</loc><changefreq>weekly</changefreq><priority>0.80</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/beu/attendance/beu-attendance-calculator</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/beu/attendance/75-percent-attendance-calculator</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/beu/cgpa/beu-cgpa-calculator</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/beu/cgpa/beu-sgpa-calculator</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/beu/result/beu-result-2025</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+
+  <!-- College Profile Routes -->
+  <url><loc>https://www.apnacollegebihar.online/college/mit-muzaffarpur</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/bce-bhagalpur</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/dce-darbhanga</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/nce-chandi</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/gce-gaya</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/mce-motihari</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/rrsdce-begusarai</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/lnjpit-chapra</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/sit-sitamarhi</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/bce-bakhtiyarpur</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/bpmce-madhepura</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/sce-saharsa</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/pce-purnea</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/sce-supaul</loc><changefreq>weekly</changefreq><priority>0.80</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/kce-katihar</loc><changefreq>weekly</changefreq><priority>0.80</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/college/gec-vaishali</loc><changefreq>weekly</changefreq><priority>0.80</priority></url>
+
+  <!-- Branch Hub Routes -->
+  <url><loc>https://www.apnacollegebihar.online/branch/cse</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/branch/civil</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/branch/mechanical</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/branch/electrical</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/branch/ece</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/branch/it</loc><changefreq>weekly</changefreq><priority>0.80</priority></url>
+
+  <!-- UGEAC Info Routes -->
+  <url><loc>https://www.apnacollegebihar.online/ugeac/choice-filling</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/ugeac/seat-allotment</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/ugeac/document-verification</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/ugeac/eligibility</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://www.apnacollegebihar.online/ugeac/important-dates</loc><changefreq>weekly</changefreq><priority>0.85</priority></url>
+
 </urlset>
