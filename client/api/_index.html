@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <base href="/" />
+   <!-- Preconnect + DNS Prefetch for all external services -->
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+   <link rel="preconnect" href="https://www.googletagmanager.com" />
+   <link rel="preconnect" href="https://firestore.googleapis.com" />
+   <link rel="preconnect" href="https://firebase.googleapis.com" />
+   <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+   <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+
+   <!-- Preload critical font for LCP improvement -->
+   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" />
+
+   <!-- Apple / PWA Icons -->
+   <link rel="apple-touch-icon" sizes="180x180" href="/logo-acb.png" />
+   <link rel="apple-touch-icon" sizes="152x152" href="/logo-acb.png" />
+
+   <script>
+      // ── Service Worker Registration ─────────────────────────────
+      if ('serviceWorker' in navigator) {
+        const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+        if (isNative) {
+          document.documentElement.classList.add('native-app');
+        } else {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').catch(err => console.warn('[SW] Registration failed:', err));
+          });
+        }
+      }
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+         e.preventDefault();
+         window.deferredPrompt = e;
+         window.dispatchEvent(new Event('pwa-ready'));
+      });
+   </script>
+
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <meta name="theme-color" content="#0d121f" />
+   <meta name="google-site-verification" content="RYqt3qpPlTqKuw2uXw9hLSZNDCLA3iGIzzv_JLOQEVs" />
+   <meta name="google" content="notranslate" />
+   <meta name="author" content="Apna College Bihar" />
+   <meta name="language" content="Hindi, English" />
+   <meta name="geo.region" content="IN-BR" />
+   <meta name="geo.placename" content="Bihar, India" />
+ 
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BXF7KW1XQS"></script>
+   <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-BXF7KW1XQS');
+   </script>
+
+   <link rel="manifest" href="/manifest.json" />
+   <link rel="icon" type="image/png" href="/logo-acb.png?v=99" />
+   <link rel="shortcut icon" href="/logo-acb.png?v=99" />
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   
+   <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+   <script>
+      tailwind.config = {
+         darkMode: 'class',
+         theme: { extend: { colors: { brand: '#3b82f6', darkbg: '#0f172a', cardbg: '#1e293b' } } }
+      }
+   </script>
+
+   <script>
+     document.addEventListener('DOMContentLoaded', () => {
+       const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+       if (!isNative) {
+         const adScript = document.createElement('script');
+         adScript.async = true;
+         adScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4005389118070865";
+         adScript.crossOrigin = "anonymous";
+         document.head.appendChild(adScript);
+       }
+     });
+   </script>
+
+   <style>
+       html, body, #root {
+          font-family: 'Inter', sans-serif;
+          scroll-behavior: smooth;
+          margin: 0 !important;
+          padding: 0 !important;
+          height: 100% !important;
+          min-height: 100% !important;
+          width: 100% !important;
+          max-width: 100vw !important;
+          overflow-x: hidden !important;
+          overflow-y: auto !important;
+       }
+       html.native-app, html.native-app body, html.native-app #root {
+          -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+       }
+       input, textarea { -webkit-user-select: auto; user-select: auto; }
+       .adsbygoogle[data-ad-status="unfilled"] { display: none !important; height: 0 !important; width: 0 !important; }
+   </style>
+  <script type="module" crossorigin src="/assets/index.1670b47d.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/dependencies.10ae7a76.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor.8b7db552.js">
+  <link rel="modulepreload" crossorigin href="/assets/firebase.37d2baee.js">
+</head>
+
+<body class="bg-slate-50 font-sans antialiased text-slate-900">
+   <div id="root">
+      <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0f172a; color: white; font-family: 'Inter', sans-serif;">
+         <div style="width: 60px; height: 60px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+         <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+         <p style="margin-top: 24px; font-size: 14px; font-weight: 900; letter-spacing: 0.3em; text-transform: uppercase; color: #94a3b8;">Apna College Bihar</p>
+      </div>
+   </div>
+   
+   <noscript>
+      <h1>Apna College Bihar</h1>
+      <p>Please enable JavaScript to use the UGEAC Predictor, BEU Notes, and CGPA Calculator.</p>
+   </noscript>
+   
+   <script>
+      (function() {
+         document.addEventListener('click', function (e) {
+            try {
+               const a = e.target.closest && e.target.closest('a');
+               if (!a) return;
+               const href = a.getAttribute && a.getAttribute('href');
+               if (!href) return;
+               if (href.startsWith('/') && !a.hasAttribute('download') && a.target !== '_blank' && !href.startsWith('//')) {
+                  if (href.startsWith('#')) return;
+                  e.preventDefault();
+                  if (window.location.pathname + window.location.search !== href) {
+                     history.pushState({}, '', href);
+                  }
+                  window.dispatchEvent(new PopStateEvent('popstate'));
+               }
+            } catch (err) {}
+         }, false);
+      })();
+   </script>
+   
+</body>
+</html>
