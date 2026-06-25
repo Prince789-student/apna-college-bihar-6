@@ -100,10 +100,15 @@ app.get('/_debug', (req, res) => {
 });
 
 // 6. SPA Catch-all with Dynamic SEO
+let cachedHtml = null;
 app.get('*', (req, res) => {
     const indexPath = path.join(publicPath, 'index.html');
-    if (fs.existsSync(indexPath)) {
-        let html = fs.readFileSync(indexPath, 'utf8');
+    if (!cachedHtml && fs.existsSync(indexPath)) {
+        cachedHtml = fs.readFileSync(indexPath, 'utf8');
+    }
+    
+    if (cachedHtml) {
+        let html = cachedHtml;
         const urlPath = req.path;
 
         let title = 'Apna College Bihar | The Largest Engineering Hub';

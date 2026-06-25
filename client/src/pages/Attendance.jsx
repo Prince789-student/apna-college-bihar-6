@@ -355,7 +355,7 @@ export default function Attendance() {
     <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500 font-['Inter']">
       
       {/* CSS Injected for scan animation */}
-      <style dangerouslySetInnerHTML={{__html: `
+      <style>{`
         @keyframes laser-sweep {
           0% { top: 0%; opacity: 0.8; }
           50% { top: 100%; opacity: 0.8; }
@@ -371,7 +371,7 @@ export default function Attendance() {
         .animate-ripple {
           animation: ripple-pulse 1.5s infinite linear;
         }
-      `}} />
+      `}</style>
 
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 md:p-8 rounded-[2.5rem] border border-slate-200 shadow-sm relative overflow-hidden">

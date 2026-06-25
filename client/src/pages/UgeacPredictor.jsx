@@ -436,7 +436,7 @@ function UgeacPredictor() {
   const addChoice = (collegeId, branch, collegeName) => {
     if (choices.find(c => c.collegeId === collegeId && c.branch === branch)) return;
     setChoices([...choices, { 
-      id: `choice-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `choice-${crypto.randomUUID()}`,
       collegeId, 
       branch, 
       collegeName: collegeName 

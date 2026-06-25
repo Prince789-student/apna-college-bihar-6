@@ -116,7 +116,7 @@ export default function Timetable() {
         const v3 = {};
         DAYS_OF_WEEK.forEach(day => {
           v3[day] = (v2[day] || []).map(c => ({
-            id: c.id || Date.now().toString() + Math.random(),
+            id: c.id || crypto.randomUUID(),
             timeSlot: `${c.startTime} - ${c.endTime}`,
             subject: c.subject
           }));
