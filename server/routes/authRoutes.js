@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 // Helper: Send OTP Email
 const sendOTPEmail = async (email, otp) => {
@@ -52,7 +53,7 @@ router.post('/send-email-otp', async (req, res) => {
         const { email } = req.body;
         if (!email) return res.status(400).json({ message: 'Email required' });
 
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otp = crypto.randomInt(100000, 999999).toString();
         
         // Log it to console so developer can see it during local testing without real email
         console.log(`✨ OTP GENERATED FOR ${email}: ${otp}`);
@@ -101,7 +102,7 @@ router.post('/register', async (req, res) => {
         const userExists = await User.findOne({ email });
         if (userExists) return res.status(400).json({ message: 'User already exists' });
 
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otp = crypto.randomInt(100000, 999999).toString();
         const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 mins
 
         const salt = await bcrypt.genSalt(10);

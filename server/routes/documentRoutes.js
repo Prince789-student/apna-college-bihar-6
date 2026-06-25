@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const Note = require('../models/Note');
+const { protect, adminOnly } = require('../middleware/authMiddleware');
 
 // Configure Multer for local storage (Temporary until Firebase/AWS is ready)
 const storage = multer.diskStorage({
@@ -34,7 +35,7 @@ const saveToLocal = (doc) => {
 const mongoose = require('mongoose');
 
 // @route   POST /api/documents/upload
-router.post('/upload', upload.single('file'), async (req, res) => {
+router.post('/upload', protect, adminOnly, upload.single('file'), async (req, res) => {
     const { title, subject, description, category } = req.body;
     if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
 
@@ -84,7 +85,7 @@ router.get('/', async (req, res) => {
 });
 
 // @route   DELETE /api/documents
-router.delete('/', async (req, res) => {
+router.delete('/', protect, adminOnly, async (req, res) => {
     const { id } = req.query; // Use query param for safety with slashes
     if (!id) return res.status(400).json({ message: 'ID required' });
     

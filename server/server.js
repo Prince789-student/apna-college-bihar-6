@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 const app = express();
 
@@ -63,6 +64,8 @@ app.get('/:filename.apk', (req, res, next) => {
 });
 
 // 2. Middleware
+app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(compression());
 app.use(express.json());
 app.use(cors({
@@ -73,7 +76,7 @@ app.use(cors({
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 1000,
   message: "Too many requests, please try again later."
 });
 app.use('/api/', limiter);
@@ -104,7 +107,7 @@ app.get('*', (req, res) => {
         const urlPath = req.path;
 
         let title = 'Apna College Bihar | The Largest Engineering Hub';
-        let description = 'Join Bihar\\'s largest engineering community. Free B.Tech Notes, PYQs, BEU Syllabus, CGPA Calculator, and UGEAC Predictor.';
+        let description = "Join Bihar's largest engineering community. Free B.Tech Notes, PYQs, BEU Syllabus, CGPA Calculator, and UGEAC Predictor.";
         let keywords = 'Apna College Bihar, BEU Notes, BEU PYQ, Bihar Engineering, B.Tech syllabus, CGPA Calculator, UGEAC';
 
         if (urlPath.startsWith('/search/')) {
