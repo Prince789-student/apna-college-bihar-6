@@ -257,6 +257,22 @@ function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const isNative = Capacitor.isNativePlatform();
 
+  // Show splash screen only once per session
+  const [showSplash, setShowSplash] = useState(() => {
+    if (window.__PRERENDER_INJECTED) return false;
+    return !sessionStorage.getItem('splashPlayed');
+  });
+
+  useEffect(() => {
+    if (showSplash) {
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+        sessionStorage.setItem('splashPlayed', 'true');
+      }, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [showSplash]);
+
   // Parse standalone param and save to session storage to persist it across navigations
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('standalone') === 'true') {
@@ -275,6 +291,60 @@ function App() {
       AdMob.initialize().catch(console.error);
     }
   }, [isNative]);
+
+  if (showSplash) {
+    return (
+      <div className="fixed inset-0 z-[99999] bg-[#0f172a] flex flex-col items-center justify-center overflow-hidden">
+        <style>{`
+          @keyframes splashFadeIn {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+          }
+          @keyframes textSlideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          @keyframes barProgress {
+            from { width: 0%; }
+            to { width: 100%; }
+          }
+          .animate-splash-logo {
+            animation: splashFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+          }
+          .animate-text-slide {
+            animation: textSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+            opacity: 0;
+          }
+          .animate-bar-progress {
+            animation: barProgress 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+          }
+        `}</style>
+        <div className="flex flex-col items-center max-w-sm px-6 text-center select-none animate-pulse-subtle">
+          {/* Glowing Animated Logo Container */}
+          <div className="relative mb-6 w-24 h-24 flex items-center justify-center rounded-full bg-slate-800/40 p-2 border border-slate-700/30 shadow-[0_0_40px_rgba(59,130,246,0.15)] animate-splash-logo">
+            <img 
+              src="/logo-acb.png" 
+              alt="Logo" 
+              className="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(59,130,246,0.3)]"
+            />
+          </div>
+
+          {/* Text Branding */}
+          <h1 className="text-2xl font-black text-white tracking-wider mb-2 uppercase animate-text-slide">
+            Apna College <span className="text-blue-500">Bihar</span>
+          </h1>
+          <p className="text-xs text-slate-400 font-medium tracking-wide animate-text-slide" style={{ animationDelay: '0.4s' }}>
+            Your Trustworthy Engineering Companion
+          </p>
+
+          {/* Loading Indicator */}
+          <div className="w-32 h-1 bg-slate-800/80 rounded-full overflow-hidden mt-8">
+            <div className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full animate-bar-progress"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   try {
     return (
