@@ -4,7 +4,7 @@ import path from 'path';
 export default function handler(req, res) {
   const indexPath = path.join(process.cwd(), 'dist', 'index.html');
   const fallbackPath = path.join(process.cwd(), 'public', 'index.html');
-  const dirnamePath = path.join(__dirname, '..', 'dist', 'index.html');
+  const rootPath = path.join(process.cwd(), 'index.html');
   
   let html = '';
   try {
@@ -12,17 +12,15 @@ export default function handler(req, res) {
       html = fs.readFileSync(indexPath, 'utf8');
     } else if (fs.existsSync(fallbackPath)) {
       html = fs.readFileSync(fallbackPath, 'utf8');
-    } else if (fs.existsSync(dirnamePath)) {
-      html = fs.readFileSync(dirnamePath, 'utf8');
+    } else if (fs.existsSync(rootPath)) {
+      html = fs.readFileSync(rootPath, 'utf8');
     } else {
-      // Force an error to hit the catch block
       throw new Error("No index.html found in any path");
     }
   } catch (err) {
     return res.status(500).send(`Internal Server Error: index.html not found. <br/> 
       cwd: ${process.cwd()} <br/> 
-      __dirname: ${__dirname} <br/>
-      Tried: ${indexPath}, ${fallbackPath}, ${dirnamePath}`);
+      Tried: ${indexPath}, ${fallbackPath}, ${rootPath}`);
   }
 
   const urlPath = req.url.split('?')[0]; // remove query params
