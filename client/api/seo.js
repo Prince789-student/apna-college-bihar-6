@@ -2,14 +2,27 @@ import fs from 'fs';
 import path from 'path';
 
 export default function handler(req, res) {
-  // Use public folder or dist folder depending on vercel build output
   const indexPath = path.join(process.cwd(), 'dist', 'index.html');
+  const fallbackPath = path.join(process.cwd(), 'public', 'index.html');
+  const dirnamePath = path.join(__dirname, '..', 'dist', 'index.html');
   
   let html = '';
   try {
-    html = fs.readFileSync(indexPath, 'utf8');
+    if (fs.existsSync(indexPath)) {
+      html = fs.readFileSync(indexPath, 'utf8');
+    } else if (fs.existsSync(fallbackPath)) {
+      html = fs.readFileSync(fallbackPath, 'utf8');
+    } else if (fs.existsSync(dirnamePath)) {
+      html = fs.readFileSync(dirnamePath, 'utf8');
+    } else {
+      // Force an error to hit the catch block
+      throw new Error("No index.html found in any path");
+    }
   } catch (err) {
-    return res.status(500).send('Internal Server Error: index.html not found');
+    return res.status(500).send(`Internal Server Error: index.html not found. <br/> 
+      cwd: ${process.cwd()} <br/> 
+      __dirname: ${__dirname} <br/>
+      Tried: ${indexPath}, ${fallbackPath}, ${dirnamePath}`);
   }
 
   const urlPath = req.url.split('?')[0]; // remove query params
