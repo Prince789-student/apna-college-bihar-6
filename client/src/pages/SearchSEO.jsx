@@ -35,14 +35,49 @@ export default function SearchSEO() {
     const q = decodedKeyword.toLowerCase();
     
     // Simple search algorithm
-    return documents.filter(d => 
+    let docs = documents.filter(d => 
       (d.title && d.title.toLowerCase().includes(q)) || 
       (d.subject && d.subject.toLowerCase().includes(q)) ||
       (d.category && d.category.toLowerCase().includes(q))
     );
+
+    // Inject Static App Features based on keyword
+    if (q.includes('syllabus')) {
+      docs.unshift({
+        id: 'static-syllabus',
+        title: 'BEU B.Tech Syllabus (All Branches)',
+        subject: 'Official revised B.Tech syllabus for BEU/AKU',
+        category: 'APP FEATURE',
+        branch: 'ALL',
+        isStaticLink: '/syllabus'
+      });
+    }
+    if (q.includes('cgpa') || q.includes('sgpa') || q.includes('calculator') || q.includes('percentage')) {
+      docs.unshift({
+        id: 'static-cgpa',
+        title: 'BEU CGPA to Percentage Calculator',
+        subject: 'Instantly convert your BEU CGPA to percentage',
+        category: 'APP FEATURE',
+        branch: 'ALL',
+        isStaticLink: '/cgpa'
+      });
+    }
+    if (q.includes('ugeac') || q.includes('predictor') || q.includes('counselling')) {
+      docs.unshift({
+        id: 'static-ugeac',
+        title: 'UGEAC College Predictor 2026',
+        subject: 'Predict Bihar engineering colleges based on JEE rank',
+        category: 'APP FEATURE',
+        branch: 'ALL',
+        isStaticLink: '/ugeac-predictor'
+      });
+    }
+
+    return docs;
   }, [decodedKeyword, documents]);
 
   const generateLink = (doc) => {
+    if (doc.isStaticLink) return doc.isStaticLink;
     const basePath = doc.category === 'PYQ' ? '/pyq' : '/notes';
     const branch = doc.branch ? doc.branch.toLowerCase() : '';
     const sem = doc.semester ? String(doc.semester) : '';
