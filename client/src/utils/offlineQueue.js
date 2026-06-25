@@ -22,7 +22,7 @@ export function queueOfflineSession(sessionData) {
       _synced: false
     });
     localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
-    console.log('[OfflineQueue] Session queued. Total pending:', queue.length);
+    // Console log removed for production
   } catch (err) {
     console.error('[OfflineQueue] Failed to queue session:', err);
   }
@@ -60,7 +60,7 @@ export async function flushOfflineQueue(db, userId) {
   const queue = getOfflineQueue();
   if (!queue.length) return 0;
 
-  console.log('[OfflineQueue] Flushing', queue.length, 'pending sessions...');
+  // Console log removed for production
 
   const synced = [];
   const failed = [];
@@ -106,7 +106,7 @@ export async function flushOfflineQueue(db, userId) {
 
   // Keep only failed sessions in queue (retry next time)
   localStorage.setItem(QUEUE_KEY, JSON.stringify(failed));
-  console.log('[OfflineQueue] Synced:', synced.length, 'Failed:', failed.length);
+  // Console log removed for production
   return synced.length;
 }
 

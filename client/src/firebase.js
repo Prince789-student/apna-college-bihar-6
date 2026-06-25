@@ -3,6 +3,7 @@ import { getAuth, GoogleAuthProvider, RecaptchaVerifier, signInWithPhoneNumber, 
 import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getMessaging, isSupported } from "firebase/messaging";
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBIvnhJLz_ucsxuFEnZeYSAq2L6vJ4DcKo",
@@ -17,6 +18,18 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+// Initialize App Check (ReCaptcha V3) to protect Firestore
+if (typeof window !== "undefined") {
+  try {
+    initializeAppCheck(app, {
+      provider: new ReCaptchaV3Provider('6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'), // Public test key for now
+      isTokenAutoRefreshEnabled: true
+    });
+  } catch (e) {
+    console.warn("App Check initialization failed", e);
+  }
+}
 
 // Enable local persistence for mobile login stability
 setPersistence(auth, browserLocalPersistence);

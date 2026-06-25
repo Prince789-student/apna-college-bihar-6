@@ -185,7 +185,7 @@ export default function StudyDashboard() {
         await AppBlocker.requestOverlayPermission();
       }
     } catch (e) {
-      console.log(e);
+      // console.log removed for production
       alert("Permission error: " + JSON.stringify(e));
     }
   };

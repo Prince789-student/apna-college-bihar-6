@@ -66,10 +66,15 @@ function initScraper() {
 
     // Schedule to run every 30 minutes
     cron.schedule('*/30 * * * *', () => {
-        fetchAndSaveNotices();
+        // Add random jitter delay (0 to 5 minutes) to avoid IP ban
+        const jitterMs = Math.floor(Math.random() * 5 * 60 * 1000);
+        console.log(`[BEU Scraper] Scheduled to run in ${Math.round(jitterMs/1000)}s...`);
+        setTimeout(() => {
+            fetchAndSaveNotices();
+        }, jitterMs);
     });
     
-    console.log('✅ BEU Notification Scraper Scheduled (Every 30 mins)');
+    console.log('✅ BEU Notification Scraper Scheduled (Every 30 mins with jitter)');
 }
 
 module.exports = { initScraper };
