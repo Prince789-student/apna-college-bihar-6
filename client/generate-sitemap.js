@@ -84,10 +84,10 @@ const urls = [];
 urls.push('/');
 urls.push('/hub');
 urls.push('/hackathons');
-urls.push('/dashboard/ugeac-predictor');
-urls.push('/dashboard/notes');
-urls.push('/dashboard/pyq');
-urls.push('/dashboard/syllabus');
+urls.push('/ugeac-predictor');
+urls.push('/notes');
+urls.push('/pyq');
+urls.push('/syllabus');
 
 // Dynamic Notes & PYQ Pages
 for (const branch of branches) {
