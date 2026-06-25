@@ -14,8 +14,9 @@
    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
 
-   <!-- Preload critical font for LCP improvement -->
-   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" />
+    <!-- Preload Google Fonts stylesheet to prevent render-blocking -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" /></noscript>
 
    <!-- Apple / PWA Icons -->
    <link rel="apple-touch-icon" sizes="180x180" href="/logo-acb.png" />
@@ -61,7 +62,6 @@
    <link rel="manifest" href="/manifest.json" />
    <link rel="icon" type="image/png" href="/logo-acb.png?v=99" />
    <link rel="shortcut icon" href="/logo-acb.png?v=99" />
-   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
    
    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
    <script>
