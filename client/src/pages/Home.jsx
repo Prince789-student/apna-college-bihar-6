@@ -453,7 +453,7 @@ export default function Home() {
       {/* ═══════════════════════════════════════════ */}
       {/* ── COLLEGE SECTION ── */}
       {/* ═══════════════════════════════════════════ */}
-      <section className="py-20 px-6 md:px-16 bg-slate-50 border-b border-slate-200">
+      <section id="colleges-section" className="py-20 px-6 md:px-16 bg-slate-50 border-b border-slate-200">
         <Reveal>
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-16">
@@ -537,7 +537,16 @@ export default function Home() {
 
             <div className="mt-12 text-center">
               <button 
-                onClick={() => setShowAllColleges(!showAllColleges)}
+                onClick={() => {
+                  if (showAllColleges) {
+                    setShowAllColleges(false);
+                    setTimeout(() => {
+                      document.getElementById('colleges-section')?.scrollIntoView({ behavior: 'smooth' });
+                    }, 50);
+                  } else {
+                    setShowAllColleges(true);
+                  }
+                }}
                 className="inline-flex items-center gap-2 px-8 py-4 bg-white border border-slate-200 hover:border-blue-500/30 text-blue-600 hover:text-blue-700 font-black text-xs uppercase tracking-widest rounded-2xl transition-all shadow-sm active:scale-95 hover:shadow-md"
               >
                 {showAllColleges ? 'Show Less Colleges' : 'View All 38+ Colleges'} 
