@@ -60,6 +60,12 @@ function syncBuild() {
         }
         copyRecursiveSync(srcDir, destDir);
         console.log('Build assets synced to server/public successfully!');
+
+        // VERCEL FIX: Copy index.html into api directory so serverless functions can read it.
+        // Because dist is gitignored, Vercel lambdas cannot read dist/index.html easily.
+        const apiIndexDest = path.join(__dirname, 'api', '_index.html');
+        fs.copyFileSync(path.join(srcDir, 'index.html'), apiIndexDest);
+        console.log('Vercel API index.html successfully copied!');
     } catch (err) {
         console.error('Error syncing build:', err);
         process.exit(1);

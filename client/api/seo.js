@@ -2,9 +2,9 @@ import fs from 'fs';
 import path from 'path';
 
 export default function handler(req, res) {
-  const indexPath = path.join(process.cwd(), 'dist', 'index.html');
-  const fallbackPath = path.join(process.cwd(), 'public', 'index.html');
-  const rootPath = path.join(process.cwd(), 'index.html');
+  // Read the index.html that was copied into the api directory during the build step.
+  const indexPath = path.join(process.cwd(), 'api', '_index.html');
+  const fallbackPath = path.join(process.cwd(), 'dist', 'index.html');
   
   let html = '';
   try {
@@ -12,15 +12,13 @@ export default function handler(req, res) {
       html = fs.readFileSync(indexPath, 'utf8');
     } else if (fs.existsSync(fallbackPath)) {
       html = fs.readFileSync(fallbackPath, 'utf8');
-    } else if (fs.existsSync(rootPath)) {
-      html = fs.readFileSync(rootPath, 'utf8');
     } else {
       throw new Error("No index.html found in any path");
     }
   } catch (err) {
     return res.status(500).send(`Internal Server Error: index.html not found. <br/> 
       cwd: ${process.cwd()} <br/> 
-      Tried: ${indexPath}, ${fallbackPath}, ${rootPath}`);
+      Tried: ${indexPath}, ${fallbackPath}`);
   }
 
   const urlPath = req.url.split('?')[0]; // remove query params
