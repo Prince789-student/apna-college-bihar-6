@@ -33,6 +33,16 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    match /beu_notifications/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+
+    match /hackathons/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if false;
+    }
+
     // Default rule: Deny everything else
     match /{document=**} {
       allow read, write: if false;
