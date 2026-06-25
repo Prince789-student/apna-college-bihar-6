@@ -247,9 +247,6 @@ export default function CollegeProfile() {
               <a href={college.website} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-xl shadow-blue-600/20">
                 <Globe size={16} /> Official Website
               </a>
-              <button className="flex items-center justify-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded-xl text-xs font-black uppercase tracking-widest transition-all">
-                <Download size={16} /> Brochure
-              </button>
             </div>
           </div>
         </div>
