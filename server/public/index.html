@@ -110,7 +110,48 @@
 </head>
 
 <body class="bg-slate-50 font-sans antialiased text-slate-900">
-   <div id="root"></div>
+   <div id="root">
+      <div style="position: fixed; inset: 0; z-index: 99999; background-color: #0f172a; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; font-family: 'Inter', sans-serif;">
+         <style>
+            @keyframes splashFadeIn {
+               from { opacity: 0; transform: scale(0.85); }
+               to { opacity: 1; transform: scale(1); }
+            }
+            @keyframes textSlideUp {
+               from { opacity: 0; transform: translateY(12px); }
+               to { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes barProgress {
+               from { width: 0%; }
+               to { width: 100%; }
+            }
+            .animate-splash-logo {
+               animation: splashFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            }
+            .animate-text-slide {
+               animation: textSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+               opacity: 0;
+            }
+            .animate-bar-progress {
+               animation: barProgress 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            }
+         </style>
+         <div style="display: flex; flex-direction: column; align-items: center; max-width: 384px; padding-left: 24px; padding-right: 24px; text-align: center; user-select: none;">
+            <div class="animate-splash-logo" style="position: relative; margin-bottom: 24px; width: 96px; height: 96px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background-color: rgba(30, 41, 59, 0.4); padding: 8px; border: 1px solid rgba(51, 65, 85, 0.3); box-shadow: 0 0 40px rgba(59, 130, 246, 0.15);">
+               <img src="/logo-acb.png" alt="Logo" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 15px rgba(59,130,246,0.3));" />
+            </div>
+            <h1 class="animate-text-slide" style="font-size: 24px; font-weight: 900; color: white; letter-spacing: 0.05em; margin-bottom: 8px; text-transform: uppercase;">
+               Apna College <span style="color: #3b82f6;">Bihar</span>
+            </h1>
+            <p class="animate-text-slide" style="font-size: 12px; color: #94a3b8; font-weight: 500; letter-spacing: 0.025em; animation-delay: 0.4s;">
+               Your Trustworthy Engineering Companion
+            </p>
+            <div style="width: 128px; height: 4px; background-color: rgba(30, 41, 59, 0.8); border-radius: 9999px; overflow: hidden; margin-top: 32px;">
+               <div class="animate-bar-progress" style="height: 100%; background: linear-gradient(to right, #3b82f6, #6366f1); border-radius: 9999px;"></div>
+            </div>
+         </div>
+      </div>
+   </div>
    
    <noscript>
       <h1>Apna College Bihar</h1>
