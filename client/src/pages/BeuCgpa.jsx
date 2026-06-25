@@ -138,7 +138,14 @@ export default function BeuCgpa() {
       setForm({ name: '', type: 'theory', credits: 4 });
       setShowAdd(false);
       fetchSubjects();
-    } catch(e) { console.error(e); alert('Save nahi hua.'); }
+    } catch(e) {
+      console.error(e);
+      // Fallback to local state if Firebase save fails (e.g. offline or rules issue)
+      setSubjects([...subjects, { id: 'temp-' + Math.random(), ...newSubData }]);
+      setForm({ name: '', type: 'theory', credits: 4 });
+      setShowAdd(false);
+      alert('Network issue: Saved locally. Data might not sync across devices.');
+    }
   };
 
   const openMarks = (sub) => {

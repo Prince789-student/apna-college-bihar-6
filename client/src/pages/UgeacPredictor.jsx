@@ -4,6 +4,9 @@ import autoTable from 'jspdf-autotable';
 import '../UgeacPredictor.css';
 import { colleges } from '../UgeacData';
 import { getLogoBase64, applyPremiumBranding, brandFullDocument } from '../utils/pdfHelper';
+import { Capacitor } from '@capacitor/core';
+import { Directory, Filesystem } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus, Minus, Layers, Search, Zap, Filter, LayoutGrid, Download, X, Calculator } from 'lucide-react';
 import SEO from '../components/SEO';
@@ -248,7 +251,24 @@ function UgeacPredictor() {
     // Apply standard watermark, header, footer on page 1
     applyPremiumBranding(doc, "Rank Prediction", 1, 1, logoBase);
 
-    doc.save(`UGEAC_Rank_Prediction.pdf`);
+    const fileName = `UGEAC_Rank_Prediction.pdf`;
+    if (Capacitor.isNativePlatform()) {
+      try {
+        const pdfOutput = doc.output('datauristring');
+        const base64Data = pdfOutput.split(',')[1];
+        const savedFile = await Filesystem.writeFile({
+          path: fileName,
+          data: base64Data,
+          directory: Directory.Documents
+        });
+        await Share.share({ title: fileName, url: savedFile.uri });
+      } catch(e) {
+        console.error("Native save error:", e);
+        import('react-hot-toast').then(m => m.toast.error("Failed to save PDF on device."));
+      }
+    } else {
+      doc.save(fileName);
+    }
   };
 
   const calculateResults = () => {
@@ -519,7 +539,24 @@ function UgeacPredictor() {
     // Brand all pages in the PDF document
     brandFullDocument(doc, "Counselling Report", logoData);
     
-    doc.save(`UGEAC_Analysis_2026.pdf`);
+    const fileName = `UGEAC_Analysis_2026.pdf`;
+    if (Capacitor.isNativePlatform()) {
+      try {
+        const pdfOutput = doc.output('datauristring');
+        const base64Data = pdfOutput.split(',')[1];
+        const savedFile = await Filesystem.writeFile({
+          path: fileName,
+          data: base64Data,
+          directory: Directory.Documents
+        });
+        await Share.share({ title: fileName, url: savedFile.uri });
+      } catch(e) {
+        console.error("Native save error:", e);
+        import('react-hot-toast').then(m => m.toast.error("Failed to save PDF on device."));
+      }
+    } else {
+      doc.save(fileName);
+    }
   };
 
   const sortedColleges = useMemo(() => [...colleges].sort((a,b) => a.name.localeCompare(b.name)), []);
@@ -1259,8 +1296,8 @@ function UgeacPredictor() {
       {isFinderCollegeOpen && (
         <div className="modal-backdrop" onClick={() => setIsFinderCollegeOpen(false)}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setIsFinderCollegeOpen(false)}><X size={20} /></button>
-            <div className="flex items-center justify-between mb-8 pr-12">
+            <button className="modal-close" onClick={() => setIsFinderCollegeOpen(false)}><X size={16} /> Close</button>
+            <div className="flex items-center justify-between mb-8 pr-24">
                <h3 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Institutes</h3>
                <div className="flex gap-2">
                   <button onClick={() => setTargetColleges(colleges.map(c => c.id))} className="text-[9px] font-black uppercase text-indigo-600 hover:bg-indigo-600 hover:text-white px-3 py-1.5 bg-indigo-50 rounded-lg transition-all border border-indigo-100">Select All</button>
@@ -1327,8 +1364,8 @@ function UgeacPredictor() {
       {isFinderBranchOpen && (
         <div className="modal-backdrop" onClick={() => setIsFinderBranchOpen(false)}>
           <div className="modal-box" onClick={e => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setIsFinderBranchOpen(false)}><X size={20} /></button>
-            <div className="flex items-center justify-between mb-8 pr-12">
+            <button className="modal-close" onClick={() => setIsFinderBranchOpen(false)}><X size={16} /> Close</button>
+            <div className="flex items-center justify-between mb-8 pr-24">
                <h3 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Branches</h3>
                <div className="flex gap-2">
                   <button onClick={() => setTargetBranches(ugeacData.branches)} className="text-[9px] font-black uppercase text-indigo-600 hover:bg-indigo-600 hover:text-white px-3 py-1.5 bg-indigo-50 rounded-lg transition-all border border-indigo-100">Select All</button>
@@ -1381,10 +1418,10 @@ function UgeacPredictor() {
       {selectedCollege && (
         <div className="modal-backdrop" onClick={() => setSelectedCollege(null)}>
           <div className="modal-box max-w-2xl overflow-y-auto max-h-[90vh]" onClick={e => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setSelectedCollege(null)}><X size={20} /></button>
+            <button className="modal-close" onClick={() => setSelectedCollege(null)}><X size={16} /> Close</button>
             
             <div className="mb-8">
-               <div className="flex items-center gap-4 mb-4">
+               <div className="flex items-center gap-4 mb-4 pr-24">
                   <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-xl shadow-indigo-900/20">
                      {selectedCollege.short.substring(0, 1)}
                   </div>

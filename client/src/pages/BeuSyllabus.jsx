@@ -3,6 +3,9 @@ import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Download } from 'luc
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import jsPDF from 'jspdf';
+import { Capacitor } from '@capacitor/core';
+import { Directory, Filesystem } from '@capacitor/filesystem';
+import { Share } from '@capacitor/share';
 import SEO from '../components/SEO';
 
 // ─── Smart Syllabus Text Cleaner ──────────────────────────────────────────────
@@ -95,10 +98,7 @@ function cleanTitleStr(s) {
 
 function splitIntoTopics(text) {
   if (!text || text.length < 5) return [];
-  if (text.split('. ').length > 2) {
-    const s = text.split('. ').filter(x => x.trim().length > 5).map(x => x.trim().replace(/\.$/, ''));
-    if (s.length > 0) return s;
-  }
+  
   let t = text.trim();
   t = t.replace(/\.\s*$/, '');
   const parts = [];
@@ -108,9 +108,12 @@ function splitIntoTopics(text) {
     const ch = t[i];
     if (ch === '(' || ch === '[') depth++;
     if (ch === ')' || ch === ']') depth--;
-    if (depth === 0 && (ch === ',' || ch === ';')) {
+    
+    const isDotSpace = (ch === '.' && i + 1 < t.length && t[i + 1] === ' ');
+    if (depth === 0 && (ch === ';' || isDotSpace)) {
       if (current.trim().length > 3) parts.push(current.trim());
       current = '';
+      if (isDotSpace) i++; // skip the space
     } else {
       current += ch;
     }
@@ -546,8 +549,9 @@ export default function BeuSyllabus() {
   const [syllabusData, setSyllabusData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [selectedSem, setSelectedSem] = useState('sem1');
-  const [selectedBranch, setSelectedBranch] = useState(branchId ? branchId.toLowerCase() : 'cse');
+  const [selectedSem, setSelectedSem] = useState('');
+  const [selectedBranch, setSelectedBranch] = useState(branchId ? branchId.toLowerCase() : '');
+  const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(null);
   const [progressTicker, setProgressTicker] = useState(0);
 
   useEffect(() => {
@@ -575,6 +579,17 @@ export default function BeuSyllabus() {
   const currentSyllabus = syllabusData.find(s => s.semester === selectedSem && s.branch === selectedBranch);
   const subjects = currentSyllabus ? parseSyllabusIntoSubjects(currentSyllabus.content) : [];
   const semBranchKey = `${selectedSem}_${selectedBranch}`;
+
+  const theorySubjects = [];
+  const labSubjects = [];
+  subjects.forEach((subj, index) => {
+    const isLab = /LAB/i.test(subj.title) || /P$/i.test(subj.courseCode);
+    if (isLab) {
+      labSubjects.push({ subject: subj, originalIndex: index });
+    } else {
+      theorySubjects.push({ subject: subj, originalIndex: index });
+    }
+  });
 
   // Overall progress calculation
   const allTopicKeys = [];
@@ -632,7 +647,7 @@ export default function BeuSyllabus() {
       imgEl.onload = () => generateContent(imgEl);
       imgEl.onerror = () => generateContent(null);
 
-      const generateContent = (logoImg) => {
+      const generateContent = async (logoImg) => {
         if (logoImg) doc.addImage(logoImg, 'PNG', margin, margin - 1, 11, 11);
         addPageDecoration(1);
         const checkPageBreak = (h) => {
@@ -690,7 +705,28 @@ export default function BeuSyllabus() {
           });
           cursorY += 6;
         });
-        doc.save(`ACB_${selectedBranch.toUpperCase()}_${selectedSem.toUpperCase()}_Syllabus.pdf`);
+        
+        const fileName = `ACB_${selectedBranch.toUpperCase()}_${selectedSem.toUpperCase()}_Syllabus.pdf`;
+        if (Capacitor.isNativePlatform()) {
+          try {
+            const pdfOutput = doc.output('datauristring');
+            const base64Data = pdfOutput.split(',')[1];
+            const savedFile = await Filesystem.writeFile({
+              path: fileName,
+              data: base64Data,
+              directory: Directory.Documents
+            });
+            await Share.share({
+              title: fileName,
+              url: savedFile.uri
+            });
+          } catch(e) {
+            console.error("Native save error:", e);
+            import('react-hot-toast').then(m => m.toast.error("Failed to save PDF on device."));
+          }
+        } else {
+          doc.save(fileName);
+        }
         setIsDownloading(false);
       };
     } catch (err) {
@@ -732,8 +768,9 @@ export default function BeuSyllabus() {
           <div className="flex-1">
             <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-2">Select Semester</label>
             <div className="relative">
-              <select value={selectedSem} onChange={e => setSelectedSem(e.target.value)}
+              <select value={selectedSem} onChange={e => { setSelectedSem(e.target.value); setSelectedSubjectIndex(null); }}
                 className="w-full appearance-none bg-slate-50 border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-slate-800 outline-none focus:border-indigo-500 transition-all cursor-pointer">
+                <option value="" disabled>Select Semester</option>
                 {semesters.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
               </select>
               <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
@@ -742,8 +779,9 @@ export default function BeuSyllabus() {
           <div className="flex-1">
             <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-2">Select Branch</label>
             <div className="relative">
-              <select value={selectedBranch} onChange={e => { setSelectedBranch(e.target.value); navigate(`/syllabus/${e.target.value}`); }}
+              <select value={selectedBranch} onChange={e => { setSelectedBranch(e.target.value); setSelectedSubjectIndex(null); navigate(`/syllabus/${e.target.value}`); }}
                 className="w-full appearance-none bg-slate-50 border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-slate-800 outline-none focus:border-indigo-500 transition-all cursor-pointer">
+                <option value="" disabled>Select Branch</option>
                 {branches.map(b => <option key={b.id} value={b.id}>{b.label}</option>)}
               </select>
               <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
@@ -802,17 +840,58 @@ export default function BeuSyllabus() {
               </div>
             ) : subjects.length > 0 ? (
               <div className="space-y-8">
-                {subjects.map((subject, si) => (
-                  <div key={si} className="bg-slate-50/50 p-4 md:p-6 rounded-[2.2rem] border border-slate-200/60 shadow-sm">
+                {selectedSubjectIndex === null ? (
+                  <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    {theorySubjects.length > 0 && (
+                      <div>
+                        <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 px-2">Theory Subjects</h3>
+                        <div className="flex flex-col gap-3">
+                          {theorySubjects.map((item) => (
+                            <button
+                              key={item.originalIndex}
+                              onClick={() => setSelectedSubjectIndex(item.originalIndex)}
+                              className="w-full text-left bg-[#2196F3] hover:bg-[#1E88E5] text-white p-4 rounded-xl font-bold text-[13px] sm:text-sm shadow-md transition-all active:scale-[0.98] border border-blue-400"
+                            >
+                              {item.subject.title}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    {labSubjects.length > 0 && (
+                      <div>
+                        <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 px-2 mt-8">Lab Subjects</h3>
+                        <div className="flex flex-col gap-3">
+                          {labSubjects.map((item) => (
+                            <button
+                              key={item.originalIndex}
+                              onClick={() => setSelectedSubjectIndex(item.originalIndex)}
+                              className="w-full text-left bg-[#FF8C00] hover:bg-[#F57C00] text-white p-4 rounded-xl font-bold text-[13px] sm:text-sm shadow-md transition-all active:scale-[0.98] border border-orange-400"
+                            >
+                              {item.subject.title}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="bg-slate-50/50 p-4 md:p-6 rounded-[2.2rem] border border-slate-200/60 shadow-sm animate-in fade-in slide-in-from-right-8 duration-300">
+                    <button 
+                      onClick={() => setSelectedSubjectIndex(null)}
+                      className="flex items-center gap-2 text-xs font-black text-slate-500 uppercase tracking-widest hover:text-indigo-600 transition-colors mb-6 px-2"
+                    >
+                      ← Back to Subjects
+                    </button>
                     {/* Subject Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4 px-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6 px-2">
                       <div>
                         <h3 className="text-base font-[900] text-indigo-600 uppercase tracking-tight">
-                          📘 {subject.title}
+                          📘 {subjects[selectedSubjectIndex].title}
                         </h3>
-                        {subject.courseCode && (
+                        {subjects[selectedSubjectIndex].courseCode && (
                           <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
-                            Course Code: {subject.courseCode} • Credits: {getSubjectCredit(subject.courseCode, subject.title)}
+                            Course Code: {subjects[selectedSubjectIndex].courseCode} • Credits: {getSubjectCredit(subjects[selectedSubjectIndex].courseCode, subjects[selectedSubjectIndex].title)}
                           </p>
                         )}
                       </div>
@@ -820,23 +899,33 @@ export default function BeuSyllabus() {
 
                     {/* Units list */}
                     <div className="space-y-2">
-                      {subject.units.map((unit, ui) => (
+                      {subjects[selectedSubjectIndex].units.map((unit, ui) => (
                         <UnitAccordion
                           key={ui}
                           unit={unit}
                           unitIndex={ui}
-                          subjectName={subject.title}
-                          semBranchKey={`${semBranchKey}_s${si}`}
+                          subjectName={subjects[selectedSubjectIndex].title}
+                          semBranchKey={`${semBranchKey}_s${selectedSubjectIndex}`}
                           onToggle={() => setProgressTicker(p => p + 1)}
                         />
                       ))}
                     </div>
                   </div>
-                ))}
+                )}
               </div>
             ) : currentSyllabus ? (
               <div className="prose prose-sm max-w-none prose-headings:font-black prose-h2:text-indigo-700 prose-h3:text-slate-800 prose-li:text-slate-600">
                 <ReactMarkdown>{cleanSyllabusText(currentSyllabus.content)}</ReactMarkdown>
+              </div>
+            ) : (!selectedSem || !selectedBranch) ? (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mb-6">
+                  <BookOpen size={32} className="text-indigo-400" />
+                </div>
+                <h3 className="text-lg font-black text-slate-800 uppercase tracking-tighter mb-2">Select to View Syllabus</h3>
+                <p className="text-[12px] font-bold text-slate-500 max-w-xs">
+                  Please select your branch and semester from the dropdowns above to view your detailed syllabus.
+                </p>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-20 text-center">
@@ -846,7 +935,7 @@ export default function BeuSyllabus() {
                 <h3 className="text-lg font-black text-slate-800 uppercase tracking-tighter mb-2">No Syllabus Found</h3>
                 <p className="text-[12px] font-bold text-slate-500 max-w-xs">
                   The syllabus for this specific semester and branch combination is not available yet.
-                  </p>
+                </p>
               </div>
             )}
           </div>

@@ -626,8 +626,9 @@ export default function DashboardLayout() {
                  
                  <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
                    <a 
-                     href="/ApnaCollegeBihar_v20.apk"
-                     download="ApnaCollegeBihar_v20.apk"
+                     href="https://apnacollegebihar.online/ApnaCollegeBihar_v20.apk"
+                     target="_blank"
+                     rel="noopener noreferrer"
                      className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
                    >
                      <span className="hidden md:inline">Download</span> APK
@@ -740,8 +741,9 @@ export default function DashboardLayout() {
 
                  <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
                    <a 
-                     href="/ApnaCollegeBihar_v20.apk"
-                     download="ApnaCollegeBihar_v20.apk"
+                     href="https://apnacollegebihar.online/ApnaCollegeBihar_v20.apk"
+                     target="_blank"
+                     rel="noopener noreferrer"
                      className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
                    >
                      <span className="hidden md:inline">Download</span> APK
@@ -857,9 +859,10 @@ export default function DashboardLayout() {
             </div>
             
             <div className="p-6 flex flex-col items-center">
-              <p className="text-xs text-slate-500 text-center font-medium mb-6 leading-relaxed">
-                Apna College Bihar is 100% free. If this platform helped you, consider treating the developer to a coffee! ☕
-              </p>
+              <div className="text-xs text-slate-500 text-center font-medium mb-6 leading-relaxed space-y-2">
+                <p>Apna College Bihar is a 100% free platform built by students, for students. We provide notes, PYQs, important questions, study materials, and exam resources to help thousands of students prepare better.</p>
+                <p>Maintaining our servers, website, and developing new features requires continuous support. If our platform has helped you in any way, please consider making a small contribution.</p>
+              </div>
               
               <div className="p-2 bg-slate-50 border-2 border-dashed border-indigo-200 rounded-3xl mb-4">
                 {/* Fallback placeholder QR if image is missing. User can replace the image at /scanner-qr.jpg */}
@@ -881,12 +884,12 @@ export default function DashboardLayout() {
               </div>
 
               <div className="bg-indigo-50 px-4 py-3 rounded-2xl w-full flex items-center justify-between group cursor-copy" onClick={() => {
-                navigator.clipboard.writeText("apnacollegebihar@upi");
+                navigator.clipboard.writeText("apnacollegebihar@slc");
                 toast.success("UPI ID Copied!");
               }}>
                 <div>
                   <p className="text-[9px] font-black uppercase text-indigo-500 mb-0.5">UPI ID (Tap to Copy)</p>
-                  <p className="text-sm font-bold text-slate-900">apnacollegebihar@upi</p>
+                  <p className="text-sm font-bold text-slate-900">apnacollegebihar@slc</p>
                 </div>
                 <div className="p-2 bg-indigo-100 text-indigo-600 rounded-xl group-hover:scale-110 transition-transform">
                   <Link2 size={16} />
