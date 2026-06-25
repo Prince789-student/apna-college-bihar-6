@@ -12,6 +12,7 @@ import DashboardLayout from './layouts/DashboardLayout';
 // Auth Components
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
+import SmartRedirect from './components/SmartRedirect';
 
 // Pages (Lazy Loaded)
 const Home = React.lazy(() => import('./pages/Home'));
@@ -385,8 +386,8 @@ function App() {
               </Route>
             </Route>
 
-            {/* Fallback */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* Smart Fallback – redirects old .html URLs to correct college pages */}
+            <Route path="*" element={<SmartRedirect />} />
           </Routes>
         </React.Suspense>
       </>
