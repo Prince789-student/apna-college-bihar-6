@@ -18,6 +18,7 @@ import GlobalSearch from '../components/GlobalSearch';
 import CountUp from '../components/CountUp';
 import Reveal from '../components/Reveal';
 import HomeEducationalGuide from '../components/HomeEducationalGuide';
+import { collegeData } from '../data/collegeData';
 
 export default function Home() {
   const { user, loading, logout } = useAuth();
@@ -28,6 +29,7 @@ export default function Home() {
   const [announcements, setAnnouncements] = useState([]);
   const [beuNotices, setBeuNotices] = useState([]);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const [showAllColleges, setShowAllColleges] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -443,6 +445,100 @@ export default function Home() {
                   </Link>
                 </div>
               ))}
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* ═══════════════════════════════════════════ */}
+      {/* ── COLLEGE SECTION ── */}
+      {/* ═══════════════════════════════════════════ */}
+      <section className="py-20 px-6 md:px-16 bg-slate-50 border-b border-slate-200">
+        <Reveal>
+          <div className="container mx-auto max-w-6xl">
+            <div className="text-center mb-16">
+              <span className="text-blue-600 font-black uppercase tracking-[0.4em] text-[10px]">BEU INSTITUTIONS</span>
+              <h2 className="text-3xl md:text-5xl font-[1000] tracking-tighter uppercase text-slate-900 mt-4">
+                Engineering Colleges
+              </h2>
+              <p className="text-slate-500 text-sm font-medium mt-3 max-w-2xl mx-auto">
+                Explore government engineering colleges in Bihar under BEU. Find cutoffs, placement records, and campus details.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {(() => {
+                const TOP_COLLEGES = [
+                  'mit-muzaffarpur',
+                  'bce-bhagalpur',
+                  'gce-gaya',
+                  'dce-darbhanga',
+                  'mce-motihari',
+                  'bce-bakhtiyarpur'
+                ];
+                const topColleges = TOP_COLLEGES.map(slug => [slug, collegeData[slug]]).filter(([_, col]) => !!col);
+                const otherColleges = Object.entries(collegeData).filter(([slug]) => !TOP_COLLEGES.includes(slug));
+                const displayedColleges = showAllColleges ? [...topColleges, ...otherColleges] : topColleges;
+
+                return displayedColleges.map(([slug, college]) => (
+                  <Link 
+                    to={`/college/${slug}`} 
+                    key={slug} 
+                    className="group bg-white rounded-3xl border border-slate-200 hover:border-blue-500/50 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
+                  >
+                    <div className="h-44 overflow-hidden relative">
+                      <img 
+                        src={college.gallery?.[0] || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'} 
+                        alt={college.shortName} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+                      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+                        <span className="px-2 py-1 bg-white/20 backdrop-blur-md text-white border border-white/20 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1">
+                          Estd. {college.established}
+                        </span>
+                        <span className="px-2 py-1 bg-emerald-500/20 backdrop-blur-md text-emerald-400 border border-emerald-500/30 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1">
+                          {college.type}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="p-6 flex-1 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-md text-[9px] font-black uppercase tracking-wider">
+                            {college.shortName}
+                          </span>
+                        </div>
+                        <h3 className="font-[900] text-slate-900 uppercase tracking-tight text-base group-hover:text-blue-600 transition-colors line-clamp-1">
+                          {college.name}
+                        </h3>
+                        <p className="text-slate-500 text-xs font-semibold mt-2 flex items-center gap-1">
+                          <MapPin size={12} className="text-rose-500" /> {college.location.split(',')[0]}
+                        </p>
+                      </div>
+                      <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-black uppercase tracking-widest text-blue-600">
+                        <span>View Details</span>
+                        <ArrowRight size={14} className="-translate-x-1 group-hover:translate-x-0 transition-transform" />
+                      </div>
+                    </div>
+                  </Link>
+                ));
+              })()}
+            </div>
+
+            <div className="mt-12 text-center">
+              <button 
+                onClick={() => setShowAllColleges(!showAllColleges)}
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white border border-slate-200 hover:border-blue-500/30 text-blue-600 hover:text-blue-700 font-black text-xs uppercase tracking-widest rounded-2xl transition-all shadow-sm active:scale-95 hover:shadow-md"
+              >
+                {showAllColleges ? 'Show Less Colleges' : 'View All 38+ Colleges'} 
+                <ChevronRight size={16} className={`transition-transform duration-300 ${showAllColleges ? '-rotate-90' : 'rotate-90'}`} />
+              </button>
             </div>
           </div>
         </Reveal>
