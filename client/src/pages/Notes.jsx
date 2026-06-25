@@ -486,7 +486,16 @@ function FileCard({ d, onAction, accentColor = 'indigo' }) {
           className="flex-1 flex items-center justify-center gap-1.5 py-2.5 md:py-3 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg md:rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all">
           <Eye size={11} /> View
         </button>
-        <button onClick={() => onAction(d.fileUrl, () => { window.open(d.fileUrl, '_system'); })}
+        <button onClick={() => onAction(d.fileUrl, () => { 
+          if (Capacitor.isNativePlatform() && Capacitor.Plugins.AndroidDownloader) {
+            import('react-hot-toast').then(m => m.toast.success("Downloading... Check notification bar"));
+            Capacitor.Plugins.AndroidDownloader.downloadFile({ url: d.fileUrl, filename: (d.title || 'Note') + '.pdf', title: d.title || 'Note' }).catch(err => {
+              import('react-hot-toast').then(m => m.toast.error("Download failed: " + err));
+            });
+          } else {
+            window.open(d.fileUrl, '_system'); 
+          }
+        })}
           className={`p-2.5 md:p-3 rounded-lg md:rounded-xl transition-all border ${c.dl}`}><Download size={12} /></button>
         <button onClick={() => onAction(d.fileUrl, () => window.open(`https://wa.me/?text=${encodeURIComponent(`Check out: ${d.title} - ${d.fileUrl}`)}`, '_blank'))}
           className="p-2.5 md:p-3 bg-emerald-50 hover:bg-emerald-600 text-emerald-600 hover:text-white rounded-lg md:rounded-xl transition-all border border-emerald-200">

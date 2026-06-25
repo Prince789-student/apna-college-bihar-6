@@ -12,6 +12,7 @@ public class MainActivity extends BridgeActivity {
         // Register all Capacitor plugins
         registerPlugin(AppBlockerPlugin.class);
         registerPlugin(DailyNotificationPlugin.class);
+        registerPlugin(AndroidDownloaderPlugin.class);
         super.onCreate(savedInstanceState);
 
         // Request POST_NOTIFICATIONS permission on Android 13+

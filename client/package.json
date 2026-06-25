@@ -19,6 +19,7 @@
     "@capacitor/preferences": "^8.0.1",
     "@capacitor/share": "^8.0.1",
     "@capacitor/toast": "^8.0.1",
+    "@capgo/capacitor-downloader": "^8.1.29",
     "@tailwindcss/typography": "^0.5.19",
     "axios": "^1.16.1",
     "cheerio": "^1.2.0",
