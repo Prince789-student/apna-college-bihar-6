@@ -99,20 +99,75 @@ app.get('/_debug', (req, res) => {
     res.json({ downloadsExist, apkExists, dirname: __dirname });
 });
 
-// 5.1 Sitemap Generator
-app.get('/sitemap.xml', (req, res) => {
-    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://apnacollegebihar.com/</loc><priority>1.0</priority></url>
-  <url><loc>https://apnacollegebihar.com/notes</loc><priority>0.9</priority></url>
-  <url><loc>https://apnacollegebihar.com/pyq</loc><priority>0.9</priority></url>
-  <url><loc>https://apnacollegebihar.com/syllabus</loc><priority>0.8</priority></url>
-  <url><loc>https://apnacollegebihar.com/cgpa</loc><priority>0.8</priority></url>
-  <url><loc>https://apnacollegebihar.com/ugeac-predictor</loc><priority>0.9</priority></url>
-  <url><loc>https://apnacollegebihar.com/colleges</loc><priority>0.8</priority></url>
-</urlset>`;
+// 5.1 Dynamic 10/10 Sitemap Generator
+const admin = require('./firebaseAdmin');
+let cachedSitemap = null;
+let sitemapCacheTime = 0;
+
+app.get('/sitemap.xml', async (req, res) => {
     res.header('Content-Type', 'application/xml');
-    res.send(sitemap);
+    
+    // Serve from cache if it is less than 12 hours old
+    if (cachedSitemap && (Date.now() - sitemapCacheTime < 12 * 60 * 60 * 1000)) {
+        return res.send(cachedSitemap);
+    }
+
+    try {
+        let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Core Pages -->
+  <url><loc>https://apnacollegebihar.online/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://apnacollegebihar.online/notes</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://apnacollegebihar.online/pyq</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
+  <url><loc>https://apnacollegebihar.online/syllabus</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apnacollegebihar.online/cgpa</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apnacollegebihar.online/ugeac-predictor</loc><changefreq>yearly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://apnacollegebihar.online/hackathons</loc><changefreq>daily</changefreq><priority>0.9</priority></url>`;
+
+        // Fetch dynamic routes from Firestore
+        if (admin && admin.firestore) {
+            const db = admin.firestore();
+            const docsSnap = await db.collection('documents').get();
+            
+            const branches = new Set();
+            const branchSemesters = new Set();
+            
+            docsSnap.forEach(doc => {
+                const data = doc.data();
+                if (data.branch) {
+                    const b = data.branch.toLowerCase();
+                    branches.add(b);
+                    if (data.semester) {
+                        branchSemesters.add(`${b}/${data.semester}`);
+                    }
+                }
+            });
+
+            // Add branch pages
+            branches.forEach(branch => {
+                sitemap += `\n  <url><loc>https://apnacollegebihar.online/notes/${branch}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>`;
+                sitemap += `\n  <url><loc>https://apnacollegebihar.online/pyq/${branch}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>`;
+                sitemap += `\n  <url><loc>https://apnacollegebihar.online/syllabus/${branch}</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>`;
+            });
+
+            // Add branch+semester pages
+            branchSemesters.forEach(bs => {
+                sitemap += `\n  <url><loc>https://apnacollegebihar.online/notes/${bs}</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>`;
+                sitemap += `\n  <url><loc>https://apnacollegebihar.online/pyq/${bs}</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>`;
+            });
+        }
+
+        sitemap += `\n</urlset>`;
+        
+        cachedSitemap = sitemap;
+        sitemapCacheTime = Date.now();
+        
+        res.send(sitemap);
+    } catch (err) {
+        console.error("Sitemap generation error:", err);
+        // Fallback to basic static sitemap
+        res.send(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://apnacollegebihar.online/</loc><priority>1.0</priority></url></urlset>`);
+    }
 });
 
 // 6. SPA Catch-all with Dynamic SEO
