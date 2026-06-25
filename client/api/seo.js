@@ -1,22 +1,26 @@
 import fs from 'fs';
 import path from 'path';
 
-export default async function handler(req, res) {
+export default function handler(req, res) {
+  const indexPath = path.join(process.cwd(), 'dist', 'index.html');
+  const fallbackPath = path.join(process.cwd(), 'public', 'index.html');
+  const rootPath = path.join(process.cwd(), 'index.html');
+  
   let html = '';
   try {
-    // Fetch the built index.html from the live CDN itself.
-    // This perfectly bypasses Vercel's Serverless Function filesystem limitations.
-    const protocol = req.headers['x-forwarded-proto'] || 'https';
-    const host = req.headers['x-forwarded-host'] || req.headers.host;
-    const url = `${protocol}://${host}/index.html`;
-    
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch index.html from CDN: ${response.statusText}`);
+    if (fs.existsSync(indexPath)) {
+      html = fs.readFileSync(indexPath, 'utf8');
+    } else if (fs.existsSync(fallbackPath)) {
+      html = fs.readFileSync(fallbackPath, 'utf8');
+    } else if (fs.existsSync(rootPath)) {
+      html = fs.readFileSync(rootPath, 'utf8');
+    } else {
+      throw new Error("No index.html found in any path");
     }
-    html = await response.text();
   } catch (err) {
-    return res.status(500).send(`Internal Server Error: Could not fetch frontend assets. <br/> Error: ${err.message}`);
+    return res.status(500).send(`Internal Server Error: index.html not found. <br/> 
+      cwd: ${process.cwd()} <br/> 
+      Tried: ${indexPath}, ${fallbackPath}, ${rootPath}`);
   }
 
   const urlPath = req.url.split('?')[0]; // remove query params
