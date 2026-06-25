@@ -253,8 +253,7 @@ function GlobalCounsellingPopup() {
 
 
 function App() {
-  const { user, loading: authLoading } = useAuth();
-  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const isNative = Capacitor.isNativePlatform();
 
@@ -277,41 +276,13 @@ function App() {
     }
   }, [isNative]);
 
-  useEffect(() => {
-    if (window.__PRERENDER_INJECTED) {
-      setLoading(false);
-      return;
-    }
-
-    // Safety timeout: Never stay loading more than 1.5 seconds
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1500);
-
-    if (!authLoading) {
-      setLoading(false);
-      clearTimeout(timer);
-    }
-
-    return () => clearTimeout(timer);
-  }, [authLoading]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center">
-        <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest animate-pulse">Initializing Hub...</p>
-      </div>
-    );
-  }
-
   try {
     return (
       <>
         <Toaster position="top-right" />
         <GlobalCounsellingPopup />
         <GlobalProfilePrompt />
-        <React.Suspense fallback={<LoadingScreen />}>
+        <React.Suspense fallback={null}>
           <Routes>
             {/* Public Routes */}
             <Route path="/hub" element={<AppHub />} />
