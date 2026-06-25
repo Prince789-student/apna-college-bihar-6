@@ -486,32 +486,36 @@ export default function Home() {
                     key={slug} 
                     className="group bg-white rounded-3xl border border-slate-200 hover:border-blue-500/50 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
                   >
-                    <div className="h-44 overflow-hidden relative">
-                      <img 
-                        src={college.gallery?.[0] || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'} 
-                        alt={college.shortName} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80';
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
-                      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-                        <span className="px-2 py-1 bg-white/20 backdrop-blur-md text-white border border-white/20 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1">
+                    <div className="h-28 bg-gradient-to-br from-slate-900 to-slate-800 relative">
+                      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10"></div>
+                      <div className="absolute top-4 right-4 flex items-center justify-between">
+                        <span className="px-2 py-1 bg-white/10 backdrop-blur-md text-white border border-white/10 rounded-lg text-[9px] font-black uppercase tracking-widest">
                           Estd. {college.established}
                         </span>
-                        <span className="px-2 py-1 bg-emerald-500/20 backdrop-blur-md text-emerald-400 border border-emerald-500/30 rounded-lg text-[9px] font-black uppercase tracking-widest flex items-center gap-1">
-                          {college.type}
-                        </span>
+                      </div>
+                      
+                      {/* Circular Floating Logo Container */}
+                      <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200 shadow-md p-1.5 absolute -bottom-8 left-6 flex items-center justify-center overflow-hidden">
+                        <img 
+                          src={college.logo} 
+                          alt={`${college.shortName} Logo`} 
+                          className="w-full h-full object-contain rounded-xl" 
+                          onError={(e) => { 
+                            e.target.onerror = null; 
+                            e.target.src = college.fallbackLogo; 
+                          }}
+                        />
                       </div>
                     </div>
                     
-                    <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div className="p-6 pt-12 flex-1 flex flex-col justify-between">
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-md text-[9px] font-black uppercase tracking-wider">
                             {college.shortName}
+                          </span>
+                          <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-md text-[9px] font-black uppercase tracking-wider">
+                            {college.type}
                           </span>
                         </div>
                         <h3 className="font-[900] text-slate-900 uppercase tracking-tight text-base group-hover:text-blue-600 transition-colors line-clamp-1">
