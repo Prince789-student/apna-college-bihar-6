@@ -661,7 +661,11 @@ export default function DashboardLayout() {
                             <div className="flex items-center justify-center gap-1 text-[8px] text-slate-500 mt-1.5 font-bold">
                               <Calendar size={10} className="text-blue-500" />
                               <span>Joined: <strong className="text-slate-900">{joinDate}</strong></span>
-                                {(user?.email === 'prince8694@gmail.com' || user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN') && (
+                            </div>
+                         </div>
+                         
+                         <div className="p-2 space-y-1">
+                            {(user?.email === 'prince8694@gmail.com' || user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN') && (
                               <Link 
                                 to="/dashboard/admin"
                                 className="flex items-center gap-3 w-full p-3 hover:bg-blue-50 text-blue-600 rounded-2xl transition-all group"

@@ -1,7 +1,27 @@
+# ==========================================
+# robots.txt – Apna College Bihar
+# https://www.apnacollegebihar.online
+# ==========================================
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
 User-agent: *
 Allow: /
+
+# Block private/admin areas only
+Disallow: /dashboard/admin
 Disallow: /backend/
 Disallow: /uploads/
-Disallow: /assets/*.pdf
 
+# Sitemap location
 Sitemap: https://www.apnacollegebihar.online/sitemap.xml

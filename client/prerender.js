@@ -45,15 +45,63 @@ const server = app.listen(PORT, async () => {
           if (pathname === '/') pathname = '/index';
           
           const page = await browser.newPage();
-          await page.goto(`http://localhost:${PORT}${urlObj.pathname}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
           
+          // Inject prerender flag to tell React to bypass Firebase and loading delays
+          await page.evaluateOnNewDocument(() => {
+            window.__PRERENDER_INJECTED = true;
+          });
+
+          // Use networkidle2 so we give Firebase/Firestore time to settle if needed
+          await page.goto(`http://localhost:${PORT}${urlObj.pathname}`, { waitUntil: 'networkidle2', timeout: 30000 });
+          
+          // STRICT SEO RENDER VERIFICATION
           await page.waitForFunction(() => {
             const root = document.querySelector('#root');
-            return root && root.children.length > 0 && !root.innerHTML.includes('INITIALIZING STUDY HUB');
-          }, { timeout: 15000 }).catch(() => console.log(`Timeout waiting for React on ${urlObj.pathname}`));
+            if (!root) return false;
+            
+            // 1. Check that React is done with ALL loading screens
+            const html = root.innerHTML;
+            if (
+              html.includes('INITIALIZING STUDY HUB') ||
+              html.includes('Initializing Hub...') ||
+              html.includes('Loading Interface...') ||
+              html.includes('Loading...') ||
+              html.includes('animate-spin') // Wait for spinners to disappear
+            ) {
+              return false; // Still loading
+            }
+            
+            // 2. Check that Helmet has successfully injected tags into <head>
+            const title = document.title;
+            const desc = document.querySelector('meta[name="description"]');
+            const canonical = document.querySelector('link[rel="canonical"]');
+            
+            // 3. Ensure content actually exists inside root
+            const hasContent = root.children.length > 0 && root.innerText.trim().length > 50;
+
+            // IF all conditions are met, we are SEO ready
+            return title.length > 5 && desc && canonical && hasContent;
+          }, { timeout: 20000 }).catch(() => console.log(`[TIMEOUT] React/Helmet failed to fully mount on ${urlObj.pathname}`));
           
+          // Verify one last time before saving to prevent writing blank HTML
+          const isValidSEO = await page.evaluate(() => {
+             const title = document.title;
+             const desc = document.querySelector('meta[name="description"]');
+             const canonical = document.querySelector('link[rel="canonical"]');
+             const root = document.querySelector('#root');
+             const hasContent = root && root.children.length > 0 && !root.innerHTML.includes('Initializing Hub...');
+             return !!(title && desc && canonical && hasContent);
+          });
+
+          if (!isValidSEO) {
+             console.error(`[SKIP] Missing SEO tags or content for ${pathname}. Skipping save to prevent indexing blank page.`);
+             await page.close();
+             return;
+          }
+
           let content = await page.content();
           
+          // Ensure HTML format
           if (!content.startsWith('<!DOCTYPE html>')) {
             content = '<!DOCTYPE html>\n' + content;
           }
@@ -72,7 +120,7 @@ const server = app.listen(PORT, async () => {
           }
           
           fs.writeFileSync(path.join(dirPath, fileName), content);
-          console.log(`Prerendered: ${pathname}`);
+          console.log(`[SUCCESS] Prerendered: ${pathname}`);
           
           await page.close();
         } catch (err) {

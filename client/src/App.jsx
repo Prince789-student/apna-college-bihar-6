@@ -277,6 +277,11 @@ function App() {
   }, [isNative]);
 
   useEffect(() => {
+    if (window.__PRERENDER_INJECTED) {
+      setLoading(false);
+      return;
+    }
+
     // Safety timeout: Never stay loading more than 1.5 seconds
     const timer = setTimeout(() => {
       setLoading(false);

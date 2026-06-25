@@ -232,6 +232,10 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
+    if (window.__PRERENDER_INJECTED) {
+      setLoading(false);
+      return;
+    }
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
       // Don't set loading to true if we already have a user and it's just a refresh
       if (!user) setLoading(true);
@@ -256,6 +260,10 @@ export function AuthProvider({ children }) {
   // Handle Redirect Results (for mobile/tablet web login)
   // This runs on EVERY page load — if user came back from Google login, this handles it
   useEffect(() => {
+    if (window.__PRERENDER_INJECTED) {
+      setLoading(false);
+      return;
+    }
     const handleRedirectResult = async () => {
       try {
         setLoading(true);

@@ -70,6 +70,10 @@ export default function Notes() {
   const [navHistory, setNavHistory] = useState([]); // for sub-folders
 
   useEffect(() => {
+    if (window.__PRERENDER_INJECTED) {
+      setLoading(false);
+      return;
+    }
     const q = collection(db, 'documents');
     const unsub = onSnapshot(q, (snap) => {
       setDocs(snap.docs.map(d => ({ id: d.id, ...d.data() })));

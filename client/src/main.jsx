@@ -23,8 +23,7 @@ if (!rootEl) {
   }
 
   try {
-    const root = ReactDOM.createRoot(rootEl);
-    root.render(
+    const appContent = (
       <React.StrictMode>
         <HelmetProvider>
           <AuthProvider>
@@ -37,6 +36,13 @@ if (!rootEl) {
         </HelmetProvider>
       </React.StrictMode>
     );
+
+    if (rootEl.hasChildNodes()) {
+      ReactDOM.hydrateRoot(rootEl, appContent);
+    } else {
+      const root = ReactDOM.createRoot(rootEl);
+      root.render(appContent);
+    }
   } catch (err) {
     console.error("[CRITICAL] React Render Error:", err);
   }

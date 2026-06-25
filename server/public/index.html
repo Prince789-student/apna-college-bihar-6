@@ -4,51 +4,39 @@
 <head>
    <meta charset="UTF-8" />
    <base href="/" />
-   <!-- Preconnect for speed -->
+   <!-- Preconnect + DNS Prefetch for all external services -->
    <link rel="preconnect" href="https://fonts.googleapis.com" />
    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
    <link rel="preconnect" href="https://www.googletagmanager.com" />
-   <!-- Cache headers managed server-side for better SEO crawling -->
+   <link rel="preconnect" href="https://firestore.googleapis.com" />
+   <link rel="preconnect" href="https://firebase.googleapis.com" />
+   <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+   <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+
+   <!-- Preload critical font for LCP improvement -->
+   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" />
+
+   <!-- Apple / PWA Icons -->
+   <link rel="apple-touch-icon" sizes="180x180" href="/logo-acb.png" />
+   <link rel="apple-touch-icon" sizes="152x152" href="/logo-acb.png" />
+
    <script>
       // ── Service Worker Registration ─────────────────────────────
       if ('serviceWorker' in navigator) {
-        // Skip SW registration inside Capacitor native app
         const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
         if (isNative) {
           document.documentElement.classList.add('native-app');
         } else {
           window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js')
-              .then(reg => {
-                console.log('[SW] Registered:', reg.scope);
-                // Listen for a new SW waiting and prompt user
-                reg.addEventListener('updatefound', () => {
-                  const newWorker = reg.installing;
-                  newWorker.addEventListener('statechange', () => {
-                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                      // New content is available — send skip-waiting
-                      newWorker.postMessage('SKIP_WAITING');
-                    }
-                  });
-                });
-              })
-              .catch(err => console.warn('[SW] Registration failed:', err));
-
-            // When SW controller changes (new SW activated), reload once
-            let refreshing = false;
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-              if (!refreshing) { refreshing = true; window.location.reload(); }
-            });
+            navigator.serviceWorker.register('/sw.js').catch(err => console.warn('[SW] Registration failed:', err));
           });
         }
       }
 
-      // Handle PWA Install Prompt
       window.addEventListener('beforeinstallprompt', (e) => {
-         console.log("[PWA] beforeinstallprompt event fired!");
          e.preventDefault();
          window.deferredPrompt = e;
-         // Notify components that the PWA is ready to be installed
          window.dispatchEvent(new Event('pwa-ready'));
       });
    </script>
@@ -57,185 +45,11 @@
    <meta name="theme-color" content="#0d121f" />
    <meta name="google-site-verification" content="RYqt3qpPlTqKuw2uXw9hLSZNDCLA3iGIzzv_JLOQEVs" />
    <meta name="google" content="notranslate" />
-    <title>Apna College Bihar</title>
-
-    <link rel="canonical" href="https://www.apnacollegebihar.online/" />
-    
-    <meta name="description" content="Bihar Engineering Counselling 2026 - UGEAC College Predictor, Cutoff Ranks, BCECE Seat Matrix, B.Tech Notes, PYQ Papers & CGPA Calculator. Official resource for Bihar Engineering students." />
-    
-    <meta name="keywords" content="UGEAC 2026, Bihar Engineering Counselling, BCECE counselling, Bihar college predictor, UGEAC cutoff rank, BCE Bhagalpur cutoff, MIT Muzaffarpur cutoff, Bihar B.Tech admission, BEU Notes, Bihar Engineering University, AKU Bihar, B.Tech Notes PDF, Engineering Study Material Bihar, SGPA Calculator BEU, Bihar engineering college list, UGEAC seat allotment, UGEAC choice filling, Bihar UGEAC rank predictor, Apna College Bihar, GCE Gaya cutoff, DCE Darbhanga cutoff, MCE Motihari cutoff, Bihar government engineering college, UGEAC 2025-2026 cutoff, Bihar engineering college rank wise" />
-    
-    <meta name="author" content="Apna College Bihar" />
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-    <meta name="language" content="Hindi, English" />
-    <meta name="geo.region" content="IN-BR" />
-    <meta name="geo.placename" content="Bihar, India" />
+   <meta name="author" content="Apna College Bihar" />
+   <meta name="language" content="Hindi, English" />
+   <meta name="geo.region" content="IN-BR" />
+   <meta name="geo.placename" content="Bihar, India" />
  
-    <!-- Open Graph / Social Media Meta -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.apnacollegebihar.online/" />
-    <meta property="og:title" content="Apna College Bihar | UGEAC & BEU Study Hub" />
-    <meta property="og:description" content="Bihar Engineering Counselling 2026 - UGEAC College Predictor, Cutoff Ranks, BCECE Seat Matrix, Free B.Tech Notes & PYQ Papers for Bihar Engineering Students." />
-    <meta property="og:site_name" content="Apna College Bihar" />
-    <meta property="og:locale" content="en_IN" />
-    <meta property="og:image" content="https://www.apnacollegebihar.online/acb_brand_final.png" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
- 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Apna College Bihar | UGEAC Predictor" />
-    <meta name="twitter:description" content="Bihar Engineering Counselling 2026 - Free UGEAC College Predictor, Cutoff Ranks & Study Material." />
-    <meta name="twitter:image" content="https://www.apnacollegebihar.online/acb_brand_final.png" />
- 
-    <!-- Schema.org Structured Data for Google Brand Verification & Knowledge Graph -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "EducationalOrganization",
-          "@id": "https://www.apnacollegebihar.online/#organization",
-          "name": "Apna College Bihar",
-          "alternateName": ["ACB", "ACB Hub", "Apna College Bihar Hub"],
-          "url": "https://www.apnacollegebihar.online/",
-          "logo": "https://www.apnacollegebihar.online/logo-acb.png",
-          "image": "https://www.apnacollegebihar.online/logo-acb.png",
-          "description": "Apna College Bihar is the official digital academic hub and state-of-the-art study companion built exclusively for engineering students across Bihar. Provides UGEAC 2026 College Predictor, Cutoff Ranks, B.Tech Notes, PYQ Papers, SGPA Calculator and Focus Zone.",
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "GEC Sheikhpura Campus",
-            "addressLocality": "Sheikhpura",
-            "addressRegion": "Bihar",
-            "postalCode": "811105",
-            "addressCountry": "IN"
-          },
-          "foundingLocation": {
-            "@type": "Place",
-            "name": "GEC Sheikhpura, Bihar, India"
-          },
-          "sameAs": [
-            "https://youtube.com/@apnacollegebihar",
-            "https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a",
-            "https://t.me/apnacollegebihar"
-          ],
-          "contactPoint": {
-            "@type": "ContactPoint",
-            "email": "prince86944@gmail.com",
-            "contactType": "customer support",
-            "availableLanguage": ["English", "Hindi"]
-          },
-          "offers": [
-            {
-              "@type": "Offer",
-              "name": "UGEAC 2026 College Predictor",
-              "description": "Predict your engineering college in Bihar based on UGEAC rank with 2025-2026 cutoff data",
-              "category": "Educational Tool",
-              "price": "0",
-              "priceCurrency": "INR"
-            },
-            {
-              "@type": "Offer",
-              "name": "Bihar Engineering B.Tech Notes & PYQs",
-              "description": "Free B.Tech semester notes, study material, and previous year question papers for BEU syllabus",
-              "category": "Educational Material",
-              "price": "0",
-              "priceCurrency": "INR"
-            }
-          ]
-        },
-        {
-          "@type": "WebSite",
-          "@id": "https://www.apnacollegebihar.online/#website",
-          "url": "https://www.apnacollegebihar.online/",
-          "name": "Apna College Bihar",
-          "alternateName": "ACB",
-          "description": "Official Study Hub for Bihar Engineering Students",
-          "publisher": {
-            "@id": "https://www.apnacollegebihar.online/#organization"
-          },
-          "potentialAction": {
-            "@type": "SearchAction",
-            "target": "https://www.apnacollegebihar.online/?search={search_term_string}",
-            "query-input": "required name=search_term_string"
-          },
-          "hasPart": [
-            {
-              "@type": "WebPage",
-              "name": "SGPA / CGPA Calculator & Results",
-              "description": "Accurate BEU grading system calculator & official examination portal for semester results tracking.",
-              "url": "https://www.apnacollegebihar.online/dashboard/cgpa?standalone=true"
-            },
-            {
-              "@type": "WebPage",
-              "name": "BEU Syllabus Hub",
-              "description": "Official BEU Patna new syllabus for all semesters and branches with vector PDF download.",
-              "url": "https://www.apnacollegebihar.online/dashboard/syllabus?standalone=true"
-            },
-            {
-              "@type": "WebPage",
-              "name": "UGEAC 2026 Predictor",
-              "description": "Bihar Engineering Counselling 2026 â€” Rank predictor based on 2025-2026 official cutoff data.",
-              "url": "https://www.apnacollegebihar.online/dashboard/ugeac-predictor?standalone=true"
-            },
-            {
-              "@type": "WebPage",
-              "name": "Notes & PYQs Hub",
-              "description": "Free B.Tech semester notes, study material, and previous year question papers for BEU syllabus.",
-              "url": "https://www.apnacollegebihar.online/dashboard/notes?standalone=true"
-            },
-            {
-              "@type": "WebPage",
-              "name": "Study Timer & Focus Zone",
-              "description": "Pomodoro technique and focus tracking for Bihar engineering students.",
-              "url": "https://www.apnacollegebihar.online/dashboard/study?standalone=true"
-            },
-            {
-              "@type": "WebPage",
-              "name": "Study Network & Groups",
-              "description": "Join active student groups to discuss PYQs and UGEAC counselling tips.",
-              "url": "https://www.apnacollegebihar.online/dashboard/groups?standalone=true"
-            }
-          ]
-        }
-      ]
-    }
-    </script>
-
-   <!-- FAQ Schema for Google Rich Results -->
-   <script type="application/ld+json">
-   {
-     "@context": "https://schema.org",
-     "@type": "FAQPage",
-     "mainEntity": [
-       {
-         "@type": "Question",
-         "name": "UGEAC 2026 mein kaun sa college milega mujhe?",
-         "acceptedAnswer": {
-           "@type": "Answer",
-           "text": "Apna College Bihar ke UGEAC College Predictor par apna rank daalein aur category select karein. Ye tool 2024-2025 ke actual cutoff data se aapko predict karega ki aapko kaun sa college aur branch milega."
-         }
-       },
-       {
-         "@type": "Question",
-         "name": "Bihar Engineering Counselling 2026 cutoff rank kya hai?",
-         "acceptedAnswer": {
-           "@type": "Answer",
-           "text": "UGEAC 2026 cutoff rank college aur branch ke anusaar alag hota hai. BCE Bhagalpur CSE ki closing rank approximately 800-1200 hai. Exact cutoff ke liye hamara College Predictor tool use karein."
-         }
-       },
-       {
-         "@type": "Question",
-         "name": "Bihar mein B.Tech ke liye best government engineering college kaunse hain?",
-         "acceptedAnswer": {
-           "@type": "Answer",
-           "text": "Bihar ke top government engineering colleges mein BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya, DCE Darbhanga, MCE Motihari aur LNJPIT Chapra shamil hain."
-         }
-       }
-     ]
-   }
-   </script>
-
    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BXF7KW1XQS"></script>
    <script>
       window.dataLayer = window.dataLayer || [];
@@ -248,231 +62,87 @@
    <link rel="icon" type="image/png" href="/logo-acb.png?v=99" />
    <link rel="shortcut icon" href="/logo-acb.png?v=99" />
    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-   <!-- Use Tailwind CSS via CDN for rapid styling -->
+   
    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
    <script>
       tailwind.config = {
          darkMode: 'class',
-         theme: {
-            extend: {
-               colors: {
-                  brand: '#3b82f6',
-                  darkbg: '#0f172a',
-                  cardbg: '#1e293b'
-               },
-               animation: {
-                  'float': 'float 6s ease-in-out infinite',
-                  'spin-slow': 'spin 8s linear infinite',
-               },
-               keyframes: {
-                  float: {
-                     '0%, 100%': { transform: 'translateY(0)' },
-                     '50%': { transform: 'translateY(-20px)' },
-                  }
-               }
-            }
-         }
+         theme: { extend: { colors: { brand: '#3b82f6', darkbg: '#0f172a', cardbg: '#1e293b' } } }
       }
    </script>
-     <!-- Google AdSense Script (Conditionally Loaded for Web Only) -->
-     <script>
-       document.addEventListener('DOMContentLoaded', () => {
-         const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
-         if (!isNative) {
-           const adScript = document.createElement('script');
-           adScript.async = true;
-           adScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4005389118070865";
-           adScript.crossOrigin = "anonymous";
-           document.head.appendChild(adScript);
-         }
-       });
-     </script>
 
-     <script>
-      // Prevent Google AdSense Auto Ads from shifting layout (e.g. injecting marginRight / width on html/body)
-      (function() {
-         const resetLayoutStyles = () => {
-            const html = document.documentElement;
-            const body = document.body;
-            if (html && (html.style.marginRight || html.style.paddingRight || html.style.width)) {
-               html.style.setProperty('margin-right', '0px', 'important');
-               html.style.setProperty('padding-right', '0px', 'important');
-               html.style.setProperty('width', '100%', 'important');
-            }
-            if (body && (body.style.marginRight || body.style.paddingRight || body.style.width)) {
-               body.style.setProperty('margin-right', '0px', 'important');
-               body.style.setProperty('padding-right', '0px', 'important');
-               body.style.setProperty('width', '100%', 'important');
-            }
-         };
-         
-         resetLayoutStyles();
-         
-         const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-               if (mutation.attributeName === 'style') {
-                  resetLayoutStyles();
-               }
-            });
-         });
-         
-         document.addEventListener('DOMContentLoaded', () => {
-            resetLayoutStyles();
-            observer.observe(document.documentElement, { attributes: true, attributeFilter: ['style'] });
-            observer.observe(document.body, { attributes: true, attributeFilter: ['style'] });
-         });
-      })();
-     </script>
+   <script>
+     document.addEventListener('DOMContentLoaded', () => {
+       const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+       if (!isNative) {
+         const adScript = document.createElement('script');
+         adScript.async = true;
+         adScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4005389118070865";
+         adScript.crossOrigin = "anonymous";
+         document.head.appendChild(adScript);
+       }
+     });
+   </script>
 
-     <style>
-         html,
-         body,
-         #root {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-            margin: 0 !important;
-            padding: 0 !important;
-            height: 100% !important;
-            min-height: 100% !important;
-            width: 100% !important;
-            max-width: 100vw !important;
-            overflow-x: hidden !important;
-            overflow-y: auto !important;
-         }
-
-         /* Disable selection only for Native app */
-         html.native-app, html.native-app body, html.native-app #root {
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            -webkit-touch-callout: none;
-         }
-
-         /* Allow text selection in input fields and textareas */
-         input, textarea {
-            -webkit-user-select: auto;
-            -khtml-user-select: auto;
-            -moz-user-select: auto;
-            -ms-user-select: auto;
-            user-select: auto;
-         }
-  
-        /* Prevent AdSense from injecting huge spacers when unfilled, but show active ads */
-        .adsbygoogle[data-ad-status="unfilled"] {
-           display: none !important;
-           height: 0 !important;
-           width: 0 !important;
-        }
-     </style>
-  <script type="module" crossorigin src="/assets/index.js"></script>
+   <style>
+       html, body, #root {
+          font-family: 'Inter', sans-serif;
+          scroll-behavior: smooth;
+          margin: 0 !important;
+          padding: 0 !important;
+          height: 100% !important;
+          min-height: 100% !important;
+          width: 100% !important;
+          max-width: 100vw !important;
+          overflow-x: hidden !important;
+          overflow-y: auto !important;
+       }
+       html.native-app, html.native-app body, html.native-app #root {
+          -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+       }
+       input, textarea { -webkit-user-select: auto; user-select: auto; }
+       .adsbygoogle[data-ad-status="unfilled"] { display: none !important; height: 0 !important; width: 0 !important; }
+   </style>
+  <script type="module" crossorigin src="/assets/index.5fcdf4f4.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/dependencies.0226b90a.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor.67cb717d.js">
+  <link rel="modulepreload" crossorigin href="/assets/firebase.1fc0d059.js">
 </head>
 
 <body class="bg-slate-50 font-sans antialiased text-slate-900">
    <div id="root">
-      <div
-         style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0f172a; color: white; font-family: 'Outfit', sans-serif;">
-         <div
-            style="width: 60px; height: 60px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;">
-         </div>
-         <style>
-            @keyframes spin {
-               to {
-                  transform: rotate(360deg);
-               }
-            }
-         </style>
-         <p
-            style="margin-top: 24px; font-size: 14px; font-weight: 900; letter-spacing: 0.3em; text-transform: uppercase; color: #94a3b8;">
-            Apna College Bihar</p>
-         <p style="margin-top: 8px; font-size: 10px; font-weight: 700; color: #475569; letter-spacing: 0.1em;">
-            INITIALIZING STUDY HUB...</p>
+      <div style="height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0f172a; color: white; font-family: 'Inter', sans-serif;">
+         <div style="width: 60px; height: 60px; border: 4px solid rgba(255,255,255,0.1); border-top-color: #3b82f6; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+         <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+         <p style="margin-top: 24px; font-size: 14px; font-weight: 900; letter-spacing: 0.3em; text-transform: uppercase; color: #94a3b8;">Apna College Bihar</p>
       </div>
    </div>
-   <!-- SEO: Hidden footer for Googlebot crawlability â€” all internal links -->
-   <footer style="display:none;" aria-hidden="true">
-      <nav>
-         <ul>
-            <!-- App Pages -->
-            <li><a href="/dashboard/ugeac-predictor?standalone=true">UGEAC 2026 College Predictor & Cutoff Ranks</a></li>
-            <li><a href="/dashboard/notes?standalone=true">BEU Notes & PYQ Question Papers Hub</a></li>
-            <li><a href="/dashboard/cgpa?standalone=true">SGPA / CGPA Calculator & BEU Results Portal</a></li>
-            <li><a href="/dashboard/syllabus?standalone=true">BEU Syllabus Hub (All Branches & Semesters)</a></li>
-            <li><a href="/dashboard/study?standalone=true">Study Timer & Focus Zone</a></li>
-            <li><a href="/dashboard/groups?standalone=true">Study Network & Student Groups</a></li>
-            <!-- UGEAC Master Guides -->
-            <li><a href="/ugeac-2026-bihar-engineering-admission.html">UGEAC 2026 Bihar Engineering Admission Master Guide</a></li>
-            <li><a href="/bihar-engineering-counselling-2026.html">Bihar Engineering Counselling 2026 Complete Guide</a></li>
-            <li><a href="/ugeac-2026-college-predictor-bihar.html">UGEAC 2026 College Predictor Bihar</a></li>
-            <li><a href="/ugeac-2026-choice-filling.html">UGEAC 2026 Choice Filling Strategy</a></li>
-            <li><a href="/ugeac-2026-seat-allotment-result.html">UGEAC 2026 Seat Allotment Result â€” Round 1 2 3</a></li>
-            <li><a href="/bihar-engineering-college-list-2026.html">Bihar Engineering College List 2025</a></li>
-            <!-- College Cutoff Pages -->
-            <li><a href="/ugeac-2026-cutoff-rank-all-colleges.html">UGEAC 2026 Cutoff Rank All Colleges Bihar</a></li>
-            <li><a href="/bce-bhagalpur-cutoff-rank-2026.html">BCE Bhagalpur Cutoff Rank 2025</a></li>
-            <li><a href="/mit-muzaffarpur-cutoff-rank-2026.html">MIT Muzaffarpur Cutoff Rank 2025</a></li>
-            <li><a href="/gce-gaya-cutoff-rank-2026.html">GCE Gaya Cutoff Rank 2025</a></li>
-            <li><a href="/dce-darbhanga-cutoff-rank-2026.html">DCE Darbhanga Cutoff Rank 2025</a></li>
-            <li><a href="/mce-motihari-cutoff-rank-2026.html">MCE Motihari Cutoff Rank 2025</a></li>
-            <li><a href="/lnjpit-chapra-cutoff-rank-2026.html">LNJPIT Chapra Cutoff Rank 2025</a></li>
-            <!-- BEU Study Resources -->
-            <li><a href="/beu-syllabus-download-bihar-engineering.html">BEU Syllabus Download Bihar Engineering</a></li>
-            <li><a href="/beu-patna-syllabus-2026.html">BEU Patna Syllabus 2025 All Semesters</a></li>
-            <li><a href="/beu-notes-download-bihar-engineering.html">BEU Notes Free Download Bihar Engineering</a></li>
-            <li><a href="/beu-sgpa-cgpa-calculator-bihar.html">BEU SGPA CGPA Calculator Bihar</a></li>
-         </ul>
-      </nav>
-   </footer>
-   <!-- SEO: Noscript fallback for search engine crawlers -->
+   
    <noscript>
-      <h1>Apna College Bihar â€” Bihar Engineering Students Ka Official Study Hub</h1>
-      <p>UGEAC 2026 College Predictor, Bihar Engineering Counselling Guide, BEU Notes Download, SGPA CGPA Calculator, Previous Year Question Papers â€” sab free!</p>
-      <ul>
-         <li><a href="/ugeac-2026-bihar-engineering-admission.html">UGEAC 2026 Bihar Engineering Admission Guide</a></li>
-         <li><a href="/ugeac-2026-cutoff-rank-all-colleges.html">All Bihar Colleges Cutoff Rank 2025</a></li>
-         <li><a href="/beu-notes-download-bihar-engineering.html">BEU Notes Free Download</a></li>
-         <li><a href="/beu-sgpa-cgpa-calculator-bihar.html">BEU SGPA CGPA Calculator</a></li>
-         <li><a href="/beu-patna-syllabus-2026.html">BEU Syllabus 2025</a></li>
-         <li><a href="/bihar-engineering-counselling-2026.html">Bihar Engineering Counselling Guide</a></li>
-      </ul>
+      <h1>Apna College Bihar</h1>
+      <p>Please enable JavaScript to use the UGEAC Predictor, BEU Notes, and CGPA Calculator.</p>
    </noscript>
+   
    <script>
       (function() {
-         // Intercept internal anchor clicks and route via History API
          document.addEventListener('click', function (e) {
             try {
                const a = e.target.closest && e.target.closest('a');
                if (!a) return;
                const href = a.getAttribute && a.getAttribute('href');
                if (!href) return;
-               // Only intercept same-origin internal links that start with '/'
-               if (
-                  href.startsWith('/') &&
-                  !a.hasAttribute('download') &&
-                  a.target !== '_blank' &&
-                  !href.startsWith('//')
-               ) {
-                  // Allow hash-only anchors to behave normally
+               if (href.startsWith('/') && !a.hasAttribute('download') && a.target !== '_blank' && !href.startsWith('//')) {
                   if (href.startsWith('#')) return;
                   e.preventDefault();
-                  try {
-                     if (window.location.pathname + window.location.search !== href) {
-                        history.pushState({}, '', href);
-                     }
-                     window.dispatchEvent(new PopStateEvent('popstate'));
-                  } catch (err) {
-                     // Fallback to full navigation on error
-                     window.location.href = href;
+                  if (window.location.pathname + window.location.search !== href) {
+                     history.pushState({}, '', href);
                   }
+                  window.dispatchEvent(new PopStateEvent('popstate'));
                }
-            } catch (err) {
-               /* ignore */
-            }
+            } catch (err) {}
          }, false);
       })();
    </script>
    
 </body>
-
 </html>

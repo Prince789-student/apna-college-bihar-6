@@ -60,3 +60,15 @@ upload_res.json
 # EXCEPTIONS: Allow committing APK/AAB files in the client public folder for Netlify hosting
 !client/public/**/*.apk
 !client/public/**/*.aab
+
+# -----------------------------------------------------
+# Ignored for not being part of the website source code
+# -----------------------------------------------------
+# Document generation scripts & files
+*.py
+*.pyc
+*.pptx
+*.docx
+*.txt
+*.png
+*.bat

@@ -68,6 +68,10 @@ export default function PYQ() {
   const [navHistory, setNavHistory] = useState([]);
 
   useEffect(() => {
+    if (window.__PRERENDER_INJECTED) {
+      setLoading(false);
+      return;
+    }
     const unsub = onSnapshot(collection(db, 'documents'), (snap) => {
       setDocs(snap.docs.map(d => ({ id: d.id, ...d.data() })));
       setLoading(false);
