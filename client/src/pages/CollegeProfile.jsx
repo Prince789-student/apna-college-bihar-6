@@ -261,7 +261,7 @@ export default function CollegeProfile() {
       <div className="container mx-auto max-w-6xl px-6 md:px-16 py-8">
         
         {/* Navigation Tabs */}
-        <div className="flex overflow-x-auto hide-scrollbar gap-2 mb-8 bg-white p-2 rounded-2xl border border-slate-200 shadow-sm sticky top-20 z-40">
+        <div className="flex overflow-x-auto hide-scrollbar gap-2 mb-8 bg-white p-2 rounded-2xl border border-slate-200 shadow-sm sticky top-0 z-40">
           {tabs.map(tab => (
             <button
               key={tab.id}
@@ -607,20 +607,21 @@ export default function CollegeProfile() {
                 <MapPin size={14} className="text-rose-500"/> Location Map
               </h3>
               <div className="rounded-2xl overflow-hidden bg-slate-100 aspect-video mb-3 flex items-center justify-center">
-                {college.mapEmbedUrl ? (
-                  <iframe 
-                    src={college.mapEmbedUrl} 
-                    width="100%" 
-                    height="100%" 
-                    style={{ border: 0 }} 
-                    allowFullScreen="" 
-                    loading="lazy" 
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="College Map"
-                  ></iframe>
-                ) : (
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-2"><MapPin size={14}/> Map Not Available</p>
-                )}
+                {(() => {
+                  const mapUrl = college.mapEmbedUrl || `https://maps.google.com/maps?q=${encodeURIComponent(college.name + ", " + college.location)}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
+                  return (
+                    <iframe 
+                      src={mapUrl} 
+                      width="100%" 
+                      height="100%" 
+                      style={{ border: 0 }} 
+                      allowFullScreen="" 
+                      loading="lazy" 
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="College Map"
+                    ></iframe>
+                  );
+                })()}
               </div>
               <p className="text-xs text-slate-500 font-medium">{college.location}</p>
             </div>
