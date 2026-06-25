@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   Building2, MapPin, Calendar, CheckCircle, ExternalLink, Download, 
@@ -6,13 +6,68 @@ import {
   Target, TrendingUp, Award, Clock, FileText, ArrowRight, Shield, Globe, Layers
 } from 'lucide-react';
 import { collegeData } from '../data/collegeData';
+import { colleges } from '../UgeacData';
 import SEO from '../components/SEO';
 import Footer from '../components/Footer';
+
+// Normalized map from UgeacPredictor to translate raw cutoff names
+const normalizedMap = {
+  "B.C.E. BHAGALPUR": "BCE Bhagalpur",
+  "M.I.T. MUZAFFARPUR": "MIT Muzaffarpur",
+  "B.C.E. BAKHTIYARPUR": "BCE Bakhtiyarpur",
+  "G.C.E. GAYA": "GCE Gaya",
+  "D.C.E. DARBHANGA": "DCE Darbhanga",
+  "NALANDA COLLEGE. OF ENGG,CHANDI": "NCE Chandi",
+  "NCE CHANDI": "NCE Chandi",
+  "M..C.E. MOTIHARI": "MCE Motihari",
+  "MCE MOTIHARI": "MCE Motihari",
+  "P.C.E. PURNEA": "Purnea College of Engineering",
+  "PURNEA COLLEGE OF ENGINEERING": "Purnea College of Engineering",
+  "S.C.E. SAHARSA": "Saharsa College of Engineering",
+  "SAHARSA COLLEGE OF ENGINEERING": "Saharsa College of Engineering",
+  "S.C.E. SUPAUL": "Supaul College of Engineering",
+  "SUPAUL COLLEGE OF ENGINEERING": "Supaul College of Engineering",
+  "S.C.E. SASARAM": "SCE Sasaram",
+  "B.P.M.C.E. MADHEPURA": "B.P.M.C.E. Madhepura",
+  "S.I.T. SITAMARHI": "SIT Sitamarhi",
+  "R.R.S.D.C.E. BEGUSARAI": "RRSDCE Begusarai",
+  "LNJPIT CHAPRA": "LNJPIT Chapra",
+  "KCE KATIHAR": "K.C.E. Katihar",
+  "G.E.C. BANKA": "Government Engineering College, Banka",
+  "G.E.C. VAISHALI": "Government Engineering College, Vaishali",
+  "G.E.C. JAMUI": "Government Engineering College, Jamui",
+  "G.E.C. NAWADA": "Government Engineering College, Nawada",
+  "G.E.C. KISHANGANJ": "Government Engineering College, Kishanganj",
+  "G.E.C. ARARIA": "Shri Phanishwar Renu Engineering College, Araria",
+  "G.E.C. MUNGER": "Government Engineering College, Munger",
+  "G.E.C. SHEOHAR": "Government Engineering College, Sheohar",
+  "G.E.C. BETTIAH": "Government Engineering College, West Champaran",
+  "G.E.C. WEST CHAMPARAN": "Government Engineering College, West Champaran",
+  "G.E.C. AURANGABAD": "Government Engineering College, Aurangabad",
+  "G.E.C. KAIMUR": "Government Engineering College, Kaimur",
+  "G.E.C. GOPALGANJ": "Government Engineering College, Gopalganj",
+  "G.E.C. MADHUBANI": "Government Engineering College, Madhubani",
+  "G.E.C. SIWAN": "Government Engineering College, Siwan",
+  "G.E.C. JEHANABAD": "Government Engineering College, Jehanabad",
+  "G.E.C. ARWAL": "Government Engineering College, Arwal",
+  "G.E.C. KHAGARIA": "Government Engineering College, Khagaria",
+  "G.E.C. BUXAR": "Government Engineering College, Buxar",
+  "G.E.C. BHOJPUR": "Government Engineering College, Bhojpur",
+  "G.E.C. SHEIKHPURA": "Government Engineering College, Sheikhpura",
+  "G.E.C. LAKHISARAI": "Government Engineering College, Lakhisarai",
+  "G.E.C. SAMASTIPUR": "Government Engineering College, Samastipur"
+};
 
 export default function CollegeProfile() {
   const { collegeSlug } = useParams();
   const [college, setCollege] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
+
+  const [cutoffData, setCutoffData] = useState([]);
+  const [loadingCutoffs, setLoadingCutoffs] = useState(false);
+  const [selectedYear, setSelectedYear] = useState('2025');
+  const [selectedCategory, setSelectedCategory] = useState('UR');
+  const [selectedSeatType, setSelectedSeatType] = useState('General');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -20,6 +75,53 @@ export default function CollegeProfile() {
       setCollege(collegeData[collegeSlug]);
     }
   }, [collegeSlug]);
+
+  useEffect(() => {
+    if (!college) return;
+    setLoadingCutoffs(true);
+
+    // Find the formal college entry in the UgeacData list
+    const matchedCol = colleges.find(co => 
+      co.short.toLowerCase() === college.shortName.toLowerCase() ||
+      co.name.toLowerCase() === college.name.toLowerCase()
+    );
+
+    fetch(`/data/cutoffs.json?v=${Date.now()}`)
+      .then(res => res.json())
+      .then(json => {
+        const processCutoffs = (raw, yr) => {
+          return raw.map(c => {
+            const key = c.collegeShort?.toUpperCase().trim();
+            const formalName = normalizedMap[key] || c.collegeShort;
+            const col = colleges.find(co => co.name === formalName || co.short === c.collegeShort);
+            return { ...c, collegeId: col ? col.id : null, collegeName: col ? col.name : formalName, year: yr };
+          }).filter(c => matchedCol && c.collegeId === matchedCol.id);
+        };
+
+        const raw2024 = json.cutoffs2024 || [];
+        const raw2025 = json.cutoffs2025 || [];
+
+        setCutoffData([
+          ...processCutoffs(raw2024, '2024'),
+          ...processCutoffs(raw2025, '2025')
+        ]);
+        setLoadingCutoffs(false);
+      })
+      .catch(err => {
+        console.error("Error fetching cutoffs:", err);
+        setLoadingCutoffs(false);
+      });
+  }, [college]);
+
+  const filteredCutoffs = useMemo(() => {
+    return cutoffData.filter(c => {
+      const matchYear = c.year === selectedYear;
+      const matchCategory = c.category === selectedCategory;
+      const currentSeatType = c.seatType || c.seat_type || 'General';
+      const matchSeatType = currentSeatType.toLowerCase() === selectedSeatType.toLowerCase();
+      return matchYear && matchCategory && matchSeatType;
+    }).sort((a, b) => a.closing - b.closing);
+  }, [cutoffData, selectedYear, selectedCategory, selectedSeatType]);
 
   if (!college) {
     return (
@@ -263,40 +365,118 @@ export default function CollegeProfile() {
 
             {/* 5. CUTOFFS */}
             {activeTab === 'cutoffs' && (
-              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-8">
-                <section>
-                  <h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter mb-4">Branch-wise Cutoff (JEE Main Percentile)</h2>
-                  <p className="text-slate-500 text-sm font-medium mb-6">Approximate closing cutoff in JEE Main Percentile format based on previous UGEAC counselling rounds. Source: GuidEnova / BCECEB.</p>
-                  
-                  <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden">
-                    <div className="overflow-x-auto">
-                      <table className="w-full text-left text-sm whitespace-nowrap">
-                        <thead className="bg-slate-50 border-b border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500">
-                          <tr>
-                            <th className="p-4">Branch</th>
-                            <th className="p-4">General</th>
-                            <th className="p-4">OBC</th>
-                            <th className="p-4">SC</th>
-                            <th className="p-4">ST</th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-100 font-medium">
-                          {college.cutoffs.map((row, i) => (
-                            <tr key={i} className="hover:bg-slate-50">
-                              <td className="p-4 text-slate-900 font-bold">{row.branch}</td>
-                              <td className="p-4 text-slate-600">{row.general}</td>
-                              <td className="p-4 text-slate-600">{row.obc}</td>
-                              <td className="p-4 text-slate-600">{row.sc}</td>
-                              <td className="p-4 text-slate-600">{row.st}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+              <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
+                <section className="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl">
+                  <h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter mb-2">Branch-Wise Cutoff (UGEAC Closing Rank)</h2>
+                  <p className="text-slate-500 text-sm font-medium mb-6">
+                    Official UGEAC opening & closing merit ranks based on previous years' BCECEB counselling.
+                  </p>
+
+                  {/* Filters Container */}
+                  <div className="space-y-4 mb-6 pb-6 border-b border-slate-100">
+                    {/* Year Selector */}
+                    <div>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-2">Select Year</span>
+                      <div className="flex gap-2">
+                        {['2025', '2024'].map(yr => (
+                          <button
+                            key={yr}
+                            onClick={() => setSelectedYear(yr)}
+                            className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
+                              selectedYear === yr 
+                                ? 'bg-blue-600 text-white shadow-md' 
+                                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+                            }`}
+                          >
+                            {yr}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Category Selector */}
+                    <div>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-2">Select Category</span>
+                      <div className="flex flex-wrap gap-2">
+                        {['UR', 'BC', 'EBC', 'SC', 'ST', 'EWS', 'RCG'].map(cat => (
+                          <button
+                            key={cat}
+                            onClick={() => setSelectedCategory(cat)}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
+                              selectedCategory === cat 
+                                ? 'bg-indigo-600 text-white shadow-md' 
+                                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+                            }`}
+                          >
+                            {cat}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Seat Type / Gender Selector */}
+                    <div>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-2">Select Quota Type</span>
+                      <div className="flex gap-2">
+                        {['General', 'Female'].map(st => (
+                          <button
+                            key={st}
+                            onClick={() => setSelectedSeatType(st)}
+                            className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
+                              selectedSeatType === st 
+                                ? 'bg-pink-600 text-white shadow-md' 
+                                : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
+                            }`}
+                          >
+                            {st}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
+
+                  {loadingCutoffs ? (
+                    <div className="flex flex-col items-center justify-center py-16">
+                      <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mb-4"></div>
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest animate-pulse">Fetching Real Cutoffs...</p>
+                    </div>
+                  ) : filteredCutoffs.length === 0 ? (
+                    <div className="text-center py-12 bg-slate-50 rounded-2xl border border-slate-200">
+                      <p className="text-sm font-semibold text-slate-500">No cutoff records found for {selectedCategory} ({selectedSeatType}) in UGEAC {selectedYear}.</p>
+                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Try switching the year or category filters.</p>
+                    </div>
+                  ) : (
+                    <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-sm whitespace-nowrap">
+                          <thead className="bg-slate-50 border-b border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500">
+                            <tr>
+                              <th className="p-4">Branch</th>
+                              <th className="p-4">Counseling Round</th>
+                              <th className="p-4">Closing Merit Rank</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
+                            {filteredCutoffs.map((row, i) => (
+                              <tr key={i} className="hover:bg-slate-50/80 transition-colors">
+                                <td className="p-4 text-slate-900 font-extrabold uppercase tracking-tight">{row.branch}</td>
+                                <td className="p-4 text-slate-500">Round {row.round}</td>
+                                <td className="p-4">
+                                  <span className="px-3 py-1 bg-indigo-50 text-indigo-700 font-mono font-black rounded-lg text-sm">
+                                    {row.closing}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
                 </section>
               </div>
             )}
+
 
             {/* 6. PLACEMENT */}
             {activeTab === 'placement' && (
