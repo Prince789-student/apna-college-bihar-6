@@ -137,7 +137,7 @@ public class UsageStatsBlockerService extends Service {
             public void run() {
                 checkForegroundApp();
             }
-        }, 0, 200); // Check 5 times per second
+        }, 0, 50); // Check 20 times per second to prevent spam tapping
     }
 
     private void loadSettings() {
@@ -208,7 +208,6 @@ public class UsageStatsBlockerService extends Service {
                 foregroundApp.equals("com.android.server.telecom") ||
                 foregroundApp.equals("com.google.android.dialer") ||
                 foregroundApp.equals("com.android.incallui") ||
-                foregroundApp.contains("inputmethod") ||
                 foregroundApp.equals("com.google.android.gms");
 
         // CRITICAL: Prevent Uninstallation!
@@ -238,11 +237,18 @@ public class UsageStatsBlockerService extends Service {
 
     private void blockApp() {
         long now = System.currentTimeMillis();
-        // Prevent spamming intents
-        if (now - lastBlockTime < 300) {
+        // Prevent spamming intents, reduced to 50ms
+        if (now - lastBlockTime < 50) {
             return;
         }
         lastBlockTime = now;
+
+        // Try to close notification panels and split screens (Works on Android 11 and below)
+        try {
+            sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+        } catch (Exception e) {
+            // Android 12+ restricts this, so ignore the security exception
+        }
 
         Intent launchIntent = getPackageManager().getLaunchIntentForPackage(myPackageName);
         if (launchIntent != null) {

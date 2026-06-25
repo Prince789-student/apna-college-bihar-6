@@ -3,47 +3,78 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper functions
     function isAuthenticated() {
       return request.auth != null;
     }
     
-    function isOwner(userId) {
-      return isAuthenticated() && request.auth.uid == userId;
+    // Check if user is an Admin
+    function isAdmin() {
+      return isAuthenticated() && (
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'SUPER_ADMIN' ||
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'ADMIN'
+      );
     }
 
-    // Profiles Collection: Users can only read and write their own profile
+    // Users Collection
     match /users/{userId} {
-      allow read, write: if isOwner(userId);
+      allow read: if isAuthenticated(); // Needed for admin panel to see all users
+      allow write: if (isAuthenticated() && request.auth.uid == userId) || isAdmin();
     }
     
-    // Notes and PYQs: Anyone authenticated can read, but no one can write (only Admin can via backend)
-    match /notes/{document=**} {
-      allow read: if isAuthenticated();
-      allow write: if false; // Block all client-side writes
+    // Main Documents (Notes & PYQs)
+    match /documents/{docId} {
+      allow read: if true; 
+      allow write: if isAdmin();
     }
     
-    match /pyqs/{document=**} {
-      allow read: if isAuthenticated();
-      allow write: if false;
+    // Announcements
+    match /announcements/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
     }
     
-    match /colleges/{document=**} {
-      allow read: if isAuthenticated();
-      allow write: if false;
+    // Ads
+    match /ads/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Study Resources
+    match /studyResources/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
     }
 
-    match /beu_notifications/{document=**} {
+    // Groups
+    match /groups/{docId} {
       allow read: if isAuthenticated();
-      allow write: if false;
+      allow write: if isAdmin();
+    }
+    
+    // Study Dashboard specific collections
+    match /Subjects/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+    match /Tasks/{docId} {
+      allow read, write: if isAuthenticated();
+    }
+    match /StudySessions/{docId} {
+      allow read, write: if isAuthenticated();
     }
 
-    match /hackathons/{document=**} {
-      allow read: if isAuthenticated();
-      allow write: if false;
+    // BEU Notifications
+    match /beu_notifications/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
     }
 
-    // Default rule: Deny everything else
+    // Hackathons
+    match /hackathons/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Default deny for anything else
     match /{document=**} {
       allow read, write: if false;
     }
