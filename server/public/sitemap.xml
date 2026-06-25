@@ -16,22 +16,22 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.apnacollegebihar.online/dashboard/ugeac-predictor</loc>
+    <loc>https://www.apnacollegebihar.online/ugeac-predictor</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.apnacollegebihar.online/dashboard/notes</loc>
+    <loc>https://www.apnacollegebihar.online/notes</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.apnacollegebihar.online/dashboard/pyq</loc>
+    <loc>https://www.apnacollegebihar.online/pyq</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.apnacollegebihar.online/dashboard/syllabus</loc>
+    <loc>https://www.apnacollegebihar.online/syllabus</loc>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>

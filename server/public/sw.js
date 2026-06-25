@@ -59,6 +59,9 @@ self.addEventListener('fetch', event => {
   if (request.method !== 'GET') return;
   if (url.origin !== self.location.origin) return;
 
+  // 1.5 Bypass Service Worker completely on localhost (Vite dev server)
+  if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') return;
+
   // 2. Skip AdSense / Analytics / GTM
   if (url.hostname.includes('google') || url.hostname.includes('gstatic')) return;
 
