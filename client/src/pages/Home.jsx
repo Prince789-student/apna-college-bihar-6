@@ -10,7 +10,7 @@ import {
   RefreshCw, Heart, Building2, Award, Mail,
   Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight
 } from 'lucide-react';
-import { collection, onSnapshot, query, orderBy, limit, where } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, limit, where, getCountFromServer } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
@@ -140,9 +140,13 @@ export default function Home() {
 
   // ── Data Fetching ──
   useEffect(() => {
-    const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
-      setStats(s => ({ ...s, users: snap.size }));
+    // BEU Notices still need onSnapshot to be live and it's limited to 3
+    const qNotices = query(collection(db, 'beu_notifications'), orderBy('noticedate', 'desc'), limit(3));
+    const unsubNotices = onSnapshot(qNotices, (snap) => {
+      setBeuNotices(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     });
+
+    // Unique docs counting logic using onSnapshot as per user requirement
     const qDocs = query(collection(db, 'documents'), where('type', '==', 'file'));
     const unsubDocs = onSnapshot(qDocs, (snap) => {
       const uniqueNotes = new Set();
@@ -156,15 +160,25 @@ export default function Home() {
       });
       setStats(s => ({ ...s, notes: uniqueNotes.size, pyqs: uniquePYQs.size }));
     });
-    const unsubGroups = onSnapshot(collection(db, 'groups'), (snap) => {
-      setStats(s => ({ ...s, groups: snap.size }));
-    });
-    const qNotices = query(collection(db, 'beu_notifications'), orderBy('noticedate', 'desc'), limit(3));
-    const unsubNotices = onSnapshot(qNotices, (snap) => {
-      setBeuNotices(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    });
 
-    return () => { unsubUsers(); unsubDocs(); unsubGroups(); unsubNotices(); };
+    const fetchCounts = async () => {
+      try {
+        const usersSnap = await getCountFromServer(collection(db, 'users'));
+        const groupsSnap = await getCountFromServer(collection(db, 'groups'));
+        
+        setStats(s => ({
+          ...s,
+          users: usersSnap.data().count || 0,
+          groups: groupsSnap.data().count || 0
+        }));
+      } catch (error) {
+        console.error("Error fetching homepage stats:", error);
+      }
+    };
+
+    fetchCounts();
+
+    return () => { unsubNotices(); unsubDocs(); };
   }, []);
 
 
