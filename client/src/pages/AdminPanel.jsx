@@ -21,6 +21,7 @@ export default function AdminPanel() {
   const [tab, setTab] = useState('overview');
   const [users, setUsers] = useState([]);
   const [userSearch, setUserSearch] = useState('');
+  const [userSortOrder, setUserSortOrder] = useState('newest');
   const [groups, setGroups] = useState([]);
   const [docs, setDocs] = useState([]);
   const [anns, setAnns] = useState([]);
@@ -507,14 +508,24 @@ if (!isAdmin) return (
         <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] border border-slate-200/80 overflow-hidden shadow-2xl animate-in fade-in duration-500">
            <div className="p-4 md:p-8 border-b border-slate-200/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest">Scholar Directory</h2>
-              <div className="relative group w-full md:w-72">
-                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500" size={16} />
-                 <input 
-                   value={userSearch}
-                   onChange={(e) => setUserSearch(e.target.value)}
-                   placeholder="Search UID/Name/District/College..." 
-                   className="w-full bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-2.5 pl-12 text-slate-900 text-[12px] font-bold outline-none" 
-                 />
+              <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
+                <div className="relative group w-full md:w-72">
+                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500" size={16} />
+                   <input 
+                     value={userSearch}
+                     onChange={(e) => setUserSearch(e.target.value)}
+                     placeholder="Search UID/Name/District/College..." 
+                     className="w-full bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-2.5 pl-12 text-slate-900 text-[12px] font-bold outline-none" 
+                   />
+                </div>
+                <select 
+                   value={userSortOrder} 
+                   onChange={e => setUserSortOrder(e.target.value)}
+                   className="w-full md:w-auto bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-2.5 text-slate-900 text-[12px] font-bold outline-none cursor-pointer appearance-none text-center"
+                >
+                   <option value="newest">Newest Joined</option>
+                   <option value="oldest">Oldest Joined</option>
+                </select>
               </div>
            </div>
            <div className="overflow-x-auto">
@@ -548,7 +559,11 @@ if (!isAdmin) return (
                      u.deviceId?.toLowerCase().includes(query) ||
                      u.device_id?.toLowerCase().includes(query)
                    );
-                 }).map(u => (
+                 }).sort((a, b) => {
+                    const dateA = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : new Date(a.createdAt || 0).getTime());
+                    const dateB = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : new Date(b.createdAt || 0).getTime());
+                    return userSortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+                  }).map(u => (
                    <tr key={u.id} className="hover:bg-slate-100/20 transition-all group">
                      {/* Identity & UID */}
                      <td className="py-6 px-8">
