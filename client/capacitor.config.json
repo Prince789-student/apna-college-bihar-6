@@ -10,6 +10,10 @@
     },
     "AdMob": {
       "initializeForTesting": true
+    },
+    "SplashScreen": {
+      "launchShowDuration": 0,
+      "backgroundColor": "#0f172a"
     }
   }
 }

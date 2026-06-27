@@ -8,11 +8,17 @@ function createWindow() {
     height: 800,
     title: "Apna College Bihar",
     icon: path.join(__dirname, 'client/public/logo-acb.png'),
+    show: false,
+    backgroundColor: '#0f172a',
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
     },
     autoHideMenuBar: true,
+  });
+
+  win.once('ready-to-show', () => {
+    win.show();
   });
 
   // Load the app
