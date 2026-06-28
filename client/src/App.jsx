@@ -478,6 +478,8 @@ function App() {
             {/* Protected Dashboard Routes */}
             <Route element={<ProtectedRoute />}>
               <Route element={<DashboardLayout />}>
+                
+                <Route path="/extras" element={<Extras />} />
 
                 {/* Admin Routes */}
                 <Route element={<AdminRoute />}>

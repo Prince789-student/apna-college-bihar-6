@@ -573,24 +573,23 @@ export default function ScientificCalc() {
       <p className="text-center text-[9px] text-slate-700 mt-4 font-bold">
         {mode === 'MATRIX' ? 'Advanced Matrix Engine · Det & Inv Supported' : 'Keyboard supported · SHIFT/M+ for advanced features'}
       </p>
+    {/* ── Educational SEO Content ── */}
+    <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12">
+      <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Scientific Calculator for B.Tech Students</h2>
+      <p>
+        A scientific calculator is an indispensable tool for engineering students at Bihar Engineering University (BEU). Whether you are solving complex differentiation, integration, statistical problems, or matrix algebra, this <strong>Online Scientific Calculator</strong> mimics the exact functionalities of standard Casio ClassWiz calculators permitted in BEU semester exams.
+      </p>
+
+      <h3 className="text-xl font-bold mt-8 mb-4">Supported Calculator Modes</h3>
+      <ul>
+        <li><strong>CALC Mode:</strong> Standard scientific calculations including trigonometric functions (sin, cos, tan), logarithmic functions, and exponents.</li>
+        <li><strong>EQN Mode:</strong> Quickly solve quadratic and cubic polynomial equations. This is extremely useful for finding roots in Control Systems or Network Theory.</li>
+        <li><strong>STATS Mode:</strong> Calculate mean, variance, and standard deviation instantly for your Mathematics and Data Science courses.</li>
+        <li><strong>MATRIX Mode:</strong> Perform matrix addition, subtraction, multiplication, and find determinants or inverses for up to 5x5 matrices.</li>
+      </ul>
     </div>
+  </div>
 
-      {/* ── Educational SEO Content ── */}
-      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12">
-        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Scientific Calculator for B.Tech Students</h2>
-        <p>
-          A scientific calculator is an indispensable tool for engineering students at Bihar Engineering University (BEU). Whether you are solving complex differentiation, integration, statistical problems, or matrix algebra, this <strong>Online Scientific Calculator</strong> mimics the exact functionalities of standard Casio ClassWiz calculators permitted in BEU semester exams.
-        </p>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">Supported Calculator Modes</h3>
-        <ul>
-          <li><strong>CALC Mode:</strong> Standard scientific calculations including trigonometric functions (sin, cos, tan), logarithmic functions, and exponents.</li>
-          <li><strong>EQN Mode:</strong> Quickly solve quadratic and cubic polynomial equations. This is extremely useful for finding roots in Control Systems or Network Theory.</li>
-          <li><strong>STATS Mode:</strong> Calculate mean, variance, and standard deviation instantly for your Mathematics and Data Science courses.</li>
-          <li><strong>MATRIX Mode:</strong> Perform matrix addition, subtraction, multiplication, and find determinants or inverses for up to 5x5 matrices.</li>
-        </ul>
-      </div>
-
-    </div>
   );
 }

@@ -27,17 +27,27 @@ export default function PersonalManager() {
 
   // Fetch Data
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     const fQuery = query(collection(db, 'user_folders'), where('userId', '==', user.uid));
     const nQuery = query(collection(db, 'user_notes'), where('userId', '==', user.uid));
 
     const unsubF = onSnapshot(fQuery, (snap) => {
       setFolders(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    }, (error) => {
+      console.error("Error fetching folders:", error);
+      toast.error("Failed to load folders");
     });
 
     const unsubN = onSnapshot(nQuery, (snap) => {
       setNotes(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      setLoading(false);
+    }, (error) => {
+      console.error("Error fetching notes:", error);
+      toast.error("Failed to load notes");
       setLoading(false);
     });
 
