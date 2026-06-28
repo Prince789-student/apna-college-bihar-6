@@ -66,7 +66,7 @@ export default function PersonalManager() {
       setNewFolderName('');
       setIsFolderModalOpen(false);
       toast.success('Folder created successfully!');
-    } catch (err) { toast.error('Failed to create folder'); }
+    } catch (err) { toast.error(`Failed to create folder: ${err.message}`); }
   };
 
   const createNote = async () => {
@@ -87,7 +87,7 @@ export default function PersonalManager() {
         createdAt: serverTimestamp()
       });
       setSelectedNote({ id: docRef.id, title, content: '', folderId: currentFolder.id });
-    } catch (err) { toast.error('Failed to create note'); }
+    } catch (err) { toast.error(`Failed to create note: ${err.message}`); }
   };
 
   const saveNote = async () => {
@@ -98,7 +98,7 @@ export default function PersonalManager() {
         updatedAt: serverTimestamp()
       });
       toast.success('Saved to ACB Vault');
-    } catch (err) { toast.error('Failed to save'); }
+    } catch (err) { toast.error(`Failed to save: ${err.message}`); }
   };
 
   const deleteItem = async (id, type) => {
@@ -106,14 +106,12 @@ export default function PersonalManager() {
     try {
       await deleteDoc(doc(db, type === 'folder' ? 'user_folders' : 'user_notes', id));
       if (type === 'folder') {
-          // deleting folder should ideally delete its notes or set them to root, 
-          // but for simplicity we just clear view
           if (currentFolder?.id === id) setCurrentFolder(null);
       } else {
           if (selectedNote?.id === id) setSelectedNote(null);
       }
       toast.success('Deleted successfully');
-    } catch (err) { toast.error('Delete failed'); }
+    } catch (err) { toast.error(`Delete failed: ${err.message}`); }
   };
 
   const filteredFolders = folders.filter(f => f.name.toLowerCase().includes(search.toLowerCase()));

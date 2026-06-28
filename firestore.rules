@@ -74,6 +74,16 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Personal Manager (Folders & Notes)
+    match /user_folders/{docId} {
+      allow read, delete, update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+    }
+    match /user_notes/{docId} {
+      allow read, delete, update: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+    }
+
     // Default deny for anything else
     match /{document=**} {
       allow read, write: if false;
