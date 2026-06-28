@@ -188,6 +188,24 @@ export default function StudyTracking() {
         </div>
       </div>
 
+      {/* ── Educational SEO Content ── */}
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Tracking Your B.Tech Syllabus Progress</h2>
+        <p>
+          The Bihar Engineering University (BEU) syllabus for any branch is vast and highly technical. Many students struggle to complete the syllabus before their mid-semester and end-semester exams. Our <strong>Study Progress Tracker</strong> is a powerful visual tool designed to help you stay ahead of your academic schedule.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">Why Track Your Study Progress?</h3>
+        <p>
+          Visualizing your progress provides immense psychological motivation. By tracking the exact number of chapters or modules you've completed against the total syllabus, you can calculate precisely how many days you need to prepare for the final exams. 
+        </p>
+        <ul>
+          <li><strong>Identify Weak Subjects:</strong> The tracker instantly highlights which subjects you are neglecting.</li>
+          <li><strong>Stay Motivated:</strong> The progress ring gives a clear sense of accomplishment.</li>
+          <li><strong>Exam Readiness:</strong> Enter the exam hall with confidence knowing exactly what percentage of the syllabus you have mastered.</li>
+        </ul>
+      </div>
+
     </div>
   );
 }

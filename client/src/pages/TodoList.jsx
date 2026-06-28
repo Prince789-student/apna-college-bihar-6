@@ -144,6 +144,30 @@ export default function TodoList() {
           ))
         )}
       </div>
+
+      {/* ── Educational SEO Content ── */}
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Engineering Student To-Do List & Task Manager</h2>
+        <p>
+          Managing assignments, lab reports, mid-semester exams, and technical projects simultaneously can be chaotic for any B.Tech student at Bihar Engineering University (BEU). Our dedicated <strong>Student To-Do List</strong> is designed to help you organize your academic life efficiently and ensure you never miss a deadline.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">How to Prioritize Tasks</h3>
+        <p>
+          We recommend using the Eisenhower Matrix technique for task prioritization:
+        </p>
+        <ul>
+          <li><strong>Urgent & Important:</strong> Lab reports due tomorrow, upcoming class tests. Do these first.</li>
+          <li><strong>Important, Not Urgent:</strong> Studying for end-semester exams, working on a major software project. Schedule time for these.</li>
+          <li><strong>Urgent, Not Important:</strong> Administrative tasks, certain emails. Delegate or finish quickly.</li>
+        </ul>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">The Benefit of Micro-Tasking</h3>
+        <p>
+          Instead of writing "Study Engineering Mathematics", break it down into micro-tasks like "Solve 5 problems on Laplace Transforms". Micro-tasking makes your goals achievable, triggers a dopamine release when you check off the task, and significantly reduces academic anxiety.
+        </p>
+      </div>
+
     </div>
   );
 }

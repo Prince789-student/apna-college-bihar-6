@@ -143,6 +143,20 @@ export default function MatrixCalc() {
             <span className="text-slate-700 text-[10px] font-bold tracking-widest uppercase">Premium Education Bihar</span>
         </div>
       </div>
+
+      {/* ── Educational SEO Content ── */}
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Engineering Matrix Calculator: Why It Matters</h2>
+        <p>
+          Matrices are the foundation of many engineering concepts, from solving systems of linear equations in electrical circuits to 3D transformations in computer graphics. Our <strong>Matrix Calculator</strong> is designed to help BEU engineering students quickly verify their manual calculations.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">How to Use the Calculator</h3>
+        <p>
+          Simply input your values into Matrix A and Matrix B. Use the buttons on the interactive interface to perform addition, subtraction, or multiplication. This tool is specifically modeled after standard Casio scientific calculators used by engineering students in Bihar.
+        </p>
+      </div>
+
     </div>
   );
 }

@@ -58,6 +58,8 @@ const SitemapDirectory = React.lazy(() => import('./pages/SitemapDirectory'));
 const CollegeDirectory = React.lazy(() => import('./pages/CollegeDirectory'));
 const CompareColleges = React.lazy(() => import('./pages/CompareColleges'));
 const PercentilePredictor = React.lazy(() => import('./pages/PercentilePredictor'));
+const Blog = React.lazy(() => import('./pages/Blog'));
+const BlogPost = React.lazy(() => import('./pages/BlogPost'));
 
 function LoadingScreen() {
   return (
@@ -428,6 +430,8 @@ function App() {
             {isNative && <Route path="/" element={<AppHub />} />}
             <Route element={<DashboardLayout />}>
               {!isNative && <Route path="/" element={<Home />} />}
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/search/:keyword" element={<SearchSEO />} />
               <Route path="/notes" element={<Notes />} />

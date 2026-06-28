@@ -74,6 +74,32 @@ export default function Terms() {
               Official university decisions (BEU/BCECEB) will always supersede platform estimates.
             </p>
           </div>
+
+          <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-4">
+            <div className="flex items-center gap-3 text-purple-600">
+              <FileText size={24} />
+              <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">4. License</h2>
+            </div>
+            <p className="text-xs font-medium text-slate-700 leading-relaxed">
+              Unless otherwise stated, Apna College Bihar and/or its licensors own the intellectual property rights for all material on Apna College Bihar. All intellectual property rights are reserved. You may access this from Apna College Bihar for your own personal use subjected to restrictions set in these terms and conditions.
+            </p>
+            <ul className="space-y-2 text-xs text-slate-600 pl-4 list-disc font-medium">
+              <li>Republish material from Apna College Bihar</li>
+              <li>Sell, rent or sub-license material from Apna College Bihar</li>
+              <li>Reproduce, duplicate or copy material from Apna College Bihar</li>
+              <li>Redistribute content from Apna College Bihar</li>
+            </ul>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-4">
+            <div className="flex items-center gap-3 text-red-600">
+              <AlertTriangle size={24} />
+              <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">5. Content Liability</h2>
+            </div>
+            <p className="text-xs font-medium text-slate-700 leading-relaxed">
+              We shall not be hold responsible for any content that appears on your Website. You agree to protect and defend us against all claims that is rising on your Website. No link(s) should appear on any Website that may be interpreted as libelous, obscene or criminal, or which infringes, otherwise violates, or advocates the infringement or other violation of, any third party rights.
+            </p>
+          </div>
         </div>
 
         {/* Footer info */}

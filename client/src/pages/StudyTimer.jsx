@@ -211,6 +211,25 @@ export default function StudyTimer() {
         </div>
 
       </div>
+
+      {/* ── Educational SEO Content ── */}
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Master Your Engineering Studies with the Pomodoro Timer</h2>
+        <p>
+          B.Tech programs at Bihar Engineering University (BEU) require immense focus, especially during mid-semester and end-semester examinations. Our <strong>Study Timer</strong> uses the scientifically proven Pomodoro Technique to help engineering students maximize their productivity and avoid burnout.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">What is the Pomodoro Technique?</h3>
+        <p>
+          The Pomodoro Technique breaks down your study sessions into intervals, traditionally 25 minutes in length, separated by short breaks (5 minutes). This method trains your brain to focus intensively for short periods and helps you stay fresh over a long study day. You can customize the focus and break durations in the settings tab above!
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">Why Engineering Students Need It</h3>
+        <p>
+          Whether you are coding a new project, practicing numericals for Engineering Mechanics, or memorizing formulas for Thermodynamics, taking planned breaks enhances memory retention. Use this timer to track your daily progress and hit your weekly study goals!
+        </p>
+      </div>
+
     </div>
   );
 }

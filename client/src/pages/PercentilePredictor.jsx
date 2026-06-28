@@ -166,6 +166,25 @@ export default function PercentilePredictor() {
           </div>
         )}
       </div>
+
+      {/* ── Educational SEO Content ── */}
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 relative z-20">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">JEE Main Percentile to College Predictor (Bihar)</h2>
+        <p>
+          Getting a good JEE Main Percentile is just the first step. For students participating in the UGEAC counseling process, predicting which Bihar Engineering University (BEU) college you might get can be a stressful process. Our <strong>JEE Main Percentile Predictor</strong> takes the guesswork out of the equation.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">How Does the Percentile Predictor Work?</h3>
+        <p>
+          This tool uses historical cut-off data from BCECEB for all participating government engineering colleges (GECs) in Bihar. By entering your expected or actual JEE Main percentile, the algorithm matches it against past closing ranks across various categories (UR, BC, EBC, SC, ST, EWS). 
+        </p>
+        
+        <h3 className="text-xl font-bold mt-8 mb-4">Why is Percentile Normalization Important?</h3>
+        <p>
+          Since JEE Main is conducted in multiple shifts, the NTA uses a normalization process to calculate your percentile score. This ensures that no student is disadvantaged due to a tougher exam shift. When applying for UGEAC, your JEE Main rank (derived from your percentile) is the sole criterion for admission into top colleges like BCE Patna, MIT Muzaffarpur, and DCE Darbhanga.
+        </p>
+      </div>
+
     </div>
   );
 }

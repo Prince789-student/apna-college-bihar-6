@@ -77,6 +77,7 @@ export default function DashboardLayout() {
     {
       title: 'Study Tools',
       items: [
+        { name: 'Blog & Articles', path: '/blog', icon: <FileText size={16} /> },
         { name: 'Study Timer', path: '/study', icon: <Timer size={16} /> },
         { name: 'Scientific Calc', path: '/calculator', icon: <Calculator size={16} /> },
         { name: 'Study Resources', path: '/study-resources', icon: <Link2 size={16} /> },
