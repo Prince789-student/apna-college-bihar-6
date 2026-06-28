@@ -35,12 +35,40 @@ export default function BlogPost() {
     }
   };
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://www.apnacollegebihar.online/blog/${post.slug}`
+    },
+    "headline": post.title,
+    "description": post.excerpt,
+    "image": "https://www.apnacollegebihar.online/acb_brand_final.png",  
+    "author": {
+      "@type": "Organization",
+      "name": post.author,
+      "url": "https://www.apnacollegebihar.online/about"
+    },  
+    "publisher": {
+      "@type": "Organization",
+      "name": "Apna College Bihar",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.apnacollegebihar.online/logo-acb.png"
+      }
+    },
+    "datePublished": post.date,
+    "dateModified": post.date
+  };
+
   return (
     <div className="min-h-screen bg-white font-['Inter'] pb-20">
       <SEO 
         title={`${post.title} | Apna College Bihar Blog`} 
         description={post.excerpt} 
         url={`https://www.apnacollegebihar.online/blog/${post.slug}`}
+        schema={articleSchema}
       />
       
       {/* Article Header */}
@@ -77,7 +105,25 @@ export default function BlogPost() {
           <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
         
-        <div className="mt-12 pt-8 border-t border-slate-200 flex items-center justify-between">
+        {/* Author Bio (E-E-A-T Signal) */}
+        <div className="mt-12 pt-8 border-t border-slate-200">
+          <div className="flex items-start gap-4">
+            <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 border-2 border-blue-200 overflow-hidden">
+              <User size={32} className="text-blue-500" />
+            </div>
+            <div>
+              <h3 className="text-lg font-[900] text-slate-900 mb-1">{post.author}</h3>
+              <p className="text-slate-600 text-sm leading-relaxed mb-2">
+                The Apna College Bihar Editorial Team consists of BEU alumni, educators, and placement experts dedicated to helping engineering students across Bihar excel in their academics and technical careers.
+              </p>
+              <div className="text-[10px] font-black uppercase tracking-widest text-blue-600">
+                Editorial & Content Integrity Team
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 pt-8 border-t border-slate-200 flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Share this article</span>
             <button onClick={handleShare} className="flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700 transition-colors">

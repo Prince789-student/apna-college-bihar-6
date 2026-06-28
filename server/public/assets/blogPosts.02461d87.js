@@ -1,12 +1,4 @@
-export const blogPosts = [
-  {
-    id: 1,
-    title: "Top 10 Government Engineering Colleges in Bihar under UGEAC",
-    slug: "top-10-government-engineering-colleges-in-bihar-ugeac",
-    date: "2026-05-15",
-    author: "Apna College Bihar Team",
-    excerpt: "Discover the best government engineering colleges in Bihar for B.Tech admission through the UGEAC counselling process. Read our detailed guide covering placements, cutoffs, and campus life.",
-    content: `
+const e=[{id:1,title:"Top 10 Government Engineering Colleges in Bihar under UGEAC",slug:"top-10-government-engineering-colleges-in-bihar-ugeac",date:"2026-05-15",author:"Apna College Bihar Team",excerpt:"Discover the best government engineering colleges in Bihar for B.Tech admission through the UGEAC counselling process. Read our detailed guide covering placements, cutoffs, and campus life.",content:`
 ## Overview of UGEAC and Engineering in Bihar
 
 Bihar has seen a tremendous rise in the quality of technical education over the past few years. With the establishment of the Bihar Engineering University (BEU) and the BCECEB’s streamlined UGEAC counselling process, getting admission into government engineering colleges has become more transparent. 
@@ -59,16 +51,7 @@ When filling your UGEAC choices, consider the following:
 - **Location & Connectivity:** Consider distance from your hometown and transport availability.
 
 Stay tuned to Apna College Bihar for the latest cutoff trends and UGEAC counselling updates.
-    `
-  },
-  {
-    id: 2,
-    title: "How to Prepare for BEU (Bihar Engineering University) Semester Exams",
-    slug: "how-to-prepare-for-beu-semester-exams",
-    date: "2026-06-02",
-    author: "Apna College Bihar Team",
-    excerpt: "A complete strategy to ace your BEU semester exams. Learn how to utilize PYQs, organized notes, and time management to score a 9+ CGPA.",
-    content: `
+    `},{id:2,title:"How to Prepare for BEU (Bihar Engineering University) Semester Exams",slug:"how-to-prepare-for-beu-semester-exams",date:"2026-06-02",author:"Apna College Bihar Team",excerpt:"A complete strategy to ace your BEU semester exams. Learn how to utilize PYQs, organized notes, and time management to score a 9+ CGPA.",content:`
 ## Acing Your BEU Semester Exams
 
 Scoring a high CGPA in Bihar Engineering University (BEU) exams requires more than just reading textbooks. It demands a strategic approach to the syllabus, understanding the exam pattern, and utilizing the right resources. 
@@ -98,16 +81,7 @@ Structure your answers with diagrams and bullet points to get maximum marks.
 Do not wait for the exam routine to be announced. Study for at least 1-2 hours daily. Use the **Study Timer** tool on Apna College Bihar to track your focus sessions and stay away from distractions.
 
 By combining the right resources (Notes + PYQs) with a consistent study schedule, scoring a high CGPA in BEU is absolutely achievable!
-    `
-  },
-  {
-    id: 3,
-    title: "Complete Guide to UGEAC Counselling Process",
-    slug: "complete-guide-to-ugeac-counselling-process",
-    date: "2026-06-10",
-    author: "Apna College Bihar Team",
-    excerpt: "Everything you need to know about the UGEAC counselling process, from registration and choice filling to document verification and final admission.",
-    content: `
+    `},{id:3,title:"Complete Guide to UGEAC Counselling Process",slug:"complete-guide-to-ugeac-counselling-process",date:"2026-06-10",author:"Apna College Bihar Team",excerpt:"Everything you need to know about the UGEAC counselling process, from registration and choice filling to document verification and final admission.",content:`
 ## What is UGEAC?
 
 UGEAC stands for **Undergraduate Engineering Admission Counselling**. It is the centralized counselling process conducted by the Bihar Combined Entrance Competitive Examination Board (BCECEB) for admission to the first year of B.Tech courses in government engineering colleges of Bihar.
@@ -147,16 +121,7 @@ After successful document verification, report to the allotted engineering colle
 
 ### Final Advice
 Do not rush the choice-filling process. Analyze previous year cutoffs carefully and always keep a backup branch or college in your list. 
-    `
-  },
-  {
-    id: 4,
-    title: "B.Tech CSE vs IT: Which is Better in Bihar?",
-    slug: "btech-cse-vs-it-which-is-better-in-bihar",
-    date: "2026-06-20",
-    author: "Apna College Bihar Team",
-    excerpt: "Confused between Computer Science and Information Technology? Here is a detailed comparison of syllabus, placements, and scope for BEU students.",
-    content: `
+    `},{id:4,title:"B.Tech CSE vs IT: Which is Better in Bihar?",slug:"btech-cse-vs-it-which-is-better-in-bihar",date:"2026-06-20",author:"Apna College Bihar Team",excerpt:"Confused between Computer Science and Information Technology? Here is a detailed comparison of syllabus, placements, and scope for BEU students.",content:`
 ## The Big Dilemma: CSE or IT?
 
 During UGEAC choice filling, the most common question among students is: "Should I choose Computer Science Engineering (CSE) or Information Technology (IT)?" 
@@ -190,16 +155,7 @@ If your goal is to clear the GATE exam or secure a job in PSUs (Public Sector Un
 ### Conclusion
 
 If you get CSE in a top college like MIT or BCE, go for it. However, if you are getting IT in a top-tier college versus CSE in a lower-tier college, **choose IT in the top-tier college**. The environment, peer group, and placement cell of a good college will benefit you far more than the slight difference in the syllabus.
-    `
-  },
-  {
-    id: 5,
-    title: "Why Previous Year Questions (PYQs) are the Key to Engineering Exams",
-    slug: "why-pyqs-are-key-to-engineering-exams",
-    date: "2026-06-25",
-    author: "Apna College Bihar Team",
-    excerpt: "Discover why solving previous year question papers is the ultimate hack for scoring top grades in your BEU B.Tech examinations.",
-    content: `
+    `},{id:5,title:"Why Previous Year Questions (PYQs) are the Key to Engineering Exams",slug:"why-pyqs-are-key-to-engineering-exams",date:"2026-06-25",author:"Apna College Bihar Team",excerpt:"Discover why solving previous year question papers is the ultimate hack for scoring top grades in your BEU B.Tech examinations.",content:`
 ## The Ultimate Engineering Hack
 
 Ask any senior with a 9+ CGPA in Bihar Engineering University (BEU), and they will tell you their biggest secret: **Previous Year Questions (PYQs)**. 
@@ -226,16 +182,7 @@ We have painstakingly collected and digitized PYQs for all branches and semester
 4. Try to solve the last 5 years' papers at least two weeks before your finals.
 
 Stop studying hard, and start studying smart!
-    `
-  },
-  {
-    id: 6,
-    title: "BEU B.Tech 1st Year Syllabus Complete Guide",
-    slug: "beu-btech-1st-year-syllabus-complete-guide",
-    date: "2026-06-28",
-    author: "Apna College Bihar Team",
-    excerpt: "Starting your B.Tech journey at BEU? Here is a comprehensive breakdown of the 1st-year syllabus, important subjects, and tips to score well in your first two semesters.",
-    content: `
+    `},{id:6,title:"BEU B.Tech 1st Year Syllabus Complete Guide",slug:"beu-btech-1st-year-syllabus-complete-guide",date:"2026-06-28",author:"Apna College Bihar Team",excerpt:"Starting your B.Tech journey at BEU? Here is a comprehensive breakdown of the 1st-year syllabus, important subjects, and tips to score well in your first two semesters.",content:`
 ## Welcome to Engineering!
 
 The first year of B.Tech under Bihar Engineering University (BEU) is crucial because it sets the foundation for your entire degree. Unlike later years where you specialize in your branch (CSE, Civil, Mechanical, etc.), the 1st-year syllabus is common for almost all branches.
@@ -259,16 +206,7 @@ BEU typically divides students into two groups (Group A and Group B) who swap su
 3. **Use Apna College Bihar PYQs:** Start solving Previous Year Questions at least one month before the end-semester exams. 
 
 Your first year SGPA will heavily impact your final degree classification. Start strong!
-    `
-  },
-  {
-    id: 7,
-    title: "Top Tech Companies Hiring in Bihar Engineering Colleges",
-    slug: "top-tech-companies-hiring-bihar-engineering",
-    date: "2026-06-28",
-    author: "Apna College Bihar Team",
-    excerpt: "Wondering about placements? Discover the top IT and core companies that recruit from government engineering colleges in Bihar and what they look for.",
-    content: `
+    `},{id:7,title:"Top Tech Companies Hiring in Bihar Engineering Colleges",slug:"top-tech-companies-hiring-bihar-engineering",date:"2026-06-28",author:"Apna College Bihar Team",excerpt:"Wondering about placements? Discover the top IT and core companies that recruit from government engineering colleges in Bihar and what they look for.",content:`
 ## The Placement Scenario in Bihar
 
 The placement ecosystem in Bihar's government engineering colleges (like MIT Muzaffarpur, BCE Bhagalpur, and GCE Gaya) has seen significant improvement. With active Training and Placement (T&P) cells, many top-tier companies are now participating in campus drives.
@@ -297,16 +235,7 @@ For Civil, Mechanical, and Electrical students, core placements are highly compe
 3. **Build Projects:** For IT roles, having 2-3 solid projects on your resume (e.g., a Web App or Machine Learning model) will make you stand out during technical interviews.
 
 Stay active on LinkedIn and keep an eye on your college's T&P notice board!
-    `
-  },
-  {
-    id: 8,
-    title: "How to Prepare for GATE while in B.Tech",
-    slug: "how-to-prepare-for-gate-during-btech",
-    date: "2026-06-28",
-    author: "Apna College Bihar Team",
-    excerpt: "A strategic guide for BEU students on how to balance semester exams with GATE preparation to secure a top rank for PSUs or M.Tech.",
-    content: `
+    `},{id:8,title:"How to Prepare for GATE while in B.Tech",slug:"how-to-prepare-for-gate-during-btech",date:"2026-06-28",author:"Apna College Bihar Team",excerpt:"A strategic guide for BEU students on how to balance semester exams with GATE preparation to secure a top rank for PSUs or M.Tech.",content:`
 ## Why GATE?
 
 The Graduate Aptitude Test in Engineering (GATE) is the golden ticket for engineering students. A top rank can land you a highly lucrative job in a PSU (like ONGC, IOCL, NTPC) or admission into premier institutes (IITs/NITs) for M.Tech.
@@ -337,16 +266,7 @@ The ideal time to start dedicated GATE preparation is the **beginning of your 3r
 ### Balancing with College
 
 Do not ignore your college CGPA. A CGPA below 6.5 might disqualify you from certain PSU interviews. Use the Apna College Bihar **Study Tracker** to allocate specific hours for college assignments and GATE prep without burning out.
-    `
-  },
-  {
-    id: 9,
-    title: "BEU Passing Marks Criteria and Grading System Explained",
-    slug: "beu-passing-marks-criteria-and-grading-system",
-    date: "2026-06-28",
-    author: "Apna College Bihar Team",
-    excerpt: "Confused about how BEU calculates your SGPA and CGPA? Understand the exact passing marks criteria, internal vs external weightage, and the grading curve.",
-    content: `
+    `},{id:9,title:"BEU Passing Marks Criteria and Grading System Explained",slug:"beu-passing-marks-criteria-and-grading-system",date:"2026-06-28",author:"Apna College Bihar Team",excerpt:"Confused about how BEU calculates your SGPA and CGPA? Understand the exact passing marks criteria, internal vs external weightage, and the grading curve.",content:`
 ## Decoding the BEU Grading System
 
 Many first-year students struggle to understand how the Bihar Engineering University (BEU) calculates grades. Knowing the exact passing criteria is essential to plan your studies and avoid backlogs.
@@ -381,16 +301,7 @@ Your **SGPA (Semester Grade Point Average)** is calculated by multiplying the gr
 Your **CGPA (Cumulative Grade Point Average)** is the average of all your SGPAs.
 
 > **Pro Tip:** Use the **Apna College Bihar SGPA/CGPA Calculator** to instantly predict your semester results and plan how many marks you need to maintain your target CGPA!
-    `
-  },
-  {
-    id: 10,
-    title: "Best Laptops for Engineering Students in 2026",
-    slug: "best-laptops-for-engineering-students",
-    date: "2026-06-28",
-    author: "Apna College Bihar Team",
-    excerpt: "Buying a laptop for college? Read our ultimate guide on the specifications you need for coding, CAD, and gaming based on your engineering branch.",
-    content: `
+    `},{id:10,title:"Best Laptops for Engineering Students in 2026",slug:"best-laptops-for-engineering-students",date:"2026-06-28",author:"Apna College Bihar Team",excerpt:"Buying a laptop for college? Read our ultimate guide on the specifications you need for coding, CAD, and gaming based on your engineering branch.",content:`
 ## The Most Important Tool for an Engineer
 
 A reliable laptop is arguably the most important investment you will make during your B.Tech journey. However, the requirements vary wildly depending on your branch of study. 
@@ -423,16 +334,7 @@ ECE and EE students sit somewhere in the middle. You'll run software like MATLAB
 1. **Battery Life Matters:** BEU college campuses are large, and you won't always find a charging socket in lecture halls. Aim for laptops with 6+ hours of battery life.
 2. **Portability:** Lugging a 2.5kg gaming laptop around campus gets tiring. If you don't need a heavy GPU, buy a thin and light ultrabook.
 3. **Student Discounts:** Always check for UNiDAYS or brand-specific student discounts using your college ID card!
-    `
-  },
-  {
-    id: 11,
-    title: "How to get an Internship in 2nd Year of B.Tech",
-    slug: "how-to-get-internship-2nd-year-btech",
-    date: "2026-06-28",
-    author: "Apna College Bihar Team",
-    excerpt: "Securing an internship early in your college life can boost your resume significantly. Learn the exact steps to land your first tech internship in your 2nd year.",
-    content: `
+    `},{id:11,title:"How to get an Internship in 2nd Year of B.Tech",slug:"how-to-get-internship-2nd-year-btech",date:"2026-06-28",author:"Apna College Bihar Team",excerpt:"Securing an internship early in your college life can boost your resume significantly. Learn the exact steps to land your first tech internship in your 2nd year.",content:`
 ## Why Intern Early?
 
 Most engineering students wait until their 3rd or 4th year to start looking for internships. By starting in your 2nd year, you gain an enormous competitive advantage, build a professional network, and get a reality check on industry expectations.
@@ -457,16 +359,7 @@ Don't apply to Google or Microsoft in your 2nd year; they mostly hire 3rd-year s
 If you can't find a traditional internship, participate in Open Source programs like GSoC (Google Summer of Code) or Hacktoberfest. These carry as much, if not more, weight than a standard internship.
 
 Remember, your first internship might be unpaid or low-paying. The goal is to gain experience and a recommendation letter, not to get rich immediately!
-    `
-  },
-  {
-    id: 12,
-    title: "Soft Skills Every Engineering Student Needs",
-    slug: "soft-skills-every-engineering-student-needs",
-    date: "2026-06-28",
-    author: "Apna College Bihar Team",
-    excerpt: "Your CGPA might get you an interview, but your soft skills will get you the job. Discover the essential non-technical skills required to succeed in the corporate world.",
-    content: `
+    `},{id:12,title:"Soft Skills Every Engineering Student Needs",slug:"soft-skills-every-engineering-student-needs",date:"2026-06-28",author:"Apna College Bihar Team",excerpt:"Your CGPA might get you an interview, but your soft skills will get you the job. Discover the essential non-technical skills required to succeed in the corporate world.",content:`
 ## The Missing Link in Engineering Education
 
 In Bihar Engineering Colleges, there is a massive focus on passing exams and coding. However, when companies visit for placements, they often reject technically sound candidates because of poor communication or behavioral skills.
@@ -490,16 +383,7 @@ The tech stack you learn in college might become obsolete in 5 years. Companies 
 - **How to improve:** Constantly explore new domains. If you are a web developer, try building a small machine learning model just to understand how it works.
 
 Start treating your soft skills as a 4-credit subject!
-    `
-  },
-  {
-    id: 13,
-    title: "Exploring Technical Clubs in Bihar Engineering Colleges",
-    slug: "exploring-technical-clubs-bihar-engineering",
-    date: "2026-06-28",
-    author: "Apna College Bihar Team",
-    excerpt: "Joining a technical club is the best decision you can make in college. Here is a look at the vibrant club culture in BEU affiliated colleges and why you should join.",
-    content: `
+    `},{id:13,title:"Exploring Technical Clubs in Bihar Engineering Colleges",slug:"exploring-technical-clubs-bihar-engineering",date:"2026-06-28",author:"Apna College Bihar Team",excerpt:"Joining a technical club is the best decision you can make in college. Here is a look at the vibrant club culture in BEU affiliated colleges and why you should join.",content:`
 ## Beyond the Classroom
 
 The real engineering happens outside the lecture halls. In government engineering colleges across Bihar (like MIT, BCE, GCE), technical clubs are the heartbeat of innovation and peer-to-peer learning.
@@ -525,16 +409,7 @@ Many colleges in Bihar now have active GDSC chapters. They focus on Google techn
 - **Build Projects:** Use the club's resources to build a major project that you can showcase on your resume.
 
 If your college doesn't have an active club, take the initiative and start one!
-    `
-  },
-  {
-    id: 14,
-    title: "State Government Scholarships for Bihar Engineering Students",
-    slug: "state-government-scholarships-bihar-engineering",
-    date: "2026-06-28",
-    author: "Apna College Bihar Team",
-    excerpt: "Don't let finances stop your education. Learn about the various scholarships and student credit card schemes offered by the Bihar Government for B.Tech students.",
-    content: `
+    `},{id:14,title:"State Government Scholarships for Bihar Engineering Students",slug:"state-government-scholarships-bihar-engineering",date:"2026-06-28",author:"Apna College Bihar Team",excerpt:"Don't let finances stop your education. Learn about the various scholarships and student credit card schemes offered by the Bihar Government for B.Tech students.",content:`
 ## Financial Aid for B.Tech Students
 
 Pursuing an engineering degree can be a financial burden for many families. Fortunately, the Bihar Government offers several robust schemes to ensure that no deserving student is deprived of technical education.
@@ -561,16 +436,7 @@ Though an AICTE initiative (Central), it is highly relevant for female students 
 ### Important Advice
 - Keep your Income Certificate, Caste Certificate, and Residential Certificate updated every year.
 - Do not miss the deadlines. Join our Apna College Bihar WhatsApp groups to get instant alerts when the scholarship portals open!
-    `
-  },
-  {
-    id: 15,
-    title: "The Future of IT Jobs for Tier-3 College Graduates",
-    slug: "future-of-it-jobs-tier-3-college-graduates",
-    date: "2026-06-28",
-    author: "Apna College Bihar Team",
-    excerpt: "With AI tools like ChatGPT changing the landscape, what does the future hold for engineering graduates from state colleges? Read our deep dive into the evolving IT job market.",
-    content: `
+    `},{id:15,title:"The Future of IT Jobs for Tier-3 College Graduates",slug:"future-of-it-jobs-tier-3-college-graduates",date:"2026-06-28",author:"Apna College Bihar Team",excerpt:"With AI tools like ChatGPT changing the landscape, what does the future hold for engineering graduates from state colleges? Read our deep dive into the evolving IT job market.",content:`
 ## AI and the Evolving Job Market
 
 The rise of Generative AI (ChatGPT, GitHub Copilot) has created a wave of anxiety among engineering students, especially those in Tier-3 state government colleges. Will AI take our jobs? Will mass recruiters stop hiring?
@@ -596,6 +462,4 @@ AI is a tool, not an engineer. Software engineering is about solving complex bus
 The IT sector is not dying; it is evolving. The barrier to entry has increased. You can no longer get a 4 LPA job just by knowing basic C++. You must be a problem solver. 
 
 Upskill constantly, and the opportunities will be limitless!
-    `
-  }
-];
+    `}];export{e as b};

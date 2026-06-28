@@ -100,17 +100,17 @@ export default function Contact() {
           </div>
 
           <div 
-            onClick={() => window.open('https://t.me/apnacollegebihar', '_blank')}
+            onClick={() => window.location.href = 'mailto:admin@apnacollegebihar.online'}
             className="bg-white border border-slate-200 hover:border-blue-500/50 rounded-[2.5rem] p-8 shadow-sm space-y-4 cursor-pointer transition-all hover:-translate-y-1 group"
           >
             <div className="w-12 h-12 bg-blue-600/10 text-blue-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-md">
               <Send size={24} />
             </div>
             <div>
-              <h3 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">Telegram Channel</h3>
-              <p className="text-xs font-medium text-slate-500 pt-1">Join our active Telegram community for PDF notes and instant discussion.</p>
+              <h3 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">Official Email</h3>
+              <p className="text-xs font-medium text-slate-500 pt-1">Reach out to admin@apnacollegebihar.online for official queries and support.</p>
             </div>
-            <span className="inline-block text-[10px] font-black text-blue-600 uppercase tracking-widest pt-2 group-hover:underline">Join Telegram →</span>
+            <span className="inline-block text-[10px] font-black text-blue-600 uppercase tracking-widest pt-2 group-hover:underline">Send Email →</span>
           </div>
         </div>
 
