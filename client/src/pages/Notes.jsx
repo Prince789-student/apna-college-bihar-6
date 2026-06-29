@@ -5,7 +5,7 @@ import {
   ShieldCheck, Bookmark, ChevronRight
 } from 'lucide-react';
 import { db } from '../firebase';
-import { collection, orderBy, onSnapshot } from 'firebase/firestore';
+import { collection, orderBy, onSnapshot, query, where } from 'firebase/firestore';
 import { useParams, useNavigate } from 'react-router-dom';
 import PremiumAds from '../components/PremiumAds';
 import SEO from '../components/SEO';
@@ -74,7 +74,7 @@ export default function Notes() {
       setLoading(false);
       return;
     }
-    const q = collection(db, 'documents');
+    const q = query(collection(db, 'documents'), where('category', '==', 'NOTES'));
     const unsub = onSnapshot(q, (snap) => {
       setDocs(snap.docs.map(d => ({ id: d.id, ...d.data() })));
       setLoading(false);

@@ -5,7 +5,7 @@ import {
   ShieldCheck, Bookmark, ChevronRight
 } from 'lucide-react';
 import { db } from '../firebase';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { useParams, useNavigate } from 'react-router-dom';
 import PremiumAds from '../components/PremiumAds';
 import SEO from '../components/SEO';
@@ -72,7 +72,7 @@ export default function PYQ() {
       setLoading(false);
       return;
     }
-    const unsub = onSnapshot(collection(db, 'documents'), (snap) => {
+    const unsub = onSnapshot(query(collection(db, 'documents'), where('category', '==', 'PYQ')), (snap) => {
       setDocs(snap.docs.map(d => ({ id: d.id, ...d.data() })));
       setLoading(false);
     });

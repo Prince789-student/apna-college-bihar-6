@@ -10,7 +10,7 @@ import {
   RefreshCw, Heart, Building2, Award, Mail,
   Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight
 } from 'lucide-react';
-import { collection, onSnapshot, query, orderBy, limit, where, getCountFromServer } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, limit, where, getCountFromServer, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
@@ -125,18 +125,41 @@ export default function Home() {
     }
   ];
 
-  const faqSchema = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqs.map(f => ({
-      "@type": "Question",
-      "name": f.q,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": f.a
+  const combinedSchema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Apna College Bihar",
+      "url": "https://www.apnacollegebihar.online/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.apnacollegebihar.online/search/{search_term_string}",
+        "query-input": "required name=search_term_string"
       }
-    }))
-  };
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Apna College Bihar",
+      "url": "https://www.apnacollegebihar.online/",
+      "logo": "https://www.apnacollegebihar.online/logo-acb.png",
+      "sameAs": [
+        "https://www.youtube.com/@ApnaCollegeBihar"
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqs.map(f => ({
+        "@type": "Question",
+        "name": f.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": f.a
+        }
+      }))
+    }
+  ];
 
   // ── Data Fetching ──
   useEffect(() => {
@@ -146,19 +169,16 @@ export default function Home() {
       setBeuNotices(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     });
 
-    // Unique docs counting logic using onSnapshot as per user requirement
-    const qDocs = query(collection(db, 'documents'), where('type', '==', 'file'));
-    const unsubDocs = onSnapshot(qDocs, (snap) => {
-      const uniqueNotes = new Set();
-      const uniquePYQs = new Set();
-      snap.forEach(doc => {
-        const data = doc.data();
-        if (data.fileUrl) {
-          if (data.category === 'NOTES') uniqueNotes.add(data.fileUrl);
-          if (data.category === 'PYQ') uniquePYQs.add(data.fileUrl);
-        }
-      });
-      setStats(s => ({ ...s, notes: uniqueNotes.size, pyqs: uniquePYQs.size }));
+    // Read pre-calculated unique stats to save reads
+    const unsubDocs = onSnapshot(doc(db, 'metadata', 'stats'), (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setStats(s => ({
+          ...s,
+          notes: data.uniqueNotesCount || 0,
+          pyqs: data.uniquePyqsCount || 0
+        }));
+      }
     });
 
     const fetchCounts = async () => {
@@ -189,7 +209,7 @@ export default function Home() {
         description="Official hub for Bihar engineering students. Free BEU Notes, PYQs, Syllabus, UGEAC Predictor, CGPA Calculator and counselling guidance for 38+ engineering colleges."
         keywords="BEU notes, Bihar engineering college, UGEAC 2026 predictor, B.Tech PYQ papers, Bihar college cutoff, CGPA calculator BEU, Apna College Bihar, Bihar engineering counselling, MIT Muzaffarpur, BCE Bhagalpur"
         url="https://www.apnacollegebihar.online/"
-        schema={faqSchema}
+        schema={combinedSchema}
       />
 
 

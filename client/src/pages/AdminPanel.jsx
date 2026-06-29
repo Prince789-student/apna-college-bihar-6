@@ -9,7 +9,7 @@ import {
 import { db, storage } from '../firebase';
 import { 
   collection, getDocs, doc, updateDoc, deleteDoc, 
-  addDoc, serverTimestamp, query, orderBy, onSnapshot, limit
+  addDoc, serverTimestamp, query, orderBy, onSnapshot, limit, setDoc
 } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '../context/AuthContext';
@@ -132,6 +132,34 @@ const [uploading, setUploading] = useState(false);
       if(unsubResources) unsubResources();
     };
   }, [isAdmin, authLoading]);
+
+  // Compute and update global unique file stats whenever docs change
+  useEffect(() => {
+    if (docs.length === 0 || !isAdmin) return;
+    const updateStats = async () => {
+      try {
+        const uniqueNotes = new Set();
+        const uniquePYQs = new Set();
+        docs.forEach(docItem => {
+          if (docItem.type === 'file' && docItem.fileUrl) {
+            if (docItem.category === 'NOTES') uniqueNotes.add(docItem.fileUrl);
+            if (docItem.category === 'PYQ') uniquePYQs.add(docItem.fileUrl);
+          }
+        });
+        
+        await setDoc(doc(db, 'metadata', 'stats'), {
+          uniqueNotesCount: uniqueNotes.size,
+          uniquePyqsCount: uniquePYQs.size,
+          lastUpdated: serverTimestamp()
+        }, { merge: true });
+      } catch (err) {
+        console.error("Error updating stats", err);
+      }
+    };
+    
+    const timeout = setTimeout(updateStats, 2000);
+    return () => clearTimeout(timeout);
+  }, [docs, isAdmin]);
 
   const approveResource = async (id) => {
     await updateDoc(doc(db, 'studyResources', id), { verified: true });

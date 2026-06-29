@@ -13,6 +13,7 @@ import DashboardLayout from './layouts/DashboardLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import SmartRedirect from './components/SmartRedirect';
+import CookieBanner from './components/CookieBanner';
 
 // Pages (Lazy Loaded)
 const Home = React.lazy(() => import('./pages/Home'));
@@ -409,6 +410,7 @@ function App() {
         <Toaster position="top-right" />
         <GlobalCounsellingPopup />
         <GlobalProfilePrompt />
+        <CookieBanner />
         <React.Suspense fallback={<SplashUI />}>
           <Routes>
             {/* Public Routes */}
