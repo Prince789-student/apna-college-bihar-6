@@ -64,7 +64,9 @@ app.get('/:filename.apk', (req, res, next) => {
 });
 
 // 2. Middleware
-app.use(helmet());
+app.use(helmet({
+  crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" }
+}));
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(compression());
 app.use(express.json());
