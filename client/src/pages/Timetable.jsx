@@ -399,23 +399,26 @@ export default function Timetable() {
       </div>
 
       {/* ── Educational SEO Content ── */}
-      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 relative z-20">
-        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">BEU B.Tech Timetable & Schedule Organizer</h2>
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 relative z-20 text-left">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Ultimate BEU B.Tech Timetable & Daily Schedule Organizer</h2>
         <p>
-          Managing your daily engineering classes is essential for staying on top of your academic performance. The <strong>BEU B.Tech Timetable Organizer</strong> is designed specifically for students of Bihar Engineering University to digitally manage their weekly class schedules, recess breaks, and faculty details.
+          Effectively managing your daily engineering classes is absolutely essential for staying on top of your academic performance and maintaining a healthy CGPA. The <strong>BEU B.Tech Timetable Organizer</strong> is a premium productivity tool designed specifically for students of Bihar Engineering University to digitally manage their weekly class schedules, recess breaks, lab sessions, and faculty details.
         </p>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">How to Setup Your College Timetable?</h3>
+        <h3 className="text-xl font-bold mt-8 mb-4">How to Setup Your Digital College Timetable?</h3>
         <ul>
-          <li><strong>Step 1:</strong> Select a specific day (Monday to Saturday) to view or edit the schedule.</li>
-          <li><strong>Step 2:</strong> Click on <strong>Add Class</strong> to insert a new lecture slot or lab session.</li>
-          <li><strong>Step 3:</strong> Enter the subject name, faculty, room number, and time. You can also mark a slot as <em>Recess/Break</em>.</li>
-          <li><strong>Step 4:</strong> Click the <strong>Save Timetable</strong> button to securely store your schedule in the cloud.</li>
+          <li><strong>Step 1:</strong> Select a specific day (Monday to Saturday) to view or edit your personalized academic schedule.</li>
+          <li><strong>Step 2:</strong> Click on <strong>Add Class</strong> to insert a new theory lecture slot, tutorial, or practical lab session.</li>
+          <li><strong>Step 3:</strong> Carefully enter the subject name, faculty assigned, room/hall number, and exact time. You can also mark a specific slot as <em>Recess/Lunch Break</em>.</li>
+          <li><strong>Step 4:</strong> Click the <strong>Save & Sync</strong> button to securely store your comprehensive schedule in our encrypted cloud database.</li>
         </ul>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">Why is a Digital Timetable Important?</h3>
+        <h3 className="text-xl font-bold mt-8 mb-4">Why is a Digital Timetable Crucial for Engineering Students?</h3>
         <p>
-          Keeping track of lab sessions, theory classes, and tutorials can be overwhelming. By creating a digital timetable, you can seamlessly integrate your daily routine with the <strong>Attendance Tracker</strong>. When your timetable is set, the system automatically pulls today's subjects so you can punch in your attendance with a single click, helping you easily maintain the mandatory 75% attendance required by BEU Patna.
+          Keeping track of alternating lab sessions, core theory classes, and tutorials across different semesters can quickly become overwhelming. By creating a rigorous digital timetable on Apna College Bihar, you seamlessly integrate your daily routine with our advanced <strong>Biometric Attendance Tracker</strong>. 
+        </p>
+        <p>
+          Once your timetable is perfectly set up, the system automatically pulls today's subjects dynamically to your dashboard. This means you can punch in your attendance with a single click every morning, helping you effortlessly maintain the mandatory 75% attendance threshold strictly enforced by BEU Patna administrators.
         </p>
       </div>
 

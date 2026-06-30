@@ -156,6 +156,29 @@ export default function About() {
           </div>
         </div>
 
+        {/* ── Educational SEO Content (E-E-A-T Focus) ── */}
+        <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 mb-8 prose prose-slate max-w-none shadow-sm text-left">
+          <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Our Mission: Transforming Technical Education in Bihar</h2>
+          <p>
+            The foundation of <strong>Apna College Bihar</strong> is built on a very simple premise: equal access to high-quality educational resources for every engineering student in Bihar. Historically, students entering Bihar Engineering University (BEU) from remote districts lacked the digital infrastructure, mentorship, and organized study material needed to compete at a national level. Our mission is to democratize technical education by offering 100% free B.Tech Notes, Previous Year Questions (PYQs), and comprehensive syllabus guides.
+          </p>
+
+          <h3 className="text-xl font-bold mt-8 mb-4">Experience and Expertise (E-E-A-T)</h3>
+          <p>
+            Our platform is not maintained by anonymous algorithms. It is actively curated, updated, and validated by current top-performing students and alumni of premier institutions like BCE Bhagalpur, MIT Muzaffarpur, and NIT Patna. Our core team consists of software developers, technical writers, and subject matter experts who have personally navigated the rigid structures of the BEU examination system. We understand exactly what examiners look for, which subjects require numerical focus, and how to effectively decode the BEU Syllabus. This hands-on, lived experience ensures that every PDF, note, and tool we provide is highly authoritative and trustworthy.
+          </p>
+
+          <h3 className="text-xl font-bold mt-8 mb-4">A Commitment to Transparency and Trust</h3>
+          <p>
+            Trust is the cornerstone of our platform. When you download a PYQ or use our CGPA Calculator, you are using tools built with complete transparency. We strictly adhere to academic integrity—we do not promote plagiarism. Instead, we provide the foundational knowledge required for self-study. Furthermore, our dedicated admin panel rigorously reviews all community-uploaded resources before they are made public, ensuring that no student is misled by inaccurate information or outdated syllabi.
+          </p>
+          
+          <h3 className="text-xl font-bold mt-8 mb-4">Beyond Just Academics: The Future of Bihar Engineering</h3>
+          <p>
+            Apna College Bihar is more than a repository for BEU Notes; it is an ecosystem. From UGEAC Counselling support for nervous freshers to advanced coding roadmaps and Hackathon directories for seniors, we are building the ultimate digital companion for the Bihar engineering community. Join us, download our app, and let us elevate the standard of technical education in our state together.
+          </p>
+        </div>
+
         {/* Footer info */}
         <div className="text-center pt-8 border-t border-slate-200 space-y-3 pb-12">
           <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">BEU - APNA COLLEGE BIHAR</p>

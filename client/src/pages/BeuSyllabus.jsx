@@ -943,28 +943,28 @@ export default function BeuSyllabus() {
       </div>
 
       {/* ── Educational SEO Content ── */}
-      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 relative z-20">
-        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Official BEU B.Tech Syllabus</h2>
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 relative z-20 text-left">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Official Bihar Engineering University (BEU) B.Tech Syllabus</h2>
         <p>
-          Access the latest, officially approved <strong>B.Tech Syllabus for Bihar Engineering University (BEU)</strong>. Whether you're in your first year or your final semester, our platform provides a smart, interactive syllabus tracker. We have digitized the massive PDF syllabus into a trackable checklist so you never miss an important topic.
+          Access the latest, officially approved <strong>B.Tech Syllabus for Bihar Engineering University (BEU)</strong>. Whether you are a fresher in your first year or a senior in your final semester, our platform provides a smart, interactive syllabus tracker. We have meticulously digitized the massive, hard-to-read PDF syllabus into a trackable checklist so you never miss an important academic topic or module.
         </p>
 
         <h3 className="text-xl font-bold mt-8 mb-4">How to Use the Smart Syllabus Tracker?</h3>
         <ul>
-          <li><strong>Step 1:</strong> Select your Engineering Branch (e.g., Computer Science, Civil).</li>
-          <li><strong>Step 2:</strong> Choose your current Semester.</li>
-          <li><strong>Step 3:</strong> Click on any subject to expand the units and see the chapter-wise topics.</li>
-          <li><strong>Step 4:</strong> Check off topics as you study them to see your real-time progress bar increase.</li>
+          <li><strong>Step 1:</strong> Select your specific Engineering Branch (e.g., Computer Science Engineering (CSE), Civil, Mechanical, Electrical).</li>
+          <li><strong>Step 2:</strong> Choose your current Semester (Sem 1 to Sem 8).</li>
+          <li><strong>Step 3:</strong> Click on any subject (e.g., Physics, Chemistry, Data Structures) to expand the units and see the chapter-wise topics breakdown.</li>
+          <li><strong>Step 4:</strong> Check off topics as you study them. Watch your real-time progress bar increase, keeping you motivated and on track for your End Semester Exams.</li>
         </ul>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">Why is Following the BEU Syllabus Important?</h3>
+        <h3 className="text-xl font-bold mt-8 mb-4">Why is Following the BEU Syllabus So Important?</h3>
         <p>
-          BEU strictly adheres to the AICTE model curriculum. The End Semester examination question papers are framed exactly according to the module weightage given in the official syllabus. By tracking your progress here, you ensure that you cover 100% of the topics that will appear in your 70-mark external exams.
+          BEU strictly adheres to the AICTE model curriculum across all 38+ engineering colleges in Bihar. The End Semester examination question papers are framed exactly according to the module weightage and topics given in the official syllabus. Studying out of the syllabus is a waste of time. By tracking your academic progress here, you ensure that you cover 100% of the topics that will appear in your 70-mark external exams. Combine this with our BEU Notes and PYQs for maximum scoring potential.
         </p>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">Can I Download the Syllabus as a PDF?</h3>
+        <h3 className="text-xl font-bold mt-8 mb-4">Can I Download the BEU Syllabus as a PDF?</h3>
         <p>
-          Yes! We have built a custom PDF generator. Once you select your branch and semester, simply click the <strong>Download PDF</strong> button. It will instantly generate a clean, formatted, and branded PDF of your exact syllabus that you can print or save for offline access.
+          Yes! We have built a custom, high-speed PDF generator specifically for BEU students. Once you select your branch and semester, simply click the <strong>Download PDF</strong> button at the top of the page. It will instantly generate a clean, well-formatted, and branded PDF of your exact syllabus that you can print out or save to your mobile device for offline access during exam preparation.
         </p>
       </div>
 

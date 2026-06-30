@@ -56,28 +56,28 @@ export default function BeuResult() {
       </div>
 
       {/* ── Educational SEO Content ── */}
-      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 relative z-20">
-        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">How to Check BEU Semester Results?</h2>
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 relative z-20 text-left">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Complete Guide to Checking BEU Semester Results Online</h2>
         <p>
-          Checking your semester results quickly and securely is important for every engineering student. We provide direct access to the official <strong>Bihar Engineering University (BEU) Result Portal</strong> right here, eliminating the need to navigate through multiple confusing university pages.
+          Checking your semester results quickly and securely is a top priority for every engineering student. We provide direct, fast access to the official <strong>Bihar Engineering University (BEU) Result Portal</strong> right here on our dashboard, eliminating the need to navigate through multiple confusing or slow university pages during peak result declaration times.
         </p>
 
         <h3 className="text-xl font-bold mt-8 mb-4">Step-by-Step Guide to Check Your BEU Result</h3>
         <ol>
-          <li>Wait for the official notification from BEU that your semester results have been declared.</li>
-          <li>In the portal window above, click on the dropdown menu and select your specific course and semester (e.g., <em>B.Tech 1st Semester Examination 2026</em>).</li>
-          <li>Enter your official University Registration Number.</li>
-          <li>Click the <strong>Show Result</strong> button. Your mark sheet will be generated instantly.</li>
+          <li>Wait for the official notification from the BEU examination controller that your specific semester results have been declared.</li>
+          <li>In the secure portal window above, click on the dropdown menu and select your specific course and semester examination (e.g., <em>B.Tech 1st Semester Examination 2026</em>).</li>
+          <li>Enter your official 11-digit University Registration Number correctly.</li>
+          <li>Click the <strong>Show Result</strong> button. Your detailed mark sheet will be generated instantly in PDF format for download.</li>
         </ol>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">Understanding BEU Grading System (SGPA & CGPA)</h3>
+        <h3 className="text-xl font-bold mt-8 mb-4">Understanding the BEU Grading System (SGPA & CGPA)</h3>
         <p>
-          BEU follows a choice-based credit system. Your result will display both an <strong>SGPA (Semester Grade Point Average)</strong> for the current semester and a <strong>CGPA (Cumulative Grade Point Average)</strong> for your overall performance. If you want to calculate your exact percentage from the CGPA, you can use our dedicated <a href="/beu-cgpa-calculator">BEU CGPA to Percentage Calculator</a>.
+          BEU strictly follows a choice-based credit system (CBCS) as mandated by AICTE. Your final result will display both an <strong>SGPA (Semester Grade Point Average)</strong> reflecting your performance in the current semester, and a <strong>CGPA (Cumulative Grade Point Average)</strong> representing your overall aggregate performance across all completed semesters. If you are applying for placements (TCS, Wipro) or higher studies and need to calculate your exact percentage, please use our highly accurate <a href="/beu-cgpa">BEU CGPA to Percentage Calculator</a>.
         </p>
 
         <h3 className="text-xl font-bold mt-8 mb-4">What to do in case of a Backlog or Pending Result?</h3>
         <p>
-          If your result shows "Pending" or if you receive a backlog (fail) in any subject, do not panic. BEU conducts special scrutiny and supplementary exams. You can apply for re-evaluation (scrutiny) within the stipulated timeframe announced by the university. Always contact your college's examination controller for the exact dates and fee submission process.
+          If your result displays as "Pending" or if you receive an 'F' grade (fail/backlog) in any theory or practical subject, do not panic. BEU conducts special scrutiny and supplementary (backlog) exams. You can formally apply for re-evaluation (scrutiny) within the stipulated timeframe—usually 15 days from the result declaration. We recommend contacting your college's examination controller immediately for the exact application dates and fee submission process.
         </p>
       </div>
 

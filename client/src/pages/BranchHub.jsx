@@ -371,6 +371,26 @@ export default function BranchHub() {
           </div>
         </div>
 
+        {/* ── Educational SEO Content ── */}
+        <section className="mt-16 pt-16 border-t border-white/10 relative z-10">
+          <div className="bg-[#0f172a]/50 p-8 md:p-12 rounded-[2.5rem] border border-white/5 prose prose-invert max-w-none text-left">
+            <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-4">A Comprehensive Guide to Engineering Branches in Bihar (BEU)</h2>
+            <p className="text-slate-300">
+              Choosing the right engineering branch is one of the most critical decisions for any UGEAC or JEE Main aspirant. Through this dedicated <strong>Branch Hub</strong>, we provide detailed insights into the core branches offered by Bihar Engineering University (BEU) affiliated colleges, including Computer Science Engineering (CSE), Civil Engineering, Mechanical Engineering, Electrical Engineering, and Electronics & Communication Engineering (ECE).
+            </p>
+
+            <h3 className="text-xl font-bold text-white mt-8 mb-4">Why is Branch Selection Crucial in BEU?</h3>
+            <p className="text-slate-300">
+              Each engineering branch offers a distinct curriculum, distinct placement prospects, and requires different core skills. In Bihar's Government Engineering Colleges (GECs), Civil Engineering often leads to highly coveted government jobs and PSU roles. Conversely, Computer Science and its specializations (like AI/ML, Data Science, Cyber Security) dominate the private sector IT placements. By exploring our branch profiles, you get a clear breakdown of the exact BEU syllabus, necessary technical skills, and average starting salaries in India.
+            </p>
+
+            <h3 className="text-xl font-bold text-white mt-8 mb-4">Core Skills & Syllabus Insights</h3>
+            <p className="text-slate-300">
+              To excel in your chosen branch, simply passing semester exams is not enough. You must build practical, industry-relevant skills. Our branch guides highlight the exact tools and technologies you need to learn. For CSE, this means mastering Data Structures, Algorithms, React, and Node.js. For Mechanical, it involves CAD, Thermodynamics, and AutoDesk. Combine this knowledge with our BEU study notes, PYQs, and interactive syllabus tracker to ensure a 360-degree academic preparation.
+            </p>
+          </div>
+        </section>
+
       </div>
     </div>
   );

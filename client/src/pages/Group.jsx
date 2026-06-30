@@ -337,6 +337,19 @@ export default function Group() {
           </div>
         </div>
       )}
+
+      {/* ── Educational SEO Content ── */}
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 text-left">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Bihar Engineering Virtual Study Groups & Network</h2>
+        <p>
+          Isolation during intense exam preparation can lead to burnout. The <strong>Apna College Bihar Study Network</strong> allows engineering students across all 38 Government Engineering Colleges (GECs) to form dedicated virtual study groups. Create a personalized hub, invite your classmates via a unique 6-character code, and start studying together online.
+        </p>
+        <h3 className="text-xl font-bold mt-8 mb-4">Collaborate & Conquer Semester Exams</h3>
+        <p>
+          Inside each Study Hub, you can track the real-time study progress of your peers. When one member starts the Pomodoro Study Timer, everyone else in the group is notified, fostering a competitive and highly productive environment. It’s like being in a college library, but completely virtual. You can also integrate Google Meet links directly into your hub for instant doubt-solving sessions.
+        </p>
+      </div>
+
     </div>
   );
 }

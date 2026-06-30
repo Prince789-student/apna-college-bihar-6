@@ -143,6 +143,33 @@ export default function CollegeDirectory() {
               <p className="text-slate-500 text-sm font-medium mt-2">Try adjusting your search keywords.</p>
             </div>
           )}
+          )}
+        </div>
+      </section>
+
+      {/* ── Educational SEO Content ── */}
+      <section className="py-16 px-6 md:px-12 bg-white border-t border-slate-200">
+        <div className="container mx-auto max-w-5xl prose prose-slate max-w-none text-left">
+          <h2 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tighter mb-4">Complete Directory of Bihar Engineering Colleges</h2>
+          <p>
+            Welcome to the most comprehensive and updated directory of <strong>Engineering Colleges under Bihar Engineering University (BEU)</strong>. Whether you are a JEE Main aspirant preparing for UGEAC Counselling or a parent looking for the best technical institutions in Bihar, this directory provides detailed, verified profiles of all 38+ Government Engineering Colleges (GECs) and private institutes affiliated with BEU and approved by AICTE.
+          </p>
+
+          <h3 className="text-xl font-bold mt-8 mb-4">How to Choose the Best Engineering College in Bihar?</h3>
+          <p>
+            Choosing the right college is the first step toward a successful B.Tech career. The colleges in Bihar range from highly established institutions like <strong>BCE Bhagalpur</strong> and <strong>MIT Muzaffarpur</strong> to newly established but rapidly growing colleges like NCE Chandi and GEC Vaishali. Our directory helps you make an informed decision by providing crucial data points:
+          </p>
+          <ul>
+            <li><strong>Available Branches:</strong> Check if your preferred branch (CSE, Civil, Mechanical, EEE) is offered.</li>
+            <li><strong>Placement Statistics:</strong> Real, student-verified placement records and average package details.</li>
+            <li><strong>Campus Facilities:</strong> Information about hostels, labs, libraries, and coding clubs.</li>
+            <li><strong>UGEAC Cutoffs:</strong> Previous year closing ranks to help you predict your admission chances.</li>
+          </ul>
+
+          <h3 className="text-xl font-bold mt-8 mb-4">The Admission Process (UGEAC & BCECE)</h3>
+          <p>
+            Admissions to B.Tech programs in Bihar Engineering University are primarily conducted through the <strong>Under Graduate Engineering Admission Counselling (UGEAC)</strong> organized by BCECEB. The counselling is strictly based on your JEE Main scores. Click on any college profile above to view their historical cutoff trends, fee structure, and a direct map link to their campus. Empower your UGEAC choice-filling process with Apna College Bihar!
+          </p>
         </div>
       </section>
     </div>

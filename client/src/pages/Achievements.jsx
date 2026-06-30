@@ -115,6 +115,19 @@ export default function Achievements() {
           <p className="text-slate-600 text-xs mt-2">Study session complete karo aur badges unlock karo</p>
         </div>
       )}
+
+      {/* ── Educational SEO Content ── */}
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 text-left">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Engineering Study Achievements & Gamification</h2>
+        <p>
+          Staying motivated consistently across 8 semesters is one of the biggest challenges for engineering students at Bihar Engineering University (BEU). We implemented this <strong>Gamified Achievements System</strong> to turn your daily study grinds, assignments, and exam preparations into rewarding milestones. 
+        </p>
+        <h3 className="text-xl font-bold mt-8 mb-4">Unlock Badges and Build Study Streaks</h3>
+        <p>
+          Every time you complete a focused Pomodoro session or hit your daily reading target, your stats are recorded. Hit major milestones like a "7-Day Streak" or "10 Hours Club" to unlock exclusive digital badges. The more badges you collect, the higher your overall global scholar ranking climbs. Keep studying to transform your BEU academic journey into an engaging and victorious experience!
+        </p>
+      </div>
+
     </div>
   );
 }

@@ -1689,6 +1689,24 @@ export default function StudyDashboard() {
           </div>
         )}
 
+        {/* ── Educational SEO Content ── */}
+        <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 mb-8 prose prose-slate max-w-none shadow-sm text-left">
+          <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Focus Mode & Study Timer for Engineering Students</h2>
+          <p>
+            Welcome to the ultimate <strong>Study Dashboard and Pomodoro Timer</strong> designed specifically for Bihar Engineering University (BEU) students. Engineering requires intense concentration, especially when preparing for complex subjects like Data Structures, Applied Mathematics, or Engineering Mechanics. Our custom-built focus timer helps you block out distractions and track your daily study hours efficiently.
+          </p>
+
+          <h3 className="text-xl font-bold mt-8 mb-4">Why Use the Apna College Bihar Study Timer?</h3>
+          <p>
+            Mobile phones are the biggest source of distraction during exam preparation. If you are using our official Android App, this Study Dashboard comes equipped with a strict <strong>App Blocker</strong>. When you start a Focus Session, it automatically locks out distracting applications (like Instagram, Facebook, and games), ensuring 100% dedication to your BEU Notes and PYQs.
+          </p>
+
+          <h3 className="text-xl font-bold mt-8 mb-4">Track Your Academic Progress</h3>
+          <p>
+            The Study Dashboard isn't just a timer; it is a complete productivity suite. You can set daily targets, organize tasks by subject, and monitor your study history via beautiful analytics charts. By consistently tracking your focus hours, you build a disciplined routine—which is the secret to scoring a high CGPA in Bihar Engineering University (BEU) end-semester examinations.
+          </p>
+        </div>
+
       </div>
     </div>
   );

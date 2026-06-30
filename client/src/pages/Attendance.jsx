@@ -816,20 +816,20 @@ export default function Attendance() {
       </div>
 
       {/* ── Educational SEO Content ── */}
-      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 relative z-20">
-        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Bihar Engineering University (BEU) Attendance & Holidays</h2>
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 relative z-20 text-left">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Bihar Engineering University (BEU) Attendance Tracker & Holiday Calendar</h2>
         <p>
-          Maintaining good attendance is a critical component of pursuing a B.Tech degree at Bihar Engineering University (BEU). We provide this smart <strong>BEU Attendance Tracker</strong> to help students seamlessly log their daily classes and ensure they meet the mandatory criteria required to appear in the end-semester examinations.
+          Maintaining robust attendance is a critical, non-negotiable component of pursuing a B.Tech degree at Bihar Engineering University (BEU). To simplify this, we have developed this smart, interactive <strong>BEU Attendance Tracker</strong> to help students seamlessly log their daily classes and ensure they meet the mandatory criteria required to safely appear in the university end-semester examinations.
         </p>
 
         <h3 className="text-xl font-bold mt-8 mb-4">The 75% Mandatory Attendance Rule</h3>
         <p>
-          According to the official academic regulations of BEU Patna, every student must maintain a minimum of <strong>75% attendance</strong> in all theory and practical classes. Falling below this threshold may lead to being debarred from the End Semester Examinations. Our tracker gives you a visual progress bar and alerts you exactly how many more classes you need to attend to stay in the safe zone.
+          According to the official academic regulations of BEU Patna, every engineering student must maintain a minimum of <strong>75% attendance</strong> collectively in all theory lectures, tutorials, and practical lab sessions. Falling below this strict threshold typically leads to being officially debarred (detained) from writing the End Semester Examinations. Our tracker provides a visual progress bar and alerts you exactly how many more classes you need to attend to stay safely in the green zone.
         </p>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">How Attendance Impacts Your Sessional Marks</h3>
+        <h3 className="text-xl font-bold mt-8 mb-4">How Attendance Directly Impacts Your Sessional Marks</h3>
         <p>
-          Your attendance percentage directly correlates with your internal sessional marks. BEU typically allocates a specific portion of internal marks (often out of 5 marks) based strictly on attendance performance:
+          Your attendance percentage directly correlates with your internal sessional marks awarded by college professors. BEU typically allocates a specific portion of internal marks (often 5 marks per subject) based strictly on attendance performance:
         </p>
         <ul>
           <li>Below 75%: 0 Marks</li>
@@ -839,11 +839,11 @@ export default function Attendance() {
           <li>90% - 95%: 4 Marks</li>
           <li>Above 95%: 5 Marks (Full Marks)</li>
         </ul>
-        <p>Using our tracker, you can estimate your internal marks in real-time as you log your daily presence!</p>
+        <p>Using our tracker daily, you can estimate your internal marks in real-time as you log your biometric presence!</p>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">BEU Holiday Calendar 2026</h3>
+        <h3 className="text-xl font-bold mt-8 mb-4">Official BEU Holiday Calendar 2026</h3>
         <p>
-          We also provide an integrated <strong>BEU Holiday Calendar</strong> for the current academic year. It lists all official gazetted holidays, summer vacations, winter breaks, and festival holidays (like Diwali, Chhath Puja, and Holi) approved by the university. Checking the calendar helps you plan your leaves without letting your attendance percentage drop dangerously low.
+          We also provide an integrated <strong>BEU Holiday Calendar</strong> for the current academic year. It comprehensively lists all official gazetted holidays, summer vacations, winter breaks, and major festival holidays (like Diwali, Chhath Puja, and Holi) approved by the university administration. Keeping an eye on the calendar helps you proactively plan your leaves without letting your attendance percentage drop to dangerous levels.
         </p>
       </div>
 

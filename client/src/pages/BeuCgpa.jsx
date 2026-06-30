@@ -618,10 +618,10 @@ export default function BeuCgpa() {
         </div>
       )}
       {/* ── Educational Guide / SEO Content ─── */}
-      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 prose prose-slate max-w-none">
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 prose prose-slate max-w-none text-left shadow-sm">
         <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">How to Calculate BEU CGPA & SGPA?</h2>
         <p>
-          The <strong>Bihar Engineering University (BEU)</strong> follows a strict Choice Based Credit System (CBCS). Under this system, each subject you study in your B.Tech course is assigned specific credits. Your overall performance is measured using SGPA (Semester Grade Point Average) and CGPA (Cumulative Grade Point Average).
+          The <strong>Bihar Engineering University (BEU)</strong> follows a strict Choice Based Credit System (CBCS). Under this system, each subject you study in your B.Tech course is assigned specific credits based on its importance and hours of study. Your overall academic performance is measured using SGPA (Semester Grade Point Average) and CGPA (Cumulative Grade Point Average).
         </p>
         
         <h3 className="text-xl font-bold mt-8 mb-4">BEU Grading Formula Explained</h3>
@@ -632,26 +632,26 @@ export default function BeuCgpa() {
           SGPA = Σ (Course Credits × Grade Points) / Σ (Course Credits)
         </blockquote>
         <p>
-          To calculate your <strong>overall CGPA</strong>, you average the SGPA of all completed semesters, weighted by their respective credits. This CGPA Calculator automates this complex process for you, taking into account the exact BEU grading scale.
+          To calculate your <strong>overall CGPA</strong>, you average the SGPA of all completed semesters, weighted by their respective credits. This BEU CGPA Calculator completely automates this complex mathematical process for you, taking into account the exact BEU grading scale, so you know exactly where you stand.
         </p>
 
         <h3 className="text-xl font-bold mt-8 mb-4">How to Convert BEU CGPA to Percentage?</h3>
         <p>
-          One of the most frequently asked questions by Bihar Engineering students during placements or higher education applications is how to convert their CGPA into a percentage. According to standard AICTE and BEU guidelines, the approximate conversion formula is:
+          One of the most frequently asked questions by Bihar Engineering students during off-campus placements or higher education applications (like GATE or CAT) is how to convert their CGPA into a percentage. According to standard AICTE and BEU guidelines, the approximate conversion formula is:
         </p>
         <blockquote className="bg-slate-50 border-l-4 border-emerald-600 p-4 rounded-r-xl my-4 font-mono text-sm text-slate-700">
           Percentage = (CGPA - 0.75) × 10
         </blockquote>
         <p>
-          Alternatively, some companies accept a direct multiplication by 9.5. Always check with your college's training and placement cell for the exact conversion certificate if required by recruiters like TCS, Wipro, or for GATE counseling.
+          Alternatively, some private recruiters (like TCS, Wipro, Infosys) may accept a direct multiplication by 9.5. Always check with your college's Training and Placement (T&P) cell for the exact university conversion certificate if required by recruiters.
         </p>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">Passing Criteria & Backlog Rules</h3>
+        <h3 className="text-xl font-bold mt-8 mb-4">Passing Criteria & Backlog Rules in BEU</h3>
         <p>
-          To pass a theory subject in BEU, you must secure a minimum of <strong>35% marks overall</strong> (Internal + External), AND a minimum of <strong>25 out of 70 marks</strong> specifically in your End Semester University Examination. Failing to meet either of these criteria will result in an 'F' grade, meaning you have a backlog in that subject.
+          To pass a theory subject in BEU, you must secure a minimum of <strong>35% marks overall</strong> (Internal + External), AND a minimum of <strong>25 out of 70 marks</strong> specifically in your End Semester University Examination. Failing to meet either of these criteria will result in an 'F' grade, meaning you have a backlog (carry paper) in that subject.
         </p>
         <p>
-          If you get a backlog, you will need to re-appear for the End Semester exam for that subject in the subsequent semester or during special backlog examinations conducted by the university.
+          If you get a backlog, you will need to re-appear for the End Semester exam for that subject in the subsequent semester or during special backlog examinations conducted by the university. Use this calculator to predict your internal marks and avoid backlogs!
         </p>
       </div>
     </div>

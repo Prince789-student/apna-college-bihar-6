@@ -310,6 +310,31 @@ export default function StudyResources() {
           </div>
         </div>
       )}
+
+      {/* ── Educational SEO Content ── */}
+      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 mb-8 prose prose-slate max-w-none shadow-sm">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Ultimate Engineering Study Resources for Bihar Students</h2>
+        <p>
+          Welcome to the <strong>Apna College Bihar Study Resources Hub</strong>. In the demanding world of B.Tech engineering, relying solely on textbooks is no longer enough. You need quick, accessible, and high-yield digital study materials to stay ahead in your semesters at Bihar Engineering University (BEU) and other technical institutions.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">Community-Driven Technical Assets</h3>
+        <p>
+          Our platform is uniquely community-driven. Engineering students from top colleges like BCE Bhagalpur, MIT Muzaffarpur, and NCE Chandi actively share their best <strong>cheat sheets, coding roadmaps, GitHub repositories, and YouTube tutorial links</strong> right here. From mastering Java OOPs and Data Structures (DSA) to grasping complex subjects like Thermodynamics and Fluid Mechanics, you will find highly curated links uploaded by your peers.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">How to Use the Study Resources Directory?</h3>
+        <ul>
+          <li><strong>Filter by Topic:</strong> Use the search bar to find exact study links (e.g., "Python Roadmap", "AutoCAD Tutorial", "Machine Learning Notes").</li>
+          <li><strong>Click and Learn:</strong> Every card provides a direct link to the external resource. Click the external link icon to jump straight into the learning material.</li>
+          <li><strong>Share Your Own:</strong> Found an amazing YouTube playlist that helped you clear a back paper? Click the "Share Link" button and help thousands of other engineering students in Bihar.</li>
+        </ul>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">Safe, Verified, and Categorized</h3>
+        <p>
+          We understand that the internet is flooded with unverified information. That is why every link submitted to the Apna College Bihar Study Resources directory undergoes a strict verification process by our admin team before becoming "Active". This guarantees that you only spend time on high-quality, virus-free, and highly educational websites and tutorials. Let's revolutionize engineering education in Bihar together!
+        </p>
+      </div>
     </div>
   );
 }

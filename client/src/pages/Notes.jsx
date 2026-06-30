@@ -435,25 +435,25 @@ export default function Notes() {
       <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 mx-auto prose prose-slate max-w-none shadow-sm mb-8">
         <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Bihar Engineering University (BEU) B.Tech Notes</h2>
         <p>
-          Welcome to the largest, most organized, and free repository of <strong>B.Tech Notes for Bihar Engineering University (BEU)</strong>. Whether you are studying Computer Science, Civil Engineering, Mechanical, or Electrical, our platform provides completely free access to chapter-wise handwritten and digital notes strictly aligned with the latest AICTE and BEU Syllabus.
+          Welcome to the largest, most organized, and free repository of <strong>B.Tech Notes for Bihar Engineering University (BEU)</strong>. Whether you are studying Computer Science (CSE), Civil Engineering, Mechanical Engineering, or Electrical and Electronics Engineering (EEE), our platform provides completely free access to chapter-wise handwritten and digital notes strictly aligned with the latest AICTE and BEU Syllabus.
         </p>
 
         <h3 className="text-xl font-bold mt-8 mb-4">Why Follow the BEU Official Syllabus for Notes?</h3>
         <p>
-          BEU standardizes the curriculum across all 38+ Government Engineering Colleges in Bihar. Relying on random internet notes can be dangerous because they might not cover the specific modules required for your End Semester Examinations. Our team meticulously curates notes from college toppers and faculties to ensure they exactly match the <strong>BEU Module-wise breakdown</strong>.
+          BEU standardizes the curriculum across all 38+ Government Engineering Colleges in Bihar (including BCE, MIT, DCE, NCE, etc.). Relying on random internet notes can be dangerous because they might not cover the specific modules required for your End Semester Examinations. Our team meticulously curates notes from college toppers, senior students, and highly qualified faculties to ensure they exactly match the <strong>BEU Module-wise breakdown</strong>. This ensures that you don't waste time studying irrelevant topics.
         </p>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">How to Download BEU Notes in PDF?</h3>
+        <h3 className="text-xl font-bold mt-8 mb-4">How to Download BEU Engineering Notes in PDF Format?</h3>
         <ul>
-          <li>Select your specific Branch (e.g., CSE, Civil, ECE).</li>
-          <li>Choose your current Semester (Sem 1 to 8).</li>
-          <li>Select the Subject folder you want to study.</li>
-          <li>Click the Download icon to save the high-quality PDF directly to your device for offline reading.</li>
+          <li><strong>Select your specific Branch:</strong> Choose from CSE, Civil, ECE, Mechanical, IT, etc.</li>
+          <li><strong>Choose your current Semester:</strong> Navigate through Sem 1 to 8 to find your exact current curriculum.</li>
+          <li><strong>Select the Subject folder:</strong> Find folders labeled with your specific subject code (e.g., Physics, Chemistry, Basic Electrical, Data Structures, Machine Learning).</li>
+          <li><strong>Download or View:</strong> Click the Download icon to save the high-quality PDF directly to your device for offline reading, or click 'View' to read directly in our fast integrated PDF viewer.</li>
         </ul>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">Are these Notes Sufficient for End Semester Exams?</h3>
+        <h3 className="text-xl font-bold mt-8 mb-4">Are these Notes Sufficient for BEU End Semester Exams?</h3>
         <p>
-          Yes! To maximize your SGPA/CGPA, we recommend combining these notes with our <strong>Previous Year Questions (PYQs)</strong> section. While notes build your conceptual foundation, solving PYQs is the ultimate hack to predict the exam pattern. Many questions in BEU exams are repeated from previous years.
+          Absolutely! These notes have been tested by thousands of engineering students across Bihar. To maximize your SGPA and CGPA, we recommend combining these notes with our <strong>Previous Year Questions (PYQs)</strong> section. While notes build your conceptual foundation and help in understanding complex derivations and numericals, solving PYQs is the ultimate hack to predict the exam pattern. Many questions in BEU exams are repeated from previous years. So, read the notes thoroughly, memorize the key points, and practice the past 3-5 years of question papers available on our platform.
         </p>
       </div>
 

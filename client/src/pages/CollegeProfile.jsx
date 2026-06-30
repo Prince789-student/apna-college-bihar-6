@@ -655,6 +655,31 @@ export default function CollegeProfile() {
             </div>
           </div>
         </section>
+
+        {/* ── Educational SEO Content ── */}
+        <section className="mt-16 pt-16 border-t border-slate-200">
+          <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 prose prose-slate max-w-none text-left shadow-sm">
+            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Complete Guide to {college.name} Admission & Placements</h2>
+            <p>
+              Are you planning to take admission in <strong>{college.name} ({college.shortName})</strong>? As one of the prominent institutions under Bihar Engineering University (BEU), {college.shortName} offers a robust academic environment for B.Tech students. Whether you are aiming for Computer Science, Civil Engineering, or Mechanical, it is crucial to understand the college's UGEAC cutoff trends, fee structure, and placement records before finalizing your choice-filling list.
+            </p>
+
+            <h3 className="text-xl font-bold mt-8 mb-4">UGEAC Cutoffs and JEE Main Requirements</h3>
+            <p>
+              Admission to {college.name} is strictly based on the merit list prepared by the Bihar Combined Entrance Competitive Examination Board (BCECEB). Students must have a valid JEE Main score to participate in the Under Graduate Engineering Admission Counselling (UGEAC). The cutoffs vary significantly based on category (UR, EWS, BC, EBC, SC, ST, RC) and seat type (General vs Female quota). Use our detailed cutoff tables above to predict your chances of securing a seat in your preferred branch at {college.shortName}.
+            </p>
+
+            <h3 className="text-xl font-bold mt-8 mb-4">Campus Facilities and Hostel Life</h3>
+            <p>
+              A good engineering college is defined not just by academics, but also by its infrastructure. {college.shortName} provides essential campus facilities including modern computer labs, central libraries, and high-speed Wi-Fi. For outstation students, {college.hostelDetails?.availability ? "the campus offers dedicated boys and girls hostels" : "accommodation is available nearby"}. The hostel environment fosters a strong coding culture, peer-to-peer learning, and active participation in technical clubs and hackathons.
+            </p>
+
+            <h3 className="text-xl font-bold mt-8 mb-4">Placement Statistics and Career Opportunities</h3>
+            <p>
+              Placement is the ultimate goal for most engineering students. {college.name} has a dedicated Training and Placement (T&P) cell that actively coordinates with top IT companies and core engineering firms. While the highest packages often go to Computer Science (CSE) students, core branches like Civil and Electrical also see consistent recruitment from state departments and public sector undertakings (PSUs). To secure the best packages at {college.shortName}, we highly recommend students to utilize our BEU Study Materials, maintain a high CGPA, and focus on off-campus opportunities simultaneously.
+            </p>
+          </div>
+        </section>
       </div>
     </div>
   );

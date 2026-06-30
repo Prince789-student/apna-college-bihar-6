@@ -671,6 +671,31 @@ export default function HackathonHub() {
         </div>
       )}
 
+      {/* ── Educational SEO Content ── */}
+      <section className="mt-16 pt-16 border-t border-slate-200 relative z-10 mx-4 max-w-7xl lg:mx-auto mb-16">
+        <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200 prose prose-slate max-w-none shadow-sm text-left">
+          <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Bihar Engineering Hackathon Hub: Innovate & Compete</h2>
+          <p>
+            Welcome to the <strong>Bihar Engineering Hackathon Hub</strong>, the first centralized platform designed specifically for students enrolled in Bihar Engineering University (BEU) to discover, prepare, and team up for national and state-level coding competitions like the Smart India Hackathon (SIH), internal GEC techfests, and global online coding events.
+          </p>
+
+          <h3 className="text-xl font-bold mt-8 mb-4">Why Participate in Hackathons?</h3>
+          <p>
+            While your BEU semester exams validate your theoretical knowledge, hackathons are the ultimate playground to test your practical coding skills. Building real-world projects under strict 24-48 hour deadlines significantly boosts your problem-solving abilities and makes your resume stand out to top tech recruiters (TCS, Infosys, Wipro, Google). 
+          </p>
+
+          <h3 className="text-xl font-bold mt-8 mb-4">Find Coding Teammates Across Bihar</h3>
+          <p>
+            Building a strong, balanced team is the secret to winning hackathons. If you are a frontend developer from BCE Bhagalpur looking for a backend Node.js expert from MIT Muzaffarpur, use our <strong>Teammate Finder</strong>. You can post your exact requirements, share your project vision, and instantly connect with talented developers across all 38 Government Engineering Colleges (GECs) in Bihar.
+          </p>
+
+          <h3 className="text-xl font-bold mt-8 mb-4">Smart India Hackathon (SIH) Preparation</h3>
+          <p>
+            SIH is the world's largest open innovation model. Preparing for the internal SIH screening rounds at your respective GEC requires meticulous planning. We provide exclusive, ready-to-use PPT presentation templates and crucial guidelines that cover technology stacks, flowchart design, and unique selling propositions (USPs) to help you clear the rigorous college-level screenings with ease.
+          </p>
+        </div>
+      </section>
+
     </div>
   );
 }

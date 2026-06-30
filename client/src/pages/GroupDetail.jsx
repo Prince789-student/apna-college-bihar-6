@@ -698,6 +698,18 @@ export default function GroupDetail() {
           </div>
         </div>
       )}
+      {/* ── Educational SEO Content ── */}
+      <div className="bg-slate-50 p-8 md:p-12 rounded-[2.5rem] border border-slate-200/80 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 text-left">
+        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Advanced Study Hub & Analytics Dashboard</h2>
+        <p>
+          Welcome to the core operations page of your virtual study network. Here, BEU students can rigorously track peer performance, examine real-time activity, and seamlessly jump into an embedded meeting room without leaving the platform.
+        </p>
+        <h3 className="text-xl font-bold mt-8 mb-4">Deep Analytics and Peer Motivation</h3>
+        <p>
+          Clicking on any member’s card pulls up their comprehensive study statistics. The system renders an interactive <strong>Donut Chart</strong> highlighting exactly which subjects they spent the most time on. You can view their daily max focus durations and send a friendly "Nudge" notification if they seem to be slacking off. This transparency creates an unmatched level of accountability amongst engineering students, driving everyone towards better academic results.
+        </p>
+      </div>
+
     </div>
   );
 }

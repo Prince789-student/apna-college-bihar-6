@@ -354,6 +354,26 @@ export default function SubjectPage() {
           </div>
         </div>
 
+        {/* ── Educational SEO Content ── */}
+        <section className="mt-16 pt-16 border-t border-white/10 relative z-10">
+          <div className="bg-[#0f172a]/50 p-8 md:p-12 rounded-[2.5rem] border border-white/5 prose prose-invert max-w-none text-left">
+            <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-4">Complete Study Guide for {subjectInfo.name} (BEU Syllabus)</h2>
+            <p className="text-slate-300">
+              Welcome to the central hub for <strong>{subjectInfo.name}</strong>. If you are a B.Tech student enrolled in Bihar Engineering University (BEU), passing this subject requires a strategic approach. We have aggregated all necessary study materials, including module-wise syllabus breakdowns, handwritten notes from college toppers, and previous year question (PYQ) papers, to help you score an 'A' grade in your end-semester examinations.
+            </p>
+
+            <h3 className="text-xl font-bold text-white mt-8 mb-4">Why are Notes and PYQs Important for {subjectInfo.name}?</h3>
+            <p className="text-slate-300">
+              In BEU exams, questions are strictly formulated based on the AICTE prescribed syllabus. However, reading standard textbooks cover-to-cover can be overwhelming. Our curated <strong>{subjectInfo.name} Notes</strong> summarize complex concepts into easy-to-understand formats. Additionally, practicing with <strong>BEU PYQ Papers</strong> is the most proven method to identify repeated questions and understand the university's exam pattern, particularly for the 70-mark external theory exams.
+            </p>
+
+            <h3 className="text-xl font-bold text-white mt-8 mb-4">How to Use This Subject Dashboard?</h3>
+            <p className="text-slate-300">
+              Navigate through the tabs above to access different types of resources. The "Syllabus" tab provides a quick checklist of units you need to cover. The "Notes" tab contains downloadable PDFs. Finally, use the "PYQ" tab a month before your exams to test your preparation level. Consistent revision using these materials is the key to maintaining a high CGPA without backlogs in BEU.
+            </p>
+          </div>
+        </section>
+
       </div>
     </div>
   );

@@ -666,6 +666,33 @@ export default function Home() {
         </Reveal>
       </section>
 
+      {/* ═══════════════════════════════════════════ */}
+      {/* ── 10. SEO TEXT DEPTH BLOCK ── */}
+      {/* ═══════════════════════════════════════════ */}
+      <section className="py-16 px-6 md:px-16 bg-slate-50 border-t border-slate-200">
+        <div className="container mx-auto max-w-6xl">
+          <div className="bg-white p-8 md:p-12 rounded-[2rem] border border-slate-100 shadow-sm">
+            <h2 className="text-2xl md:text-3xl font-[900] text-slate-900 tracking-tight mb-6">Apna College Bihar: The Ultimate Resource for BEU B.Tech Students</h2>
+            
+            <div className="prose prose-slate max-w-none text-slate-600 space-y-6 text-sm leading-relaxed font-medium">
+              <p>Welcome to <strong>Apna College Bihar</strong>, the premier digital learning platform dedicated specifically to students of <strong>Bihar Engineering University (BEU)</strong>. Whether you are pursuing Computer Science (CSE), Civil Engineering, Mechanical Engineering, or Electrical Engineering, finding structured, high-quality study materials can be challenging. Our mission is to bridge this gap by providing comprehensive, easy-to-understand resources that align perfectly with the official BEU B.Tech syllabus.</p>
+
+              <h3 className="text-xl font-[800] text-slate-800 mt-8 mb-4">Comprehensive BEU Notes and Study Materials</h3>
+              <p>One of the biggest hurdles engineering students face is the lack of concise and accurate study notes. At Apna College Bihar, we offer meticulously crafted <strong>BEU Notes</strong> that cover every unit of your semester. These notes are designed by top-performing students and subject matter experts to ensure that you grasp complex engineering concepts quickly. From fundamental physics and mathematics in the first year to advanced core subjects in your final year, our notes are optimized to help you score an excellent CGPA.</p>
+
+              <h3 className="text-xl font-[800] text-slate-800 mt-8 mb-4">Mastering Exams with BEU Previous Year Questions (PYQs)</h3>
+              <p>It is a well-known fact that analyzing <strong>BEU Previous Year Question Papers (PYQs)</strong> is the most effective strategy for exam preparation. The university exam patterns often repeat crucial concepts and question formats. Our platform provides a vast, organized repository of BEU PYQs for all branches and semesters. By practicing these past papers, you can identify high-weightage topics, understand the grading scheme, and approach your semester exams with absolute confidence.</p>
+
+              <h3 className="text-xl font-[800] text-slate-800 mt-8 mb-4">Advanced Tools: CGPA Calculator, Syllabus, and Timetable</h3>
+              <p>Beyond study materials, Apna College Bihar equips you with powerful digital tools to manage your academic life. Our <strong>BEU CGPA Calculator</strong> allows you to accurately track your academic performance based on the university's credit system. We also provide an easily navigable version of the <strong>BEU B.Tech Syllabus</strong> so you never miss a topic. Furthermore, our built-in timetable and attendance trackers ensure that you maintain the mandatory 75% attendance while effectively managing your self-study hours through our custom Study Timer (Focus Mode).</p>
+
+              <h3 className="text-xl font-[800] text-slate-800 mt-8 mb-4">Why Choose Apna College Bihar?</h3>
+              <p>Engineering in Bihar is evolving, and so should your preparation methods. We are not just a website; we are a community of thousands of Bihar Engineering University students striving for excellence. By integrating everything from UGEAC Counselling predictors for freshers to advanced study resources for senior students, Apna College Bihar stands as the most trusted, all-in-one educational hub. Download our official app today, eliminate distractions with our strict app blocker, and take a definitive step towards academic success.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
