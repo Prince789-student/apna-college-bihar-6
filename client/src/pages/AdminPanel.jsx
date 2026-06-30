@@ -147,7 +147,7 @@ const [uploading, setUploading] = useState(false);
           }
         });
         
-        await setDoc(doc(db, 'metadata', 'stats'), {
+        await setDoc(doc(db, 'documents', 'unique_counts_metadata'), {
           uniqueNotesCount: uniqueNotes.size,
           uniquePyqsCount: uniquePYQs.size,
           lastUpdated: serverTimestamp()

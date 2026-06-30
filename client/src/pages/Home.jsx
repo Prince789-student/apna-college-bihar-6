@@ -170,7 +170,7 @@ export default function Home() {
     });
 
     // Read pre-calculated unique stats to save reads
-    const unsubDocs = onSnapshot(doc(db, 'metadata', 'stats'), (docSnap) => {
+    const unsubDocs = onSnapshot(doc(db, 'documents', 'unique_counts_metadata'), (docSnap) => {
       if (docSnap.exists()) {
         const data = docSnap.data();
         setStats(s => ({
