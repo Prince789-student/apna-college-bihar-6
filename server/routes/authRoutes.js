@@ -99,7 +99,19 @@ const generateToken = (id, role, name, email) => {
 router.post('/register', async (req, res) => {
     try {
         const { name, email, password, mobile, role } = req.body;
-        const userExists = await User.findOne({ email });
+        
+        // Input Validation
+        if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            return res.status(400).json({ message: 'Valid email is required' });
+        }
+        if (!password || typeof password !== 'string' || password.length < 6) {
+            return res.status(400).json({ message: 'Password must be at least 6 characters' });
+        }
+        if (!name || typeof name !== 'string' || name.trim().length === 0) {
+            return res.status(400).json({ message: 'Name is required' });
+        }
+
+        const userExists = await User.findOne({ email: email.toLowerCase() });
         if (userExists) return res.status(400).json({ message: 'User already exists' });
 
         const otp = crypto.randomInt(100000, 999999).toString();
@@ -182,7 +194,16 @@ router.post('/verify-otp', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email });
+
+        // Input Validation
+        if (!email || typeof email !== 'string') {
+            return res.status(400).json({ message: 'Valid email required' });
+        }
+        if (!password || typeof password !== 'string') {
+            return res.status(400).json({ message: 'Password required' });
+        }
+
+        const user = await User.findOne({ email: email.toLowerCase() });
 
         if (user && (await bcrypt.compare(password, user.password))) {
             res.json({
