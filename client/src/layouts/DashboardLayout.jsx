@@ -710,7 +710,7 @@ export default function DashboardLayout() {
                                     import('react-hot-toast').then(m => m.toast.success("App link copied to clipboard!"));
                                   }
                                 } catch (err) {
-                                  console.log("Error sharing:", err);
+                                  // console.log removed
                                 }
                               }}
                               className="flex items-center gap-3 w-full p-3 hover:bg-emerald-50 text-slate-500 hover:text-emerald-600 rounded-2xl transition-all group"

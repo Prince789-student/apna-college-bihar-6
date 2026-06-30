@@ -67,4 +67,4 @@ isSupported().then((supported) => {
   if (supported) {
     messaging = getMessaging(app);
   }
-}).catch(err => console.log('Firebase messaging not supported:', err));
+}).catch(err => {/* console.log removed */});

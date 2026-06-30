@@ -27,9 +27,8 @@ export const startFocusSession = async (minutes, allowedPackages = []) => {
   try {
     if (AppBlocker && AppBlocker.startCountdown) {
       await AppBlocker.startCountdown({ minutes, allowedPackages });
-      console.log(`Hardcore Focus Session started for ${minutes} mins`);
     } else {
-      console.log("Focus session simulated (Web)");
+      // console.log removed
     }
   } catch (error) {
     console.debug("Focus session start skipped on web");

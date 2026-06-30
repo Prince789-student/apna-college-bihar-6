@@ -74,7 +74,7 @@ export function StudyProvider({ children }) {
               _setAllowedPackages(getPrefsAllowed.value);
             }
             
-            console.log("Restored active focus session on initialization:", remainingSecs, "seconds remaining");
+            // console.log removed
           } else {
             // Clean up expired focus session
             if (AppBlocker && AppBlocker.stopBlocker) await AppBlocker.stopBlocker();

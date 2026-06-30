@@ -329,8 +329,7 @@ const [uploading, setUploading] = useState(false);
     }
   }
 
-  // Debug logging
-  console.log('Uploading notes:', { title, subject, category, branch, semester, selectedSubjectId, file, externalUrl });
+  // console.log removed
 
   setLoadingOverlayVisible(true);
   setUploading(true);

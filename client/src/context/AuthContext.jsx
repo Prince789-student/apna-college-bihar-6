@@ -37,7 +37,6 @@ export function AuthProvider({ children }) {
   // Sync profile logic
   const syncProfile = async (u) => {
     if (!u) { 
-      console.log("[AUTH] No user to sync.");
       setUser(null); 
       return; 
     }
@@ -69,7 +68,6 @@ export function AuthProvider({ children }) {
       
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        console.log("[AUTH] Existing user data found:", userData.role);
         
         let finalData;
         if (isFounder && userData.role !== ROLES.SUPER_ADMIN) {
@@ -82,7 +80,7 @@ export function AuthProvider({ children }) {
         // Step 3: Update localStorage cache with fresh Firestore data
         localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ ...userData, uid: u.uid }));
       } else {
-        console.log("[AUTH] No existing profile. Creating new entry...");
+
         const data = {
           uid: u.uid,
           name: u.displayName || 'Scholar',
@@ -269,7 +267,6 @@ export function AuthProvider({ children }) {
         setLoading(true);
         const result = await getRedirectResult(auth);
         if (result?.user) {
-          console.log("[AUTH] Redirect login success:", result.user.email);
           await syncProfile(result.user);
           // Clear any stored redirect path
           const lastPath = localStorage.getItem('lastPath');
