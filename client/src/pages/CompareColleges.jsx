@@ -103,33 +103,6 @@ export default function CompareColleges() {
             Launch Predictor Engine <ArrowRight size={14} />
           </Link>
         </div>
-        </div>
-
-        {/* ── Educational SEO Content ── */}
-        <section className="mt-16 pt-16 border-t border-white/10 relative z-10">
-          <div className="bg-[#0f172a]/50 p-8 md:p-12 rounded-[2.5rem] border border-white/5 prose prose-invert max-w-none text-left">
-            <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-4">Compare Bihar Engineering Colleges: Make an Informed Decision</h2>
-            <p className="text-slate-300">
-              During the UGEAC counselling process, choosing between two government engineering colleges (GECs) in Bihar can be incredibly confusing. Is BCE Bhagalpur better than MIT Muzaffarpur for Civil Engineering? Should you choose NCE Chandi or Darbhanga College of Engineering (DCE) for Computer Science? Our <strong>College Compare Tool</strong> allows you to evaluate two institutions side-by-side to find the perfect fit for your B.Tech journey.
-            </p>
-
-            <h3 className="text-xl font-bold text-white mt-8 mb-4">Key Metrics for College Comparison</h3>
-            <p className="text-slate-300">
-              When comparing two BEU-affiliated colleges, you should look beyond just the campus infrastructure. Consider the following crucial metrics:
-            </p>
-            <ul className="text-slate-300">
-              <li><strong>Tier Ranking:</strong> Top-tier colleges generally receive better state funding and corporate placement opportunities.</li>
-              <li><strong>Establishment Year:</strong> Older colleges usually have stronger alumni networks and highly experienced permanent faculty.</li>
-              <li><strong>Location:</strong> Colleges situated near major IT hubs like Patna or Muzaffarpur often offer better off-campus internship opportunities.</li>
-              <li><strong>Placement Records:</strong> Compare the highest and average salary packages offered by tech giants like TCS, Wipro, and Cognizant.</li>
-            </ul>
-
-            <h3 className="text-xl font-bold text-white mt-8 mb-4">Leveraging UGEAC Cutoffs</h3>
-            <p className="text-slate-300">
-              Once you have compared your target colleges, the next step is to check if your JEE Main percentile is sufficient to secure a seat there. We strongly recommend using our UGEAC Rank Predictor in conjunction with this comparison tool to finalize your counselling choice-filling strategy accurately.
-            </p>
-          </div>
-        </section>
       </div>
     </div>
   );

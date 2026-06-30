@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+﻿import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   BookOpen, HelpCircle, FileText, CheckCircle2, ChevronRight, 
@@ -317,28 +317,6 @@ export default function UgeacInfo() {
             </div>
           </div>
         </div>
-
-        </div>
-
-        {/* ── Educational SEO Content ── */}
-        <section className="mt-16 pt-16 border-t border-white/10 relative z-10">
-          <div className="bg-[#0f172a]/50 p-8 md:p-12 rounded-[2.5rem] border border-white/5 prose prose-invert max-w-none text-left">
-            <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-4">Complete Guide to UGEAC Counselling Process in Bihar</h2>
-            <p className="text-slate-300">
-              The <strong>Under Graduate Engineering Admission Counselling (UGEAC)</strong> is the official admission gateway for all 38 Government Engineering Colleges (GECs) and participating private colleges affiliated with Bihar Engineering University (BEU). Conducted by the BCECEB, UGEAC allocates seats strictly on the basis of a candidate's JEE Main All India Rank (AIR).
-            </p>
-
-            <h3 className="text-xl font-bold text-white mt-8 mb-4">UGEAC Eligibility Criteria and Documents Required</h3>
-            <p className="text-slate-300">
-              To participate in UGEAC, candidates must have qualified in JEE Mains and must possess a valid Bihar domicile certificate. During the online registration and document verification process at the nodal centers, students must present essential documents including their JEE Main scorecard, 10th & 12th passing certificates, caste certificate (if applicable for UR, BC, EBC, SC, ST quotas), and income certificate (for EWS candidates). Check our 'Eligibility' section for the complete UGEAC document checklist.
-            </p>
-
-            <h3 className="text-xl font-bold text-white mt-8 mb-4">Choice Filling and Seat Allotment Strategies</h3>
-            <p className="text-slate-300">
-              Choice filling is the most crucial step of UGEAC. Candidates are advised to fill maximum choices in decreasing order of preference. Top tier colleges like BCE Bhagalpur, MIT Muzaffarpur, and NCE Chandi fill up rapidly, especially for Computer Science Engineering (CSE). We highly recommend using the Apna College Bihar <strong>UGEAC College Predictor</strong> before locking your choices to analyze past year opening and closing ranks.
-            </p>
-          </div>
-        </section>
 
       </div>
     </div>
