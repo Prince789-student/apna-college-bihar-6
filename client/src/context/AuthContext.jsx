@@ -161,16 +161,7 @@ export function AuthProvider({ children }) {
         throw new Error('Native Google Login failed — no idToken');
       } catch (err) {
         console.error("Native Google Login Error:", err);
-        // Fallback: popup inside WebView
-        try {
-           const res = await signInWithPopup(auth, googleProvider);
-           await syncProfile(res.user);
-           return res.user;
-        } catch (popupErr) {
-           setLoading(true);
-           googleProvider.setCustomParameters({ prompt: 'select_account' });
-           return await signInWithRedirect(auth, googleProvider);
-        }
+        throw new Error("Native Google Sign-In failed or was cancelled.");
       }
     }
 

@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { StudyProvider } from './context/StudyContext'
 import { HelmetProvider } from 'react-helmet-async'
+import './index.css'
 
 const rootEl = document.getElementById('root');
 if (!rootEl) {
@@ -37,12 +38,10 @@ if (!rootEl) {
       </React.StrictMode>
     );
 
-    if (rootEl.hasChildNodes()) {
-      ReactDOM.hydrateRoot(rootEl, appContent);
-    } else {
-      const root = ReactDOM.createRoot(rootEl);
-      root.render(appContent);
-    }
+    // Always use createRoot since this is a client-side only app.
+    // The splash screen inside #root is not SSR content.
+    const root = ReactDOM.createRoot(rootEl);
+    root.render(appContent);
   } catch (err) {
     console.error("[CRITICAL] React Render Error:", err);
   }

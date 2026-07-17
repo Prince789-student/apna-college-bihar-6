@@ -198,16 +198,7 @@ function GlobalProfilePrompt() {
 }
 
 function GlobalCounsellingPopup() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    // Show popup once per session (not on every refresh)
-    const hasSeenPopup = sessionStorage.getItem('ugeacPopupSeen');
-    if (!hasSeenPopup) {
-      const timer = setTimeout(() => setIsOpen(true), 1500);
-      return () => clearTimeout(timer);
-    }
-  }, []);
+  return null;
 
   const handleClose = () => {
     sessionStorage.setItem('ugeacPopupSeen', 'true');

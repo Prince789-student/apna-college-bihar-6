@@ -60,22 +60,26 @@ function cleanSyllabusText(rawText) {
       continue;
     }
 
-    const unitMatch = line.match(/^UNIT\s+(\d+\.?\d*)\s*[-–:.]?\s*(.+?)\s+(\d+\s*hrs?)/i);
+    // Strip "hrs" from the line globally so topics don't have ": 5 hrs"
+    line = line.replace(/[:\-]?\s*\d+\s*hrs?/gi, '').trim();
+
+    // Re-check if line is empty after stripping hrs
+    if (!line) { result.push(''); continue; }
+
+    const unitMatch = line.match(/^UNIT\s+(\d+\.?\d*)\s*[-–:.]?\s*(.+)$/i);
     if (unitMatch && !line.startsWith('#')) {
       const num = unitMatch[1];
       const title = unitMatch[2].replace(/\s{2,}/g, ' ').trim();
-      const hrs = unitMatch[3].trim();
-      result.push(`\n### 📌 Unit ${num}: ${title} (${hrs})\n`);
+      result.push(`\n### 📌 Unit ${num}: ${title}\n`);
       insideReferences = false;
       continue;
     }
 
-    const unitMatch2 = line.match(/^Unit[-–\s]+(\d+\.?\d*)\s*[:.]?\s*(.+?)\s+(\d+\s*hrs?)/i);
+    const unitMatch2 = line.match(/^Unit[-–\s]+(\d+\.?\d*)\s*[:.]?\s*(.+)$/i);
     if (unitMatch2 && !line.startsWith('#')) {
       const num = unitMatch2[1];
       const title = unitMatch2[2].replace(/\s{2,}/g, ' ').trim();
-      const hrs = unitMatch2[3].trim();
-      result.push(`\n### 📌 Unit ${num}: ${title} (${hrs})\n`);
+      result.push(`\n### 📌 Unit ${num}: ${title}\n`);
       insideReferences = false;
       continue;
     }
@@ -110,16 +114,31 @@ function splitIntoTopics(text) {
     if (ch === ')' || ch === ']') depth--;
     
     const isDotSpace = (ch === '.' && i + 1 < t.length && t[i + 1] === ' ');
-    if (depth === 0 && (ch === ';' || isDotSpace)) {
+    const isComma = (ch === ',');
+    const isHyphenSep = (ch === '-' && i > 0 && i + 1 < t.length && t[i-1] === ' ' && t[i+1] === ' ');
+    
+    if (depth === 0 && (ch === ';' || isDotSpace || isComma || isHyphenSep)) {
       if (current.trim().length > 3) parts.push(current.trim());
       current = '';
       if (isDotSpace) i++; // skip the space
+      if (isHyphenSep) i++; // skip the space after hyphen
     } else {
       current += ch;
     }
   }
   if (current.trim().length > 3) parts.push(current.trim());
-  return parts;
+  
+  // Clean up any remaining leading/trailing characters from the split chunks
+  return parts.map(p => {
+    let clean = p.trim();
+    // Strip hours like ": 5 hrs" at the beginning or end of topic strings
+    clean = clean.replace(/^[:\-]?\s*\d+\s*(?:hrs?|hours?)\b\s*[:\-]?/gi, '').trim();
+    clean = clean.replace(/\b\d+\s*(?:hrs?|hours?)\s*[:\-]?$/gi, '').trim();
+    
+    if (clean.startsWith('-')) clean = clean.substring(1).trim();
+    if (clean.endsWith('-')) clean = clean.substring(0, clean.length - 1).trim();
+    return clean;
+  }).filter(p => p.length > 2);
 }
 
 
@@ -210,7 +229,7 @@ function parseSyllabusIntoSubjects(rawText) {
 
         if (isExplicitUnit) {
           title = trimmed.replace(/^#+\s*(?:📌)?\s*/, '').replace(/^UNIT\s+/i, 'Unit ').trim();
-          title = title.replace(/\s*\d+\s*(?:hrs?|hours?)\s*$/i, '');
+          title = title.replace(/[:\-]?\s*\d+\s*(?:hrs?|hours?)\s*$/i, '');
         } else if (isNumberedUnit) {
           const match = trimmed.match(/^\d+\s*\\?\.\s*\*\*(.+?)\*\*/);
           const num = match[0].match(/\d+/)[0];
@@ -769,9 +788,9 @@ export default function BeuSyllabus() {
             <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-2">Select Semester</label>
             <div className="relative">
               <select value={selectedSem} onChange={e => { setSelectedSem(e.target.value); setSelectedSubjectIndex(null); }}
-                className="w-full appearance-none bg-slate-50 border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-slate-800 outline-none focus:border-indigo-500 transition-all cursor-pointer">
-                <option value="" disabled>Select Semester</option>
-                {semesters.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
+                className="w-full appearance-none bg-slate-50 border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-slate-800 outline-none focus:border-indigo-500 transition-all cursor-pointer dark:text-slate-800">
+                <option value="" disabled className="bg-white text-slate-900">Select Semester</option>
+                {semesters.map(s => <option key={s.id} value={s.id} className="bg-white text-slate-900">{s.label}</option>)}
               </select>
               <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
             </div>
@@ -780,9 +799,9 @@ export default function BeuSyllabus() {
             <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-2">Select Branch</label>
             <div className="relative">
               <select value={selectedBranch} onChange={e => { setSelectedBranch(e.target.value); setSelectedSubjectIndex(null); navigate(`/syllabus/${e.target.value}`); }}
-                className="w-full appearance-none bg-slate-50 border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-slate-800 outline-none focus:border-indigo-500 transition-all cursor-pointer">
-                <option value="" disabled>Select Branch</option>
-                {branches.map(b => <option key={b.id} value={b.id}>{b.label}</option>)}
+                className="w-full appearance-none bg-slate-50 border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-slate-800 outline-none focus:border-indigo-500 transition-all cursor-pointer dark:text-slate-800">
+                <option value="" disabled className="bg-white text-slate-900">Select Branch</option>
+                {branches.map(b => <option key={b.id} value={b.id} className="bg-white text-slate-900">{b.label}</option>)}
               </select>
               <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
             </div>
