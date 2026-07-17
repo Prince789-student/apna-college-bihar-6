@@ -113,15 +113,11 @@ function splitIntoTopics(text) {
     if (ch === '(' || ch === '[') depth++;
     if (ch === ')' || ch === ']') depth--;
     
-    const isDotSpace = (ch === '.' && i + 1 < t.length && t[i + 1] === ' ');
-    const isComma = (ch === ',');
-    const isHyphenSep = (ch === '-' && i > 0 && i + 1 < t.length && t[i-1] === ' ' && t[i+1] === ' ');
+    const isSemicolon = (ch === ';');
     
-    if (depth === 0 && (ch === ';' || isDotSpace || isComma || isHyphenSep)) {
+    if (depth === 0 && isSemicolon) {
       if (current.trim().length > 3) parts.push(current.trim());
       current = '';
-      if (isDotSpace) i++; // skip the space
-      if (isHyphenSep) i++; // skip the space after hyphen
     } else {
       current += ch;
     }
