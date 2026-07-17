@@ -169,6 +169,7 @@ function parseSyllabusIntoSubjects(rawText) {
     const lines = block.split('\n');
     let subject = null;
     let currentUnit = null;
+    let parsingReferences = false;
 
     // First pass of the block: find out if it contains any explicit unit headers
     let hasExplicitUnits = false;
@@ -224,6 +225,7 @@ function parseSyllabusIntoSubjects(rawText) {
       const isH4NumberedUnit = !hasExplicitUnits && /^####\s*\d+\\?\.\s*(.+?)/.test(trimmed);
 
       if (isExplicitUnit || isNumberedUnit || isH4NumberedUnit) {
+        parsingReferences = false;
         let title = '';
         let remainingText = '';
 
@@ -317,7 +319,17 @@ function parseSyllabusIntoSubjects(rawText) {
 
       // Topics
       if (currentUnit) {
-        if (/^(test|text|reference|credit|l\s*t\s*p|course outcome)/i.test(trimmed)) {
+        if (/^(test|text\s*book|reference|credit|l\s*t\s*p|course outcome|suggested reading|books recommended)/i.test(trimmed)) {
+          parsingReferences = true;
+          continue;
+        }
+        
+        if (trimmed.toLowerCase().includes('references & textbooks')) {
+          parsingReferences = true;
+          continue;
+        }
+
+        if (parsingReferences) {
           continue;
         }
 
@@ -340,11 +352,6 @@ function parseSyllabusIntoSubjects(rawText) {
           if (text.length > 3) {
             currentUnit.topics.push({ text, isHeading: false });
           }
-          continue;
-        }
-
-        if (trimmed.includes('References & Textbooks')) {
-          currentUnit.topics.push({ text: 'References & Textbooks', isHeading: true });
           continue;
         }
 
