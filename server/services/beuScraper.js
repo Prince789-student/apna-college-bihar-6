@@ -28,6 +28,8 @@ async function fetchAndSaveNotices() {
         // Process only the latest 20 notices to save writes
         const latestNotices = notices.slice(0, 20);
 
+        let newNotices = [];
+
         for (const notice of latestNotices) {
             const docRef = db.collection('beu_notifications').doc(notice.id.toString());
             
@@ -45,12 +47,52 @@ async function fetchAndSaveNotices() {
                     pdfUrl: `https://beu-bih.ac.in/backend/${encodeURIComponent(notice.link)}`
                 });
                 addedCount++;
+                newNotices.push(notice);
             }
         }
 
         if (addedCount > 0) {
             await batch.commit();
             console.log(`[BEU Scraper] Successfully added ${addedCount} new notices to Firestore.`);
+            
+            // Send push notifications for new notices
+            try {
+                const messaging = admin.messaging();
+                const usersSnapshot = await db.collection('users').get();
+                const tokens = [];
+                
+                usersSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.fcmToken) {
+                        tokens.push(data.fcmToken);
+                    }
+                });
+
+                if (tokens.length > 0) {
+                    for (const notice of newNotices) {
+                        for (let i = 0; i < tokens.length; i += 500) {
+                            const chunk = tokens.slice(i, i + 500);
+                            const message = {
+                                notification: {
+                                    title: notice.isimportant === "1" ? '🚨 URGENT: New BEU Notice!' : '🔔 New BEU Notice Update',
+                                    body: notice.board || 'A new official notice has been published by BEU. Tap to view details.'
+                                },
+                                data: {
+                                    type: 'beu_notice',
+                                    id: notice.id.toString(),
+                                    link: `https://beu-bih.ac.in/backend/${notice.link || ''}`
+                                },
+                                tokens: chunk
+                            };
+                            
+                            const response = await messaging.sendEachForMulticast(message);
+                            console.log(`[BEU Scraper] Push sent. Success: ${response.successCount}, Failed: ${response.failureCount}`);
+                        }
+                    }
+                }
+            } catch (pushError) {
+                console.error('[BEU Scraper] Error sending push notifications:', pushError.message);
+            }
         } else {
             console.log('[BEU Scraper] No new notices found.');
         }
