@@ -75,6 +75,14 @@ public class UserUnlockReceiver extends BroadcastReceiver {
                     showMorningNotification(context);
                 }
             }
+
+            // Attempt to restore Launcher Icon if the OEM launcher aggressively hides it after failed uninstall
+            try {
+                android.content.pm.PackageManager pm = context.getPackageManager();
+                android.content.ComponentName componentName = new android.content.ComponentName(context, MainActivity.class);
+                pm.setComponentEnabledSetting(componentName, android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED, android.content.pm.PackageManager.DONT_KILL_APP);
+                pm.setComponentEnabledSetting(componentName, android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED, android.content.pm.PackageManager.DONT_KILL_APP);
+            } catch (Exception e) {}
         }
     }
 
