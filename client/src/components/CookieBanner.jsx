@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Info, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Capacitor } from '@capacitor/core';
 
 export default function CookieBanner() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Do not show cookie banner in Native Android/iOS apps
+    if (Capacitor.isNativePlatform()) {
+      setIsVisible(false);
+      return;
+    }
+
     const hasConsented = localStorage.getItem('acb_cookie_consent');
     if (!hasConsented) {
       setIsVisible(true);
