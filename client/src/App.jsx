@@ -4,6 +4,7 @@ import { Toaster, toast } from 'react-hot-toast';
 import { AlertTriangle, Shield, Phone, ShieldCheck } from 'lucide-react';
 import { useAuth } from './context/AuthContext';
 import { Capacitor } from '@capacitor/core';
+import { App as CapacitorApp } from '@capacitor/app';
 import { AdMob } from '@capacitor-community/admob';
 
 // Layouts
@@ -338,6 +339,14 @@ function App() {
   useEffect(() => {
     if (isNative) {
       AdMob.initialize().catch(console.error);
+      
+      CapacitorApp.addListener('backButton', ({ canGoBack }) => {
+        if (!canGoBack || window.location.pathname === '/' || window.location.pathname === '/hub') {
+          CapacitorApp.exitApp();
+        } else {
+          window.history.back();
+        }
+      });
     }
   }, [isNative]);
 
