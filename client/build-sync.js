@@ -50,10 +50,6 @@ const assetsDestDir = path.join(destDir, 'assets');
 function syncBuild() {
     try {
         console.log('Syncing build assets...');
-        // Only clean the assets folder so we don't delete root HTML files
-        if (fs.existsSync(assetsDestDir)) {
-            cleanDir(assetsDestDir);
-        }
         // Then copy from dist to public
         if (!fs.existsSync(destDir)) {
             fs.mkdirSync(destDir, { recursive: true });
