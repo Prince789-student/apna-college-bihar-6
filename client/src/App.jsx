@@ -340,10 +340,21 @@ function App() {
     if (isNative) {
       AdMob.initialize().catch(console.error);
       
-      CapacitorApp.addListener('backButton', ({ canGoBack }) => {
+      CapacitorApp.addListener('backButton', async ({ canGoBack }) => {
         if (!canGoBack || window.location.pathname === '/' || window.location.pathname === '/hub') {
-          if (window.confirm('Are you sure you want to exit?')) {
-            CapacitorApp.exitApp();
+          try {
+            const { Dialog } = await import('@capacitor/dialog');
+            const { value } = await Dialog.confirm({
+              title: 'Exit App',
+              message: 'Are you sure you want to exit?'
+            });
+            if (value) {
+              CapacitorApp.exitApp();
+            }
+          } catch(e) {
+            if (window.confirm('Are you sure you want to exit?')) {
+              CapacitorApp.exitApp();
+            }
           }
         } else {
           window.history.back();

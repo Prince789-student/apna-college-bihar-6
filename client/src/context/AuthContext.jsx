@@ -27,8 +27,22 @@ export function useAuth() {
 const USER_CACHE_KEY = 'acb_user_cache';
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(() => {
+    try {
+      const cached = localStorage.getItem(USER_CACHE_KEY);
+      return cached ? JSON.parse(cached) : null;
+    } catch (e) {
+      return null;
+    }
+  });
+  const [loading, setLoading] = useState(() => {
+    try {
+      const cached = localStorage.getItem(USER_CACHE_KEY);
+      return !cached;
+    } catch (e) {
+      return true;
+    }
+  });
   const isSyncing = useRef(false);
 
   // Profile Roles: 'STUDENT', 'ADMIN', 'SUPER_ADMIN'
