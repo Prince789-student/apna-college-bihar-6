@@ -792,9 +792,9 @@ export default function BeuSyllabus() {
             <div className="relative">
               <select value={selectedSem} onChange={e => { setSelectedSem(e.target.value); setSelectedSubjectIndex(null); }}
                 style={{ colorScheme: 'light' }}
-                className="w-full appearance-none bg-slate-50 border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-slate-800 outline-none focus:border-indigo-500 transition-all cursor-pointer">
-                <option value="" disabled className="bg-white text-black">Select Semester</option>
-                {semesters.map(s => <option key={s.id} value={s.id} className="bg-white text-black">{s.label}</option>)}
+                className="w-full appearance-none bg-white border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-black outline-none focus:border-indigo-500 transition-all cursor-pointer">
+                <option value="" disabled style={{backgroundColor: 'white', color: 'black'}}>Select Semester</option>
+                {semesters.map(s => <option key={s.id} value={s.id} style={{backgroundColor: 'white', color: 'black'}}>{s.label}</option>)}
               </select>
               <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
             </div>
@@ -804,9 +804,9 @@ export default function BeuSyllabus() {
             <div className="relative">
               <select value={selectedBranch} onChange={e => { setSelectedBranch(e.target.value); setSelectedSubjectIndex(null); navigate(`/syllabus/${e.target.value}`); }}
                 style={{ colorScheme: 'light' }}
-                className="w-full appearance-none bg-slate-50 border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-slate-800 outline-none focus:border-indigo-500 transition-all cursor-pointer">
-                <option value="" disabled className="bg-white text-black">Select Branch</option>
-                {branches.map(b => <option key={b.id} value={b.id} className="bg-white text-black">{b.label}</option>)}
+                className="w-full appearance-none bg-white border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-black outline-none focus:border-indigo-500 transition-all cursor-pointer">
+                <option value="" disabled style={{backgroundColor: 'white', color: 'black'}}>Select Branch</option>
+                {branches.map(b => <option key={b.id} value={b.id} style={{backgroundColor: 'white', color: 'black'}}>{b.label}</option>)}
               </select>
               <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
             </div>
