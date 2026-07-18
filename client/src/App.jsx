@@ -342,7 +342,9 @@ function App() {
       
       CapacitorApp.addListener('backButton', ({ canGoBack }) => {
         if (!canGoBack || window.location.pathname === '/' || window.location.pathname === '/hub') {
-          CapacitorApp.exitApp();
+          if (window.confirm('Are you sure you want to exit?')) {
+            CapacitorApp.exitApp();
+          }
         } else {
           window.history.back();
         }
