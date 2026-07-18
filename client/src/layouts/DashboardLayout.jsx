@@ -638,6 +638,16 @@ export default function DashboardLayout() {
                      New
                    </span>
                  </div>
+                 
+                 {/* Open App Button (Deep Link) */}
+                 <div className={`relative ${isNative ? 'hidden' : 'block lg:hidden'}`}>
+                   <a 
+                     href="apnacollegebihar://open"
+                     className="flex items-center gap-2 px-3 py-2 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-600 hover:text-white border border-emerald-500/20 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
+                   >
+                     Open App
+                   </a>
+                 </div>
                  <div className="relative">
                    <button 
                      onClick={() => setShowProfileMenu(!showProfileMenu)}
