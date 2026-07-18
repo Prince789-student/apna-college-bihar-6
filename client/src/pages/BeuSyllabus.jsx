@@ -868,7 +868,7 @@ export default function BeuSyllabus() {
                 {semesters.find(s => s.id === selectedSem)?.label}
               </p>
             </div>
-            {currentSyllabus && (
+            {currentSyllabus && !Capacitor.isNativePlatform() && (
               <button onClick={handleDownloadPdf} disabled={isDownloading}
                 className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-400 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg transition-all active:scale-95 ml-auto">
                 {isDownloading ? <><Loader2 size={16} className="animate-spin" /> Generating...</> : <><Download size={16} /> Download PDF</>}

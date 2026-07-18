@@ -903,12 +903,14 @@ function UgeacPredictor() {
                            >
                               <CheckCircle2 size={14} /> Use Rank in Predictor
                            </button>
-                           <button 
-                              onClick={downloadRankPredictionPDF}
-                              className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-md"
-                           >
-                              <Download size={14} /> Download PDF
-                           </button>
+                           {!Capacitor.isNativePlatform() && (
+                             <button 
+                                onClick={downloadRankPredictionPDF}
+                                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all shadow-md"
+                             >
+                                <Download size={14} /> Download PDF
+                             </button>
+                           )}
                         </div>
                      </div>
 
@@ -1199,7 +1201,9 @@ function UgeacPredictor() {
                        </div>
                        <div className="flex gap-4">
                           <div className="stats-pill">{results.all.length} MATCHES</div>
-                          <button onClick={downloadResultsPDF} className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-900/20 active:scale-95"><Download size={14} /> Official Report</button>
+                          {!Capacitor.isNativePlatform() && (
+                            <button onClick={downloadResultsPDF} className="flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg shadow-indigo-900/20 active:scale-95"><Download size={14} /> Official Report</button>
+                          )}
                        </div>
                     </div>
 

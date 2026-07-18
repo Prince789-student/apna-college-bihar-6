@@ -242,6 +242,14 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
     
+    // Initialize Scrapers
+    try {
+        const beuScraper = require('./services/beuScraper');
+        beuScraper.initScraper();
+    } catch (err) {
+        console.error('Failed to initialize BEU scraper:', err.message);
+    }
+    
     // Render Keep-Alive
     const APP_URL = process.env.APP_URL;
     if (APP_URL) {

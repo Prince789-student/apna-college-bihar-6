@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { CalendarDays, Save, UserCheck, ArrowRight, Info, Trophy, Plus, X, Clock, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { Capacitor } from '@capacitor/core';
 
 const DAYS_OF_WEEK = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 
@@ -48,37 +49,73 @@ const addOneHour = (time24) => {
 const HOURS = ['1','2','3','4','5','6','7','8','9','10','11','12'];
 const MINUTES = ['00','05','10','15','20','25','30','35','40','45','50','55'];
 
+function CustomSelect({ value, onChange, options, styleClass, style, isToday }) {
+  const [open, setOpen] = useState(false);
+  const dropdownRef = React.useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative" ref={dropdownRef} style={style}>
+      <div 
+        className={`${styleClass} flex items-center justify-center`}
+        onClick={() => setOpen(!open)}
+      >
+        {value}
+      </div>
+      {open && (
+        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 max-h-48 overflow-y-auto bg-white border border-slate-200 rounded-lg shadow-xl z-50 min-w-[60px] custom-scrollbar">
+          {options.map((opt) => (
+            <div 
+              key={opt.value} 
+              className={`px-3 py-2 text-xs font-bold text-center cursor-pointer hover:bg-indigo-50 transition-colors ${value === opt.value ? 'bg-indigo-100 text-indigo-700' : 'text-slate-700'}`}
+              onClick={() => {
+                onChange(opt.value);
+                setOpen(false);
+              }}
+            >
+              {opt.label}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function TimePickerAMPM({ value, onChange, isToday, label }) {
   const { h, m, ampm } = parse24h(value);
   const sel = `text-[10px] font-black border outline-none rounded-lg px-1.5 py-1 cursor-pointer transition-all appearance-none text-center ${
-    isToday ? 'bg-white border-indigo-200 focus:border-indigo-500 text-indigo-700' : 'bg-white border-slate-200 focus:border-slate-400 text-slate-700'
+    isToday ? 'bg-white border-indigo-200 hover:border-indigo-500 text-indigo-700' : 'bg-white border-slate-200 hover:border-slate-400 text-slate-700'
   }`;
   const update = (newH, newM, newAmpm) => onChange(to24h(newH, newM, newAmpm));
 
   const handleHourChange = (newH) => {
-    // Auto-switch AM↔PM at 12:
-    // If user picks 12 while in AM → switch to PM (noon, not midnight)
-    // If user picks 1-11 while in PM → keep PM (1PM, 2PM... not AM)
     let autoAmpm = ampm;
     if (newH === '12' && ampm === 'AM') autoAmpm = 'PM';
     update(newH, m, autoAmpm);
   };
 
+  const hrOptions = HOURS.map(hr => ({value: hr, label: hr}));
+  const minOptions = MINUTES.map(mn => ({value: mn, label: mn}));
+  const ampmOptions = [{value: 'AM', label: 'AM'}, {value: 'PM', label: 'PM'}];
+
   return (
     <div className="flex flex-col gap-0.5">
       <span className={`text-[8px] font-black uppercase tracking-widest ${isToday ? 'text-indigo-400' : 'text-slate-400'}`}>{label}</span>
       <div className="flex items-center gap-0.5">
-        <select value={h} onChange={e => handleHourChange(e.target.value)} className={sel} style={{width:'36px'}}>
-          {HOURS.map(hr => <option key={hr} value={hr}>{hr}</option>)}
-        </select>
+        <CustomSelect value={h} onChange={handleHourChange} options={hrOptions} styleClass={sel} style={{width:'36px'}} isToday={isToday} />
         <span className="text-slate-400 font-black text-xs">:</span>
-        <select value={m} onChange={e => update(h, e.target.value, ampm)} className={sel} style={{width:'38px'}}>
-          {MINUTES.map(mn => <option key={mn} value={mn}>{mn}</option>)}
-        </select>
-        <select value={ampm} onChange={e => update(h, m, e.target.value)} className={sel} style={{width:'40px'}}>
-          <option value="AM">AM</option>
-          <option value="PM">PM</option>
-        </select>
+        <CustomSelect value={m} onChange={(val) => update(h, val, ampm)} options={minOptions} styleClass={sel} style={{width:'38px'}} isToday={isToday} />
+        <CustomSelect value={ampm} onChange={(val) => update(h, m, val)} options={ampmOptions} styleClass={sel} style={{width:'40px'}} isToday={isToday} />
       </div>
     </div>
   );
