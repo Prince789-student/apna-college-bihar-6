@@ -8,6 +8,40 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import SEO from '../components/SEO';
 
+const CustomDropdown = ({ label, value, options, onChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const selectedLabel = options.find(o => o.id === value)?.label || label;
+  
+  return (
+    <div className="relative">
+      <div 
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full bg-white border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-black cursor-pointer flex items-center justify-between"
+      >
+        <span>{selectedLabel}</span>
+        <ChevronDown size={16} className={`text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+      </div>
+      
+      {isOpen && (
+        <div className="absolute z-50 top-full left-0 right-0 mt-2 bg-white border-2 border-slate-100 rounded-2xl shadow-xl max-h-60 overflow-y-auto">
+          {options.map(opt => (
+            <div
+              key={opt.id}
+              className={`p-3 text-[13px] font-bold cursor-pointer hover:bg-indigo-50 transition-colors ${value === opt.id ? 'bg-indigo-50 text-indigo-600' : 'text-black'}`}
+              onClick={() => {
+                onChange(opt.id);
+                setIsOpen(false);
+              }}
+            >
+              {opt.label}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 // ─── Smart Syllabus Text Cleaner ──────────────────────────────────────────────
 function cleanSyllabusText(rawText) {
   if (!rawText) return rawText;
@@ -789,27 +823,21 @@ export default function BeuSyllabus() {
         <div className="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100 mb-6 flex flex-col md:flex-row gap-4">
           <div className="flex-1">
             <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-2">Select Semester</label>
-            <div className="relative">
-              <select value={selectedSem} onChange={e => { setSelectedSem(e.target.value); setSelectedSubjectIndex(null); }}
-                style={{ colorScheme: 'light' }}
-                className="w-full appearance-none bg-white border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-black outline-none focus:border-indigo-500 transition-all cursor-pointer">
-                <option value="" disabled style={{backgroundColor: 'white', color: 'black'}}>Select Semester</option>
-                {semesters.map(s => <option key={s.id} value={s.id} style={{backgroundColor: 'white', color: 'black'}}>{s.label}</option>)}
-              </select>
-              <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-            </div>
+            <CustomDropdown 
+              label="Select Semester"
+              value={selectedSem}
+              options={semesters}
+              onChange={(val) => { setSelectedSem(val); setSelectedSubjectIndex(null); }}
+            />
           </div>
           <div className="flex-1">
             <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-2">Select Branch</label>
-            <div className="relative">
-              <select value={selectedBranch} onChange={e => { setSelectedBranch(e.target.value); setSelectedSubjectIndex(null); navigate(`/syllabus/${e.target.value}`); }}
-                style={{ colorScheme: 'light' }}
-                className="w-full appearance-none bg-white border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-black outline-none focus:border-indigo-500 transition-all cursor-pointer">
-                <option value="" disabled style={{backgroundColor: 'white', color: 'black'}}>Select Branch</option>
-                {branches.map(b => <option key={b.id} value={b.id} style={{backgroundColor: 'white', color: 'black'}}>{b.label}</option>)}
-              </select>
-              <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-            </div>
+            <CustomDropdown 
+              label="Select Branch"
+              value={selectedBranch}
+              options={branches}
+              onChange={(val) => { setSelectedBranch(val); setSelectedSubjectIndex(null); navigate(`/syllabus/${val}`); }}
+            />
           </div>
         </div>
 
