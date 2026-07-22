@@ -506,10 +506,30 @@ let xml = `<?xml version="1.0" encoding="UTF-8"?>
 `;
 
 for (const url of urls) {
+  let changefreq = 'weekly';
+  let priority = '0.6';
+
+  if (url === '/') {
+    changefreq = 'daily';
+    priority = '1.0';
+  } else if (url.startsWith('/hub') || url.startsWith('/hackathons') || url.startsWith('/ugeac-predictor')) {
+    changefreq = 'daily';
+    priority = '0.9';
+  } else if (url.startsWith('/college/')) {
+    changefreq = 'weekly';
+    priority = '0.8';
+  } else if (url.startsWith('/subject/') || url.startsWith('/notes/') || url.startsWith('/pyq/') || url.startsWith('/syllabus/')) {
+    changefreq = 'monthly';
+    priority = '0.7';
+  } else if (url.startsWith('/search/')) {
+    changefreq = 'monthly';
+    priority = '0.4'; // Low priority for programmatic long-tail keywords
+  }
+
   xml += `  <url>
     <loc>${DOMAIN}${url}</loc>
-    <changefreq>daily</changefreq>
-    <priority>${url === '/' ? '1.0' : '0.8'}</priority>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
   </url>\n`;
 }
 
