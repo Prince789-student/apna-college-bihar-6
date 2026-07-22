@@ -791,14 +791,12 @@ export default function BeuSyllabus() {
       const semLabel = semesters.find(s => s.id === selectedSem)?.label || selectedSem.toUpperCase();
 
       const addPageDecoration = (pageNum, logoImg) => {
-        // Watermark Text and Logo
+        // Watermark Logo
         doc.saveGraphicsState();
         try { doc.setGState(new doc.GState({ opacity: 0.05 })); } catch(e) { doc.setTextColor(240, 243, 248); }
         if (logoImg) {
           doc.addImage(logoImg, 'PNG', pageWidth / 2 - 40, pageHeight / 2 - 60, 80, 80);
         }
-        doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'bold'); doc.setFontSize(42);
-        doc.text('APNA COLLEGE BIHAR', pageWidth / 2, pageHeight / 2 + 40, { align: 'center', angle: 45 });
         doc.restoreGraphicsState();
 
         doc.setFillColor(79, 70, 229); doc.rect(0, 0, pageWidth, 6, 'F');
