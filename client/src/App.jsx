@@ -336,32 +336,30 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const [showExitPrompt, setShowExitPrompt] = useState(false);
+
   useEffect(() => {
     if (isNative) {
       AdMob.initialize().catch(console.error);
       
-      CapacitorApp.addListener('backButton', async ({ canGoBack }) => {
+      const handleBackButton = async ({ canGoBack }) => {
+        if (showExitPrompt) {
+          setShowExitPrompt(false);
+          return;
+        }
         if (!canGoBack || window.location.pathname === '/' || window.location.pathname === '/hub') {
-          try {
-            const { Dialog } = await import('@capacitor/dialog');
-            const { value } = await Dialog.confirm({
-              title: 'Exit App',
-              message: 'Are you sure you want to exit?'
-            });
-            if (value) {
-              CapacitorApp.exitApp();
-            }
-          } catch(e) {
-            if (window.confirm('Are you sure you want to exit?')) {
-              CapacitorApp.exitApp();
-            }
-          }
+          setShowExitPrompt(true);
         } else {
           window.history.back();
         }
-      });
+      };
+      
+      const listener = CapacitorApp.addListener('backButton', handleBackButton);
+      return () => {
+        listener.then(l => l.remove());
+      };
     }
-  }, [isNative]);
+  }, [isNative, showExitPrompt]);
 
   if (showSplash) {
     return (
@@ -420,6 +418,28 @@ function App() {
   try {
     return (
       <>
+        {showExitPrompt && (
+          <div className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+            <div className="bg-white rounded-2xl w-full max-w-[320px] shadow-2xl p-6 text-center animate-scale-in">
+              <h3 className="text-xl font-bold text-slate-800 mb-2">Exit App</h3>
+              <p className="text-slate-500 mb-6 font-medium">Are you sure you want to exit?</p>
+              <div className="flex gap-3 w-full">
+                <button 
+                  onClick={() => setShowExitPrompt(false)}
+                  className="flex-1 py-3 px-4 bg-slate-100 text-slate-600 rounded-xl font-bold hover:bg-slate-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={() => CapacitorApp.exitApp()}
+                  className="flex-1 py-3 px-4 bg-rose-500 text-white rounded-xl font-bold hover:bg-rose-600 transition-colors shadow-[0_4px_12px_rgba(244,63,94,0.3)]"
+                >
+                  Exit
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         <Toaster position="top-right" />
         <GlobalCounsellingPopup />
         <GlobalProfilePrompt />
