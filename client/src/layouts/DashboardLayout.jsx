@@ -627,7 +627,7 @@ export default function DashboardLayout() {
                  
                  <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
                    <a 
-                     href="https://apnacollegebihar.online/apna-college-bihar-v37.apk"
+                     href="https://apnacollegebihar.online/apna-college-bihar-v38.apk"
                      target="_blank"
                      rel="noopener noreferrer"
                      className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
