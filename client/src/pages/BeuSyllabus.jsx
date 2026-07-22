@@ -147,9 +147,9 @@ function splitIntoTopics(text) {
     if (ch === '(' || ch === '[') depth++;
     if (ch === ')' || ch === ']') depth--;
     
-    const isSemicolon = (ch === ';');
+    const isDelimiter = (ch === ';' || ch === ',' || (ch === '.' && (i === t.length - 1 || t[i+1] === ' ' || t[i+1] === '\n')));
     
-    if (depth === 0 && isSemicolon) {
+    if (depth === 0 && isDelimiter) {
       if (current.trim().length > 3) parts.push(current.trim());
       current = '';
     } else {
