@@ -5,12 +5,14 @@ export default function ScrollToTop() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    // Scroll to the top of the page instantly when the route changes
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'instant'
-    });
+    // Scroll window for safety
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    
+    // Scroll the main content area inside DashboardLayout
+    const mainContainer = document.getElementById('main-scroll-container');
+    if (mainContainer) {
+      mainContainer.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
   }, [pathname]);
 
   return null;

@@ -783,7 +783,7 @@ export default function DashboardLayout() {
       )}
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto custom-scrollbar relative z-10 bg-[#f8fafc] flex flex-col">
+      <main id="main-scroll-container" className="flex-1 overflow-y-auto custom-scrollbar relative z-10 bg-[#f8fafc] flex flex-col">
         <div className={`w-full grow shrink-0 pb-24 lg:pb-8 min-h-[80vh] ${location.pathname === '/' ? '' : 'p-4 md:p-6 lg:p-8 max-w-7xl mx-auto'}`}>
           <Outlet />
         </div>
