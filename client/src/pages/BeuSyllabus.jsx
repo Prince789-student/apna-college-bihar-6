@@ -480,12 +480,12 @@ function AiPromptModal({ promptText, onClose }) {
   const handleCopy = () => {
     navigator.clipboard.writeText(promptText);
     setCopied(true);
-    import('react-hot-toast').then(m => m.toast.success("Prompt Copied!"));
+    import('react-hot-toast').then(m => m.toast.success("Prompt Copied! Please Paste it in AI Chatbox"));
     setTimeout(() => setCopied(false), 2000);
   };
 
   const platforms = [
-    { name: 'ChatGPT', url: `https://chatgpt.com/?q=${encodeURIComponent(promptText)}`, icon: '🤖', color: 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-emerald-200' },
+    { name: 'ChatGPT', url: `https://chatgpt.com/?q=${encodeURIComponent(promptText)}`, copyFirst: true, icon: '🤖', color: 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-emerald-200' },
     { name: 'Gemini', url: `https://gemini.google.com/app`, copyFirst: true, icon: '✨', color: 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-200' },
     { name: 'Claude', url: `https://claude.ai/new`, copyFirst: true, icon: '🧠', color: 'bg-amber-100 text-amber-700 hover:bg-amber-200 border-amber-200' },
     { name: 'Meta AI', url: `https://www.meta.ai/`, copyFirst: true, icon: '🌐', color: 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200 border-indigo-200' },
@@ -675,6 +675,7 @@ function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, onToggle })
               topic={topic}
               doneKey={topicKeys[ti]}
               subjectName={subjectName}
+              unitName={unit.title}
               onToggle={handleToggle}
             />
           ))}
