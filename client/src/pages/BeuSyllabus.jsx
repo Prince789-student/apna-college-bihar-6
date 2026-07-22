@@ -486,9 +486,9 @@ function AiPromptModal({ promptText, onClose }) {
 
   const platforms = [
     { name: 'ChatGPT', url: `https://chatgpt.com/?q=${encodeURIComponent(promptText)}`, copyFirst: true, icon: '🤖', color: 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-emerald-200' },
+    { name: 'Perplexity', url: `https://www.perplexity.ai/search?q=${encodeURIComponent(promptText)}`, icon: '🔍', color: 'bg-teal-100 text-teal-700 hover:bg-teal-200 border-teal-200' },
     { name: 'Gemini', url: `https://gemini.google.com/app`, copyFirst: true, icon: '✨', color: 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-200' },
     { name: 'Claude', url: `https://claude.ai/new`, copyFirst: true, icon: '🧠', color: 'bg-amber-100 text-amber-700 hover:bg-amber-200 border-amber-200' },
-    { name: 'Meta AI', url: `https://www.meta.ai/`, copyFirst: true, icon: '🌐', color: 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200 border-indigo-200' },
     { name: 'WhatsApp', url: `https://api.whatsapp.com/send?text=${encodeURIComponent(promptText)}`, icon: '💬', color: 'bg-green-100 text-green-700 hover:bg-green-200 border-green-200' },
     { name: 'Telegram', url: `https://t.me/share/url?url=${encodeURIComponent(promptText)}`, icon: '✈️', color: 'bg-sky-100 text-sky-700 hover:bg-sky-200 border-sky-200' }
   ];
