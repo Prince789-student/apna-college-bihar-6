@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { StudyProvider } from './context/StudyContext'
 import { HelmetProvider } from 'react-helmet-async'
+import ScrollToTop from './components/ScrollToTop'
 import './index.css'
 
 const rootEl = document.getElementById('root');
@@ -30,6 +31,7 @@ if (!rootEl) {
           <AuthProvider>
             <StudyProvider>
               <BrowserRouter>
+                <ScrollToTop />
                 <App />
               </BrowserRouter>
             </StudyProvider>
