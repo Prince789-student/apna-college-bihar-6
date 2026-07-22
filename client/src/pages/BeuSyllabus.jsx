@@ -917,7 +917,7 @@ export default function BeuSyllabus() {
   return (
     <div className="min-h-screen bg-slate-50 font-['Inter'] pb-24">
       <SEO 
-        title={`BEU ${selectedBranch.toUpperCase()} Sem ${selectedSem.replace('sem', '')} Syllabus | Apna College Bihar`}
+        title={`BEU ${selectedBranch.toUpperCase()} Sem ${selectedSem.replace('sem', '')} Syllabus ✅ | Apna College Bihar`}
         description={`Check official Bihar Engineering University (BEU) syllabus for ${selectedBranch.toUpperCase()} Semester ${selectedSem.replace('sem', '')}. Track your syllabus progress online.`}
         keywords={`BEU Syllabus, ${selectedBranch} Syllabus, Semester ${selectedSem.replace('sem', '')} Syllabus, Bihar Engineering Syllabus, B.Tech Syllabus BEU`}
         url={`https://www.apnacollegebihar.online/syllabus/${selectedBranch}`}

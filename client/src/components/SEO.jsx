@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 export default function SEO({ 
-  title = "Apna College Bihar | UGEAC Counselling 2026, B.Tech Notes, PYQ & College Predictor",
+  title = "Apna College Bihar ✅ | UGEAC Counselling 2026, B.Tech Notes, PYQ & College Predictor",
   description = "Bihar Engineering Counselling 2026 - UGEAC College Predictor, Cutoff Ranks, B.Tech Notes, PYQ Papers & CGPA Calculator. Official resource for Bihar Engineering students.",
   keywords = "UGEAC 2026, Bihar Engineering Counselling, BCECE counselling 2026, Bihar college predictor, B.Tech Notes PDF, Engineering Study Material Bihar",
   url = "https://www.apnacollegebihar.online/",
