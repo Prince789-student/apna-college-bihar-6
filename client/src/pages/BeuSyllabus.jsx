@@ -485,13 +485,28 @@ function AiPromptModal({ promptText, onClose }) {
   };
 
   const platforms = [
-    { name: 'ChatGPT', url: `https://chatgpt.com/?q=${encodeURIComponent(promptText)}`, copyFirst: true, icon: '🤖', color: 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-emerald-200' },
-    { name: 'Perplexity', url: `https://www.perplexity.ai/search?q=${encodeURIComponent(promptText)}`, icon: '🔍', color: 'bg-teal-100 text-teal-700 hover:bg-teal-200 border-teal-200' },
-    { name: 'Gemini', url: `https://gemini.google.com/app`, copyFirst: true, icon: '✨', color: 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-200' },
-    { name: 'Claude', url: `https://claude.ai/new`, copyFirst: true, icon: '🧠', color: 'bg-amber-100 text-amber-700 hover:bg-amber-200 border-amber-200' },
-    { name: 'WhatsApp', url: `https://api.whatsapp.com/send?text=${encodeURIComponent(promptText)}`, icon: '💬', color: 'bg-green-100 text-green-700 hover:bg-green-200 border-green-200' },
-    { name: 'Telegram', url: `https://t.me/share/url?url=${encodeURIComponent(promptText)}`, icon: '✈️', color: 'bg-sky-100 text-sky-700 hover:bg-sky-200 border-sky-200' }
+    { name: 'ChatGPT', webUrl: `https://chatgpt.com/?q=${encodeURIComponent(promptText)}`, pkg: 'com.openai.chatgpt', copyFirst: true, icon: '🤖', color: 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-emerald-200' },
+    { name: 'Perplexity', webUrl: `https://www.perplexity.ai/search?q=${encodeURIComponent(promptText)}`, pkg: 'ai.perplexity.app.android', icon: '🔍', color: 'bg-teal-100 text-teal-700 hover:bg-teal-200 border-teal-200' },
+    { name: 'Gemini', webUrl: `https://gemini.google.com/app`, pkg: 'com.google.android.apps.bard', copyFirst: true, icon: '✨', color: 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-200' },
+    { name: 'Claude', webUrl: `https://claude.ai/new`, pkg: 'com.anthropic.claude', copyFirst: true, icon: '🧠', color: 'bg-amber-100 text-amber-700 hover:bg-amber-200 border-amber-200' },
+    { name: 'WhatsApp', webUrl: `https://api.whatsapp.com/send?text=${encodeURIComponent(promptText)}`, pkg: 'com.whatsapp', scheme: 'whatsapp', icon: '💬', color: 'bg-green-100 text-green-700 hover:bg-green-200 border-green-200' },
+    { name: 'Telegram', webUrl: `https://t.me/share/url?url=${encodeURIComponent(promptText)}`, pkg: 'org.telegram.messenger', scheme: 'tg', icon: '✈️', color: 'bg-sky-100 text-sky-700 hover:bg-sky-200 border-sky-200' }
   ];
+
+  const isAndroid = /android/i.test(navigator.userAgent);
+  const getLink = (p) => {
+    if (isAndroid && p.pkg) {
+      if (p.scheme === 'whatsapp') {
+        return `intent://send?text=${encodeURIComponent(promptText)}#Intent;scheme=whatsapp;package=${p.pkg};S.browser_fallback_url=${encodeURIComponent(p.webUrl)};end`;
+      }
+      if (p.scheme === 'tg') {
+        return `intent://msg?text=${encodeURIComponent(promptText)}#Intent;scheme=tg;package=${p.pkg};S.browser_fallback_url=${encodeURIComponent(p.webUrl)};end`;
+      }
+      const urlWithoutScheme = p.webUrl.replace(/^https?:\/\//, '');
+      return `intent://${urlWithoutScheme}#Intent;scheme=https;package=${p.pkg};S.browser_fallback_url=${encodeURIComponent(p.webUrl)};end`;
+    }
+    return p.webUrl;
+  };
 
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
@@ -530,7 +545,7 @@ function AiPromptModal({ promptText, onClose }) {
                 key={p.name}
                 onClick={() => {
                   if (p.copyFirst) handleCopy();
-                  window.open(p.url, '_blank');
+                  window.open(getLink(p), '_blank');
                 }}
                 className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all active:scale-95 ${p.color}`}
               >
