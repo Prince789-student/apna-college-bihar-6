@@ -617,6 +617,13 @@ export default function BeuSyllabus() {
       .catch(err => { console.error("Error fetching syllabus:", err); setLoading(false); });
   }, []);
 
+  useEffect(() => {
+    const mainContainer = document.getElementById('main-scroll-container');
+    if (mainContainer) {
+      mainContainer.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [selectedSubjectIndex, selectedBranch, selectedSem]);
+
   const semesters = [
     { id: 'sem1', label: '1st Semester' }, { id: 'sem2', label: '2nd Semester' },
     { id: 'sem3', label: '3rd Semester' }, { id: 'sem4', label: '4th Semester' },
