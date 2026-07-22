@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Download } from 'lucide-react';
+import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Download, Bot, Copy, X, MessageSquare, Send } from 'lucide-react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import jsPDF from 'jspdf';
@@ -473,12 +473,92 @@ function parseSyllabusIntoSubjects(rawText) {
   });
 }
 
+// ─── AI Prompt Modal Component ──────────────────────────────────────────────────
+function AiPromptModal({ promptText, onClose }) {
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(promptText);
+    setCopied(true);
+    import('react-hot-toast').then(m => m.toast.success("Prompt Copied!"));
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const platforms = [
+    { name: 'ChatGPT', url: `https://chatgpt.com/?q=${encodeURIComponent(promptText)}`, icon: '🤖', color: 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border-emerald-200' },
+    { name: 'Gemini', url: `https://gemini.google.com/app`, copyFirst: true, icon: '✨', color: 'bg-blue-100 text-blue-700 hover:bg-blue-200 border-blue-200' },
+    { name: 'Claude', url: `https://claude.ai/new`, copyFirst: true, icon: '🧠', color: 'bg-amber-100 text-amber-700 hover:bg-amber-200 border-amber-200' },
+    { name: 'Meta AI', url: `https://www.meta.ai/`, copyFirst: true, icon: '🌐', color: 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200 border-indigo-200' },
+    { name: 'WhatsApp', url: `https://api.whatsapp.com/send?text=${encodeURIComponent(promptText)}`, icon: '💬', color: 'bg-green-100 text-green-700 hover:bg-green-200 border-green-200' },
+    { name: 'Telegram', url: `https://t.me/share/url?url=${encodeURIComponent(promptText)}`, icon: '✈️', color: 'bg-sky-100 text-sky-700 hover:bg-sky-200 border-sky-200' }
+  ];
+
+  return (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+      <div className="w-full max-w-md bg-white rounded-[2rem] shadow-2xl relative overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 border border-slate-200">
+        <div className="p-6 pb-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shadow-sm border border-indigo-200">
+              <Bot size={20} />
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-slate-800 uppercase tracking-tight">Ask AI Tutor</h3>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Learn topics faster</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-800 bg-white rounded-xl shadow-sm border border-slate-200 transition-colors">
+            <X size={18} strokeWidth={2.5} />
+          </button>
+        </div>
+        
+        <div className="p-6">
+          <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-2 px-1">Auto-Generated Prompt</p>
+          <div className="bg-slate-100 p-4 rounded-2xl text-sm text-slate-700 font-medium leading-relaxed border border-slate-200 mb-6 relative group">
+            "{promptText}"
+            <button 
+              onClick={handleCopy}
+              className="absolute top-2 right-2 p-2 bg-white rounded-lg shadow-sm border border-slate-200 text-slate-500 hover:text-indigo-600 transition-colors opacity-0 group-hover:opacity-100"
+            >
+              <Copy size={14} />
+            </button>
+          </div>
+
+          <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-3 px-1">Open With</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {platforms.map(p => (
+              <button
+                key={p.name}
+                onClick={() => {
+                  if (p.copyFirst) handleCopy();
+                  window.open(p.url, '_blank');
+                }}
+                className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all active:scale-95 ${p.color}`}
+              >
+                <span className="text-2xl mb-1">{p.icon}</span>
+                <span className="text-[10px] font-black uppercase tracking-wider">{p.name}</span>
+              </button>
+            ))}
+          </div>
+          
+          <button 
+            onClick={handleCopy}
+            className="w-full mt-6 flex items-center justify-center gap-2 py-3.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-md transition-all active:scale-95"
+          >
+            <Copy size={16} /> {copied ? 'Copied!' : 'Copy Prompt'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Single Topic Row Component ───────────────────────────────────────────────
-function TopicRow({ topic, doneKey, subjectName, onToggle }) {
+function TopicRow({ topic, doneKey, subjectName, unitName, onToggle }) {
   const [done, setDone] = React.useState(() => {
     try { return JSON.parse(localStorage.getItem(doneKey) || 'false'); } catch { return false; }
   });
   const [showVideo, setShowVideo] = React.useState(false);
+  const [showAiModal, setShowAiModal] = React.useState(false);
 
   const toggleDone = () => {
     const next = !done;
@@ -496,6 +576,7 @@ function TopicRow({ topic, doneKey, subjectName, onToggle }) {
   }
 
   const ytQuery = encodeURIComponent(`${topic.text} ${subjectName} BEU B.Tech in Hindi`);
+  const promptText = `Explain this in detail: ${topic.text} from the chapter '${unitName}' in the subject '${subjectName}'`;
 
   return (
     <div className={`flex flex-col px-4 py-3.5 border-b border-slate-100 group transition-all ${done ? 'bg-emerald-50/50' : 'hover:bg-slate-50'}`}>
@@ -512,7 +593,13 @@ function TopicRow({ topic, doneKey, subjectName, onToggle }) {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-1.5 pl-8 md:pl-0 flex-shrink-0 opacity-90 md:opacity-60 md:group-hover:opacity-100 transition-opacity">
-                    <a
+          <button
+            onClick={() => setShowAiModal(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 md:px-2 md:py-1 bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm"
+          >
+            <Bot size={12} /> Ask AI
+          </button>
+          <a
             href={`https://www.youtube.com/results?search_query=${ytQuery}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -529,7 +616,7 @@ function TopicRow({ topic, doneKey, subjectName, onToggle }) {
           </button>
         </div>
       </div>
-      
+      {showAiModal && <AiPromptModal promptText={promptText} onClose={() => setShowAiModal(false)} />}
     </div>
   );
 }
