@@ -790,18 +790,35 @@ export default function BeuSyllabus() {
       const branchLabel = branches.find(b => b.id === selectedBranch)?.label || selectedBranch.toUpperCase();
       const semLabel = semesters.find(s => s.id === selectedSem)?.label || selectedSem.toUpperCase();
 
-      const addPageDecoration = (pageNum) => {
-        doc.setTextColor(240, 243, 248); doc.setFont('helvetica', 'bold'); doc.setFontSize(42);
-        doc.text('APNA COLLEGE BIHAR', pageWidth / 2, pageHeight / 2 + 10, { align: 'center', angle: 45 });
+      const addPageDecoration = (pageNum, logoImg) => {
+        // Watermark Text and Logo
+        doc.saveGraphicsState();
+        try { doc.setGState(new doc.GState({ opacity: 0.05 })); } catch(e) { doc.setTextColor(240, 243, 248); }
+        if (logoImg) {
+          doc.addImage(logoImg, 'PNG', pageWidth / 2 - 40, pageHeight / 2 - 60, 80, 80);
+        }
+        doc.setTextColor(100, 100, 100); doc.setFont('helvetica', 'bold'); doc.setFontSize(42);
+        doc.text('APNA COLLEGE BIHAR', pageWidth / 2, pageHeight / 2 + 40, { align: 'center', angle: 45 });
+        doc.restoreGraphicsState();
+
         doc.setFillColor(79, 70, 229); doc.rect(0, 0, pageWidth, 6, 'F');
+        
+        // Centered Header Text
+        if (logoImg) {
+          doc.addImage(logoImg, 'PNG', pageWidth / 2 - 50, margin + 1, 10, 10);
+        }
         doc.setTextColor(15, 23, 42); doc.setFont('helvetica', 'bold'); doc.setFontSize(16);
-        doc.text('APNA COLLEGE BIHAR', margin + 14, margin + 5);
+        doc.text('APNA COLLEGE BIHAR', pageWidth / 2, margin + 5, { align: 'center' });
+        
         doc.setTextColor(79, 70, 229); doc.setFontSize(10); doc.setFont('helvetica', 'bold');
-        doc.text('OFFICIAL BEU SYLLABUS', margin + 14, margin + 11);
+        doc.text('OFFICIAL BEU SYLLABUS', pageWidth / 2, margin + 11, { align: 'center' });
+        
         doc.setTextColor(100, 116, 139); doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
-        doc.text(`${branchLabel} • ${semLabel}`, margin + 14, margin + 16);
+        doc.text(`${branchLabel} • ${semLabel}`, pageWidth / 2, margin + 16, { align: 'center' });
+        
         doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5);
         doc.line(margin, margin + 20, pageWidth - margin, margin + 20);
+        
         doc.setFontSize(8); doc.setTextColor(148, 163, 184);
         doc.text(`Page ${pageNum}`, pageWidth / 2, pageHeight - 12, { align: 'center' });
         doc.text('https://apnacollegebihar.online', margin, pageHeight - 12);
@@ -814,14 +831,12 @@ export default function BeuSyllabus() {
       imgEl.onerror = () => generateContent(null);
 
       const generateContent = async (logoImg) => {
-        if (logoImg) doc.addImage(logoImg, 'PNG', margin, margin - 1, 11, 11);
-        addPageDecoration(1);
+        addPageDecoration(1, logoImg);
         const checkPageBreak = (h) => {
           if (cursorY + h > pageHeight - margin - 15) {
             doc.addPage(); pageCount++;
             cursorY = margin + 30;
-            if (logoImg) doc.addImage(logoImg, 'PNG', margin, margin - 1, 11, 11);
-            addPageDecoration(pageCount);
+            addPageDecoration(pageCount, logoImg);
           }
         };
         subjects.forEach(subject => {
@@ -829,7 +844,7 @@ export default function BeuSyllabus() {
           checkPageBreak(s.length * 6 + 25); cursorY += 6;
           s.forEach(line => { 
             doc.setFont('helvetica', 'bold'); doc.setFontSize(14); doc.setTextColor(67, 56, 202);
-            doc.text(line, margin, cursorY); cursorY += 6; 
+            doc.text(line, pageWidth / 2, cursorY, { align: 'center' }); cursorY += 6; 
           });
           doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
           doc.line(margin, cursorY - 3, pageWidth - margin, cursorY - 3); cursorY += 4;
