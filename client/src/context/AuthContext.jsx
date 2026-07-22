@@ -60,6 +60,7 @@ export function AuthProvider({ children }) {
     isSyncing.current = true;
 
     // Step 1: Try localStorage cache immediately (works offline, instant)
+    let hasCacheForUser = false;
     try {
       const cachedRaw = localStorage.getItem(USER_CACHE_KEY);
       if (cachedRaw) {
@@ -67,11 +68,26 @@ export function AuthProvider({ children }) {
         if (cachedData.uid === u.uid) {
           // Instantly set user from cache — no network needed
           setUser({ ...u, ...cachedData });
+          hasCacheForUser = true;
         }
       }
     } catch (cacheErr) {
       // Cache read failed — not critical, continue
     }
+
+    // Step 1.5: If NO cache, immediately set a basic user so the UI doesn't wait for Firestore (which can take 10s on slow networks)
+    if (!hasCacheForUser) {
+      const isFounder = u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com';
+      setUser({
+        uid: u.uid,
+        email: u.email,
+        name: u.displayName || 'Scholar',
+        role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT
+      });
+    }
+
+    // Set loading to false now that we have at least a basic user or cached user
+    setLoading(false);
 
     // Step 2: Try Firestore for fresh data (requires internet)
     try {
@@ -240,9 +256,6 @@ export function AuthProvider({ children }) {
       return;
     }
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
-      // Don't set loading to true if we already have a user and it's just a refresh
-      if (!user) setLoading(true);
-      
       try {
         if (u) {
           await syncProfile(u);
@@ -253,7 +266,10 @@ export function AuthProvider({ children }) {
         }
       } catch (err) {
         console.error("Auth sync error:", err);
-      } finally {
+      }
+      // Note: setLoading(false) is now handled inside syncProfile when user is present,
+      // but if user is null we still need to set it to false here.
+      if (!u) {
         setLoading(false);
       }
     });
