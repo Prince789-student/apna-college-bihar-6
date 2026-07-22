@@ -143,7 +143,6 @@ export default function CollegeDirectory() {
               <p className="text-slate-500 text-sm font-medium mt-2">Try adjusting your search keywords.</p>
             </div>
           )}
-          )}
         </div>
       </section>
 
