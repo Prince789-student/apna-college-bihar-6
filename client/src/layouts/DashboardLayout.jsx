@@ -34,13 +34,13 @@ export default function DashboardLayout() {
 
   useEffect(() => {
     if (isNative) {
+      // AdMob banner has been temporarily disabled because it overlaps the UI
+      /*
       const showBanner = async () => {
         try {
-          // Ensure AdMob is initialized first
           await AdMob.initialize();
-          
           await AdMob.showBanner({
-            adId: 'ca-app-pub-3940256099942544/6300978111', // Test Banner ID
+            adId: 'ca-app-pub-3940256099942544/6300978111', 
             adSize: BannerAdSize.BANNER,
             position: BannerAdPosition.BOTTOM_CENTER,
             margin: 0,
@@ -48,9 +48,6 @@ export default function DashboardLayout() {
           });
         } catch (e) {
           console.error('AdMob Banner error', e);
-          import('@capacitor/toast').then(({ Toast }) => {
-            Toast.show({ text: `Ad Error: ${e.message || 'Unknown'}` });
-          });
         }
       };
       showBanner();
@@ -58,6 +55,7 @@ export default function DashboardLayout() {
       return () => {
         AdMob.hideBanner().catch(console.error);
       };
+      */
     }
   }, [isNative]);
 
