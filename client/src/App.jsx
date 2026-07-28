@@ -310,6 +310,12 @@ function App() {
   // Show splash screen only once per session
   const [showSplash, setShowSplash] = useState(() => {
     if (window.__PRERENDER_INJECTED) return false;
+    
+    // DETECT GOOGLEBOT / ADSENSE BOT
+    const userAgent = navigator.userAgent || "";
+    const isBot = userAgent.indexOf('Mediapartners-Google') !== -1 || userAgent.indexOf('Googlebot') !== -1;
+    if (isBot) return false; // SKIPS SPLASH SCREEN COMPLETELY FOR BOTS
+
     return !sessionStorage.getItem('splashPlayed');
   });
 

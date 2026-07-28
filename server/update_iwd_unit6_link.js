@@ -7,7 +7,7 @@ async function updateLink() {
     }
     const db = admin.firestore();
 
-    const newUrl = "https://drive.google.com/file/d/1AqQAF4hZV1DcsNWYMr1z9FH8fdjEAAY2/view?usp=drive_link";
+    const newUrl = "https://drive.google.com/file/d/1inVZ2GMQJyI0Nnrt6YDaOIOxmUVt3iWE/view?usp=drive_link";
     const targetTitle = "Unit 6 Advance Java Script";
 
     const query = await db.collection('documents')

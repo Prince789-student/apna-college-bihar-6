@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Channa Mereya Player</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1a1a1a;
+            color: white;
+            margin: 0;
+            flex-direction: column;
+        }
+        h1 { margin-bottom: 20px; }
+        #video-container {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <h1>Playing: Channa Mereya</h1>
+    <!-- We will use DOM manipulation to inject the video here -->
+    <div id="video-container"></div>
+
+    <script>
+        // Using DOM to create the iframe element and play the video
+        const container = document.getElementById('video-container');
+        
+        const iframe = document.createElement('iframe');
+        iframe.width = "800";
+        iframe.height = "450";
+        // We use the embed URL with autoplay=1
+        iframe.src = "https://www.youtube.com/embed/bzSTpdcs-EI?autoplay=1";
+        iframe.title = "Channa Mereya Video";
+        iframe.frameBorder = "0";
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+        
+        // Append the iframe to the container
+        container.appendChild(iframe);
+    </script>
+</body>
+</html>
