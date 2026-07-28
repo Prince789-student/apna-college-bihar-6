@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { AlertCircle, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
 
 export default function Disclaimer() {
   useEffect(() => {
@@ -9,6 +10,7 @@ export default function Disclaimer() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] pt-20 pb-20">
+      <SEO title="Disclaimer | Apna College Bihar" url={window.location.href} />
       <div className="container mx-auto max-w-4xl px-6">
         <Link to="/" className="inline-flex items-center text-slate-500 hover:text-blue-600 font-bold text-sm mb-8 transition-colors">
           <ArrowLeft size={16} className="mr-2" /> Back to Home

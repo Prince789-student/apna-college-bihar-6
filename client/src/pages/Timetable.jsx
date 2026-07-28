@@ -6,6 +6,7 @@ import { CalendarDays, Save, UserCheck, ArrowRight, Info, Trophy, Plus, X, Clock
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Capacitor } from '@capacitor/core';
+import SEO from '../components/SEO';
 
 const DAYS_OF_WEEK = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
 
@@ -65,6 +66,7 @@ function CustomSelect({ value, onChange, options, styleClass, style, isToday }) 
 
   return (
     <div className="relative" ref={dropdownRef} style={style}>
+      <SEO title="Timetable | Apna College Bihar" url={window.location.href} />
       <div 
         className={`${styleClass} flex items-center justify-center`}
         onClick={() => setOpen(!open)}

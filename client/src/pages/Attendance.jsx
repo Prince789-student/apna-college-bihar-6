@@ -5,6 +5,7 @@ import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import SEO from '../components/SEO';
 
 const HOLIDAYS_2026 = [
   { name: 'Makar Sankranti (मकर संक्रांति)', date: '14 Jan 2026', dateStrings: ['2026-01-14'], day: 'Wednesday', duration: 1 },
@@ -353,6 +354,7 @@ export default function Attendance() {
 
   return (
     <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500 font-['Inter']">
+      <SEO title="Attendance | Apna College Bihar" url={window.location.href} />
       
       {/* CSS Injected for scan animation */}
       <style>{`

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CalendarRange, ChevronLeft, ChevronRight, Bell } from 'lucide-react';
+import SEO from '../components/SEO';
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -53,6 +54,7 @@ export default function Calendar() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
+      <SEO title="Calendar | Apna College Bihar" url={window.location.href} />
       <div className="flex items-center justify-between bg-white p-8 rounded-[3rem] border border-slate-200 shadow-sm">
         <div className="flex items-center gap-4">
           <div className="p-4 bg-orange-600/10 text-orange-600 rounded-3xl">

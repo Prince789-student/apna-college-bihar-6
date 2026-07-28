@@ -1,3 +1,4 @@
+import SEO from '../components/SEO';
 import React, { useState, useEffect } from 'react';
 import { Timer, Play, Pause, Square, Trophy, Users, Flame, Calendar, BarChart2, Hash, CheckSquare, Zap } from 'lucide-react';
 
@@ -33,6 +34,7 @@ export default function StudyTracking() {
 
   return (
     <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6 p-4 text-slate-900 min-h-screen bg-slate-950">
+      <SEO title="Study Tracking | Apna College Bihar" url={window.location.href} />
       
       {/* Left Sidebar: Profile & Stats */}
       <div className="lg:w-1/4 space-y-6">

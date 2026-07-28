@@ -1,3 +1,4 @@
+import SEO from '../components/SEO';
 import React, { useState, useEffect } from 'react';
 import { collection, query, where, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -78,6 +79,7 @@ export default function TodoList() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 animate-in fade-in duration-300">
+      <SEO title="Todo List | Apna College Bihar" url={window.location.href} />
       <div className="flex items-center gap-3">
         <ClipboardList size={24} className="text-blue-500" />
         <div>

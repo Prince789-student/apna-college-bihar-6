@@ -196,7 +196,7 @@ export default function BeuCgpa() {
       <SEO 
         title="BEU CGPA Calculator | Apna College Bihar" 
         description="Calculate your Bihar Engineering University (BEU) semester CGPA easily. Track your academic progress." 
-      />
+       url={window.location.href} />
       
       {/* ── Header ─── */}
       <div>

@@ -1,3 +1,4 @@
+import SEO from '../components/SEO';
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Timer, Play, Pause, Square, BookOpen, 
@@ -93,6 +94,7 @@ export default function StudyTimer() {
 
   return (
     <div className="max-w-6xl mx-auto pb-24 space-y-8 lg:space-y-12">
+      <SEO title="Study Timer | Apna College Bihar" url={window.location.href} />
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         

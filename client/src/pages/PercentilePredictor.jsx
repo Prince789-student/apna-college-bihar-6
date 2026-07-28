@@ -96,7 +96,7 @@ export default function PercentilePredictor() {
       <SEO 
         title="JEE Main Percentile Predictor | Apna College Bihar"
         description="Predict your Bihar Engineering college dynamically based on JEE Main percentile."
-      />
+       url={window.location.href} />
       <div className="max-w-4xl mx-auto space-y-8 relative z-10">
         <div className="text-center space-y-4">
           <div className="inline-flex p-3 bg-indigo-600/10 text-indigo-500 rounded-2xl border border-indigo-500/20">

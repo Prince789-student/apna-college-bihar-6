@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, GraduationCap, Send, BookOpen, Timer, Users, Calculator, Shield, Award, Sparkles, Heart } from 'lucide-react';
+import SEO from '../components/SEO';
 
 export default function About() {
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ export default function About() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-['Inter'] selection:bg-blue-500/30 pb-24">
+      <SEO title="About | Apna College Bihar" url={window.location.href} />
       {/* Header */}
       <div className="sticky top-0 z-50 bg-[#f8fafc]/90 backdrop-blur-xl border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">
         <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors group">

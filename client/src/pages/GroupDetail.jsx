@@ -1,3 +1,4 @@
+import SEO from '../components/SEO';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
@@ -139,6 +140,7 @@ export default function GroupDetail() {
     if (total === 0) {
       return (
         <div className="w-24 h-24 rounded-full border-4 border-slate-100 flex items-center justify-center text-slate-300 font-bold text-[8px] uppercase text-center p-2">
+      <SEO title="Group Detail | Apna College Bihar" url={window.location.href} />
           No Sessions
         </div>
       );

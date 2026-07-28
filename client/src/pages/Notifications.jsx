@@ -28,7 +28,7 @@ export default function Notifications() {
       <SEO 
         title="BEU Notifications | Apna College Bihar" 
         description="View the latest official notifications and updates from Bihar Engineering University (BEU)." 
-      />
+       url={window.location.href} />
 
       <div className="max-w-5xl mx-auto space-y-6">
         
