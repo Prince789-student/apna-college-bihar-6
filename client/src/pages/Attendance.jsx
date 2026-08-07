@@ -39,6 +39,9 @@ export default function Attendance() {
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState([]);
   const [dailyLog, setDailyLog] = useState({});
+  const [subjectLogs, setSubjectLogs] = useState({});
+  const [selectedSubject, setSelectedSubject] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [activeTab, setActiveTab] = useState('subjects'); // 'subjects', 'daily', 'holidays'
   const [loading, setLoading] = useState(true);
   
@@ -115,6 +118,9 @@ export default function Attendance() {
         if (data.dailyAttendanceLog) {
           setDailyLog(data.dailyAttendanceLog);
         }
+        if (data.subjectAttendanceLogs) {
+          setSubjectLogs(data.subjectAttendanceLogs);
+        }
         if (data.timetableV3) {
           setTimetable(data.timetableV3);
           // Parse today's classes from timetableV3
@@ -186,11 +192,12 @@ export default function Attendance() {
     }
   };
 
-  const saveAttendance = async (newSubjects, newDailyLog = dailyLog) => {
+  const saveAttendance = async (newSubjects, newDailyLog = dailyLog, newSubjectLogs = subjectLogs) => {
     try {
       await updateDoc(doc(db, 'users', user.uid), {
         attendance: newSubjects,
-        dailyAttendanceLog: newDailyLog
+        dailyAttendanceLog: newDailyLog,
+        subjectAttendanceLogs: newSubjectLogs
       });
     } catch (e) {
       console.error("Save attendance error:", e);
@@ -524,20 +531,12 @@ export default function Attendance() {
                 </div>
 
                 <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-2">
-                    <button 
-                      onClick={() => updateAttendance(i, 'present')}
-                      className="flex items-center justify-center gap-1.5 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-sm"
-                    >
-                      <Plus size={14} /> Present
-                    </button>
-                    <button 
-                      onClick={() => updateAttendance(i, 'absent')}
-                      className="flex items-center justify-center gap-1.5 py-3.5 bg-red-600 hover:bg-red-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-sm"
-                    >
-                      <Minus size={14} /> Absent
-                    </button>
-                  </div>
+                  <button 
+                    onClick={() => setSelectedSubject({ index: i, ...s })}
+                    className="w-full flex items-center justify-center gap-2 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest active:scale-95 transition-all shadow-sm"
+                  >
+                    <Calendar size={14} /> Open Calendar & Notes
+                  </button>
 
                   <div className="flex justify-between items-center pt-2 border-t border-slate-100">
                     <button 
@@ -848,6 +847,205 @@ export default function Attendance() {
           We also provide an integrated <strong>BEU Holiday Calendar</strong> for the current academic year. It comprehensively lists all official gazetted holidays, summer vacations, winter breaks, and major festival holidays (like Diwali, Chhath Puja, and Holi) approved by the university administration. Keeping an eye on the calendar helps you proactively plan your leaves without letting your attendance percentage drop to dangerous levels.
         </p>
       </div>
+
+
+      
+      {/* ── Subject Calendar Modal ── */}
+      {selectedSubject && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-2xl max-h-[95vh] overflow-y-auto shadow-2xl flex flex-col animate-in zoom-in-95 duration-300 relative">
+            
+            {/* Modal Header */}
+            <div className="p-6 md:p-8 border-b border-slate-100 flex justify-between items-center sticky top-0 bg-white/90 backdrop-blur-md z-10 rounded-t-[2.5rem]">
+              <div>
+                <h3 className="text-xl md:text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">{selectedSubject.name}</h3>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Calendar & Notes Log</p>
+              </div>
+              <button 
+                onClick={() => { setSelectedSubject(null); setSelectedDate(null); }}
+                className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-all active:scale-90"
+              >
+                <XCircle size={20} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 md:p-8 flex flex-col lg:flex-row gap-8">
+              
+              {/* Left Side: Calendar */}
+              <div className="flex-1">
+                {/* Stats Overview */}
+                <div className="grid grid-cols-3 gap-3 mb-6">
+                  <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 text-center">
+                    <p className="text-[8px] font-black text-emerald-600 uppercase tracking-widest mb-1">Present</p>
+                    <p className="text-xl font-black text-emerald-700">{selectedSubject.present}</p>
+                  </div>
+                  <div className="p-4 bg-red-50 rounded-2xl border border-red-100 text-center">
+                    <p className="text-[8px] font-black text-red-600 uppercase tracking-widest mb-1">Absent</p>
+                    <p className="text-xl font-black text-red-700">{selectedSubject.total - selectedSubject.present}</p>
+                  </div>
+                  <div className="p-4 bg-indigo-50 rounded-2xl border border-indigo-100 text-center">
+                    <p className="text-[8px] font-black text-indigo-600 uppercase tracking-widest mb-1">Percentage</p>
+                    <p className="text-xl font-black text-indigo-700">
+                      {selectedSubject.total > 0 ? ((selectedSubject.present / selectedSubject.total) * 100).toFixed(1) : 0}%
+                    </p>
+                  </div>
+                </div>
+
+                {/* Calendar Navigation */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200">
+                    <button onClick={handlePrevMonth} className="p-1.5 hover:bg-white rounded-lg text-slate-600 active:scale-90 transition-all"><ChevronLeft size={16} /></button>
+                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-800 px-2 min-w-[120px] text-center">{currentMonthName}</span>
+                    <button onClick={handleNextMonth} className="p-1.5 hover:bg-white rounded-lg text-slate-600 active:scale-90 transition-all"><ChevronRight size={16} /></button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-7 gap-2 text-center mb-2">
+                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
+                    <span key={d} className="text-[8px] font-black uppercase tracking-widest text-slate-400 py-1">{d}</span>
+                  ))}
+                </div>
+                
+                <div className="grid grid-cols-7 gap-2 text-center">
+                  {(() => {
+                    const year = currentDate.getFullYear();
+                    const month = currentDate.getMonth();
+                    const startDayOfWeek = new Date(year, month, 1).getDay();
+                    const p = [];
+                    for (let i = 0; i < startDayOfWeek; i++) {
+                       p.push(<span key={`pad-${i}`}></span>);
+                    }
+                    return p;
+                  })()}
+                  
+                  {calendarDays.map(dayObj => {
+                    const logs = subjectLogs[selectedSubject.name] || {};
+                    const dayData = logs[dayObj.dateStr] || {};
+                    const status = dayData.status;
+                    const hasNote = dayData.note && dayData.note.trim() !== '';
+                    const isSelected = selectedDate === dayObj.dateStr;
+                    
+                    let tileColor = 'bg-slate-50 border border-slate-100 hover:bg-slate-100 text-slate-600';
+                    if (status === 'PRESENT') tileColor = 'bg-emerald-500 border-emerald-600 text-white shadow-md';
+                    else if (status === 'ABSENT') tileColor = 'bg-red-500 border-red-600 text-white shadow-md';
+                    else if (status === 'CANCELLED') tileColor = 'bg-slate-800 border-slate-900 text-white';
+
+                    const dayName = new Date(dayObj.dateStr).toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+                    const isScheduled = timetable && timetable[dayName] && timetable[dayName].some(c => c.subject && c.subject.trim().toLowerCase() === selectedSubject.name.toLowerCase());
+
+                    return (
+                      <button
+                        key={dayObj.day}
+                        onClick={() => setSelectedDate(dayObj.dateStr)}
+                        className={`w-full aspect-square rounded-xl flex flex-col items-center justify-center text-xs font-black transition-all active:scale-90 relative ${tileColor} ${isScheduled && !status ? 'ring-2 ring-indigo-400 ring-offset-1' : ''} ${isSelected ? 'ring-4 ring-amber-400 z-10 scale-110' : ''}`}
+                      >
+                        <span>{dayObj.day}</span>
+                        {hasNote && <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-yellow-400 rounded-full"></span>}
+                        {isScheduled && !status && <span className="absolute bottom-1 w-1 h-1 bg-indigo-500 rounded-full"></span>}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Right/Bottom Side: Editor Panel */}
+              <div className="w-full lg:w-72 flex-shrink-0">
+                {!selectedDate ? (
+                  <div className="h-full min-h-[200px] flex flex-col items-center justify-center bg-slate-50 border-2 border-dashed border-slate-200 rounded-[2rem] p-6 text-center">
+                    <Calendar size={32} className="text-slate-300 mb-3" />
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Select a date</p>
+                    <p className="text-[9px] font-bold text-slate-400 mt-1">Tap a date on the calendar to mark attendance and add notes.</p>
+                  </div>
+                ) : (
+                  <div className="bg-slate-50 border border-slate-200 rounded-[2rem] p-6 animate-in slide-in-from-right-8 duration-300">
+                    <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-500 mb-4 flex items-center gap-2">
+                      <Calendar size={14} /> {new Date(selectedDate).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' })}
+                    </h4>
+                    
+                    {(() => {
+                      const logs = subjectLogs[selectedSubject.name] || {};
+                      const dayData = logs[selectedDate] || {};
+                      
+                      const handleSaveStatus = (nextStatus) => {
+                        const newSubjectLogs = { ...subjectLogs };
+                        newSubjectLogs[selectedSubject.name] = { ...(subjectLogs[selectedSubject.name] || {}) };
+                        
+                        if (nextStatus) {
+                          newSubjectLogs[selectedSubject.name][selectedDate] = { ...dayData, status: nextStatus };
+                        } else {
+                          const { status, ...rest } = newSubjectLogs[selectedSubject.name][selectedDate] || {};
+                          if (rest.note) {
+                             newSubjectLogs[selectedSubject.name][selectedDate] = rest;
+                          } else {
+                             delete newSubjectLogs[selectedSubject.name][selectedDate];
+                          }
+                        }
+                        
+                        let p = 0; let t = 0;
+                        Object.values(newSubjectLogs[selectedSubject.name] || {}).forEach(d => {
+                          if (d.status === 'PRESENT') { p++; t++; }
+                          if (d.status === 'ABSENT') { t++; }
+                        });
+                        
+                        const newSubjects = [...subjects];
+                        const updatedSubj = { ...newSubjects[selectedSubject.index], present: p, total: t };
+                        newSubjects[selectedSubject.index] = updatedSubj;
+                        
+                        setSubjectLogs(newSubjectLogs);
+                        setSubjects(newSubjects);
+                        setSelectedSubject({ index: selectedSubject.index, ...updatedSubj }); 
+                        saveAttendance(newSubjects, dailyLog, newSubjectLogs);
+                        toast.success('Attendance updated', { id: 'status-toast' });
+                      };
+
+                      const handleSaveNote = (e) => {
+                        const note = e.target.value;
+                        const newSubjectLogs = { ...subjectLogs };
+                        newSubjectLogs[selectedSubject.name] = { ...(subjectLogs[selectedSubject.name] || {}) };
+                        
+                        newSubjectLogs[selectedSubject.name][selectedDate] = { ...dayData, note };
+                        if (!note && !dayData.status) {
+                           delete newSubjectLogs[selectedSubject.name][selectedDate];
+                        }
+                        
+                        setSubjectLogs(newSubjectLogs);
+                        saveAttendance(subjects, dailyLog, newSubjectLogs);
+                      };
+
+                      return (
+                        <div className="space-y-5">
+                          <div>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Mark Status</p>
+                            <div className="flex flex-col gap-2">
+                              <button onClick={() => handleSaveStatus('PRESENT')} className={`py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${dayData.status === 'PRESENT' ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-white border border-emerald-200 text-emerald-600 hover:bg-emerald-50'}`}>+ Present</button>
+                              <button onClick={() => handleSaveStatus('ABSENT')} className={`py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${dayData.status === 'ABSENT' ? 'bg-red-500 text-white shadow-md shadow-red-500/20' : 'bg-white border border-red-200 text-red-600 hover:bg-red-50'}`}>- Absent</button>
+                              <div className="flex gap-2">
+                                <button onClick={() => handleSaveStatus('CANCELLED')} className={`flex-1 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${dayData.status === 'CANCELLED' ? 'bg-slate-800 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'}`}>Cancelled</button>
+                                <button onClick={() => handleSaveStatus(undefined)} className="flex-1 py-2 rounded-xl bg-white border border-slate-200 text-slate-400 hover:text-slate-600 text-[9px] font-black uppercase tracking-widest transition-all">Clear</button>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div>
+                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2">Class Note</p>
+                            <textarea 
+                              placeholder="e.g. Taught matrix multiplication, assignment given..."
+                              value={dayData.note || ''}
+                              onChange={handleSaveNote}
+                              className="w-full h-28 bg-white border border-slate-200 rounded-xl p-3 text-xs text-slate-700 font-medium resize-none focus:outline-none focus:border-indigo-500 transition-all placeholder:text-slate-300"
+                            ></textarea>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
