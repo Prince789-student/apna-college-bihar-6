@@ -121,6 +121,7 @@ export default function FeatureSEO() {
         description={`${config.description}${decoded ? ' Related: ' + decoded + '.' : ''}`}
         keywords={`${config.keywords}${decoded ? ', ' + decoded : ''}`}
         url={seoUrl}
+        noindex={!!keyword}
       />
       {/* SEO Breadcrumb */}
       <div className={`bg-gradient-to-r ${config.color} text-white px-4 py-3`}>

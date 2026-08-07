@@ -103,6 +103,7 @@ export default function BeuToolSEO() {
         description={seoDesc}
         keywords={seoKeywords}
         url={seoUrl}
+        noindex={!!keyword}
       />
       {/* SEO Breadcrumb header – lightweight, helps Google understand context */}
       <div className={`bg-gradient-to-r ${config.color} text-white px-4 py-3`}>
