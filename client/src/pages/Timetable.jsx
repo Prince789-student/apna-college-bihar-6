@@ -167,6 +167,10 @@ export default function Timetable() {
   };
 
   const handleSave = async () => {
+    if (!user) {
+      toast.error('You must be logged in to save your timetable!');
+      return;
+    }
     try {
       // Collect unique subjects for Attendance Sync
       const uniqueSubjects = new Set();
