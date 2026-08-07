@@ -42,6 +42,7 @@ export default function Attendance() {
   const [subjectLogs, setSubjectLogs] = useState({});
   const [selectedSubject, setSelectedSubject] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDailyEditorDate, setSelectedDailyEditorDate] = useState(null);
   const [activeTab, setActiveTab] = useState('subjects'); // 'subjects', 'daily', 'holidays'
   const [loading, setLoading] = useState(true);
   
@@ -263,7 +264,8 @@ export default function Attendance() {
 
   const handleScanSuccess = async () => {
     const todayStr = new Date().toLocaleDateString('en-CA');
-    const newDailyLog = { ...dailyLog, [todayStr]: 'PRESENT' };
+    const existingVal = dailyLog[todayStr];
+    const newDailyLog = { ...dailyLog, [todayStr]: typeof existingVal === 'object' ? { ...existingVal, status: 'PRESENT' } : { status: 'PRESENT', note: '' } };
     setDailyLog(newDailyLog);
     setScanning(false);
     setScanProgress(0);
@@ -330,7 +332,8 @@ export default function Attendance() {
   };
 
   // Calculate statistics from dailyLog (All-time overall)
-  const dailyStats = Object.values(dailyLog).reduce((acc, status) => {
+  const dailyStats = Object.values(dailyLog).reduce((acc, val) => {
+    const status = typeof val === 'object' ? val.status : val;
     if (status === 'PRESENT') acc.present += 1;
     if (status === 'ABSENT') acc.absent += 1;
     if (status === 'HOLIDAY') acc.holiday += 1;
@@ -345,7 +348,8 @@ export default function Attendance() {
   const selMonth = currentDate.getMonth();
   const prefix = `${selYear}-${String(selMonth + 1).padStart(2, '0')}-`;
 
-  const monthlyStats = Object.entries(dailyLog).reduce((acc, [dateStr, status]) => {
+  const monthlyStats = Object.entries(dailyLog).reduce((acc, [dateStr, val]) => {
+    const status = typeof val === 'object' ? val.status : val;
     if (dateStr.startsWith(prefix)) {
       if (status === 'PRESENT') acc.present += 1;
       if (status === 'ABSENT') acc.absent += 1;
@@ -721,7 +725,9 @@ export default function Attendance() {
 
               {/* Render days */}
               {calendarDays.map(dayObj => {
-                const status = dailyLog[dayObj.dateStr];
+                const val = dailyLog[dayObj.dateStr];
+                const status = typeof val === 'object' ? val.status : val;
+                const hasNote = typeof val === 'object' && val.note && val.note.trim() !== '';
                 const holidayName = getOfficialHolidayName(dayObj.dateStr);
                 
                 let tileColor = 'bg-slate-50 border border-slate-100 hover:bg-slate-100 text-slate-600';
@@ -733,12 +739,13 @@ export default function Attendance() {
                 return (
                   <button
                     key={dayObj.day}
-                    onClick={() => toggleDailyDate(dayObj.dateStr)}
+                    onClick={() => setSelectedDailyEditorDate(dayObj.dateStr)}
                     className={`w-10 h-10 mx-auto rounded-xl flex flex-col items-center justify-center text-xs font-black transition-all active:scale-90 relative ${tileColor}`}
-                    title={holidayName ? `Official Holiday: ${holidayName} (Click to override)` : `Date: ${dayObj.dateStr} | Status: ${status || 'Unmarked'} (Click to change)`}
+                    title={holidayName ? `Official Holiday: ${holidayName} (Click to override)` : `Date: ${dayObj.dateStr} | Status: ${status || 'Unmarked'}`}
                   >
                     <span>{dayObj.day}</span>
                     {holidayName && !status && <span className="absolute bottom-1 w-1 h-1 bg-amber-500 rounded-full"></span>}
+                    {hasNote && <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-indigo-500 rounded-full"></span>}
                   </button>
                 );
               })}
@@ -1042,6 +1049,91 @@ export default function Attendance() {
                   </div>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {/* ── Daily Punch-In Editor Modal ── */}
+      {selectedDailyEditorDate && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-[2.5rem] w-full max-w-sm overflow-hidden shadow-2xl flex flex-col animate-in zoom-in-95 duration-300">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-white/90 backdrop-blur-md">
+              <div>
+                <h3 className="text-xl font-[1000] text-slate-900 uppercase tracking-tighter">Daily Log</h3>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">
+                  {new Date(selectedDailyEditorDate).toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' })}
+                </p>
+              </div>
+              <button 
+                onClick={() => setSelectedDailyEditorDate(null)}
+                className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 transition-all active:scale-90"
+              >
+                <XCircle size={20} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 bg-slate-50">
+              {(() => {
+                const val = dailyLog[selectedDailyEditorDate];
+                const status = typeof val === 'object' ? val.status : val;
+                const note = typeof val === 'object' ? val.note : '';
+                
+                const handleSaveDailyStatus = (nextStatus) => {
+                  const newDailyLog = { ...dailyLog };
+                  if (nextStatus) {
+                    newDailyLog[selectedDailyEditorDate] = { status: nextStatus, note };
+                  } else {
+                    if (note) {
+                      newDailyLog[selectedDailyEditorDate] = { status: undefined, note };
+                    } else {
+                      delete newDailyLog[selectedDailyEditorDate];
+                    }
+                  }
+                  setDailyLog(newDailyLog);
+                  saveAttendance(subjects, newDailyLog, subjectLogs);
+                  toast.success('Log updated');
+                };
+
+                const handleSaveDailyNote = (e) => {
+                  const newNote = e.target.value;
+                  const newDailyLog = { ...dailyLog };
+                  newDailyLog[selectedDailyEditorDate] = { status, note: newNote };
+                  if (!newNote && !status) delete newDailyLog[selectedDailyEditorDate];
+                  
+                  setDailyLog(newDailyLog);
+                  saveAttendance(subjects, newDailyLog, subjectLogs);
+                };
+
+                return (
+                  <div className="space-y-6">
+                    <div>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-3">Mark Status</p>
+                      <div className="grid grid-cols-2 gap-2 mb-2">
+                        <button onClick={() => handleSaveDailyStatus('PRESENT')} className={`py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${status === 'PRESENT' ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20' : 'bg-white border border-emerald-200 text-emerald-600 hover:bg-emerald-50'}`}>+ Present</button>
+                        <button onClick={() => handleSaveDailyStatus('ABSENT')} className={`py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${status === 'ABSENT' ? 'bg-red-500 text-white shadow-md shadow-red-500/20' : 'bg-white border border-red-200 text-red-600 hover:bg-red-50'}`}>- Absent</button>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <button onClick={() => handleSaveDailyStatus('HOLIDAY')} className={`py-3 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${status === 'HOLIDAY' ? 'bg-amber-500 text-white shadow-md shadow-amber-500/20' : 'bg-white border border-amber-200 text-amber-600 hover:bg-amber-50'}`}>Holiday</button>
+                        <button onClick={() => handleSaveDailyStatus(undefined)} className="py-3 rounded-xl bg-white border border-slate-200 text-slate-400 hover:text-slate-600 text-[9px] font-black uppercase tracking-widest transition-all">Clear</button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-3">Daily Note (Optional)</p>
+                      <textarea 
+                        placeholder="Write a note for this day..."
+                        value={note || ''}
+                        onChange={handleSaveDailyNote}
+                        className="w-full h-24 bg-white border border-slate-200 rounded-xl p-3 text-sm text-slate-700 font-medium resize-none focus:outline-none focus:border-blue-500 transition-all placeholder:text-slate-300"
+                      ></textarea>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           </div>
         </div>
