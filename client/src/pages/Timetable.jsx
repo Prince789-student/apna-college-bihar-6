@@ -226,7 +226,7 @@ export default function Timetable() {
     
     // Auto-fill: next class starts where the last one ended
     const dayClasses = newSchedule[day];
-    let defaultStart = '08:00';
+    let defaultStart = '10:00';
     if (dayClasses.length > 0) {
       const lastClass = dayClasses[dayClasses.length - 1];
       if (lastClass.endTime) {
@@ -249,9 +249,11 @@ export default function Timetable() {
   };
 
   const updateClass = (day, id, field, value) => {
-    const newSchedule = { ...schedule };
-    newSchedule[day] = newSchedule[day].map(c => c.id === id ? { ...c, [field]: value } : c);
-    setSchedule(newSchedule);
+    setSchedule(prev => {
+      const newSchedule = { ...prev };
+      newSchedule[day] = newSchedule[day].map(c => c.id === id ? { ...c, [field]: value } : c);
+      return newSchedule;
+    });
     setSaved(false);
   };
 
