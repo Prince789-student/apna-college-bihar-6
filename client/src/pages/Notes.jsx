@@ -71,6 +71,17 @@ export default function Notes() {
   const [navHistory, setNavHistory] = useState([]); // for sub-folders
 
   useEffect(() => {
+    const b = branchId ? BRANCHES.find(x => x.id.toLowerCase() === branchId.toLowerCase()) : null;
+    const s = semesterId ? parseInt(semesterId) : null;
+    setBranch(b);
+    setSem(s);
+    if (!s) {
+       setFolder(null);
+       setNavHistory([]);
+    }
+  }, [branchId, semesterId]);
+
+  useEffect(() => {
     if (window.__PRERENDER_INJECTED) {
       setLoading(false);
       return;
