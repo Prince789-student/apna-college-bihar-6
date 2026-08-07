@@ -7,7 +7,8 @@ export default function SEO({
   keywords = "UGEAC 2026, Bihar Engineering Counselling, BCECE counselling 2026, Bihar college predictor, B.Tech Notes PDF, Engineering Study Material Bihar",
   url = "https://www.apnacollegebihar.online/",
   image = "https://www.apnacollegebihar.online/acb_brand_final.png",
-  schema = null 
+  schema = null,
+  noindex = false
 }) {
   const fullTitle = title.includes("Apna College Bihar") ? title : `${title} | Apna College Bihar`;
 
@@ -18,7 +19,7 @@ export default function SEO({
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <meta name="robots" content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
       <meta name="author" content="Apna College Bihar" />
       <link rel="canonical" href={url} />
 
