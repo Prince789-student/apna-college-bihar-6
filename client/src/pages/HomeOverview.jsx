@@ -44,7 +44,7 @@ export default function HomeOverview() {
 
   return (
     <div className="space-y-6 pb-8">
-      <SEO title="Home Overview | Apna College Bihar" url={window.location.href} />
+      <SEO title="Home Overview | Apna College Bihar" />
       {/* Welcome Banner */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-[2rem] p-6 md:p-8 text-white relative overflow-hidden shadow-2xl shadow-blue-600/20 transition-transform duration-300 hover:scale-[1.01]">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mt-20 -mr-20"></div>

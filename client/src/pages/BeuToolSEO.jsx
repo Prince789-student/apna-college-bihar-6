@@ -102,7 +102,6 @@ export default function BeuToolSEO() {
         title={seoTitle}
         description={seoDesc}
         keywords={seoKeywords}
-        url={seoUrl}
         noindex={!!keyword}
       />
       {/* SEO Breadcrumb header – lightweight, helps Google understand context */}

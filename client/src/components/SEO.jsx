@@ -1,16 +1,20 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useLocation } from 'react-router-dom';
 
 export default function SEO({ 
   title = "Apna College Bihar ✅ | UGEAC Counselling 2026, B.Tech Notes, PYQ & College Predictor",
   description = "Bihar Engineering Counselling 2026 - UGEAC College Predictor, Cutoff Ranks, B.Tech Notes, PYQ Papers & CGPA Calculator. Official resource for Bihar Engineering students.",
   keywords = "UGEAC 2026, Bihar Engineering Counselling, BCECE counselling 2026, Bihar college predictor, B.Tech Notes PDF, Engineering Study Material Bihar",
-  url = "https://www.apnacollegebihar.online/",
   image = "https://www.apnacollegebihar.online/acb_brand_final.png",
   schema = null,
   noindex = false
 }) {
+  const location = useLocation();
   const fullTitle = title.includes("Apna College Bihar") ? title : `${title} | Apna College Bihar`;
+  
+  const cleanPath = location.pathname === '/' ? '/' : location.pathname.replace(/\/$/, '');
+  const canonicalUrl = `https://www.apnacollegebihar.online${cleanPath}`;
 
   return (
     <Helmet>
@@ -21,11 +25,11 @@ export default function SEO({
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta name="robots" content={noindex ? "noindex, follow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"} />
       <meta name="author" content="Apna College Bihar" />
-      <link rel="canonical" href={url} />
+      <link rel="canonical" href={canonicalUrl} />
 
       {/* Open Graph / Social Media Meta */}
       <meta property="og:type" content="website" />
-      <meta property="og:url" content={url} />
+      <meta property="og:url" content={canonicalUrl} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:site_name" content="Apna College Bihar" />

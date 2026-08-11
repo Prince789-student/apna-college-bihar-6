@@ -136,7 +136,6 @@ export default function BranchHub() {
         title={seoTitle}
         description={seoDescription}
         keywords={seoKeywords}
-        url={`https://www.apnacollegebihar.online/branch/${branchId}/${currentSection}`}
       />
       
       {/* Background gradients */}

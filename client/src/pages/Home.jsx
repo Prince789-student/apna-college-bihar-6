@@ -208,7 +208,6 @@ export default function Home() {
         title="Bihar's Largest Engineering Student Platform | Apna College Bihar"
         description="Official hub for Bihar engineering students. Free BEU Notes, PYQs, Syllabus, UGEAC Predictor, CGPA Calculator and counselling guidance for 38+ engineering colleges."
         keywords="BEU notes, Bihar engineering college, UGEAC 2026 predictor, B.Tech PYQ papers, Bihar college cutoff, CGPA calculator BEU, Apna College Bihar, Bihar engineering counselling, MIT Muzaffarpur, BCE Bhagalpur"
-        url="https://www.apnacollegebihar.online/"
         schema={combinedSchema}
       />
 

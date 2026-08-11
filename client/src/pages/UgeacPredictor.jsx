@@ -605,7 +605,6 @@ function UgeacPredictor() {
         title={seoDetails.title}
         description={seoDetails.description}
         keywords={seoDetails.keywords}
-        url={seoDetails.url}
       />
       {loadingData ? (
         <div className="flex flex-col items-center justify-center p-20 glass-panel min-h-[400px]">

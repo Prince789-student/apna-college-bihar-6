@@ -29,8 +29,7 @@ export default function CompareColleges() {
     <div className="min-h-screen bg-[#070b14] text-slate-100 font-['Inter'] relative overflow-hidden p-6 md:p-12">
       <SEO 
         title={`${col1?.short || 'College'} vs ${col2?.short || 'College'} Head-to-Head Comparison | Apna College Bihar`}
-        description={`Compare side-by-side details, fee structure, location, tier level, and placements between ${col1?.name} and ${col2?.name}.`}
-       url={window.location.href} />
+        description={`Compare side-by-side details, fee structure, location, tier level, and placements between ${col1?.name} and ${col2?.name}.`} />
 
       <div className="max-w-5xl mx-auto space-y-12 relative z-10">
         {/* Header */}

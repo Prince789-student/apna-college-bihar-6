@@ -192,7 +192,6 @@ export default function CollegeProfile() {
         title={`${college.name} - Admission, Cutoff, Fees & Placement | Apna College Bihar`}
         description={college.description}
         keywords={`${college.shortName}, ${college.name}, Bihar engineering college, BEU, UGEAC cutoff, B.Tech admission Bihar`}
-        url={`https://www.apnacollegebihar.online/college/${collegeSlug}`}
         schema={[seoSchema, breadcrumbSchema]}
       />
 

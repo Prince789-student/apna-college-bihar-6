@@ -52,7 +52,7 @@ export default function Achievements() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-8 animate-in fade-in duration-300">
-      <SEO title="Achievements | Apna College Bihar" url={window.location.href} />
+      <SEO title="Achievements | Apna College Bihar" />
       
       <div className="flex items-center gap-3">
         <Trophy size={24} className="text-amber-500" />

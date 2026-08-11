@@ -122,7 +122,7 @@ export default function PersonalManager() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 md:space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
-      <SEO title="Personal Manager | Apna College Bihar" url={window.location.href} />
+      <SEO title="Personal Manager | Apna College Bihar" />
       
       {/* Header Area */}
       <div className="bg-white p-6 md:p-10 rounded-[2.5rem] md:rounded-[4rem] border border-slate-200/80 shadow-2xl relative overflow-hidden">

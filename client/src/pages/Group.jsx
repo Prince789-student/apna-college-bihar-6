@@ -183,7 +183,7 @@ export default function Group() {
 
   return (
     <div className="max-w-6xl mx-auto pb-24 space-y-8 animate-in fade-in slide-in-from-bottom-5 duration-700">
-      <SEO title="Group | Apna College Bihar" url={window.location.href} />
+      <SEO title="Group | Apna College Bihar" />
       
       {/* Header & Controls */}
       <div className="bg-white p-8 rounded-[3rem] border border-slate-200/80 shadow-2xl relative overflow-hidden">

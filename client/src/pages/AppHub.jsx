@@ -106,7 +106,6 @@ export default function AppHub() {
       <SEO 
         title="App Hub | Apna College Bihar - The Official Study Engine"
         description="Access all your college utilities - Study Timer, Notes, PYQs, UGEAC Predictor, SGPA Calculator, and more in one place."
-        url="https://www.apnacollegebihar.online/hub"
       />
       
       {/* Fixed Top Header Bar */}

@@ -12,7 +12,6 @@ export default function Blog() {
         title="Engineering Blog & Articles | Apna College Bihar" 
         description="Read top-quality educational articles, tips on BEU exams, UGEAC counselling guides, and engineering career advice for Bihar students." 
         keywords="BEU blog, UGEAC guide, engineering in Bihar, CSE vs IT, BEU preparation"
-        url="https://www.apnacollegebihar.online/blog"
       />
       
       {/* Header */}

@@ -120,7 +120,6 @@ export default function FeatureSEO() {
         title={seoTitle}
         description={`${config.description}${decoded ? ' Related: ' + decoded + '.' : ''}`}
         keywords={`${config.keywords}${decoded ? ', ' + decoded : ''}`}
-        url={seoUrl}
         noindex={!!keyword}
       />
       {/* SEO Breadcrumb */}

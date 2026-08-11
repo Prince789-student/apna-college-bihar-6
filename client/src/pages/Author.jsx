@@ -10,8 +10,7 @@ export default function Author() {
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-['Inter'] selection:bg-blue-500/30 pb-24">
       <SEO 
         title="Creator & Author - Prince Kumar | Apna College Bihar" 
-        description="Learn about Prince Kumar, the Founder, Developer & Educational Content Creator behind Apna College Bihar."
-       url={window.location.href} />
+        description="Learn about Prince Kumar, the Founder, Developer & Educational Content Creator behind Apna College Bihar." />
       
       {/* Header */}
       <div className="sticky top-0 z-50 bg-[#f8fafc]/90 backdrop-blur-xl border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">

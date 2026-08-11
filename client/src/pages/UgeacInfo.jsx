@@ -1,4 +1,4 @@
-﻿import React, { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   BookOpen, HelpCircle, FileText, CheckCircle2, ChevronRight, 
@@ -247,7 +247,6 @@ export default function UgeacInfo() {
       <SEO 
         title={activePage.title}
         description={activePage.description}
-        url={`https://www.apnacollegebihar.online/ugeac/${page}`}
       />
       
       {/* Background gradients */}

@@ -344,8 +344,7 @@ export default function CollegePage() {
       <SEO 
         title={seoTitle}
         description={seoDescription}
-        keywords={seoKeywords}
-        url={`https://www.apnacollegebihar.online/college/${collegeSlug}/${currentSection}`}
+        keywords={seoKeywords}/${currentSection}`}
       />
       
       {/* Background gradients */}

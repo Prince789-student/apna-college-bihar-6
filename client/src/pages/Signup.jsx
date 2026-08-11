@@ -49,7 +49,7 @@ export default function Signup() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center p-4 relative overflow-hidden font-['Inter']">
-      <SEO title="Signup | Apna College Bihar" url={window.location.href} />
+      <SEO title="Signup | Apna College Bihar" />
       {/* Background Orbs */}
       <div className="absolute top-[-10%] left-[-20%] w-[1000px] h-[1000px] bg-blue-600/5 rounded-full blur-[200px] pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] bg-indigo-600/5 rounded-full blur-[150px] pointer-events-none"></div>

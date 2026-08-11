@@ -202,7 +202,6 @@ export default function HackathonHub() {
         title={`${activeTabTitle} | Apna College Bihar`}
         description="Discover active online hackathons and GEC techfests in Bihar. Find coding teammates across colleges, get SIH preparation templates, and access prototyping resources."
         keywords="Bihar engineering hackathon, Smart India Hackathon GEC, GEC techfest, coding teammates Bihar, BEU hackathon, Apna College Bihar hackathon"
-        url="https://www.apnacollegebihar.online/hackathons"
       />
       
       {/* Background gradients */}

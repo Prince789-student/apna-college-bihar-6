@@ -66,8 +66,7 @@ export default function BlogPost() {
     <div className="min-h-screen bg-white font-['Inter'] pb-20">
       <SEO 
         title={`${post.title} | Apna College Bihar Blog`} 
-        description={post.excerpt} 
-        url={`https://www.apnacollegebihar.online/blog/${post.slug}`}
+        description={post.excerpt}
         schema={articleSchema}
       />
       

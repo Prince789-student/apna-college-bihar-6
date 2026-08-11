@@ -236,27 +236,23 @@ export default function Notes() {
           title={`${folder.title} Notes - BEU ${branch.short} Sem ${sem} | Apna College Bihar`}
           description={`Download free PDF notes for ${folder.title} (Semester ${sem} ${branch.short}) at Apna College Bihar.`}
           keywords={`BEU Notes, ${folder.title} Notes, ${branch.short} Semester ${sem}`}
-          url={`https://www.apnacollegebihar.online/notes/${branch.id.toLowerCase()}/${sem}`}
         />
       ) : branch && sem ? (
         <SEO 
           title={`BEU ${branch.short} Semester ${sem} Notes PDF Download`} 
           description={`Download free B.Tech ${branch.label} Semester ${sem} notes for Bihar Engineering University (BEU). Best study material, chapter-wise PDFs.`}
           keywords={`BEU Notes, ${branch.short} Notes, Semester ${sem} Notes, Bihar Engineering Notes, B.Tech Notes PDF`}
-          url={`https://www.apnacollegebihar.online/notes/${branch.id.toLowerCase()}/${sem}`}
         />
       ) : branch ? (
         <SEO 
           title={`BEU ${branch.short} B.Tech Notes PDF Download - All Semesters`} 
           description={`Free B.Tech ${branch.label} notes for all semesters under Bihar Engineering University (BEU). Organized study material and PDFs.`}
           keywords={`BEU Notes, ${branch.short} Notes, Bihar Engineering Notes, B.Tech Notes PDF`}
-          url={`https://www.apnacollegebihar.online/notes/${branch.id.toLowerCase()}`}
         />
       ) : (
         <SEO 
           title="BEU B.Tech Notes PDF Download | Apna College Bihar" 
           description="Download free B.Tech semester notes and study material for all branches under Bihar Engineering University (BEU)."
-          url="https://www.apnacollegebihar.online/notes"
         />
       )}
 

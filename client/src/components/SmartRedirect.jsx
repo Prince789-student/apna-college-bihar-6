@@ -82,8 +82,7 @@ export default function SmartRedirect() {
       return;
     }
 
-    // Default fallback: go to home
-    navigate('/', { replace: true });
+    // Default fallback: do nothing, let NotFound component handle it
   }, [location.pathname, navigate]);
 
   return null;

@@ -92,7 +92,6 @@ export default function SearchSEO() {
         title={`${decodedKeyword.toUpperCase()} B.Tech Notes & PYQ Download | Apna College Bihar`}
         description={`Download free ${decodedKeyword} study material, previous year questions (PYQ), and notes for Bihar Engineering University (BEU) students.`}
         keywords={`${decodedKeyword}, ${decodedKeyword} BEU, ${decodedKeyword} notes, ${decodedKeyword} PYQ, Bihar Engineering`}
-        url={`https://www.apnacollegebihar.online/search/${encodeURIComponent(keyword || '')}`}
         noindex={true}
       />
 

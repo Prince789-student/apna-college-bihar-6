@@ -205,27 +205,23 @@ export default function PYQ() {
           title={`${folder.title} PYQ Papers - BEU ${branch.short} Sem ${sem} | Apna College Bihar`}
           description={`Download free Previous Year Question (PYQ) papers for ${folder.title} (Semester ${sem} ${branch.short}) at Apna College Bihar.`}
           keywords={`BEU PYQ, ${folder.title} PYQ, ${branch.short} Semester ${sem} PYQ`}
-          url={`https://www.apnacollegebihar.online/pyq/${branch.id.toLowerCase()}/${sem}`}
         />
       ) : branch && sem ? (
         <SEO 
           title={`BEU ${branch.short} Semester ${sem} PYQ Papers Download`} 
           description={`Download free B.Tech ${branch.label} Semester ${sem} Previous Year Question (PYQ) papers for Bihar Engineering University (BEU).`}
           keywords={`BEU PYQ, ${branch.short} PYQ, Semester ${sem} Question Papers, Bihar Engineering PYQ, B.Tech Question Papers`}
-          url={`https://www.apnacollegebihar.online/pyq/${branch.id.toLowerCase()}/${sem}`}
         />
       ) : branch ? (
         <SEO 
           title={`BEU ${branch.short} B.Tech PYQ Papers Download - All Semesters`} 
           description={`Free B.Tech ${branch.label} Previous Year Question Papers for all semesters under Bihar Engineering University (BEU).`}
           keywords={`BEU PYQ, ${branch.short} PYQ, Bihar Engineering Question Papers`}
-          url={`https://www.apnacollegebihar.online/pyq/${branch.id.toLowerCase()}`}
         />
       ) : (
         <SEO 
           title="BEU B.Tech PYQ Papers Download | Apna College Bihar" 
           description="Download free B.Tech Previous Year Question (PYQ) papers for all branches under Bihar Engineering University (BEU)."
-          url="https://www.apnacollegebihar.online/pyq"
         />
       )}
 

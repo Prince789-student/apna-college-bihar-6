@@ -10,7 +10,7 @@ export default function DMCAPolicy() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] pt-20 pb-20">
-      <SEO title="D M C A Policy | Apna College Bihar" url={window.location.href} />
+      <SEO title="D M C A Policy | Apna College Bihar" />
       <div className="container mx-auto max-w-4xl px-6">
         <Link to="/" className="inline-flex items-center text-slate-500 hover:text-blue-600 font-bold text-sm mb-8 transition-colors">
           <ArrowLeft size={16} className="mr-2" /> Back to Home

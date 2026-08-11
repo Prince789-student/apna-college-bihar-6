@@ -365,7 +365,7 @@ export default function Attendance() {
 
   return (
     <div className="space-y-6 md:space-y-8 animate-in fade-in duration-500 font-['Inter']">
-      <SEO title="Attendance | Apna College Bihar" url={window.location.href} />
+      <SEO title="Attendance | Apna College Bihar" />
       
       {/* CSS Injected for scan animation */}
       <style>{`

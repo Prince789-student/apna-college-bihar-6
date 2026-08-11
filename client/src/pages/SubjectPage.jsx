@@ -187,7 +187,6 @@ export default function SubjectPage() {
         title={seoTitle}
         description={seoDescription}
         keywords={seoKeywords}
-        url={`https://www.apnacollegebihar.online/subject/${subjectSlug}/${currentSection}`}
       />
       
       {/* Background gradients */}

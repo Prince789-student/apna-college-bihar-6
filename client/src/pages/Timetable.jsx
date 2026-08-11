@@ -66,7 +66,7 @@ function CustomSelect({ value, onChange, options, styleClass, style, isToday }) 
 
   return (
     <div className="relative" ref={dropdownRef} style={style}>
-      <SEO title="Timetable | Apna College Bihar" url={window.location.href} />
+      <SEO title="Timetable | Apna College Bihar" />
       <div 
         className={`${styleClass} flex items-center justify-center`}
         onClick={() => setOpen(!open)}

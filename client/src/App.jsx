@@ -62,6 +62,7 @@ const CompareColleges = React.lazy(() => import('./pages/CompareColleges'));
 const PercentilePredictor = React.lazy(() => import('./pages/PercentilePredictor'));
 const Blog = React.lazy(() => import('./pages/Blog'));
 const BlogPost = React.lazy(() => import('./pages/BlogPost'));
+const NotFound = React.lazy(() => import('./pages/NotFound'));
 
 function LoadingScreen() {
   return (
@@ -530,7 +531,12 @@ function App() {
             </Route>
 
             {/* Smart Fallback – redirects old .html URLs to correct college pages */}
-            <Route path="*" element={<SmartRedirect />} />
+            <Route path="*" element={
+              <>
+                <SmartRedirect />
+                <NotFound />
+              </>
+            } />
           </Routes>
         </React.Suspense>
       </>

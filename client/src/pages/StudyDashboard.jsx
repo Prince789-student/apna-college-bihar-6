@@ -639,8 +639,7 @@ export default function StudyDashboard() {
     <div className="max-w-2xl mx-auto pb-24 px-3 md:px-0">
       <SEO 
         title={`${activeTabTitle} | Apna College Bihar`} 
-        description="Track your study hours, manage tasks, block distractions, and focus better with Apna College Bihar's Study Dashboard."
-       url={window.location.href} />
+        description="Track your study hours, manage tasks, block distractions, and focus better with Apna College Bihar's Study Dashboard." />
 
       {/* ACB Study Zone Header */}
       <div className="flex items-center gap-3 pt-4 pb-3">

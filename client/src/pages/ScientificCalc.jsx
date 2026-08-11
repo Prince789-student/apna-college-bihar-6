@@ -336,7 +336,7 @@ export default function ScientificCalc() {
 
   return (
     <div className="w-full max-w-2xl mx-auto px-2 md:px-4 pb-20">
-      <SEO title="Scientific Calc | Apna College Bihar" url={window.location.href} />
+      <SEO title="Scientific Calc | Apna College Bihar" />
       <div className="bg-white rounded-3xl md:rounded-[2.5rem] border border-slate-200 shadow-xl overflow-hidden">
 
         {/* Top bar */}

@@ -27,8 +27,7 @@ export default function Notifications() {
     <div className="min-h-screen bg-slate-50 font-['Inter'] pb-20 md:pb-10 pt-6 px-4 md:px-8">
       <SEO 
         title="BEU Notifications | Apna College Bihar" 
-        description="View the latest official notifications and updates from Bihar Engineering University (BEU)." 
-       url={window.location.href} />
+        description="View the latest official notifications and updates from Bihar Engineering University (BEU)." />
 
       <div className="max-w-5xl mx-auto space-y-6">
         

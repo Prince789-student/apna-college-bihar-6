@@ -34,7 +34,7 @@ export default function StudyTracking() {
 
   return (
     <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-6 p-4 text-slate-900 min-h-screen bg-slate-950">
-      <SEO title="Study Tracking | Apna College Bihar" url={window.location.href} />
+      <SEO title="Study Tracking | Apna College Bihar" />
       
       {/* Left Sidebar: Profile & Stats */}
       <div className="lg:w-1/4 space-y-6">

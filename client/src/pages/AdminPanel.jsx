@@ -467,7 +467,7 @@ const [uploading, setUploading] = useState(false);
 
   if (authLoading) return (
     <div className="flex flex-col items-center justify-center py-40 gap-4">
-      <SEO title="Admin Panel | Apna College Bihar" url={window.location.href} />
+      <SEO title="Admin Panel | Apna College Bihar" />
       <Loader2 className="w-12 h-12 text-indigo-500 animate-spin" />
       <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Checking Authority...</p>
     </div>

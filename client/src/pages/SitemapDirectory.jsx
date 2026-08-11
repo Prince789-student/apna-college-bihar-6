@@ -135,7 +135,6 @@ export default function SitemapDirectory() {
         title="Sitemap & Directory | Apna College Bihar"
         description="Comprehensive index directory of Bihar Engineering Colleges, BEU Syllabus, SGPA CGPA Calculator, Notes, Cutoff details, and academic resources."
         keywords="Bihar engineering colleges, BEU notes, UGEAC cutoff, sitemap apna college bihar, academic hub directory"
-        url="https://www.apnacollegebihar.online/directory"
       />
 
       {/* Decorative background vectors */}

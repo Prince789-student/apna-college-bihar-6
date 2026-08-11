@@ -5,7 +5,7 @@ import SEO from '../components/SEO';
 export default function BeuResult() {
   return (
     <div className="max-w-5xl mx-auto space-y-6 pb-20 animate-in fade-in duration-300">
-      <SEO title="Beu Result | Apna College Bihar" url={window.location.href} />
+      <SEO title="Beu Result | Apna College Bihar" />
       {/* Header */}
       <div>
         <h1 className="text-2xl font-black text-slate-900 uppercase tracking-tight">BEU Exam Result</h1>

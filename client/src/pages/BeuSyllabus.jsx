@@ -920,7 +920,6 @@ export default function BeuSyllabus() {
         title={`BEU ${selectedBranch.toUpperCase()} Sem ${selectedSem.replace('sem', '')} Syllabus ✅ | Apna College Bihar`}
         description={`Check official Bihar Engineering University (BEU) syllabus for ${selectedBranch.toUpperCase()} Semester ${selectedSem.replace('sem', '')}. Track your syllabus progress online.`}
         keywords={`BEU Syllabus, ${selectedBranch} Syllabus, Semester ${selectedSem.replace('sem', '')} Syllabus, Bihar Engineering Syllabus, B.Tech Syllabus BEU`}
-        url={`https://www.apnacollegebihar.online/syllabus/${selectedBranch}`}
       />
       
       {/* Header */}

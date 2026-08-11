@@ -40,7 +40,6 @@ export default function CollegeDirectory() {
         title="38+ Bihar Government Engineering Colleges | BEU List | Apna College Bihar"
         description="Complete list of all 38 government engineering colleges in Bihar. View UGEAC cutoffs, fees, placements, and campus details for MIT, BCE, GCE and all GECs."
         keywords="Bihar engineering colleges list, top 10 engineering colleges in bihar, BEU colleges, GEC bihar, MIT Muzaffarpur, UGEAC colleges list"
-        url="https://www.apnacollegebihar.online/colleges"
         schema={[seoSchema]}
       />
 

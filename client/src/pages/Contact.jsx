@@ -36,7 +36,6 @@ export default function Contact() {
       <SEO 
         title="Contact Us | Apna College Bihar" 
         description="Get in touch with Apna College Bihar support. 24/7 assistance for Bihar Engineering students, BEU exam queries, and UGEAC counselling."
-        url="https://www.apnacollegebihar.online/contact"
       />
       {/* Header */}
       <div className="sticky top-0 z-50 bg-[#f8fafc]/90 backdrop-blur-xl border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">

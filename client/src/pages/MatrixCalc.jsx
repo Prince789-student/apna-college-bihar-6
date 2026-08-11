@@ -46,7 +46,7 @@ export default function MatrixCalc() {
 
   return (
     <div className="flex justify-center items-center py-6 md:py-10 min-h-screen bg-slate-950 px-2">
-      <SEO title="Matrix Calc | Apna College Bihar" url={window.location.href} />
+      <SEO title="Matrix Calc | Apna College Bihar" />
       {/* Casio ClassWiz Shell */}
       <div className="w-full max-w-[400px] bg-[#1a1a1a] p-4 md:p-5 rounded-3xl md:rounded-[4rem] shadow-[0_45px_100px_rgba(0,0,0,1)] border-[6px] md:border-[8px] border-slate-900 border-b-[15px] md:border-b-[20px] relative">
         
