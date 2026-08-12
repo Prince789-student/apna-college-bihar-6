@@ -441,28 +441,54 @@ export default function Notes() {
 
       {/* ── Educational SEO Content ── */}
       <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 mx-auto prose prose-slate max-w-none shadow-sm mb-8">
-        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Bihar Engineering University (BEU) B.Tech Notes</h2>
-        <p>
-          Welcome to the largest, most organized, and free repository of <strong>B.Tech Notes for Bihar Engineering University (BEU)</strong>. Whether you are studying Computer Science (CSE), Civil Engineering, Mechanical Engineering, or Electrical and Electronics Engineering (EEE), our platform provides completely free access to chapter-wise handwritten and digital notes strictly aligned with the latest AICTE and BEU Syllabus.
+        <h2 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tighter mb-6">Bihar Engineering University (BEU) B.Tech Notes & Study Material</h2>
+        
+        <p className="text-slate-700 text-lg leading-relaxed mb-6">
+          Welcome to Apna College Bihar's dedicated portal for <strong>B.Tech Notes for Bihar Engineering University (BEU)</strong>. This is the largest, most organized, and entirely free repository designed specifically for engineering students across Bihar. Whether you are pursuing Computer Science Engineering (CSE), Civil Engineering, Mechanical Engineering, Electrical Engineering, or specialized branches like Artificial Intelligence, our platform provides comprehensive, chapter-wise handwritten and digital notes. All materials are strictly aligned with the latest AICTE guidelines and the official BEU Syllabus.
         </p>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">Why Follow the BEU Official Syllabus for Notes?</h3>
-        <p>
-          BEU standardizes the curriculum across all 38+ Government Engineering Colleges in Bihar (including BCE, MIT, DCE, NCE, etc.). Relying on random internet notes can be dangerous because they might not cover the specific modules required for your End Semester Examinations. Our team meticulously curates notes from college toppers, senior students, and highly qualified faculties to ensure they exactly match the <strong>BEU Module-wise breakdown</strong>. This ensures that you don't waste time studying irrelevant topics.
-        </p>
+        <div className="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-r-2xl my-8">
+          <h3 className="text-xl font-bold text-indigo-900 mt-0 mb-3">Why Rely on Official BEU Syllabus Notes?</h3>
+          <p className="text-indigo-800 mb-0">
+            The Bihar Engineering University standardizes the curriculum across all 38+ Government Engineering Colleges in Bihar, including prestigious institutions like MIT Muzaffarpur, BCE Bhagalpur, and DCE Darbhanga. Relying on generic internet notes can be detrimental to your grades because they often miss the specific modules and derivations required for your End Semester Examinations. Our team meticulously curates notes from college toppers, senior students, and highly qualified faculties to ensure they exactly match the <strong>BEU Module-wise breakdown</strong>. This targeted approach ensures you maximize your study efficiency and don't waste time on irrelevant topics.
+          </p>
+        </div>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">How to Download BEU Engineering Notes in PDF Format?</h3>
-        <ul>
-          <li><strong>Select your specific Branch:</strong> Choose from CSE, Civil, ECE, Mechanical, IT, etc.</li>
-          <li><strong>Choose your current Semester:</strong> Navigate through Sem 1 to 8 to find your exact current curriculum.</li>
-          <li><strong>Select the Subject folder:</strong> Find folders labeled with your specific subject code (e.g., Physics, Chemistry, Basic Electrical, Data Structures, Machine Learning).</li>
-          <li><strong>Download or View:</strong> Click the Download icon to save the high-quality PDF directly to your device for offline reading, or click 'View' to read directly in our fast integrated PDF viewer.</li>
-        </ul>
-
-        <h3 className="text-xl font-bold mt-8 mb-4">Are these Notes Sufficient for BEU End Semester Exams?</h3>
-        <p>
-          Absolutely! These notes have been tested by thousands of engineering students across Bihar. To maximize your SGPA and CGPA, we recommend combining these notes with our <strong>Previous Year Questions (PYQs)</strong> section. While notes build your conceptual foundation and help in understanding complex derivations and numericals, solving PYQs is the ultimate hack to predict the exam pattern. Many questions in BEU exams are repeated from previous years. So, read the notes thoroughly, memorize the key points, and practice the past 3-5 years of question papers available on our platform.
+        <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-5">How to Effectively Use These Engineering Notes</h3>
+        <p className="text-slate-700 mb-4">
+          To get the most out of our study materials and secure a high SGPA/CGPA, follow this structured approach:
         </p>
+        <ol className="space-y-4 text-slate-700 mb-8">
+          <li><strong>Select your specific Branch and Semester:</strong> Navigation is straightforward. Choose from core branches like CSE, Civil, ECE, Mechanical, IT, etc., and select your current semester (Sem 1 to 8) to find your exact curriculum.</li>
+          <li><strong>Locate the Subject Folder:</strong> Find folders labeled with your specific subject code (e.g., Physics, Engineering Chemistry, Basic Electrical Engineering, Data Structures & Algorithms, Machine Learning).</li>
+          <li><strong>Download or View Online:</strong> Click the Download icon to save the high-quality PDF directly to your device for offline reading, or click 'View' to read directly in our fast, integrated PDF viewer without downloading.</li>
+          <li><strong>Cross-Reference with the Syllabus:</strong> Always keep a copy of the official BEU syllabus handy. As you read through a module in our notes, check it off your syllabus copy to track your progress.</li>
+        </ol>
+
+        <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-6">Frequently Asked Questions (FAQs)</h3>
+        
+        <div className="space-y-6">
+          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+            <h4 className="text-lg font-bold text-slate-900 mb-2">Are these Notes Sufficient for BEU End Semester Exams?</h4>
+            <p className="text-slate-600 mb-0">
+              Absolutely! These notes have been thoroughly tested by thousands of engineering students across Bihar. However, to maximize your SGPA and CGPA, we strongly recommend combining these notes with our <strong>Previous Year Questions (PYQs)</strong> section. While notes build your conceptual foundation and help in understanding complex derivations and numericals, solving PYQs is the ultimate strategy to understand the exam pattern and question framing.
+            </p>
+          </div>
+
+          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+            <h4 className="text-lg font-bold text-slate-900 mb-2">Is the study material completely free?</h4>
+            <p className="text-slate-600 mb-0">
+              Yes, Apna College Bihar is committed to democratizing engineering education in Bihar. All our B.Tech notes, previous year question papers, syllabus copies, and counselling tools are 100% free for all students. You do not need to pay any subscription fees to download or view the PDFs.
+            </p>
+          </div>
+
+          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+            <h4 className="text-lg font-bold text-slate-900 mb-2">How often are the notes updated?</h4>
+            <p className="text-slate-600 mb-0">
+              Our academic team and community of student contributors continuously review and update the content. Whenever BEU introduces a syllabus change (like the recent updates to the CSE and emerging branches curriculum), we prioritize acquiring and uploading the updated notes. We ensure that the material reflects the most current academic requirements.
+            </p>
+          </div>
+        </div>
       </div>
 
     </div>

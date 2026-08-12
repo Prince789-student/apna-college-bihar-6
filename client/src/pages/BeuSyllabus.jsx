@@ -1118,28 +1118,54 @@ export default function BeuSyllabus() {
 
       {/* ── Educational SEO Content ── */}
       <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 relative z-20 text-left">
-        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Official Bihar Engineering University (BEU) B.Tech Syllabus</h2>
-        <p>
-          Access the latest, officially approved <strong>B.Tech Syllabus for Bihar Engineering University (BEU)</strong>. Whether you are a fresher in your first year or a senior in your final semester, our platform provides a smart, interactive syllabus tracker. We have meticulously digitized the massive, hard-to-read PDF syllabus into a trackable checklist so you never miss an important academic topic or module.
+        <h2 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tighter mb-6">Official Bihar Engineering University (BEU) B.Tech Syllabus</h2>
+        
+        <p className="text-slate-700 text-lg leading-relaxed mb-6">
+          Welcome to the most advanced and user-friendly syllabus tracking tool for the <strong>B.Tech Syllabus under Bihar Engineering University (BEU)</strong>. Whether you are a first-year student navigating the common curriculum or a final-year senior preparing for specialized electives, our platform provides a smart, interactive syllabus tracker. We have painstakingly digitized the massive, hard-to-read official PDF syllabus files into a trackable checklist so you never miss an important academic topic or module during your exam preparation.
         </p>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">How to Use the Smart Syllabus Tracker?</h3>
-        <ul>
-          <li><strong>Step 1:</strong> Select your specific Engineering Branch (e.g., Computer Science Engineering (CSE), Civil, Mechanical, Electrical).</li>
-          <li><strong>Step 2:</strong> Choose your current Semester (Sem 1 to Sem 8).</li>
-          <li><strong>Step 3:</strong> Click on any subject (e.g., Physics, Chemistry, Data Structures) to expand the units and see the chapter-wise topics breakdown.</li>
-          <li><strong>Step 4:</strong> Check off topics as you study them. Watch your real-time progress bar increase, keeping you motivated and on track for your End Semester Exams.</li>
-        </ul>
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl my-8">
+          <h3 className="text-xl font-bold text-blue-900 mt-0 mb-3">Why is Following the BEU Syllabus Strictly Necessary?</h3>
+          <p className="text-blue-800 mb-0">
+            BEU adheres rigidly to the AICTE model curriculum across all 38+ engineering colleges in Bihar, including BCE, MIT, DCE, and others. The End Semester examination question papers (worth 70 external marks) are framed exactly according to the module weightage and specific topics explicitly listed in the official syllabus. Studying topics out of the syllabus is a massive waste of your limited study time. By tracking your academic progress using our tool, you ensure that you comprehensively cover 100% of the topics that will appear in your exams. For maximum scoring potential, we highly advise combining your syllabus tracking with our curated BEU Notes and PYQs.
+          </p>
+        </div>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">Why is Following the BEU Syllabus So Important?</h3>
-        <p>
-          BEU strictly adheres to the AICTE model curriculum across all 38+ engineering colleges in Bihar. The End Semester examination question papers are framed exactly according to the module weightage and topics given in the official syllabus. Studying out of the syllabus is a waste of time. By tracking your academic progress here, you ensure that you cover 100% of the topics that will appear in your 70-mark external exams. Combine this with our BEU Notes and PYQs for maximum scoring potential.
+        <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-5">How to Use the Smart Syllabus Tracker Effectively</h3>
+        <p className="text-slate-700 mb-4">
+          Our tracker is designed to keep you organized and motivated:
         </p>
+        <ol className="space-y-4 text-slate-700 mb-8">
+          <li><strong>Step 1: Branch Selection</strong> - Select your specific Engineering Branch from the dropdown (e.g., Computer Science Engineering (CSE), Civil, Mechanical, Electrical, ECE, AI, Data Science).</li>
+          <li><strong>Step 2: Semester Selection</strong> - Choose your current Semester (Sem 1 to Sem 8) to load your specific curriculum.</li>
+          <li><strong>Step 3: Explore Subjects</strong> - Click on any theory or lab subject (e.g., Physics, Engineering Chemistry, Data Structures, Machine Learning) to expand the units and see the highly detailed chapter-wise topics breakdown.</li>
+          <li><strong>Step 4: Track Progress</strong> - Click the checkboxes next to topics as you study and master them. Watch your real-time progress bar increase, which provides psychological momentum and keeps you on track for your End Semester Exams.</li>
+        </ol>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">Can I Download the BEU Syllabus as a PDF?</h3>
-        <p>
-          Yes! We have built a custom, high-speed PDF generator specifically for BEU students. Once you select your branch and semester, simply click the <strong>Download PDF</strong> button at the top of the page. It will instantly generate a clean, well-formatted, and branded PDF of your exact syllabus that you can print out or save to your mobile device for offline access during exam preparation.
-        </p>
+        <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-6">Frequently Asked Questions (FAQs)</h3>
+        
+        <div className="space-y-6">
+          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+            <h4 className="text-lg font-bold text-slate-900 mb-2">Can I Download the BEU Syllabus as a PDF?</h4>
+            <p className="text-slate-600 mb-0">
+              Yes! We understand that sometimes you need physical copies or offline access. We have built a custom, high-speed PDF generator specifically for BEU students. Once you select your branch and semester, simply click the <strong>Download PDF</strong> button at the top of the tracker page. It will instantly generate a clean, well-formatted, and branded PDF of your exact syllabus that you can print out or save to your mobile device.
+            </p>
+          </div>
+
+          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+            <h4 className="text-lg font-bold text-slate-900 mb-2">Is this syllabus up to date with the latest AICTE guidelines?</h4>
+            <p className="text-slate-600 mb-0">
+              Absolutely. We continuously monitor official university announcements and AICTE curriculum revisions. Whenever the Bihar Engineering University introduces a syllabus change (such as the recent updates to emerging branches like AI/ML and Data Science), our academic team immediately digitizes the new curriculum and pushes it live to our tracker. You can always trust that you are studying the correct material.
+            </p>
+          </div>
+          
+          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+            <h4 className="text-lg font-bold text-slate-900 mb-2">How does the Credit System (L-T-P) work?</h4>
+            <p className="text-slate-600 mb-0">
+              In the syllabus, you will see 'L-T-P' which stands for Lectures, Tutorials, and Practicals per week. The number of credits a subject carries determines its weightage in your overall SGPA/CGPA calculation. A 4-credit theory subject heavily impacts your grade compared to a 1-credit lab. Always prioritize high-credit subjects during your exam preparation!
+            </p>
+          </div>
+        </div>
       </div>
 
     </div>

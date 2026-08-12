@@ -404,28 +404,54 @@ export default function PYQ() {
 
       {/* ── Educational SEO Content ── */}
       <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 mx-auto prose prose-slate max-w-none shadow-sm mb-8">
-        <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Bihar Engineering University (BEU) Previous Year Questions (PYQ)</h2>
-        <p>
-          Welcome to the most comprehensive and verified collection of <strong>Bihar Engineering University (BEU) Previous Year Question (PYQ) papers</strong>. Passing engineering exams in Bihar heavily relies on understanding the exam pattern, the weightage of modules, and the types of numericals asked. There is no better way to decode the university exam strategy than analyzing the actual End Semester papers from the past 5-10 years.
+        <h2 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tighter mb-6">Bihar Engineering University (BEU) Previous Year Questions (PYQ)</h2>
+        
+        <p className="text-slate-700 text-lg leading-relaxed mb-6">
+          Welcome to Apna College Bihar's most comprehensive and verified collection of <strong>Bihar Engineering University (BEU) Previous Year Question (PYQ) papers</strong>. Excelling in engineering semester exams in Bihar heavily relies on understanding the specific exam pattern, recognizing the weightage of different modules, and practicing the exact types of numericals and theoretical questions asked. There is no better or more proven strategy to decode the university exam framework than by analyzing the actual End Semester papers from the past 5-10 years.
         </p>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">Why are PYQs the Ultimate Hack for BEU Exams?</h3>
-        <p>
-          Unlike continuous internal assessments or mid-semesters, the End Semester Exams (70 Marks) conducted by BEU follow a highly structured and traditional pattern. Historically, a significant percentage of questions—sometimes up to 40%—are repeated from past years or follow the exact same derivation and numerical models. Solving PYQs is the smartest way to guarantee that you clear the passing threshold (25 marks out of 70) with ease and push your CGPA above 8.5.
-        </p>
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-2xl my-8">
+          <h3 className="text-xl font-bold text-amber-900 mt-0 mb-3">Why are PYQs the Ultimate Strategy for BEU Exams?</h3>
+          <p className="text-amber-800 mb-0">
+            Unlike internal assessments, the End Semester Exams (worth 70 Marks) conducted by BEU follow a highly structured and traditional testing pattern. Historically, a significant percentage of questions—sometimes ranging from 30% to 40%—are either directly repeated from previous years or follow the exact same derivations and numerical models with minor value changes. Solving PYQs systematically is the smartest, most efficient way to guarantee that you easily clear the passing threshold (25 marks) and drastically push your CGPA upwards towards 8.5 and beyond.
+          </p>
+        </div>
 
-        <h3 className="text-xl font-bold mt-8 mb-4">How to Download BEU PYQ PDFs for All Branches?</h3>
-        <ul>
-          <li><strong>Select your specific Engineering Branch:</strong> Our database includes PYQs for Computer Science Engineering (CSE), Civil Engineering, Mechanical Engineering, Electrical & Electronics Engineering (EEE), and Information Technology (IT).</li>
-          <li><strong>Choose your current Semester:</strong> Filter through Sem 1 to Sem 8 to find the exact question papers for your current academic year.</li>
-          <li><strong>Open the Subject folder:</strong> Access year-wise question papers organized cleanly by subject code.</li>
-          <li><strong>Download:</strong> Click the Download icon to save the official university question paper PDF directly to your mobile or laptop for offline study.</li>
-        </ul>
-
-        <h3 className="text-xl font-bold mt-8 mb-4">Are these Official BCECEB/BEU Papers?</h3>
-        <p>
-          Yes, absolutely! All papers available in our directory are the original, unaltered question papers distributed during the BEU End Semester Examinations. They are crowd-sourced and collected directly from students across all 38 Government Engineering Colleges in Bihar (including MIT Muzaffarpur, BCE Bhagalpur, and NCE Chandi). We constantly update and verify our database after every single exam cycle to ensure you have the latest papers. Start practicing today to master your BEU exams!
+        <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-5">How to Download & Practice BEU PYQ PDFs</h3>
+        <p className="text-slate-700 mb-4">
+          We have made accessing these critical resources as simple as possible:
         </p>
+        <ol className="space-y-4 text-slate-700 mb-8">
+          <li><strong>Select your Engineering Branch:</strong> Our extensive database includes categorized PYQs for Computer Science Engineering (CSE), Civil Engineering, Mechanical Engineering, Electrical & Electronics Engineering (EEE), Information Technology (IT), and specialized branches.</li>
+          <li><strong>Choose your current Semester:</strong> Filter through Semester 1 to Semester 8 to immediately find the relevant question papers for your current academic term.</li>
+          <li><strong>Navigate to the Subject Folder:</strong> Access neatly organized, year-wise question papers sorted strictly by the official BEU subject codes.</li>
+          <li><strong>Download or Preview:</strong> Click the Download icon to save the official university question paper PDF directly to your mobile device or laptop for focused offline study, or use the View button for a quick glance.</li>
+        </ol>
+
+        <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-6">Frequently Asked Questions (FAQs)</h3>
+        
+        <div className="space-y-6">
+          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+            <h4 className="text-lg font-bold text-slate-900 mb-2">Are these Official BCECEB/BEU Question Papers?</h4>
+            <p className="text-slate-600 mb-0">
+              Yes, absolutely! Every single paper available in our directory is the original, authentic question paper distributed during the official BEU End Semester Examinations. These are painstakingly crowd-sourced, scanned, and collected directly from students across all 38 Government Engineering Colleges in Bihar. We rigorously update and verify our database after every exam cycle to ensure you have access to the absolute latest papers.
+            </p>
+          </div>
+
+          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+            <h4 className="text-lg font-bold text-slate-900 mb-2">Are the PYQs free to download?</h4>
+            <p className="text-slate-600 mb-0">
+              Yes. All Previous Year Question papers provided by Apna College Bihar are 100% free to access and download. We believe that every student deserves equal access to essential study materials without any financial barriers.
+            </p>
+          </div>
+          
+          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+            <h4 className="text-lg font-bold text-slate-900 mb-2">How many years of PYQs should I solve?</h4>
+            <p className="text-slate-600 mb-0">
+              For optimal preparation, we recommend thoroughly solving at least the last 3 to 5 years of PYQs. Focus especially on identifying the questions that appear repeatedly across different years, as these are considered "high-probability" topics by university examiners.
+            </p>
+          </div>
+        </div>
       </div>
 
     </div>

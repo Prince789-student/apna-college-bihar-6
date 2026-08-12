@@ -42,10 +42,28 @@ export default function SEO({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
 
-      {/* Dynamic Schema Injection (if provided) */}
-      {schema && (
+      {/* Dynamic Schema Injection */}
+      {schema ? (
         <script type="application/ld+json">
           {JSON.stringify(schema)}
+        </script>
+      ) : (
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "url": canonicalUrl,
+            "name": "Apna College Bihar",
+            "description": description,
+            "publisher": {
+              "@type": "Organization",
+              "name": "Apna College Bihar",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.apnacollegebihar.online/acb_brand_final.png"
+              }
+            }
+          })}
         </script>
       )}
     </Helmet>
