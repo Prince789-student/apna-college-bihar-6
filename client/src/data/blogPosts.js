@@ -672,7 +672,7 @@ The UGEAC counselling process is your gateway to a solid engineering career with
     date: "2026-07-05",
     author: "Apna College Bihar Team",
     excerpt: "Engineering exams in Bihar require smart work, not just hard work. Learn the definitive strategy involving PYQ analysis, module prioritization, and answer writing techniques to ace BEU exams.",
-    content: \`
+    content: `
 ## Demystifying the BEU Examination System
 
 Scoring a 9+ CGPA in the Bihar Engineering University (BEU) is a goal for many, but achieved by only a strategic few. The transition from high school to engineering often leaves students overwhelmed by the sheer volume of the syllabus. However, the secret to conquering BEU exams lies not in reading every single page of a 1000-page textbook, but in understanding the specific anatomy of the university's examination pattern.
@@ -715,7 +715,7 @@ Knowing the answer is only half the battle; presenting it effectively is what di
 ### Conclusion
 
 Scoring a 9+ CGPA is not about studying 14 hours a day; it's about studying the right material efficiently. By aligning your preparation with the official syllabus, heavily analyzing PYQs, utilizing curated notes, and mastering the art of answer presentation, you will inevitably rise to the top of your class.
-    \`
+    `
   },
   {
     id: 18,
@@ -724,7 +724,7 @@ Scoring a 9+ CGPA is not about studying 14 hours a day; it's about studying the 
     date: "2026-08-01",
     author: "Apna College Bihar Career Cell",
     excerpt: "Confused between Core CSE, Information Technology, and emerging branches like Artificial Intelligence and Data Science? Read our deep dive to make the right career choice during counselling.",
-    content: \`
+    content: `
 ## Navigating the Maze of Tech Branches in Engineering
 
 For the past decade, Computer Science and Engineering (CSE) has been the undisputed king of engineering branches, consistently recording the highest cutoffs in UGEAC counselling across Bihar. However, the rapid evolution of technology has introduced a plethora of new options: Information Technology (IT), and specialized branches like CSE (Artificial Intelligence & Machine Learning), CSE (Data Science), and CSE (Cybersecurity).
@@ -766,6 +766,6 @@ When you are filling out your choices on the BCECEB portal, use this strategic f
 ### Conclusion
 
 Whether you choose Core CSE, IT, or a specialization, your ultimate success depends on your coding skills, projects, and internships, not just the name of your degree. Focus on mastering Data Structures and Algorithms (DSA), build a strong portfolio, and utilize the resources on Apna College Bihar to stay ahead of the curve.
-    \`
+    `
   }
 ];
