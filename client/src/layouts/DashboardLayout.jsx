@@ -171,50 +171,35 @@ export default function DashboardLayout() {
       const todayStr = new Date().toLocaleDateString('en-CA');
       const curHour = new Date().getHours();
 
-      // morning greeting check (5:00 AM)
-      if (curHour >= 5) {
-        const morningKey = `morning_greeting_${todayStr}`;
-        if (!localStorage.getItem(morningKey)) {
-          const sessionsQuery = query(
-            collection(db, 'StudySessions'),
-            where('userId', '==', user.uid),
-            where('date', '==', todayStr)
-          );
-          const snap = await getDocs(sessionsQuery);
-          // If they have studied today, OR timer is active, OR it's 8 AM or later, they are awake!
-          const isAwake = !snap.empty || timerActive || curHour >= 8;
-          const userName = user.name || 'Bihari Babu';
-          let title = '';
-          let body = '';
-
-          if (!isAwake) {
-            title = `Good Morning Bhai ${userName} ☀️`;
-            body = `Uth ja bidu 😄, kitna soyega?\n\nNaya din hai, naya chance hai. Kal jo nahi hua uska tension chhod, aaj jo kar sakta hai uspar focus kar.\n\nChai ☕ pi, fresh ho, aur lag ja apne kaam par. Thoda-thoda karke hi bade sapne pure hote hain.\n\nAur haan, mobile scroll karne se pehle apna target yaad kar lena. 😏\n\nChal bhai, aaj ka din phod dete hain. 💪🔥\nGood Morning, have a great day! 🌞✨`;
-          } else {
-            title = `Good Morning Biru 🌞`;
-            body = `Subah-subah yaad aa gaya ki duniya mein ek banda aur hai jo bade-bade sapne dekhta hai aur phir unhe pura karne ki koshish bhi karta hai. 😄\n\nAaj ka mission simple hai:\n\nBakchodi limited 😜\nMehnat unlimited 💪\nTension zero 😌\n\nAur haan, agar aaj motivation na mile to yaad rakhna — sapne free hain, lekin unki EMI roz ki mehnat se bharni padti hai. 😅\n\nDin mast jaye bhai, kuch aisa karna ki raat ko lage ki aaj ka din waste nahi gaya. ❤️✨`;
+      // 6 AM Morning Greeting Notification Scheduled (Replaces old in-app check)
+      const scheduleMorningGreeting = async () => {
+        try {
+          const perms = await LocalNotifications.checkPermissions();
+          if (perms.display !== 'granted') {
+            await LocalNotifications.requestPermissions();
           }
-
-          toast.custom((t) => (
-            <div className={`${t.visible ? 'animate-enter' : 'animate-leave'} max-w-md w-full bg-slate-900 text-white shadow-2xl rounded-[2rem] border border-slate-700/60 p-6 pointer-events-auto flex flex-col gap-3 font-['Inter'] z-[9999]`}>
-              <div className="flex justify-between items-start">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl">🌅</span>
-                  <h4 className="text-xs font-black uppercase tracking-wider text-amber-400">{title}</h4>
-                </div>
-                <button onClick={() => toast.dismiss(t.id)} className="text-slate-400 hover:text-white text-[10px] font-black uppercase tracking-widest bg-white/10 px-2.5 py-1 rounded-lg">Close</button>
-              </div>
-              <p className="text-[10px] font-bold uppercase tracking-wider leading-relaxed whitespace-pre-line text-slate-300">
-                {body}
-              </p>
-            </div>
-          ), { duration: 15000 });
-
-          if ('Notification' in window && Notification.permission === 'granted') {
-            new Notification(title, { body: body.replace(/\n\n/g, ' '), icon: '/logo-acb.png' });
+          const pending = await LocalNotifications.getPending();
+          if (!pending.notifications.find(n => n.id === 600)) {
+            await LocalNotifications.schedule({
+              notifications: [
+                {
+                  title: "Good Morning Biru 🌞",
+                  body: "Subah-subah yaad aa gaya ki duniya mein ek banda aur hai jo bade-bade sapne dekhta hai aur phir unhe pura karne ki koshish bhi karta hai. 😄\n\nAaj ka mission simple hai:\n\nBakchodi limited 😜\nMehnat unlimited 💪\nTension zero 😌\n\nAur haan, agar aaj motivation na mile to yaad rakhna — sapne free hain, lekin unki EMI roz ki mehnat se bharni padti hai. 😅\n\nDin mast jaye bhai, kuch aisa karna ki raat ko lage ki aaj ka din waste nahi gaya. ❤️✨",
+                  id: 600,
+                  schedule: { on: { hour: 6, minute: 0 }, repeats: true },
+                  largeIcon: "ic_stat_name",
+                  smallIcon: "ic_stat_name"
+                }
+              ]
+            });
           }
-          localStorage.setItem(morningKey, 'true');
+        } catch (error) {
+          console.error("Failed to schedule morning greeting", error);
         }
+      };
+
+      if (isNative) {
+        scheduleMorningGreeting();
       }
 
       // class schedule alert (8:00 AM) - Always run before attendance warning
