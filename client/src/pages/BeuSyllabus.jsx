@@ -8,34 +8,56 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import SEO from '../components/SEO';
 
-const CustomDropdown = ({ label, value, options, onChange }) => {
+const CustomDropdown = ({ label, value, options, onChange, enableSearch = false }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const selectedLabel = options.find(o => o.id === value)?.label || label;
   
+  const filteredOptions = enableSearch 
+    ? options.filter(o => o.label.toLowerCase().includes(searchTerm.toLowerCase()))
+    : options;
+
   return (
     <div className="relative">
       <div 
         onClick={() => setIsOpen(!isOpen)}
         className="w-full bg-white border-2 border-slate-100 p-4 pr-10 rounded-2xl text-[13px] font-bold text-black cursor-pointer flex items-center justify-between"
       >
-        <span>{selectedLabel}</span>
-        <ChevronDown size={16} className={`text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <span className="truncate">{selectedLabel}</span>
+        <ChevronDown size={16} className={`text-slate-400 flex-shrink-0 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </div>
       
       {isOpen && (
-        <div className="absolute z-50 top-full left-0 right-0 mt-2 bg-white border-2 border-slate-100 rounded-2xl shadow-xl max-h-60 overflow-y-auto">
-          {options.map(opt => (
-            <div
-              key={opt.id}
-              className={`p-3 text-[13px] font-bold cursor-pointer hover:bg-indigo-50 transition-colors ${value === opt.id ? 'bg-indigo-50 text-indigo-600' : 'text-black'}`}
-              onClick={() => {
-                onChange(opt.id);
-                setIsOpen(false);
-              }}
-            >
-              {opt.label}
+        <div className="absolute z-50 top-full left-0 right-0 mt-2 bg-white border-2 border-slate-100 rounded-2xl shadow-xl max-h-64 flex flex-col overflow-hidden">
+          {enableSearch && (
+            <div className="p-3 border-b border-slate-100">
+              <input 
+                type="text" 
+                autoFocus
+                placeholder="Search branch..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold focus:outline-none focus:border-indigo-500"
+              />
             </div>
-          ))}
+          )}
+          <div className="overflow-y-auto">
+            {filteredOptions.length > 0 ? filteredOptions.map(opt => (
+              <div
+                key={opt.id}
+                className={`p-3 text-[13px] font-bold cursor-pointer hover:bg-indigo-50 transition-colors ${value === opt.id ? 'bg-indigo-50 text-indigo-600' : 'text-black'}`}
+                onClick={() => {
+                  onChange(opt.id);
+                  setIsOpen(false);
+                  setSearchTerm('');
+                }}
+              >
+                {opt.label}
+              </div>
+            )) : (
+              <div className="p-4 text-xs font-bold text-slate-400 text-center">No results found</div>
+            )}
+          </div>
         </div>
       )}
     </div>
@@ -134,7 +156,7 @@ function cleanTitleStr(s) {
   return res.trim();
 }
 
-function splitIntoTopics(text) {
+function splitIntoTopics(text, isNewSyllabus = false) {
   if (!text || text.length < 5) return [];
   
   let t = text.trim();
@@ -147,7 +169,12 @@ function splitIntoTopics(text) {
     if (ch === '(' || ch === '[') depth++;
     if (ch === ')' || ch === ']') depth--;
     
-    const isDelimiter = (ch === ';' || ch === ',' || (ch === '.' && (i === t.length - 1 || t[i+1] === ' ' || t[i+1] === '\n')));
+    let isDelimiter = false;
+    if (isNewSyllabus) {
+      isDelimiter = (ch === ';' || (ch === '.' && (i === t.length - 1 || t[i+1] === ' ' || t[i+1] === '\n')));
+    } else {
+      isDelimiter = (ch === ';' || ch === ',' || (ch === '.' && (i === t.length - 1 || t[i+1] === ' ' || t[i+1] === '\n')));
+    }
     
     if (depth === 0 && isDelimiter) {
       if (current.trim().length > 3) parts.push(current.trim());
@@ -187,7 +214,7 @@ function getSubjectCredit(courseCode, title) {
   return '3';
 }
 
-function parseSyllabusIntoSubjects(rawText) {
+function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
   if (!rawText) return [];
   const cleaned = cleanSyllabusText(rawText);
   
@@ -208,7 +235,8 @@ function parseSyllabusIntoSubjects(rawText) {
       if (/^#{3,4}\s*(?:📌)?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
           /^UNIT\s+\d/i.test(trimmed) || 
           /^Module\s+\d/i.test(trimmed) || 
-          /^#{3,4}\s*Module\s+\d/i.test(trimmed)) {
+          /^#{3,4}\s*Module\s+\d/i.test(trimmed) ||
+          /^#{3,4}\s*(?:📌)?\s*PRACTICAL EXPERIMENTS/i.test(trimmed)) {
         hasExplicitUnits = true;
         break;
       }
@@ -244,7 +272,8 @@ function parseSyllabusIntoSubjects(rawText) {
       const isExplicitUnit = /^#{3,4}\s*(?:📌)?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
                              /^UNIT\s+\d/i.test(trimmed) || 
                              /^Module\s+\d/i.test(trimmed) || 
-                             /^#{3,4}\s*Module\s+\d/i.test(trimmed);
+                             /^#{3,4}\s*Module\s+\d/i.test(trimmed) ||
+                             /^#{3,4}\s*(?:📌)?\s*PRACTICAL EXPERIMENTS/i.test(trimmed);
 
       const isNumberedUnit = !hasExplicitUnits && 
                              /^\d+\s*\\?\.\s*\*\*(.+?)\*\*/.test(trimmed) && 
@@ -455,7 +484,7 @@ function parseSyllabusIntoSubjects(rawText) {
         if (topic.isHeading) {
           newTopics.push(topic);
         } else {
-          const splits = splitIntoTopics(topic.text);
+          const splits = splitIntoTopics(topic.text, isNewSyllabus);
           for (const sp of splits) {
             newTopics.push({ text: sp, isHeading: false });
           }
@@ -728,12 +757,13 @@ export default function BeuSyllabus() {
   }, [selectedSubjectIndex, selectedBranch, selectedSem]);
 
   const semesters = [
+    { id: 'sem1_new', label: '1st Sem New (2026 Batch)' },
     { id: 'sem1', label: '1st Semester' }, { id: 'sem2', label: '2nd Semester' },
     { id: 'sem3', label: '3rd Semester' }, { id: 'sem4', label: '4th Semester' },
     { id: 'sem5', label: '5th Semester' }, { id: 'sem6', label: '6th Semester' },
   ];
 
-  const branches = [
+  const oldBranches = [
     { id: 'cse', label: 'Computer Science (All Spec.)' },
     { id: 'civil', label: 'Civil Engineering' },
     { id: 'mech', label: 'Mechanical Engineering' },
@@ -742,9 +772,51 @@ export default function BeuSyllabus() {
     { id: 'eee', label: 'Electrical & Electronics' },
   ];
 
-  const currentSyllabus = syllabusData.find(s => s.semester === selectedSem && s.branch === selectedBranch);
-  const subjects = currentSyllabus ? parseSyllabusIntoSubjects(currentSyllabus.content) : [];
-  const semBranchKey = `${selectedSem}_${selectedBranch}`;
+  const newBranches = [
+    // Group A
+    { id: 'cse_new', groupId: 'group_a', label: 'Computer Science & Engineering' },
+    { id: 'cse_ai', groupId: 'group_a', label: 'Computer Science & Engg (AI)' },
+    { id: 'cse_cs', groupId: 'group_a', label: 'Computer Science & Engg (Cyber Security)' },
+    { id: 'cse_ds', groupId: 'group_a', label: 'Computer Science & Engg (Data Science)' },
+    { id: 'cse_aiml', groupId: 'group_a', label: 'Computer Science & Engg (AI & ML)' },
+    { id: 'cse_iot', groupId: 'group_a', label: 'Computer Science & Engg (IoT)' },
+    { id: 'cse_iot_cs', groupId: 'group_a', label: 'Computer Science & Engg (IOT & Cyber Security incl. Block Chain)' },
+    { id: 'cse_networks', groupId: 'group_a', label: 'Computer Science & Engg (Networks)' },
+    { id: 'it', groupId: 'group_a', label: 'Information Technology' },
+    { id: '3d_animation', groupId: 'group_a', label: '3-D Animation & Graphics' },
+    { id: 'math_computing', groupId: 'group_a', label: 'Mathematics & Computing' },
+
+    // Group B
+    { id: 'ee_new', groupId: 'group_b', label: 'Electrical Engineering' },
+    { id: 'eee_new', groupId: 'group_b', label: 'Electrical and Electronics Engineering' },
+    { id: 'ece_new', groupId: 'group_b', label: 'Electronics and Communication Engineering' },
+    { id: 'ece_adv', groupId: 'group_b', label: 'Electronics & Comm. (Advance Communication Tech)' },
+    { id: 'ece_vlsi', groupId: 'group_b', label: 'Electronics Engineering (VLSI Design & Tech)' },
+    { id: 'eie', groupId: 'group_b', label: 'Electronics and Instrumentation Engineering' },
+
+    // Group C
+    { id: 'mech_new', groupId: 'group_c', label: 'Mechanical Engineering' },
+    { id: 'mech_smart', groupId: 'group_c', label: 'Mechanical and Smart Manufacturing Engineering' },
+    { id: 'robotics', groupId: 'group_c', label: 'Robotics and Automation' },
+    { id: 'civil_new', groupId: 'group_c', label: 'Civil Engineering' },
+    { id: 'civil_ca', groupId: 'group_c', label: 'Civil Engineering with Computer Applications' },
+    { id: 'petrochemical', groupId: 'group_c', label: 'Petrochemical Engineering' },
+    { id: 'chem_leather', groupId: 'group_c', label: 'Chemical Engineering (Leather Technology)' },
+    { id: 'chem_plastic', groupId: 'group_c', label: 'Chemical Engineering (Plastic & Polymer)' },
+    { id: 'waste_management', groupId: 'group_c', label: 'Waste Management' },
+    { id: 'aeronautical', groupId: 'group_c', label: 'Aeronautical Engineering' },
+    { id: 'biomedical', groupId: 'group_c', label: 'Biomedical & Robotics Engineering' },
+  ];
+
+  const branches = selectedSem === 'sem1_new' ? newBranches : oldBranches;
+
+  const selectedBranchObj = branches.find(b => b.id === selectedBranch);
+  const syllabusBranchQuery = selectedSem === 'sem1_new' ? selectedBranchObj?.groupId : selectedBranch;
+
+  const currentSyllabus = syllabusData.find(s => s.semester === selectedSem && s.branch === syllabusBranchQuery);
+  const isNewSyllabus = selectedSem === 'sem1_new';
+  const subjects = currentSyllabus ? parseSyllabusIntoSubjects(currentSyllabus.content, isNewSyllabus) : [];
+  const semBranchKey = `${selectedSem}_${syllabusBranchQuery}`;
 
   const theorySubjects = [];
   const labSubjects = [];
@@ -958,6 +1030,7 @@ export default function BeuSyllabus() {
               label="Select Branch"
               value={selectedBranch}
               options={branches}
+              enableSearch={selectedSem === 'sem1_new'}
               onChange={(val) => { setSelectedBranch(val); setSelectedSubjectIndex(null); navigate(`/syllabus/${val}`); }}
             />
           </div>
