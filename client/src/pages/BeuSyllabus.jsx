@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Download, Bot, Copy, X, MessageSquare, Send } from 'lucide-react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -733,11 +733,22 @@ function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, onToggle })
 export default function BeuSyllabus() {
   const { branchId } = useParams();
   const navigate = useNavigate();
+  const syllabusContentRef = useRef(null);
+  const subjectDetailRef = useRef(null);
+
+  // Auto-detect semester from URL branchId
+  const newBranchIds = [
+    'cse_new','cse_ai','cse_cs','cse_ds','cse_aiml','cse_iot','cse_iot_cs','cse_networks',
+    'it','3d_animation','math_computing','ee_new','eee_new','ece_new','ece_adv','ece_vlsi',
+    'eie','mech_new','mech_smart','robotics','civil_new','civil_ca','petrochemical',
+    'chem_leather','chem_plastic','waste_management','aeronautical','biomedical'
+  ];
+  const detectedSem = branchId && newBranchIds.includes(branchId.toLowerCase()) ? 'sem1_new' : '';
 
   const [syllabusData, setSyllabusData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [selectedSem, setSelectedSem] = useState('');
+  const [selectedSem, setSelectedSem] = useState(detectedSem);
   const [selectedBranch, setSelectedBranch] = useState(branchId ? branchId.toLowerCase() : '');
   const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(null);
   const [progressTicker, setProgressTicker] = useState(0);
@@ -745,7 +756,18 @@ export default function BeuSyllabus() {
   useEffect(() => {
     fetch('/data/syllabus.json?v=' + new Date().getTime())
       .then(res => res.json())
-      .then(data => { setSyllabusData(data); setLoading(false); })
+      .then(data => {
+        setSyllabusData(data);
+        setLoading(false);
+        // Scroll to syllabus section after data loads if branch & sem already selected
+        if (selectedBranch && selectedSem) {
+          setTimeout(() => {
+            if (syllabusContentRef.current) {
+              syllabusContentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }, 300);
+        }
+      })
       .catch(err => { console.error("Error fetching syllabus:", err); setLoading(false); });
   }, []);
 
@@ -754,7 +776,7 @@ export default function BeuSyllabus() {
     if (mainContainer) {
       mainContainer.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  }, [selectedSubjectIndex, selectedBranch, selectedSem]);
+  }, [selectedSubjectIndex]);
 
   const semesters = [
     { id: 'sem1_new', label: '1st Sem New (2026 Batch)' },
@@ -1053,7 +1075,7 @@ export default function BeuSyllabus() {
         )}
 
         {/* Content Area */}
-        <div className="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden min-h-[400px]">
+        <div ref={syllabusContentRef} className="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden min-h-[400px]">
           <div className="p-4 md:p-6 bg-slate-50 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 className="text-sm font-black text-slate-800 uppercase tracking-widest">
@@ -1086,66 +1108,88 @@ export default function BeuSyllabus() {
                 </p>
               </div>
             ) : subjects.length > 0 ? (
-              <div className="space-y-8">
-                {selectedSubjectIndex === null ? (
-                  <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    {theorySubjects.length > 0 && (
-                      <div>
-                        <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 px-2">Theory Subjects</h3>
-                        <div className="flex flex-col gap-3">
-                          {theorySubjects.map((item) => (
-                            <button
-                              key={item.originalIndex}
-                              onClick={() => setSelectedSubjectIndex(item.originalIndex)}
-                              className="w-full text-left bg-[#2196F3] hover:bg-[#1E88E5] text-white p-4 rounded-xl font-bold text-[13px] sm:text-sm shadow-md transition-all active:scale-[0.98] border border-blue-400"
-                            >
-                              {item.subject.title}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {labSubjects.length > 0 && (
-                      <div>
-                        <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 px-2 mt-8">Lab Subjects</h3>
-                        <div className="flex flex-col gap-3">
-                          {labSubjects.map((item) => (
-                            <button
-                              key={item.originalIndex}
-                              onClick={() => setSelectedSubjectIndex(item.originalIndex)}
-                              className="w-full text-left bg-[#FF8C00] hover:bg-[#F57C00] text-white p-4 rounded-xl font-bold text-[13px] sm:text-sm shadow-md transition-all active:scale-[0.98] border border-orange-400"
-                            >
-                              {item.subject.title}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="bg-slate-50/50 p-4 md:p-6 rounded-[2.2rem] border border-slate-200/60 shadow-sm animate-in fade-in slide-in-from-right-8 duration-300">
-                    <button 
-                      onClick={() => setSelectedSubjectIndex(null)}
-                      className="flex items-center gap-2 text-xs font-black text-slate-500 uppercase tracking-widest hover:text-indigo-600 transition-colors mb-6 px-2"
-                    >
-                      ← Back to Subjects
-                    </button>
-                    {/* Subject Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6 px-2">
-                      <div>
-                        <h3 className="text-base font-[900] text-indigo-600 uppercase tracking-tight">
-                          📘 {subjects[selectedSubjectIndex].title}
-                        </h3>
-                        {subjects[selectedSubjectIndex].courseCode && (
-                          <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
-                            Course Code: {subjects[selectedSubjectIndex].courseCode} • Credits: {getSubjectCredit(subjects[selectedSubjectIndex].courseCode, subjects[selectedSubjectIndex].title)}
-                          </p>
-                        )}
-                      </div>
+              <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                {/* Theory Subject Buttons */}
+                {theorySubjects.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 px-2">Theory Subjects</h3>
+                    <div className="flex flex-col gap-3">
+                      {theorySubjects.map((item) => (
+                        <button
+                          key={item.originalIndex}
+                          onClick={() => {
+                            const newIndex = selectedSubjectIndex === item.originalIndex ? null : item.originalIndex;
+                            setSelectedSubjectIndex(newIndex);
+                            if (newIndex !== null) {
+                              setTimeout(() => {
+                                if (subjectDetailRef.current) {
+                                  subjectDetailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }
+                              }, 100);
+                            }
+                          }}
+                          className={`w-full text-left p-4 rounded-xl font-bold text-[13px] sm:text-sm shadow-md transition-all active:scale-[0.98] border flex items-center justify-between ${
+                            selectedSubjectIndex === item.originalIndex
+                              ? 'bg-[#1565C0] border-blue-700 text-white'
+                              : 'bg-[#2196F3] hover:bg-[#1E88E5] text-white border-blue-400'
+                          }`}
+                        >
+                          <span>{item.subject.title}</span>
+                          <span className="text-white/70 text-lg">{selectedSubjectIndex === item.originalIndex ? '▲' : '▼'}</span>
+                        </button>
+                      ))}
                     </div>
+                  </div>
+                )}
+                {/* Lab Subject Buttons */}
+                {labSubjects.length > 0 && (
+                  <div>
+                    <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 px-2 mt-2">Lab Subjects</h3>
+                    <div className="flex flex-col gap-3">
+                      {labSubjects.map((item) => (
+                        <button
+                          key={item.originalIndex}
+                          onClick={() => {
+                            const newIndex = selectedSubjectIndex === item.originalIndex ? null : item.originalIndex;
+                            setSelectedSubjectIndex(newIndex);
+                            if (newIndex !== null) {
+                              setTimeout(() => {
+                                if (subjectDetailRef.current) {
+                                  subjectDetailRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }
+                              }, 100);
+                            }
+                          }}
+                          className={`w-full text-left p-4 rounded-xl font-bold text-[13px] sm:text-sm shadow-md transition-all active:scale-[0.98] border flex items-center justify-between ${
+                            selectedSubjectIndex === item.originalIndex
+                              ? 'bg-[#E65100] border-orange-700 text-white'
+                              : 'bg-[#FF8C00] hover:bg-[#F57C00] text-white border-orange-400'
+                          }`}
+                        >
+                          <span>{item.subject.title}</span>
+                          <span className="text-white/70 text-lg">{selectedSubjectIndex === item.originalIndex ? '▲' : '▼'}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
-                    {/* Units list */}
-                    <div className="space-y-2">
+                {/* Selected Subject Detail — shown below all buttons */}
+                {selectedSubjectIndex !== null && subjects[selectedSubjectIndex] && (
+                  <div ref={subjectDetailRef} className="mt-4 rounded-2xl border border-slate-200 overflow-hidden shadow-md animate-in fade-in slide-in-from-top-4 duration-300">
+                    {/* Header */}
+                    <div className={`px-5 py-4 ${ /LAB/i.test(subjects[selectedSubjectIndex].title) ? 'bg-[#FF8C00]' : 'bg-[#2196F3]' }`}>
+                      <h3 className="text-white font-black text-sm uppercase tracking-tight">
+                        📘 {subjects[selectedSubjectIndex].title}
+                      </h3>
+                      {subjects[selectedSubjectIndex].courseCode && (
+                        <p className="text-white/70 text-[9px] font-bold uppercase tracking-widest mt-0.5">
+                          Course Code: {subjects[selectedSubjectIndex].courseCode} • Credits: {getSubjectCredit(subjects[selectedSubjectIndex].courseCode, subjects[selectedSubjectIndex].title)}
+                        </p>
+                      )}
+                    </div>
+                    {/* Units */}
+                    <div className="p-3 bg-white space-y-2">
                       {subjects[selectedSubjectIndex].units.map((unit, ui) => (
                         <UnitAccordion
                           key={ui}
