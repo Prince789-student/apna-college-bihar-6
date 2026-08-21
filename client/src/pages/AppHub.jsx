@@ -9,7 +9,7 @@ import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
 import GlobalSearch from '../components/GlobalSearch';
 import Footer from '../components/Footer';
-import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
+import { collection, query, limit, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 
 export default function AppHub() {
@@ -19,9 +19,15 @@ export default function AppHub() {
   const [beuNotices, setBeuNotices] = useState([]);
 
   React.useEffect(() => {
-    const qNotices = query(collection(db, 'beu_notifications'), orderBy('noticedate', 'desc'), limit(3));
+    const qNotices = query(collection(db, 'beu_notifications'), limit(50));
     const unsubNotices = onSnapshot(qNotices, (snap) => {
-      setBeuNotices(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      data.sort((a, b) => {
+        const dateA = a.noticedate ? new Date(a.noticedate) : new Date(0);
+        const dateB = b.noticedate ? new Date(b.noticedate) : new Date(0);
+        return dateB - dateA;
+      });
+      setBeuNotices(data.slice(0, 3));
     });
     return () => { unsubNotices(); };
   }, []);

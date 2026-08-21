@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, onSnapshot, query, orderBy } from 'firebase/firestore';
+import { collection, onSnapshot, query } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Calendar, ArrowUpRight, Search, FileText } from 'lucide-react';
 import SEO from '../components/SEO';
@@ -10,9 +10,19 @@ export default function Notifications() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const qNotices = query(collection(db, 'beu_notifications'), orderBy('noticedate', 'desc'));
+    const qNotices = query(collection(db, 'beu_notifications'));
     const unsub = onSnapshot(qNotices, (snap) => {
-      setNotices(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      // Sort client-side by noticedate descending (avoids Firestore index requirement)
+      data.sort((a, b) => {
+        const dateA = a.noticedate ? new Date(a.noticedate) : new Date(0);
+        const dateB = b.noticedate ? new Date(b.noticedate) : new Date(0);
+        return dateB - dateA;
+      });
+      setNotices(data);
+      setLoading(false);
+    }, (error) => {
+      console.error('Firestore error:', error);
       setLoading(false);
     });
 
