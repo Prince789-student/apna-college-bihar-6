@@ -19,6 +19,26 @@ import LoadingOverlay from '../components/LoadingOverlay';
 
 export default function AdminPanel() {
   const { user, ROLES, loading: authLoading } = useAuth();
+import React, { useState, useEffect } from 'react';
+import { 
+  Shield, Users, FileText, Bell, 
+  Trash2, Ban, UserCheck, UploadCloud, 
+  Search, RefreshCw, BarChart3, 
+  ChevronRight, AlertCircle, Loader2,
+  FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye, Calendar
+} from 'lucide-react';
+import { db, storage } from '../firebase';
+import { 
+  collection, getDocs, doc, updateDoc, deleteDoc, 
+  addDoc, serverTimestamp, query, orderBy, onSnapshot, limit, setDoc
+} from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { useAuth } from '../context/AuthContext';
+import { isValidPDF } from '../utils/validation';
+import LoadingOverlay from '../components/LoadingOverlay';
+
+export default function AdminPanel() {
+  const { user, ROLES, loading: authLoading } = useAuth();
   const [tab, setTab] = useState('overview');
   const [users, setUsers] = useState([]);
   const [userSearch, setUserSearch] = useState('');
@@ -32,8 +52,11 @@ export default function AdminPanel() {
   const [newAnn, setNewAnn] = useState({ title: '', content: '', type: 'INFO' });
   const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '', useAdSense: false, adSlot: '' });
   const [msg, setMsg] = useState(null);
+  // ── BEU NOTIFICATIONS STATE ──
+  const [beuNotifications, setBeuNotifications] = useState([]);
+  const [beuForm, setBeuForm] = useState({ board: '', noticedate: new Date().toISOString().split('T')[0], pdfUrl: '', isimportant: 0 });
   const [loading, setLoading] = useState(true);
-const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [loadingOverlayVisible, setLoadingOverlayVisible] = useState(false);
 
   // ── UPLOAD STATE ──
@@ -123,6 +146,16 @@ const [uploading, setUploading] = useState(false);
       setStudyResources(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     });
 
+    const unsubBeu = onSnapshot(collection(db, 'beu_notifications'), (snap) => {
+      const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      data.sort((a, b) => {
+        const da = a.noticedate ? new Date(a.noticedate) : new Date(0);
+        const db2 = b.noticedate ? new Date(b.noticedate) : new Date(0);
+        return db2 - da;
+      });
+      setBeuNotifications(data);
+    });
+
     setLoading(false);
     return () => { 
       if(unsubUsers) unsubUsers(); 
@@ -131,6 +164,7 @@ const [uploading, setUploading] = useState(false);
       if(unsubAnns) unsubAnns(); 
       if(unsubAds) unsubAds();
       if(unsubResources) unsubResources();
+      if(unsubBeu) unsubBeu();
     };
   }, [isAdmin, authLoading]);
 
@@ -313,96 +347,91 @@ const [uploading, setUploading] = useState(false);
     await deleteDoc(doc(db, 'announcements', id));
     flash('Broadcast Removed');
   };
+  
   const handleUpload = async (e) => {
-  e.preventDefault();
-  const { title, subject, category, branch, semester, selectedSubjectId, file, externalUrl } = docForm;
+    e.preventDefault();
+    const { title, subject, category, branch, semester, selectedSubjectId, file, externalUrl } = docForm;
 
-  // Basic field validation
-  if (!title) { flash('Title required', 'err'); return; }
-  if (selectedSubjectId === 'new' && !subject) { flash('Subject Name required', 'err'); return; }
+    if (!title) { flash('Title required', 'err'); return; }
+    if (selectedSubjectId === 'new' && !subject) { flash('Subject Name required', 'err'); return; }
 
-  // File validation (if a file is selected)
-  if (file) {
-    // Use utility to validate PDF size and type
-    if (!isValidPDF(file)) {
-      flash('Invalid PDF file. Ensure it is a .pdf and under 10 MB.', 'err');
-      return;
-    }
-  }
-
-  // console.log removed
-
-  setLoadingOverlayVisible(true);
-  setUploading(true);
-  try {
-    let finalUrl = externalUrl;
     if (file) {
-      const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
-      const storageRef = ref(storage, `notes/${fileName}`);
-      const snapshot = await uploadBytes(storageRef, file);
-      finalUrl = await getDownloadURL(snapshot.ref);
-    }
-    if (!finalUrl) { flash('File or Direct Link required', 'err'); return; }
-
-    let parentFolderId = selectedSubjectId;
-    if (selectedSubjectId === 'new') {
-      const cleanSubject = subject.trim().toUpperCase();
-      const existingFld = docs.find(d =>
-        d.type === 'folder' &&
-        d.branch === branch &&
-        String(d.semester) === String(semester) &&
-        d.category === category &&
-        d.title?.trim().toUpperCase() === cleanSubject
-      );
-      if (existingFld) {
-        parentFolderId = existingFld.id;
-      } else {
-        const newFolderRef = await addDoc(collection(db, 'documents'), {
-          title: cleanSubject,
-          subject: cleanSubject,
-          category,
-          branch,
-          semester,
-          fileUrl: '',
-          type: 'folder',
-          parentId: 'root',
-          verified: true,
-          createdAt: serverTimestamp()
-        });
-        parentFolderId = newFolderRef.id;
+      if (!isValidPDF(file)) {
+        flash('Invalid PDF file. Ensure it is a .pdf and under 10 MB.', 'err');
+        return;
       }
     }
 
+    setLoadingOverlayVisible(true);
+    setUploading(true);
+    try {
+      let finalUrl = externalUrl;
+      if (file) {
+        const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+        const storageRef = ref(storage, `notes/${fileName}`);
+        const snapshot = await uploadBytes(storageRef, file);
+        finalUrl = await getDownloadURL(snapshot.ref);
+      }
+      if (!finalUrl) { flash('File or Direct Link required', 'err'); return; }
 
-    const folderDoc = docs.find(d => d.id === parentFolderId) || { title: subject };
-    const finalSubject = folderDoc.title || subject;
-    await addDoc(collection(db, 'documents'), {
-      title,
-      subject: finalSubject.toUpperCase(),
-      category,
-      branch,
-      semester,
-      fileUrl: finalUrl,
-      type: 'file',
-      parentId: parentFolderId,
-      verified: true,
-      createdAt: serverTimestamp()
-    });
-    flash('Success! Document ready in Library! ✅');
-    setDocForm(prev => ({
-      ...prev,
-      title: '',
-      file: null,
-      externalUrl: ''
-    }));
-  } catch (err) {
-    console.error('DEPLOY ERROR:', err);
-    flash('Deployment failed: ' + err.message, 'err');
-  } finally {
-    setUploading(false);
-    setLoadingOverlayVisible(false);
-  }
-};
+      let parentFolderId = selectedSubjectId;
+      if (selectedSubjectId === 'new') {
+        const cleanSubject = subject.trim().toUpperCase();
+        const existingFld = docs.find(d =>
+          d.type === 'folder' &&
+          d.branch === branch &&
+          String(d.semester) === String(semester) &&
+          d.category === category &&
+          d.title?.trim().toUpperCase() === cleanSubject
+        );
+        if (existingFld) {
+          parentFolderId = existingFld.id;
+        } else {
+          const newFolderRef = await addDoc(collection(db, 'documents'), {
+            title: cleanSubject,
+            subject: cleanSubject,
+            category,
+            branch,
+            semester,
+            fileUrl: '',
+            type: 'folder',
+            parentId: 'root',
+            verified: true,
+            createdAt: serverTimestamp()
+          });
+          parentFolderId = newFolderRef.id;
+        }
+      }
+
+      const folderDoc = docs.find(d => d.id === parentFolderId) || { title: subject };
+      const finalSubject = folderDoc.title || subject;
+      await addDoc(collection(db, 'documents'), {
+        title,
+        subject: finalSubject.toUpperCase(),
+        category,
+        branch,
+        semester,
+        fileUrl: finalUrl,
+        type: 'file',
+        parentId: parentFolderId,
+        verified: true,
+        createdAt: serverTimestamp()
+      });
+      flash('Success! Document ready in Library! ✅');
+      setDocForm(prev => ({
+        ...prev,
+        title: '',
+        file: null,
+        externalUrl: ''
+      }));
+    } catch (err) {
+      console.error('DEPLOY ERROR:', err);
+      flash('Deployment failed: ' + err.message, 'err');
+    } finally {
+      setUploading(false);
+      setLoadingOverlayVisible(false);
+    }
+  };
 
   const handleAdUpload = async (e) => {
     e.preventDefault();
@@ -415,7 +444,6 @@ const [uploading, setUploading] = useState(false);
       let imageUrl = adForm.externalUrl;
       
       if (adForm.file) {
-        // Safety Timeout for Storage Upload
         timeoutId = setTimeout(() => {
           setUploading(false);
           flash('Storage Upload taking too long! ⏳ Try using "Direct Image Link" instead.', 'err');
@@ -464,6 +492,40 @@ const [uploading, setUploading] = useState(false);
     flash(active ? 'Ad Disabled' : 'Ad Activated');
   };
 
+  // ── BEU NOTIFICATION HANDLERS ──
+  const addBeuNotification = async (e) => {
+    e.preventDefault();
+    if (!beuForm.board.trim() || !beuForm.noticedate || !beuForm.pdfUrl.trim()) {
+      flash('Title, Date aur PDF URL zaroori hai!', 'err'); return;
+    }
+    setUploading(true);
+    try {
+      const maxId = beuNotifications.reduce((m, n) => Math.max(m, Number(n.id) || 0), 0);
+      const newId = maxId + 1;
+      const filename = beuForm.pdfUrl.split('/').pop().replace(/%20/g, ' ');
+      await setDoc(doc(db, 'beu_notifications', String(newId)), {
+        id: newId,
+        board: beuForm.board.trim(),
+        noticedate: beuForm.noticedate,
+        pdfUrl: beuForm.pdfUrl.trim(),
+        link: filename,
+        isimportant: Number(beuForm.isimportant),
+        createdAt: serverTimestamp()
+      });
+      setBeuForm({ board: '', noticedate: new Date().toISOString().split('T')[0], pdfUrl: '', isimportant: 0 });
+      flash(`BEU Notification #${newId} add ho gaya! 🔔`);
+    } catch (err) {
+      flash('Error: ' + err.message, 'err');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const deleteBeuNotification = async (id) => {
+    if (!window.confirm(`BEU Notification #${id} delete karna chahte hain?`)) return;
+    await deleteDoc(doc(db, 'beu_notifications', id));
+    flash('BEU Notification deleted.');
+  };
 
   if (authLoading) return (
     <div className="flex flex-col items-center justify-center py-40 gap-4">
@@ -496,7 +558,7 @@ if (!isAdmin) return (
           </div>
         </div>
         <div className="flex flex-wrap bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 overflow-x-auto">
-           {['overview', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources'].map(t => (
+           {['overview', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu'].map(t => (
              <button key={t} onClick={()=>setTab(t)}
                className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${tab===t?'bg-indigo-600 text-slate-900 shadow-xl shadow-indigo-900/20':'text-slate-500 hover:text-slate-700'}`}>
                {t}
@@ -1206,6 +1268,100 @@ if (!isAdmin) return (
              </div>
            )}
         </div>
+      )}
+
+      {/* ── BEU NOTIFICATIONS TAB ── */}
+      {tab==='beu' && (
+        <div className="space-y-6">
+          {/* Add Form */}
+          <div className="bg-white border border-slate-200/80 rounded-[2rem] p-6 shadow-xl">
+            <h2 className="text-[11px] font-[1000] text-slate-900 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+              <Bell size={16} className="text-amber-500" /> BEU Notification Add Karo
+            </h2>
+            <form onSubmit={addBeuNotification} className="space-y-4">
+              <div>
+                <label className="block text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Notice Title *</label>
+                <input
+                  value={beuForm.board}
+                  onChange={e => setBeuForm(f => ({ ...f, board: e.target.value }))}
+                  placeholder="e.g. Notice for B.Tech 5th Semester Examination 2025"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Notice Date *</label>
+                  <input
+                    type="date"
+                    value={beuForm.noticedate}
+                    onChange={e => setBeuForm(f => ({ ...f, noticedate: e.target.value }))}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Important?</label>
+                  <select
+                    value={beuForm.isimportant}
+                    onChange={e => setBeuForm(f => ({ ...f, isimportant: Number(e.target.value) }))}
+                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  >
+                    <option value={0}>Normal</option>
+                    <option value={1}>⚡ Important</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">PDF URL * (BEU site se copy karo)</label>
+                <input
+                  value={beuForm.pdfUrl}
+                  onChange={e => setBeuForm(f => ({ ...f, pdfUrl: e.target.value }))}
+                  placeholder="https://beu-bih.ac.in/backend/1234567890-NOTICE.pdf"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={uploading}
+                className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-white font-black text-[11px] uppercase tracking-widest rounded-xl transition-all active:scale-95 disabled:opacity-50"
+              >
+                {uploading ? 'Adding...' : '🔔 Add BEU Notification'}
+              </button>
+            </form>
+          </div>
+
+          {/* Existing Notifications */}
+          <div className="bg-white border border-slate-200/80 rounded-[2rem] shadow-xl overflow-hidden">
+            <div className="px-6 py-5 border-b border-slate-100">
+              <h3 className="text-[11px] font-[1000] text-slate-900 uppercase tracking-[0.2em]">Existing Notifications ({beuNotifications.length})</h3>
+            </div>
+            <div className="divide-y divide-slate-100">
+              {beuNotifications.map(n => (
+                <div key={n.id} className="flex items-center justify-between px-6 py-4 hover:bg-slate-50/50 transition-colors">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      {n.isimportant === 1 && <span className="text-[8px] font-black bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full uppercase">Important</span>}
+                      <span className="text-[13px] font-bold text-slate-800 truncate">{n.board}</span>
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-mono">{n.noticedate} • ID: {n.id}</span>
+                  </div>
+                  <div className="flex items-center gap-2 ml-4">
+                    <a href={n.pdfUrl} target="_blank" rel="noreferrer" className="p-2 bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-all">
+                      <Eye size={13}/>
+                    </a>
+                    <button onClick={() => deleteBeuNotification(n.id)} className="p-2 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all">
+                      <Trash2 size={13}/>
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {beuNotifications.length === 0 && (
+                <div className="text-center py-12 text-slate-400 text-sm">Koi notification nahi mili</div>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>
