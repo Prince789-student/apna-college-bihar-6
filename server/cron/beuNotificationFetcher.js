@@ -1,22 +1,17 @@
-const admin = require('firebase-admin');
+const admin = require('../firebaseAdmin');
 const puppeteer = require('puppeteer');
-
-// Initialize Firebase Admin if not already initialized
-if (!admin.apps.length) {
-    try {
-        const serviceAccount = require('../firebase-service-account.json');
-        admin.initializeApp({
-            credential: admin.credential.cert(serviceAccount)
-        });
-    } catch (e) {
-        console.log("Firebase not initialized in scraper. Make sure to run from server.js");
-    }
-}
-
-const db = admin.firestore();
 
 async function scrapeBEUNotifications() {
     console.log('[BEU Scraper] Starting fetch process...');
+    
+    // Check if Firebase is initialized
+    if (!admin.apps.length) {
+        console.error('⚠️ Firebase is not initialized. Skipping BEU scrape. Please provide firebase-service-account.json');
+        return { success: false, message: 'Firebase not initialized on server.' };
+    }
+    
+    const db = admin.firestore();
+    
     let browser = null;
     try {
         // Launch Puppeteer browser with memory-saving flags
