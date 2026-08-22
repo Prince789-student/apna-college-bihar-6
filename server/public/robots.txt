@@ -3,36 +3,28 @@
 # https://www.apnacollegebihar.online
 # ==========================================
 
+User-agent: Googlebot
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
 User-agent: *
 Allow: /
 
-# Block private/admin areas
+# Block private/admin areas only
 Disallow: /dashboard/admin
 Disallow: /backend/
 Disallow: /uploads/
-
-# ── Block deleted/failed college cutoff pages ──
-# These pages have been removed (404) and should not be indexed
-Disallow: /gec-
-Disallow: /sce-
-Disallow: /bce-
-Disallow: /pce-
-Disallow: /nce-
-Disallow: /kce-
-Disallow: /sgidt-
-Disallow: /mit-
-Disallow: /sit-
-Disallow: /dce-
-Disallow: /mce-
-Disallow: /ugeac-2025-
-Disallow: /bihar-engineering-counselling-2025
-Disallow: /lnjpit-
-Disallow: /cipet-
-Disallow: /cp-thakur-
-Disallow: /rrsdce-
-Disallow: /gce-
-Disallow: /bpmce-
-Disallow: /wit-
 
 # Sitemap location
 Sitemap: https://www.apnacollegebihar.online/sitemap.xml
