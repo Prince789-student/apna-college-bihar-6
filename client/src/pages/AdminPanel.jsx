@@ -1378,6 +1378,8 @@ if (!isAdmin) return (
           </div>
         </div>
       )}
+      </div>
+      )}
     </div>
   );
 }

@@ -36,5 +36,9 @@
   },
   "dependencies": {
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^8.0.1",
+    "@babel/parser": "^8.0.4"
   }
 }
