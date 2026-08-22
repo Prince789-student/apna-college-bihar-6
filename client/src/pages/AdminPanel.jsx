@@ -19,26 +19,6 @@ import LoadingOverlay from '../components/LoadingOverlay';
 
 export default function AdminPanel() {
   const { user, ROLES, loading: authLoading } = useAuth();
-import React, { useState, useEffect } from 'react';
-import { 
-  Shield, Users, FileText, Bell, 
-  Trash2, Ban, UserCheck, UploadCloud, 
-  Search, RefreshCw, BarChart3, 
-  ChevronRight, AlertCircle, Loader2,
-  FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye, Calendar
-} from 'lucide-react';
-import { db, storage } from '../firebase';
-import { 
-  collection, getDocs, doc, updateDoc, deleteDoc, 
-  addDoc, serverTimestamp, query, orderBy, onSnapshot, limit, setDoc
-} from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { useAuth } from '../context/AuthContext';
-import { isValidPDF } from '../utils/validation';
-import LoadingOverlay from '../components/LoadingOverlay';
-
-export default function AdminPanel() {
-  const { user, ROLES, loading: authLoading } = useAuth();
   const [tab, setTab] = useState('overview');
   const [users, setUsers] = useState([]);
   const [userSearch, setUserSearch] = useState('');
@@ -1363,6 +1343,8 @@ if (!isAdmin) return (
             </div>
           </div>
         </div>
+      )}
+      </div>
       )}
     </div>
   );
