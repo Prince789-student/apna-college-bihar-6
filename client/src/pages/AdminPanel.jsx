@@ -507,6 +507,25 @@ export default function AdminPanel() {
     flash('BEU Notification deleted.');
   };
 
+  const handleSyncBEU = async () => {
+    if (!window.confirm("Are you sure you want to trigger a manual sync for BEU notifications? This may take up to 60 seconds.")) return;
+    setUploading(true);
+    try {
+        const url = window.location.hostname === 'localhost' ? 'http://localhost:5000/api/admin/sync-beu' : '/api/admin/sync-beu';
+        const response = await fetch(url, { method: 'POST' });
+        const data = await response.json();
+        if (data.success) {
+            flash(data.message);
+        } else {
+            flash(data.message, 'err');
+        }
+    } catch (err) {
+        flash("Sync failed: " + err.message, 'err');
+    } finally {
+        setUploading(false);
+    }
+  };
+
   if (authLoading) return (
     <div className="flex flex-col items-center justify-center py-40 gap-4">
       <SEO title="Admin Panel | Apna College Bihar" />
@@ -1253,6 +1272,21 @@ if (!isAdmin) return (
       {/* ── BEU NOTIFICATIONS TAB ── */}
       {tab==='beu' && (
         <div className="space-y-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-indigo-50/50 p-6 rounded-[2rem] border border-indigo-100">
+            <div>
+              <h2 className="text-[12px] font-[1000] text-slate-900 uppercase tracking-widest">BEU Notification Sync</h2>
+              <p className="text-[10px] text-slate-500 font-bold mt-1">Automatically scrapes the official BEU portal. The system also runs this check in the background.</p>
+            </div>
+            <button 
+                onClick={handleSyncBEU} 
+                disabled={uploading}
+                className="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2 shadow-xl shadow-indigo-500/20 disabled:opacity-50"
+            >
+                {uploading ? <Loader2 className="animate-spin w-4 h-4" /> : <RefreshCw className="w-4 h-4" />} 
+                Sync Now
+            </button>
+          </div>
+
           {/* Add Form */}
           <div className="bg-white border border-slate-200/80 rounded-[2rem] p-6 shadow-xl">
             <h2 className="text-[11px] font-[1000] text-slate-900 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
@@ -1328,7 +1362,7 @@ if (!isAdmin) return (
                     <span className="text-[10px] text-slate-400 font-mono">{n.noticedate} • ID: {n.id}</span>
                   </div>
                   <div className="flex items-center gap-2 ml-4">
-                    <a href={n.pdfUrl} target="_blank" rel="noreferrer" className="p-2 bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-all">
+                    <a href={n.pdfUrl || n.link} target="_blank" rel="noreferrer" className="p-2 bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-all">
                       <Eye size={13}/>
                     </a>
                     <button onClick={() => deleteBeuNotification(n.id)} className="p-2 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all">
@@ -1345,7 +1379,6 @@ if (!isAdmin) return (
         </div>
       )}
       </div>
-      )}
     </div>
   );
 }

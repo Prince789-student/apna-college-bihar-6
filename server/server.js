@@ -28,8 +28,29 @@ const { startHackathonCron } = require('./cron/hackathonFetcher');
 startHackathonCron();
 
 // Start BEU Notification Scraper
-const { initScraper } = require('./services/beuScraper');
-initScraper();
+const scrapeBEUNotifications = require('./cron/beuNotificationFetcher');
+// Set up cron for BEU Scraper (runs every 6 hours)
+const cron = require('node-cron');
+cron.schedule('0 */6 * * *', () => {
+    console.log('[Cron] Running BEU Scraper...');
+    scrapeBEUNotifications();
+});
+// Initial run
+scrapeBEUNotifications();
+
+// Manual Sync Endpoint for BEU Scraper
+app.post('/api/admin/sync-beu', async (req, res) => {
+    try {
+        const result = await scrapeBEUNotifications();
+        if (result && result.success) {
+            res.json({ success: true, message: `Synced successfully. Added ${result.added} notices out of ${result.totalFound} found.` });
+        } else {
+            res.status(500).json({ success: false, message: result?.error || result?.message || 'Sync failed.' });
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
 
 // 1. ABSOLUTE PRIORITY: APK DOWNLOAD ROUTE
 // This must be BEFORE any other middleware to avoid SPA interception
@@ -242,12 +263,11 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running on port ${PORT}`);
     
-    // Initialize Scrapers
+    // Initialize Scrapers (Others)
     try {
-        const beuScraper = require('./services/beuScraper');
-        beuScraper.initScraper();
+        // any other scrapers if needed
     } catch (err) {
-        console.error('Failed to initialize BEU scraper:', err.message);
+        console.error('Failed to initialize scrapers:', err.message);
     }
     
     // Render Keep-Alive
