@@ -15,6 +15,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import SmartRedirect from './components/SmartRedirect';
 import CookieBanner from './components/CookieBanner';
+import WhatsAppPopup from './components/WhatsAppPopup';
 
 // Pages (Lazy Loaded)
 const Home = React.lazy(() => import('./pages/Home'));
@@ -451,6 +452,7 @@ function App() {
         <GlobalCounsellingPopup />
         <GlobalProfilePrompt />
         <CookieBanner />
+        <WhatsAppPopup />
         <React.Suspense fallback={<SplashUI />}>
           <Routes>
             {/* Public Routes */}

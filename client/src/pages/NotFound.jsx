@@ -1,9 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Home, Search, AlertTriangle } from 'lucide-react';
 import SEO from '../components/SEO';
 
 export default function NotFound() {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    console.warn(`[404 NOT FOUND] User tried to access: ${location.pathname}${location.search}`);
+  }, [location]);
   return (
     <div className="min-h-screen bg-[#f8fafc] font-['Inter'] flex flex-col items-center justify-center p-6 relative overflow-hidden">
       <SEO 
