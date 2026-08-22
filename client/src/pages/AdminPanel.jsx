@@ -1267,6 +1267,7 @@ if (!isAdmin) return (
              </div>
            )}
         </div>
+        </div>
       )}
 
       {/* ── BEU NOTIFICATIONS TAB ── */}
@@ -1377,8 +1378,6 @@ if (!isAdmin) return (
             </div>
           </div>
         </div>
-      )}
-      </div>
       )}
     </div>
   );
