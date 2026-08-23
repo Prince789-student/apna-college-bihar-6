@@ -83,6 +83,7 @@ function GlobalProfilePrompt() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [branch, setBranch] = useState('');
   const [admissionYear, setAdmissionYear] = useState('');
+  const [dob, setDob] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -93,6 +94,7 @@ function GlobalProfilePrompt() {
       setPhoneNumber(user.phone && user.phone !== 'NOT LINKED' ? user.phone : '');
       setBranch(user.branch || '');
       setAdmissionYear(user.admissionYear || '');
+      setDob(user.dob || '');
     }
   }, [user]);
 
@@ -103,6 +105,7 @@ function GlobalProfilePrompt() {
     (!user?.district || user?.district?.trim() === "") ||
     (!user?.branch || user?.branch?.trim() === "") ||
     (!user?.admissionYear || user?.admissionYear?.trim() === "") ||
+    (!user?.dob || user?.dob?.trim() === "") ||
     (user?.wantsCall === undefined)
   );
 
@@ -115,6 +118,7 @@ function GlobalProfilePrompt() {
     if (!district.trim()) return toast.error("Please enter your district name!");
     if (!branch.trim()) return toast.error("Please enter your branch!");
     if (!admissionYear.trim()) return toast.error("Please enter your admission year!");
+    if (!dob.trim()) return toast.error("Please select your date of birth!");
     if (phoneNumber.length < 10) return toast.error("Enter a valid 10-digit mobile number!");
     
     setIsSubmitting(true);
@@ -125,7 +129,8 @@ function GlobalProfilePrompt() {
         district: district.trim(),
         phone: phoneNumber,
         branch: branch.trim(),
-        admissionYear: admissionYear.trim()
+        admissionYear: admissionYear.trim(),
+        dob: dob.trim()
       });
       setStep(2);
     } catch (err) {
@@ -186,9 +191,15 @@ function GlobalProfilePrompt() {
                     <input type="text" value={admissionYear} onChange={(e) => setAdmissionYear(e.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="e.g. 2024" className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
                   </div>
                 </div>
-                <div>
-                  <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Mobile Number</label>
-                  <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="10-DIGIT MOBILE NO." className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
+                <div className="flex gap-4">
+                  <div className="flex-1">
+                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Date of Birth</label>
+                    <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
+                  </div>
+                  <div className="flex-1">
+                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Mobile Number</label>
+                    <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="10-DIGIT MOBILE NO." className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
+                  </div>
                 </div>
                 
                 <button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 text-white font-[1000] py-4.5 rounded-[1.5rem] shadow-[0_10px_40px_rgba(37,99,235,0.4)] transition-all active:scale-95 text-xs tracking-widest uppercase mt-4">

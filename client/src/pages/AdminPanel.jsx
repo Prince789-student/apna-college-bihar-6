@@ -719,6 +719,11 @@ if (!isAdmin) return (
                                Branch: <span className="text-indigo-600">{u.branch}</span> {u.admissionYear && `(${u.admissionYear})`}
                              </p>
                            )}
+                           {u.dob && (
+                             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+                               DOB: <span className="text-indigo-600">{new Date(u.dob).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+                             </p>
+                           )}
                         </div>
                      </td>
 
