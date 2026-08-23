@@ -9,12 +9,18 @@ export default function ScrollToTop() {
     window.scrollTo(0, 0);
     
     // Scroll the main content area inside DashboardLayout
-    setTimeout(() => {
+    const scrollUp = () => {
       const mainContainer = document.getElementById('main-scroll-container');
       if (mainContainer) {
+        mainContainer.scrollTo({ top: 0, left: 0, behavior: 'instant' });
         mainContainer.scrollTop = 0;
       }
-    }, 10);
+    };
+    
+    scrollUp();
+    setTimeout(scrollUp, 50);
+    setTimeout(scrollUp, 150);
+    setTimeout(scrollUp, 300);
   }, [pathname]);
 
   return null;
