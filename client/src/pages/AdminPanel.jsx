@@ -684,10 +684,17 @@ if (!isAdmin) return (
                      {/* Contact & Device */}
                      <td className="py-6 px-8">
                         <div className="space-y-1">
-                          <div className="inline-block px-2.5 py-1 bg-slate-100/50 border border-slate-200/80 rounded-lg">
-                            <span className="text-[10px] font-black text-slate-600 tracking-wider">
-                              {u.phone || 'NO PHONE'}
-                            </span>
+                          <div className="flex gap-2 items-center">
+                            <div className="inline-block px-2.5 py-1 bg-slate-100/50 border border-slate-200/80 rounded-lg">
+                              <span className="text-[10px] font-black text-slate-600 tracking-wider">
+                                {u.phone || 'NO PHONE'}
+                              </span>
+                            </div>
+                            {u.wantsCall !== undefined && (
+                              <span title={u.wantsCall ? "User wants calls from ACB team" : "User does not want calls"} className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter inline-block ${u.wantsCall ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
+                                {u.wantsCall ? 'CALL OK' : 'NO CALL'}
+                              </span>
+                            )}
                           </div>
                           <p className="text-[9px] font-mono text-slate-500 truncate max-w-[150px] select-all" title={u.deviceId || u.device_id}>
                             Device: {u.deviceId || u.device_id || 'N/A'}
@@ -707,6 +714,11 @@ if (!isAdmin) return (
                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">
                              District: <span className="text-indigo-600">{u.homeDistrict || u.district || u.home_district || 'N/A'}</span>
                            </p>
+                           {u.branch && (
+                             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
+                               Branch: <span className="text-indigo-600">{u.branch}</span> {u.admissionYear && `(${u.admissionYear})`}
+                             </p>
+                           )}
                         </div>
                      </td>
 
