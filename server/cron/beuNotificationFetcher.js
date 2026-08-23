@@ -26,14 +26,17 @@ async function scrapeBEUNotifications() {
         
         console.log(`[BEU Scraper] Found ${notifications.length} valid notifications in API.`);
         
-        // Save to Firestore
+        // Save to Firestore (only latest 30 to avoid timeout on Render)
         let addedCount = 0;
         const beuRef = db.collection('beu_notifications');
         
-        for (const notif of notifications) {
+        const recentNotifs = notifications.slice(0, 30);
+        
+        // Process concurrently for speed
+        const processNotification = async (notif) => {
             // Construct the full PDF link
             const fullLink = notif.link ? `https://beu-bih.ac.in/backend/${notif.link.trim()}` : '';
-            if (!fullLink) continue;
+            if (!fullLink) return 0;
 
             const title = notif.board ? notif.board.trim() : 'BEU Notice';
             
@@ -58,9 +61,14 @@ async function scrapeBEUNotifications() {
                     isNew: true,
                     autoSynced: true
                 });
-                addedCount++;
+                return 1;
             }
-        }
+            return 0;
+        };
+
+        const promises = recentNotifs.map(notif => processNotification(notif));
+        const results = await Promise.all(promises);
+        addedCount = results.reduce((a, b) => a + b, 0);
         
         console.log(`[BEU Scraper] Sync complete. Added ${addedCount} new notifications.`);
         return { success: true, added: addedCount, totalFound: notifications.length };
