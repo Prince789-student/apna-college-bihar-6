@@ -9,7 +9,7 @@ import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
 import GlobalSearch from '../components/GlobalSearch';
 import Footer from '../components/Footer';
-import { collection, query, limit, onSnapshot } from 'firebase/firestore';
+import { collection, query, limit, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 export default function AppHub() {
@@ -51,6 +51,18 @@ export default function AppHub() {
       navigate('/');
     } catch (err) {
       console.error("Logout failed:", err);
+    }
+  };
+
+  const handleDeleteNotice = async (notice, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!window.confirm(`Are you sure you want to delete "${notice.title || notice.board}"?`)) return;
+    try {
+      await deleteDoc(doc(db, 'beu_notifications', notice.id));
+      alert('Notice deleted successfully!');
+    } catch (err) {
+      alert('Error deleting notice: ' + err.message);
     }
   };
 
@@ -210,7 +222,7 @@ export default function AppHub() {
                   href={notice.pdfUrl || `https://beu-bih.ac.in/backend/${encodeURIComponent(notice.link)}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex flex-col p-4 bg-slate-50 border border-slate-100 hover:border-blue-200 rounded-2xl transition-all group"
+                  className="relative flex flex-col p-4 bg-slate-50 border border-slate-100 hover:border-blue-200 rounded-2xl transition-all group"
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <span className="px-2 py-1 bg-red-600 text-white text-[8px] font-black uppercase tracking-widest rounded-md animate-pulse">NEW</span>
@@ -218,9 +230,19 @@ export default function AppHub() {
                       <Calendar size={10} /> {notice.date || notice.noticedate ? (notice.date?.includes('/') ? notice.date : new Date(notice.date || notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })) : 'Unknown Date'}
                     </span>
                   </div>
-                  <h3 className="text-xs font-bold text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-2">
+                  <h3 className="text-xs font-bold text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-2 pr-10">
                     {notice.title || notice.board}
                   </h3>
+                  
+                  {/* Admin Delete Action */}
+                  {(user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN') && (
+                    <button 
+                      onClick={(e) => handleDeleteNotice(notice, e)} 
+                      className="absolute top-4 right-4 p-1.5 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all z-20"
+                    >
+                      <Trash2 size={12} />
+                    </button>
+                  )}
                 </a>
               ))}
             </div>

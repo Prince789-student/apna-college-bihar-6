@@ -2,11 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   FileDigit, Search, Download, Eye,
   FolderOpen, ArrowRight, ArrowLeft,
-  ShieldCheck, Bookmark, ChevronRight
+  ShieldCheck, Bookmark, ChevronRight, Pencil, Trash2
 } from 'lucide-react';
 import { db } from '../firebase';
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, onSnapshot, query, where, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import PremiumAds from '../components/PremiumAds';
 import SEO from '../components/SEO';
 import { Capacitor } from '@capacitor/core';
@@ -55,6 +56,7 @@ const BRANCH_COLORS = {
 export default function PYQ() {
   const { branchId, semesterId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const initialBranch = branchId ? BRANCHES.find(b => b.id.toLowerCase() === branchId.toLowerCase()) : null;
   const initialSem = semesterId ? parseInt(semesterId) : null;
@@ -94,6 +96,36 @@ export default function PYQ() {
   const handleAction = (url, callback) => {
     if (!url || url.includes('localhost')) { alert('Ye link abhi active nahi hai. Admin se sampark karein.'); return; }
     callback();
+  };
+
+  const handleEditPYQ = async (pyq) => {
+    const newTitle = window.prompt("Enter new title:", pyq.title);
+    if (!newTitle) return;
+    const newSubject = window.prompt("Enter new subject:", pyq.subject);
+    if (!newSubject) return;
+    const newUrl = window.prompt("Enter new file URL:", pyq.fileUrl);
+    if (!newUrl) return;
+
+    try {
+      await updateDoc(doc(db, 'docs', pyq.id), {
+        title: newTitle,
+        subject: newSubject,
+        fileUrl: newUrl
+      });
+      alert('PYQ updated successfully!');
+    } catch (err) {
+      alert('Error updating PYQ: ' + err.message);
+    }
+  };
+
+  const handleDeletePYQ = async (pyq) => {
+    if (!window.confirm(`Are you sure you want to delete "${pyq.title}"?`)) return;
+    try {
+      await deleteDoc(doc(db, 'docs', pyq.id));
+      alert('PYQ deleted successfully!');
+    } catch (err) {
+      alert('Error deleting PYQ: ' + err.message);
+    }
   };
 
   // Subject folders for branch+sem in PYQ category
@@ -235,7 +267,7 @@ export default function PYQ() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
-              {searchResults.map(d => <PYQFileCard key={d.id} d={d} onAction={handleAction} />)}
+              {searchResults.map(d => <PYQFileCard key={d.id} d={d} onAction={handleAction} user={user} onEdit={handleEditPYQ} onDelete={handleDeletePYQ} />)}
             </div>
           )}
         </div>
@@ -383,7 +415,7 @@ export default function PYQ() {
                       <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-amber-600 group-hover:gap-2.5 transition-all">Open <ArrowRight size={10} /></div>
                     </button>
                   ) : (
-                    <PYQFileCard d={d} onAction={handleAction} />
+                    <PYQFileCard key={d.id} d={d} onAction={handleAction} user={user} onEdit={handleEditPYQ} onDelete={handleDeletePYQ} />
                   )}
                   {idx % 4 === 3 && <div className="col-span-1"><PremiumAds type="INLINE" /></div>}
                 </React.Fragment>
@@ -458,10 +490,19 @@ export default function PYQ() {
   );
 }
 
-function PYQFileCard({ d, onAction }) {
+function PYQFileCard({ d, onAction, user, onEdit, onDelete }) {
   return (
-    <div className="bg-white rounded-2xl md:rounded-[2rem] border border-slate-200/80 p-4 md:p-6 hover:border-amber-300/60 transition-all group flex flex-col shadow-sm hover:shadow-md">
-      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4 bg-amber-100 text-amber-600 group-hover:scale-110 transition-transform">
+    <div className="relative bg-white rounded-[2rem] border border-slate-200/80 p-5 hover:border-amber-300/50 transition-all group flex flex-col shadow-sm hover:shadow-xl">
+      
+      {/* Admin Actions */}
+      {(user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN') && (
+        <div className="absolute top-4 right-4 flex gap-2 z-10">
+           <button onClick={(e) => { e.stopPropagation(); onEdit && onEdit(d); }} className="p-1.5 bg-blue-50 text-blue-500 rounded-lg hover:bg-blue-500 hover:text-white transition-all"><Pencil size={14} /></button>
+           <button onClick={(e) => { e.stopPropagation(); onDelete && onDelete(d); }} className="p-1.5 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all"><Trash2 size={14} /></button>
+        </div>
+      )}
+
+      <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4 bg-amber-100 text-amber-600 group-hover:scale-110 transition-transform">
         <FileDigit size={18} className="md:hidden" />
         <FileDigit size={22} className="hidden md:block" />
       </div>

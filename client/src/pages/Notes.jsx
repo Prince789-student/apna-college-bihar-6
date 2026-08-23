@@ -2,11 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   BookOpen, Search, Download, Eye,
   FolderOpen, FileDigit, ArrowRight, ArrowLeft,
-  ShieldCheck, Bookmark, ChevronRight
+  ShieldCheck, Bookmark, ChevronRight, Pencil, Trash2
 } from 'lucide-react';
 import { db } from '../firebase';
-import { collection, orderBy, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, orderBy, onSnapshot, query, where, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import PremiumAds from '../components/PremiumAds';
 import SEO from '../components/SEO';
 import { Capacitor } from '@capacitor/core';
@@ -55,6 +56,7 @@ const BRANCH_COLORS = {
 export default function Notes() {
   const { branchId, semesterId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   // Parse URL params for initial state
   const initialBranch = branchId ? BRANCHES.find(b => b.id.toLowerCase() === branchId.toLowerCase()) : null;
@@ -104,6 +106,36 @@ export default function Notes() {
       return;
     }
     callback();
+  };
+
+  const handleEditNote = async (note) => {
+    const newTitle = window.prompt("Enter new title:", note.title);
+    if (!newTitle) return;
+    const newSubject = window.prompt("Enter new subject:", note.subject);
+    if (!newSubject) return;
+    const newUrl = window.prompt("Enter new file URL:", note.fileUrl);
+    if (!newUrl) return;
+
+    try {
+      await updateDoc(doc(db, 'docs', note.id), {
+        title: newTitle,
+        subject: newSubject,
+        fileUrl: newUrl
+      });
+      alert('Note updated successfully!');
+    } catch (err) {
+      alert('Error updating note: ' + err.message);
+    }
+  };
+
+  const handleDeleteNote = async (note) => {
+    if (!window.confirm(`Are you sure you want to delete "${note.title}"?`)) return;
+    try {
+      await deleteDoc(doc(db, 'docs', note.id));
+      alert('Note deleted successfully!');
+    } catch (err) {
+      alert('Error deleting note: ' + err.message);
+    }
   };
 
   // Current folder id for display
@@ -266,7 +298,7 @@ export default function Notes() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
-              {searchResults.map(d => <FileCard key={d.id} d={d} onAction={handleAction} accentColor="indigo" />)}
+              {searchResults.map(d => <FileCard key={d.id} d={d} onAction={handleAction} accentColor="indigo" user={user} onEdit={handleEditNote} onDelete={handleDeleteNote} />)}
             </div>
           )}
         </div>
@@ -383,7 +415,15 @@ export default function Notes() {
               ))}
               {/* Orphan files not inside any folder */}
               {looseFiles.map(d => (
-                <FileCard key={d.id} d={d} onAction={handleAction} accentColor="indigo" />
+                  <FileCard 
+                    key={d.id} 
+                    d={d} 
+                    onAction={handleAction} 
+                    accentColor={branch?.color}
+                    user={user}
+                    onEdit={handleEditNote}
+                    onDelete={handleDeleteNote}
+                  />
               ))}
             </div>
           )}
@@ -495,14 +535,23 @@ export default function Notes() {
   );
 }
 
-function FileCard({ d, onAction, accentColor = 'indigo' }) {
+function FileCard({ d, onAction, accentColor = 'indigo', user, onEdit, onDelete }) {
   const colors = {
     indigo: { icon: 'bg-indigo-100 text-indigo-600', badge: 'bg-indigo-50 text-indigo-500 border-indigo-200', dl: 'bg-indigo-100 hover:bg-indigo-600 text-indigo-600 hover:text-white border-indigo-200' },
     amber:  { icon: 'bg-amber-100 text-amber-600',  badge: 'bg-amber-50 text-amber-500 border-amber-200',  dl: 'bg-amber-100 hover:bg-amber-600 text-amber-600 hover:text-white border-amber-200' },
   };
   const c = colors[accentColor] || colors.indigo;
   return (
-    <div className="bg-white rounded-2xl md:rounded-[2rem] border border-slate-200/80 p-4 md:p-6 hover:border-indigo-300/50 transition-all group flex flex-col shadow-sm hover:shadow-md">
+    <div className="relative bg-white rounded-2xl md:rounded-[2rem] border border-slate-200/80 p-4 md:p-6 hover:border-indigo-300/50 transition-all group flex flex-col shadow-sm hover:shadow-md">
+      
+      {/* Admin Actions */}
+      {(user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN') && (
+        <div className="absolute top-4 right-4 flex gap-2 z-10">
+           <button onClick={(e) => { e.stopPropagation(); onEdit && onEdit(d); }} className="p-1.5 bg-blue-50 text-blue-500 rounded-lg hover:bg-blue-500 hover:text-white transition-all"><Pencil size={14} /></button>
+           <button onClick={(e) => { e.stopPropagation(); onDelete && onDelete(d); }} className="p-1.5 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all"><Trash2 size={14} /></button>
+        </div>
+      )}
+
       <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4 ${c.icon} group-hover:scale-110 transition-transform`}>
         <FileDigit size={18} className="md:hidden" />
         <FileDigit size={22} className="hidden md:block" />

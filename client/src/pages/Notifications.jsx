@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { collection, onSnapshot, query } from 'firebase/firestore';
+import { collection, onSnapshot, query, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { Calendar, ArrowUpRight, Search, FileText } from 'lucide-react';
+import { Calendar, ArrowUpRight, Search, FileText, Trash2, Pencil } from 'lucide-react';
 import SEO from '../components/SEO';
+import { useAuth } from '../context/AuthContext';
 
 export default function Notifications() {
+  const { user } = useAuth();
   const [notices, setNotices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -40,6 +42,37 @@ export default function Notifications() {
 
     return () => unsub();
   }, []);
+
+  const handleEditNotice = async (notice, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const newTitle = window.prompt("Enter new title:", notice.title || notice.board);
+    if (!newTitle) return;
+    const newUrl = window.prompt("Enter new PDF URL:", notice.pdfUrl || notice.link);
+    if (!newUrl) return;
+
+    try {
+      await updateDoc(doc(db, 'beu_notifications', notice.id), {
+        board: newTitle,
+        pdfUrl: newUrl
+      });
+      alert('Notice updated successfully!');
+    } catch (err) {
+      alert('Error updating notice: ' + err.message);
+    }
+  };
+
+  const handleDeleteNotice = async (notice, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!window.confirm(`Are you sure you want to delete "${notice.title || notice.board}"?`)) return;
+    try {
+      await deleteDoc(doc(db, 'beu_notifications', notice.id));
+      alert('Notice deleted successfully!');
+    } catch (err) {
+      alert('Error deleting notice: ' + err.message);
+    }
+  };
 
   const filteredNotices = notices.filter(n => 
     (n.title || n.board || '').toLowerCase().includes(searchQuery.toLowerCase())
@@ -110,7 +143,7 @@ export default function Notifications() {
                         <Calendar size={12} /> {notice.date || notice.noticedate ? (notice.date?.includes('/') ? notice.date : new Date(notice.date || notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })) : 'Unknown Date'}
                       </div>
                     </div>
-                    <h3 className="text-sm font-bold text-slate-800 leading-snug group-hover:text-indigo-600 transition-colors line-clamp-3">
+                    <h3 className="text-sm font-bold text-slate-800 leading-snug group-hover:text-indigo-600 transition-colors line-clamp-3 pr-16">
                       {notice.title || notice.board}
                     </h3>
                   </div>
@@ -118,6 +151,14 @@ export default function Notifications() {
                     <ArrowUpRight size={18} />
                   </div>
                 </div>
+
+                {/* Admin Actions */}
+                {(user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN') && (
+                  <div className="absolute top-4 right-4 flex gap-2 z-20">
+                     <button onClick={(e) => handleEditNotice(notice, e)} className="p-1.5 bg-blue-50 text-blue-500 rounded-lg hover:bg-blue-500 hover:text-white transition-all"><Pencil size={14} /></button>
+                     <button onClick={(e) => handleDeleteNotice(notice, e)} className="p-1.5 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all"><Trash2 size={14} /></button>
+                  </div>
+                )}
               </a>
             ))
           ) : (
