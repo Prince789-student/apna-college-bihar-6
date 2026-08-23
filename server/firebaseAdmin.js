@@ -8,7 +8,21 @@ let serviceAccount;
 
 try {
     if (process.env.FIREBASE_SERVICE_ACCOUNT) {
-        serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+        let rawStr = process.env.FIREBASE_SERVICE_ACCOUNT;
+        // Try parsing, it might be base64 or plain string
+        try {
+            // Check if base64 (doesn't start with { )
+            if (!rawStr.trim().startsWith('{')) {
+                rawStr = Buffer.from(rawStr, 'base64').toString('utf8');
+            }
+            serviceAccount = JSON.parse(rawStr);
+            // Fix private key newlines if they were escaped
+            if (serviceAccount.private_key) {
+                serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
+            }
+        } catch (parseError) {
+            console.error('Failed to parse FIREBASE_SERVICE_ACCOUNT:', parseError.message);
+        }
     } else if (fs.existsSync(serviceAccountPath)) {
         serviceAccount = require(serviceAccountPath);
     }
