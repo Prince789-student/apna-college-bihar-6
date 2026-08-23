@@ -6,13 +6,15 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     // Scroll window for safety
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    window.scrollTo(0, 0);
     
     // Scroll the main content area inside DashboardLayout
-    const mainContainer = document.getElementById('main-scroll-container');
-    if (mainContainer) {
-      mainContainer.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    }
+    setTimeout(() => {
+      const mainContainer = document.getElementById('main-scroll-container');
+      if (mainContainer) {
+        mainContainer.scrollTop = 0;
+      }
+    }, 10);
   }, [pathname]);
 
   return null;
