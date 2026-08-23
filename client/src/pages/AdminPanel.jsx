@@ -756,10 +756,12 @@ if (!isAdmin) return (
 
                      {/* Operations */}
                      <td className="py-6 px-8 text-right space-x-2 whitespace-nowrap">
-                        <button onClick={()=>toggleBan(u.id, u.banned)} className={`p-2 rounded-xl transition-all ${u.banned?'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-slate-900':'bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-slate-900'}`} title={u.banned ? 'Unban User' : 'Ban User'}>
-                           {u.banned ? <UserCheck size={16}/> : <Ban size={16}/>}
-                        </button>
-                        {isSuper && (
+                        {u.role !== ROLES.SUPER_ADMIN && (
+                          <button onClick={()=>toggleBan(u.id, u.banned)} className={`p-2 rounded-xl transition-all ${u.banned?'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-slate-900':'bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-slate-900'}`} title={u.banned ? 'Unban User' : 'Ban User'}>
+                             {u.banned ? <UserCheck size={16}/> : <Ban size={16}/>}
+                          </button>
+                        )}
+                        {isSuper && u.role !== ROLES.SUPER_ADMIN && (
                           <button onClick={()=>changeRole(u.id, u.role==='STUDENT'?'ADMIN':'STUDENT')} className="p-2 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-slate-900 rounded-xl" title="Change Role">
                             {u.role==='STUDENT'?<UserPlus size={16}/>:<UserMinus size={16}/>}
                           </button>
