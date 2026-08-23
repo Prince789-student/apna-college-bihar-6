@@ -38,19 +38,7 @@ cron.schedule('0 */6 * * *', () => {
 // Initial run
 scrapeBEUNotifications();
 
-// Manual Sync Endpoint for BEU Scraper
-app.post('/api/admin/sync-beu', async (req, res) => {
-    try {
-        const result = await scrapeBEUNotifications();
-        if (result && result.success) {
-            res.json({ success: true, message: `Synced successfully. Added ${result.added} notices out of ${result.totalFound} found.` });
-        } else {
-            res.status(500).json({ success: false, message: result?.error || result?.message || 'Sync failed.' });
-        }
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
-    }
-});
+// Removed route to place it below CORS middleware
 
 // 1. ABSOLUTE PRIORITY: APK DOWNLOAD ROUTE
 // This must be BEFORE any other middleware to avoid SPA interception
@@ -111,6 +99,20 @@ app.use(express.static(publicPath));
 // 4. API Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/documents', require('./routes/documentRoutes'));
+
+// Manual Sync Endpoint for BEU Scraper (Moved here to use CORS)
+app.post('/api/admin/sync-beu', async (req, res) => {
+    try {
+        const result = await scrapeBEUNotifications();
+        if (result && result.success) {
+            res.json({ success: true, message: `Synced successfully. Added ${result.added} notices out of ${result.totalFound} found.` });
+        } else {
+            res.status(500).json({ success: false, message: result?.error || result?.message || 'Sync failed.' });
+        }
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
 app.use('/api/tasks', require('./routes/taskRoutes'));
 
 

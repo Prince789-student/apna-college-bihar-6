@@ -511,7 +511,7 @@ export default function AdminPanel() {
     if (!window.confirm("Are you sure you want to trigger a manual sync for BEU notifications? This may take up to 60 seconds.")) return;
     setUploading(true);
     try {
-        const url = window.location.hostname === 'localhost' ? 'http://localhost:5000/api/admin/sync-beu' : '/api/admin/sync-beu';
+        const url = window.location.hostname === 'localhost' ? 'http://localhost:5000/api/admin/sync-beu' : 'https://apna-college-bihar-6.onrender.com/api/admin/sync-beu';
         const response = await fetch(url, { method: 'POST' });
         const data = await response.json();
         if (data.success) {
