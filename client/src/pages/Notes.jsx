@@ -229,6 +229,15 @@ export default function Notes() {
 
   const step = !branch ? 'branch' : !sem ? 'sem' : !folder ? 'subject' : 'files';
 
+  useEffect(() => {
+    const mainContainer = document.getElementById('main-scroll-container');
+    if (mainContainer) {
+      mainContainer.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }
+  }, [step]);
+
   const branchColor = branch ? BRANCH_COLORS[branch.color] : BRANCH_COLORS.indigo;
 
   return (
