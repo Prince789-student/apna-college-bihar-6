@@ -9,6 +9,7 @@ import { collection, onSnapshot, query, where, doc, deleteDoc, updateDoc } from 
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import PremiumAds from '../components/PremiumAds';
+import DonateModal from '../components/DonateModal';
 import SEO from '../components/SEO';
 import { Capacitor } from '@capacitor/core';
 
@@ -70,6 +71,8 @@ export default function PYQ() {
   const [folder, setFolder] = useState(null);
   const [navHistory, setNavHistory] = useState([]);
 
+  const [donateModal, setDonateModal] = useState({ isOpen: false, mode: 'SUPPORT', onProceed: null });
+
   useEffect(() => {
     const b = branchId ? BRANCHES.find(x => x.id.toLowerCase() === branchId.toLowerCase()) : null;
     const s = semesterId ? parseInt(semesterId) : null;
@@ -86,7 +89,8 @@ export default function PYQ() {
       setLoading(false);
       return;
     }
-    const unsub = onSnapshot(query(collection(db, 'documents'), where('category', '==', 'PYQ')), (snap) => {
+    const q = query(collection(db, 'documents'), where('category', '==', 'PYQ'));
+    const unsub = onSnapshot(q, (snap) => {
       setDocs(snap.docs.map(d => ({ id: d.id, ...d.data() })));
       setLoading(false);
     });
@@ -95,7 +99,8 @@ export default function PYQ() {
 
   const handleAction = (url, callback) => {
     if (!url || url.includes('localhost')) { alert('Ye link abhi active nahi hai. Admin se sampark karein.'); return; }
-    callback();
+    // Show Donate Modal before continuing
+    setDonateModal({ isOpen: true, mode: 'DOWNLOAD', onProceed: callback });
   };
 
   const handleEditPYQ = async (pyq) => {
@@ -107,7 +112,7 @@ export default function PYQ() {
     if (!newUrl) return;
 
     try {
-      await updateDoc(doc(db, 'docs', pyq.id), {
+      await updateDoc(doc(db, 'documents', pyq.id), {
         title: newTitle,
         subject: newSubject,
         fileUrl: newUrl
@@ -121,7 +126,7 @@ export default function PYQ() {
   const handleDeletePYQ = async (pyq) => {
     if (!window.confirm(`Are you sure you want to delete "${pyq.title}"?`)) return;
     try {
-      await deleteDoc(doc(db, 'docs', pyq.id));
+      await deleteDoc(doc(db, 'documents', pyq.id));
       alert('PYQ deleted successfully!');
     } catch (err) {
       alert('Error deleting PYQ: ' + err.message);
@@ -417,7 +422,7 @@ export default function PYQ() {
                   ) : (
                     <PYQFileCard key={d.id} d={d} onAction={handleAction} user={user} onEdit={handleEditPYQ} onDelete={handleDeletePYQ} />
                   )}
-                  {idx % 4 === 3 && <div className="col-span-1"><PremiumAds type="INLINE" /></div>}
+                  {idx % 4 === 3 && <div className="col-span-1"><PremiumAds type="INLINE" onClick={() => setDonateModal({isOpen: true, mode: 'SUPPORT'})} /></div>}
                 </React.Fragment>
               ))}
             </div>
@@ -486,6 +491,12 @@ export default function PYQ() {
         </div>
       </div>
 
+      <DonateModal 
+        isOpen={donateModal.isOpen}
+        mode={donateModal.mode}
+        onClose={() => setDonateModal({ ...donateModal, isOpen: false })}
+        onContinueWithoutDonating={donateModal.onProceed}
+      />
     </div>
   );
 }

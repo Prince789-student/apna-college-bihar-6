@@ -7,9 +7,11 @@ import {
 import { db } from '../firebase';
 import { collection, orderBy, onSnapshot, query, where, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import GlobalSearch from '../components/GlobalSearch';
 import PremiumAds from '../components/PremiumAds';
+import DonateModal from '../components/DonateModal';
 import SEO from '../components/SEO';
+import { useAuth } from '../context/AuthContext';
 import { Capacitor } from '@capacitor/core';
 
 const BRANCHES = [
@@ -72,6 +74,8 @@ export default function Notes() {
   const [folder, setFolder] = useState(null);
   const [navHistory, setNavHistory] = useState([]); // for sub-folders
 
+  const [donateModal, setDonateModal] = useState({ isOpen: false, mode: 'SUPPORT', onProceed: null });
+
   useEffect(() => {
     const b = branchId ? BRANCHES.find(x => x.id.toLowerCase() === branchId.toLowerCase()) : null;
     const s = semesterId ? parseInt(semesterId) : null;
@@ -105,7 +109,8 @@ export default function Notes() {
       alert('Bhai, ye file link abhi active nahi hai. Admin se sampark karein.');
       return;
     }
-    callback();
+    // Show Donate Modal before continuing
+    setDonateModal({ isOpen: true, mode: 'DOWNLOAD', onProceed: callback });
   };
 
   const handleEditNote = async (note) => {
@@ -117,7 +122,7 @@ export default function Notes() {
     if (!newUrl) return;
 
     try {
-      await updateDoc(doc(db, 'docs', note.id), {
+      await updateDoc(doc(db, 'documents', note.id), {
         title: newTitle,
         subject: newSubject,
         fileUrl: newUrl
@@ -131,7 +136,7 @@ export default function Notes() {
   const handleDeleteNote = async (note) => {
     if (!window.confirm(`Are you sure you want to delete "${note.title}"?`)) return;
     try {
-      await deleteDoc(doc(db, 'docs', note.id));
+      await deleteDoc(doc(db, 'documents', note.id));
       alert('Note deleted successfully!');
     } catch (err) {
       alert('Error deleting note: ' + err.message);
@@ -460,9 +465,9 @@ export default function Notes() {
                       <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-indigo-600 group-hover:gap-2.5 transition-all">Open <ArrowRight size={10} /></div>
                     </button>
                   ) : (
-                    <FileCard d={d} onAction={handleAction} accentColor="indigo" />
+                    <FileCard d={d} onAction={handleAction} accentColor="indigo" user={user} onEdit={handleEditNote} onDelete={handleDeleteNote} />
                   )}
-                  {idx % 4 === 3 && <div className="col-span-1"><PremiumAds type="INLINE" /></div>}
+                  {idx % 4 === 3 && <div className="col-span-1"><PremiumAds type="INLINE" onClick={() => setDonateModal({isOpen: true, mode: 'SUPPORT'})} /></div>}
                 </React.Fragment>
               ))}
             </div>
@@ -531,6 +536,12 @@ export default function Notes() {
         </div>
       </div>
 
+      <DonateModal 
+        isOpen={donateModal.isOpen}
+        mode={donateModal.mode}
+        onClose={() => setDonateModal({ ...donateModal, isOpen: false })}
+        onContinueWithoutDonating={donateModal.onProceed}
+      />
     </div>
   );
 }

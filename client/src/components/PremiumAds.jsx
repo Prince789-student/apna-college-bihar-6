@@ -33,7 +33,7 @@ const FALLBACK_ADS = {
   }
 };
 
-export default function PremiumAds({ type = 'BANNER' }) {
+export default function PremiumAds({ type = 'BANNER', onClick }) {
   const [ad, setAd] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -130,9 +130,17 @@ export default function PremiumAds({ type = 'BANNER' }) {
     );
   }
 
+  const handleAdClick = (e, link) => {
+    if (onClick) {
+      e.preventDefault();
+      onClick();
+    }
+  };
+
   return (
     <a href={current.link.startsWith('/') || current.link.startsWith('http') ? current.link : `https://${current.link}`} 
-       target="_blank" rel="noopener noreferrer" 
+       onClick={(e) => handleAdClick(e, current.link)}
+       target={current.link.startsWith('/') ? "_self" : "_blank"} rel="noopener noreferrer" 
        className={`p-4 bg-slate-100/30 border border-slate-200/80 rounded-xl flex items-center justify-between gap-4 group hover:border-slate-300 transition-all`}>
        <div className="flex items-center gap-4">
           <div className="p-3 bg-slate-800 border border-slate-300 rounded-xl group-hover:scale-110 transition-transform">
