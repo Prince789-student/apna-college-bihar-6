@@ -108,7 +108,7 @@ function GlobalProfilePrompt() {
 
   if (!needsProfileUpdate) return null;
 
-  const handleNextStep = (e) => {
+  const handleNextStep = async (e) => {
     e.preventDefault();
     if (!name.trim()) return toast.error("Please enter your name!");
     if (!collegeName.trim()) return toast.error("Please enter your college name!");
@@ -116,10 +116,7 @@ function GlobalProfilePrompt() {
     if (!branch.trim()) return toast.error("Please enter your branch!");
     if (!admissionYear.trim()) return toast.error("Please enter your admission year!");
     if (phoneNumber.length < 10) return toast.error("Enter a valid 10-digit mobile number!");
-    setStep(2);
-  };
-
-  const submitFinal = async (wantsCallValue) => {
+    
     setIsSubmitting(true);
     try {
       await updateProfileData({
@@ -128,12 +125,25 @@ function GlobalProfilePrompt() {
         district: district.trim(),
         phone: phoneNumber,
         branch: branch.trim(),
-        admissionYear: admissionYear.trim(),
+        admissionYear: admissionYear.trim()
+      });
+      setStep(2);
+    } catch (err) {
+      toast.error("Failed to save details. Try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const submitFinal = async (wantsCallValue) => {
+    setIsSubmitting(true);
+    try {
+      await updateProfileData({
         wantsCall: wantsCallValue
       });
       toast.success("Profile setup completed successfully!");
     } catch (err) {
-      toast.error("Failed to save. Try again.");
+      toast.error("Failed to save preference. Try again.");
     } finally {
       setIsSubmitting(false);
     }
