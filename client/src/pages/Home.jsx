@@ -359,11 +359,11 @@ export default function Home() {
                       <div className="flex items-center gap-3 mb-2">
                         <span className="px-2 py-1 bg-red-600 text-white text-[9px] font-black uppercase tracking-widest rounded-md animate-pulse">NEW</span>
                         <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
-                          <Calendar size={12} /> {new Date(notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                          <Calendar size={12} /> {notice.date || notice.noticedate ? (notice.date?.includes('/') ? notice.date : new Date(notice.date || notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })) : 'Unknown Date'}
                         </span>
                       </div>
                       <h3 className="text-sm md:text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-2">
-                        {notice.board}
+                        {notice.title || notice.board}
                       </h3>
                     </div>
                     <div className="w-10 h-10 shrink-0 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">

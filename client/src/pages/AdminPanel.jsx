@@ -1370,9 +1370,9 @@ if (!isAdmin) return (
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       {n.isimportant === 1 && <span className="text-[8px] font-black bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full uppercase">Important</span>}
-                      <span className="text-[13px] font-bold text-slate-800 truncate">{n.board}</span>
+                      <span className="text-[13px] font-bold text-slate-800 truncate">{n.title || n.board}</span>
                     </div>
-                    <span className="text-[10px] text-slate-400 font-mono">{n.noticedate} • ID: {n.id}</span>
+                    <span className="text-[10px] text-slate-400 font-mono">{n.date || n.noticedate} • ID: {n.id}</span>
                   </div>
                   <div className="flex items-center gap-2 ml-4">
                     <a href={n.pdfUrl || n.link} target="_blank" rel="noreferrer" className="p-2 bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-all">

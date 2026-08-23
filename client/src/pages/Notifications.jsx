@@ -42,7 +42,7 @@ export default function Notifications() {
   }, []);
 
   const filteredNotices = notices.filter(n => 
-    n.board.toLowerCase().includes(searchQuery.toLowerCase())
+    (n.title || n.board || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -106,12 +106,12 @@ export default function Notifications() {
                       {notice.isimportant === 1 && (
                         <span className="px-2 py-1 bg-red-600 text-white text-[9px] font-black uppercase tracking-widest rounded-md animate-pulse">Important</span>
                       )}
-                      <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
-                        <Calendar size={12} /> {new Date(notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                      </span>
+                      <div className="flex items-center text-[11px] font-bold text-slate-500 uppercase tracking-widest mt-4">
+                        <Calendar size={12} /> {notice.date || notice.noticedate ? (notice.date?.includes('/') ? notice.date : new Date(notice.date || notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })) : 'Unknown Date'}
+                      </div>
                     </div>
-                    <h3 className="text-sm md:text-base font-bold text-slate-900 leading-snug group-hover:text-blue-600 transition-colors">
-                      {notice.board}
+                    <h3 className="text-sm font-bold text-slate-800 leading-snug group-hover:text-indigo-600 transition-colors line-clamp-3">
+                      {notice.title || notice.board}
                     </h3>
                   </div>
                   <div className="hidden md:flex w-10 h-10 shrink-0 bg-slate-50 text-slate-400 group-hover:bg-blue-600 group-hover:text-white rounded-xl items-center justify-center transition-all">

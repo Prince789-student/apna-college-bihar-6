@@ -215,11 +215,11 @@ export default function AppHub() {
                   <div className="flex items-center gap-2 mb-2">
                     <span className="px-2 py-1 bg-red-600 text-white text-[8px] font-black uppercase tracking-widest rounded-md animate-pulse">NEW</span>
                     <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
-                      <Calendar size={10} /> {new Date(notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      <Calendar size={10} /> {notice.date || notice.noticedate ? (notice.date?.includes('/') ? notice.date : new Date(notice.date || notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })) : 'Unknown Date'}
                     </span>
                   </div>
                   <h3 className="text-xs font-bold text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-2">
-                    {notice.board}
+                    {notice.title || notice.board}
                   </h3>
                 </a>
               ))}
