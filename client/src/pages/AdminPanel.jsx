@@ -128,10 +128,22 @@ export default function AdminPanel() {
 
     const unsubBeu = onSnapshot(collection(db, 'beu_notifications'), (snap) => {
       const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const parseDate = (d) => {
+        if (!d) return 0;
+        if (d.includes('-')) return new Date(d).getTime();
+        const p = d.split('/');
+        if (p.length === 3) return new Date(`${p[2]}-${p[1]}-${p[0]}`).getTime();
+        return new Date(d).getTime();
+      };
       data.sort((a, b) => {
-        const da = a.noticedate ? new Date(a.noticedate) : new Date(0);
-        const db2 = b.noticedate ? new Date(b.noticedate) : new Date(0);
-        return db2 - da;
+        const tA = parseDate(a.date || a.noticedate);
+        const tB = parseDate(b.date || b.noticedate);
+        if (tA === tB) {
+            const tsA = a.timestamp?.seconds || 0;
+            const tsB = b.timestamp?.seconds || 0;
+            return tsB - tsA;
+        }
+        return tB - tA;
       });
       setBeuNotifications(data);
     });
