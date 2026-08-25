@@ -11,6 +11,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Send, MapPin, ExternalLink, ShieldCheck, AlertTriangle, GraduationCap, Info, ChevronDown, ChevronUp, CheckCircle2, Building2, Wifi, BookOpen, Trash2, Plus, Minus, Layers, Search, Zap, Filter, LayoutGrid, Download, X, Calculator } from 'lucide-react';
 import SEO from '../components/SEO';
 import Footer from '../components/Footer';
+import useScrollToTop from '../hooks/useScrollToTop';
 
 function UgeacPredictor() {
   const { collegeSlug } = useParams();
@@ -34,6 +35,8 @@ function UgeacPredictor() {
   const [choices, setChoices] = useState([]); 
   const [visibleCount, setVisibleCount] = useState(1000);
   const [finderPriority, setFinderPriority] = useState('college'); // college or branch
+  
+  useScrollToTop([mode, hasPredicted]);
 
   const [ugeacData, setUgeacData] = useState({ data2024: [], data2025: [], branches: [] });
   const [seatMatrix, setSeatMatrix] = useState([]);

@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import useScrollToTop from '../hooks/useScrollToTop';
 import { toast } from 'react-hot-toast';
 import { Capacitor, registerPlugin } from '@capacitor/core';
 import {
@@ -43,6 +44,8 @@ export default function StudyDashboard() {
   const location = useLocation();
   const [tab, setTab] = useState(location.state?.tab || 'timer');
   const queryParams = new URLSearchParams(location.search);
+  
+  useScrollToTop([tab]);
   const isStandalone = queryParams.get('standalone') === 'true';
   const todayStr = new Date().toLocaleDateString('en-CA');
 
