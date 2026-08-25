@@ -577,18 +577,40 @@ export default function ScientificCalc() {
       </p>
     {/* ── Educational SEO Content ── */}
     <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12">
-      <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Scientific Calculator for B.Tech Students</h2>
+      <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Advanced Scientific Calculator for B.Tech Students</h2>
       <p>
-        A scientific calculator is an indispensable tool for engineering students at Bihar Engineering University (BEU). Whether you are solving complex differentiation, integration, statistical problems, or matrix algebra, this <strong>Online Scientific Calculator</strong> mimics the exact functionalities of standard Casio ClassWiz calculators permitted in BEU semester exams.
+        A robust scientific calculator is the most indispensable tool for engineering students enrolled in <strong>Bihar Engineering University (BEU)</strong>. From solving fundamental derivations in your first-year Engineering Mathematics and Physics courses, to executing complex structural load calculations or digital signal processing algorithms in your final year, computational accuracy is paramount. 
+      </p>
+      <p>
+        We designed this <strong>Online Scientific Calculator</strong> to strictly mimic the exact functionalities and workflow of standard physical scientific calculators (such as the Casio fx-991EX ClassWiz or fx-82MS series) which are officially permitted inside BEU semester examination halls. By practicing your numerical problems on this identical digital interface, you build muscle memory and computational speed, drastically reducing calculation errors during high-pressure university exams.
       </p>
 
-      <h3 className="text-xl font-bold mt-8 mb-4">Supported Calculator Modes</h3>
+      <h3 className="text-xl font-bold mt-8 mb-4">Comprehensive Calculator Modes and Features</h3>
+      <p>
+        Our calculator is divided into four highly specialized modes, each catering to a distinct branch of engineering mathematics:
+      </p>
       <ul>
-        <li><strong>CALC Mode:</strong> Standard scientific calculations including trigonometric functions (sin, cos, tan), logarithmic functions, and exponents.</li>
-        <li><strong>EQN Mode:</strong> Quickly solve quadratic and cubic polynomial equations. This is extremely useful for finding roots in Control Systems or Network Theory.</li>
-        <li><strong>STATS Mode:</strong> Calculate mean, variance, and standard deviation instantly for your Mathematics and Data Science courses.</li>
-        <li><strong>MATRIX Mode:</strong> Perform matrix addition, subtraction, multiplication, and find determinants or inverses for up to 5x5 matrices.</li>
+        <li>
+          <strong>CALC (Standard Scientific) Mode:</strong> The default mode handles everyday engineering computations. It features standard trigonometric functions (sin, cos, tan) and their inverses, essential for Civil and Mechanical engineering mechanics. It also includes hyperbolic functions, logarithmic operations (base 10 and natural log 'ln'), exponential functions (eˣ), permutations (nPr), and combinations (nCr). The interface supports both Degree (DEG) and Radian (RAD) angular units, which is crucial when switching between geometrical problems and calculus.
+        </li>
+        <li>
+          <strong>EQN (Equation Solver) Mode:</strong> Finding the roots of polynomial equations manually is incredibly time-consuming and prone to algebraic errors. Our EQN mode utilizes the Durand-Kerner numerical method to instantly solve quadratic, cubic, and higher-order polynomials up to the 6th degree. It accurately computes both real and complex (imaginary) roots. This feature is heavily utilized by Electrical Engineering students for solving characteristic equations in Control Systems, and by Electronics students analyzing RLC network poles and zeros.
+        </li>
+        <li>
+          <strong>STATS (Statistics) Mode:</strong> Designed for Data Science, Machine Learning, and Industrial Engineering subjects. Simply input your dataset (comma or space-separated), and the engine instantly calculates the total count (n), summation (Σx), arithmetic mean (x̄), median, minimum, maximum, sample standard deviation (σ), and variance (σ²).
+        </li>
+        <li>
+          <strong>MATRIX (Linear Algebra) Mode:</strong> Matrices form the backbone of modern computer graphics, structural analysis, and quantum mechanics. Our fully dynamic Matrix Mode allows you to configure any matrix dimension up to 5x5. You can instantly perform matrix addition (A+B), subtraction (A-B), and multiplication (A×B). Furthermore, it handles complex linear algebra operations like finding the Transpose, calculating the Determinant, and computing the Inverse Matrix using Gaussian elimination.
+        </li>
       </ul>
+
+      <h3 className="text-xl font-bold mt-8 mb-4">Why Digital Practice is Crucial for BEU Exams</h3>
+      <p>
+        In BEU examinations, especially for numerics-heavy subjects like Thermodynamics, Fluid Mechanics, or Power Systems, a single arithmetic mistake in step one propagates throughout the entire 14-mark question, leading to a massive loss of grades. 
+      </p>
+      <p>
+        By integrating our Advanced Scientific Calculator into your daily study routine, you learn how to effectively use memory functions (M+, Ans), parentheses grouping for complex fractions, and scientific notation (EXP) for extremely large or small numbers. We recommend using this tool alongside our <strong>BEU Previous Year Questions (PYQs)</strong> database to simulate a realistic exam environment right from your laptop or smartphone.
+      </p>
     </div>
   </div>
 

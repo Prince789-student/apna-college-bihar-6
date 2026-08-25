@@ -210,26 +210,152 @@ export default function StudyTimer() {
                 <p className="text-[10px] text-slate-500 font-bold uppercase mt-2">6.5h / 10h Completed</p>
               </div>
            </div>
+      <SEO title="Study Timer | Apna College Bihar" />
+      
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        {/* Timer Core */}
+        <div className="lg:col-span-12 xl:col-span-8 space-y-8">
+           <div className="bg-white p-10 md:p-16 rounded-[4rem] border border-slate-200/80 shadow-2xl relative overflow-hidden flex flex-col items-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent pointer-events-none"></div>
+              
+              <div className="flex items-center gap-3 mb-10 px-6 py-2 bg-slate-100/50 rounded-full border border-slate-200/50">
+                <Target size={14} className="text-orange-400" />
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">Current Objective: <span className="text-slate-900">{selSub}</span></p>
+              </div>
+
+              <h1 className="text-8xl md:text-[10rem] font-[1000] text-slate-900 tracking-tighter transition-all tabular-nums leading-none">
+                {fmt(time)}
+              </h1>
+
+              <div className="mt-12 flex gap-4 w-full max-w-sm">
+                {!active ? (
+                  <button onClick={() => { setActive(true); setTimerActive(true); }} 
+                    className="flex-1 py-5 bg-blue-600 hover:bg-blue-500 text-white rounded-3xl font-black text-xs uppercase tracking-widest shadow-xl shadow-blue-900/20 active:scale-95 transition-all flex items-center justify-center gap-3">
+                    <Play size={18} fill="currentColor" /> Initialize Focus
+                  </button>
+                ) : (
+                  <>
+                    <button onClick={() => { setActive(false); setTimerActive(false); }} 
+                      className="flex-1 py-5 bg-orange-600 hover:bg-orange-500 text-white rounded-3xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-3">
+                      <Pause size={18} fill="currentColor" /> Suspend
+                    </button>
+                    <button onClick={() => { save(); setTimerActive(false); }} 
+                      className="flex-1 py-5 bg-red-600 hover:bg-red-500 text-white rounded-3xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-3">
+                      <Square size={18} fill="currentColor" /> Terminate
+                    </button>
+                  </>
+                )}
+              </div>
+
+              <div className="mt-12 flex flex-wrap justify-center gap-2">
+                {subjects.map(s => (
+                  <button key={s} onClick={() => !active && setSelSub(s)}
+                    className={`px-6 py-3 rounded-2xl text-[11px] font-bold uppercase transition-all ${selSub === s ? 'bg-white text-black shadow-xl scale-105' : 'bg-slate-100 text-slate-500 hover:text-slate-900'}`}>
+                    {s}
+                  </button>
+                ))}
+                <button onClick={()=>setSubjects([...subjects, prompt('New Subject:') || 'Extra'])} className="px-6 py-3 bg-slate-800 rounded-2xl text-[11px] font-bold text-slate-500 hover:text-slate-900 transition-all">+</button>
+              </div>
+           </div>
+
+           {/* Personal Stats Hub */}
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { label: 'Daily Session', val: fmt(stats.daily), icon: Clock, col: 'blue' },
+                { label: 'Weekly Grind', val: fmt(stats.weekly), icon: CalendarDays, col: 'indigo' },
+                { label: 'Subject Leader', val: selSub, icon: BookOpen, col: 'orange' },
+              ].map(s => (
+                <div key={s.label} className="bg-white p-8 rounded-[3rem] border border-slate-200/80 group hover:border-blue-500/20 transition-all">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="p-3 bg-slate-100 rounded-2xl text-slate-500 group-hover:text-blue-500 transition-colors">
+                      <s.icon size={20} />
+                    </div>
+                    <ChevronRight size={14} className="text-slate-800" />
+                  </div>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">{s.label}</p>
+                  <p className="text-2xl font-black text-slate-900">{s.val}</p>
+                </div>
+              ))}
+           </div>
+        </div>
+
+        {/* Global Leaderboard */}
+        <div className="lg:col-span-12 xl:col-span-4 space-y-6">
+           <div className="bg-slate-50 p-8 rounded-[3.5rem] border border-slate-300/30 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                  <Trophy size={20} className="text-amber-500" />
+                  <h2 className="text-sm font-black uppercase text-slate-900 tracking-widest">Global Ranking</h2>
+                </div>
+                <button onClick={fetchStats} className="p-2 text-slate-500 hover:text-slate-900"><RefreshCw size={14}/></button>
+              </div>
+
+              <div className="space-y-4">
+                {leaderboard.map((u, i) => (
+                  <div key={i} className="flex items-center justify-between p-4 bg-white rounded-3xl border border-slate-200/80 group">
+                    <div className="flex items-center gap-4">
+                       <span className={`text-xs font-[1000] w-6 ${i===0?'text-amber-500':i===1?'text-slate-500':'text-slate-600'}`}>0{i+1}</span>
+                       <div className="w-9 h-9 bg-slate-800 rounded-full flex items-center justify-center font-black text-xs text-white uppercase group-hover:bg-blue-600 transition-colors">
+                         {(u.name || 'S')[0].toUpperCase()}
+                       </div>
+                       <div>
+                          <p className="text-[11px] font-black text-slate-900 uppercase tracking-tight">{u.name || 'Scholar'}</p>
+                          <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest">Global Scholar</p>
+                       </div>
+                    </div>
+                    <p className="text-xs font-black text-slate-500">{Math.floor(u.dur/60)}m</p>
+                  </div>
+                ))}
+              </div>
+
+              <button className="w-full mt-8 py-4 bg-slate-100 hover:bg-slate-100 text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all">
+                 View Full Hall of Fame
+              </button>
+           </div>
+
+           <div className="bg-white p-8 rounded-[3rem] border border-slate-200/80 flex items-center gap-6">
+              <div className="w-16 h-16 bg-blue-600/10 rounded-3xl flex items-center justify-center text-blue-500 shrink-0">
+                <BarChart3 size={28} />
+              </div>
+              <div>
+                <p className="text-sm font-black text-slate-900 uppercase">Weekly Goal</p>
+                <div className="mt-2 w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                  <div className="h-full bg-blue-600 rounded-full" style={{width: '65%'}}></div>
+                </div>
+                <p className="text-[10px] text-slate-500 font-bold uppercase mt-2">6.5h / 10h Completed</p>
+              </div>
+           </div>
         </div>
 
       </div>
 
       {/* ── Educational SEO Content ── */}
-      {/* ── Educational SEO Content ── */}
       <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 text-left">
         <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-4">Master Your Engineering Studies with the Advanced Pomodoro Timer</h2>
         <p>
-          B.Tech programs at Bihar Engineering University (BEU) require immense focus and dedication, especially during mid-semester and end-semester examinations. Our <strong>Study Timer & Global Leaderboard</strong> uses the scientifically proven Pomodoro Technique to help engineering students maximize their productivity, drastically improve their CGPA, and avoid academic burnout.
+          B.Tech programs at Bihar Engineering University (BEU) require immense focus and dedication, especially during mid-semester and end-semester examinations. Our <strong>Study Timer & Global Leaderboard</strong> uses the scientifically proven Pomodoro Technique to help engineering students maximize their productivity, drastically improve their CGPA, and avoid academic burnout. Engineering subjects like Data Structures, Thermodynamics, or Network Theory demand uninterrupted deep work, which is exactly what this tool facilitates.
         </p>
 
         <h3 className="text-xl font-bold mt-8 mb-4">What is the Pomodoro Technique?</h3>
         <p>
-          The Pomodoro Technique breaks down your intense study sessions into manageable intervals, traditionally 25 minutes in length, separated by short refreshing breaks (5 minutes). This method trains your brain to focus intensively for short periods and helps you stay incredibly fresh over a long, grueling study day. When you hit "Initialize Focus", the timer kicks off and logs every second of your hard work.
+          The Pomodoro Technique is a time management system that breaks down your intense study sessions into manageable intervals—traditionally 25 minutes in length—separated by short, refreshing breaks of 5 minutes. After completing four consecutive study intervals, you take a longer break of 15 to 30 minutes. 
+        </p>
+        <p>
+          This method trains your brain to focus intensively for short periods and helps you stay incredibly fresh over a long, grueling study day. When you hit "Initialize Focus" on our dashboard, the timer kicks off and meticulously logs every second of your hard work. By committing to just a few focused sessions a day without checking social media or your phone, you will find your retention of complex engineering concepts doubling.
         </p>
 
         <h3 className="text-xl font-bold mt-8 mb-4">Climb the Global Leaderboard</h3>
         <p>
-          Every minute you spend studying using this timer contributes to your daily and weekly stats. As you accumulate more hours, your name will rise on the <strong>Global Ranking Leaderboard</strong>, allowing you to compete with thousands of other ambitious engineering scholars across Bihar. Whether you are coding a new project, practicing complex numericals for Engineering Mechanics, or memorizing core formulas for Thermodynamics, using this timer turns studying into a rewarding game!
+          Every minute you spend studying using this timer contributes to your daily and weekly academic statistics. As you accumulate more hours, your name will rise on the <strong>Global Ranking Leaderboard</strong>, allowing you to compete with thousands of other ambitious engineering scholars across Bihar. Whether you are coding a new full-stack project in MERN, practicing complex numericals for Engineering Mechanics, or memorizing core formulas for your BEU exams, using this timer turns studying into a rewarding, gamified experience.
+        </p>
+
+        <h3 className="text-xl font-bold mt-8 mb-4">Tracking Your Academic Grind</h3>
+        <p>
+          The Apna College Bihar Study Dashboard does more than just tick down a clock. It provides a visual representation of your "Weekly Grind", showing exactly how many hours you have dedicated to self-study outside of regular college lectures. By selecting specific subjects before you start the timer, you can see which areas (like Mathematics II or Basic Electrical Engineering) are consuming most of your time, allowing you to balance your study schedule perfectly before the BEU finals approach.
+        </p>
+        <p>
+          Combine this timer with our comprehensive <strong>BEU Notes</strong> and <strong>Previous Year Question Papers (PYQs)</strong> to create the ultimate, distraction-free study environment. Stay focused, stay disciplined, and watch your CGPA soar.
         </p>
       </div>
 
