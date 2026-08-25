@@ -4,9 +4,9 @@ export default function useScrollToTop(dependencies) {
   useEffect(() => {
     const mainContainer = document.getElementById('main-scroll-container');
     if (mainContainer) {
-      mainContainer.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      mainContainer.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     } else {
-      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     }
   }, dependencies);
 }
