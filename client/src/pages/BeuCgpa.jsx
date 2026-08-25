@@ -6,6 +6,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
+import useScrollToTop from '../hooks/useScrollToTop';
 import {
   Plus, Trash2, BookOpen, FlaskConical,
   ChevronDown, ChevronUp, AlertTriangle, CheckCircle, Award, Target, BarChart3,
@@ -82,6 +83,8 @@ export default function BeuCgpa() {
   const [marksModal, setMarksModal] = useState(null); // subject doc id
   const [expandedId, setExpandedId] = useState(null);
   const [activeTab, setActiveTab] = useState('calculator'); // always calculator
+
+  useScrollToTop([activeTab]);
 
   // Add subject form
   const [form, setForm] = useState({ name: '', type: 'theory', credits: 4 });

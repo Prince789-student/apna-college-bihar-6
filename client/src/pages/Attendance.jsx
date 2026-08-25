@@ -4,6 +4,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import useScrollToTop from '../hooks/useScrollToTop';
 import toast from 'react-hot-toast';
 import SEO from '../components/SEO';
 
@@ -46,6 +47,8 @@ export default function Attendance() {
   const [activeTab, setActiveTab] = useState('subjects'); // 'subjects', 'daily', 'holidays'
   const [loading, setLoading] = useState(true);
   
+  useScrollToTop([activeTab]);
+
   const [currentDate, setCurrentDate] = useState(() => {
     const today = new Date();
     if (today.getFullYear() !== 2026) {

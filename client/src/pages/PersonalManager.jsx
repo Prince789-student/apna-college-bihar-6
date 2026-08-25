@@ -1,4 +1,5 @@
 import SEO from '../components/SEO';
+import useScrollToTop from '../hooks/useScrollToTop';
 import React, { useState, useEffect } from 'react';
 import { 
   FolderPlus, FilePlus, Folder, FileText, 
@@ -21,6 +22,8 @@ export default function PersonalManager() {
   const [selectedNote, setSelectedNote] = useState(null);
   const [loading, setLoading] = useState(true);
   
+  useScrollToTop([currentFolder, selectedNote]);
+
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
   

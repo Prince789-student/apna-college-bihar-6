@@ -771,12 +771,7 @@ export default function BeuSyllabus() {
       .catch(err => { console.error("Error fetching syllabus:", err); setLoading(false); });
   }, []);
 
-  useEffect(() => {
-    const mainContainer = document.getElementById('main-scroll-container');
-    if (mainContainer) {
-      mainContainer.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [selectedSubjectIndex]);
+  useScrollToTop([selectedSubjectIndex, selectedSem, selectedBranch]);
 
   const semesters = [
     { id: 'sem1_new', label: '1st Sem New (2026 Batch)' },

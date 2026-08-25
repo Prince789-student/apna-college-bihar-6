@@ -8,6 +8,7 @@ import {
 import { collegeData } from '../data/collegeData';
 import { colleges } from '../UgeacData';
 import SEO from '../components/SEO';
+import useScrollToTop from '../hooks/useScrollToTop';
 import Footer from '../components/Footer';
 
 // Normalized map from UgeacPredictor to translate raw cutoff names
@@ -62,6 +63,8 @@ export default function CollegeProfile() {
   const { collegeSlug } = useParams();
   const [college, setCollege] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
+
+  useScrollToTop([activeTab]);
 
   const [cutoffData, setCutoffData] = useState([]);
   const [loadingCutoffs, setLoadingCutoffs] = useState(false);

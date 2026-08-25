@@ -5,6 +5,7 @@ import {
   collection, getDocs, addDoc, serverTimestamp, query, orderBy 
 } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
+import useScrollToTop from '../hooks/useScrollToTop';
 import { 
   Cpu, Users, Calendar, Award, BookOpen, Search, Plus, 
   HelpCircle, ChevronRight, CheckCircle2, AlertTriangle, 
@@ -22,6 +23,8 @@ export default function HackathonHub() {
   const [teams, setTeams] = useState([]);
   const [loadingHackathons, setLoadingHackathons] = useState(true);
   const [loadingTeams, setLoadingTeams] = useState(true);
+
+  useScrollToTop([activeTab]);
 
   // Filter states
   const [hkSearch, setHkSearch] = useState('');
