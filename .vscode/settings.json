@@ -6,7 +6,8 @@
     "java.autobuild.enabled": false,
     "java.import.exclusions": [
         "**/node_modules/**",
-        "**/.git/**"
+        "**/.git/**",
+        "**/client/android/**"
     ],
     "files.exclude": {
         "**/.git": true,
