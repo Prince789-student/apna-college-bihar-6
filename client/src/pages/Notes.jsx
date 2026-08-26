@@ -495,20 +495,22 @@ export default function Notes() {
 
       {/* ── Educational SEO Content ── */}
       <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 mx-auto prose prose-slate max-w-none shadow-sm mb-8">
-        <h2 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tighter mb-6">Bihar Engineering University (BEU) B.Tech Notes & Study Material</h2>
+        <h2 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tighter mb-6">
+          Bihar Engineering University (BEU) {branch ? `${branch.label} ` : ''}{sem ? `Semester ${sem} ` : ''}B.Tech Notes & Study Material
+        </h2>
         
         <p className="text-slate-700 text-lg leading-relaxed mb-6">
-          Welcome to Apna College Bihar's dedicated portal for <strong>B.Tech Notes for Bihar Engineering University (BEU)</strong>. This is the largest, most organized, and entirely free repository designed specifically for engineering students across Bihar. Whether you are pursuing Computer Science Engineering (CSE), Civil Engineering, Mechanical Engineering, Electrical Engineering, or specialized branches like Artificial Intelligence, our platform provides comprehensive, chapter-wise handwritten and digital notes. All materials are strictly aligned with the latest AICTE guidelines and the official BEU Syllabus.
+          Welcome to Apna College Bihar's dedicated portal for <strong>B.Tech Notes for Bihar Engineering University (BEU) {branch ? `for ${branch.label} ` : ''}{sem ? `Semester ${sem}` : ''}</strong>. This is the largest, most organized, and entirely free repository designed specifically for engineering students across Bihar. {branch ? `For ${branch.short} students, ` : 'Whether you are pursuing Computer Science Engineering (CSE), Civil Engineering, Mechanical Engineering, Electrical Engineering, or specialized branches like Artificial Intelligence, '}our platform provides comprehensive, chapter-wise handwritten and digital notes. All materials are strictly aligned with the latest AICTE guidelines and the official BEU {sem ? `Semester ${sem} ` : ''}Syllabus.
         </p>
 
         <div className="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-r-2xl my-8">
-          <h3 className="text-xl font-bold text-indigo-900 mt-0 mb-3">Why Rely on Official BEU Syllabus Notes?</h3>
+          <h3 className="text-xl font-bold text-indigo-900 mt-0 mb-3">Why Rely on Official BEU Syllabus Notes for {branch ? branch.short : 'Engineering'}?</h3>
           <p className="text-indigo-800 mb-0">
-            The Bihar Engineering University standardizes the curriculum across all 38+ Government Engineering Colleges in Bihar, including prestigious institutions like MIT Muzaffarpur, BCE Bhagalpur, and DCE Darbhanga. Relying on generic internet notes can be detrimental to your grades because they often miss the specific modules and derivations required for your End Semester Examinations. Our team meticulously curates notes from college toppers, senior students, and highly qualified faculties to ensure they exactly match the <strong>BEU Module-wise breakdown</strong>. This targeted approach ensures you maximize your study efficiency and don't waste time on irrelevant topics.
+            The Bihar Engineering University standardizes the curriculum across all 38+ Government Engineering Colleges in Bihar, including prestigious institutions like MIT Muzaffarpur, BCE Bhagalpur, and DCE Darbhanga. Relying on generic internet notes can be detrimental to your grades because they often miss the specific modules and derivations required for your {sem ? `Semester ${sem} ` : ''}End Semester Examinations. Our team meticulously curates notes from college toppers, senior students, and highly qualified faculties to ensure they exactly match the <strong>BEU Module-wise breakdown</strong>. This targeted approach ensures you maximize your study efficiency and don't waste time on irrelevant topics.
           </p>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-5">How to Effectively Use These Engineering Notes</h3>
+        <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-5">How to Effectively Use These {branch ? branch.short : ''} Engineering Notes</h3>
         <p className="text-slate-700 mb-4">
           To get the most out of our study materials and secure a high SGPA/CGPA, follow this structured approach:
         </p>
@@ -523,14 +525,14 @@ export default function Notes() {
         
         <div className="space-y-6">
           <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <h4 className="text-lg font-bold text-slate-900 mb-2">Are these Notes Sufficient for BEU End Semester Exams?</h4>
+            <h4 className="text-lg font-bold text-slate-900 mb-2">Are these Notes Sufficient for BEU {sem ? `Semester ${sem} ` : ''}End Semester Exams?</h4>
             <p className="text-slate-600 mb-0">
               Absolutely! These notes have been thoroughly tested by thousands of engineering students across Bihar. However, to maximize your SGPA and CGPA, we strongly recommend combining these notes with our <strong>Previous Year Questions (PYQs)</strong> section. While notes build your conceptual foundation and help in understanding complex derivations and numericals, solving PYQs is the ultimate strategy to understand the exam pattern and question framing.
             </p>
           </div>
 
           <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <h4 className="text-lg font-bold text-slate-900 mb-2">Is the study material completely free?</h4>
+            <h4 className="text-lg font-bold text-slate-900 mb-2">Is the {branch ? branch.short : ''} study material completely free?</h4>
             <p className="text-slate-600 mb-0">
               Yes, Apna College Bihar is committed to democratizing engineering education in Bihar. All our B.Tech notes, previous year question papers, syllabus copies, and counselling tools are 100% free for all students. You do not need to pay any subscription fees to download or view the PDFs.
             </p>

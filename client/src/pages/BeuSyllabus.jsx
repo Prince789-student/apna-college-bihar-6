@@ -1230,16 +1230,16 @@ export default function BeuSyllabus() {
 
       {/* ── Educational SEO Content ── */}
       <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 max-w-4xl mx-auto prose prose-slate max-w-none shadow-sm mb-12 relative z-20 text-left">
-        <h2 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tighter mb-6">Official Bihar Engineering University (BEU) B.Tech Syllabus</h2>
+        <h2 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tighter mb-6">Official Bihar Engineering University (BEU) {selectedBranch ? branches.find(b => b.id === selectedBranch)?.label + ' ' : ''}{selectedSem ? semesters.find(s => s.id === selectedSem)?.label + ' ' : ''}B.Tech Syllabus</h2>
         
         <p className="text-slate-700 text-lg leading-relaxed mb-6">
-          Welcome to the most advanced and user-friendly syllabus tracking tool for the <strong>B.Tech Syllabus under Bihar Engineering University (BEU)</strong>. Whether you are a first-year student navigating the common curriculum or a final-year senior preparing for specialized electives, our platform provides a smart, interactive syllabus tracker. We have painstakingly digitized the massive, hard-to-read official PDF syllabus files into a trackable checklist so you never miss an important academic topic or module during your exam preparation.
+          Welcome to the most advanced and user-friendly syllabus tracking tool for the <strong>B.Tech Syllabus under Bihar Engineering University (BEU) {selectedBranch ? `for ${branches.find(b => b.id === selectedBranch)?.label} ` : ''}{selectedSem ? semesters.find(s => s.id === selectedSem)?.label : ''}</strong>. Whether you are a first-year student navigating the common curriculum or a final-year senior preparing for specialized electives, our platform provides a smart, interactive syllabus tracker. We have painstakingly digitized the massive, hard-to-read official PDF syllabus files into a trackable checklist so you never miss an important academic topic or module during your exam preparation.
         </p>
 
         <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-2xl my-8">
-          <h3 className="text-xl font-bold text-blue-900 mt-0 mb-3">Why is Following the BEU Syllabus Strictly Necessary?</h3>
+          <h3 className="text-xl font-bold text-blue-900 mt-0 mb-3">Why is Following the BEU Syllabus Strictly Necessary for {selectedBranch ? branches.find(b => b.id === selectedBranch)?.label : 'Engineering'}?</h3>
           <p className="text-blue-800 mb-0">
-            BEU adheres rigidly to the AICTE model curriculum across all 38+ engineering colleges in Bihar, including BCE, MIT, DCE, and others. The End Semester examination question papers (worth 70 external marks) are framed exactly according to the module weightage and specific topics explicitly listed in the official syllabus. Studying topics out of the syllabus is a massive waste of your limited study time. By tracking your academic progress using our tool, you ensure that you comprehensively cover 100% of the topics that will appear in your exams. For maximum scoring potential, we highly advise combining your syllabus tracking with our curated BEU Notes and PYQs.
+            BEU adheres rigidly to the AICTE model curriculum across all 38+ engineering colleges in Bihar, including BCE, MIT, DCE, and others. The {selectedSem ? semesters.find(s => s.id === selectedSem)?.label + ' ' : ''}End Semester examination question papers (worth 70 external marks) are framed exactly according to the module weightage and specific topics explicitly listed in the official syllabus. Studying topics out of the syllabus is a massive waste of your limited study time. By tracking your academic progress using our tool, you ensure that you comprehensively cover 100% of the topics that will appear in your exams. For maximum scoring potential, we highly advise combining your syllabus tracking with our curated BEU Notes and PYQs.
           </p>
         </div>
 
@@ -1258,14 +1258,14 @@ export default function BeuSyllabus() {
         
         <div className="space-y-6">
           <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <h4 className="text-lg font-bold text-slate-900 mb-2">Can I Download the BEU Syllabus as a PDF?</h4>
+            <h4 className="text-lg font-bold text-slate-900 mb-2">Can I Download the BEU {selectedBranch ? branches.find(b => b.id === selectedBranch)?.label : ''} Syllabus as a PDF?</h4>
             <p className="text-slate-600 mb-0">
               Yes! We understand that sometimes you need physical copies or offline access. We have built a custom, high-speed PDF generator specifically for BEU students. Once you select your branch and semester, simply click the <strong>Download PDF</strong> button at the top of the tracker page. It will instantly generate a clean, well-formatted, and branded PDF of your exact syllabus that you can print out or save to your mobile device.
             </p>
           </div>
 
           <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <h4 className="text-lg font-bold text-slate-900 mb-2">Is this syllabus up to date with the latest AICTE guidelines?</h4>
+            <h4 className="text-lg font-bold text-slate-900 mb-2">Is this {selectedSem ? semesters.find(s => s.id === selectedSem)?.label : ''} syllabus up to date with the latest AICTE guidelines?</h4>
             <p className="text-slate-600 mb-0">
               Absolutely. We continuously monitor official university announcements and AICTE curriculum revisions. Whenever the Bihar Engineering University introduces a syllabus change (such as the recent updates to emerging branches like AI/ML and Data Science), our academic team immediately digitizes the new curriculum and pushes it live to our tracker. You can always trust that you are studying the correct material.
             </p>
