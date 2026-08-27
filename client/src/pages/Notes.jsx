@@ -88,7 +88,7 @@ export default function Notes() {
   }, [branchId, semesterId]);
 
   useEffect(() => {
-    if (window.__PRERENDER_INJECTED) {
+    if (window.__PRERENDER_INJECTED && !window.Capacitor?.isNativePlatform?.()) {
       setLoading(false);
       return;
     }

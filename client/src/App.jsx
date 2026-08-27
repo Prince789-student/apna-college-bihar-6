@@ -350,7 +350,7 @@ function App() {
 
   // Show splash screen only once per session
   const [showSplash, setShowSplash] = useState(() => {
-    if (window.__PRERENDER_INJECTED) return false;
+    if (window.__PRERENDER_INJECTED && !window.Capacitor?.isNativePlatform?.()) return false;
     
     // DETECT GOOGLEBOT / ADSENSE BOT
     const userAgent = navigator.userAgent || "";

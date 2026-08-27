@@ -251,7 +251,7 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    if (window.__PRERENDER_INJECTED) {
+    if (window.__PRERENDER_INJECTED && !window.Capacitor?.isNativePlatform?.()) {
       setLoading(false);
       return;
     }
@@ -279,7 +279,7 @@ export function AuthProvider({ children }) {
   // Handle Redirect Results (for mobile/tablet web login)
   // This runs on EVERY page load — if user came back from Google login, this handles it
   useEffect(() => {
-    if (window.__PRERENDER_INJECTED) {
+    if (window.__PRERENDER_INJECTED && !window.Capacitor?.isNativePlatform?.()) {
       setLoading(false);
       return;
     }
