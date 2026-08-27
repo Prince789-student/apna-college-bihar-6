@@ -754,7 +754,8 @@ export default function BeuSyllabus() {
   const [progressTicker, setProgressTicker] = useState(0);
 
   useEffect(() => {
-    fetch('/data/syllabus.json?v=' + new Date().getTime())
+    const baseUrl = Capacitor.isNativePlatform() ? 'https://apnacollegebihar.online' : '';
+    fetch(`${baseUrl}/data/syllabus.json?v=` + new Date().getTime())
       .then(res => res.json())
       .then(data => {
         setSyllabusData(data);

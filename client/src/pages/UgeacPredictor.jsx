@@ -132,11 +132,12 @@ function UgeacPredictor() {
   }), []);
 
   useEffect(() => {
+    const baseUrl = Capacitor.isNativePlatform() ? 'https://apnacollegebihar.online' : '';
     Promise.all([
-      fetch(`/data/cutoffs.json?v=${Date.now()}`).then(res => res.json()),
-      fetch(`/data/seat_matrix.json?v=${Date.now()}`).then(res => res.json()).catch(() => [])
+      fetch(`${baseUrl}/data/cutoffs.json?v=${Date.now()}`).then(res => res.json()).catch(() => ({})),
+      fetch(`${baseUrl}/data/seat_matrix.json?v=${Date.now()}`).then(res => res.json()).catch(() => [])
     ]).then(([json, seats]) => {
-        const process = (raw) => raw.map(c => {
+        const process = (raw) => (raw || []).map(c => {
           const key = c.collegeShort?.toUpperCase().trim();
           const formalName = normalizedMap[key] || c.collegeShort;
           const col = colleges.find(co => co.name === formalName || co.short === c.collegeShort);
@@ -148,12 +149,12 @@ function UgeacPredictor() {
         setUgeacData({ 
           data2024: process(raw2024), 
           data2025: process(raw2025), 
-          branches: Array.from(new Set([...raw2024.map(c => c.branch.trim()), ...raw2025.map(c => c.branch.trim())])).sort() 
+          branches: Array.from(new Set([...raw2024.map(c => c.branch?.trim()), ...raw2025.map(c => c.branch?.trim())])).filter(Boolean).sort() 
         });
-        setSeatMatrix(seats);
+        setSeatMatrix(seats || []);
         setLoadingData(false);
       })
-      .catch(err => { console.error(err); setLoadingData(false); });
+      .catch(err => { console.error("Fetch Error:", err); setLoadingData(false); });
   }, []);
 
   const collegeToBranchesMap = useMemo(() => {

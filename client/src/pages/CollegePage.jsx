@@ -7,6 +7,7 @@ import {
   Phone, Mail, BookOpen, BarChart3, HelpCircle, ChevronRight 
 } from 'lucide-react';
 import SEO from '../components/SEO';
+import { Capacitor } from '@capacitor/core';
 
 // Normalized map from UgeacPredictor
 const normalizedMap = {
@@ -218,9 +219,10 @@ export default function CollegePage() {
     if (!college) return;
     
     setLoading(true);
+    const baseUrl = Capacitor.isNativePlatform() ? 'https://apnacollegebihar.online' : '';
     Promise.all([
-      fetch(`/data/cutoffs.json?v=${Date.now()}`).then(res => res.json()).catch(() => ({})),
-      fetch(`/data/seat_matrix.json?v=${Date.now()}`).then(res => res.json()).catch(() => [])
+      fetch(`${baseUrl}/data/cutoffs.json?v=${Date.now()}`).then(res => res.json()).catch(() => ({})),
+      fetch(`${baseUrl}/data/seat_matrix.json?v=${Date.now()}`).then(res => res.json()).catch(() => [])
     ]).then(([json, seats]) => {
       const processCutoffs = (raw) => {
         return raw.map(c => {

@@ -12,6 +12,7 @@ import PremiumAds from '../components/PremiumAds';
 import DonateModal from '../components/DonateModal';
 import SEO from '../components/SEO';
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-hot-toast';
 import { Capacitor } from '@capacitor/core';
 
 const BRANCHES = [
@@ -106,7 +107,7 @@ export default function Notes() {
       return;
     }
     if (!url || url.includes('localhost')) {
-      alert('Bhai, ye file link abhi active nahi hai. Admin se sampark karein.');
+      toast.error('Bhai, ye file link abhi active nahi hai. Admin se sampark karein.');
       return;
     }
     // Show Donate Modal before continuing
@@ -127,9 +128,9 @@ export default function Notes() {
         subject: newSubject,
         fileUrl: newUrl
       });
-      alert('Note updated successfully!');
+      toast.success('Note updated successfully!');
     } catch (err) {
-      alert('Error updating note: ' + err.message);
+      toast.error('Error updating note: ' + err.message);
     }
   };
 
@@ -137,9 +138,9 @@ export default function Notes() {
     if (!window.confirm(`Are you sure you want to delete "${note.title}"?`)) return;
     try {
       await deleteDoc(doc(db, 'documents', note.id));
-      alert('Note deleted successfully!');
+      toast.success('Note deleted successfully!');
     } catch (err) {
-      alert('Error deleting note: ' + err.message);
+      toast.error('Error deleting note: ' + err.message);
     }
   };
 

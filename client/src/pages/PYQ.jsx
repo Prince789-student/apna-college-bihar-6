@@ -11,6 +11,7 @@ import { useAuth } from '../context/AuthContext';
 import PremiumAds from '../components/PremiumAds';
 import DonateModal from '../components/DonateModal';
 import SEO from '../components/SEO';
+import { toast } from 'react-hot-toast';
 import { Capacitor } from '@capacitor/core';
 
 const BRANCHES = [
@@ -98,7 +99,10 @@ export default function PYQ() {
   }, []);
 
   const handleAction = (url, callback) => {
-    if (!url || url.includes('localhost')) { alert('Ye link abhi active nahi hai. Admin se sampark karein.'); return; }
+    if (!url || url.includes('localhost')) { 
+      toast.error('Ye link abhi active nahi hai. Admin se sampark karein.');
+      return; 
+    }
     // Show Donate Modal before continuing
     setDonateModal({ isOpen: true, mode: 'DOWNLOAD', onProceed: callback });
   };
@@ -117,9 +121,9 @@ export default function PYQ() {
         subject: newSubject,
         fileUrl: newUrl
       });
-      alert('PYQ updated successfully!');
+      toast.success('PYQ updated successfully!');
     } catch (err) {
-      alert('Error updating PYQ: ' + err.message);
+      toast.error('Error updating PYQ: ' + err.message);
     }
   };
 
@@ -127,9 +131,9 @@ export default function PYQ() {
     if (!window.confirm(`Are you sure you want to delete "${pyq.title}"?`)) return;
     try {
       await deleteDoc(doc(db, 'documents', pyq.id));
-      alert('PYQ deleted successfully!');
+      toast.success('PYQ deleted successfully!');
     } catch (err) {
-      alert('Error deleting PYQ: ' + err.message);
+      toast.error('Error deleting PYQ: ' + err.message);
     }
   };
 

@@ -10,6 +10,7 @@ import { colleges } from '../UgeacData';
 import SEO from '../components/SEO';
 import useScrollToTop from '../hooks/useScrollToTop';
 import Footer from '../components/Footer';
+import { Capacitor } from '@capacitor/core';
 
 // Normalized map from UgeacPredictor to translate raw cutoff names
 const normalizedMap = {
@@ -89,7 +90,8 @@ export default function CollegeProfile() {
       co.name.toLowerCase() === college.name.toLowerCase()
     );
 
-    fetch(`/data/cutoffs.json?v=${Date.now()}`)
+    const baseUrl = Capacitor.isNativePlatform() ? 'https://apnacollegebihar.online' : '';
+    fetch(`${baseUrl}/data/cutoffs.json?v=${Date.now()}`)
       .then(res => res.json())
       .then(json => {
         const processCutoffs = (raw, yr) => {

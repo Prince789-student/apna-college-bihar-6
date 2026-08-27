@@ -1,4 +1,5 @@
 import jsPDF from 'jspdf';
+import { Capacitor } from '@capacitor/core';
 
 // Cache for the logo base64 string
 let cachedLogoBase64 = null;
@@ -9,7 +10,8 @@ let cachedLogoBase64 = null;
 export async function getLogoBase64() {
   if (cachedLogoBase64) return cachedLogoBase64;
   try {
-    const resp = await fetch('/logo-acb.png?v=99');
+    const baseUrl = Capacitor.isNativePlatform() ? 'https://apnacollegebihar.online' : '';
+    const resp = await fetch(`${baseUrl}/logo-acb.png?v=99`);
     if (resp.ok) {
       const blob = await resp.blob();
       cachedLogoBase64 = await new Promise((resolve) => {

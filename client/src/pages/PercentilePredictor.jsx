@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { colleges } from '../UgeacData';
 import SEO from '../components/SEO';
 import { Calculator, Search, ShieldCheck } from 'lucide-react';
+import { Capacitor } from '@capacitor/core';
 
 export default function PercentilePredictor() {
   const [percentile, setPercentile] = useState('');
@@ -11,7 +12,8 @@ export default function PercentilePredictor() {
   const [cutoffs, setCutoffs] = useState([]);
 
   useEffect(() => {
-    fetch('/data/cutoffs.json')
+    const baseUrl = Capacitor.isNativePlatform() ? 'https://apnacollegebihar.online' : '';
+    fetch(`${baseUrl}/data/cutoffs.json?v=${Date.now()}`)
       .then(res => res.json())
       .then(json => setCutoffs(json.cutoffs2025 || []))
       .catch(err => console.error("Error loading cutoffs:", err));
