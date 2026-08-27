@@ -36,8 +36,6 @@ function UgeacPredictor() {
   const [visibleCount, setVisibleCount] = useState(1000);
   const [finderPriority, setFinderPriority] = useState('college'); // college or branch
   
-  useScrollToTop([mode, hasPredicted]);
-
   const [ugeacData, setUgeacData] = useState({ data2024: [], data2025: [], branches: [] });
   const [seatMatrix, setSeatMatrix] = useState([]);
   const [loadingData, setLoadingData] = useState(true);
@@ -48,6 +46,8 @@ function UgeacPredictor() {
   const [hasPredicted, setHasPredicted] = useState(false);
   const [results, setResults] = useState({ all: [], calculatedRank: 0, mockAllotment: null, mockDiscussions: [] });
   const [selectedCollege, setSelectedCollege] = useState(null);
+
+  useScrollToTop([mode, hasPredicted]);
 
   const branchMapping = {
     "Computer Science": "Computer Science (CSE)",
