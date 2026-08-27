@@ -346,7 +346,7 @@ export default function CollegePage() {
       <SEO 
         title={seoTitle}
         description={seoDescription}
-        keywords={seoKeywords}/${currentSection}`}
+        keywords={seoKeywords}
       />
       
       {/* Background gradients */}
