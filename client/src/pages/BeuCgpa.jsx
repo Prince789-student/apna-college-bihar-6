@@ -116,6 +116,7 @@ export default function BeuCgpa() {
 
   const addSubject = async () => {
     if (!form.name.trim()) return;
+    const newId = 'temp-' + Date.now() + Math.random().toString(36).substring(2);
     const newSubData = {
       semester,
       name: form.name.trim().toUpperCase(),
@@ -126,8 +127,7 @@ export default function BeuCgpa() {
     };
 
     if (!user) {
-      // Guest: Random ID and local state update
-      setSubjects([...subjects, { id: 'temp-' + crypto.randomUUID(), ...newSubData }]);
+      setSubjects([...subjects, { id: newId, ...newSubData }]);
       setForm({ name: '', type: 'theory', credits: 4 });
       setShowAdd(false);
       return;
@@ -143,11 +143,10 @@ export default function BeuCgpa() {
       fetchSubjects();
     } catch(e) {
       console.error(e);
-      // Fallback to local state if Firebase save fails (e.g. offline or rules issue)
-      setSubjects([...subjects, { id: 'temp-' + crypto.randomUUID(), ...newSubData }]);
+      setSubjects([...subjects, { id: newId, ...newSubData }]);
       setForm({ name: '', type: 'theory', credits: 4 });
       setShowAdd(false);
-      alert('Network issue: Saved locally. Data might not sync across devices.');
+      // No alert to prevent AdSense Vignette Ad from popping up
     }
   };
 
@@ -157,7 +156,7 @@ export default function BeuCgpa() {
   };
 
   const saveMarks = async () => {
-    if (!user) {
+    if (!user || marksModal.startsWith('temp-')) {
       setSubjects(subjects.map(s => s.id === marksModal ? { ...s, marks: marksForm } : s));
       setMarksModal(null);
       return;
@@ -170,7 +169,7 @@ export default function BeuCgpa() {
   };
 
   const deleteSubject = async (id) => {
-    if (!user) {
+    if (!user || id.startsWith('temp-')) {
       setSubjects(subjects.filter(s => s.id !== id));
       return;
     }
