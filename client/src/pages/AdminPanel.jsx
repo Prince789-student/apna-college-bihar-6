@@ -30,6 +30,8 @@ export default function AdminPanel() {
   const [anns, setAnns] = useState([]);
   const [ads, setAds] = useState([]);
   const [studyResources, setStudyResources] = useState([]);
+  const [shortlinks, setShortlinks] = useState([]);
+  const [shortlinkForm, setShortlinkForm] = useState({ id: '', longUrl: '' });
   const [resourceForm, setResourceForm] = useState({ title: '', url: '', description: '' });
   const [newAnn, setNewAnn] = useState({ title: '', content: '', type: 'INFO' });
   const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '', useAdSense: false, adSlot: '' });
@@ -128,6 +130,10 @@ export default function AdminPanel() {
       setStudyResources(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     });
 
+    const unsubShortlinks = onSnapshot(collection(db, 'shortlinks'), (snap) => {
+      setShortlinks(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    });
+
     const unsubDonors = onSnapshot(query(collection(db, 'donors'), orderBy('amount', 'desc')), (snap) => {
       setDonors(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     });
@@ -164,6 +170,7 @@ export default function AdminPanel() {
       if(unsubResources) unsubResources();
       if(unsubBeu) unsubBeu();
       if(unsubDonors) unsubDonors();
+      if(unsubShortlinks) unsubShortlinks();
     };
   }, [isAdmin, authLoading]);
 
@@ -226,6 +233,30 @@ export default function AdminPanel() {
     } finally {
       setUploading(false);
     }
+  };
+
+  const addShortlink = async (e) => {
+    e.preventDefault();
+    if (!shortlinkForm.id || !shortlinkForm.longUrl) { flash('ID and URL required', 'err'); return; }
+    setUploading(true);
+    try {
+      await setDoc(doc(db, 'shortlinks', shortlinkForm.id.trim()), {
+        longUrl: shortlinkForm.longUrl.trim(),
+        createdAt: serverTimestamp()
+      });
+      setShortlinkForm({ id: '', longUrl: '' });
+      flash('Shortlink Saved! 🔗');
+    } catch (err) {
+      flash('Failed: ' + err.message, 'err');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const deleteShortlink = async (id) => {
+    if (!window.confirm('Delete this shortlink?')) return;
+    await deleteDoc(doc(db, 'shortlinks', id));
+    flash('Shortlink Deleted.');
   };
 
   // ── USER ACTIONS ──
@@ -604,7 +635,7 @@ if (!isAdmin) return (
           </div>
         </div>
         <div className="flex flex-wrap bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 overflow-x-auto">
-           {['overview', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu', 'donors'].map(t => (
+           {['overview', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu', 'donors', 'shortlinks'].map(t => (
              <button key={t} onClick={()=>setTab(t)}
                className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${tab===t?'bg-indigo-600 text-slate-900 shadow-xl shadow-indigo-900/20':'text-slate-500 hover:text-slate-700'}`}>
                {t}
@@ -616,6 +647,65 @@ if (!isAdmin) return (
       {msg && (
         <div className={`p-4 rounded-2xl border flex items-center gap-3 animate-in zoom-in duration-300 ${msg.type==='ok'?'bg-emerald-600/20 text-emerald-400 border-emerald-50-30':'bg-red-600/20 text-red-400 border-red-500/30'}`}>
           <AlertCircle size={18}/> <span className="text-[13px] font-bold uppercase tracking-tight">{msg.text}</span>
+        </div>
+      )}
+
+      {/* ── SHORTLINKS TAB ── */}
+      {tab === 'shortlinks' && (
+        <div className="bg-white rounded-[2rem] border border-slate-200/80 overflow-hidden shadow-2xl p-6 md:p-8 animate-in fade-in duration-500">
+          <div className="flex items-center gap-4 mb-8 border-b border-slate-100 pb-6">
+            <div className="p-3 bg-indigo-50 text-indigo-500 rounded-2xl">
+              <span className="text-2xl">🔗</span>
+            </div>
+            <div>
+              <h2 className="text-lg font-black uppercase text-slate-800 tracking-tight">Short Links Manager</h2>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Manage dynamic redirects instantly</p>
+            </div>
+          </div>
+          
+          <form onSubmit={addShortlink} className="flex flex-col md:flex-row gap-4 mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+            <input 
+              value={shortlinkForm.id} 
+              onChange={e => setShortlinkForm({...shortlinkForm, id: e.target.value.replace(/[^a-zA-Z0-9-]/g, '').toLowerCase()})} 
+              placeholder="Short ID (e.g. chem-unit1)" 
+              className="flex-1 bg-white border border-slate-200 p-4 rounded-xl font-bold text-xs focus:border-indigo-500 outline-none transition-colors" 
+              required 
+            />
+            <input 
+              value={shortlinkForm.longUrl} 
+              onChange={e => setShortlinkForm({...shortlinkForm, longUrl: e.target.value})} 
+              placeholder="Long URL (e.g. https://youtube.com/...)" 
+              className="flex-[2] bg-white border border-slate-200 p-4 rounded-xl font-bold text-xs focus:border-indigo-500 outline-none transition-colors" 
+              required 
+            />
+            <button type="submit" disabled={uploading} className="bg-indigo-600 hover:bg-indigo-500 text-white font-black px-8 py-4 rounded-xl uppercase tracking-widest text-[10px] transition-all disabled:opacity-50">
+              {uploading ? 'Saving...' : 'Add Link'}
+            </button>
+          </form>
+
+          <div className="grid gap-4">
+            {shortlinks.map(link => (
+              <div key={link.id} className="flex flex-col md:flex-row justify-between md:items-center bg-white border border-slate-200 p-5 rounded-2xl gap-4 hover:border-indigo-200 transition-colors group">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="px-2 py-1 bg-indigo-50 text-indigo-600 text-[10px] font-black uppercase tracking-widest rounded-md">ID: {link.id}</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 font-mono truncate w-full" title={link.longUrl}>{link.longUrl}</p>
+                  <a href={`https://apnacollegebihar.online/p/${link.id}`} target="_blank" rel="noreferrer" className="inline-block text-[10px] text-blue-500 hover:text-blue-600 font-bold mt-2">
+                    🔗 apnacollegebihar.online/p/{link.id}
+                  </a>
+                </div>
+                <button onClick={() => deleteShortlink(link.id)} className="p-3 bg-rose-50 text-rose-500 rounded-xl hover:bg-rose-500 hover:text-white transition-colors self-start md:self-auto opacity-100 md:opacity-0 group-hover:opacity-100">
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ))}
+            {shortlinks.length === 0 && (
+              <div className="text-center py-12 text-slate-400 font-black text-xs uppercase tracking-widest border-2 border-dashed border-slate-100 rounded-2xl">
+                No shortlinks found
+              </div>
+            )}
+          </div>
         </div>
       )}
 
