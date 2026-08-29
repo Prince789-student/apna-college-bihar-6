@@ -324,7 +324,7 @@ export default function Home() {
               {beuNotices.map((notice) => (
                 <a
                   key={notice.id}
-                  href={notice.pdfUrl || `https://beu-bih.ac.in/backend/${encodeURIComponent(notice.link)}`}
+                  href={notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`)}
                   target="_blank"
                   rel="noreferrer"
                   className="block p-4 md:p-5 bg-white border border-slate-200 hover:border-blue-300 rounded-2xl shadow-sm hover:shadow-md transition-all group"

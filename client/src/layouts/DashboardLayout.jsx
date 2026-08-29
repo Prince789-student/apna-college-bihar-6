@@ -768,7 +768,14 @@ export default function DashboardLayout() {
       {/* Main Content Area */}
       <main id="main-scroll-container" className="flex-1 overflow-y-auto custom-scrollbar relative z-10 bg-[#f8fafc] flex flex-col">
         <div className={`w-full grow shrink-0 pb-24 lg:pb-8 min-h-[80vh] ${location.pathname === '/' ? '' : 'p-4 md:p-6 lg:p-8 max-w-7xl mx-auto'}`}>
-          <Outlet />
+          <React.Suspense fallback={
+            <div className="flex flex-col items-center justify-center w-full h-[60vh]">
+              <div className="w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-4">Loading Module...</p>
+            </div>
+          }>
+            <Outlet />
+          </React.Suspense>
         </div>
 
         {/* Global Footer */}

@@ -18,14 +18,15 @@ import CookieBanner from './components/CookieBanner';
 import WhatsAppPopup from './components/WhatsAppPopup';
 import ScrollToTop from './components/ScrollToTop';
 
+import Home from './pages/Home';
+import HomeOverview from './pages/HomeOverview';
+import AppHub from './pages/AppHub';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+
 // Pages (Lazy Loaded)
-const Home = React.lazy(() => import('./pages/Home'));
-const HomeOverview = React.lazy(() => import('./pages/HomeOverview'));
 const Author = React.lazy(() => import('./pages/Author'));
-const AppHub = React.lazy(() => import('./pages/AppHub'));
 const Notifications = React.lazy(() => import('./pages/Notifications'));
-const Login = React.lazy(() => import('./pages/Login'));
-const Signup = React.lazy(() => import('./pages/Signup'));
 const UgeacPredictor = React.lazy(() => import('./pages/UgeacPredictor'));
 const Notes = React.lazy(() => import('./pages/Notes'));
 const PYQ = React.lazy(() => import('./pages/PYQ'));
@@ -487,7 +488,7 @@ function App() {
         <CookieBanner />
         <WhatsAppPopup />
         <ScrollToTop />
-        <React.Suspense fallback={<SplashUI />}>
+        <React.Suspense fallback={<LoadingScreen />}>
           <Routes>
             {/* Public Routes */}
             <Route path="/hub" element={<AppHub />} />

@@ -219,7 +219,7 @@ export default function AppHub() {
               {beuNotices.map((notice) => (
                 <a
                   key={notice.id}
-                  href={notice.pdfUrl || `https://beu-bih.ac.in/backend/${encodeURIComponent(notice.link)}`}
+                  href={notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`)}
                   target="_blank"
                   rel="noreferrer"
                   className="relative flex flex-col p-4 bg-slate-50 border border-slate-100 hover:border-blue-200 rounded-2xl transition-all group"
