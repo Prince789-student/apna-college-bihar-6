@@ -124,12 +124,6 @@ app.get('/_debug', (req, res) => {
     res.json({ downloadsExist, apkExists, dirname: __dirname });
 });
 
-// Custom shortlinks for Chemistry Playlists
-app.get('/p/chem-unit1', (req, res) => res.redirect('https://www.youtube.com/watch_videos?video_ids=gcVA9vnoO7M,6fGHVAEKOZM,REyE17BfTkg,bxcwI__AQ6w,pvlpTlqrVVk,e0hyIUS7PfA,6tB6E6R_XpQ,cHl8vsh1dtA,plRidjLPkp8,fF-pCNqROSk,715-HyYgb_E,cbVs0EC340w,Rz4rv8Uusa0'));
-app.get('/p/chem-unit2', (req, res) => res.redirect('https://www.youtube.com/watch_videos?video_ids=hqUBDWZeBsg,LMkXHx3Xzso,bpy5xyF7wh0,g1Cz-qAM0BA,-kZ3NbbhRLk,hiwzpGOco_4,8C8CH5tgkeY,nzELjRKczAU,FXGNQqdRBzc,cttsO5Sbaao'));
-app.get('/p/chem-unit3', (req, res) => res.redirect('https://www.youtube.com/watch_videos?video_ids=ACRnKmU-kXc,mioIRtvvjN4,I7l1pCTNFlg,LSp9aAEhoHc,uykUlwndCyc,lARbzwoNlk0,Jbh0fMPKyUA,J1pjMwFiGRo,MtQ6LmkIbS0,hVWt4mB2-88,qRhKr531U3k,JiQNuqCj_jk'));
-app.get('/p/chem-unit4', (req, res) => res.redirect('https://www.youtube.com/watch_videos?video_ids=qsoXoHvIbK8,RK7EF7HdT1E,H3jMB_4mD1Y,K3MJ3tRydXk,2C9VGiDHzSU,WcG1Mzhs1Uc,eU9dhmJKSf4,qQYCsvX7jco,G722z6Vl64k,zvrzsDoffJw,WAoZ9xsaDjE,kMfBIEW_4Es,4inQkgmgdbM,w9znpP4Qlkg,XNfKdS82EaY,BO9aOypYmss,hMrZc1i_yys,7zS5IUCmTuo,knu5pyLHmsI'));
-app.get('/p/chem-unit5', (req, res) => res.redirect('https://www.youtube.com/watch_videos?video_ids=I_ALnsSg7ak,4-T1oX7gL2c,McVkP33DGpw,pej-sr5Rnok,ilrt9YDQGkU,jbtvqcTddNg,q0Jq-tBC3_Y,DaspjgOHXRo,JYyWAPoWjOk,d7H9bRneYO0,Zbh2lTu2o8A,Bk18u-5mp_4,v0POus3qK5o,dTMHqVBF4xI,3K1zWAYDvMA,v6R2631y2_I,3luNQRSdttQ'));
 
 // 5.1 Dynamic 10/10 Sitemap Generator
 const admin = require('./firebaseAdmin');

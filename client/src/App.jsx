@@ -66,6 +66,7 @@ const PercentilePredictor = React.lazy(() => import('./pages/PercentilePredictor
 const Blog = React.lazy(() => import('./pages/Blog'));
 const BlogPost = React.lazy(() => import('./pages/BlogPost'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
+const ShortLinkResolver = React.lazy(() => import('./pages/ShortLinkResolver'));
 
 function LoadingScreen() {
   return (
@@ -503,6 +504,7 @@ function App() {
             <Route path="/dmca" element={<DMCAPolicy />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
             <Route path="/directory" element={isStandalone ? <Navigate to="/" replace /> : <SitemapDirectory />} />
+            <Route path="/p/:shortId" element={<ShortLinkResolver />} />
 
             {/* Landing page for all visitors (web and mobile app) */}
             
