@@ -7,6 +7,7 @@ import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
 import SEO from '../components/SEO';
+import useScrollToTop from '../hooks/useScrollToTop';
 
 const CustomDropdown = ({ label, value, options, onChange, enableSearch = false }) => {
   const [isOpen, setIsOpen] = useState(false);
