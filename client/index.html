@@ -37,12 +37,6 @@
             window.addEventListener('load', () => {
                navigator.serviceWorker.register('/sw.js').catch(err => console.warn('[SW] Registration failed:', err));
             });
-            // Inject AdSense only for web users to prevent AdSense Policy Violations in WebViews and annoying Vignette Ads
-            const adScript = document.createElement('script');
-            adScript.async = true;
-            adScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4005389118070865";
-            adScript.crossOrigin = "anonymous";
-            document.head.appendChild(adScript);
          }
       }
 
@@ -64,6 +58,22 @@
    
    <title>Apna College Bihar - Official Engineering Hub for BEU</title>
    <meta name="description" content="Official hub for Bihar engineering students. Free BEU Notes, PYQs, Syllabus, UGEAC Predictor, CGPA Calculator and counselling guidance for 38+ engineering colleges." />
+
+   <!-- AdSense WebView Safety: Disable ads in App WebViews -->
+   <script>
+      (function() {
+         var ua = navigator.userAgent || navigator.vendor || window.opera;
+         var isWebView = (ua.indexOf('wv') > -1) || (ua.indexOf('Capacitor') > -1) || (ua.indexOf('Android') > -1 && ua.indexOf('Version/') > -1);
+         var isBot = /Googlebot|Mediapartners-Google/i.test(ua);
+         if (isWebView && !isBot) {
+            window.adsbygoogle = window.adsbygoogle || [];
+            window.adsbygoogle.pauseAdRequests = 1;
+            console.log('[AdSense] Ad requests paused in Native WebView');
+         }
+      })();
+   </script>
+   <!-- AdSense Verification Script (STATIC FOR BOT APPROVAL) -->
+   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4005389118070865" crossorigin="anonymous"></script>
 
 
    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BXF7KW1XQS"></script>
@@ -184,9 +194,16 @@
       </div>
    
       <noscript>
-      <div style="padding: 20px; font-family: sans-serif; text-align: center;">
-         <h1>Apna College Bihar</h1>
+      <div style="padding: 20px; font-family: sans-serif; text-align: center; max-width: 800px; margin: 0 auto; color: #333;">
+         <h1>Apna College Bihar - The Ultimate Engineering Study Hub</h1>
          <p>Please enable JavaScript to access the official BEU study resources, PYQs, and tools.</p>
+         <p>Welcome to <strong>Apna College Bihar</strong>, the premier digital learning platform dedicated specifically to students of <strong>Bihar Engineering University (BEU)</strong>. Whether you are pursuing Computer Science (CSE), Civil Engineering, Mechanical Engineering, or Electrical Engineering, finding structured, high-quality study materials can be challenging. Our mission is to bridge this gap by providing comprehensive, easy-to-understand resources that align perfectly with the official BEU B.Tech syllabus.</p>
+         <h2>Comprehensive BEU Notes and Study Materials</h2>
+         <p>One of the biggest hurdles engineering students face is the lack of concise and accurate study notes. At Apna College Bihar, we offer meticulously crafted <strong>BEU Notes</strong> that cover every unit of your semester. These notes are designed by top-performing students and subject matter experts to ensure that you grasp complex engineering concepts quickly.</p>
+         <h2>Mastering Exams with BEU Previous Year Questions (PYQs)</h2>
+         <p>It is a well-known fact that analyzing <strong>BEU Previous Year Question Papers (PYQs)</strong> is the most effective strategy for exam preparation. The university exam patterns often repeat crucial concepts and question formats. Our platform provides a vast, organized repository of BEU PYQs for all branches and semesters.</p>
+         <h2>Advanced Tools: CGPA Calculator, Syllabus, and Timetable</h2>
+         <p>Beyond study materials, Apna College Bihar equips you with powerful digital tools to manage your academic life. Our <strong>BEU CGPA Calculator</strong> allows you to accurately track your academic performance. We also provide an easily navigable version of the <strong>BEU B.Tech Syllabus</strong> so you never miss a topic.</p>
          <a href="/directory">View Sitemap Directory</a>
       </div>
    </noscript>
