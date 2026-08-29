@@ -8,7 +8,7 @@ import {
   ShieldCheck, Calendar, Sparkles, FileText, Library,
   Star, ChevronRight, Search, MapPin, Target,
   RefreshCw, Heart, Building2, Award, Mail,
-  Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight
+  Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight, X
 } from 'lucide-react';
 import { collection, onSnapshot, query, orderBy, limit, where, getCountFromServer, doc } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -19,6 +19,7 @@ import CountUp from '../components/CountUp';
 import Reveal from '../components/Reveal';
 import HomeEducationalGuide from '../components/HomeEducationalGuide';
 import { collegeData } from '../data/collegeData';
+import toast from 'react-hot-toast';
 
 export default function Home() {
   const { user, loading, logout } = useAuth();
@@ -27,6 +28,8 @@ export default function Home() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(null);
   const [announcements, setAnnouncements] = useState([]);
+  const [topDonors, setTopDonors] = useState([]);
+  const [showScanner, setShowScanner] = useState(false);
   const [beuNotices, setBeuNotices] = useState([]);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [showAllColleges, setShowAllColleges] = useState(false);
@@ -125,6 +128,8 @@ export default function Home() {
     }
   ];
 
+  // ── Top Donors Data (Fetched via Firestore) ──
+
   const combinedSchema = [
     {
       "@context": "https://schema.org",
@@ -163,6 +168,11 @@ export default function Home() {
 
   // ── Data Fetching ──
   useEffect(() => {
+    // Top Donors
+    const unsubDonors = onSnapshot(query(collection(db, 'donors'), orderBy('amount', 'desc'), limit(4)), (snap) => {
+      setTopDonors(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+
     // BEU Notices still need onSnapshot to be live and it's limited to 3
     const qNotices = query(collection(db, 'beu_notifications'), limit(50));
     const unsubNotices = onSnapshot(qNotices, (snap) => {
@@ -216,7 +226,7 @@ export default function Home() {
 
     fetchCounts();
 
-    return () => { unsubNotices(); unsubDocs(); };
+    return () => { unsubNotices(); unsubDocs(); unsubDonors(); };
   }, []);
 
 
@@ -233,92 +243,57 @@ export default function Home() {
       {/* ═══════════════════════════════════════════ */}
       {/* ── 1. HERO SECTION ── */}
       {/* ═══════════════════════════════════════════ */}
-      <section className="relative pt-12 pb-16 md:pt-20 md:pb-24 px-6 md:px-16 overflow-hidden">
-        {/* Decorative Background */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[800px] h-[600px] md:h-[800px] bg-gradient-to-tr from-blue-500/10 via-indigo-500/5 to-transparent rounded-full blur-[100px] pointer-events-none"></div>
-
-        <div className="relative z-10 container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Left Text Content */}
-          <div className="space-y-7 text-center lg:text-left">
-            <h1 className="text-4xl md:text-5xl lg:text-[4rem] font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.9]">
-              Bihar's Largest <br className="hidden md:block" />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Engineering Student</span> <br className="hidden md:block" />
-              Platform
-            </h1>
-
-            <p className="text-slate-600 text-sm md:text-base font-medium leading-relaxed max-w-lg mx-auto lg:mx-0">
-              Notes, PYQs, Syllabus, UGEAC Tools, College Resources and Academic Support for Bihar Engineering Students.
-            </p>
-
-            {/* Feature Highlights */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 max-w-lg mx-auto lg:mx-0 pt-2">
-              {[
-                '38+ Colleges Covered',
-                'Free Study Resources',
-                'UGEAC Guidance',
-                'BEU Resources'
-              ].map((text, i) => (
-                <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50/50 hover:bg-blue-50 border border-blue-100 rounded-full text-[10px] font-black uppercase tracking-widest text-blue-700 transition-colors shadow-sm">
-                  <CheckCircle size={12} className="text-blue-500" /> {text}
-                </div>
-              ))}
-            </div>
-
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-              <a
-                href="/apna-college-bihar-v47.apk"
-                download="apna-college-bihar-v47.apk"
-                className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-xl shadow-blue-600/20 hover:shadow-2xl hover:shadow-blue-600/30 hover:-translate-y-0.5 flex items-center justify-center gap-2"
-              >
-                <Download size={18} /> Download App
-              </a>
-              <a
-                href="#resources"
-                className="w-full sm:w-auto px-8 py-4 bg-white hover:bg-slate-50 text-slate-900 border border-slate-200 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center justify-center gap-2 group"
-              >
-                Explore Resources <ArrowRight size={16} className="text-slate-400 group-hover:text-blue-600 transition-colors group-hover:translate-x-1" />
-              </a>
-            </div>
+      <section className="relative pt-12 pb-16 md:pt-24 md:pb-32 px-6 md:px-16 overflow-hidden bg-white">
+        <div className="relative z-10 container mx-auto flex flex-col items-center text-center max-w-4xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-100 rounded-full text-xs font-semibold text-blue-700 mb-6">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+            </span>
+            Bihar's Largest Engineering Platform
           </div>
 
-          {/* Right Dashboard Mockup */}
-          <div className="relative hidden lg:block animate-float">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-indigo-600/30 rounded-[3rem] blur-[80px] transform rotate-3"></div>
-            <div className="relative bg-white/90 backdrop-blur-xl border border-white/40 rounded-[2.5rem] shadow-2xl hover:shadow-[0_20px_60px_-15px_rgba(59,130,246,0.3)] transition-all duration-500 p-8 space-y-6 group cursor-default">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
-                    <GraduationCap size={24} />
-                  </div>
-                  <div>
-                    <p className="text-lg font-[1000] text-slate-900 tracking-tighter uppercase">Student Dashboard</p>
-                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">BEU Academic Hub</p>
-                  </div>
-                </div>
-                <div className="px-3 py-1 bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-widest rounded-full border border-emerald-100">
-                  Verified
-                </div>
-              </div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
+            Complete Education Guide for <span className="text-blue-600">Bihar Engineering Students</span>
+          </h1>
 
-              <div className="grid grid-cols-1 gap-4">
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center justify-between">
-                  <div>
-                    <p className="text-2xl font-[1000] text-slate-900">100%</p>
-                    <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Free Notes</p>
-                  </div>
-                  <BookOpen size={32} className="text-indigo-500 opacity-50" />
-                </div>
-              </div>
+          <p className="text-slate-600 text-base md:text-lg font-medium leading-relaxed max-w-2xl mx-auto mb-10">
+            Get access to organized B.Tech notes, previous year question papers, official syllabus, UGEAC counselling tools, and reliable college reviews.
+          </p>
 
-              <div className="space-y-3 pt-2">
-                {['B.Tech Notes', 'PYQ Papers', 'UGEAC Predictor'].map((item, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl">
-                    <span className="text-xs font-bold text-slate-700">{item}</span>
-                    <ChevronRight size={14} className="text-slate-400" />
-                  </div>
-                ))}
-              </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+            <a
+              href="/apna-college-bihar-v47.apk"
+              download="apna-college-bihar-v47.apk"
+              className="w-full sm:w-auto px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-all shadow-md flex items-center justify-center gap-2"
+            >
+              <Download size={18} /> Download App
+            </a>
+            <a
+              href="#resources"
+              className="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 group"
+            >
+              Explore Resources <ArrowRight size={16} className="text-slate-400 group-hover:text-blue-600 transition-colors" />
+            </a>
+          </div>
+
+          {/* Quick Stats Below Hero */}
+          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 w-full border-t border-slate-100 pt-8">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-slate-900">38+</p>
+              <p className="text-sm font-medium text-slate-500">Colleges Covered</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-slate-900">100%</p>
+              <p className="text-sm font-medium text-slate-500">Free Resources</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-slate-900">UGEAC</p>
+              <p className="text-sm font-medium text-slate-500">Counselling Guide</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-slate-900">5+ Yrs</p>
+              <p className="text-sm font-medium text-slate-500">PYQ Papers</p>
             </div>
           </div>
         </div>
@@ -398,24 +373,24 @@ export default function Home() {
       {/* ═══════════════════════════════════════════ */}
       {/* ── 3. REAL STATS ── */}
       {/* ═══════════════════════════════════════════ */}
-      <section className="py-16 px-6 md:px-16 bg-slate-50">
+      <section className="py-16 px-6 md:px-16 bg-white border-b border-slate-200">
         <Reveal>
           <div className="container mx-auto max-w-6xl">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
               {[
-                { value: stats.notes, suffix: '+', label: 'Notes Available', icon: <BookOpen size={24} />, color: 'text-indigo-600', bg: 'bg-white', border: 'border-slate-200' },
-                { value: stats.pyqs, suffix: '+', label: 'PYQs Available', icon: <FileText size={24} />, color: 'text-purple-600', bg: 'bg-white', border: 'border-slate-200' },
-                { value: stats.users, suffix: '+', label: 'Active Users', icon: <Users size={24} />, color: 'text-blue-600', bg: 'bg-white', border: 'border-slate-200' },
-                { value: 8, suffix: '', label: 'Semesters Covered', icon: <Layers size={24} />, color: 'text-emerald-600', bg: 'bg-white', border: 'border-slate-200' },
+                { value: stats.notes, suffix: '+', label: 'Notes Available', icon: <BookOpen size={24} />, color: 'text-indigo-600', bg: 'bg-indigo-50', border: 'border-slate-100' },
+                { value: stats.pyqs, suffix: '+', label: 'PYQs Available', icon: <FileText size={24} />, color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-slate-100' },
+                { value: stats.users, suffix: '+', label: 'Active Users', icon: <Users size={24} />, color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-slate-100' },
+                { value: 8, suffix: '', label: 'Semesters Covered', icon: <Layers size={24} />, color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-slate-100' },
               ].map((stat, idx) => (
-                <div key={idx} className={`p-6 rounded-3xl border ${stat.bg} ${stat.border} text-center flex flex-col items-center justify-center transition-all hover:-translate-y-2 hover:shadow-xl shadow-sm group`}>
-                  <div className={`w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 shadow-sm border border-slate-100 ${stat.color} group-hover:scale-110 transition-transform`}>
+                <div key={idx} className={`p-6 rounded-2xl border ${stat.border} bg-white text-center flex flex-col items-center justify-center transition-all hover:shadow-lg shadow-sm group`}>
+                  <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-4 ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform`}>
                     {stat.icon}
                   </div>
-                  <p className="text-3xl font-[1000] text-slate-900 tracking-tighter">
+                  <p className="text-3xl font-extrabold text-slate-900 tracking-tight">
                     <CountUp end={stat.value} suffix={stat.suffix} duration={1500} />
                   </p>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-600 mt-1">{stat.label}</p>
+                  <p className="text-xs font-semibold text-slate-500 mt-2 uppercase tracking-wide">{stat.label}</p>
                 </div>
               ))}
             </div>
@@ -426,32 +401,28 @@ export default function Home() {
       {/* ═══════════════════════════════════════════ */}
       {/* ── 4. WHY CHOOSE APNA COLLEGE BIHAR ── */}
       {/* ═══════════════════════════════════════════ */}
-      <section className="py-20 px-6 md:px-16 bg-slate-900 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 to-transparent"></div>
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10"></div>
+      <section className="py-20 px-6 md:px-16 bg-white relative">
         <Reveal delay={100}>
-          <div className="container mx-auto relative z-10 max-w-6xl">
-            <div className="text-center mb-16">
-              <span className="text-blue-400 font-black uppercase tracking-[0.4em] text-[10px]">Platform Features</span>
-              <h2 className="text-3xl md:text-5xl font-[1000] tracking-tighter uppercase text-white mt-4">
+          <div className="container mx-auto max-w-5xl">
+            <div className="text-center mb-12">
+              <span className="text-blue-600 font-semibold uppercase tracking-wider text-sm">Platform Features</span>
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mt-2">
                 Why Choose Us
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { title: 'Complete Study Resources', desc: 'Detailed notes, important questions, and PYQs for every BEU subject.', icon: <Database /> },
-                { title: 'UGEAC Support', desc: 'Predictors and guides to navigate the BCECEB admission process.', icon: <Target /> },
-                { title: 'One Platform Solution', desc: 'From syllabus tracking to CGPA calculation, everything in one place.', icon: <Zap /> },
+                { title: 'Complete Study Resources', desc: 'Detailed notes, important questions, and PYQs for every BEU subject.', icon: <Database size={28} /> },
+                { title: 'UGEAC Support', desc: 'Accurate predictors and guides to easily navigate the BCECEB admission process.', icon: <Target size={28} /> },
+                { title: 'One Platform Solution', desc: 'From syllabus tracking to CGPA calculation, access everything in one place.', icon: <Zap size={28} /> },
               ].map((feature, idx) => (
-                <div key={idx} className="bg-slate-800/50 border border-slate-700/50 p-8 rounded-3xl backdrop-blur-sm hover:bg-slate-800 transition-colors flex items-start gap-5 group">
-                  <div className="w-14 h-14 bg-blue-500/20 text-blue-400 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:text-blue-300 transition-transform">
+                <div key={idx} className="bg-slate-50 border border-slate-200 p-8 rounded-2xl transition-colors flex flex-col items-center text-center group hover:bg-white hover:shadow-lg">
+                  <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
                     {feature.icon}
                   </div>
-                  <div>
-                    <h3 className="text-lg font-[900] text-white uppercase tracking-tight mb-2 group-hover:text-blue-400 transition-colors">{feature.title}</h3>
-                    <p className="text-slate-400 text-sm font-medium leading-relaxed">{feature.desc}</p>
-                  </div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-3">{feature.title}</h3>
+                  <p className="text-slate-600 text-sm font-medium leading-relaxed">{feature.desc}</p>
                 </div>
               ))}
             </div>
@@ -462,12 +433,12 @@ export default function Home() {
       {/* ═══════════════════════════════════════════ */}
       {/* ── 5. POPULAR RESOURCES ── */}
       {/* ═══════════════════════════════════════════ */}
-      <section id="resources" className="py-20 px-6 md:px-16 bg-white border-b border-slate-200">
+      <section id="resources" className="py-20 px-6 md:px-16 bg-slate-50 border-b border-slate-200">
         <Reveal>
           <div className="container mx-auto max-w-6xl">
-            <div className="text-center mb-16">
-              <span className="text-purple-600 font-black uppercase tracking-[0.4em] text-[10px]">Academic Toolkit</span>
-              <h2 className="text-3xl md:text-5xl font-[1000] tracking-tighter uppercase text-slate-900 mt-4">
+            <div className="text-center mb-12">
+              <span className="text-blue-600 font-semibold uppercase tracking-wider text-sm">Academic Toolkit</span>
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mt-2">
                 Popular Resources
               </h2>
             </div>
@@ -481,18 +452,18 @@ export default function Home() {
                 { title: 'Study Timer', desc: 'Focus & Productivity', icon: <Timer />, path: '/study', color: 'text-rose-600', bg: 'bg-rose-50' },
                 { title: 'College Predictor', desc: 'UGEAC College Predictor', icon: <Target />, path: '/ugeac-predictor', color: 'text-indigo-600', bg: 'bg-indigo-50' },
               ].map((res, idx) => (
-                <div key={idx} className="flex flex-col p-6 border border-slate-200 rounded-3xl hover:shadow-2xl hover:-translate-y-1 hover:border-slate-300 transition-all duration-300 bg-white group cursor-pointer">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${res.bg} ${res.color} group-hover:scale-110 transition-transform`}>
+                <div key={idx} className="flex flex-col p-6 border border-slate-200 rounded-2xl hover:shadow-lg transition-all duration-300 bg-white group cursor-pointer">
+                  <div className="flex items-center gap-4 mb-5">
+                    <div className={`w-14 h-14 rounded-full flex items-center justify-center ${res.bg} ${res.color} group-hover:scale-110 transition-transform`}>
                       {res.icon}
                     </div>
                     <div>
-                      <h3 className="font-[900] text-slate-900 uppercase tracking-tight text-lg group-hover:text-blue-600 transition-colors">{res.title}</h3>
-                      <p className="text-xs font-medium text-slate-500 mt-1">{res.desc}</p>
+                      <h3 className="font-bold text-slate-900 text-lg group-hover:text-blue-600 transition-colors">{res.title}</h3>
+                      <p className="text-sm font-medium text-slate-500 mt-1">{res.desc}</p>
                     </div>
                   </div>
-                  <Link to={res.path} className="mt-auto inline-flex items-center justify-center w-full py-3 bg-slate-50 text-slate-700 font-bold text-[10px] uppercase tracking-widest rounded-xl transition-all border border-slate-200 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 group-hover:shadow-md">
-                    Access Tool <ArrowRight size={14} className="ml-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  <Link to={res.path} className="mt-auto inline-flex items-center justify-center w-full py-2.5 bg-slate-50 text-slate-700 font-semibold text-xs uppercase tracking-wide rounded-lg transition-all border border-slate-200 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600">
+                    Access Tool <ArrowRight size={14} className="ml-2 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </div>
               ))}
@@ -502,17 +473,62 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════ */}
+      {/* ── 5.5. TOP DONORS ── */}
+      {/* ═══════════════════════════════════════════ */}
+      <section className="py-20 px-6 md:px-16 bg-white border-b border-slate-200">
+        <Reveal delay={50}>
+          <div className="container mx-auto max-w-5xl">
+            <div className="text-center mb-12">
+              <span className="text-rose-600 font-semibold uppercase tracking-wider text-sm flex items-center justify-center gap-2">
+                <Heart size={16} className="fill-rose-600" /> Support Our Mission
+              </span>
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mt-2">
+                Our Top Supporters
+              </h2>
+              <p className="text-slate-600 text-sm font-medium mt-3 max-w-2xl mx-auto">
+                Apna College Bihar is free for everyone. A big thank you to the students who contributed to keep our servers running and the platform growing!
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+              {topDonors.map((donor, idx) => (
+                <div key={idx} className="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col items-center text-center hover:shadow-md transition-shadow group">
+                  <div className="w-14 h-14 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mb-4 font-bold text-xl group-hover:scale-110 transition-transform">
+                    {donor.name.charAt(0)}
+                  </div>
+                  <h3 className="font-bold text-slate-900 mb-1">{donor.name}</h3>
+                  <p className="text-xs text-slate-500 font-medium mb-4">{donor.college}</p>
+                  <div className="mt-auto px-5 py-1.5 bg-green-50 text-green-700 border border-green-200 rounded-full text-sm font-bold w-full">
+                    ₹{donor.amount}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-12 text-center">
+              <button 
+                onClick={() => setShowScanner(true)}
+                className="inline-flex items-center gap-2 px-8 py-3.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm rounded-xl transition-all shadow-md hover:shadow-lg active:scale-95"
+              >
+                <Heart size={18} className="fill-white" /> Contribute to Platform
+              </button>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* ═══════════════════════════════════════════ */}
       {/* ── COLLEGE SECTION ── */}
       {/* ═══════════════════════════════════════════ */}
-      <section id="colleges-section" className="py-20 px-6 md:px-16 bg-slate-50 border-b border-slate-200">
+      <section id="colleges-section" className="py-20 px-6 md:px-16 bg-white border-b border-slate-200">
         <Reveal>
           <div className="container mx-auto max-w-6xl">
-            <div className="text-center mb-16">
-              <span className="text-blue-600 font-black uppercase tracking-[0.4em] text-[10px]">BEU INSTITUTIONS</span>
-              <h2 className="text-3xl md:text-5xl font-[1000] tracking-tighter uppercase text-slate-900 mt-4">
+            <div className="text-center mb-12">
+              <span className="text-blue-600 font-semibold uppercase tracking-wider text-sm">BEU Institutions</span>
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mt-2">
                 Engineering Colleges
               </h2>
-              <p className="text-slate-500 text-sm font-medium mt-3 max-w-2xl mx-auto">
+              <p className="text-slate-600 text-sm font-medium mt-3 max-w-2xl mx-auto">
                 Explore government engineering colleges in Bihar under BEU. Find cutoffs, placement records, and campus details.
               </p>
             </div>
@@ -535,22 +551,21 @@ export default function Home() {
                   <Link 
                     to={`/college/${slug}`} 
                     key={slug} 
-                    className="group bg-white rounded-3xl border border-slate-200 hover:border-blue-500/50 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
+                    className="group bg-white rounded-2xl border border-slate-200 hover:border-blue-300 hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col"
                   >
-                    <div className="h-28 bg-gradient-to-br from-slate-900 to-slate-800 relative">
-                      <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-10"></div>
-                      <div className="absolute top-4 right-4 flex items-center justify-between">
-                        <span className="px-2 py-1 bg-white/10 backdrop-blur-md text-white border border-white/10 rounded-lg text-[9px] font-black uppercase tracking-widest">
+                    <div className="h-24 bg-slate-50 relative flex items-center justify-center border-b border-slate-100">
+                      <div className="absolute top-3 right-3 flex items-center justify-between">
+                        <span className="px-2 py-1 bg-white text-slate-600 border border-slate-200 rounded text-[10px] font-bold uppercase tracking-wide">
                           Estd. {college.established}
                         </span>
                       </div>
                       
-                      {/* Circular Floating Logo Container */}
-                      <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200 shadow-md p-1.5 absolute -bottom-8 left-6 flex items-center justify-center overflow-hidden">
+                      {/* Logo Container */}
+                      <div className="w-16 h-16 rounded-xl bg-white border border-slate-200 p-1 flex items-center justify-center overflow-hidden">
                         <img 
                           src={college.logo} 
                           alt={`${college.shortName} Logo`} 
-                          className="w-full h-full object-contain rounded-xl" 
+                          className="w-full h-full object-contain" 
                           onError={(e) => { 
                             e.target.onerror = null; 
                             e.target.src = college.fallbackLogo; 
@@ -559,24 +574,24 @@ export default function Home() {
                       </div>
                     </div>
                     
-                    <div className="p-6 pt-12 flex-1 flex flex-col justify-between">
+                    <div className="p-5 flex-1 flex flex-col justify-between">
                       <div>
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-md text-[9px] font-black uppercase tracking-wider">
+                          <span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px] font-bold uppercase tracking-wide">
                             {college.shortName}
                           </span>
-                          <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-md text-[9px] font-black uppercase tracking-wider">
+                          <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded text-[10px] font-bold uppercase tracking-wide">
                             {college.type}
                           </span>
                         </div>
-                        <h3 className="font-[900] text-slate-900 uppercase tracking-tight text-base group-hover:text-blue-600 transition-colors line-clamp-1">
+                        <h3 className="font-bold text-slate-900 text-lg group-hover:text-blue-600 transition-colors line-clamp-1">
                           {college.name}
                         </h3>
-                        <p className="text-slate-500 text-xs font-semibold mt-2 flex items-center gap-1">
-                          <MapPin size={12} className="text-rose-500" /> {college.location.split(',')[0]}
+                        <p className="text-slate-500 text-xs font-medium mt-1 flex items-center gap-1">
+                          <MapPin size={12} className="text-slate-400" /> {college.location.split(',')[0]}
                         </p>
                       </div>
-                      <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-black uppercase tracking-widest text-blue-600">
+                      <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600">
                         <span>View Details</span>
                         <ArrowRight size={14} className="-translate-x-1 group-hover:translate-x-0 transition-transform" />
                       </div>
@@ -598,10 +613,10 @@ export default function Home() {
                     setShowAllColleges(true);
                   }
                 }}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white border border-slate-200 hover:border-blue-500/30 text-blue-600 hover:text-blue-700 font-black text-xs uppercase tracking-widest rounded-2xl transition-all shadow-sm active:scale-95 hover:shadow-md"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-sm rounded-xl transition-all shadow-sm active:scale-95"
               >
                 {showAllColleges ? 'Show Less Colleges' : 'View All 38+ Colleges'} 
-                <ChevronRight size={16} className={`transition-transform duration-300 ${showAllColleges ? '-rotate-90' : 'rotate-90'}`} />
+                <ChevronDown size={16} className={`transition-transform duration-300 ${showAllColleges ? 'rotate-180' : ''}`} />
               </button>
             </div>
           </div>
@@ -611,32 +626,30 @@ export default function Home() {
       {/* ═══════════════════════════════════════════ */}
       {/* ── 8. FAQ SECTION ── */}
       {/* ═══════════════════════════════════════════ */}
-      <section className="py-20 px-6 md:px-16 bg-slate-50">
+      <section className="py-20 px-6 md:px-16 bg-slate-50 border-t border-slate-200">
         <Reveal delay={100}>
           <div className="container mx-auto max-w-4xl">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-[1000] tracking-tighter uppercase text-slate-900">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900">
                 Frequently Asked Questions
               </h2>
             </div>
 
             <div className="space-y-4">
               {faqs.map((faq, i) => (
-                <div key={i} className="bg-white border border-slate-200 rounded-2xl overflow-hidden transition-shadow duration-300 hover:shadow-md">
+                <div key={i} className="bg-white border border-slate-200 rounded-xl overflow-hidden transition-shadow duration-300 hover:shadow-sm">
                   <button
                     onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                    className="w-full flex items-center justify-between p-6 text-left transition-colors hover:bg-slate-50/50 outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                    className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-slate-50 outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
                   >
-                    <h3 className="text-sm md:text-base font-[900] text-slate-900 pr-4">{faq.q}</h3>
-                    <div className={`relative w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-500 ${openFaqIndex === i ? 'bg-blue-600 text-white rotate-180' : 'bg-slate-100 border border-slate-200 text-slate-500'
-                      }`}>
-                      <Plus size={16} className={`absolute transition-all duration-300 ${openFaqIndex === i ? 'opacity-0 scale-50' : 'opacity-100 scale-100'}`} />
-                      <Minus size={16} className={`absolute transition-all duration-300 ${openFaqIndex === i ? 'opacity-100 scale-100' : 'opacity-0 scale-50 -rotate-90'}`} />
+                    <h3 className="text-sm md:text-base font-bold text-slate-900 pr-4">{faq.q}</h3>
+                    <div className="shrink-0 text-blue-600">
+                      {openFaqIndex === i ? <Minus size={20} /> : <Plus size={20} />}
                     </div>
                   </button>
                   <div className={`grid transition-all duration-300 ease-in-out ${openFaqIndex === i ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                     <div className="overflow-hidden">
-                      <p className="px-6 pb-6 text-slate-600 text-sm leading-relaxed font-medium border-t border-slate-100 pt-4">
+                      <p className="px-5 pb-5 text-slate-600 text-sm leading-relaxed font-medium pt-1">
                         {faq.a}
                       </p>
                     </div>
@@ -653,31 +666,26 @@ export default function Home() {
       {/* ═══════════════════════════════════════════ */}
       {/* ── 9. FINAL CTA ── */}
       {/* ═══════════════════════════════════════════ */}
-      <section className="py-20 px-6 md:px-16 bg-white">
+      <section className="py-20 px-6 md:px-16 bg-blue-600 relative overflow-hidden">
         <Reveal delay={150}>
-          <div className="container mx-auto max-w-5xl">
-            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-[3rem] p-10 md:p-20 text-center relative overflow-hidden shadow-2xl">
-              <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-20"></div>
-              <div className="relative z-10">
-                <h2 className="text-3xl md:text-5xl font-[1000] text-white tracking-tighter uppercase leading-tight mb-10">
-                  Ready To Ace Your Semester?
-                </h2>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-                  <a
-                    href="/apna-college-bihar-v47.apk"
-                    download="apna-college-bihar-v47.apk"
-                    className="w-full sm:w-auto px-10 py-5 bg-white hover:bg-slate-50 text-blue-600 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2 hover:-translate-y-1 hover:shadow-2xl"
-                  >
-                    <Download size={20} /> Download App
-                  </a>
-                  <Link
-                    to="/notes"
-                    className="w-full sm:w-auto px-10 py-5 bg-blue-800/40 hover:bg-blue-800/60 text-white border border-blue-400/30 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-2 hover:-translate-y-1 hover:bg-blue-800/70"
-                  >
-                    Explore Resources <ArrowRight size={20} />
-                  </Link>
-                </div>
-              </div>
+          <div className="container mx-auto max-w-4xl text-center relative z-10">
+            <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-8">
+              Ready To Ace Your Semester?
+            </h2>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href="/apna-college-bihar-v47.apk"
+                download="apna-college-bihar-v47.apk"
+                className="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-slate-100 text-blue-600 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2"
+              >
+                <Download size={20} /> Download App
+              </a>
+              <Link
+                to="/notes"
+                className="w-full sm:w-auto px-8 py-3.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 border border-blue-500"
+              >
+                Explore Resources <ArrowRight size={20} />
+              </Link>
             </div>
           </div>
         </Reveal>
@@ -709,6 +717,58 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── SCANNER MODAL ── */}
+      {showScanner && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowScanner(false)}>
+          <div className="bg-white rounded-[24px] shadow-2xl max-w-[450px] w-full max-h-[80vh] mt-12 flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200" onClick={e => e.stopPropagation()}>
+            {/* Top Blue Header Section */}
+            <div className="bg-blue-600 relative pt-6 pb-5 flex flex-col items-center flex-shrink-0">
+              <button onClick={() => setShowScanner(false)} className="absolute top-4 right-4 text-white/80 hover:text-white transition-colors p-1.5 bg-white/10 hover:bg-white/20 rounded-full">
+                <X size={16} />
+              </button>
+              
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center text-white mb-3 shadow-sm backdrop-blur-sm">
+                <Award size={20} />
+              </div>
+              <h3 className="font-[900] text-white text-lg tracking-wide uppercase">Support Our Team</h3>
+              <p className="text-[9px] font-bold text-blue-200 uppercase tracking-widest mt-1">
+                Help Us Pay Server Bills!
+              </p>
+            </div>
+            
+            {/* Body */}
+            <div className="p-5 flex flex-col items-center overflow-y-auto scrollbar-hide">
+              <p className="text-[11px] font-medium text-slate-500 text-center leading-relaxed mb-2">
+                Apna College Bihar is a 100% free platform built by students, for students. We provide notes, PYQs, important questions, study materials, and exam resources to help thousands of students prepare better.
+              </p>
+              <p className="text-[11px] font-medium text-slate-500 text-center leading-relaxed mb-5">
+                Maintaining our servers requires continuous support. Please add your <strong className="text-blue-600">Name and College Name</strong> in the UPI payment message so we can feature you on our wall of fame!
+              </p>
+              
+              <div className="w-40 h-40 sm:w-44 sm:h-44 bg-white rounded-3xl p-2.5 border-2 border-dashed border-blue-200 flex items-center justify-center overflow-hidden mb-5 shadow-sm flex-shrink-0">
+                <img src="/scanner-qr.jpg" alt="UPI Scanner" className="w-full h-full object-contain rounded-xl" />
+              </div>
+              
+              {/* UPI ID Box */}
+              <div className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-4 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => {
+                  navigator.clipboard.writeText('apnacollegebihar@slc');
+                  toast.success('UPI ID Copied to clipboard!');
+                }}
+              >
+                <div>
+                  <p className="text-[9px] font-bold text-blue-500 uppercase tracking-widest mb-0.5">UPI ID (Tap to Copy)</p>
+                  <p className="text-sm font-[900] text-slate-900">apnacollegebihar@slc</p>
+                </div>
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 group-hover:scale-105 transition-transform">
+                  <ExternalLink size={14} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

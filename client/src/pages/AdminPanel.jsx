@@ -5,7 +5,7 @@ import {
   Trash2, Ban, UserCheck, UploadCloud, 
   Search, RefreshCw, BarChart3, 
   ChevronRight, AlertCircle, Loader2,
-  FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye, Calendar
+  FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye, Calendar, Heart
 } from 'lucide-react';
 import { db, storage } from '../firebase';
 import { 
@@ -21,6 +21,8 @@ export default function AdminPanel() {
   const { user, ROLES, loading: authLoading } = useAuth();
   const [tab, setTab] = useState('overview');
   const [users, setUsers] = useState([]);
+  const [donors, setDonors] = useState([]);
+  const [newDonor, setNewDonor] = useState({ name: '', college: '', amount: '' });
   const [userSearch, setUserSearch] = useState('');
   const [userSortOrder, setUserSortOrder] = useState('newest');
   const [groups, setGroups] = useState([]);
@@ -126,6 +128,10 @@ export default function AdminPanel() {
       setStudyResources(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     });
 
+    const unsubDonors = onSnapshot(query(collection(db, 'donors'), orderBy('amount', 'desc')), (snap) => {
+      setDonors(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    });
+
     const unsubBeu = onSnapshot(collection(db, 'beu_notifications'), (snap) => {
       const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       const parseDate = (d) => {
@@ -157,6 +163,7 @@ export default function AdminPanel() {
       if(unsubAds) unsubAds();
       if(unsubResources) unsubResources();
       if(unsubBeu) unsubBeu();
+      if(unsubDonors) unsubDonors();
     };
   }, [isAdmin, authLoading]);
 
@@ -286,6 +293,34 @@ export default function AdminPanel() {
     } catch (err) {
       flash('Creation failed: ' + err.message, 'err');
     }
+  };
+
+  const handleAddDonor = async (e) => {
+    e.preventDefault();
+    if (!newDonor.name || !newDonor.college || !newDonor.amount) {
+      flash('All donor fields are required', 'err');
+      return;
+    }
+    setUploading(true);
+    try {
+      await addDoc(collection(db, 'donors'), {
+        ...newDonor,
+        amount: Number(newDonor.amount),
+        createdAt: serverTimestamp()
+      });
+      flash('Donor added successfully! 💖');
+      setNewDonor({ name: '', college: '', amount: '' });
+    } catch (err) {
+      flash('Error: ' + err.message, 'err');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const deleteDonor = async (id) => {
+    if (!window.confirm('Remove this donor?')) return;
+    await deleteDoc(doc(db, 'donors', id));
+    flash('Donor removed');
   };
 
   const navigateTo = (folder) => {
@@ -569,7 +604,7 @@ if (!isAdmin) return (
           </div>
         </div>
         <div className="flex flex-wrap bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 overflow-x-auto">
-           {['overview', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu'].map(t => (
+           {['overview', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu', 'donors'].map(t => (
              <button key={t} onClick={()=>setTab(t)}
                className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${tab===t?'bg-indigo-600 text-slate-900 shadow-xl shadow-indigo-900/20':'text-slate-500 hover:text-slate-700'}`}>
                {t}
@@ -1405,6 +1440,53 @@ if (!isAdmin) return (
               ))}
               {beuNotifications.length === 0 && (
                 <div className="text-center py-12 text-slate-400 text-sm">Koi notification nahi mili</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── DONORS TAB ── */}
+      {tab === 'donors' && (
+        <div className="space-y-6 animate-in fade-in zoom-in duration-500">
+          <div className="bg-white p-6 md:p-8 border border-slate-200/80 rounded-[2rem] shadow-xl">
+            <h2 className="text-[13px] font-[1000] uppercase text-slate-800 tracking-widest mb-6 flex items-center gap-2">
+              <Heart size={16} className="text-rose-500" />
+              Add New Top Supporter
+            </h2>
+            <form onSubmit={handleAddDonor} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input required placeholder="Donor Name" value={newDonor.name} onChange={e => setNewDonor({...newDonor, name: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-[13px] font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
+                <input required placeholder="College (e.g. MIT Muzaffarpur)" value={newDonor.college} onChange={e => setNewDonor({...newDonor, college: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-[13px] font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
+                <input required type="number" placeholder="Amount (₹)" value={newDonor.amount} onChange={e => setNewDonor({...newDonor, amount: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-[13px] font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
+              </div>
+              <button disabled={uploading} type="submit" className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[11px] font-[1000] tracking-widest uppercase disabled:opacity-50 transition-colors">
+                {uploading ? 'Processing...' : 'Add Supporter'}
+              </button>
+            </form>
+          </div>
+
+          <div className="bg-white border border-slate-200/80 rounded-[2rem] shadow-xl overflow-hidden">
+            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+              <h3 className="text-[11px] font-[1000] text-slate-900 uppercase tracking-[0.2em]">Donor List ({donors.length})</h3>
+            </div>
+            <div className="divide-y divide-slate-100">
+              {donors.map(d => (
+                <div key={d.id} className="flex items-center justify-between px-6 py-4 hover:bg-slate-50/50 transition-colors">
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[14px] font-bold text-slate-800">{d.name}</p>
+                    <p className="text-[11px] text-slate-500 font-medium">{d.college}</p>
+                  </div>
+                  <div className="flex items-center gap-4 ml-4">
+                    <span className="px-3 py-1 bg-green-50 text-green-600 border border-green-200 rounded-lg text-sm font-[900]">₹{d.amount}</span>
+                    <button onClick={() => deleteDonor(d.id)} className="p-2 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all">
+                      <Trash2 size={13}/>
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {donors.length === 0 && (
+                <div className="text-center py-12 text-slate-400 text-sm font-medium">Koi donor add nahi kiya gaya hai</div>
               )}
             </div>
           </div>
