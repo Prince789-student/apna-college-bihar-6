@@ -264,8 +264,8 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
             <a
-              href="/apna-college-bihar-v47.apk"
-              download="apna-college-bihar-v47.apk"
+              href="/apna-college-bihar-v48.apk"
+              download="apna-college-bihar-v48.apk"
               className="w-full sm:w-auto px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-all shadow-md flex items-center justify-center gap-2"
             >
               <Download size={18} /> Download App
@@ -676,8 +676,8 @@ export default function Home() {
             </h2>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="/apna-college-bihar-v47.apk"
-                download="apna-college-bihar-v47.apk"
+                href="/apna-college-bihar-v48.apk"
+                download="apna-college-bihar-v48.apk"
                 className="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-slate-100 text-blue-600 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2"
               >
                 <Download size={20} /> Download App
