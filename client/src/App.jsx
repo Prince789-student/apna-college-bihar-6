@@ -48,6 +48,7 @@ const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
 const Terms = React.lazy(() => import('./pages/Terms'));
 const DeleteAccount = React.lazy(() => import('./pages/DeleteAccount'));
 const About = React.lazy(() => import('./pages/About'));
+const LectureFinder = React.lazy(() => import('./pages/LectureFinder'));
 const Contact = React.lazy(() => import('./pages/Contact'));
 const SearchSEO = React.lazy(() => import('./pages/SearchSEO'));
 const DMCAPolicy = React.lazy(() => import('./pages/DMCAPolicy'));
@@ -503,6 +504,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/dmca" element={<DMCAPolicy />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
+            <Route path="/lecture-finder" element={<LectureFinder />} />
             <Route path="/directory" element={isStandalone ? <Navigate to="/" replace /> : <SitemapDirectory />} />
             <Route path="/p/:shortId" element={<ShortLinkResolver />} />
 

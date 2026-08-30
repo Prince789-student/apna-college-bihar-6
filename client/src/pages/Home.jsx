@@ -448,6 +448,7 @@ export default function Home() {
                 { title: 'Notes', desc: 'Handwritten BEU notes', icon: <BookOpen />, path: '/notes', color: 'text-blue-600', bg: 'bg-blue-50' },
                 { title: 'PYQs', desc: 'Previous 5 Years Papers', icon: <FileText />, path: '/pyq', color: 'text-purple-600', bg: 'bg-purple-50' },
                 { title: 'Syllabus', desc: 'Official BEU Curriculum', icon: <Library />, path: '/syllabus', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+                { title: 'Lecture Finder', desc: 'Find topic-wise lectures', icon: <BookOpen />, path: '/lecture-finder', color: 'text-rose-600', bg: 'bg-rose-50' },
                 { title: 'CGPA Calculator', desc: 'BEU Grading Tool', icon: <Calculator />, path: '/cgpa', color: 'text-amber-600', bg: 'bg-amber-50' },
                 { title: 'Study Timer', desc: 'Focus & Productivity', icon: <Timer />, path: '/study', color: 'text-rose-600', bg: 'bg-rose-50' },
                 { title: 'College Predictor', desc: 'UGEAC College Predictor', icon: <Target />, path: '/ugeac-predictor', color: 'text-indigo-600', bg: 'bg-indigo-50' },
