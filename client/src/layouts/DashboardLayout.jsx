@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate, Link } from 'react-router-dom';
-import { ChevronLeft, Shield, Timer, X, LayoutDashboard, Library, BookOpen, Calendar, Clock, FileText, GraduationCap, Calculator, User, LogOut, Menu, UserCheck, Flame, Send, ChevronDown, Globe, Award, Link2, ArrowRight, UserX } from 'lucide-react';
+import { ChevronLeft, Shield, Timer, X, LayoutDashboard, Library, BookOpen, Calendar, Clock, FileText, GraduationCap, Calculator, User, LogOut, Menu, UserCheck, Flame, Send, ChevronDown, Globe, Award, Link2, ArrowRight, UserX, Youtube } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStudy } from '../context/StudyContext';
 import { Capacitor, registerPlugin } from '@capacitor/core';
@@ -68,6 +68,7 @@ export default function DashboardLayout() {
         { name: 'Timetable', path: '/timetable', icon: <Calendar size={16} /> },
         { name: 'Notes', path: '/notes', icon: <BookOpen size={16} /> },
         { name: 'PYQ Papers', path: '/pyq', icon: <FileText size={16} /> },
+        { name: 'Lecture Finder', path: '/lecture-finder', icon: <Youtube size={16} /> },
         { name: 'SGPA / CGPA', path: '/cgpa', icon: <GraduationCap size={16} /> },
         { name: 'Syllabus', path: '/syllabus', icon: <Library size={16} /> },
       ],
@@ -481,6 +482,7 @@ export default function DashboardLayout() {
     if (pathname.includes('/study')) return 'Study Zone';
     if (pathname.includes('/notes')) return 'B.Tech Notes';
     if (pathname.includes('/pyq')) return 'PYQ Papers';
+    if (pathname.includes('/lecture-finder')) return 'Lecture Finder';
     if (pathname.includes('/syllabus')) return 'BEU Syllabus';
     if (pathname.includes('/cgpa')) return 'CGPA Calculator';
     if (pathname.includes('/ugeac-predictor')) return 'UGEAC Predictor';

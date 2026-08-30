@@ -20,6 +20,7 @@ const routes = [
     '/study-resources',
     '/timetable',
     '/hackathons',
+    '/lecture-finder',
     '/timer',
     '/calculator',
     '/matrix',

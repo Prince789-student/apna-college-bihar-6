@@ -51,6 +51,7 @@ export default function Home() {
       items: [
         { name: 'Notes', path: '/notes', icon: <BookOpen size={16} /> },
         { name: 'PYQ Papers', path: '/pyq', icon: <FileText size={16} /> },
+        { name: 'Lecture Finder', path: '/lecture-finder', icon: <Youtube size={16} /> },
         { name: 'Syllabus', path: '/syllabus', icon: <Library size={16} /> },
         { name: 'Timetable', path: '/timetable', icon: <Calendar size={16} /> },
         { name: 'SGPA / CGPA', path: '/cgpa', icon: <GraduationCap size={16} /> },
