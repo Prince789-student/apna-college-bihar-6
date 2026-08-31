@@ -3,9 +3,10 @@
 @tailwind utilities;
 
 @layer base {
-  select option {
+  select, select option {
     background-color: #ffffff;
     color: #000000;
+    background-image: none !important;
   }
   
   ::selection {
