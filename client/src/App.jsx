@@ -5,6 +5,7 @@ import { AlertTriangle, Shield, Phone, ShieldCheck } from 'lucide-react';
 import { useAuth } from './context/AuthContext';
 import { Capacitor } from '@capacitor/core';
 import { App as CapacitorApp } from '@capacitor/app';
+import { SplashScreen } from '@capacitor/splash-screen';
 import { AdMob } from '@capacitor-community/admob';
 
 // Layouts
@@ -349,10 +350,16 @@ function SplashUI() {
 function App() {
   const { user } = useAuth();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const isNative = Capacitor.isNativePlatform();
+  const isNative = Capacitor.isNativePlatform() || !!window.Capacitor?.isNative || window.location.protocol === 'file:' || window.location.hostname === 'localhost';
 
-  // Show splash screen only once per session
+  useEffect(() => {
+    if (isNative) {
+      SplashScreen.hide().catch(() => {});
+    }
+  }, [isNative]);
+
   const [showSplash, setShowSplash] = useState(() => {
+    if (isNative) return false; // Native app handles its own splash screen
     if (window.__PRERENDER_INJECTED && !window.Capacitor?.isNativePlatform?.()) return false;
     
     // DETECT GOOGLEBOT / ADSENSE BOT
