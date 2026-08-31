@@ -87,6 +87,7 @@ export default function AppHub() {
     {
       title: "📚 STUDY",
       items: [
+        { name: 'Engineering Blog', icon: <FileText size={24} />, path: '/blog', color: 'text-blue-600' },
         { name: 'Study Timer', icon: <Timer size={24} />, path: '/study?standalone=true', color: 'text-rose-600' },
         { name: 'Study Network', icon: <Users size={24} />, path: '/groups?standalone=true', color: 'text-orange-600' },
         { name: 'Scientific Calc', icon: <Calculator size={24} />, path: '/calculator?standalone=true', color: 'text-emerald-600' },

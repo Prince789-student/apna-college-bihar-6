@@ -19,6 +19,7 @@ import CountUp from '../components/CountUp';
 import Reveal from '../components/Reveal';
 import HomeEducationalGuide from '../components/HomeEducationalGuide';
 import { collegeData } from '../data/collegeData';
+import { blogPosts } from '../data/blogPosts';
 import toast from 'react-hot-toast';
 
 export default function Home() {
@@ -666,6 +667,61 @@ export default function Home() {
       <HomeEducationalGuide />
 
       {/* ═══════════════════════════════════════════ */}
+      {/* ── 8.5 LATEST ARTICLES & GUIDES ── */}
+      {/* ═══════════════════════════════════════════ */}
+      <section className="py-20 px-6 md:px-16 bg-[#f8fafc] border-t border-slate-200">
+        <Reveal delay={100}>
+          <div className="container mx-auto max-w-6xl">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+              <div>
+                <span className="text-blue-600 font-black uppercase tracking-[0.4em] text-[10px] block mb-2">Knowledge Base & Guides</span>
+                <h2 className="text-3xl md:text-4xl font-[1000] text-slate-900 tracking-tight uppercase">
+                  Latest Engineering Articles
+                </h2>
+                <p className="text-slate-500 font-medium text-sm mt-2 max-w-xl">
+                  In-depth guides on UGEAC counselling, BEU semester preparation, top college comparisons, and career strategies.
+                </p>
+              </div>
+              <Link 
+                to="/blog" 
+                className="mt-4 md:mt-0 inline-flex items-center gap-2 px-5 py-2.5 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all group"
+              >
+                View All {blogPosts.length} Articles <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {blogPosts.slice(0, 6).map((post, idx) => (
+                <article key={post.id} className="bg-white border border-slate-200 rounded-[2rem] p-6 hover:shadow-xl hover:border-blue-200 transition-all duration-300 flex flex-col justify-between group">
+                  <div>
+                    <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">
+                      <Calendar size={12} className="text-blue-500" />
+                      <span>{new Date(post.date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                    </div>
+                    <Link to={`/blog/${post.slug}`}>
+                      <h3 className="text-lg font-[900] text-slate-900 group-hover:text-blue-600 transition-colors leading-snug line-clamp-2 mb-3">
+                        {post.title}
+                      </h3>
+                    </Link>
+                    <p className="text-slate-500 text-xs leading-relaxed line-clamp-3 mb-6 font-medium">
+                      {post.excerpt}
+                    </p>
+                  </div>
+                  
+                  <div className="pt-4 border-t border-slate-100 flex items-center justify-between mt-auto">
+                    <span className="text-[10px] font-bold text-slate-600">{post.author}</span>
+                    <Link to={`/blog/${post.slug}`} className="text-xs font-bold text-blue-600 flex items-center gap-1 group-hover:gap-2 transition-all">
+                      Read Guide <ChevronRight size={14} />
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* ═══════════════════════════════════════════ */}
       {/* ── 9. FINAL CTA ── */}
       {/* ═══════════════════════════════════════════ */}
       <section className="py-20 px-6 md:px-16 bg-blue-600 relative overflow-hidden">
@@ -676,8 +732,8 @@ export default function Home() {
             </h2>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="/apna-college-bihar-v48.apk"
-                download="apna-college-bihar-v48.apk"
+                href="/apna-college-bihar-v53.apk"
+                download="apna-college-bihar-v53.apk"
                 className="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-slate-100 text-blue-600 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2"
               >
                 <Download size={20} /> Download App

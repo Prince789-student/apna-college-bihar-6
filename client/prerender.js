@@ -3,12 +3,13 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { blogPosts } from './src/data/blogPosts.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distPath = path.join(__dirname, 'dist');
 const port = 4173;
 
-const routes = [
+const baseRoutes = [
     '/',
     '/pyq',
     '/notes',
@@ -27,8 +28,15 @@ const routes = [
     '/about',
     '/privacy-policy',
     '/terms',
-    '/disclaimer'
+    '/disclaimer',
+    '/dmca'
 ];
+
+const blogRoutes = Array.isArray(blogPosts) 
+    ? blogPosts.filter(p => p.slug).map(p => `/blog/${p.slug}`) 
+    : [];
+
+const routes = [...baseRoutes, ...blogRoutes];
 
 async function prerender() {
     console.log('Starting prerendering process...');
