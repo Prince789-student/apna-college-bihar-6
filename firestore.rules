@@ -74,6 +74,18 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Donors
+    match /donors/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Shortlinks
+    match /short_links/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // Personal Manager (Folders & Notes)
     match /user_folders/{docId} {
       allow read, delete, update: if isAuthenticated() && resource.data.userId == request.auth.uid;
