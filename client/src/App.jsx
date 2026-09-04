@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
-import { AlertTriangle, Shield, Phone, ShieldCheck } from 'lucide-react';
+import { AlertTriangle, Shield, Phone, ShieldCheck, MessageCircle } from 'lucide-react';
 import { useAuth } from './context/AuthContext';
 import { Capacitor } from '@capacitor/core';
 import { App as CapacitorApp } from '@capacitor/app';
@@ -214,20 +214,24 @@ function GlobalProfilePrompt() {
             </>
           ) : (
             <>
-              <div className="p-4 bg-amber-500/10 rounded-full border border-amber-500/20 mb-6">
-                <Phone className="text-amber-500 w-10 h-10" />
+              <div className="p-4 bg-emerald-500/10 rounded-full border border-emerald-500/20 mb-6">
+                <MessageCircle className="text-emerald-500 w-10 h-10" />
               </div>
-              <h2 className="text-2xl md:text-3xl font-[900] text-center text-slate-900 uppercase tracking-tighter mb-2">Almost Done!</h2>
-              <p className="text-slate-500 text-xs font-bold text-center mb-8">Do you want to receive calls from the Apna College Bihar team regarding free counselling, exam updates, and exclusive resources?</p>
+              <h2 className="text-2xl md:text-3xl font-[900] text-center text-slate-900 uppercase tracking-tighter mb-2">WhatsApp Alerts!</h2>
+              <p className="text-slate-500 text-xs font-bold text-center mb-8">Apna College Bihar ke sabhi important BEU updates, notes aur free counselling sidhe apne WhatsApp par paayein.</p>
               
-              <div className="flex gap-4 w-full">
+              <div className="flex gap-4 w-full mb-6">
                 <button onClick={() => submitFinal(false)} disabled={isSubmitting} className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-[1000] py-4.5 rounded-[1.5rem] transition-all active:scale-95 text-[10px] tracking-widest uppercase">
                   No Thanks
                 </button>
-                <button onClick={() => submitFinal(true)} disabled={isSubmitting} className="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-[1000] py-4.5 rounded-[1.5rem] shadow-[0_10px_40px_rgba(37,99,235,0.4)] transition-all active:scale-95 text-[10px] tracking-widest uppercase">
-                  {isSubmitting ? "Saving..." : "Yes, Call Me"}
+                <button onClick={() => submitFinal(true)} disabled={isSubmitting} className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-[1000] py-4.5 rounded-[1.5rem] shadow-[0_10px_40px_rgba(16,185,129,0.4)] transition-all active:scale-95 text-[10px] tracking-widest uppercase">
+                  {isSubmitting ? "Saving..." : "Yes, Please"}
                 </button>
               </div>
+              
+              <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 text-emerald-600 text-[10px] font-black uppercase tracking-widest hover:underline">
+                📲 Join our WhatsApp Channel
+              </a>
             </>
           )}
 
