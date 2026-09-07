@@ -2,10 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   BookOpen, Search, Download, Eye,
   FolderOpen, FileDigit, ArrowRight, ArrowLeft,
-  ShieldCheck, Bookmark, ChevronRight, Pencil, Trash2
+  ShieldCheck, Bookmark, ChevronRight, Pencil, Trash2,
+  RefreshCw, WifiOff
 } from 'lucide-react';
 import { db } from '../firebase';
-import { collection, orderBy, onSnapshot, query, where, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { collection, orderBy, onSnapshot, query, where, doc, deleteDoc, updateDoc, getDocs } from 'firebase/firestore';
+import { getCachedData, setCachedData, invalidateCache, CACHE_KEYS } from '../utils/dataCache';
 import { useParams, useNavigate } from 'react-router-dom';
 import GlobalSearch from '../components/GlobalSearch';
 import PremiumAds from '../components/PremiumAds';
@@ -88,17 +90,66 @@ export default function Notes() {
     }
   }, [branchId, semesterId]);
 
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
   useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  const fetchNotes = async (force = false) => {
+    // 1. Instant load from local cache if available (0ms render, 100% offline support)
+    if (!force) {
+      const cached = getCachedData(CACHE_KEYS.NOTES, 30 * 60 * 1000); // 30 min cache
+      if (cached && Array.isArray(cached.data) && cached.data.length > 0) {
+        setDocs(cached.data);
+        setLoading(false);
+        // If fresh and not forcing, skip network to save thousands of reads
+        if (!cached.isExpired) {
+          return;
+        }
+      }
+    }
+
     if (window.__PRERENDER_INJECTED && !window.Capacitor?.isNativePlatform?.()) {
       setLoading(false);
       return;
     }
-    const q = query(collection(db, 'documents'), where('category', '==', 'NOTES'));
-    const unsub = onSnapshot(q, (snap) => {
-      setDocs(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+
+    // 2. If offline and no network, retain cached docs
+    if (!navigator.onLine) {
       setLoading(false);
-    });
-    return unsub;
+      return;
+    }
+
+    // 3. Fetch from Firestore
+    try {
+      setIsRefreshing(true);
+      const q = query(collection(db, 'documents'), where('category', '==', 'NOTES'));
+      const snap = await getDocs(q);
+      const freshDocs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      setDocs(freshDocs);
+      setCachedData(CACHE_KEYS.NOTES, freshDocs);
+      if (force) {
+        toast.success("Notes refreshed with latest data!");
+      }
+    } catch (err) {
+      console.warn('[Notes] Fetch fallback:', err);
+    } finally {
+      setLoading(false);
+      setIsRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotes(false);
   }, []);
 
   const handleAction = (url, callback) => {
@@ -128,6 +179,8 @@ export default function Notes() {
         subject: newSubject,
         fileUrl: newUrl
       });
+      invalidateCache(CACHE_KEYS.NOTES);
+      fetchNotes(true);
       toast.success('Note updated successfully!');
     } catch (err) {
       toast.error('Error updating note: ' + err.message);
@@ -138,6 +191,8 @@ export default function Notes() {
     if (!window.confirm(`Are you sure you want to delete "${note.title}"?`)) return;
     try {
       await deleteDoc(doc(db, 'documents', note.id));
+      invalidateCache(CACHE_KEYS.NOTES);
+      fetchNotes(true);
       toast.success('Note deleted successfully!');
     } catch (err) {
       toast.error('Error deleting note: ' + err.message);
@@ -248,15 +303,34 @@ export default function Notes() {
       <div className="bg-white p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] border border-slate-200/80 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-indigo-600/8 rounded-full blur-[80px] pointer-events-none"></div>
         <div className="relative z-10">
-          <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
-            <div className="p-2.5 md:p-3.5 bg-indigo-600/15 text-indigo-500 rounded-xl md:rounded-2xl">
-              <BookOpen size={22} className="md:hidden" />
-              <BookOpen size={30} className="hidden md:block" />
+          <div className="flex items-center justify-between gap-3 md:gap-4 mb-4 md:mb-6">
+            <div className="flex items-center gap-3 md:gap-4">
+              <div className="p-2.5 md:p-3.5 bg-indigo-600/15 text-indigo-500 rounded-xl md:rounded-2xl">
+                <BookOpen size={22} className="md:hidden" />
+                <BookOpen size={30} className="hidden md:block" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-xl md:text-3xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Notes Library</h1>
+                  {isOffline && (
+                    <span className="inline-flex items-center gap-1 text-[8px] md:text-[9px] font-black uppercase px-2 py-0.5 bg-amber-500/10 text-amber-600 border border-amber-500/20 rounded-full">
+                      <WifiOff size={10} /> Offline
+                    </span>
+                  )}
+                </div>
+                <p className="text-[8px] md:text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] mt-0.5 md:mt-1">Branch → Semester → Subject → Files</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl md:text-3xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Notes Library</h1>
-              <p className="text-[8px] md:text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] mt-0.5 md:mt-1">Branch → Semester → Subject → Files</p>
-            </div>
+
+            <button
+              onClick={() => fetchNotes(true)}
+              disabled={isRefreshing}
+              title="Sync latest notes"
+              className="p-2.5 md:p-3 rounded-xl bg-slate-100 hover:bg-indigo-50 text-slate-500 hover:text-indigo-600 transition-all border border-slate-200/60 active:scale-95 shrink-0 flex items-center gap-1.5"
+            >
+              <RefreshCw size={14} className={isRefreshing ? 'animate-spin text-indigo-600' : ''} />
+              <span className="hidden sm:inline text-[9px] font-black uppercase tracking-wider">Sync</span>
+            </button>
           </div>
 
           {/* Breadcrumb */}

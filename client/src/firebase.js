@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, RecaptchaVerifier, signInWithPhoneNumber, browserLocalPersistence, setPersistence } from "firebase/auth";
-import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
+import { Capacitor } from "@capacitor/core";
+import { initializeFirestore, getFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getMessaging, isSupported } from "firebase/messaging";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
@@ -19,8 +20,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Initialize App Check (ReCaptcha V3) to protect Firestore
-if (typeof window !== "undefined") {
+// Initialize App Check (ReCaptcha V3) ONLY on Web to prevent breaking native Android/Capacitor
+if (typeof window !== "undefined" && !Capacitor.isNativePlatform()) {
   try {
     initializeAppCheck(app, {
       provider: new ReCaptchaV3Provider('6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'), // Public test key for now
@@ -35,7 +36,21 @@ if (typeof window !== "undefined") {
 setPersistence(auth, browserLocalPersistence);
 
 export { auth };
-export const db = getFirestore(app);
+
+// Initialize Firestore with Multi-tab Persistent Local Cache for offline support & minimum reads
+let dbInstance;
+try {
+  dbInstance = initializeFirestore(app, {
+    localCache: persistentLocalCache({
+      tabManager: persistentMultipleTabManager()
+    })
+  });
+} catch (e) {
+  // Fallback to standard getFirestore if already initialized or unsupported
+  dbInstance = getFirestore(app);
+}
+
+export const db = dbInstance;
 export const storage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();
 // Add basic profile scope (required for name/email)
@@ -44,18 +59,6 @@ googleProvider.addScope('email');
 // Force account selection every time (important for shared devices)
 googleProvider.setCustomParameters({
   prompt: 'select_account'
-});
-
-// Enable Firestore offline persistence
-// Data will be cached in IndexedDB (~2-5MB) so app works offline
-enableIndexedDbPersistence(db).catch((err) => {
-  if (err.code === 'failed-precondition') {
-    // Multiple browser tabs open — persistence only works in one tab at a time
-    console.warn('[Firestore] Offline persistence limited: multiple tabs open');
-  } else if (err.code === 'unimplemented') {
-    // Browser doesn't support IndexedDB (very rare)
-    console.warn('[Firestore] Offline persistence not supported in this browser');
-  }
 });
 
 export { RecaptchaVerifier, signInWithPhoneNumber };

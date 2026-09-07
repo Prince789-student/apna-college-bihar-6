@@ -2,10 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   FileDigit, Search, Download, Eye,
   FolderOpen, ArrowRight, ArrowLeft,
-  ShieldCheck, Bookmark, ChevronRight, Pencil, Trash2
+  ShieldCheck, Bookmark, ChevronRight, Pencil, Trash2,
+  RefreshCw, WifiOff
 } from 'lucide-react';
 import { db } from '../firebase';
-import { collection, onSnapshot, query, where, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { collection, onSnapshot, query, where, doc, deleteDoc, updateDoc, getDocs } from 'firebase/firestore';
+import { getCachedData, setCachedData, invalidateCache, CACHE_KEYS } from '../utils/dataCache';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import PremiumAds from '../components/PremiumAds';
@@ -85,17 +87,65 @@ export default function PYQ() {
     }
   }, [branchId, semesterId]);
 
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+
   useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  const fetchPYQs = async (force = false) => {
+    // 1. Instant load from local cache if available (0ms render, 100% offline support)
+    if (!force) {
+      const cached = getCachedData(CACHE_KEYS.PYQ, 30 * 60 * 1000); // 30 min cache
+      if (cached && Array.isArray(cached.data) && cached.data.length > 0) {
+        setDocs(cached.data);
+        setLoading(false);
+        if (!cached.isExpired) {
+          return;
+        }
+      }
+    }
+
     if (window.__PRERENDER_INJECTED && !window.Capacitor?.isNativePlatform?.()) {
       setLoading(false);
       return;
     }
-    const q = query(collection(db, 'documents'), where('category', '==', 'PYQ'));
-    const unsub = onSnapshot(q, (snap) => {
-      setDocs(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+
+    // 2. If offline and no network, retain cached docs
+    if (!navigator.onLine) {
       setLoading(false);
-    });
-    return unsub;
+      return;
+    }
+
+    // 3. Fetch from Firestore
+    try {
+      setIsRefreshing(true);
+      const q = query(collection(db, 'documents'), where('category', '==', 'PYQ'));
+      const snap = await getDocs(q);
+      const freshDocs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      setDocs(freshDocs);
+      setCachedData(CACHE_KEYS.PYQ, freshDocs);
+      if (force) {
+        toast.success("PYQs refreshed with latest papers!");
+      }
+    } catch (err) {
+      console.warn('[PYQ] Fetch fallback:', err);
+    } finally {
+      setLoading(false);
+      setIsRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPYQs(false);
   }, []);
 
   const handleAction = (url, callback) => {
@@ -121,6 +171,8 @@ export default function PYQ() {
         subject: newSubject,
         fileUrl: newUrl
       });
+      invalidateCache(CACHE_KEYS.PYQ);
+      fetchPYQs(true);
       toast.success('PYQ updated successfully!');
     } catch (err) {
       toast.error('Error updating PYQ: ' + err.message);
@@ -131,6 +183,8 @@ export default function PYQ() {
     if (!window.confirm(`Are you sure you want to delete "${pyq.title}"?`)) return;
     try {
       await deleteDoc(doc(db, 'documents', pyq.id));
+      invalidateCache(CACHE_KEYS.PYQ);
+      fetchPYQs(true);
       toast.success('PYQ deleted successfully!');
     } catch (err) {
       toast.error('Error deleting PYQ: ' + err.message);
@@ -221,15 +275,34 @@ export default function PYQ() {
       <div className="bg-white p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] border border-slate-200/80 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-amber-500/8 rounded-full blur-[80px] pointer-events-none"></div>
         <div className="relative z-10">
-          <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
-            <div className="p-2.5 md:p-3.5 bg-amber-500/15 text-amber-500 rounded-xl md:rounded-2xl">
-              <FileDigit size={22} className="md:hidden" />
-              <FileDigit size={30} className="hidden md:block" />
+          <div className="flex items-center justify-between gap-3 md:gap-4 mb-4 md:mb-6">
+            <div className="flex items-center gap-3 md:gap-4">
+              <div className="p-2.5 md:p-3.5 bg-amber-500/15 text-amber-500 rounded-xl md:rounded-2xl">
+                <FileDigit size={22} className="md:hidden" />
+                <FileDigit size={30} className="hidden md:block" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-xl md:text-3xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">PYQ Bank</h1>
+                  {isOffline && (
+                    <span className="inline-flex items-center gap-1 text-[8px] md:text-[9px] font-black uppercase px-2 py-0.5 bg-amber-500/10 text-amber-600 border border-amber-500/20 rounded-full">
+                      <WifiOff size={10} /> Offline
+                    </span>
+                  )}
+                </div>
+                <p className="text-[8px] md:text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] mt-0.5 md:mt-1">Branch → Semester → Subject → Papers</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl md:text-3xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">PYQ Bank</h1>
-              <p className="text-[8px] md:text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] mt-0.5 md:mt-1">Branch → Semester → Subject → Papers</p>
-            </div>
+
+            <button
+              onClick={() => fetchPYQs(true)}
+              disabled={isRefreshing}
+              title="Sync latest PYQs"
+              className="p-2.5 md:p-3 rounded-xl bg-slate-100 hover:bg-amber-50 text-slate-500 hover:text-amber-600 transition-all border border-slate-200/60 active:scale-95 shrink-0 flex items-center gap-1.5"
+            >
+              <RefreshCw size={14} className={isRefreshing ? 'animate-spin text-amber-600' : ''} />
+              <span className="hidden sm:inline text-[9px] font-black uppercase tracking-wider">Sync</span>
+            </button>
           </div>
 
           {/* Breadcrumb */}

@@ -8,6 +8,7 @@ import {
   updateDoc, addDoc, deleteDoc, onSnapshot
 } from 'firebase/firestore';
 import { db } from '../firebase';
+import { queueOfflineTask, queueOfflineTaskUpdate, flushOfflineQueue } from '../utils/offlineQueue';
 import { useAuth } from '../context/AuthContext';
 import { useStudy } from '../context/StudyContext';
 import SEO from '../components/SEO';
@@ -242,14 +243,40 @@ export default function StudyDashboard() {
 
   useEffect(() => {
     if (!user) return;
+
+    // Load local cached tasks & sessions immediately (0ms render, 100% offline)
+    try {
+      const cachedTasks = localStorage.getItem('acb_user_tasks_' + user.uid);
+      if (cachedTasks) setTasks(JSON.parse(cachedTasks));
+      const cachedSess = localStorage.getItem('acb_user_sessions_' + user.uid);
+      if (cachedSess) setSessions(JSON.parse(cachedSess));
+    } catch (err) {
+      console.warn('[StudyDashboard] Local cache read error:', err);
+    }
+
+    // Flush any pending offline queue items if online
+    if (navigator.onLine) {
+      flushOfflineQueue(db, user.uid).then(res => {
+        if (res.syncedTasks > 0 || res.syncedSessions > 0) {
+          toast.success(`Synced ${res.syncedTasks} target(s) & ${res.syncedSessions} session(s)!`);
+        }
+      }).catch(console.error);
+    }
+
     const sessQuery = query(collection(db, 'StudySessions'), where('userId', '==', user.uid));
     const unsubSess = onSnapshot(sessQuery, (snap) => {
-      setSessions(snap.docs.map(d => d.data()));
-    });
+      const sessData = snap.docs.map(d => d.data());
+      setSessions(sessData);
+      try { localStorage.setItem('acb_user_sessions_' + user.uid, JSON.stringify(sessData)); } catch {}
+    }, (err) => console.warn('[StudyDashboard] Sess snapshot fallback:', err));
+
     const taskQuery = query(collection(db, 'Tasks'), where('userId', '==', user.uid));
     const unsubTask = onSnapshot(taskQuery, (snap) => {
-      setTasks(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    });
+      const taskData = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      setTasks(taskData);
+      try { localStorage.setItem('acb_user_tasks_' + user.uid, JSON.stringify(taskData)); } catch {}
+    }, (err) => console.warn('[StudyDashboard] Task snapshot fallback:', err));
+
     return () => { unsubSess(); unsubTask(); };
   }, [user]);
 
@@ -557,13 +584,37 @@ export default function StudyDashboard() {
 
   const addTask = async () => {
     if (!newTask.trim()) return;
-    await addDoc(collection(db, 'Tasks'), {
-      userId: user.uid, text: newTask.trim(),
-      subject: newTaskSubject, done: false,
-      date: todayStr, 
+    const taskPayload = {
+      userId: user.uid,
+      text: newTask.trim(),
+      subject: newTaskSubject,
+      done: false,
+      date: todayStr,
       duration: newTaskDuration ? parseInt(newTaskDuration) : null,
       createdAt: new Date().toISOString()
-    });
+    };
+
+    if (navigator.onLine) {
+      try {
+        const ref = await addDoc(collection(db, 'Tasks'), taskPayload);
+        const newTaskItem = { id: ref.id, ...taskPayload };
+        setTasks(prev => [newTaskItem, ...prev]);
+        toast.success("Target added!");
+      } catch (err) {
+        const tempId = 'temp_' + Date.now();
+        const offlineTask = { id: tempId, tempId, ...taskPayload };
+        setTasks(prev => [offlineTask, ...prev]);
+        queueOfflineTask(offlineTask);
+        toast.success("Target saved offline!");
+      }
+    } else {
+      const tempId = 'temp_' + Date.now();
+      const offlineTask = { id: tempId, tempId, ...taskPayload };
+      setTasks(prev => [offlineTask, ...prev]);
+      queueOfflineTask(offlineTask);
+      toast.success("Target saved offline (will sync when online)");
+    }
+
     setNewTask('');
     setNewTaskDuration('');
     setNewTaskSubject('OTHERS');
@@ -571,22 +622,64 @@ export default function StudyDashboard() {
 
   const addSubjectTask = async (subjectName) => {
     if (!inlineTaskText.trim()) return;
-    try {
-      await addDoc(collection(db, 'Tasks'), {
-        userId: user.uid,
-        text: inlineTaskText.trim(),
-        subject: subjectName,
-        done: false,
-        date: selectedPlannerDate,
-        duration: inlineTaskDuration ? parseInt(inlineTaskDuration) : null,
-        createdAt: new Date().toISOString()
-      });
-      setInlineTaskText('');
-      setInlineTaskDuration('');
-      setOpenAddFormSubject(null);
-      toast.success("Task added to planner!");
-    } catch (e) {
-      toast.error("Failed to add task");
+    const taskPayload = {
+      userId: user.uid,
+      text: inlineTaskText.trim(),
+      subject: subjectName,
+      done: false,
+      date: selectedPlannerDate,
+      duration: inlineTaskDuration ? parseInt(inlineTaskDuration) : null,
+      createdAt: new Date().toISOString()
+    };
+
+    if (navigator.onLine) {
+      try {
+        const ref = await addDoc(collection(db, 'Tasks'), taskPayload);
+        const newTaskItem = { id: ref.id, ...taskPayload };
+        setTasks(prev => [newTaskItem, ...prev]);
+        toast.success("Target added to planner!");
+      } catch (err) {
+        const tempId = 'temp_' + Date.now();
+        const offlineTask = { id: tempId, tempId, ...taskPayload };
+        setTasks(prev => [offlineTask, ...prev]);
+        queueOfflineTask(offlineTask);
+        toast.success("Target saved offline!");
+      }
+    } else {
+      const tempId = 'temp_' + Date.now();
+      const offlineTask = { id: tempId, tempId, ...taskPayload };
+      setTasks(prev => [offlineTask, ...prev]);
+      queueOfflineTask(offlineTask);
+      toast.success("Target saved offline (will sync when online)");
+    }
+
+    setInlineTaskText('');
+    setInlineTaskDuration('');
+    setOpenAddFormSubject(null);
+  };
+
+  const handleToggleTask = async (task) => {
+    const updatedDone = !task.done;
+    setTasks(prev => prev.map(t => t.id === task.id ? { ...t, done: updatedDone } : t));
+    if (navigator.onLine && !task.id.startsWith('temp_')) {
+      try {
+        await updateDoc(doc(db, 'Tasks', task.id), { done: updatedDone });
+      } catch (err) {
+        queueOfflineTaskUpdate(task.id, { done: updatedDone });
+      }
+    } else {
+      queueOfflineTaskUpdate(task.id, { done: updatedDone });
+    }
+  };
+
+  const handleDeleteTask = async (task) => {
+    setTasks(prev => prev.filter(t => t.id !== task.id));
+    if (navigator.onLine && !task.id.startsWith('temp_')) {
+      try {
+        await deleteDoc(doc(db, 'Tasks', task.id));
+      } catch (err) {
+        console.warn('Failed to delete task online:', err);
+      }
     }
   };
 
@@ -1311,7 +1404,7 @@ export default function StudyDashboard() {
                       {subTasks.map(task => (
                         <div key={task.id} className={`flex items-center gap-3 p-4 bg-white rounded-2xl border transition-all ${task.done ? 'border-slate-100 opacity-60' : 'border-slate-200/60 shadow-sm'}`}>
                           <button 
-                            onClick={async () => await updateDoc(doc(db, 'Tasks', task.id), { done: !task.done })} 
+                            onClick={() => handleToggleTask(task)} 
                             className={`w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${task.done ? 'bg-emerald-500 text-white border-emerald-500' : 'border-2 border-slate-300'}`}
                           >
                             {task.done && <CheckCircle2 size={14} className="text-white" />}
@@ -1337,7 +1430,7 @@ export default function StudyDashboard() {
                               </button>
                             )}
                             <button 
-                              onClick={async () => await deleteDoc(doc(db, 'Tasks', task.id))} 
+                              onClick={() => handleDeleteTask(task)} 
                               className="text-slate-300 hover:text-red-500 p-2 transition-colors"
                             >
                               <Trash2 size={14} />

@@ -47,17 +47,26 @@ function cleanDir(dir) {
 
 const assetsDestDir = path.join(destDir, 'assets');
 
+const androidAssetsDir = path.join(__dirname, 'android', 'app', 'src', 'main', 'assets', 'public');
+
 function syncBuild() {
     try {
         console.log('Syncing build assets...');
-        // Then copy from dist to public
+        // 1. Copy from dist to server/public
         if (!fs.existsSync(destDir)) {
             fs.mkdirSync(destDir, { recursive: true });
         }
         copyRecursiveSync(srcDir, destDir);
         console.log('Build assets synced to server/public successfully!');
 
-        // Removed API index.html copy as serverless function is deleted
+        // 2. Also sync to android/app/src/main/assets/public if present
+        if (fs.existsSync(path.dirname(androidAssetsDir))) {
+            if (!fs.existsSync(androidAssetsDir)) {
+                fs.mkdirSync(androidAssetsDir, { recursive: true });
+            }
+            copyRecursiveSync(srcDir, androidAssetsDir);
+            console.log('Build assets synced to Android Capacitor assets successfully!');
+        }
     } catch (err) {
         console.error('Error syncing build:', err);
         process.exit(1);
