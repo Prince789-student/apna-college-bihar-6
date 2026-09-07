@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const srcDir = path.join(__dirname, 'dist');
 const destDir = path.join(__dirname, '..', 'server', 'public');
 
-function copyRecursiveSync(src, dest) {
+function copyRecursiveSync(src, dest, filterFn) {
     const exists = fs.existsSync(src);
     const stats = exists && fs.statSync(src);
     const isDirectory = exists && stats.isDirectory();
@@ -15,9 +15,12 @@ function copyRecursiveSync(src, dest) {
             fs.mkdirSync(dest, { recursive: true });
         }
         fs.readdirSync(src).forEach((childItemName) => {
-            copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
+            const childSrc = path.join(src, childItemName);
+            if (filterFn && !filterFn(childSrc, childItemName)) return;
+            copyRecursiveSync(childSrc, path.join(dest, childItemName), filterFn);
         });
     } else {
+        if (filterFn && !filterFn(src, path.basename(src))) return;
         fs.copyFileSync(src, dest);
     }
 }
@@ -59,12 +62,12 @@ function syncBuild() {
         copyRecursiveSync(srcDir, destDir);
         console.log('Build assets synced to server/public successfully!');
 
-        // 2. Also sync to android/app/src/main/assets/public if present
+        // 2. Also sync to android/app/src/main/assets/public if present (excluding apk/zip)
         if (fs.existsSync(path.dirname(androidAssetsDir))) {
             if (!fs.existsSync(androidAssetsDir)) {
                 fs.mkdirSync(androidAssetsDir, { recursive: true });
             }
-            copyRecursiveSync(srcDir, androidAssetsDir);
+            copyRecursiveSync(srcDir, androidAssetsDir, (p, name) => !name.endsWith('.apk') && !name.endsWith('.zip') && !name.endsWith('.aab'));
             console.log('Build assets synced to Android Capacitor assets successfully!');
         }
     } catch (err) {
