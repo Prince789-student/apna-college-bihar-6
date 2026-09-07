@@ -57,6 +57,22 @@ app.get('/api/download-apk', (req, res) => {
     }
 });
 
+// WINDOWS DESKTOP APP DOWNLOAD ROUTE
+app.get('/api/download-windows', (req, res) => {
+    const zipPath = path.join(__dirname, 'public', 'Apna-College-Bihar-Windows.zip');
+    
+    if (fs.existsSync(zipPath)) {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+        res.setHeader('Content-Type', 'application/zip');
+        res.setHeader('Content-Disposition', 'attachment; filename="Apna-College-Bihar-Windows.zip"');
+        return res.sendFile(zipPath);
+    } else {
+        res.status(404).send("Windows application package not found on server.");
+    }
+});
+
 // Route for specific APK file names to prevent SPA interception
 app.get('/:filename.apk', (req, res, next) => {
     const filename = req.params.filename;

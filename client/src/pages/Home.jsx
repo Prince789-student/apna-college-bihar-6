@@ -7,7 +7,7 @@ import {
   User, LogOut, ChevronDown, Download, MessageCircle,
   ShieldCheck, Calendar, Sparkles, FileText, Library,
   Star, ChevronRight, Search, MapPin, Target,
-  RefreshCw, Heart, Building2, Award, Mail,
+  RefreshCw, Heart, Building2, Award, Mail, Laptop,
   Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight, X
 } from 'lucide-react';
 import { collection, onSnapshot, query, orderBy, limit, where, getCountFromServer, doc } from 'firebase/firestore';
@@ -20,6 +20,7 @@ import Reveal from '../components/Reveal';
 import HomeEducationalGuide from '../components/HomeEducationalGuide';
 import { collegeData } from '../data/collegeData';
 import { blogPosts } from '../data/blogPosts';
+import { getClientOS } from '../utils/deviceHelper';
 import toast from 'react-hot-toast';
 
 export default function Home() {
@@ -35,8 +36,10 @@ export default function Home() {
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [showAllColleges, setShowAllColleges] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [clientOS, setClientOS] = useState('windows');
 
   useEffect(() => {
+    setClientOS(getClientOS());
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -125,8 +128,8 @@ export default function Home() {
       a: 'Yes, our CGPA/SGPA calculator is built strictly according to the official Bihar Engineering University (BEU) grading system and credit structure.',
     },
     {
-      q: 'Is there a mobile app available?',
-      a: 'Yes, we have an Android APK available for download. Click on the "Download App" button in the menu or footer for a faster, distraction-free experience with built-in study timers.',
+      q: 'Is there a mobile or desktop app available?',
+      a: 'Yes! We have both an Android APK and a dedicated Windows Desktop/Laptop App available for free download. Click on the "Download for Windows" or "Download App" button to get the software.',
     }
   ];
 
@@ -263,20 +266,55 @@ export default function Home() {
             Get access to organized B.Tech notes, previous year question papers, official syllabus, UGEAC counselling tools, and reliable college reviews.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-            <a
-              href="/apna-college-bihar-v53.apk"
-              download="apna-college-bihar-v53.apk"
-              className="w-full sm:w-auto px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-all shadow-md flex items-center justify-center gap-2"
-            >
-              <Download size={18} /> Download App
-            </a>
-            <a
-              href="#resources"
-              className="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 group"
-            >
-              Explore Resources <ArrowRight size={16} className="text-slate-400 group-hover:text-blue-600 transition-colors" />
-            </a>
+          <div className="flex flex-col items-center justify-center gap-3 w-full">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full">
+              {clientOS === 'android' ? (
+                <a
+                  href="/apna-college-bihar-v53.apk"
+                  download="apna-college-bihar-v53.apk"
+                  className="w-full sm:w-auto px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2.5 active:scale-95"
+                >
+                  <Download size={18} /> Download Android App
+                  <span className="text-[10px] bg-emerald-500 text-white px-2 py-0.5 rounded-full font-black uppercase tracking-wider">APK</span>
+                </a>
+              ) : (
+                <a
+                  href="/Apna-College-Bihar-Windows.zip"
+                  download="Apna-College-Bihar-Windows.zip"
+                  className="w-full sm:w-auto px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2.5 border border-slate-700 active:scale-95"
+                >
+                  <Laptop size={18} className="text-sky-400" /> Download for Windows
+                  <span className="text-[10px] bg-blue-600 text-white px-2 py-0.5 rounded-full font-black uppercase tracking-wider">PC</span>
+                </a>
+              )}
+              <a
+                href="#resources"
+                className="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 group"
+              >
+                Explore Resources <ArrowRight size={16} className="text-slate-400 group-hover:text-blue-600 transition-colors" />
+              </a>
+            </div>
+
+            {/* Cross-platform helper link */}
+            <div className="text-center pt-1">
+              {clientOS === 'android' ? (
+                <a 
+                  href="/Apna-College-Bihar-Windows.zip" 
+                  download="Apna-College-Bihar-Windows.zip" 
+                  className="text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors inline-flex items-center gap-1.5"
+                >
+                  <Laptop size={13} className="text-slate-400" /> Also studying on laptop? <span className="underline font-bold text-slate-700">Download for Windows PC</span>
+                </a>
+              ) : (
+                <a 
+                  href="/apna-college-bihar-v53.apk" 
+                  download="apna-college-bihar-v53.apk" 
+                  className="text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors inline-flex items-center gap-1.5"
+                >
+                  <Download size={13} className="text-blue-500" /> Also studying on phone? <span className="underline font-bold text-blue-600">Download Android APK</span>
+                </a>
+              )}
+            </div>
           </div>
 
           {/* Quick Stats Below Hero */}
@@ -730,20 +768,52 @@ export default function Home() {
             <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight mb-8">
               Ready To Ace Your Semester?
             </h2>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a
-                href="/apna-college-bihar-v53.apk"
-                download="apna-college-bihar-v53.apk"
-                className="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-slate-100 text-blue-600 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2"
-              >
-                <Download size={20} /> Download App
-              </a>
-              <Link
-                to="/notes"
-                className="w-full sm:w-auto px-8 py-3.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 border border-blue-500"
-              >
-                Explore Resources <ArrowRight size={20} />
-              </Link>
+            <div className="flex flex-col items-center justify-center gap-3">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full">
+                {clientOS === 'android' ? (
+                  <a
+                    href="/apna-college-bihar-v53.apk"
+                    download="apna-college-bihar-v53.apk"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-slate-100 text-blue-600 rounded-xl font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2.5 active:scale-95"
+                  >
+                    <Download size={18} /> Download Android App
+                  </a>
+                ) : (
+                  <a
+                    href="/Apna-College-Bihar-Windows.zip"
+                    download="Apna-College-Bihar-Windows.zip"
+                    className="w-full sm:w-auto px-8 py-3.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold text-sm transition-all shadow-lg flex items-center justify-center gap-2.5 border border-slate-700 active:scale-95"
+                  >
+                    <Laptop size={18} className="text-sky-400" /> Download for Windows
+                  </a>
+                )}
+                <Link
+                  to="/notes"
+                  className="w-full sm:w-auto px-8 py-3.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 border border-blue-500"
+                >
+                  Explore Resources <ArrowRight size={18} />
+                </Link>
+              </div>
+
+              <div className="text-center pt-2">
+                {clientOS === 'android' ? (
+                  <a 
+                    href="/Apna-College-Bihar-Windows.zip" 
+                    download="Apna-College-Bihar-Windows.zip" 
+                    className="text-xs font-semibold text-blue-100 hover:text-white transition-colors underline"
+                  >
+                    Looking for PC/Laptop version? Download for Windows
+                  </a>
+                ) : (
+                  <a 
+                    href="/apna-college-bihar-v53.apk" 
+                    download="apna-college-bihar-v53.apk" 
+                    className="text-xs font-semibold text-blue-100 hover:text-white transition-colors underline"
+                  >
+                    Looking for Mobile version? Download Android APK
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </Reveal>

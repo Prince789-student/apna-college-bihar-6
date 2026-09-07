@@ -2,5 +2,6 @@
 /ACB_v22_Final.apk             /ApnaCollegeBihar_Stable.apk  302
 /ApnaCollegeBihar_v2.2_Pro.apk /ApnaCollegeBihar_Stable.apk  302
 /api/download-apk              /ApnaCollegeBihar_Stable.apk  302
+/api/download-windows          /Apna-College-Bihar-Windows.zip 302
 /api/*                         https://apna-college-bihar-6.onrender.com/api/:splat 200
 /*                             /index.html  200

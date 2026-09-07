@@ -10,6 +10,8 @@
     "build": "npm install --prefix server",
     "heroku-postbuild": "npm run build",
     "dev": "npm run dev --prefix client",
+    "desktop": "npm start --prefix desktop",
+    "desktop:pack": "npm run pack --prefix desktop",
     "electron:dev": "electron .",
     "electron:build": "npm run build --prefix client && electron-builder",
     "electron:package": "npm run build --prefix client && electron-packager . \"Apna College Bihar\" --platform=win32 --arch=x64 --out=dist-electron --overwrite",

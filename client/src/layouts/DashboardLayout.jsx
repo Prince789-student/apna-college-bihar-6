@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate, Link } from 'react-router-dom';
-import { ChevronLeft, Shield, Timer, X, LayoutDashboard, Library, BookOpen, Calendar, Clock, FileText, GraduationCap, Calculator, User, LogOut, Menu, UserCheck, Flame, Send, ChevronDown, Globe, Award, Link2, ArrowRight, UserX, Youtube } from 'lucide-react';
+import { ChevronLeft, Shield, Timer, X, LayoutDashboard, Library, BookOpen, Calendar, Clock, FileText, GraduationCap, Calculator, User, LogOut, Menu, UserCheck, Flame, Send, ChevronDown, Globe, Award, Link2, ArrowRight, UserX, Youtube, Laptop, Download } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStudy } from '../context/StudyContext';
 import { Capacitor, registerPlugin } from '@capacitor/core';
@@ -14,6 +14,7 @@ import { doc, updateDoc, collection, query, where, onSnapshot, getDocs } from 'f
 import { messaging, VAPID_KEY, db } from '../firebase';
 import SEO from '../components/SEO';
 import Footer from '../components/Footer';
+import { getClientOS } from '../utils/deviceHelper';
 import { toast } from 'react-hot-toast';
 
 export default function DashboardLayout() {
@@ -31,6 +32,11 @@ export default function DashboardLayout() {
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(null);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showSupportModal, setShowSupportModal] = useState(false);
+  const [clientOS, setClientOS] = useState('windows');
+
+  useEffect(() => {
+    setClientOS(getClientOS());
+  }, []);
 
   useEffect(() => {
     if (isNative) {
@@ -610,19 +616,39 @@ export default function DashboardLayout() {
                <div className="flex items-center gap-2 md:gap-4">
                  <HeaderTimer />
                  
-                 <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
-                   <a 
-                     href="https://apnacollegebihar.online/apna-college-bihar-v53.apk"
-                     target="_blank"
-                     rel="noopener noreferrer"
-                     className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
-                   >
-                     <span className="hidden md:inline">Download</span> APK
-                   </a>
-                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[6px] md:text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
-                     New
-                   </span>
-                 </div>
+                 {/* Dynamic Download Button based on user device */}
+                  {!isNative && (
+                    clientOS === 'windows' ? (
+                      <div className="relative hidden md:block">
+                        <a 
+                          href="/Apna-College-Bihar-Windows.zip"
+                          download="Apna-College-Bihar-Windows.zip"
+                          className="flex items-center gap-1.5 px-3 md:px-4 py-2 md:py-2.5 bg-slate-900 hover:bg-slate-800 text-white border border-slate-700 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
+                        >
+                          <Laptop size={14} className="text-sky-400" />
+                          <span>Windows PC</span>
+                        </a>
+                        <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-[6px] md:text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
+                          PC
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="relative hidden md:block">
+                        <a 
+                          href="https://apnacollegebihar.online/apna-college-bihar-v53.apk"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
+                        >
+                          <Download size={14} />
+                          <span className="hidden md:inline">Download</span> APK
+                        </a>
+                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[6px] md:text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
+                          New
+                        </span>
+                      </div>
+                    )
+                  )}
                  
                  {/* Open App Button (Deep Link) */}
                  <div className={`relative ${isNative ? 'hidden' : 'block lg:hidden'}`}>
@@ -735,19 +761,39 @@ export default function DashboardLayout() {
                <div className="flex items-center gap-2 md:gap-4">
                  <HeaderTimer />
 
-                 <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
-                   <a 
-                     href="https://apnacollegebihar.online/apna-college-bihar-v53.apk"
-                     target="_blank"
-                     rel="noopener noreferrer"
-                     className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
-                   >
-                     <span className="hidden md:inline">Download</span> APK
-                   </a>
-                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[6px] md:text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
-                     New
-                   </span>
-                 </div>
+                 {/* Dynamic Download Button based on user device */}
+                  {!isNative && (
+                    clientOS === 'windows' ? (
+                      <div className="relative hidden md:block">
+                        <a 
+                          href="/Apna-College-Bihar-Windows.zip"
+                          download="Apna-College-Bihar-Windows.zip"
+                          className="flex items-center gap-1.5 px-3 md:px-4 py-2 md:py-2.5 bg-slate-900 hover:bg-slate-800 text-white border border-slate-700 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
+                        >
+                          <Laptop size={14} className="text-sky-400" />
+                          <span>Windows PC</span>
+                        </a>
+                        <span className="absolute -top-2 -right-2 bg-blue-600 text-white text-[6px] md:text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
+                          PC
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="relative hidden md:block">
+                        <a 
+                          href="https://apnacollegebihar.online/apna-college-bihar-v53.apk"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
+                        >
+                          <Download size={14} />
+                          <span className="hidden md:inline">Download</span> APK
+                        </a>
+                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[6px] md:text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
+                          New
+                        </span>
+                      </div>
+                    )
+                  )}
                  <Link to="/login" className="hidden md:block px-4 py-2.5 md:px-5 md:py-3 text-slate-600 hover:text-slate-900 font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-colors">
                    Login
                  </Link>
@@ -813,22 +859,41 @@ export default function DashboardLayout() {
           ))}
 
           {!isNative && (
-            <div className="px-3 pt-4 border-t border-slate-100">
-               <button 
-                 onClick={() => {
-                   setMobileMenuOpen(false);
-                   setShowSupportModal(true);
-                 }}
-                 className="flex items-center gap-3 w-full p-3 hover:bg-indigo-50 text-indigo-600 rounded-2xl transition-all group border border-indigo-100 bg-indigo-50/50"
+            <div className="px-3 pt-4 border-t border-slate-100 space-y-2">
+               <p className="px-1 text-[8px] font-black text-slate-400 uppercase tracking-widest">Get The Apps</p>
+               <a 
+                 href="/Apna-College-Bihar-Windows.zip"
+                 download="Apna-College-Bihar-Windows.zip"
+                 className="flex items-center gap-3 w-full p-2.5 bg-slate-900 text-white rounded-xl transition-all shadow-sm"
                >
-                  <div className="p-2 bg-white rounded-xl shadow-sm">
-                    <Award size={16} className="text-indigo-600" />
-                  </div>
-                  <div className="text-left">
-                    <span className="text-[11px] font-black uppercase tracking-widest block text-indigo-700">Support Us</span>
-                    <span className="text-[8px] font-bold text-indigo-500 uppercase tracking-wider">Help maintain server cost</span>
-                  </div>
-               </button>
+                 <Laptop size={16} className="text-sky-400" />
+                 <span className="text-[10px] font-black uppercase tracking-wider">Download for Windows (PC)</span>
+               </a>
+               <a 
+                 href="https://apnacollegebihar.online/apna-college-bihar-v53.apk"
+                 className="flex items-center gap-3 w-full p-2.5 bg-blue-600 text-white rounded-xl transition-all shadow-sm"
+               >
+                 <Download size={16} />
+                 <span className="text-[10px] font-black uppercase tracking-wider">Download Android APK</span>
+               </a>
+
+               <div className="pt-2">
+                 <button 
+                   onClick={() => {
+                     setMobileMenuOpen(false);
+                     setShowSupportModal(true);
+                   }}
+                   className="flex items-center gap-3 w-full p-3 hover:bg-indigo-50 text-indigo-600 rounded-2xl transition-all group border border-indigo-100 bg-indigo-50/50"
+                 >
+                    <div className="p-2 bg-white rounded-xl shadow-sm">
+                      <Award size={16} className="text-indigo-600" />
+                    </div>
+                    <div className="text-left">
+                      <span className="text-[11px] font-black uppercase tracking-widest block text-indigo-700">Support Us</span>
+                      <span className="text-[8px] font-bold text-indigo-500 uppercase tracking-wider">Help maintain server cost</span>
+                    </div>
+                 </button>
+               </div>
             </div>
           )}
         </div>

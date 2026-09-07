@@ -1,0 +1,17 @@
+{
+  "name": "apna-college-bihar-desktop",
+  "version": "2.0.0",
+  "description": "Apna College Bihar - Official Laptop & Desktop Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "pack": "node build-app.js"
+  },
+  "author": "Apna College Bihar",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^33.0.0"
+  }
+}
