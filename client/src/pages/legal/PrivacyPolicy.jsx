@@ -32,7 +32,7 @@ export default function PrivacyPolicy() {
 
       <section className="space-y-4">
         <h2 className="text-xl font-black text-blue-400">5. Contact Us</h2>
-        <p>Agar aapko koi sawaal hai toh humein contact karein: <strong>apnacollegebihar@gmail.com</strong></p>
+        <p>Agar aapko koi sawaal hai toh humein contact karein: <a href="mailto:prince86944@gmail.com" className="text-blue-600 underline font-bold">prince86944@gmail.com</a></p>
       </section>
     </div>
   );

@@ -18,7 +18,7 @@ export default function ContactUs() {
               <Mail className="text-slate-500" size={24}/>
               <div className="flex flex-col">
                 <span className="text-[9px] font-black uppercase text-slate-500 tracking-widest">Email</span>
-                <span className="text-lg font-bold text-slate-900 uppercase">apnacollegebihar@gmail.com</span>
+                <a href="mailto:prince86944@gmail.com" className="text-lg font-bold text-slate-900 lowercase hover:text-emerald-600 transition-colors">prince86944@gmail.com</a>
               </div>
             </div>
             <div className="flex items-center gap-4">
