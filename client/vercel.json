@@ -1,5 +1,7 @@
 {
   "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
   "headers": [
     {
       "source": "/(.*)\\.apk",
@@ -55,6 +57,17 @@
     }
   ],
   "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "apnacollegebihar.online"
+        }
+      ],
+      "destination": "https://www.apnacollegebihar.online/:path*",
+      "permanent": true
+    },
     {
       "source": "/api/download-apk",
       "destination": "/apna-college-bihar-v54.apk",

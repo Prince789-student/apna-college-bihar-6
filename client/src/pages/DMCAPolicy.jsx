@@ -57,8 +57,8 @@ export default function DMCAPolicy() {
                 <Mail size={18} className="text-blue-600" /> Contact Information
               </h2>
               <p className="mb-2">Please send your formal DMCA takedown notices to:</p>
-              <a href="mailto:contact@apnacollegebihar.online" className="text-blue-600 font-bold hover:underline">
-                contact@apnacollegebihar.online
+              <a href="mailto:prince86944@gmail.com" className="text-blue-600 font-bold hover:underline">
+                prince86944@gmail.com
               </a>
               <p className="mt-4 text-sm text-slate-500">
                 We will process valid takedown requests within 48-72 hours of receipt and promptly remove or disable access to the allegedly infringing material.

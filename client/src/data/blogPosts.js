@@ -4,7 +4,7 @@ export const blogPosts = [
     title: "Top 10 Government Engineering Colleges in Bihar under UGEAC",
     slug: "top-10-government-engineering-colleges-in-bihar-ugeac",
     date: "2026-05-15",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Discover the best government engineering colleges in Bihar for B.Tech admission through the UGEAC counselling process. Read our detailed guide covering placements, cutoffs, and campus life.",
     content: `
 ## Overview of UGEAC and Engineering in Bihar
@@ -66,7 +66,7 @@ Stay tuned to Apna College Bihar for the latest cutoff trends and UGEAC counsell
     title: "How to Prepare for BEU (Bihar Engineering University) Semester Exams",
     slug: "how-to-prepare-for-beu-semester-exams",
     date: "2026-06-02",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "A complete strategy to ace your BEU semester exams. Learn how to utilize PYQs, organized notes, and time management to score a 9+ CGPA.",
     content: `
 ## Acing Your BEU Semester Exams
@@ -105,7 +105,7 @@ By combining the right resources (Notes + PYQs) with a consistent study schedule
     title: "Complete Guide to UGEAC Counselling Process",
     slug: "complete-guide-to-ugeac-counselling-process",
     date: "2026-06-10",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Everything you need to know about the UGEAC counselling process, from registration and choice filling to document verification and final admission.",
     content: `
 ## What is UGEAC?
@@ -154,7 +154,7 @@ Do not rush the choice-filling process. Analyze previous year cutoffs carefully 
     title: "B.Tech CSE vs IT: Which is Better in Bihar?",
     slug: "btech-cse-vs-it-which-is-better-in-bihar",
     date: "2026-06-20",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Confused between Computer Science and Information Technology? Here is a detailed comparison of syllabus, placements, and scope for BEU students.",
     content: `
 ## The Big Dilemma: CSE or IT?
@@ -197,7 +197,7 @@ If you get CSE in a top college like MIT or BCE, go for it. However, if you are 
     title: "Why Previous Year Questions (PYQs) are the Key to Engineering Exams",
     slug: "why-pyqs-are-key-to-engineering-exams",
     date: "2026-06-25",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Discover why solving previous year question papers is the ultimate hack for scoring top grades in your BEU B.Tech examinations.",
     content: `
 ## The Ultimate Engineering Hack
@@ -233,7 +233,7 @@ Stop studying hard, and start studying smart!
     title: "BEU B.Tech 1st Year Syllabus Complete Guide",
     slug: "beu-btech-1st-year-syllabus-complete-guide",
     date: "2026-06-28",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Starting your B.Tech journey at BEU? Here is a comprehensive breakdown of the 1st-year syllabus, important subjects, and tips to score well in your first two semesters.",
     content: `
 ## Welcome to Engineering!
@@ -266,7 +266,7 @@ Your first year SGPA will heavily impact your final degree classification. Start
     title: "Top Tech Companies Hiring in Bihar Engineering Colleges",
     slug: "top-tech-companies-hiring-bihar-engineering",
     date: "2026-06-28",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Wondering about placements? Discover the top IT and core companies that recruit from government engineering colleges in Bihar and what they look for.",
     content: `
 ## The Placement Scenario in Bihar
@@ -304,7 +304,7 @@ Stay active on LinkedIn and keep an eye on your college's T&P notice board!
     title: "How to Prepare for GATE while in B.Tech",
     slug: "how-to-prepare-for-gate-during-btech",
     date: "2026-06-28",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "A strategic guide for BEU students on how to balance semester exams with GATE preparation to secure a top rank for PSUs or M.Tech.",
     content: `
 ## Why GATE?
@@ -344,7 +344,7 @@ Do not ignore your college CGPA. A CGPA below 6.5 might disqualify you from cert
     title: "BEU Passing Marks Criteria and Grading System Explained",
     slug: "beu-passing-marks-criteria-and-grading-system",
     date: "2026-06-28",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Confused about how BEU calculates your SGPA and CGPA? Understand the exact passing marks criteria, internal vs external weightage, and the grading curve.",
     content: `
 ## Decoding the BEU Grading System
@@ -388,7 +388,7 @@ Your **CGPA (Cumulative Grade Point Average)** is the average of all your SGPAs.
     title: "Best Laptops for Engineering Students in 2026",
     slug: "best-laptops-for-engineering-students",
     date: "2026-06-28",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Buying a laptop for college? Read our ultimate guide on the specifications you need for coding, CAD, and gaming based on your engineering branch.",
     content: `
 ## The Most Important Tool for an Engineer
@@ -430,7 +430,7 @@ ECE and EE students sit somewhere in the middle. You'll run software like MATLAB
     title: "How to get an Internship in 2nd Year of B.Tech",
     slug: "how-to-get-internship-2nd-year-btech",
     date: "2026-06-28",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Securing an internship early in your college life can boost your resume significantly. Learn the exact steps to land your first tech internship in your 2nd year.",
     content: `
 ## Why Intern Early?
@@ -464,7 +464,7 @@ Remember, your first internship might be unpaid or low-paying. The goal is to ga
     title: "Soft Skills Every Engineering Student Needs",
     slug: "soft-skills-every-engineering-student-needs",
     date: "2026-06-28",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Your CGPA might get you an interview, but your soft skills will get you the job. Discover the essential non-technical skills required to succeed in the corporate world.",
     content: `
 ## The Missing Link in Engineering Education
@@ -497,7 +497,7 @@ Start treating your soft skills as a 4-credit subject!
     title: "Exploring Technical Clubs in Bihar Engineering Colleges",
     slug: "exploring-technical-clubs-bihar-engineering",
     date: "2026-06-28",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Joining a technical club is the best decision you can make in college. Here is a look at the vibrant club culture in BEU affiliated colleges and why you should join.",
     content: `
 ## Beyond the Classroom
@@ -532,7 +532,7 @@ If your college doesn't have an active club, take the initiative and start one!
     title: "State Government Scholarships for Bihar Engineering Students",
     slug: "state-government-scholarships-bihar-engineering",
     date: "2026-06-28",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Don't let finances stop your education. Learn about the various scholarships and student credit card schemes offered by the Bihar Government for B.Tech students.",
     content: `
 ## Financial Aid for B.Tech Students
@@ -568,7 +568,7 @@ Though an AICTE initiative (Central), it is highly relevant for female students 
     title: "The Future of IT Jobs for Tier-3 College Graduates",
     slug: "future-of-it-jobs-tier-3-college-graduates",
     date: "2026-06-28",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "With AI tools like ChatGPT changing the landscape, what does the future hold for engineering graduates from state colleges? Read our deep dive into the evolving IT job market.",
     content: `
 ## AI and the Evolving Job Market
@@ -603,7 +603,7 @@ Upskill constantly, and the opportunities will be limitless!
     title: "The Ultimate Guide to UGEAC Counselling 2026: Top Engineering Colleges in Bihar",
     slug: "ultimate-guide-ugeac-counselling-top-colleges-bihar",
     date: "2026-06-15",
-    author: "Apna College Bihar Admin Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Everything you need to know about the BCECEB UGEAC counselling process, cutoff trends, choice filling strategies, and a deep dive into the top government engineering colleges in Bihar.",
     content: `
 ## Comprehensive Overview of UGEAC and Technical Education in Bihar
@@ -670,7 +670,7 @@ The UGEAC counselling process is your gateway to a solid engineering career with
     title: "How to Score a 9+ CGPA in BEU Semester Exams: A Strategic Masterclass",
     slug: "how-to-score-9-cgpa-beu-semester-exams",
     date: "2026-07-05",
-    author: "Apna College Bihar Team",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Engineering exams in Bihar require smart work, not just hard work. Learn the definitive strategy involving PYQ analysis, module prioritization, and answer writing techniques to ace BEU exams.",
     content: `
 ## Demystifying the BEU Examination System
@@ -722,7 +722,7 @@ Scoring a 9+ CGPA is not about studying 14 hours a day; it's about studying the 
     title: "Computer Science (CSE) vs. IT vs. Specializations (AI/ML): What Should Bihar Students Choose?",
     slug: "cse-vs-it-vs-specializations-ai-ml-guide",
     date: "2026-08-01",
-    author: "Apna College Bihar Career Cell",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
     excerpt: "Confused between Core CSE, Information Technology, and emerging branches like Artificial Intelligence and Data Science? Read our deep dive to make the right career choice during counselling.",
     content: `
 ## Navigating the Maze of Tech Branches in Engineering
@@ -766,6 +766,230 @@ When you are filling out your choices on the BCECEB portal, use this strategic f
 ### Conclusion
 
 Whether you choose Core CSE, IT, or a specialization, your ultimate success depends on your coding skills, projects, and internships, not just the name of your degree. Focus on mastering Data Structures and Algorithms (DSA), build a strong portfolio, and utilize the resources on Apna College Bihar to stay ahead of the curve.
+    `
+  },
+  {
+    id: 19,
+    title: "Bihar Student Credit Card (MNSSBY) Scheme: Complete Guide for B.Tech Students",
+    slug: "bihar-student-credit-card-mnssby-scheme-guide",
+    date: "2026-08-10",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
+    excerpt: "Learn how Bihar engineering students can secure up to 4 Lakhs education loan at just 1% interest (for women/divyang) or 4% for general under the Mukhyamantri Nischay Swayam Sahayata Bhatta Yojana (MNSSBY).",
+    content: `
+## What is the Bihar Student Credit Card (BSCC) Scheme?
+
+Higher education in technical domains like Engineering (B.Tech) often comes with financial burdens including semester fees, hostel charges, books, laptops, and living expenses. To ensure that financial constraints do not stop deserving students in Bihar from pursuing technical education, the Government of Bihar launched the **Bihar Student Credit Card Scheme (MNSSBY - Mukhyamantri Nischay Swayam Sahayata Bhatta Yojana)**.
+
+Under this welfare initiative, students admitted to approved government and private engineering colleges in Bihar and across India can avail an education loan of up to **Rs. 4,00,000 (4 Lakhs)** without collateral or security.
+
+### Key Benefits of BSCC for Bihar Engineering Students
+
+1. **High Loan Quantum:** Up to Rs. 4,00,000 covering tuition fees, hostel rent, food expenses, books, and essential study equipment (such as a laptop).
+2. **Subsidized Interest Rates:**
+   - **1% simple interest** for Female, Transgender, and Differently-Abled (Divyang) students.
+   - **4% simple interest** for Male students.
+3. **Moratorium Period (Repayment Holiday):** No repayment is required during the 4-year course duration plus 1 additional year (or 6 months after securing employment, whichever is earlier).
+4. **Government as Guarantor:** The State Government acts as the guarantor, meaning your family does not need to pledge land, home, or fixed deposits.
+
+### Eligibility Criteria
+
+To apply for the Bihar Student Credit Card, you must satisfy the following conditions:
+
+- **Resident of Bihar:** You must be a permanent resident of Bihar with a valid Domicile Certificate.
+- **Educational Qualification:** You must have completed 12th standard (Intermediate) or equivalent from a recognized Bihar board or CBSE/ICSE school in Bihar.
+- **Age Limit:** Maximum age is 25 years at the date of application.
+- **Admission Verification:** You must have secured confirmed admission in an engineering institute recognized by AICTE, UGC, or Bihar Engineering University (BEU).
+
+### Step-by-Step Application Process (DRCC Guide)
+
+The application for BSCC is processed through the **District Registration and Counselling Centre (DRCC)** of your home district:
+
+1. **Online Registration:** Visit the official portal 7nishchay-yuvaupmission.bihar.gov.in and register with your Aadhaar number and mobile number.
+2. **Form Filling:** Fill in your personal information, family income, and chosen engineering college details along with fee structure breakdown.
+3. **Appointment Scheduling:** Book an appointment slot to visit your local DRCC center for physical document verification.
+4. **Physical Verification at DRCC:** Visit DRCC on your scheduled date with original documents and photocopies.
+5. **Approval and Sanction Letter:** Once verified, the Bihar State Educational Finance Corporation (BSEFC) sanctions the loan, and funds are disbursed directly to your college account and your personal bank account (for hostel and maintenance).
+
+### Mandatory Documents Required
+
+Keep the following documents ready before visiting the DRCC office:
+
+- 10th and 12th Mark sheets and Certificates
+- College Allotment Letter (from UGEAC/BCECEB) and Admission Fee Receipt
+- College Bonafide Certificate & Official Fee Structure on institute letterhead
+- Permanent Resident (Domicile) Certificate of Bihar
+- Aadhaar Card of Student and Co-applicant (Father/Mother)
+- PAN Card of Student and Co-applicant
+- 2 Passport-sized photographs of Student and Co-applicant
+- Bank Passbook / Cancelled Cheque showing IFSC and Account Number
+
+### Pro-Tips for Fast Approval
+
+- Ensure your name on Aadhaar, 10th Certificate, and Bank Account matches letter-for-letter. Any mismatch will cause rejections at DRCC.
+- Obtain the Bonafide Certificate with the college's official AICTE/BEU registration code clearly printed.
+- Utilize the loan wisely: Keep track of every semester fee receipt to enable smooth release of the next semester's installment.
+    `
+  },
+  {
+    id: 20,
+    title: "How to Score 9+ CGPA in BEU: Branch-Wise Subject Strategy & Exam Blueprint",
+    slug: "how-to-score-9-plus-cgpa-in-beu-engineering",
+    date: "2026-08-15",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
+    excerpt: "A battle-tested semester exam strategy for Bihar Engineering University students. Discover how question patterns work, unit weightage, and high-scoring answer presentation techniques.",
+    content: `
+## Why High CGPA Matters for Bihar Engineering Students
+
+A strong Cumulative Grade Point Average (CGPA) above 8.5 or 9.0 is your golden passport to on-campus placements, off-campus tech drives, PSU recruitments through GATE, and top-tier Master's programs (M.Tech at IITs/NITs or MS abroad). 
+
+In Bihar Engineering University (BEU), many students study relentlessly for weeks yet end up with a 7.2 or 7.8 CGPA. The difference between an average scorer and a 9+ CGPA topper is not raw intelligence—it is **strategic exam engineering**.
+
+In this guide, we break down the exact playbook used by university toppers to score consistent 9+ CGPA across semesters.
+
+### Understanding the BEU Question Paper Pattern
+
+The BEU end-semester examination is conducted out of **70 marks** (with 30 marks reserved for internal mid-term assessments and lab work).
+
+1. **Total Questions:** The paper contains 9 questions across all units of the syllabus.
+2. **Compulsory Question (Question 1):** Typically consists of 7 objective or short-answer questions (2 marks each = 14 marks). This question carries zero margin for error; getting 14/14 here creates the foundation of a 9+ CGPA.
+3. **Descriptive Section:** You must select and answer 4 out of the remaining 8 questions (14 marks each = 56 marks).
+
+### 5 Cardinal Rules of Scoring 9+ in BEU
+
+#### 1. The 80/20 PYQ Strategy
+In BEU semester exams, **over 60% of descriptive questions are variations of Previous Year Questions (PYQs)** from the past 4 to 5 years.
+- Download the last 5 years' PYQs from the Apna College Bihar PYQ portal.
+- Group questions unit-wise. You will notice that certain derivation topics (e.g., Navier-Stokes in Mechanical/Civil, Gauss Divergence in Math, Deadlock detection in CSE) appear in alternate years without fail.
+- Prepare handwritten, perfect answers for these recurring questions 3 weeks before the exams.
+
+#### 2. Visual Answers: Diagrams, Flowcharts & Equations
+BEU examiners evaluate hundreds of answer booklets every single day. Text-heavy blocks of paragraphs tire examiners out.
+- **Draw neat diagrams** using pencil and ruler for every 7 or 14 mark question. Even in theoretical subjects like Operating Systems, draw architecture blocks and state diagrams.
+- Box your final numerical results with double outlines.
+- Write stepwise derivations with explanatory lines on the right margin.
+
+#### 3. Structure Your Answers with Headings
+Follow the **Definition → Principle → Working/Derivation → Advantages → Applications** format for every engineering topic. This structured presentation visually signals mastery of the concept.
+
+#### 4. Maximize Internal Sessional Marks (30/30)
+Do not underestimate the 30 internal marks!
+- Maintain 75%+ class attendance to earn full marks in the attendance component.
+- Submit lab records and assignments on time.
+- Prepare sincerely for the mid-semester tests. Scoring 27+ out of 30 in internal assessments gives you a huge buffer.
+
+### Branch-Wise Strategic Advice
+
+- **Computer Science & IT:** Focus heavily on clean syntax in C/C++/Java/Python and clear step-by-step Dry Runs for algorithms with time and space complexity analysis.
+- **Civil Engineering:** Master standard IS-code provisions, moment area theorems, and clear RCC cross-sectional reinforcement drawings.
+- **Mechanical Engineering:** Memorize thermodynamic cycles (Carnot, Rankine, Otto, Diesel) with their P-V and T-S diagrams drawn to exact scale.
+- **Electrical & ECE:** Master circuit diagrams, sign conventions in KCL/KVL, and Bode plots with clearly marked gain and phase margins.
+
+Use the **BEU CGPA Calculator** on Apna College Bihar to track your required grades semester-by-semester and set realistic target goals.
+    `
+  },
+  {
+    id: 21,
+    title: "BEU 75% Attendance & Carry-Over Exam Rules 2026: Everything You Need to Know",
+    slug: "beu-75-attendance-carry-over-exam-rules-2026",
+    date: "2026-08-20",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
+    excerpt: "Understand Bihar Engineering University's strict academic ordinances: 75% mandatory attendance, Year Back rules, carry-over examination process, and grace mark policies.",
+    content: `
+## Academic Regulations at Bihar Engineering University (BEU)
+
+Transitioning into university life comes with academic freedom, but Bihar Engineering University (BEU) enforces strict academic ordinances designed to maintain institutional rigor across all 38 Government Engineering Colleges (GECs).
+
+Every year, hundreds of students face detentions, debarments, or Year Backs simply because they were unaware of the official university rules. This article explains the key academic regulations every BEU student must adhere to.
+
+### The 75% Attendance Mandatory Clause
+
+Under BEU Academic Ordinance Regulation 6.1:
+- A student is required to maintain a **minimum of 75% attendance** in lectures, practical classes, and tutorials for every subject registered in a semester to be eligible for the end-semester examination.
+- **Medical Relaxation (65%):** If a student falls short due to certified illness, hospitalization, or participating in authorized state/national sports or tech events, the Principal of the college may condone attendance up to **10%**, bringing the minimum threshold to **65%**. Official medical certificates from a registered medical practitioner must be submitted within 7 days of resuming classes.
+- **Consequence of Shortage:** Students with attendance below 65% are strictly **debarred** from appearing in the end-semester exam for that subject and must re-register when the course is offered again.
+
+### Carry-Over (Backlog) Examination Rules
+
+Engineering courses are challenging, and encountering a backlog (carry-over paper) is not the end of the world. Here is how BEU handles carry-over examinations:
+
+1. **When are Backlog Exams Conducted?** Carry-over exams are conducted alongside regular semester examinations. Odd semester backlogs (1st, 3rd, 5th, 7th) are cleared during odd semester exams, and even semester backlogs during even semester exams.
+2. **Form Fill-Up Fee:** A nominal examination fee per backlog paper is charged during university exam registration.
+3. **Internal Marks Retention:** Your internal sessional marks (out of 30) from your regular semester are retained. You only re-appear for the 70-mark external theory or practical paper.
+
+### Year Back & Credit Promotion Criteria
+
+To be promoted to higher semesters, BEU follows a credit-accumulation system:
+
+- **Promotion to 2nd Year (3rd Semester):** A student must earn at least 50% of the total credits prescribed for the 1st and 2nd semesters combined.
+- **Promotion to 3rd Year (5th Semester):** You must clear all 1st year foundational subjects without any active backlog in semester 1 and 2.
+- **Promotion to 4th Year (7th Semester):** You must clear all 2nd year subjects.
+
+If a student fails to acquire the requisite credits, they face an academic **Year Back**, meaning they cannot attend the next year's regular classes until backlogs are cleared.
+
+### Grace Marks Policy
+
+BEU provides a student-friendly grace marks provision under specific conditions:
+- If a candidate is failing in **only one theory subject** by a narrow margin (usually 1 to 5 marks), the university academic council may award grace marks to declare the student 'PASS', provided the candidate secures the required aggregate marks overall.
+- Grace marks are indicated on the official university grade card.
+
+### Summary Advice
+
+Keep track of your daily attendance using the Apna College Bihar **Attendance Tracker** feature. Never let your attendance slide below 75%, and if you ever incur a backlog, prioritize clearing it in the very next immediate cycle.
+    `
+  },
+  {
+    id: 22,
+    title: "Smart India Hackathon (SIH) 2026: Complete Strategy for Bihar Engineering Colleges",
+    slug: "smart-india-hackathon-sih-bihar-gec-complete-strategy",
+    date: "2026-08-25",
+    author: "Er. Prince Kumar (BEU Mentor & ACB Team)",
+    excerpt: "Step-by-step blueprint for Bihar GEC students to win Smart India Hackathon (SIH). Learn team formation rules, problem statement selection, PPT presentation design, and prototype architecture.",
+    content: `
+## What is Smart India Hackathon (SIH)?
+
+Organized by the Ministry of Education's Innovation Cell (MIC) and AICTE, the **Smart India Hackathon (SIH)** is the world's largest open innovation initiative. It invites college students across India to solve real-world governance, industrial, and societal problems faced by Central Ministries, State Governments, and top corporations.
+
+Winning SIH not only brings a cash prize of **Rs. 1,00,000 (1 Lakh)** per problem statement, but it also places your resume at the very top of tech recruiter radars worldwide. In recent editions, teams from Bihar engineering colleges like MIT Muzaffarpur, BCE Bhagalpur, and GCE Gaya have won national first prizes.
+
+This comprehensive guide details how you and your college teammates can prepare, crack the internal college screening, and conquer the National Grand Finale.
+
+### SIH Team Formation Rules (Mandatory Criteria)
+
+Before selecting any problem statement, your team must strictly adhere to SIH guidelines:
+
+1. **Exact Team Size:** Every team must consist of **strictly 6 student members**. Neither 5 nor 7 members are accepted under any circumstances.
+2. **Mandatory Female Member:** Having **at least 1 female team member is 100% compulsory**. Teams without a female participant are disqualified automatically during registration.
+3. **Single College Affiliation:** All 6 members must be enrolled students of the same college. Cross-college teams are not permitted.
+4. **Mentors (Optional but Recommended):** You can include up to 2 industry or academic mentors to guide your architecture and presentation.
+
+### Step 1: Choosing the Winning Problem Statement (PS)
+
+Every year, SIH publishes hundreds of problem statements categorized into:
+- **Software Edition:** Mobile apps, web portals, AI/ML pipelines, Blockchain registries, IoT data dashboards.
+- **Hardware Edition:** Drones, agricultural automation, robotics, biomedical devices, renewable energy kits.
+
+**Strategy:** Avoid problem statements that have 2,000+ teams competing on generic concepts (like simple attendance apps). Look for niche problems submitted by specific ministries (like Ministry of Jal Shakti, Ministry of Railways, or ISRO) where deep domain research and innovative UI/UX can make your solution uniquely compelling.
+
+### Step 2: Cracking the Internal College Screening
+
+Every college is permitted to nominate only a limited number of teams (typically top 30 software teams and 5 waitlisted teams) through an **Internal College Hackathon** evaluated by an internal jury and Single Point of Contact (SPOC).
+
+Your Idea Submission PPT must follow the standard 6-slide structure:
+1. **Slide 1: Team & Project Overview** — Team Name, Problem Statement ID, Project Title, College Name & Logo.
+2. **Slide 2: Proposed Solution Architecture** — Clear block diagram depicting system components (Frontend, Backend, Cloud DB, AI Engine).
+3. **Slide 3: Technology Stack** — React/Flutter, Node.js/Python FastAPI, PostgreSQL/MongoDB, Docker, AWS/GCP.
+4. **Slide 4: Process Flowchart / User Journey** — Wireframes and sequence diagrams.
+5. **Slide 5: Innovation & Uniqueness (USP)** — Why your solution outperforms existing market solutions.
+6. **Slide 6: Team Roles & Feasibility Matrix** — Clear contribution breakdown of each member.
+
+### Step 3: Preparing for the 36-Hour Grand Finale
+
+If your team is selected for the Grand Finale:
+- **Build a Working Prototype First:** Focus on building a functional Minimum Viable Product (MVP) with working core features before polishing animations.
+- **Continuous Evaluation Rounds:** In the 36-hour coding marathon, judges conduct multiple mentoring and evaluation rounds. Incorporate their feedback promptly into your code!
+- **Presentation is Everything:** A great technical solution poorly explained loses to an average solution presented with confidence, clarity, and business impact.
+
+Use the **Hackathon Hub & Teammate Finder** on Apna College Bihar to connect with passionate coders in your college and start your SIH journey today!
     `
   }
 ];

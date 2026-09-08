@@ -179,6 +179,14 @@ export default function About() {
           <p>
             Apna College Bihar is more than a repository for BEU Notes; it is an ecosystem. From UGEAC Counselling support for nervous freshers to advanced coding roadmaps and Hackathon directories for seniors, we are building the ultimate digital companion for the Bihar engineering community. Join us, download our app, and let us elevate the standard of technical education in our state together.
           </p>
+
+          <div className="mt-8 p-6 bg-slate-50 border border-slate-200 rounded-2xl not-prose">
+            <h4 className="text-sm font-black text-slate-900 uppercase tracking-wider mb-2">Editorial Leadership & Contact Details</h4>
+            <p className="text-xs text-slate-600 mb-1"><strong>Founder & Chief Editor:</strong> Er. Prince Kumar (B.Tech CSE, BEU Alumnus & Academic Mentor)</p>
+            <p className="text-xs text-slate-600 mb-1"><strong>Editorial Board:</strong> Apna College Bihar Technical Mentorship Cell</p>
+            <p className="text-xs text-slate-600 mb-1"><strong>Headquarters / Operational Base:</strong> Patna, Bihar 800001, India</p>
+            <p className="text-xs text-slate-600"><strong>Official Editorial Email:</strong> <a href="mailto:prince86944@gmail.com" className="text-blue-600 underline">prince86944@gmail.com</a></p>
+          </div>
         </div>
 
         {/* Footer info */}
