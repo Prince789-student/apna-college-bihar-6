@@ -1,6 +1,5 @@
 {
   "version": 2,
-
   "headers": [
     {
       "source": "/(.*)\\.apk",
@@ -8,6 +7,14 @@
         {
           "key": "Cache-Control",
           "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/vnd.android.package-archive"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "attachment"
         }
       ]
     },
@@ -47,7 +54,17 @@
       ]
     }
   ],
+  "redirects": [
+    {
+      "source": "/api/download-apk",
+      "destination": "/apna-college-bihar-v54.apk",
+      "permanent": false
+    }
+  ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/((?!.*\\.(?:apk|aab|zip|pdf|png|jpg|jpeg|svg|ico|json|txt|xml|js|css|woff2?|map)$).*)",
+      "destination": "/index.html"
+    }
   ]
 }
