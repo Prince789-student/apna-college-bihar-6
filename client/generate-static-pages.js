@@ -12,7 +12,18 @@ if (!fs.existsSync(templatePath)) {
   process.exit(1);
 }
 
-const baseTemplate = fs.readFileSync(templatePath, 'utf8');
+const rawTemplate = fs.readFileSync(templatePath, 'utf8');
+const baseTemplate = rawTemplate
+  .replace(/<script>[\s\S]*?FAST-TRACK FOR ADSENSE[\s\S]*?<\/script>/gi, '')
+  .replace(/<style>[\s\S]*?Hide splash screen for bots[\s\S]*?<\/style>/gi, '')
+  .replace(/<div id="acb-splash-screen"[\s\S]*?<\/div>\s*<\/div>/gi, '');
+
+function injectIntoRoot(template, bodyContent) {
+  if (/<div id="root">[\s\S]*?<\/div>/i.test(template)) {
+    return template.replace(/<div id="root">[\s\S]*?<\/div>/i, `<div id="root">\n${bodyContent}\n</div>`);
+  }
+  return template.replace('<div id="root">', `<div id="root">\n${bodyContent}\n</div>`);
+}
 
 // Clean up old flat HTML files in dist so they don't conflict with folder/index.html
 const flatHtmlFiles = ['about.html', 'contact.html', 'privacy-policy.html', 'terms.html', 'disclaimer.html', 'dmca.html', 'blog.html'];
@@ -349,8 +360,8 @@ blogPosts.forEach((post, index) => {
   </div>
   `;
 
-  // Inject into template root
-  let postHtml = baseTemplate.replace('<div id="root">', `<div id="root">${bodyContent}`);
+  // Inject into template root cleanly
+  let postHtml = injectIntoRoot(baseTemplate, bodyContent);
   
   // Inject metadata
   postHtml = injectHeadMetadata(postHtml, {
@@ -436,7 +447,7 @@ const blogIndexBody = `
 </div>
 `;
 
-let blogIndexHtml = baseTemplate.replace('<div id="root">', `<div id="root">${blogIndexBody}`);
+let blogIndexHtml = injectIntoRoot(baseTemplate, blogIndexBody);
 blogIndexHtml = injectHeadMetadata(blogIndexHtml, {
   title: 'BEU Engineering Blog, UGEAC Guides & Academic Articles | Apna College Bihar',
   description: 'Official academic articles, BEU syllabus strategies, UGEAC college cutoffs, and semester exam tips for Bihar engineering students across 38 government engineering colleges.',
@@ -497,7 +508,7 @@ const aboutBody = `
 </div>
 `;
 
-let aboutHtml = baseTemplate.replace('<div id="root">', `<div id="root">${aboutBody}`);
+let aboutHtml = injectIntoRoot(baseTemplate, aboutBody);
 aboutHtml = injectHeadMetadata(aboutHtml, {
   title: 'About Apna College Bihar | Official Study Engine & Guidance Platform',
   description: 'Learn about Apna College Bihar, our editorial board, leadership, and mission to deliver 100% free BEU Notes, PYQs, and UGEAC counselling tools to engineering students across Bihar.',
@@ -568,7 +579,7 @@ const contactBody = `
 </div>
 `;
 
-let contactHtml = baseTemplate.replace('<div id="root">', `<div id="root">${contactBody}`);
+let contactHtml = injectIntoRoot(baseTemplate, contactBody);
 contactHtml = injectHeadMetadata(contactHtml, {
   title: 'Contact Us | Apna College Bihar Support & Mentorship',
   description: 'Get in touch with the Apna College Bihar support team. Official email, WhatsApp community, and verified academic assistance for BEU students.',
@@ -633,7 +644,7 @@ const privacyBody = `
 </div>
 `;
 
-let privacyHtml = baseTemplate.replace('<div id="root">', `<div id="root">${privacyBody}`);
+let privacyHtml = injectIntoRoot(baseTemplate, privacyBody);
 privacyHtml = injectHeadMetadata(privacyHtml, {
   title: 'Privacy Policy | Apna College Bihar',
   description: 'Official Privacy Policy of Apna College Bihar. Learn about our data collection practices, Google AdSense cookie compliance, and user rights.',
@@ -677,7 +688,7 @@ const termsBody = `
 </div>
 `;
 
-let termsHtml = baseTemplate.replace('<div id="root">', `<div id="root">${termsBody}`);
+let termsHtml = injectIntoRoot(baseTemplate, termsBody);
 termsHtml = injectHeadMetadata(termsHtml, {
   title: 'Terms of Service | Apna College Bihar',
   description: 'Terms of Service for Apna College Bihar educational platform and study resources.',
@@ -720,7 +731,7 @@ const disclaimerBody = `
 </div>
 `;
 
-let disclaimerHtml = baseTemplate.replace('<div id="root">', `<div id="root">${disclaimerBody}`);
+let disclaimerHtml = injectIntoRoot(baseTemplate, disclaimerBody);
 disclaimerHtml = injectHeadMetadata(disclaimerHtml, {
   title: 'Disclaimer | Apna College Bihar',
   description: 'Official disclaimer clarifying that Apna College Bihar is an independent educational platform not affiliated with government agencies.',
@@ -763,7 +774,7 @@ const dmcaBody = `
 </div>
 `;
 
-let dmcaHtml = baseTemplate.replace('<div id="root">', `<div id="root">${dmcaBody}`);
+let dmcaHtml = injectIntoRoot(baseTemplate, dmcaBody);
 dmcaHtml = injectHeadMetadata(dmcaHtml, {
   title: 'DMCA Copyright Policy | Apna College Bihar',
   description: 'DMCA copyright and takedown policy for Apna College Bihar.',
@@ -891,7 +902,7 @@ const homeStaticBody = `
 `;
 
 // Update dist/index.html with the rich semantic home body inside root
-let enrichedHomeHtml = baseTemplate.replace('<div id="root">', `<div id="root">${homeStaticBody}`);
+let enrichedHomeHtml = injectIntoRoot(baseTemplate, homeStaticBody);
 enrichedHomeHtml = injectHeadMetadata(enrichedHomeHtml, {
   title: "Apna College Bihar - The Ultimate Engineering Study Hub for BEU",
   description: "Official study engine for Bihar engineering students. Free BEU Notes, PYQs, Syllabus, UGEAC Predictor, CGPA Calculator and counselling guidance for 38+ engineering colleges.",

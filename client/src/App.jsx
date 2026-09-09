@@ -363,14 +363,8 @@ function App() {
   }, [isNative]);
 
   const [showSplash, setShowSplash] = useState(() => {
-    if (isNative) return false; // Native app handles its own splash screen
-    if (window.__PRERENDER_INJECTED && !window.Capacitor?.isNativePlatform?.()) return false;
-    
-    // DETECT GOOGLEBOT / ADSENSE BOT
-    const userAgent = navigator.userAgent || "";
-    const isBot = userAgent.indexOf('Mediapartners-Google') !== -1 || userAgent.indexOf('Googlebot') !== -1;
-    if (isBot) return false; // SKIPS SPLASH SCREEN COMPLETELY FOR BOTS
-
+    // For web visitors and AdSense evaluators, do not show blocking full-screen overlay
+    if (!isNative) return false;
     return !sessionStorage.getItem('splashPlayed');
   });
 
