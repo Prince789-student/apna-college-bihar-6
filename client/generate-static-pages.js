@@ -25,20 +25,7 @@ function injectIntoRoot(template, bodyContent) {
   return template.replace('<div id="root">', `<div id="root">\n${bodyContent}\n</div>`);
 }
 
-// Clean up old flat HTML files in dist so they don't conflict with folder/index.html
-const flatHtmlFiles = ['about.html', 'contact.html', 'privacy-policy.html', 'terms.html', 'disclaimer.html', 'dmca.html', 'blog.html'];
-flatHtmlFiles.forEach(file => {
-  const p = path.join(distDir, file);
-  if (fs.existsSync(p)) fs.unlinkSync(p);
-});
-const distBlogDir = path.join(distDir, 'blog');
-if (fs.existsSync(distBlogDir)) {
-  fs.readdirSync(distBlogDir).forEach(item => {
-    if (item.endsWith('.html') && item !== 'index.html') {
-      fs.unlinkSync(path.join(distBlogDir, item));
-    }
-  });
-}
+
 
 
 // Lightweight, deterministic Markdown-to-HTML converter
@@ -261,15 +248,26 @@ function injectHeadMetadata(html, { title, description, canonical, schemaJson })
   return modified;
 }
 
-// Helper to write static file as standard folder/index.html
+// Helper to write static file as both standard folder/index.html AND flat .html (for Vercel cleanUrls)
 function writeStaticHtml(subPath, htmlContent) {
+  // 1. Write folder/index.html
   const targetDir = path.join(distDir, subPath);
   if (!fs.existsSync(targetDir)) {
     fs.mkdirSync(targetDir, { recursive: true });
   }
   const indexPath = path.join(targetDir, 'index.html');
   fs.writeFileSync(indexPath, htmlContent, 'utf8');
-  console.log(`[SSG] Generated: /${subPath}/index.html`);
+
+  // 2. Also write flat .html (e.g. dist/about.html or dist/blog/foo.html)
+  // This allows Vercel cleanUrls to directly serve /about and /blog/foo with 200 OK
+  const flatFilePath = path.join(distDir, `${subPath}.html`);
+  const flatFileDir = path.dirname(flatFilePath);
+  if (!fs.existsSync(flatFileDir)) {
+    fs.mkdirSync(flatFileDir, { recursive: true });
+  }
+  fs.writeFileSync(flatFilePath, htmlContent, 'utf8');
+
+  console.log(`[SSG] Generated: /${subPath}/index.html & /${subPath}.html`);
 }
 
 // ─────────────────────────────────────────────────────────────

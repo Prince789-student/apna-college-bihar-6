@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="color-scheme" content="light only" />
+   <base href="/" />
+   <!-- Preconnect + DNS Prefetch for all external services -->
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+   <link rel="preconnect" href="https://www.googletagmanager.com" />
+   <link rel="preconnect" href="https://firestore.googleapis.com" />
+   <link rel="preconnect" href="https://firebase.googleapis.com" />
+   <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+   <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+
+   <!-- Preload Google Fonts stylesheet to prevent render-blocking -->
+   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap"
+      as="style" onload="this.onload=null;this.rel='stylesheet'" />
+   <noscript>
+      <link rel="stylesheet"
+         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" />
+   </noscript>
+
+   <!-- Apple / PWA Icons -->
+   <link rel="apple-touch-icon" sizes="180x180" href="/logo-acb.png" />
+   <link rel="apple-touch-icon" sizes="152x152" href="/logo-acb.png" />
+
+   <script>
+      // ── Service Worker Registration ─────────────────────────────
+      if ('serviceWorker' in navigator) {
+         const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+         if (isNative) {
+            document.documentElement.classList.add('native-app');
+         } else {
+            window.addEventListener('load', () => {
+               navigator.serviceWorker.register('/sw.js').catch(err => console.warn('[SW] Registration failed:', err));
+            });
+         }
+      }
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+         e.preventDefault();
+         window.deferredPrompt = e;
+         window.dispatchEvent(new Event('pwa-ready'));
+      });
+   </script>
+
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+   <meta name="theme-color" content="#0d121f" />
+   <meta name="google-site-verification" content="RYqt3qpPlTqKuw2uXw9hLSZNDCLA3iGIzzv_JLOQEVs" />
+   <meta name="google" content="notranslate" />
+   <meta name="author" content="Apna College Bihar" />
+   <meta name="language" content="Hindi, English" />
+   <meta name="geo.region" content="IN-BR" />
+   <meta name="geo.placename" content="Bihar, India" />
+   
+   <title>Smart India Hackathon (SIH) 2026: Complete Strategy for Bihar Engineering Colleges | Apna College Bihar</title>
+   <meta name="description" content="Step-by-step blueprint for Bihar GEC students to win Smart India Hackathon (SIH). Learn team formation rules, problem statement selection, PPT presentation design, and prototype architecture." />
+
+   <!-- AdSense enabled: pause logic removed to allow ads in WebView -->
+   <!-- AdSense Verification Script (STATIC FOR BOT APPROVAL) -->
+   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4005389118070865" crossorigin="anonymous"></script>
+
+
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BXF7KW1XQS"></script>
+   <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-BXF7KW1XQS');
+   </script>
+
+   <link rel="manifest" href="/manifest.json" />
+   <link rel="icon" type="image/png" href="/logo-acb.png?v=99" />
+   <link rel="shortcut icon" href="/logo-acb.png?v=99" />
+
+   <!-- Tailwind CSS is now built locally -->
+
+   <style>
+      html,
+      body,
+      #root {
+         font-family: 'Inter', sans-serif;
+         scroll-behavior: smooth;
+         margin: 0 !important;
+         padding: 0 !important;
+         height: 100% !important;
+         min-height: 100% !important;
+         width: 100% !important;
+         max-width: 100vw !important;
+         overflow-x: hidden !important;
+         overflow-y: auto !important;
+      }
+
+      html.native-app,
+      html.native-app body,
+      html.native-app #root {
+         -webkit-user-select: none;
+         -moz-user-select: none;
+              user-select: none;
+         -webkit-touch-callout: none;
+      }
+
+      input,
+      textarea {
+         -webkit-user-select: auto;
+         -moz-user-select: auto;
+              user-select: auto;
+      }
+
+      .adsbygoogle[data-ad-status="unfilled"] {
+         display: none !important;
+         height: 0 !important;
+         width: 0 !important;
+      }
+   </style>
+  <script type="module" crossorigin src="/assets/index.bf805c98.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/dependencies.ee8fdb3d.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor.1053c91b.js">
+  <link rel="modulepreload" crossorigin href="/assets/firebase.bf776e93.js">
+  <link rel="stylesheet" href="/assets/index.5f468626.css">
+   <link rel="canonical" href="https://www.apnacollegebihar.online/blog/smart-india-hackathon-sih-bihar-gec-complete-strategy" />
+
+   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.apnacollegebihar.online/blog/smart-india-hackathon-sih-bihar-gec-complete-strategy"},"headline":"Smart India Hackathon (SIH) 2026: Complete Strategy for Bihar Engineering Colleges","description":"Step-by-step blueprint for Bihar GEC students to win Smart India Hackathon (SIH). Learn team formation rules, problem statement selection, PPT presentation design, and prototype architecture.","image":"https://www.apnacollegebihar.online/logo-acb.png","author":{"@type":"Person","name":"Er. Prince Kumar (BEU Mentor & ACB Team)","jobTitle":"Lead Engineering Mentor","worksFor":{"@type":"Organization","name":"Apna College Bihar"}},"publisher":{"@type":"Organization","name":"Apna College Bihar","logo":{"@type":"ImageObject","url":"https://www.apnacollegebihar.online/logo-acb.png"}},"datePublished":"2026-08-25","dateModified":"2026-08-25"}</script>
+</head>
+
+   <body class="bg-slate-50 font-sans antialiased text-slate-900">
+   <div id="root">
+
+  <div class="min-h-screen bg-white font-['Inter'] flex flex-col justify-between">
+    
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2.5">
+      <img src="/logo-acb.png" alt="Apna College Bihar" class="w-8 h-8 rounded-lg" />
+      <span class="font-black text-base md:text-lg text-slate-900 uppercase tracking-tight">Apna College <span class="text-blue-600">Bihar</span></span>
+    </a>
+    <nav class="hidden md:flex items-center gap-6 text-xs font-bold uppercase tracking-wider text-slate-600">
+      <a href="/" class="hover:text-blue-600 transition-colors">Home</a>
+      <a href="/notes" class="hover:text-blue-600 transition-colors">BEU Notes</a>
+      <a href="/pyq" class="hover:text-blue-600 transition-colors">PYQ Papers</a>
+      <a href="/syllabus" class="hover:text-blue-600 transition-colors">Syllabus</a>
+      <a href="/ugeac-predictor" class="hover:text-blue-600 transition-colors">UGEAC Predictor</a>
+      <a href="/blog" class="text-blue-600 font-black">Blog</a>
+      <a href="/about" class="hover:text-blue-600 transition-colors">About Us</a>
+      <a href="/contact" class="hover:text-blue-600 transition-colors">Contact</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="/apna-college-bihar-v54.apk" download class="px-3.5 py-2 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Get App</a>
+    </div>
+  </div>
+</header>
+
+
+    <main class="flex-grow">
+      <!-- Breadcrumb Bar -->
+      <div class="bg-slate-50 border-b border-slate-200 py-3">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 text-xs text-slate-500 flex items-center gap-2">
+          <a href="/" class="hover:text-blue-600">Home</a>
+          <span>/</span>
+          <a href="/blog" class="hover:text-blue-600">Blog</a>
+          <span>/</span>
+          <span class="text-slate-800 font-semibold truncate max-w-md">Smart India Hackathon (SIH) 2026: Complete Strategy for Bihar Engineering Colleges</span>
+        </div>
+      </div>
+
+      <!-- Article Header -->
+      <article class="pt-8 pb-12 px-4 sm:px-6 max-w-4xl mx-auto">
+        <header class="mb-8 border-b border-slate-200 pb-8">
+          <span class="px-3 py-1 bg-blue-100 text-blue-800 text-[10px] font-black uppercase tracking-widest rounded-full inline-block mb-4">BEU Academic Guide</span>
+          <h1 class="text-2xl sm:text-4xl md:text-5xl font-[1000] text-slate-900 tracking-tight leading-tight mb-4">Smart India Hackathon (SIH) 2026: Complete Strategy for Bihar Engineering Colleges</h1>
+          
+          <div class="flex flex-wrap items-center gap-4 text-xs font-bold text-slate-500">
+            <span>📅 Published: <time datetime="2026-08-25">25 August 2026</time></span>
+            <span>✍️ Written by: <span class="text-slate-800">Er. Prince Kumar (BEU Mentor & ACB Team)</span></span>
+            <span>⏱️ 5 min read</span>
+          </div>
+        </header>
+
+        <!-- Main Body -->
+        <div class="prose prose-slate max-w-none text-slate-800 leading-relaxed">
+          <h2 class="text-xl md:text-2xl font-black text-slate-900 mt-10 mb-4 border-b border-slate-200 pb-2">What is Smart India Hackathon (SIH)?</h2>
+<p class="text-slate-700 leading-relaxed text-sm md:text-base my-4">Organized by the Ministry of Education's Innovation Cell (MIC) and AICTE, the <strong>Smart India Hackathon (SIH)</strong> is the world's largest open innovation initiative. It invites college students across India to solve real-world governance, industrial, and societal problems faced by Central Ministries, State Governments, and top corporations.</p>
+<p class="text-slate-700 leading-relaxed text-sm md:text-base my-4">Winning SIH not only brings a cash prize of <strong>Rs. 1,00,000 (1 Lakh)</strong> per problem statement, but it also places your resume at the very top of tech recruiter radars worldwide. In recent editions, teams from Bihar engineering colleges like MIT Muzaffarpur, BCE Bhagalpur, and GCE Gaya have won national first prizes.</p>
+<p class="text-slate-700 leading-relaxed text-sm md:text-base my-4">This comprehensive guide details how you and your college teammates can prepare, crack the internal college screening, and conquer the National Grand Finale.</p>
+<h3 class="text-lg md:text-xl font-black text-slate-900 mt-8 mb-3">SIH Team Formation Rules (Mandatory Criteria)</h3>
+<p class="text-slate-700 leading-relaxed text-sm md:text-base my-4">Before selecting any problem statement, your team must strictly adhere to SIH guidelines:</p>
+<ol class="list-decimal pl-6 space-y-2 text-slate-700 my-4">
+<li><strong>Exact Team Size:</strong> Every team must consist of <strong>strictly 6 student members</strong>. Neither 5 nor 7 members are accepted under any circumstances.</li>
+<li><strong>Mandatory Female Member:</strong> Having <strong>at least 1 female team member is 100% compulsory</strong>. Teams without a female participant are disqualified automatically during registration.</li>
+<li><strong>Single College Affiliation:</strong> All 6 members must be enrolled students of the same college. Cross-college teams are not permitted.</li>
+<li><strong>Mentors (Optional but Recommended):</strong> You can include up to 2 industry or academic mentors to guide your architecture and presentation.</li>
+</ol>
+<h3 class="text-lg md:text-xl font-black text-slate-900 mt-8 mb-3">Step 1: Choosing the Winning Problem Statement (PS)</h3>
+<p class="text-slate-700 leading-relaxed text-sm md:text-base my-4">Every year, SIH publishes hundreds of problem statements categorized into:</p>
+<ul class="list-disc pl-6 space-y-2 text-slate-700 my-4">
+<li><strong>Software Edition:</strong> Mobile apps, web portals, AI/ML pipelines, Blockchain registries, IoT data dashboards.</li>
+<li><strong>Hardware Edition:</strong> Drones, agricultural automation, robotics, biomedical devices, renewable energy kits.</li>
+</ul>
+<p class="text-slate-700 leading-relaxed text-sm md:text-base my-4"><strong>Strategy:</strong> Avoid problem statements that have 2,000+ teams competing on generic concepts (like simple attendance apps). Look for niche problems submitted by specific ministries (like Ministry of Jal Shakti, Ministry of Railways, or ISRO) where deep domain research and innovative UI/UX can make your solution uniquely compelling.</p>
+<h3 class="text-lg md:text-xl font-black text-slate-900 mt-8 mb-3">Step 2: Cracking the Internal College Screening</h3>
+<p class="text-slate-700 leading-relaxed text-sm md:text-base my-4">Every college is permitted to nominate only a limited number of teams (typically top 30 software teams and 5 waitlisted teams) through an <strong>Internal College Hackathon</strong> evaluated by an internal jury and Single Point of Contact (SPOC).</p>
+<p class="text-slate-700 leading-relaxed text-sm md:text-base my-4">Your Idea Submission PPT must follow the standard 6-slide structure:</p>
+<ol class="list-decimal pl-6 space-y-2 text-slate-700 my-4">
+<li><strong>Slide 1: Team & Project Overview</strong> — Team Name, Problem Statement ID, Project Title, College Name & Logo.</li>
+<li><strong>Slide 2: Proposed Solution Architecture</strong> — Clear block diagram depicting system components (Frontend, Backend, Cloud DB, AI Engine).</li>
+<li><strong>Slide 3: Technology Stack</strong> — React/Flutter, Node.js/Python FastAPI, PostgreSQL/MongoDB, Docker, AWS/GCP.</li>
+<li><strong>Slide 4: Process Flowchart / User Journey</strong> — Wireframes and sequence diagrams.</li>
+<li><strong>Slide 5: Innovation & Uniqueness (USP)</strong> — Why your solution outperforms existing market solutions.</li>
+<li><strong>Slide 6: Team Roles & Feasibility Matrix</strong> — Clear contribution breakdown of each member.</li>
+</ol>
+<h3 class="text-lg md:text-xl font-black text-slate-900 mt-8 mb-3">Step 3: Preparing for the 36-Hour Grand Finale</h3>
+<p class="text-slate-700 leading-relaxed text-sm md:text-base my-4">If your team is selected for the Grand Finale:</p>
+<ul class="list-disc pl-6 space-y-2 text-slate-700 my-4">
+<li><strong>Build a Working Prototype First:</strong> Focus on building a functional Minimum Viable Product (MVP) with working core features before polishing animations.</li>
+<li><strong>Continuous Evaluation Rounds:</strong> In the 36-hour coding marathon, judges conduct multiple mentoring and evaluation rounds. Incorporate their feedback promptly into your code!</li>
+<li><strong>Presentation is Everything:</strong> A great technical solution poorly explained loses to an average solution presented with confidence, clarity, and business impact.</li>
+</ul>
+<p class="text-slate-700 leading-relaxed text-sm md:text-base my-4">Use the <strong>Hackathon Hub & Teammate Finder</strong> on Apna College Bihar to connect with passionate coders in your college and start your SIH journey today!</p>
+        </div>
+
+        <!-- Author Bio Box (E-E-A-T) -->
+        <div class="mt-12 p-6 md:p-8 bg-slate-50 border border-slate-200 rounded-3xl flex flex-col sm:flex-row gap-5 items-start">
+          <div class="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-xl shrink-0 shadow-md">
+            PK
+          </div>
+          <div class="space-y-2 text-xs">
+            <h3 class="text-base font-black text-slate-900">Er. Prince Kumar (BEU Mentor & ACB Team)</h3>
+            <p class="text-slate-600 leading-relaxed font-medium">
+              Er. Prince Kumar is an engineering educator and Bihar Engineering University (BEU) alumnus. He leads the technical and academic content initiatives at Apna College Bihar, helping tens of thousands of engineering scholars across Bihar excel in semester exams, UGEAC counselling, and national coding hackathons.
+            </p>
+            <div class="flex items-center gap-4 pt-1 font-bold text-blue-600">
+              <a href="/about" class="hover:underline">Meet the Editorial Board &rarr;</a>
+              <a href="/contact" class="hover:underline">Report Correction / Feedback &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Articles Section -->
+        <div class="mt-12 pt-8 border-t border-slate-200">
+          <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-4">Recommended Articles & Guides</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+    <a href="/blog/top-10-government-engineering-colleges-in-bihar-ugeac" class="p-5 bg-slate-50 border border-slate-200 rounded-2xl hover:border-blue-500 transition-all group block">
+      <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest block mb-1">Article</span>
+      <h4 class="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors line-clamp-2 mb-2">Top 10 Government Engineering Colleges in Bihar under UGEAC</h4>
+      <p class="text-xs text-slate-500 line-clamp-2">Discover the best government engineering colleges in Bihar for B.Tech admission through the UGEAC counselling process. Read our detailed guide covering placements, cutoffs, and campus life.</p>
+    </a>
+  
+    <a href="/blog/how-to-prepare-for-beu-semester-exams" class="p-5 bg-slate-50 border border-slate-200 rounded-2xl hover:border-blue-500 transition-all group block">
+      <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest block mb-1">Article</span>
+      <h4 class="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors line-clamp-2 mb-2">How to Prepare for BEU (Bihar Engineering University) Semester Exams</h4>
+      <p class="text-xs text-slate-500 line-clamp-2">A complete strategy to ace your BEU semester exams. Learn how to utilize PYQs, organized notes, and time management to score a 9+ CGPA.</p>
+    </a>
+  
+    <a href="/blog/complete-guide-to-ugeac-counselling-process" class="p-5 bg-slate-50 border border-slate-200 rounded-2xl hover:border-blue-500 transition-all group block">
+      <span class="text-[10px] font-bold text-blue-600 uppercase tracking-widest block mb-1">Article</span>
+      <h4 class="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors line-clamp-2 mb-2">Complete Guide to UGEAC Counselling Process</h4>
+      <p class="text-xs text-slate-500 line-clamp-2">Everything you need to know about the UGEAC counselling process, from registration and choice filling to document verification and final admission.</p>
+    </a>
+  
+          </div>
+        </div>
+      </article>
+    </main>
+
+    
+<footer class="bg-slate-900 text-white pt-16 pb-12 border-t border-slate-800">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-slate-800 text-xs">
+      <div class="space-y-3 md:col-span-1">
+        <div class="flex items-center gap-2">
+          <img src="/logo-acb.png" alt="ACB Logo" class="w-7 h-7 rounded" />
+          <span class="font-black text-sm uppercase tracking-wider">Apna College <span class="text-blue-400">Bihar</span></span>
+        </div>
+        <p class="text-slate-400 leading-relaxed">
+          The premier digital study engine and guidance platform for Bihar Engineering University (BEU) scholars across 38 government colleges.
+        </p>
+        <p class="text-slate-500 font-bold">Patna, Bihar 800001, India</p>
+        <p class="text-slate-500">Contact: <a href="mailto:prince86944@gmail.com" class="text-blue-400 hover:underline">prince86944@gmail.com</a></p>
+      </div>
+      <div>
+        <h4 class="font-black uppercase tracking-widest text-slate-300 mb-3">Academic Tools</h4>
+        <ul class="space-y-2 text-slate-400 font-medium">
+          <li><a href="/notes" class="hover:text-white transition-colors">BEU Semester Notes</a></li>
+          <li><a href="/pyq" class="hover:text-white transition-colors">Previous Year Questions</a></li>
+          <li><a href="/syllabus" class="hover:text-white transition-colors">Official B.Tech Syllabus</a></li>
+          <li><a href="/cgpa" class="hover:text-white transition-colors">BEU CGPA Calculator</a></li>
+          <li><a href="/ugeac-predictor" class="hover:text-white transition-colors">UGEAC College Predictor</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-black uppercase tracking-widest text-slate-300 mb-3">Quick Navigation</h4>
+        <ul class="space-y-2 text-slate-400 font-medium">
+          <li><a href="/blog" class="hover:text-white transition-colors">Engineering Blog & Guides</a></li>
+          <li><a href="/colleges" class="hover:text-white transition-colors">Bihar GEC Directory</a></li>
+          <li><a href="/hackathons" class="hover:text-white transition-colors">Hackathon Hub</a></li>
+          <li><a href="/lecture-finder" class="hover:text-white transition-colors">YouTube Lecture Finder</a></li>
+          <li><a href="/directory" class="hover:text-white transition-colors">Sitemap Directory</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-black uppercase tracking-widest text-slate-300 mb-3">Institutional & Legal</h4>
+        <ul class="space-y-2 text-slate-400 font-medium">
+          <li><a href="/about" class="hover:text-white transition-colors">About Our Platform</a></li>
+          <li><a href="/contact" class="hover:text-white transition-colors">Contact Support Center</a></li>
+          <li><a href="/privacy-policy" class="hover:text-white transition-colors">Privacy Policy</a></li>
+          <li><a href="/terms" class="hover:text-white transition-colors">Terms of Service</a></li>
+          <li><a href="/disclaimer" class="hover:text-white transition-colors">Disclaimer</a></li>
+          <li><a href="/dmca" class="hover:text-white transition-colors">DMCA Notice</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <p>&copy; 2026 Apna College Bihar. All rights reserved. Built with dedication for Bihar Engineering Scholars.</p>
+      <div class="flex items-center gap-4">
+        <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition-colors">WhatsApp Channel</a>
+        <a href="https://youtube.com/@apnacollegebihar" target="_blank" rel="noopener noreferrer" class="hover:text-red-400 transition-colors">YouTube</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+  </div>
+  
+</div>
+   
+      <noscript>
+      <div style="padding: 20px; font-family: sans-serif; text-align: center; max-width: 800px; margin: 0 auto; color: #333;">
+         <h1>Apna College Bihar - The Ultimate Engineering Study Hub</h1>
+         <p>Please enable JavaScript to access the official BEU study resources, PYQs, and tools.</p>
+         <p>Welcome to <strong>Apna College Bihar</strong>, the premier digital learning platform dedicated specifically to students of <strong>Bihar Engineering University (BEU)</strong>. Whether you are pursuing Computer Science (CSE), Civil Engineering, Mechanical Engineering, or Electrical Engineering, finding structured, high-quality study materials can be challenging. Our mission is to bridge this gap by providing comprehensive, easy-to-understand resources that align perfectly with the official BEU B.Tech syllabus.</p>
+         <h2>Comprehensive BEU Notes and Study Materials</h2>
+         <p>One of the biggest hurdles engineering students face is the lack of concise and accurate study notes. At Apna College Bihar, we offer meticulously crafted <strong>BEU Notes</strong> that cover every unit of your semester. These notes are designed by top-performing students and subject matter experts to ensure that you grasp complex engineering concepts quickly.</p>
+         <h2>Mastering Exams with BEU Previous Year Questions (PYQs)</h2>
+         <p>It is a well-known fact that analyzing <strong>BEU Previous Year Question Papers (PYQs)</strong> is the most effective strategy for exam preparation. The university exam patterns often repeat crucial concepts and question formats. Our platform provides a vast, organized repository of BEU PYQs for all branches and semesters.</p>
+         <h2>Advanced Tools: CGPA Calculator, Syllabus, and Timetable</h2>
+         <p>Beyond study materials, Apna College Bihar equips you with powerful digital tools to manage your academic life. Our <strong>BEU CGPA Calculator</strong> allows you to accurately track your academic performance. We also provide an easily navigable version of the <strong>BEU B.Tech Syllabus</strong> so you never miss a topic.</p>
+         <a href="/directory">View Sitemap Directory</a>
+      </div>
+   </noscript>
+
+   <script>
+      (function () {
+         document.addEventListener('click', function (e) {
+            try {
+               const a = e.target.closest && e.target.closest('a');
+               if (!a) return;
+               const href = a.getAttribute && a.getAttribute('href');
+               if (!href) return;
+               if (href.startsWith('/') && !a.hasAttribute('download') && a.target !== '_blank' && !href.startsWith('//')) {
+                  if (href.startsWith('#')) return;
+                  e.preventDefault();
+                  if (window.location.pathname + window.location.search !== href) {
+                     history.pushState({}, '', href);
+                  }
+                  window.dispatchEvent(new PopStateEvent('popstate'));
+               }
+            } catch (err) { }
+         }, false);
+      })();
+   </script>
+   
+</body>
+
+</html>
