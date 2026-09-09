@@ -53,6 +53,7 @@
       ]
     }
   ],
+  "cleanUrls": true,
   "redirects": [
     {
       "source": "/api/download-apk",
@@ -62,7 +63,7 @@
   ],
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!about|contact|privacy-policy|terms|disclaimer|dmca|blog|.*\\..*).*)",
       "destination": "/index.html"
     }
   ]
