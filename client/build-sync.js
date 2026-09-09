@@ -55,6 +55,24 @@ const androidAssetsDir = path.join(__dirname, 'android', 'app', 'src', 'main', '
 function syncBuild() {
     try {
         console.log('Syncing build assets...');
+        // 0. Remove obsolete/colliding folders from server/public
+        const collidingDirs = ['about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca'];
+        collidingDirs.forEach(dir => {
+            const p = path.join(destDir, dir);
+            if (fs.existsSync(p) && fs.statSync(p).isDirectory()) {
+                fs.rmSync(p, { recursive: true, force: true });
+            }
+        });
+        const serverBlogDir = path.join(destDir, 'blog');
+        if (fs.existsSync(serverBlogDir)) {
+            fs.readdirSync(serverBlogDir).forEach(item => {
+                const itemPath = path.join(serverBlogDir, item);
+                if (fs.statSync(itemPath).isDirectory()) {
+                    fs.rmSync(itemPath, { recursive: true, force: true });
+                }
+            });
+        }
+
         // 1. Copy from dist to server/public
         if (!fs.existsSync(destDir)) {
             fs.mkdirSync(destDir, { recursive: true });

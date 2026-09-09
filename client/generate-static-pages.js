@@ -14,6 +14,24 @@ if (!fs.existsSync(templatePath)) {
 
 const baseTemplate = fs.readFileSync(templatePath, 'utf8');
 
+// Clean up any conflicting directories in dist to ensure cleanUrls work without 404 collisions
+const collidingDirs = ['about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca'];
+collidingDirs.forEach(dir => {
+  const p = path.join(distDir, dir);
+  if (fs.existsSync(p) && fs.statSync(p).isDirectory()) {
+    fs.rmSync(p, { recursive: true, force: true });
+  }
+});
+const distBlogDir = path.join(distDir, 'blog');
+if (fs.existsSync(distBlogDir)) {
+  fs.readdirSync(distBlogDir).forEach(item => {
+    const itemPath = path.join(distBlogDir, item);
+    if (fs.statSync(itemPath).isDirectory()) {
+      fs.rmSync(itemPath, { recursive: true, force: true });
+    }
+  });
+}
+
 // Lightweight, deterministic Markdown-to-HTML converter
 function mdToHtml(md) {
   if (!md) return '';
@@ -234,22 +252,38 @@ function injectHeadMetadata(html, { title, description, canonical, schemaJson })
   return modified;
 }
 
-// Helper to write static file to directory and clean URL variant
+// Helper to write static file for clean URLs without folder collisions
 function writeStaticHtml(subPath, htmlContent) {
-  const targetDir = path.join(distDir, subPath);
-  if (!fs.existsSync(targetDir)) {
-    fs.mkdirSync(targetDir, { recursive: true });
+  if (subPath === 'blog') {
+    // /blog has sub-posts inside /blog/, so write /blog/index.html and /blog.html
+    const blogDir = path.join(distDir, 'blog');
+    if (!fs.existsSync(blogDir)) {
+      fs.mkdirSync(blogDir, { recursive: true });
+    }
+    fs.writeFileSync(path.join(blogDir, 'index.html'), htmlContent, 'utf8');
+    fs.writeFileSync(path.join(distDir, 'blog.html'), htmlContent, 'utf8');
+    console.log(`[SSG] Generated: /blog (blog.html + blog/index.html)`);
+    return;
   }
-  
-  // 1. Write as /subPath/index.html
-  const indexPath = path.join(targetDir, 'index.html');
-  fs.writeFileSync(indexPath, htmlContent, 'utf8');
 
-  // 2. Write as /subPath.html (for Vercel cleanUrls)
+  // If subPath has a slash, e.g. "blog/my-post"
+  const parts = subPath.split('/');
+  if (parts.length > 1) {
+    const parentDir = path.join(distDir, ...parts.slice(0, -1));
+    if (!fs.existsSync(parentDir)) {
+      fs.mkdirSync(parentDir, { recursive: true });
+    }
+    const cleanPath = path.join(distDir, `${subPath}.html`);
+    fs.writeFileSync(cleanPath, htmlContent, 'utf8');
+    console.log(`[SSG] Generated: /${subPath} (${subPath}.html)`);
+    return;
+  }
+
+  // Top-level pages: "about", "contact", "privacy-policy", "terms", "disclaimer", "dmca"
+  // ONLY write subPath.html so there is NO directory collision with cleanUrls: true
   const cleanPath = path.join(distDir, `${subPath}.html`);
   fs.writeFileSync(cleanPath, htmlContent, 'utf8');
-
-  console.log(`[SSG] Generated: /${subPath}`);
+  console.log(`[SSG] Generated: /${subPath} (${subPath}.html)`);
 }
 
 // ─────────────────────────────────────────────────────────────
