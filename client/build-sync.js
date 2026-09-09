@@ -55,20 +55,17 @@ const androidAssetsDir = path.join(__dirname, 'android', 'app', 'src', 'main', '
 function syncBuild() {
     try {
         console.log('Syncing build assets...');
-        // 0. Remove obsolete/colliding folders from server/public
-        const collidingDirs = ['about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca'];
-        collidingDirs.forEach(dir => {
-            const p = path.join(destDir, dir);
-            if (fs.existsSync(p) && fs.statSync(p).isDirectory()) {
-                fs.rmSync(p, { recursive: true, force: true });
-            }
+        // 0. Remove flat HTML files from server/public so folder/index.html is clean
+        const flatHtmlFiles = ['about.html', 'contact.html', 'privacy-policy.html', 'terms.html', 'disclaimer.html', 'dmca.html', 'blog.html'];
+        flatHtmlFiles.forEach(file => {
+            const p = path.join(destDir, file);
+            if (fs.existsSync(p)) fs.unlinkSync(p);
         });
         const serverBlogDir = path.join(destDir, 'blog');
         if (fs.existsSync(serverBlogDir)) {
             fs.readdirSync(serverBlogDir).forEach(item => {
-                const itemPath = path.join(serverBlogDir, item);
-                if (fs.statSync(itemPath).isDirectory()) {
-                    fs.rmSync(itemPath, { recursive: true, force: true });
+                if (item.endsWith('.html') && item !== 'index.html') {
+                    fs.unlinkSync(path.join(serverBlogDir, item));
                 }
             });
         }

@@ -14,23 +14,21 @@ if (!fs.existsSync(templatePath)) {
 
 const baseTemplate = fs.readFileSync(templatePath, 'utf8');
 
-// Clean up any conflicting directories in dist to ensure cleanUrls work without 404 collisions
-const collidingDirs = ['about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca'];
-collidingDirs.forEach(dir => {
-  const p = path.join(distDir, dir);
-  if (fs.existsSync(p) && fs.statSync(p).isDirectory()) {
-    fs.rmSync(p, { recursive: true, force: true });
-  }
+// Clean up old flat HTML files in dist so they don't conflict with folder/index.html
+const flatHtmlFiles = ['about.html', 'contact.html', 'privacy-policy.html', 'terms.html', 'disclaimer.html', 'dmca.html', 'blog.html'];
+flatHtmlFiles.forEach(file => {
+  const p = path.join(distDir, file);
+  if (fs.existsSync(p)) fs.unlinkSync(p);
 });
 const distBlogDir = path.join(distDir, 'blog');
 if (fs.existsSync(distBlogDir)) {
   fs.readdirSync(distBlogDir).forEach(item => {
-    const itemPath = path.join(distBlogDir, item);
-    if (fs.statSync(itemPath).isDirectory()) {
-      fs.rmSync(itemPath, { recursive: true, force: true });
+    if (item.endsWith('.html') && item !== 'index.html') {
+      fs.unlinkSync(path.join(distBlogDir, item));
     }
   });
 }
+
 
 // Lightweight, deterministic Markdown-to-HTML converter
 function mdToHtml(md) {
@@ -252,38 +250,15 @@ function injectHeadMetadata(html, { title, description, canonical, schemaJson })
   return modified;
 }
 
-// Helper to write static file for clean URLs without folder collisions
+// Helper to write static file as standard folder/index.html
 function writeStaticHtml(subPath, htmlContent) {
-  if (subPath === 'blog') {
-    // /blog has sub-posts inside /blog/, so write /blog/index.html and /blog.html
-    const blogDir = path.join(distDir, 'blog');
-    if (!fs.existsSync(blogDir)) {
-      fs.mkdirSync(blogDir, { recursive: true });
-    }
-    fs.writeFileSync(path.join(blogDir, 'index.html'), htmlContent, 'utf8');
-    fs.writeFileSync(path.join(distDir, 'blog.html'), htmlContent, 'utf8');
-    console.log(`[SSG] Generated: /blog (blog.html + blog/index.html)`);
-    return;
+  const targetDir = path.join(distDir, subPath);
+  if (!fs.existsSync(targetDir)) {
+    fs.mkdirSync(targetDir, { recursive: true });
   }
-
-  // If subPath has a slash, e.g. "blog/my-post"
-  const parts = subPath.split('/');
-  if (parts.length > 1) {
-    const parentDir = path.join(distDir, ...parts.slice(0, -1));
-    if (!fs.existsSync(parentDir)) {
-      fs.mkdirSync(parentDir, { recursive: true });
-    }
-    const cleanPath = path.join(distDir, `${subPath}.html`);
-    fs.writeFileSync(cleanPath, htmlContent, 'utf8');
-    console.log(`[SSG] Generated: /${subPath} (${subPath}.html)`);
-    return;
-  }
-
-  // Top-level pages: "about", "contact", "privacy-policy", "terms", "disclaimer", "dmca"
-  // ONLY write subPath.html so there is NO directory collision with cleanUrls: true
-  const cleanPath = path.join(distDir, `${subPath}.html`);
-  fs.writeFileSync(cleanPath, htmlContent, 'utf8');
-  console.log(`[SSG] Generated: /${subPath} (${subPath}.html)`);
+  const indexPath = path.join(targetDir, 'index.html');
+  fs.writeFileSync(indexPath, htmlContent, 'utf8');
+  console.log(`[SSG] Generated: /${subPath}/index.html`);
 }
 
 // ─────────────────────────────────────────────────────────────
