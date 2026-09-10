@@ -57,7 +57,27 @@ function syncBuild() {
         console.log('Syncing build assets...');
 
 
-        // 1. Copy from dist to server/public
+        // 1. Clean conflicting directories in server/public so Vercel cleanUrls maps cleanly to flat .html files without directory collision
+        const conflictingDirs = ['about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca'];
+        conflictingDirs.forEach(dir => {
+            const p = path.join(destDir, dir);
+            if (fs.existsSync(p)) fs.rmSync(p, { recursive: true, force: true });
+        });
+        const serverBlogHtml = path.join(destDir, 'blog.html');
+        if (fs.existsSync(serverBlogHtml)) {
+            fs.unlinkSync(serverBlogHtml);
+        }
+        const serverBlogDir = path.join(destDir, 'blog');
+        if (fs.existsSync(serverBlogDir)) {
+            fs.readdirSync(serverBlogDir).forEach(item => {
+                const p = path.join(serverBlogDir, item);
+                if (fs.statSync(p).isDirectory()) {
+                    fs.rmSync(p, { recursive: true, force: true });
+                }
+            });
+        }
+
+        // 2. Copy from dist to server/public
         if (!fs.existsSync(destDir)) {
             fs.mkdirSync(destDir, { recursive: true });
         }

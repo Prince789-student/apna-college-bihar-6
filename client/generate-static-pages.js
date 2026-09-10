@@ -26,6 +26,26 @@ function injectIntoRoot(template, bodyContent) {
 }
 
 
+// Clean up any conflicting directories so Vercel cleanUrls maps cleanly to flat .html files without directory collision
+const conflictingDirs = ['about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca'];
+conflictingDirs.forEach(dir => {
+  const p = path.join(distDir, dir);
+  if (fs.existsSync(p)) fs.rmSync(p, { recursive: true, force: true });
+});
+const flatBlog = path.join(distDir, 'blog.html');
+if (fs.existsSync(flatBlog)) fs.unlinkSync(flatBlog);
+
+const distBlogDir = path.join(distDir, 'blog');
+if (fs.existsSync(distBlogDir)) {
+  fs.readdirSync(distBlogDir).forEach(item => {
+    const p = path.join(distBlogDir, item);
+    if (fs.statSync(p).isDirectory()) {
+      fs.rmSync(p, { recursive: true, force: true });
+    }
+  });
+}
+
+
 
 
 // Lightweight, deterministic Markdown-to-HTML converter
@@ -248,26 +268,15 @@ function injectHeadMetadata(html, { title, description, canonical, schemaJson })
   return modified;
 }
 
-// Helper to write static file as both standard folder/index.html AND flat .html (for Vercel cleanUrls)
+// Helper to write static file as flat .html for Vercel cleanUrls
 function writeStaticHtml(subPath, htmlContent) {
-  // 1. Write folder/index.html
-  const targetDir = path.join(distDir, subPath);
-  if (!fs.existsSync(targetDir)) {
-    fs.mkdirSync(targetDir, { recursive: true });
-  }
-  const indexPath = path.join(targetDir, 'index.html');
-  fs.writeFileSync(indexPath, htmlContent, 'utf8');
-
-  // 2. Also write flat .html (e.g. dist/about.html or dist/blog/foo.html)
-  // This allows Vercel cleanUrls to directly serve /about and /blog/foo with 200 OK
   const flatFilePath = path.join(distDir, `${subPath}.html`);
   const flatFileDir = path.dirname(flatFilePath);
   if (!fs.existsSync(flatFileDir)) {
     fs.mkdirSync(flatFileDir, { recursive: true });
   }
   fs.writeFileSync(flatFilePath, htmlContent, 'utf8');
-
-  console.log(`[SSG] Generated: /${subPath}/index.html & /${subPath}.html`);
+  console.log(`[SSG] Generated: /${subPath}.html`);
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -451,7 +460,16 @@ blogIndexHtml = injectHeadMetadata(blogIndexHtml, {
   description: 'Official academic articles, BEU syllabus strategies, UGEAC college cutoffs, and semester exam tips for Bihar engineering students across 38 government engineering colleges.',
   canonical: 'https://www.apnacollegebihar.online/blog'
 });
-writeStaticHtml('blog', blogIndexHtml);
+const blogDir = path.join(distDir, 'blog');
+if (!fs.existsSync(blogDir)) {
+  fs.mkdirSync(blogDir, { recursive: true });
+}
+fs.writeFileSync(path.join(blogDir, 'index.html'), blogIndexHtml, 'utf8');
+const flatBlogHtml = path.join(distDir, 'blog.html');
+if (fs.existsSync(flatBlogHtml)) {
+  fs.unlinkSync(flatBlogHtml);
+}
+console.log('[SSG] Generated: /blog/index.html');
 
 // ─────────────────────────────────────────────────────────────
 // 3. GENERATE ABOUT US PAGE (/about)
