@@ -57,7 +57,7 @@ for (const url of urls) {
   let priority = url === '/' ? '1.0' : url.startsWith('/blog') ? '0.8' : '0.7';
 
   xml += `  <url>
-    <loc>${DOMAIN}${url === '/' ? '' : url}</loc>
+    <loc>${DOMAIN}${url === '/' ? '/' : url}</loc>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>\n`;
