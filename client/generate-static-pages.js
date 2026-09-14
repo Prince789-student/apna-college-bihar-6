@@ -57,6 +57,8 @@ function mdToHtml(md) {
   let html = [];
   let inList = false;
   let listType = 'ul';
+  let inTable = false;
+  let isTableHead = false;
 
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i].trim();
@@ -66,27 +68,35 @@ function mdToHtml(md) {
         html.push(`</${listType}>`);
         inList = false;
       }
+      if (inTable) {
+        html.push('</tbody></table></div>');
+        inTable = false;
+      }
       continue;
     }
 
     // Headings
     if (line.startsWith('#### ')) {
       if (inList) { html.push(`</${listType}>`); inList = false; }
+      if (inTable) { html.push('</tbody></table></div>'); inTable = false; }
       html.push(`<h4 class="text-base font-bold text-slate-900 mt-6 mb-2">${formatInline(line.slice(5))}</h4>`);
       continue;
     }
     if (line.startsWith('### ')) {
       if (inList) { html.push(`</${listType}>`); inList = false; }
+      if (inTable) { html.push('</tbody></table></div>'); inTable = false; }
       html.push(`<h3 class="text-lg md:text-xl font-black text-slate-900 mt-8 mb-3">${formatInline(line.slice(4))}</h3>`);
       continue;
     }
     if (line.startsWith('## ')) {
       if (inList) { html.push(`</${listType}>`); inList = false; }
+      if (inTable) { html.push('</tbody></table></div>'); inTable = false; }
       html.push(`<h2 class="text-xl md:text-2xl font-black text-slate-900 mt-10 mb-4 border-b border-slate-200 pb-2">${formatInline(line.slice(3))}</h2>`);
       continue;
     }
     if (line.startsWith('# ')) {
       if (inList) { html.push(`</${listType}>`); inList = false; }
+      if (inTable) { html.push('</tbody></table></div>'); inTable = false; }
       html.push(`<h1 class="text-2xl md:text-3xl font-black text-slate-900 mt-12 mb-4">${formatInline(line.slice(2))}</h1>`);
       continue;
     }
@@ -94,12 +104,50 @@ function mdToHtml(md) {
     // Blockquote
     if (line.startsWith('> ')) {
       if (inList) { html.push(`</${listType}>`); inList = false; }
+      if (inTable) { html.push('</tbody></table></div>'); inTable = false; }
       html.push(`<blockquote class="border-l-4 border-blue-500 pl-4 py-2 my-4 bg-blue-50/50 rounded-r text-slate-700 italic">${formatInline(line.slice(2))}</blockquote>`);
       continue;
     }
 
+    // Markdown Table
+    if (line.startsWith('|') && line.endsWith('|')) {
+      if (inList) { html.push(`</${listType}>`); inList = false; }
+      if (!inTable) {
+        html.push('<div class="overflow-x-auto my-6 border border-slate-200 rounded-2xl shadow-sm"><table class="min-w-full divide-y divide-slate-200 text-xs md:text-sm text-left">');
+        inTable = true;
+        isTableHead = true;
+      }
+      
+      // Separator row like |---|---|
+      if (/^\|(\s*:?-+:?\s*\|)+$/.test(line)) {
+        isTableHead = false;
+        continue;
+      }
+      
+      const cells = line.split('|').slice(1, -1).map(c => c.trim());
+      if (isTableHead) {
+        html.push('<thead class="bg-slate-100 text-slate-900 font-bold uppercase tracking-wider text-[11px]"><tr>');
+        cells.forEach(cell => {
+          html.push(`<th class="px-4 py-3">${formatInline(cell)}</th>`);
+        });
+        html.push('</tr></thead><tbody class="divide-y divide-slate-200 bg-white">');
+        isTableHead = false;
+      } else {
+        html.push('<tr class="hover:bg-slate-50 transition-colors">');
+        cells.forEach(cell => {
+          html.push(`<td class="px-4 py-3 text-slate-700">${formatInline(cell)}</td>`);
+        });
+        html.push('</tr>');
+      }
+      continue;
+    } else if (inTable) {
+      html.push('</tbody></table></div>');
+      inTable = false;
+    }
+
     // Unordered list
     if (line.startsWith('* ') || line.startsWith('- ')) {
+      if (inTable) { html.push('</tbody></table></div>'); inTable = false; }
       if (!inList || listType !== 'ul') {
         if (inList) html.push(`</${listType}>`);
         html.push('<ul class="list-disc pl-6 space-y-2 text-slate-700 my-4">');
@@ -113,6 +161,7 @@ function mdToHtml(md) {
     // Ordered list
     const numMatch = line.match(/^(\d+)\.\s+(.*)/);
     if (numMatch) {
+      if (inTable) { html.push('</tbody></table></div>'); inTable = false; }
       if (!inList || listType !== 'ol') {
         if (inList) html.push(`</${listType}>`);
         html.push('<ol class="list-decimal pl-6 space-y-2 text-slate-700 my-4">');
@@ -128,11 +177,18 @@ function mdToHtml(md) {
       html.push(`</${listType}>`);
       inList = false;
     }
+    if (inTable) {
+      html.push('</tbody></table></div>');
+      inTable = false;
+    }
     html.push(`<p class="text-slate-700 leading-relaxed text-sm md:text-base my-4">${formatInline(line)}</p>`);
   }
 
   if (inList) {
     html.push(`</${listType}>`);
+  }
+  if (inTable) {
+    html.push('</tbody></table></div>');
   }
 
   return html.join('\n');
