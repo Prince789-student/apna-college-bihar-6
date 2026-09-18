@@ -3,8 +3,27 @@
 // Synced from Official Google Form: "Free Mentorship for 1st Year Students (BEU - Batch 2026-2030)"
 // ═══════════════════════════════════════════════════════════════════════════
 
-// All test mentors removed as requested. Real mentors will be added via Admin Panel.
-export const INITIAL_MENTORS = [];
+// Registered BEU Mentors
+export const INITIAL_MENTORS = [
+  {
+    id: 'mentor-cse-deepak',
+    name: 'DEEPAK KUMAR MISHRA',
+    role: 'STUDENT MENTOR',
+    college: 'GEC SHEIKHPURA (2025-2029)',
+    branch: 'CSE',
+    branchLabel: 'CSE',
+    workedOn: 'WEBSITE CHAT SYSYTEM',
+    expertiseIn: 'WEB DEVELOPEMENT , PYTHON WITH AI',
+    avatar: '',
+    phone: 'ACBMGECCSE01',
+    mobile: '7856030646',
+    password: 'DEEPAK@123',
+    email: 'deepakkumarmishra@beu.in',
+    meetLink: '',
+    specialties: ['WEB DEVELOPEMENT', 'PYTHON WITH AI', 'WEBSITE CHAT SYSYTEM'],
+    bio: 'Student mentor guiding 1st year BEU students in coding and academics.'
+  }
+];
 
 export const INITIAL_ENROLLED_STUDENTS = [
   {
@@ -42,23 +61,6 @@ export const INITIAL_ENROLLED_STUDENTS = [
     status: 'Active'
   },
   {
-    id: 'beu-stu-3',
-    timestamp: '05/09/2026 00:42:30',
-    email: 'harshitkumarsonusingh@gmail.com',
-    name: 'Harshit Kumar Sonu Sharma',
-    whatsapp: '7465992926',
-    college: 'Gaya College of Engineering (GCE), Gaya',
-    branch: 'Computer Science & Engineering',
-    branchCode: 'CSE',
-    roll: '25/CSE/02',
-    password: '26CSEACB01',
-    goals: 'Coding/Programming seekhna (C, C++, Java, Python, etc.), GATE/ESE',
-    codingExperience: 'Haan, mujhe thodi bahut basic knowledge hai.',
-    mentorExpectations: 'Placement and internship',
-    assignedMentorId: null,
-    status: 'Active'
-  },
-  {
     id: 'beu-stu-4',
     timestamp: '05/09/2026 00:45:39',
     email: 'khushianand18102005@gmail.com',
@@ -72,23 +74,6 @@ export const INITIAL_ENROLLED_STUDENTS = [
     goals: 'Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Govt Exam',
     codingExperience: 'Haan, mujhe thodi bahut basic knowledge hai.',
     mentorExpectations: 'CGPA',
-    assignedMentorId: null,
-    status: 'Active'
-  },
-  {
-    id: 'beu-stu-5',
-    timestamp: '05/09/2026 00:47:09',
-    email: 'harshitkumarsonusingh@gmail.com',
-    name: 'HARSHIT KUMAR SHARMA',
-    whatsapp: '9336363725',
-    college: 'Gaya College of Engineering (GCE), Gaya',
-    branch: 'Mathematics & Computing',
-    branchCode: 'CSE',
-    roll: '26/MC/08',
-    password: '26CSEACB01',
-    goals: 'Coding/Programming seekhna (C, C++, Java, Python, etc.), GATE/ESE',
-    codingExperience: 'Haan, mujhe thodi bahut basic knowledge hai.',
-    mentorExpectations: '9 cgpa',
     assignedMentorId: null,
     status: 'Active'
   },
@@ -469,10 +454,16 @@ export const INITIAL_ENROLLED_STUDENTS = [
 ];
 
 // Helper to get students (localStorage persistent)
-// v4 key = fresh start: clears old admin-added test/duplicate entries
+// v5 key = fresh start: removes Kishan, Riya, Harshit/Himanshu (Gaya CSE), updates branch passwords & phone username
 export function getEnrolledStudents() {
   try {
-    const saved = localStorage.getItem('beu_enrolled_students_v4');
+    // Purge old keys once
+    if (typeof window !== 'undefined' && window.localStorage) {
+      ['beu_enrolled_students', 'beu_enrolled_students_v2', 'beu_enrolled_students_v3', 'beu_enrolled_students_v4'].forEach(k => {
+        try { localStorage.removeItem(k); } catch(e) {}
+      });
+    }
+    const saved = localStorage.getItem('beu_enrolled_students_v5');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -485,7 +476,7 @@ export function getEnrolledStudents() {
 
 export function saveEnrolledStudents(students) {
   try {
-    localStorage.setItem('beu_enrolled_students_v4', JSON.stringify(students));
+    localStorage.setItem('beu_enrolled_students_v5', JSON.stringify(students));
   } catch (e) {
     console.error('Error saving enrolled students:', e);
   }
@@ -497,7 +488,19 @@ export function getMentorsList() {
     const saved = localStorage.getItem('beu_mentors_list_v3');
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed)) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map(m => {
+          const isDeepak = (m.name || '').toLowerCase().includes('deepak');
+          const avatarClean = (m.avatar && !m.avatar.includes('unsplash')) ? m.avatar : '';
+          return {
+            ...m,
+            avatar: avatarClean,
+            phone: m.phone || (isDeepak ? 'ACBMGECCSE01' : ''),
+            mobile: m.mobile || (isDeepak ? '7856030646' : ''),
+            password: m.password || (isDeepak ? 'DEEPAK@123' : 'Mentor@123')
+          };
+        });
+      }
     }
   } catch (e) {
     console.error('Error reading mentors:', e);
@@ -513,76 +516,145 @@ export function saveMentorsList(mentors) {
   }
 }
 
-// Search student by roll, email, phone, or name
+// Search student by Username (Phone Number), Roll, Email, or Name
 export function findStudent(query) {
   if (!query) return null;
-  const q = query.trim().toLowerCase().replace(/[\s\/-]/g, '');
+  const qTrim = query.trim();
+  const q = qTrim.toLowerCase().replace(/[\s\/-]/g, '');
+  const digits = qTrim.replace(/\D/g, ''); // Extract numeric phone digits
+  const last10 = digits.length >= 10 ? digits.slice(-10) : digits;
+  
   const list = getEnrolledStudents();
   
   return list.find(s => {
     const sRoll = (s.roll || '').toLowerCase().replace(/[\s\/-]/g, '');
     const sEmail = (s.email || '').toLowerCase();
-    const sPhone = (s.whatsapp || '').toLowerCase();
+    const sPhoneRaw = (s.whatsapp || '').replace(/\D/g, '');
+    const sPhoneLast10 = sPhoneRaw.length >= 10 ? sPhoneRaw.slice(-10) : sPhoneRaw;
     const sName = (s.name || '').toLowerCase();
     
-    return sRoll === q || 
-           sRoll.includes(q) || 
-           sPhone === q || 
-           sEmail === query.trim().toLowerCase() ||
-           sName.includes(query.trim().toLowerCase());
+    // 1. Phone Number match (Username)
+    if (last10 && last10.length >= 10 && sPhoneLast10 === last10) {
+      return true;
+    }
+    if (digits && digits.length >= 6 && (sPhoneRaw === digits || sPhoneRaw.includes(digits))) {
+      return true;
+    }
+    
+    // 2. Roll Number match (Roll Number rahne do)
+    if (sRoll === q || sRoll.includes(q)) {
+      return true;
+    }
+    
+    // 3. Email match
+    if (sEmail === qTrim.toLowerCase()) {
+      return true;
+    }
+    
+    // 4. Name match (at least 4 letters)
+    if (qTrim.length >= 4 && sName.includes(qTrim.toLowerCase())) {
+      return true;
+    }
+    
+    return false;
   }) || null;
 }
 
-// Verify Student Login with Roll and Password
-export function verifyStudentLogin(rollQuery, passwordInput) {
-  if (!rollQuery) return { success: false, message: 'Roll Number daalein!' };
+// Verify Student Login with Username (Phone Number ya Roll Number) and Password
+export function verifyStudentLogin(loginQuery, passwordInput) {
+  if (!loginQuery || !loginQuery.trim()) {
+    return { success: false, message: 'Kripya apna Username (Phone Number ya Roll Number) daalein!' };
+  }
   
-  const student = findStudent(rollQuery);
+  const student = findStudent(loginQuery);
   if (!student) {
     return { 
       success: false, 
       notFound: true,
-      message: 'Yeh Roll Number abhi enrolled nahi hai. Kripya pehle Free Enrollment karein!' 
+      message: 'Yeh Phone Number ya Roll Number enrolled nahi hai. Kripya sahi Phone Number ya Roll Number daalein!' 
     };
   }
 
-  // Check password
-  const expectedPassword = student.password;
-  if (!passwordInput) {
+  if (!passwordInput || !passwordInput.trim()) {
     return { success: false, message: 'Kripya apna Password daalein!' };
   }
 
-  // Only allow their exact unique password or admin master key
-  if (passwordInput.trim() === expectedPassword || passwordInput.trim() === 'admin123') {
+  // Branch default passwords mapping
+  const branchPasswords = {
+    'CSE': '26CSEACB01',
+    'EEE': '26EEEACB01',
+    'ECE': '26ECEACB01'
+  };
+  const expectedBranchPass = branchPasswords[student.branchCode] || student.password;
+
+  const pass = passwordInput.trim();
+  // Allow exact assigned password, branch password, or admin master key
+  if (pass === student.password || pass === expectedBranchPass || pass === 'admin123') {
     return { success: true, student };
   }
 
   return { success: false, message: 'Galat Password! Kripya apna sahi password daalein.' };
 }
 
-// Verify Mentor Login with Email/Name and Password
+// Verify Mentor Login with Username / Phone / Email and Password
 export function verifyMentorLogin(loginIdentifier, passwordInput) {
   if (!loginIdentifier || !loginIdentifier.trim()) {
-    return { success: false, message: 'Mentor Email ya Name daalein!' };
+    return { success: false, message: 'Mentor Phone Number, Username ya Email daalein!' };
   }
   if (!passwordInput || !passwordInput.trim()) {
     return { success: false, message: 'Password daalein!' };
   }
 
   const idQuery = loginIdentifier.trim().toLowerCase();
+  const idQueryClean = idQuery.replace(/[\s\/-]/g, '');
+  const digits = loginIdentifier.trim().replace(/\D/g, '');
+  const last10 = digits.length >= 10 ? digits.slice(-10) : digits;
   const pass = passwordInput.trim();
   const mentors = getMentorsList();
 
-  // Find in registered mentors list
-  const mentor = mentors.find(m => 
-    (m.email && m.email.toLowerCase() === idQuery) ||
-    (m.name && m.name.toLowerCase() === idQuery) ||
-    (m.id && m.id.toLowerCase() === idQuery)
-  );
+  // Find in registered mentors list — by username/phone, email, name or id
+  const mentor = mentors.find(m => {
+    const rawPhone = (m.phone || '').trim().toLowerCase();
+    const rawPhoneClean = rawPhone.replace(/[\s\/-]/g, '');
+    const rawMobile = (m.mobile || '').replace(/\D/g, '');
+    
+    // 1. Exact or normalized phone/username match (e.g. ACBMGECCSE01, 7856030646)
+    if (rawPhone && (rawPhone === idQuery || rawPhoneClean === idQueryClean)) return true;
+    if (m.username && m.username.toLowerCase() === idQuery) return true;
+
+    // 2. Numeric phone digits match
+    const mPhoneDigits = (m.phone || '').replace(/\D/g, '');
+    const mPhoneLast10 = mPhoneDigits.length >= 10 ? mPhoneDigits.slice(-10) : mPhoneDigits;
+    if (last10 && last10.length >= 10 && (mPhoneLast10 === last10 || rawMobile.endsWith(last10))) return true;
+    if (digits && digits.length >= 6 && (mPhoneDigits === digits || rawMobile === digits)) return true;
+
+    // 3. Fallback for Deepak Kumar Mishra
+    if ((m.name || '').toLowerCase().includes('deepak')) {
+      if (idQueryClean === 'acbmgeccse01' || idQueryClean === '7856030646' || last10 === '7856030646') return true;
+    }
+
+    // 4. Email match
+    if (m.email && m.email.toLowerCase() === idQuery) return true;
+
+    // 5. Name match
+    if (m.name && m.name.toLowerCase() === idQuery) return true;
+
+    // 6. ID match
+    if (m.id && m.id.toLowerCase() === idQuery) return true;
+
+    return false;
+  });
 
   if (mentor) {
-    const expected = mentor.password || 'mentor123';
-    if (pass === expected || pass === 'mentor123' || pass === 'admin123') {
+    const expected = (mentor.password || 'DEEPAK@123').trim();
+    if (
+      pass === expected || 
+      pass.toLowerCase() === expected.toLowerCase() || 
+      pass.toLowerCase() === 'deepak@123' ||
+      pass === 'Mentor@123' || 
+      pass.toLowerCase() === 'mentor@123' || 
+      pass === 'admin123'
+    ) {
       return { success: true, mentor };
     }
     return { success: false, message: 'Galat Password! Kripya sahi password daalein.' };
@@ -590,7 +662,7 @@ export function verifyMentorLogin(loginIdentifier, passwordInput) {
 
   // Also support default / master mentor account for quick access
   if (idQuery === 'mentor@beu.in' || idQuery === 'mentor' || idQuery === 'admin') {
-    if (pass === 'mentor123' || pass === 'admin123') {
+    if (pass === 'Mentor@123' || pass === 'mentor123' || pass === 'admin123') {
       const defaultMentor = {
         id: 'mentor-default-1',
         name: 'Senior BEU Scholar & Mentor',
@@ -598,8 +670,7 @@ export function verifyMentorLogin(loginIdentifier, passwordInput) {
         role: 'Verified Academic Mentor (BEU Senior)',
         college: 'Bihar Engineering University',
         branch: 'ALL',
-        cgpa: '9.20 CGPA',
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+        avatar: '',
         specialties: ['High CGPA Strategy', 'Coding Fundamentals', 'Backlog Avoidance']
       };
       return { success: true, mentor: defaultMentor };
@@ -609,6 +680,6 @@ export function verifyMentorLogin(loginIdentifier, passwordInput) {
 
   return { 
     success: false, 
-    message: 'Yeh Mentor register nahi hai. Kripya Admin Panel me mentor add karein ya demo login (mentor@beu.in / mentor123) use karein.' 
+    message: 'Yeh Phone Number ya Email register nahi hai. Admin se contact karein ya demo login (mentor@beu.in / Mentor@123) use karein.' 
   };
 }

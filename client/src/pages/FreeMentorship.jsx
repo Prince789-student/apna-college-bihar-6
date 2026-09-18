@@ -7,7 +7,7 @@ import {
   TrendingUp, Flame, Check, Plus, Trash2, HelpCircle, 
   Share2, ShieldCheck, RefreshCw, Star, ExternalLink, ArrowRight,
   Search, Users, User, Mail, Lock, Eye, EyeOff, KeyRound, UserPlus, LogIn,
-  Filter, BookMarked, Briefcase, FileText, X, Play, Pause, RotateCcw, Timer
+  Filter, BookMarked, Briefcase, FileText, X, Play, Pause, RotateCcw, Timer, Save
 } from 'lucide-react';
 import SEO from '../components/SEO';
 import toast from 'react-hot-toast';
@@ -17,6 +17,7 @@ import {
   getEnrolledStudents, 
   saveEnrolledStudents,
   getMentorsList,
+  saveMentorsList,
   verifyStudentLogin,
   verifyMentorLogin
 } from '../data/mentorshipData';
@@ -95,6 +96,7 @@ export default function FreeMentorship() {
   const [mentorBranchFilter, setMentorBranchFilter] = useState('ALL');
   const [mentorAssignmentFilter, setMentorAssignmentFilter] = useState('all'); // 'all' | 'assigned'
   const [selectedMenteeLogs, setSelectedMenteeLogs] = useState(null);
+  const [mentorMeetInput, setMentorMeetInput] = useState('');
 
   // Study Tracker & Live Timer State
   const [studyLogs, setStudyLogs] = useState([]);
@@ -180,18 +182,56 @@ export default function FreeMentorship() {
           college: 'Bihar Engineering University',
           branch: 'ALL',
           cgpa: '9.20 CGPA',
-          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+          avatar: '',
           specialties: ['High CGPA Strategy', 'Coding Fundamentals', 'Backlog Avoidance']
         });
       }
     }
+
+    // Auto-clean any mock study logs from localStorage
+    try {
+      const regRaw = localStorage.getItem('beu_all_study_logs_registry');
+      if (regRaw) {
+        const reg = JSON.parse(regRaw);
+        let changed = false;
+        Object.keys(reg).forEach(k => {
+          if (Array.isArray(reg[k])) {
+            const clean = reg[k].filter(item => !isMockStudyLog(item));
+            if (clean.length !== reg[k].length) {
+              reg[k] = clean;
+              changed = true;
+            }
+          }
+        });
+        if (changed) {
+          localStorage.setItem('beu_all_study_logs_registry', JSON.stringify(reg));
+        }
+      }
+    } catch (e) {}
   }, []);
 
+  // Helper to detect mock/dummy study logs
+  const isMockStudyLog = (item) => {
+    if (!item) return true;
+    const t = (item.topic || '').toLowerCase();
+    const s = (item.subject || '').toLowerCase();
+    const id = String(item.id || '');
+    return (
+      t.includes('c programming & ac circuit') ||
+      t.includes('syllabus orientation') ||
+      t.includes('calculus & matrices') ||
+      s.includes('core engineering basics') ||
+      id === '1' ||
+      id === '2' ||
+      item.date === 'Recent' ||
+      item.date === 'Yesterday'
+    );
+  };
+
   const setLoggedInStudent = (stu, mentors = mentorsList) => {
-    const mentor = (mentors && mentors.length > 0)
-      ? (mentors.find(m => m.id === stu.assignedMentorId) ||
-         mentors.find(m => m.branch === stu.branchCode) ||
-         mentors[0])
+    // Only assign mentor if stu.assignedMentorId matches a real mentor
+    const mentor = (stu.assignedMentorId && mentors && mentors.length > 0)
+      ? (mentors.find(m => m.id === stu.assignedMentorId) || null)
       : null;
 
     const studentData = {
@@ -208,6 +248,8 @@ export default function FreeMentorship() {
     localStorage.setItem('beu_mentorship_active_student_name', stu.name);
     if (mentor?.name) {
       localStorage.setItem('beu_mentorship_active_mentor_name', mentor.name);
+    } else {
+      localStorage.removeItem('beu_mentorship_active_mentor_name');
     }
     loadSavedStudyLogs(stu.roll);
   };
@@ -219,24 +261,24 @@ export default function FreeMentorship() {
       if (saved) {
         try { parsed = JSON.parse(saved); } catch(e) {}
       }
-      if (parsed && Array.isArray(parsed) && parsed.length > 0) {
-        setStudyLogs(parsed);
+      if (parsed && Array.isArray(parsed)) {
+        const clean = parsed.filter(item => !isMockStudyLog(item));
+        setStudyLogs(clean);
+        localStorage.setItem(`beu_study_logs_${roll}`, JSON.stringify(clean));
       } else {
         const registry = JSON.parse(localStorage.getItem('beu_all_study_logs_registry') || '{}');
-        if (registry[roll] && Array.isArray(registry[roll]) && registry[roll].length > 0) {
-          setStudyLogs(registry[roll]);
-          localStorage.setItem(`beu_study_logs_${roll}`, JSON.stringify(registry[roll]));
+        if (registry[roll] && Array.isArray(registry[roll])) {
+          const clean = registry[roll].filter(item => !isMockStudyLog(item));
+          setStudyLogs(clean);
+          localStorage.setItem(`beu_study_logs_${roll}`, JSON.stringify(clean));
         } else {
-          const initialLogs = [
-            { id: 1, date: 'Today', dateStr: new Date().toLocaleDateString('en-CA'), subject: 'Basic Electrical & Programming', topic: 'C Programming & AC Circuit Fundamentals', hours: '2', duration: 7200, today: true, status: 'Completed ✅' },
-            { id: 2, date: 'Yesterday', subject: 'Engineering Mathematics', topic: 'Differential Calculus & Matrices Practice', hours: '1.5', duration: 5400, status: 'PYQs Solved 📝' },
-          ];
-          setStudyLogs(initialLogs);
-          localStorage.setItem(`beu_study_logs_${roll}`, JSON.stringify(initialLogs));
+          setStudyLogs([]);
+          localStorage.setItem(`beu_study_logs_${roll}`, JSON.stringify([]));
         }
       }
     } catch (e) {
       console.error(e);
+      setStudyLogs([]);
     }
   };
 
@@ -275,7 +317,7 @@ export default function FreeMentorship() {
   const handleLogin = (e) => {
     e.preventDefault();
     if (!loginRoll.trim()) {
-      toast.error('Kripya apna Roll Number daalein!');
+      toast.error('Kripya apna Username (Phone Number ya Roll Number) daalein!');
       return;
     }
     if (!loginPassword.trim()) {
@@ -339,7 +381,25 @@ export default function FreeMentorship() {
     setActiveMentor(null);
     setMentorEmail('');
     setMentorPassword('');
+    setMentorMeetInput('');
     toast('Mentor Portal se logged out.', { icon: '👋' });
+  };
+
+  // Dynamically update or remove Google Meet link by mentor
+  const handleUpdateMentorMeetLink = (newLink) => {
+    const link = (newLink || '').trim();
+    const updatedMentor = { ...activeMentor, meetLink: link };
+    setActiveMentor(updatedMentor);
+
+    const mentors = getMentorsList();
+    const updatedMentors = mentors.map(m => m.id === activeMentor.id ? { ...m, meetLink: link } : m);
+    saveMentorsList(updatedMentors);
+
+    if (link) {
+      toast.success('Google Meet link successfully set ho gaya! Ab sabhi students ko Live Meeting button dikhega. 🔴');
+    } else {
+      toast.success('Google Meet link successfully hata diya gaya! Meeting ended. ✅');
+    }
   };
 
   const handleAddStudyLog = (e) => {
@@ -409,15 +469,14 @@ export default function FreeMentorship() {
       const saved = localStorage.getItem(`beu_study_logs_${roll}`);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) return parsed.filter(item => !isMockStudyLog(item));
       }
       const registry = JSON.parse(localStorage.getItem('beu_all_study_logs_registry') || '{}');
-      if (registry[roll] && Array.isArray(registry[roll])) return registry[roll];
+      if (registry[roll] && Array.isArray(registry[roll])) {
+        return registry[roll].filter(item => !isMockStudyLog(item));
+      }
     } catch (e) {}
-    return [
-      { id: 1, date: 'Recent', subject: 'Core Engineering Basics', topic: 'Syllabus Orientation & Formula Derivations', hours: '1.5', status: 'Completed ✅', durationText: '1.5 hrs' },
-      { id: 2, date: 'Yesterday', subject: 'Engineering Mathematics', topic: 'Calculus & Matrices PYQs Practice', hours: '2.0', status: 'PYQs Solved 📝', durationText: '2.0 hrs' }
-    ];
+    return [];
   };
 
   const handleDeleteLog = (id) => {
@@ -586,7 +645,8 @@ export default function FreeMentorship() {
 
       {/* ── NOT LOGGED IN: Auth Screen (Student Login vs Mentor Login) ── */}
       {!activeStudent && !activeMentor ? (
-        <div className="bg-white rounded-[2rem] border border-slate-200 shadow-xl p-6 sm:p-10 space-y-6 max-w-2xl mx-auto">
+        <div className="space-y-12">
+          <div className="bg-white rounded-[2rem] border border-slate-200 shadow-xl p-6 sm:p-10 space-y-6 max-w-2xl mx-auto">
           
           {/* Tabs: Student Login vs Mentor Login */}
           <div className="flex bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
@@ -614,19 +674,20 @@ export default function FreeMentorship() {
               <div className="text-center space-y-1">
                 <h2 className="text-2xl font-black text-slate-900 tracking-tight">Student Mentorship Login</h2>
                 <p className="text-xs text-slate-500 font-medium">
-                  Apna Roll Number aur Password daal kar study tracker aur assigned mentor access karein.
+                  Apna Phone Number (Username) ya Roll Number aur Password daal kar login karein.
                 </p>
               </div>
 
               <form onSubmit={handleLogin} className="space-y-4">
                 <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-600 mb-1">
-                    BEU Roll Number / Registration No.
+                  <label className="block text-[11px] font-black uppercase text-slate-600 mb-1 flex items-center justify-between">
+                    <span>Username (Phone Number / BEU Roll No.)</span>
+                    <span className="text-[10px] text-blue-600 font-bold normal-case">Phone ya Roll daalein</span>
                   </label>
                   <div className="relative">
                     <input 
                       type="text" 
-                      placeholder="e.g. 26/EEE/46, 25/CSE/02, 26cse47..."
+                      placeholder="Apna WhatsApp Phone Number ya BEU Roll No. daalein..."
                       value={loginRoll}
                       onChange={(e) => setLoginRoll(e.target.value)}
                       className="w-full pl-4 pr-10 py-3.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-900 font-bold tracking-wider placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition-all text-sm"
@@ -692,18 +753,18 @@ export default function FreeMentorship() {
               <form onSubmit={handleMentorLogin} className="space-y-4">
                 <div>
                   <label className="block text-[11px] font-black uppercase text-slate-600 mb-1">
-                    Mentor Email Address / Username
+                    Phone Number (Username) / Email
                   </label>
                   <div className="relative">
                     <input 
                       type="text" 
-                      placeholder="e.g. mentor@beu.in ya registered mentor email"
+                      placeholder="Phone Number ya Email (jaise admin ne diya)"
                       value={mentorEmail}
                       onChange={(e) => setMentorEmail(e.target.value)}
                       className="w-full pl-4 pr-10 py-3.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-900 font-bold tracking-wider placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:bg-white transition-all text-sm"
                       required
                     />
-                    <Mail size={18} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <Phone size={18} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                   </div>
                 </div>
 
@@ -750,6 +811,203 @@ export default function FreeMentorship() {
           )}
 
         </div>
+
+        {/* ── 1000+ WORD COMPREHENSIVE BEU MENTORSHIP GUIDE & AD-SENSE HIGH VALUE CONTENT ── */}
+        <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm p-6 sm:p-12 space-y-12 text-slate-800">
+          
+          {/* Main Title & Overview */}
+          <div className="border-b border-slate-100 pb-8 space-y-3">
+            <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-black uppercase tracking-widest rounded-full inline-block">
+              Free Academic Initiative
+            </span>
+            <h2 className="text-2xl sm:text-4xl font-[1000] text-slate-900 tracking-tight uppercase leading-tight">
+              The Comprehensive Guide to Free BEU Mentorship: Navigating Engineering Excellence in Bihar
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              Empowering 38+ Government Engineering Colleges across Bihar with structured peer guidance, verified semester exam strategies, daily study accountability, and industry placement roadmaps.
+            </p>
+          </div>
+
+          {/* Section 1: The Transition Challenge */}
+          <section className="space-y-4">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+              <span>1. The Transition Challenge: Why Bihar Engineering Scholars Need Peer Mentorship</span>
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+              Every academic year, thousands of brilliant, ambitious students from across Bihar’s 38 districts secure admission into Government Engineering Colleges (GECs) through the BCECEB UGEAC counseling process. While clearing the entrance hurdle reflects tremendous mathematical grit and perseverance, stepping into the university lecture halls of Bihar Engineering University (BEU), Patna, introduces a unique set of academic and psychological friction points.
+            </p>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+              For a significant majority of scholars graduating from Bihar State Board (BSEB) or regional vernacular schooling, the abrupt shift to an entirely English-medium technical curriculum can feel intimidating. Fundamental subjects like Engineering Mathematics, Applied Physics, Basic Electrical Engineering, and Engineering Mechanics demand not just conceptual mastery, but precise analytical formulation and technical articulation. Without timely, empathetic guidance from senior students who have successfully traversed the exact same journey, first-year scholars frequently develop exam anxiety, fall prey to backlog cycles, or lose focus during crucial foundational semesters.
+            </p>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+              The <strong>Apna College Bihar (ACB) Free Mentorship Program</strong> was conceived to eradicate this isolation. By bridging the generational gap between senior university scholars (3rd and 4th year achievers) and incoming juniors, our platform establishes a supportive, democratized ecosystem where every student receives personalized academic direction, psychological reassurance, and actionable roadmaps completely free of charge.
+            </p>
+          </section>
+
+          {/* Section 2: Core Pillars */}
+          <section className="space-y-6">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              2. Core Pillars of the ACB Free Mentorship Framework
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-black text-base">
+                  01
+                </div>
+                <h4 className="text-base font-black text-slate-900 uppercase tracking-tight">1-on-1 Personalized Senior Matching</h4>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  Unlike generic advisory forums, our algorithm pairs each enrolled student with a verified senior mentor from their specific branch (CSE, Civil, Mechanical, EEE, ECE) or alumni network. This guarantees that subject-specific nuances—such as lab manual drafting, university numerical derivations, and faculty evaluation preferences—are addressed with pinpoint contextual accuracy.
+                </p>
+              </div>
+
+              <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-black text-base">
+                  02
+                </div>
+                <h4 className="text-base font-black text-slate-900 uppercase tracking-tight">The "Kya Padha, Kitna Padha" Daily Accountability Habit</h4>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  Consistency is the ultimate differentiator in university examinations. The integrated study log tracker encourages students to record their daily topics, chapter revisions, and Pomodoro focus sessions. Mentors actively monitor these logs, praising productive study streaks and intervening when inactivity signals potential study bottlenecks before mid-semester exams arrive.
+                </p>
+              </div>
+
+              <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-black text-base">
+                  03
+                </div>
+                <h4 className="text-base font-black text-slate-900 uppercase tracking-tight">BEU PYQ & Derivation Mastery</h4>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  University exams conducted by BEU place heavy emphasis on theoretical derivations, standard proofs, and recurring problem archetypes spanning the last 5 to 7 years. Mentors provide students with curated Previous Year Question (PYQ) breakdowns, highlighting high-yield units and training them to produce presentation-perfect answer sheets with clean pencil schematics and boxed numerical answers.
+                </p>
+              </div>
+
+              <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center font-black text-base">
+                  04
+                </div>
+                <h4 className="text-base font-black text-slate-900 uppercase tracking-tight">Career, Internship & Placement Guidance</h4>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  Beyond semester grades, students receive strategic clarity regarding internships, Smart India Hackathon (SIH) participations, GATE preparation timelines, State Engineering Service (BPSC AE) foundations, and software engineering hiring tracks. Mentors review GitHub profiles, suggest curated YouTube lecture playlists, and conduct mock technical interview drills.
+                </p>
+              </div>
+
+            </div>
+          </section>
+
+          {/* Section 3: Branch-Specific 4-Year Progression Blueprints */}
+          <section className="space-y-6">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              3. Branch-Specific 4-Year Academic & Skill Progression Blueprint
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+              Every engineering specialization demands a distinct balance between university curriculum adherence and external industry skill acquisition. Here is the structured roadmap recommended by our senior mentors:
+            </p>
+
+            <div className="space-y-4">
+              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
+                <h4 className="text-sm font-black text-blue-900 flex items-center gap-2">
+                  <span>💻 Computer Science & IT (CSE, AI/ML, Data Science, Cyber Security)</span>
+                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  <strong>Year 1:</strong> Master C Programming fundamentals and discrete mathematics; maintain SGPA &gt; 8.5. <strong>Year 2:</strong> Data Structures &amp; Algorithms (Java or C++), Object-Oriented Design, Database Management Systems (SQL), and Version Control (Git/GitHub). <strong>Year 3:</strong> Operating Systems, Computer Networks, full-stack web or ML project development, open-source contributions, and internship hunting. <strong>Year 4:</strong> Advanced LeetCode problem solving, system design fundamentals, resume tailoring, and off-campus/on-campus placement drives.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
+                <h4 className="text-sm font-black text-emerald-900 flex items-center gap-2">
+                  <span>🏗️ Civil Engineering (CE)</span>
+                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  <strong>Year 1 &amp; 2:</strong> Develop deep mastery in Strength of Materials (SOM), Fluid Mechanics, Surveying, and Building Materials. <strong>Year 3:</strong> Structural Analysis, Design of Concrete Structures (RCC), Soil Mechanics, and software proficiency in AutoCAD, STAAD Pro, or Revit. <strong>Year 4:</strong> Intensive preparation for GATE Civil, BPSC AE, and SSC JE examinations, alongside site engineering internship experience.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
+                <h4 className="text-sm font-black text-amber-900 flex items-center gap-2">
+                  <span>⚙️ Mechanical Engineering (ME)</span>
+                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  <strong>Year 1 &amp; 2:</strong> Solidify core concepts in Engineering Thermodynamics, Kinematics of Machines, and Manufacturing Processes. <strong>Year 3:</strong> Heat Transfer, Fluid Machines, Machine Design, and 3D CAD modeling (SolidWorks/CATIA). <strong>Year 4:</strong> Thermal &amp; design project implementation, industrial plant training reports, and PSU/GATE competitive exam test series.
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
+                <h4 className="text-sm font-black text-indigo-900 flex items-center gap-2">
+                  <span>⚡ Electrical & Electronics Engineering (EEE / EE / ECE)</span>
+                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  <strong>Year 1 &amp; 2:</strong> Circuit &amp; Network Theory, Analog Electronics, Electromagnetic Fields, and Digital Logic. <strong>Year 3:</strong> Control Systems, Electrical Machines, Microprocessors, Power Systems, and MATLAB/Simulink simulations. <strong>Year 4:</strong> Renewable energy capstone projects, Embedded C or VLSI fundamentals, and core electrical/electronics placement preparation.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Section 4: Tips for 9+ CGPA in BEU */}
+          <section className="space-y-4">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              4. The Blueprint to Securing an 8.5+ or 9.0+ CGPA in BEU Semester Examinations
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+              Scoring high marks in Bihar Engineering University is not about rote memorization; it is about strategic presentation and syllabus alignment. Senior mentors highlight five proven rules:
+            </p>
+            <ul className="list-disc pl-5 space-y-2 text-xs sm:text-sm text-slate-600 font-medium">
+              <li><strong>Prioritize High-Weightage Syllabus Units:</strong> BEU question papers offer internal choices. Identify the 3 core units per subject that reliably generate full 14-mark questions and master their derivations completely.</li>
+              <li><strong>Incorporate Structured Schematics &amp; Flowcharts:</strong> Examiners evaluate hundreds of answer booklets. Neatly labeled pencil diagrams, circuit layouts, and algorithmic flowcharts immediately elevate your paper above average submissions.</li>
+              <li><strong>Formula Box Highlighting:</strong> Conclude every mathematical derivation by boxing the final formula with standard units and clear parameter definitions. This signals rigor and thorough understanding.</li>
+              <li><strong>Internal Sessional &amp; Attendance Regularity:</strong> Maintain 75%+ lecture attendance and submit laboratory records on time. Internal 30 marks heavily stabilize your semester SGPA and shield against unexpected theory scaling.</li>
+              <li><strong>Systematic PYQ Rehearsal:</strong> Solve at least five recent end-semester papers under timed 3-hour examination conditions to build writing stamina and prevent time crunches during final exams.</li>
+            </ul>
+          </section>
+
+          {/* Section 5: Frequently Asked Questions (FAQs) */}
+          <section className="space-y-4">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              5. Frequently Asked Questions (FAQs)
+            </h3>
+            
+            <div className="space-y-3">
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <h5 className="text-xs sm:text-sm font-black text-slate-900 mb-1">Q1: Is the BEU Mentorship Program really 100% free?</h5>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  Yes, absolutely. Apna College Bihar is an independent community initiative created by students and alumni. There are no fees, hidden subscriptions, or premium tiers for mentorship, doubt clearing, or tracker access.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <h5 className="text-xs sm:text-sm font-black text-slate-900 mb-1">Q2: How do I get my login username and password?</h5>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  Enrolled students receive their credentials directly via official WhatsApp communications from our administrator desk. Your username is typically your registered WhatsApp Phone Number or University Roll Number, accompanied by your secure access password.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <h5 className="text-xs sm:text-sm font-black text-slate-900 mb-1">Q3: How are mentors selected and assigned?</h5>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  Our mentors are verified 3rd-year, 4th-year scholars and alumni across Bihar Government Engineering Colleges with exceptional academic records (8.5+ CGPA) and proven track records in technical projects, hackathons, or competitive examinations.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                <h5 className="text-xs sm:text-sm font-black text-slate-900 mb-1">Q4: Can I book live 1-on-1 video calls with my mentor?</h5>
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  Yes! Once logged into your student dashboard, you can request 1-on-1 Google Meet sessions, submit specific academic doubts via the Doubt Box, or connect directly through official WhatsApp channels for swift feedback.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Section 6: Institutional Note */}
+          <div className="pt-6 border-t border-slate-100 text-center space-y-2">
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+              Apna College Bihar • Dedicated to Bihar Engineering Scholars
+            </p>
+            <p className="text-xs text-slate-500 font-medium max-w-xl mx-auto">
+              Notice: Apna College Bihar is a non-governmental, independent peer-learning platform. All educational syllabi and university details are referenced from public educational gazettes for academic welfare.
+            </p>
+          </div>
+
+        </div>
+      </div>
       ) : activeMentor ? (
         /* ── LOGGED IN: MENTOR PORTAL DASHBOARD (Access to all students & their Study Trackers) ── */
         <div className="space-y-8 animate-in fade-in duration-300">
@@ -757,12 +1015,18 @@ export default function FreeMentorship() {
           {/* Mentor Profile Header Bar */}
           <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-indigo-800/40 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex items-center gap-5">
-              <div className="relative">
-                <img 
-                  src={activeMentor.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80'} 
-                  alt={activeMentor.name} 
-                  className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-indigo-400 shadow-xl"
-                />
+              <div className="relative shrink-0">
+                {activeMentor.avatar && !activeMentor.avatar.includes('unsplash') ? (
+                  <img 
+                    src={activeMentor.avatar} 
+                    alt={activeMentor.name} 
+                    className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-indigo-400 shadow-xl"
+                  />
+                ) : (
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-indigo-500 via-blue-600 to-indigo-700 border-2 border-indigo-400 shadow-xl flex items-center justify-center text-white font-[1000] text-2xl sm:text-3xl tracking-wider uppercase">
+                    {activeMentor.name.split(' ').map(n => n[0]).slice(0, 2).join('') || 'BM'}
+                  </div>
+                )}
                 <span className="absolute -bottom-1 -right-1 bg-emerald-500 text-white p-1 rounded-full ring-2 ring-slate-900">
                   <ShieldCheck size={14} />
                 </span>
@@ -779,14 +1043,62 @@ export default function FreeMentorship() {
                 <p className="text-xs sm:text-sm text-indigo-200 font-bold">
                   {activeMentor.role || 'Senior BEU Academic Mentor'} · {activeMentor.college || 'Bihar Engineering University'}
                 </p>
-                <p className="text-xs text-slate-300 flex items-center gap-2 flex-wrap pt-0.5">
-                  <span className="flex items-center gap-1 text-sky-300"><Mail size={12} /> {activeMentor.email}</span>
-                  {activeMentor.cgpa && <span className="bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded border border-amber-400/30 font-bold">{activeMentor.cgpa}</span>}
-                </p>
+                {activeMentor.workedOn && (
+                  <p className="text-xs text-indigo-200 flex items-center gap-2 flex-wrap pt-0.5 font-medium">
+                    <span className="text-slate-300 text-[11px]">🛠️ Project/Work: {activeMentor.workedOn}</span>
+                  </p>
+                )}
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+              {/* Google Meet Link Control */}
+              {activeMentor.meetLink ? (
+                <div className="flex items-center gap-2 bg-rose-600/20 border border-rose-500/30 rounded-xl px-3 py-2">
+                  <span className="flex items-center gap-1.5 text-[11px] font-black text-rose-300">
+                    <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping shrink-0" />
+                    Live Meet On
+                  </span>
+                  <a
+                    href={activeMentor.meetLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[10px] text-white bg-rose-600 hover:bg-rose-700 px-2 py-0.5 rounded font-bold flex items-center gap-1 transition-colors"
+                  >
+                    <ExternalLink size={10} /> Open
+                  </a>
+                  <button
+                    onClick={() => handleUpdateMentorMeetLink('')}
+                    className="text-[10px] text-rose-300 hover:text-white px-2 py-0.5 rounded border border-rose-500/40 font-bold transition-colors"
+                    title="Meeting band karo"
+                  >
+                    ✕ Hatao
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="Google Meet link paste karein..."
+                    value={mentorMeetInput}
+                    onChange={(e) => setMentorMeetInput(e.target.value)}
+                    className="px-3 py-2 bg-white/10 border border-white/20 rounded-xl text-[11px] text-white placeholder:text-slate-400 focus:outline-none focus:border-indigo-400 w-48"
+                  />
+                  <button
+                    onClick={() => {
+                      if (mentorMeetInput.trim()) {
+                        handleUpdateMentorMeetLink(mentorMeetInput.trim());
+                        setMentorMeetInput('');
+                      }
+                    }}
+                    disabled={!mentorMeetInput.trim()}
+                    className="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-white rounded-xl text-[11px] font-black transition-colors flex items-center gap-1"
+                    title="Live Google Meet lagao"
+                  >
+                    <Video size={13} /> Live
+                  </button>
+                </div>
+              )}
               <button
                 onClick={handleMentorLogout}
                 className="px-4 py-2.5 bg-rose-500/20 hover:bg-rose-500 text-rose-200 hover:text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all border border-rose-400/30"
@@ -796,265 +1108,226 @@ export default function FreeMentorship() {
             </div>
           </div>
 
-          {/* Quick Metrics Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-              <div className="flex items-center justify-between text-slate-500">
-                <span className="text-[11px] font-bold uppercase tracking-wider">Total Enrolled</span>
-                <Users size={18} className="text-blue-600" />
-              </div>
-              <div className="text-2xl font-black text-slate-900">{enrolledList.length} Students</div>
-              <p className="text-[10px] text-emerald-600 font-bold">100% Free Mentorship</p>
-            </div>
+          {/* Mentee Portal: Show only students assigned to this mentor */}
+          {(() => {
+            const myMentees = enrolledList.filter(s => s.assignedMentorId === activeMentor.id);
+            const collegesCount = new Set(myMentees.map(s => s.college)).size;
+            const filteredMentees = myMentees.filter(stu => {
+              if (mentorSearchQuery.trim()) {
+                const q = mentorSearchQuery.toLowerCase();
+                const matches = (stu.name && stu.name.toLowerCase().includes(q)) ||
+                                (stu.roll && stu.roll.toLowerCase().includes(q)) ||
+                                (stu.college && stu.college.toLowerCase().includes(q)) ||
+                                (stu.branch && stu.branch.toLowerCase().includes(q)) ||
+                                (stu.whatsapp && stu.whatsapp.includes(q));
+                if (!matches) return false;
+              }
+              return true;
+            });
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-              <div className="flex items-center justify-between text-slate-500">
-                <span className="text-[11px] font-bold uppercase tracking-wider">Assigned to You</span>
-                <GraduationCap size={18} className="text-indigo-600" />
-              </div>
-              <div className="text-2xl font-black text-slate-900">
-                {enrolledList.filter(s => s.assignedMentorId === activeMentor.id || (activeMentor.branch !== 'ALL' && activeMentor.branch === s.branchCode)).length || enrolledList.length} Mentees
-              </div>
-              <p className="text-[10px] text-indigo-600 font-bold">Direct Guidance Access</p>
-            </div>
-
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-              <div className="flex items-center justify-between text-slate-500">
-                <span className="text-[11px] font-bold uppercase tracking-wider">BEU Colleges</span>
-                <BookOpen size={18} className="text-amber-600" />
-              </div>
-              <div className="text-2xl font-black text-slate-900">
-                {new Set(enrolledList.map(s => s.college)).size} Colleges
-              </div>
-              <p className="text-[10px] text-slate-500 font-medium">Bihar-wide Coverage</p>
-            </div>
-
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
-              <div className="flex items-center justify-between text-slate-500">
-                <span className="text-[11px] font-bold uppercase tracking-wider">Live Tracker Status</span>
-                <Flame size={18} className="text-orange-500 fill-orange-500" />
-              </div>
-              <div className="text-2xl font-black text-slate-900">Live Synced</div>
-              <p className="text-[10px] text-blue-600 font-bold">Study Timer & Topics</p>
-            </div>
-          </div>
-
-          {/* Search & Branch Filter Toolbar */}
-          <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div className="space-y-1">
-                <h3 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
-                  <Users size={20} className="text-indigo-600" />
-                  Aapke Mentee Students ({enrolledList.length})
-                </h3>
-                <p className="text-xs text-slate-500 font-medium">
-                  Har student ke 'Kya Padha' tracker aur Study Timer records ko yahan se monitor karein aur WhatsApp pe direct guidance dein.
-                </p>
-              </div>
-
-              {/* View toggle: All vs Assigned */}
-              <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200 self-start">
-                <button
-                  onClick={() => setMentorAssignmentFilter('all')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    mentorAssignmentFilter === 'all' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-600'
-                  }`}
-                >
-                  Sabhi Students ({enrolledList.length})
-                </button>
-                <button
-                  onClick={() => setMentorAssignmentFilter('assigned')}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                    mentorAssignmentFilter === 'assigned' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-600'
-                  }`}
-                >
-                  Assigned to Me ({enrolledList.filter(s => s.assignedMentorId === activeMentor.id || (activeMentor.branch !== 'ALL' && activeMentor.branch === s.branchCode)).length || enrolledList.length})
-                </button>
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-3">
-              <div className="relative flex-1">
-                <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input 
-                  type="text"
-                  placeholder="Student ka naam, roll number, college ya mobile se search karein..."
-                  value={mentorSearchQuery}
-                  onChange={(e) => setMentorSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600"
-                />
-              </div>
-
-              {/* Branch Filter Pills */}
-              <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-                {['ALL', 'CSE', 'EEE', 'ECE', 'EE', 'CE', 'ME'].map(br => (
-                  <button
-                    key={br}
-                    onClick={() => setMentorBranchFilter(br)}
-                    className={`px-3 py-2 rounded-xl text-xs font-bold uppercase transition-all shrink-0 ${
-                      mentorBranchFilter === br 
-                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-500/20' 
-                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                    }`}
-                  >
-                    {br}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Students Grid List */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {enrolledList
-              .filter(stu => {
-                if (mentorAssignmentFilter === 'assigned') {
-                  const isMine = stu.assignedMentorId === activeMentor.id || 
-                                 (activeMentor.branch !== 'ALL' && activeMentor.branch === stu.branchCode);
-                  if (!isMine && enrolledList.filter(s => s.assignedMentorId === activeMentor.id).length > 0) return false;
-                }
-                if (mentorBranchFilter !== 'ALL' && stu.branchCode !== mentorBranchFilter) {
-                  return false;
-                }
-                if (mentorSearchQuery.trim()) {
-                  const q = mentorSearchQuery.toLowerCase();
-                  const matches = (stu.name && stu.name.toLowerCase().includes(q)) ||
-                                  (stu.roll && stu.roll.toLowerCase().includes(q)) ||
-                                  (stu.college && stu.college.toLowerCase().includes(q)) ||
-                                  (stu.branch && stu.branch.toLowerCase().includes(q)) ||
-                                  (stu.whatsapp && stu.whatsapp.includes(q));
-                  if (!matches) return false;
-                }
-                return true;
-              })
-              .map(stu => {
-                // Read student's study logs
-                let logs = [];
-                try {
-                  const saved = localStorage.getItem(`beu_study_logs_${stu.roll}`);
-                  if (saved) logs = JSON.parse(saved);
-                  else {
-                    const registry = JSON.parse(localStorage.getItem('beu_all_study_logs_registry') || '{}');
-                    if (registry[stu.roll]) logs = registry[stu.roll];
-                  }
-                } catch(e) {}
-
-                if (!logs || logs.length === 0) {
-                  logs = [
-                    { id: 1, date: 'Recent', subject: 'Core Engineering Basics', topic: 'Syllabus Orientation & Formula Notes', hours: '1.5', status: 'Completed ✅' },
-                    { id: 2, date: 'Yesterday', subject: 'Engineering Mathematics', topic: 'Calculus & Matrices Practice', hours: '2.0', status: 'PYQs Solved 📝' }
-                  ];
-                }
-
-                const totalHrs = logs.reduce((acc, curr) => acc + (parseFloat(curr.hours) || 0), 0);
-                const latestLog = logs[0];
-
-                return (
-                  <div 
-                    key={stu.id || stu.roll}
-                    className="bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-300 transition-all p-5 space-y-4 flex flex-col justify-between"
-                  >
-                    <div className="space-y-3">
-                      {/* Top student header */}
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 flex items-center justify-center text-xl shrink-0">
-                            {stu.branchCode === 'CSE' ? '💻' : stu.branchCode === 'ECE' ? '📡' : stu.branchCode === 'EEE' ? '🔋' : stu.branchCode === 'CE' ? '🏗️' : '⚙️'}
-                          </div>
-                          <div>
-                            <h4 className="text-sm font-black text-slate-900 leading-tight">
-                              {stu.name}
-                            </h4>
-                            <span className="font-mono text-[11px] font-bold text-blue-600">
-                              Roll: {stu.roll}
-                            </span>
-                          </div>
-                        </div>
-
-                        <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-black uppercase shrink-0">
-                          Active Mentee
-                        </span>
-                      </div>
-
-                      {/* College & Branch */}
-                      <div className="space-y-1 text-xs text-slate-600 border-t border-slate-100 pt-2.5">
-                        <p className="font-bold text-slate-800 line-clamp-1">
-                          🏛️ {stu.college}
-                        </p>
-                        <p className="text-[11px] text-slate-500 font-medium">
-                          {stu.branch} ({stu.branchCode})
-                        </p>
-                      </div>
-
-                      {/* Stated Goals */}
-                      {(stu.goals || stu.mentorExpectations) && (
-                        <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 text-[11px]">
-                          <p className="font-bold text-slate-700 line-clamp-2">
-                            🎯 <strong>Goals:</strong> {stu.goals || 'Padhai me guidance'}
-                          </p>
-                          {stu.mentorExpectations && (
-                            <p className="text-slate-500 line-clamp-1 font-medium italic">
-                              💡 "{stu.mentorExpectations}"
-                            </p>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Live Study Tracker & Timer Box */}
-                      <div className="p-3 bg-gradient-to-br from-blue-50/70 to-indigo-50/70 rounded-2xl border border-blue-100 space-y-2">
-                        <div className="flex items-center justify-between text-[11px]">
-                          <span className="font-bold text-blue-900 flex items-center gap-1">
-                            <Flame size={14} className="text-amber-500 fill-amber-500" /> Study Tracker:
-                          </span>
-                          <span className="font-black text-indigo-700 bg-white px-2 py-0.5 rounded-md border border-blue-200">
-                            {totalHrs.toFixed(1)} hrs Logged
-                          </span>
-                        </div>
-                        {latestLog && (
-                          <div className="text-[11px] space-y-0.5 text-slate-700">
-                            <p className="font-bold text-slate-900 line-clamp-1">
-                              📖 Latest: {latestLog.subject}
-                            </p>
-                            <p className="text-slate-500 text-[10px] line-clamp-1">
-                              "{latestLog.topic}" ({latestLog.status})
-                            </p>
-                          </div>
-                        )}
-                      </div>
+            return (
+              <>
+                {/* Quick Metrics Cards (Only for this mentor's assigned mentees) */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+                    <div className="flex items-center justify-between text-slate-500">
+                      <span className="text-[11px] font-bold uppercase tracking-wider">Aapke Assigned Mentees</span>
+                      <GraduationCap size={20} className="text-indigo-600" />
                     </div>
-
-                    {/* Action Buttons: Kya Padha Log, WhatsApp & Email */}
-                    <div className="space-y-2 pt-2 border-t border-slate-100">
-                      <button
-                        onClick={() => setSelectedMenteeLogs({ ...stu, logs })}
-                        className="w-full py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-md shadow-indigo-600/20 active:scale-[0.98]"
-                      >
-                        <TrendingUp size={14} /> Kya Padha & Study Timer Logs
-                      </button>
-
-                      <div className="grid grid-cols-2 gap-2">
-                        <a 
-                          href={`https://wa.me/91${stu.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${stu.name}! Main ${activeMentor.name} bol raha hoon (Aapka BEU Senior Mentor). Maine aapka study tracker dekha. Padhai aur semester guidance ke baare me baat karte hain.`)}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="py-2 px-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center gap-1 border border-emerald-200"
-                        >
-                          <MessageCircle size={14} /> WhatsApp
-                        </a>
-
-                        <a 
-                          href={`mailto:${stu.email}?subject=${encodeURIComponent(`BEU Mentorship Guidance - ${stu.name}`)}`}
-                          className="py-2 px-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-xl text-[11px] font-bold transition-all flex items-center justify-center gap-1 border border-blue-200"
-                        >
-                          <Mail size={14} /> Email
-                        </a>
-                      </div>
+                    <div className="text-2xl font-black text-slate-900">
+                      {myMentees.length} {myMentees.length === 1 ? 'Mentee' : 'Mentees'}
                     </div>
-
+                    <p className="text-[10px] text-emerald-600 font-bold">1-on-1 Direct Guidance</p>
                   </div>
-                );
-              })}
-          </div>
+
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+                    <div className="flex items-center justify-between text-slate-500">
+                      <span className="text-[11px] font-bold uppercase tracking-wider">BEU Colleges</span>
+                      <BookOpen size={20} className="text-amber-600" />
+                    </div>
+                    <div className="text-2xl font-black text-slate-900">
+                      {collegesCount} Colleges
+                    </div>
+                    <p className="text-[10px] text-slate-500 font-medium">Assigned Mentees Campus</p>
+                  </div>
+
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
+                    <div className="flex items-center justify-between text-slate-500">
+                      <span className="text-[11px] font-bold uppercase tracking-wider">Live Tracker Status</span>
+                      <Flame size={20} className="text-orange-500 fill-orange-500" />
+                    </div>
+                    <div className="text-2xl font-black text-slate-900">Live Synced</div>
+                    <p className="text-[10px] text-blue-600 font-bold">Study Timer & Topics</p>
+                  </div>
+                </div>
+
+                {/* Toolbar */}
+                <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                  <div className="space-y-1">
+                    <h3 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
+                      <Users size={20} className="text-indigo-600" />
+                      Aapke Mentee Students ({myMentees.length})
+                    </h3>
+                    <p className="text-xs text-slate-500 font-medium">
+                      Aapko assign kiye gaye students ke 'Kya Padha' study records ko yahan se monitor karein aur WhatsApp pe direct guidance dein.
+                    </p>
+                  </div>
+
+                  {myMentees.length > 0 && (
+                    <div className="relative flex-1">
+                      <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <input 
+                        type="text"
+                        placeholder="Mentee ka naam, roll number, college ya mobile se search karein..."
+                        value={mentorSearchQuery}
+                        onChange={(e) => setMentorSearchQuery(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-600"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                {/* Students Grid List */}
+                {filteredMentees.length === 0 ? (
+                  <div className="bg-white rounded-3xl border border-dashed border-slate-300 p-12 text-center space-y-3">
+                    <div className="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-3xl mx-auto shadow-inner">
+                      👨‍🏫
+                    </div>
+                    <h4 className="text-base font-black text-slate-900">
+                      {myMentees.length === 0 ? 'Abhi Tak Koi Mentee Assign Nahi Hua Hai' : 'Koi student match nahi hua'}
+                    </h4>
+                    <p className="text-xs text-slate-500 max-w-md mx-auto font-medium">
+                      {myMentees.length === 0 
+                        ? 'Admin dwara aapko student assign kiye jane par unka complete profile aur "Kya Padha" study tracker yahan dikhega.'
+                        : 'Search query badal kar dekhein.'}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {filteredMentees.map(stu => {
+                      // Read student's study logs
+                      let logs = [];
+                      try {
+                        const saved = localStorage.getItem(`beu_study_logs_${stu.roll}`);
+                        if (saved) {
+                          const parsed = JSON.parse(saved);
+                          if (Array.isArray(parsed)) logs = parsed.filter(item => !isMockStudyLog(item));
+                        } else {
+                          const registry = JSON.parse(localStorage.getItem('beu_all_study_logs_registry') || '{}');
+                          if (registry[stu.roll] && Array.isArray(registry[stu.roll])) {
+                            logs = registry[stu.roll].filter(item => !isMockStudyLog(item));
+                          }
+                        }
+                      } catch(e) {}
+
+                      const totalHrs = (logs || []).reduce((acc, curr) => acc + (parseFloat(curr.hours) || 0), 0);
+                      const latestLog = logs && logs.length > 0 ? logs[0] : null;
+
+                      return (
+                        <div 
+                          key={stu.id || stu.roll}
+                          className="bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-md hover:border-indigo-300 transition-all p-5 space-y-4 flex flex-col justify-between"
+                        >
+                          <div className="space-y-3">
+                            {/* Top student header */}
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex items-center gap-3">
+                                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 flex items-center justify-center text-xl shrink-0">
+                                  {stu.branchCode === 'CSE' ? '💻' : stu.branchCode === 'ECE' ? '📡' : stu.branchCode === 'EEE' ? '🔋' : stu.branchCode === 'CE' ? '🏗️' : '⚙️'}
+                                </div>
+                                <div>
+                                  <h4 className="text-sm font-black text-slate-900 leading-tight">
+                                    {stu.name}
+                                  </h4>
+                                  <span className="font-mono text-[11px] font-bold text-blue-600">
+                                    Roll: {stu.roll}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <span className="px-2 py-0.5 rounded-full border text-[10px] font-black uppercase shrink-0 bg-emerald-50 text-emerald-700 border-emerald-200">
+                                Assigned Mentee
+                              </span>
+                            </div>
+
+                            {/* College & Branch */}
+                            <div className="space-y-1 text-xs text-slate-600 border-t border-slate-100 pt-2.5">
+                              <p className="font-bold text-slate-800 line-clamp-1">
+                                🏛️ {stu.college}
+                              </p>
+                              <p className="text-[11px] text-slate-500 font-medium">
+                                {stu.branch} ({stu.branchCode})
+                              </p>
+                            </div>
+
+                            {/* Stated Goals */}
+                            {(stu.goals || stu.mentorExpectations) && (
+                              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100 space-y-1 text-[11px]">
+                                <p className="font-bold text-slate-700 line-clamp-2">
+                                  🎯 <strong>Goals:</strong> {stu.goals || 'Padhai me guidance'}
+                                </p>
+                                {stu.mentorExpectations && (
+                                  <p className="text-slate-500 line-clamp-1 font-medium italic">
+                                    💡 "{stu.mentorExpectations}"
+                                  </p>
+                                )}
+                              </div>
+                            )}
+
+                            {/* Live Study Tracker & Timer Box */}
+                            <div className="p-3 bg-gradient-to-br from-blue-50/70 to-indigo-50/70 rounded-2xl border border-blue-100 space-y-2">
+                              <div className="flex items-center justify-between text-[11px]">
+                                <span className="font-bold text-blue-900 flex items-center gap-1">
+                                  <Flame size={14} className={totalHrs > 0 ? "text-amber-500 fill-amber-500" : "text-slate-400"} /> Study Tracker:
+                                </span>
+                                <span className={`font-black px-2 py-0.5 rounded-md border text-[11px] ${totalHrs > 0 ? 'text-indigo-700 bg-white border-blue-200' : 'text-slate-500 bg-slate-100 border-slate-200'}`}>
+                                  {totalHrs > 0 ? `${totalHrs.toFixed(1)} hrs Logged` : '0 hrs Logged'}
+                                </span>
+                              </div>
+                              {latestLog ? (
+                                <div className="text-[11px] space-y-0.5 text-slate-700">
+                                  <p className="font-bold text-slate-900 line-clamp-1">
+                                    📖 Latest: {latestLog.subject}
+                                  </p>
+                                  <p className="text-slate-500 text-[10px] line-clamp-1">
+                                    "{latestLog.topic}" ({latestLog.status})
+                                  </p>
+                                </div>
+                              ) : (
+                                <p className="text-[11px] text-slate-400 italic">
+                                  Abhi koi study session log nahi hua hai
+                                </p>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Action Buttons: Kya Padha Log & WhatsApp only */}
+                          <div className="space-y-2 pt-2 border-t border-slate-100">
+                            <button
+                              onClick={() => setSelectedMenteeLogs({ ...stu, logs })}
+                              className="w-full py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-md shadow-indigo-600/20 active:scale-[0.98]"
+                            >
+                              <TrendingUp size={14} /> Kya Padha & Study Timer Logs
+                            </button>
+
+                            <a 
+                              href={`https://wa.me/91${stu.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${stu.name}! Main ${activeMentor.name} bol raha hoon (Aapka BEU Senior Mentor). Padhai aur semester guidance ke baare me baat karte hain.`)}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="w-full py-2.5 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 border border-emerald-200"
+                            >
+                              <MessageCircle size={15} /> WhatsApp Pe Guidance Dein
+                            </a>
+                          </div>
+
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
+            );
+          })()}
 
         </div>
       ) : (
@@ -1130,12 +1403,18 @@ export default function FreeMentorship() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 pt-2">
-                  <div className="relative">
-                    <img 
-                      src={activeStudent.mentor.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80'} 
-                      alt={activeStudent.mentor.name} 
-                      className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-blue-500 shadow-lg"
-                    />
+                  <div className="relative shrink-0">
+                    {activeStudent.mentor.avatar && !activeStudent.mentor.avatar.includes('unsplash') ? (
+                      <img 
+                        src={activeStudent.mentor.avatar} 
+                        alt={activeStudent.mentor.name} 
+                        className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-blue-500 shadow-lg"
+                      />
+                    ) : (
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white font-[1000] text-2xl sm:text-3xl flex items-center justify-center border-2 border-blue-400 shadow-lg shrink-0 uppercase">
+                        {activeStudent.mentor.name.split(' ').map(w => w[0]).join('').slice(0, 2) || 'BM'}
+                      </div>
+                    )}
                     <span className="absolute -bottom-1 -right-1 bg-emerald-500 text-white p-1 rounded-full ring-2 ring-white">
                       <ShieldCheck size={14} />
                     </span>
@@ -1146,8 +1425,8 @@ export default function FreeMentorship() {
                       <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
                         {activeStudent.mentor.name}
                       </h3>
-                      <span className="px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200 text-[11px] font-black flex items-center gap-1">
-                        <Star size={12} className="fill-amber-500 text-amber-500" /> {activeStudent.mentor.cgpa}
+                      <span className="px-2 py-0.5 rounded-md bg-blue-100 text-blue-700 text-[11px] font-black uppercase">
+                        {activeStudent.mentor.branch || activeStudent.mentor.branchLabel}
                       </span>
                     </div>
                     <p className="text-xs sm:text-sm font-bold text-blue-600">
@@ -1156,41 +1435,43 @@ export default function FreeMentorship() {
                     <p className="text-xs text-slate-500 font-medium">
                       Alumnus: {activeStudent.mentor.college}
                     </p>
-                    <p className="text-[11px] text-indigo-600 font-bold flex items-center gap-1 pt-0.5">
-                      <Mail size={12} /> {activeStudent.mentor.email}
-                    </p>
                   </div>
                 </div>
 
-                {/* Bio & Specialties */}
-                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-3">
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium italic">
-                    "{activeStudent.mentor.bio}"
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {(activeStudent.mentor.specialties || []).map((spec, i) => (
-                      <span key={i} className="px-2.5 py-1 bg-white text-slate-700 border border-slate-200 rounded-lg text-[11px] font-semibold shadow-sm">
-                        🎯 {spec}
-                      </span>
-                    ))}
+                {/* Worked On & Expertise */}
+                {(activeStudent.mentor.workedOn || activeStudent.mentor.expertiseIn) && (
+                  <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 space-y-2 text-xs font-semibold">
+                    {activeStudent.mentor.workedOn && (
+                      <p className="text-slate-800">
+                        🛠️ <strong className="text-slate-900">Worked On:</strong> {activeStudent.mentor.workedOn}
+                      </p>
+                    )}
+                    {activeStudent.mentor.expertiseIn && (
+                      <p className="text-blue-800">
+                        💡 <strong className="text-blue-900">Expertise:</strong> {activeStudent.mentor.expertiseIn}
+                      </p>
+                    )}
                   </div>
-                </div>
+                )}
 
-                {/* Contact / Action Buttons */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                  <a 
-                    href={`mailto:${activeStudent.mentor.email}?subject=${encodeURIComponent(`BEU Mentorship Guidance - ${activeStudent.name} (${activeStudent.roll})`)}&body=${encodeURIComponent(`Respected ${activeStudent.mentor.name},\n\nI am ${activeStudent.name} from ${activeStudent.college} (${activeStudent.branch}). My Roll No is ${activeStudent.roll}.\n\nI need guidance regarding:\n`)}`}
-                    className="py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-indigo-600/20 active:scale-[0.98]"
-                  >
-                    <Mail size={16} /> Email Mentor
-                  </a>
-
-                  <button 
-                    onClick={() => setShowBookingModal(true)}
-                    className="py-3.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-blue-600/20 active:scale-[0.98]"
-                  >
-                    <Calendar size={16} /> Book 1-on-1 Guidance
-                  </button>
+                {/* Live Meeting Action (No Email, No Book Guidance) */}
+                <div className="pt-2">
+                  {activeStudent.mentor.meetLink ? (
+                    <a
+                      href={activeStudent.mentor.meetLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full py-3.5 px-4 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-rose-600/25 active:scale-[0.98] animate-pulse"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+                      <Video size={16} /> Join Live Google Meet Session
+                    </a>
+                  ) : (
+                    <div className="p-3 bg-slate-100/80 rounded-xl flex items-center justify-between text-xs text-slate-500 font-semibold border border-slate-200">
+                      <span className="flex items-center gap-2"><Video size={15} className="text-slate-400" /> No Live Meet Scheduled Right Now</span>
+                      <span className="text-[10px] text-slate-500 font-bold bg-white px-2 py-0.5 rounded border border-slate-200">Mentor will notify</span>
+                    </div>
+                  )}
                 </div>
               </div>
             ) : (
@@ -1201,42 +1482,42 @@ export default function FreeMentorship() {
 
                 <div className="space-y-2">
                   <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-                    Namaste {activeStudent.name}! Aapka Registration Confirmed Hai.
+                    Wait! Your Mentor is being assigned according to your problem ⏳
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-normal">
-                    Admin team aapke branch (<span className="text-amber-400 font-bold">{activeStudent.branch}</span>) aur college (<span className="text-blue-300 font-bold">{activeStudent.college}</span>) ke anuroop ek verified senior mentor jald hi assign kar rahi hai.
+                    Namaste <strong className="text-white">{activeStudent.name}</strong>! Admin team aapke branch (<span className="text-amber-400 font-bold">{activeStudent.branch}</span>) aur aapke queries/goals ke anusaar ek verified senior mentor jald hi assign kar rahi hai.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                {(activeStudent.mentorExpectations || activeStudent.goals) && (
                   <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1">
                     <p className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
-                      <Flame size={14} /> "Kya Padha" Study Tracker:
+                      🎯 Aapka Guidance Requirement / Problem:
+                    </p>
+                    <p className="text-[12px] text-slate-200 italic font-medium">
+                      "{activeStudent.mentorExpectations || activeStudent.goals}"
+                    </p>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1">
+                    <p className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                      <Flame size={14} /> "Kya Padha" Live Study Tracker
                     </p>
                     <p className="text-[11px] text-slate-300">
-                      Niche diye gaye tracker me daily apne padhe gaye topics aur hours log karein taaki mentor aate hi aapka streak dekh sake!
+                      Niche diye gaye study tracker aur Pomodoro timer se daily padhai track karein.
                     </p>
                   </div>
 
                   <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1">
-                    <p className="text-xs font-bold text-blue-300 flex items-center gap-1.5">
-                      <BookOpen size={14} /> Free Study Material:
+                    <p className="text-xs font-bold text-blue-400 flex items-center gap-1.5">
+                      <BookOpen size={14} /> Free Study Material
                     </p>
                     <p className="text-[11px] text-slate-300">
-                      Syllabus, Handwritten Notes aur Previous Year Papers ke liye platform ke study sections ka upyog karein.
+                      Handwritten topper notes, official BEU syllabus aur Previous Year Question papers freely use karein.
                     </p>
                   </div>
-                </div>
-
-                <div className="pt-1">
-                  <a 
-                    href="https://wa.me/916204640645?text=Hello%20Admin,%20I%20am%20enrolled%20in%20Free%20Mentorship.%20Please%20assign%20me%20a%20mentor."
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs uppercase tracking-wider transition-all shadow-md shadow-emerald-600/30"
-                  >
-                    <MessageCircle size={15} /> Contact Admin for Priority Mentor
-                  </a>
                 </div>
               </div>
             )}
@@ -1588,7 +1869,9 @@ export default function FreeMentorship() {
               <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-center">
                 <span className="block text-[10px] font-black uppercase text-slate-400">Total Hours</span>
                 <span className="text-base sm:text-lg font-black text-blue-600">
-                  {selectedMenteeLogs.logs?.reduce((acc, curr) => acc + (parseFloat(curr.hours) || 0), 0).toFixed(1)} hrs
+                  {selectedMenteeLogs.logs && selectedMenteeLogs.logs.length > 0
+                    ? `${selectedMenteeLogs.logs.reduce((acc, curr) => acc + (parseFloat(curr.hours) || 0), 0).toFixed(1)} hrs`
+                    : '0.0 hrs'}
                 </span>
               </div>
               <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-center">
@@ -1599,8 +1882,8 @@ export default function FreeMentorship() {
               </div>
               <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-center">
                 <span className="block text-[10px] font-black uppercase text-slate-400">Study Status</span>
-                <span className="text-xs sm:text-sm font-black text-indigo-600">
-                  Active 🔥
+                <span className={`text-xs sm:text-sm font-black ${selectedMenteeLogs.logs && selectedMenteeLogs.logs.length > 0 ? 'text-indigo-600' : 'text-slate-400'}`}>
+                  {selectedMenteeLogs.logs && selectedMenteeLogs.logs.length > 0 ? 'Active 🔥' : 'No Logs Yet ⏳'}
                 </span>
               </div>
             </div>

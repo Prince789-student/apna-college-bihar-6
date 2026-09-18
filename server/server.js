@@ -88,6 +88,23 @@ app.get('/:filename.apk', (req, res, next) => {
     next();
 });
 
+// GOOGLE ADSENSE & SEARCH ENGINE CRAWLER ROUTES (HIGHEST PRIORITY)
+app.get('/ads.txt', (req, res) => {
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=86400');
+    res.send('google.com, pub-4005389118070865, DIRECT, f08c47fec0942fa0\n');
+});
+
+app.get('/robots.txt', (req, res) => {
+    const robotsPath = path.join(__dirname, 'public', 'robots.txt');
+    if (fs.existsSync(robotsPath)) {
+        res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+        return res.sendFile(robotsPath);
+    }
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.send("User-agent: *\nAllow: /\n\nUser-agent: Mediapartners-Google\nAllow: /\n\nUser-agent: Googlebot\nAllow: /\n\nSitemap: https://www.apnacollegebihar.online/sitemap.xml\n");
+});
+
 // 2. Middleware
 app.use(helmet({
   crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" }

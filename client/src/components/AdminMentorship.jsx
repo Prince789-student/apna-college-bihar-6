@@ -4,7 +4,7 @@ import {
   MessageCircle, Trash2, Search, Filter, Plus, 
   CheckCircle2, ExternalLink, RefreshCw, Star, 
   Calendar, Video, ShieldCheck, Mail, BookOpen, Clock,
-  Copy, Download, Send, KeyRound, Eye, EyeOff, Check, Save, Sparkles
+  Copy, Download, Send, KeyRound, Eye, EyeOff, Check, Save, Sparkles, Camera
 } from 'lucide-react';
 import { db } from '../firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -29,18 +29,24 @@ export default function AdminMentorship({ flash }) {
   const [visiblePasswords, setVisiblePasswords] = useState({});
   const [isCloudSaving, setIsCloudSaving] = useState(false);
 
+  // Mentor Password & Phone Management State
+  const [editingMentorPhones, setEditingMentorPhones] = useState({});
+  const [editingMentorPasswords, setEditingMentorPasswords] = useState({});
+  const [visibleMentorPasswords, setVisibleMentorPasswords] = useState({});
+
   // New Mentor Form State
   const [mentorForm, setMentorForm] = useState({
     name: '',
     role: '',
     college: '',
     branch: 'CSE',
-    cgpa: '8.80 CGPA',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+    workedOn: '',
+    expertiseIn: '',
+    avatar: '',
+    phone: '',
+    password: 'DEEPAK@123',
     email: '',
-    meetTime: 'Every Saturday · 7:30 PM',
-    meetLink: 'https://meet.google.com/new',
-    specialties: 'BEU Exams, Coding, Placements',
+    meetLink: '',
     bio: ''
   });
 
@@ -65,21 +71,34 @@ export default function AdminMentorship({ flash }) {
 
   const loadData = () => {
     setStudents(getEnrolledStudents());
-    setMentors(getMentorsList());
+    const rawMentors = getMentorsList();
+    const sanitized = (rawMentors || []).map(m => {
+      const isDeepak = (m.name || '').toLowerCase().includes('deepak');
+      const cleanAvatar = (m.avatar && !m.avatar.includes('unsplash')) ? m.avatar : '';
+      return {
+        ...m,
+        avatar: cleanAvatar,
+        phone: m.phone || (isDeepak ? 'ACBMGECCSE01' : ''),
+        mobile: m.mobile || (isDeepak ? '7856030646' : '7856030646'),
+        password: m.password || (isDeepak ? 'DEEPAK@123' : 'Mentor@123')
+      };
+    });
+    setMentors(sanitized);
+    saveMentorsList(sanitized);
   };
 
   const copyAllCredentials = () => {
     const lines = students.map((s, idx) => 
-      `${idx + 1}. ${s.name} | Roll: ${s.roll} | Pass: ${s.password || 'Rohit@2026'} | Email: ${s.email} | WhatsApp: ${s.whatsapp}`
+      `${idx + 1}. ${s.name} | Username (Phone): ${s.whatsapp} | Roll: ${s.roll} | Branch: ${s.branchCode || s.branch} | Pass: ${s.password} | College: ${s.college}`
     ).join('\n');
     navigator.clipboard.writeText(lines);
     if (flash) flash(`Sabhi ${students.length} students ke Passwords clipboard me copy ho gaye!`, 'suc');
   };
 
   const downloadCSV = () => {
-    const headers = 'ID,Name,Roll,Password,Email,WhatsApp,College,Branch,Goals\n';
+    const headers = 'ID,Name,Username_Phone,Roll,Password,Branch,College,Email\n';
     const rows = students.map(s => 
-      `"${s.id}","${s.name}","${s.roll}","${s.password || 'Rohit@2026'}","${s.email}","${s.whatsapp}","${s.college}","${s.branch}","${(s.goals || '').replace(/"/g, '""')}"`
+      `"${s.id}","${s.name}","${s.whatsapp}","${s.roll}","${s.password}","${s.branchCode || s.branch}","${s.college}","${s.email}"`
     ).join('\n');
     const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -99,6 +118,11 @@ export default function AdminMentorship({ flash }) {
       return;
     }
 
+    const specialtiesList = [
+      ...(mentorForm.expertiseIn ? mentorForm.expertiseIn.split(',').map(s => s.trim()) : []),
+      ...(mentorForm.workedOn ? mentorForm.workedOn.split(',').map(s => s.trim()) : [])
+    ].filter(Boolean);
+
     const newMentor = {
       id: `mentor-${mentorForm.branch.toLowerCase()}-${Date.now()}`,
       name: mentorForm.name.trim(),
@@ -106,13 +130,15 @@ export default function AdminMentorship({ flash }) {
       college: mentorForm.college.trim(),
       branch: mentorForm.branch,
       branchLabel: mentorForm.branch,
-      cgpa: mentorForm.cgpa.trim(),
-      avatar: mentorForm.avatar.trim() || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80',
-      email: mentorForm.email.trim() || `${mentorForm.name.toLowerCase().replace(/[^a-z0-9]/g, '')}@gmail.com`,
-      meetTime: mentorForm.meetTime.trim() || 'Every Saturday · 7:30 PM',
-      meetLink: mentorForm.meetLink.trim() || 'https://meet.google.com',
-      specialties: mentorForm.specialties.split(',').map(s => s.trim()).filter(Boolean),
-      bio: mentorForm.bio.trim() || 'Experienced senior guide for Bihar Engineering University students.'
+      workedOn: mentorForm.workedOn.trim(),
+      expertiseIn: mentorForm.expertiseIn.trim(),
+      avatar: mentorForm.avatar.trim() || '',
+      phone: mentorForm.phone.trim(),
+      password: mentorForm.password.trim() || 'Mentor@123',
+      email: mentorForm.email.trim() || `${mentorForm.name.toLowerCase().replace(/[^a-z0-9]/g, '') || 'mentor'}@beu.in`,
+      meetLink: '',
+      specialties: specialtiesList.length > 0 ? specialtiesList : ['Academic Guidance', 'BEU Prep'],
+      bio: mentorForm.bio.trim() || (mentorForm.workedOn ? `Worked on: ${mentorForm.workedOn}` : 'Experienced senior mentor.')
     };
 
     const updated = [newMentor, ...mentors];
@@ -124,12 +150,13 @@ export default function AdminMentorship({ flash }) {
       role: '',
       college: '',
       branch: 'CSE',
-      cgpa: '8.80 CGPA',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+      workedOn: '',
+      expertiseIn: '',
+      avatar: '',
+      phone: '',
+      password: '',
       email: '',
-      meetTime: 'Every Saturday · 7:30 PM',
-      meetLink: 'https://meet.google.com/new',
-      specialties: 'BEU Exams, Coding, Placements',
+      meetLink: '',
       bio: ''
     });
 
@@ -143,6 +170,96 @@ export default function AdminMentorship({ flash }) {
     setMentors(updated);
     saveMentorsList(updated);
     if (flash) flash('Mentor remove ho gaya.');
+  };
+
+  // Update or Clear Google Meet Link dynamically
+  const handleUpdateMentorMeetLink = (mentorId, newLink) => {
+    const updated = mentors.map(m => m.id === mentorId ? { ...m, meetLink: (newLink || '').trim() } : m);
+    setMentors(updated);
+    saveMentorsList(updated);
+    if (newLink && newLink.trim()) {
+      if (flash) flash('Google Meet link lag gaya! Students ko live join dikhega. 🔴', 'suc');
+    } else {
+      if (flash) flash('Google Meet link hata diya gaya! Meeting closed. ✅', 'suc');
+    }
+  };
+
+  // Save Mentor Credentials (Phone & Password)
+  const handleSaveMentorCredentials = (mentorId) => {
+    const currentMentor = mentors.find(m => m.id === mentorId);
+    if (!currentMentor) return;
+
+    const isDeepak = (currentMentor.name || '').toLowerCase().includes('deepak');
+    const newPhone = editingMentorPhones[mentorId] !== undefined ? editingMentorPhones[mentorId].trim() : (currentMentor.phone || (isDeepak ? 'ACBMGECCSE01' : ''));
+    const newPassword = editingMentorPasswords[mentorId] !== undefined ? editingMentorPasswords[mentorId].trim() : (currentMentor.password || 'DEEPAK@123');
+
+    if (!newPassword) {
+      if (flash) flash('Password khali nahi ho sakta!', 'err');
+      return;
+    }
+
+    const updated = mentors.map(m => m.id === mentorId ? { ...m, phone: newPhone, password: newPassword } : m);
+    setMentors(updated);
+    saveMentorsList(updated);
+
+    setEditingMentorPhones(prev => ({ ...prev, [mentorId]: undefined }));
+    setEditingMentorPasswords(prev => ({ ...prev, [mentorId]: undefined }));
+
+    if (flash) flash(`Mentor "${currentMentor.name}" ke Credentials save ho gaye! ✅`, 'suc');
+  };
+
+  // Upload Mentor Photo
+  const handleUploadMentorPhoto = (mentorId, file) => {
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      if (flash) flash('Photo size 2MB se kam honi chahiye!', 'err');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64 = event.target.result;
+      const updated = mentors.map(m => m.id === mentorId ? { ...m, avatar: base64 } : m);
+      setMentors(updated);
+      saveMentorsList(updated);
+      if (flash) flash('Mentor photo successfully update ho gayi! 📸', 'suc');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Remove Mentor Photo (Nothing / Initials instead)
+  const handleRemoveMentorPhoto = (mentorId) => {
+    const updated = mentors.map(m => m.id === mentorId ? { ...m, avatar: '' } : m);
+    setMentors(updated);
+    saveMentorsList(updated);
+    if (flash) flash('Photo hata di gayi! Ab koi stock photo nahi dikhegi. ✅', 'suc');
+  };
+
+  // 1-Click Copy Mentor Credentials
+  const copyMentorCredentials = (m) => {
+    const isDeepak = (m.name || '').toLowerCase().includes('deepak');
+    const username = editingMentorPhones[m.id] !== undefined ? editingMentorPhones[m.id] : (m.phone || (isDeepak ? 'ACBMGECCSE01' : ''));
+    const pass = editingMentorPasswords[m.id] !== undefined ? editingMentorPasswords[m.id] : (m.password || 'DEEPAK@123');
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://www.apnacollegebihar.online';
+    const text = `Mentor: ${m.name}\nPortal: ${origin}/mentorship\nUsername: ${username}\nMobile: 7856030646\nPassword: ${pass}`;
+    navigator.clipboard.writeText(text);
+    if (flash) flash(`Mentor "${m.name}" ke credentials copy ho gaye! 📋`, 'suc');
+  };
+
+  // Generate WhatsApp Share Link for Mentor
+  const getMentorWhatsAppUrl = (m) => {
+    const isDeepak = (m.name || '').toLowerCase().includes('deepak');
+    const rawUsername = editingMentorPhones[m.id] !== undefined ? editingMentorPhones[m.id] : (m.phone || (isDeepak ? 'ACBMGECCSE01' : ''));
+    const targetMobile = (rawUsername.replace(/\D/g, '').length >= 10)
+      ? rawUsername.replace(/\D/g, '')
+      : (m.mobile || '7856030646').replace(/\D/g, '');
+
+    const pass = editingMentorPasswords[m.id] !== undefined ? editingMentorPasswords[m.id] : (m.password || 'DEEPAK@123');
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://www.apnacollegebihar.online';
+    const portalUrl = `${origin}/mentorship`;
+
+    const message = `Namaste ${m.name} ji! 👋\n\nApna College Bihar ke *Free BEU Mentorship Portal* me aapka Mentor Account successfully set ho gaya hai.\n\n🔗 *Portal Login Link:* ${portalUrl}\n👤 *Username:* ${rawUsername || 'ACBMGECCSE01'}\n📱 *Mobile:* ${targetMobile}\n🔑 *Login Password:* ${pass}\n\n*Portal me aap:*\n1️⃣ Apne assigned 1st-year students ki list check kar sakte hain.\n2️⃣ Google Meet link add/remove karke live guidance sessions le sakte hain.\n\nAap abhi login karke check kar lijiye!\n\nShukriya,\nApna College Bihar Team`;
+
+    return `https://wa.me/91${targetMobile}?text=${encodeURIComponent(message)}`;
   };
 
   // Add Student Handler
@@ -169,7 +286,7 @@ export default function AdminMentorship({ flash }) {
       goals: studentForm.goals.trim(),
       codingExperience: studentForm.codingExperience,
       mentorExpectations: studentForm.mentorExpectations.trim(),
-      assignedMentorId: matchedMentor ? matchedMentor.id : 'mentor-cse-1',
+      assignedMentorId: null,
       status: 'Active'
     };
 
@@ -313,7 +430,7 @@ export default function AdminMentorship({ flash }) {
         {/* Mentors Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {mentors.map((m) => {
-            const assignedStudentsCount = students.filter(s => s.assignedMentorId === m.id || (!s.assignedMentorId && s.branchCode === m.branch)).length;
+            const assignedStudentsCount = students.filter(s => s.assignedMentorId === m.id).length;
 
             return (
               <div key={m.id} className="p-5 bg-slate-50 rounded-2xl border border-slate-200/80 hover:border-blue-300 transition-all space-y-3 relative group">
@@ -326,11 +443,50 @@ export default function AdminMentorship({ flash }) {
                 </button>
 
                 <div className="flex items-center gap-3.5">
-                  <img 
-                    src={m.avatar} 
-                    alt={m.name} 
-                    className="w-14 h-14 rounded-xl object-cover border-2 border-blue-500 shadow-sm shrink-0" 
-                  />
+                  <div className="relative group/avatar shrink-0">
+                    {m.avatar && !m.avatar.includes('unsplash') ? (
+                      <img 
+                        src={m.avatar} 
+                        alt={m.name} 
+                        className="w-14 h-14 rounded-xl object-cover border-2 border-blue-500 shadow-sm" 
+                      />
+                    ) : (
+                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white font-black text-base flex items-center justify-center border-2 border-blue-400 shadow-sm uppercase">
+                        {m.name.split(' ').map(w => w[0]).join('').slice(0, 2) || 'BM'}
+                      </div>
+                    )}
+
+                    {/* Change / Upload Photo Input */}
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      id={`mentor-photo-input-${m.id}`}
+                      className="hidden"
+                      onChange={(e) => {
+                        if (e.target.files?.[0]) handleUploadMentorPhoto(m.id, e.target.files[0]);
+                      }}
+                    />
+                    <label 
+                      htmlFor={`mentor-photo-input-${m.id}`}
+                      className="absolute -bottom-1 -right-1 bg-white hover:bg-slate-100 text-slate-700 p-1 rounded-md border border-slate-300 shadow-xs cursor-pointer transition-all"
+                      title="Photo upload ya change karein"
+                    >
+                      <Camera size={11} />
+                    </label>
+
+                    {/* Remove Photo if exists */}
+                    {m.avatar && !m.avatar.includes('unsplash') && (
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveMentorPhoto(m.id)}
+                        className="absolute -top-1.5 -left-1.5 bg-rose-600 hover:bg-rose-700 text-white w-4 h-4 rounded-full flex items-center justify-center text-[10px] shadow-xs"
+                        title="Photo hatao (kuch nahi dikhega)"
+                      >
+                        ✕
+                      </button>
+                    )}
+                  </div>
+
                   <div>
                     <div className="flex items-center gap-1.5 flex-wrap">
                       <h3 className="text-sm font-black text-slate-900">{m.name}</h3>
@@ -343,17 +499,172 @@ export default function AdminMentorship({ flash }) {
                   </div>
                 </div>
 
+                {/* Worked on & Expertise */}
+                {(m.workedOn || m.expertiseIn || (m.specialties && m.specialties.length > 0)) && (
+                  <div className="text-[11px] space-y-1 bg-white p-2.5 rounded-xl border border-slate-200/60">
+                    {m.workedOn && (
+                      <p className="text-slate-700 font-semibold truncate" title={m.workedOn}>
+                        🛠️ <strong className="text-slate-900">Worked On:</strong> {m.workedOn}
+                      </p>
+                    )}
+                    {m.expertiseIn && (
+                      <p className="text-blue-700 font-semibold truncate" title={m.expertiseIn}>
+                        💡 <strong className="text-blue-900">Expertise:</strong> {m.expertiseIn}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Dynamic Google Meet Session Link (Add or Remove) */}
+                {m.meetLink ? (
+                  <div className="p-2.5 bg-rose-50 border border-rose-200 rounded-xl space-y-1.5">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="font-black text-rose-800 flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-rose-600 animate-ping"></span> Live Meet Active
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleUpdateMentorMeetLink(m.id, '')}
+                        className="text-[10px] font-black text-rose-600 hover:text-white hover:bg-rose-600 bg-white px-2 py-0.5 rounded border border-rose-300 transition-colors"
+                        title="Live meeting link hatao"
+                      >
+                        Meet Link Hatao ✕
+                      </button>
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] text-slate-600 font-mono truncate max-w-[170px]" title={m.meetLink}>
+                        {m.meetLink}
+                      </span>
+                      <a
+                        href={m.meetLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-2 py-0.5 bg-rose-600 hover:bg-rose-700 text-white rounded text-[10px] font-bold shrink-0 flex items-center gap-1"
+                      >
+                        <ExternalLink size={10} /> Open
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-2 bg-slate-100/80 rounded-xl flex items-center justify-between text-[11px] text-slate-500">
+                    <span className="flex items-center gap-1"><Video size={13} className="text-slate-400" /> No Meet Active</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const link = window.prompt(`Mentor "${m.name}" ke liye Google Meet Link daalein:`, 'https://meet.google.com/new');
+                        if (link) handleUpdateMentorMeetLink(m.id, link);
+                      }}
+                      className="text-[10px] font-black text-indigo-700 hover:text-white hover:bg-indigo-600 bg-white px-2 py-0.5 rounded border border-slate-200 transition-colors"
+                    >
+                      + Lagao Meet Link
+                    </button>
+                  </div>
+                )}
+
+                {/* ── Mentor Login Credentials & 1-Click WhatsApp Share ── */}
+                {(() => {
+                  const isDeepak = (m.name || '').toLowerCase().includes('deepak');
+                  const currentPhone = editingMentorPhones[m.id] !== undefined ? editingMentorPhones[m.id] : (m.phone || (isDeepak ? 'ACBMGECCSE01' : ''));
+                  const currentPass = editingMentorPasswords[m.id] !== undefined ? editingMentorPasswords[m.id] : (m.password || 'DEEPAK@123');
+                  const isPassVisible = visibleMentorPasswords[m.id];
+                  const hasCredChanges = (editingMentorPhones[m.id] !== undefined && editingMentorPhones[m.id] !== m.phone) ||
+                                         (editingMentorPasswords[m.id] !== undefined && editingMentorPasswords[m.id] !== m.password);
+                  const targetMobile = (currentPhone.replace(/\D/g, '').length >= 10) ? currentPhone.replace(/\D/g, '') : '7856030646';
+
+                  return (
+                    <div className="p-3.5 bg-gradient-to-br from-indigo-50/80 via-white to-blue-50/60 rounded-xl border border-indigo-200/80 space-y-2.5 shadow-2xs">
+                      <div className="flex items-center justify-between pb-1.5 border-b border-indigo-100">
+                        <span className="text-[11px] font-black uppercase tracking-wider text-indigo-950 flex items-center gap-1.5">
+                          <KeyRound size={13} className="text-indigo-600" /> Mentor Login Credentials
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => copyMentorCredentials(m)}
+                          className="text-[10px] font-bold text-indigo-700 hover:text-indigo-900 flex items-center gap-1 bg-white hover:bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200 transition-all shadow-2xs"
+                          title="Copy credentials"
+                        >
+                          <Copy size={11} /> Copy
+                        </button>
+                      </div>
+
+                      {/* Username (Login ID) */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-[10px] font-black text-slate-500 uppercase tracking-wider">
+                          <span className="flex items-center gap-1"><Phone size={10} className="text-indigo-500" /> Username (Login ID / Phone):</span>
+                          <span className="text-[9px] text-indigo-600 font-bold lowercase">portal username</span>
+                        </div>
+                        <input
+                          type="text"
+                          value={currentPhone}
+                          onChange={(e) => setEditingMentorPhones(prev => ({ ...prev, [m.id]: e.target.value }))}
+                          placeholder="e.g. ACBMGECCSE01 ya 7856030646"
+                          className="w-full px-2.5 py-1.5 text-xs font-mono font-black text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-indigo-600 shadow-2xs"
+                        />
+                      </div>
+
+                      {/* Password with Show/Hide toggle */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-[10px] font-black text-slate-500 uppercase tracking-wider">
+                          <span className="flex items-center gap-1"><KeyRound size={10} className="text-indigo-500" /> Password:</span>
+                          {hasCredChanges && (
+                            <span className="text-[9px] text-amber-600 font-bold">Unsaved changes!</span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                          <div className="relative flex-1">
+                            <input
+                              type={isPassVisible ? 'text' : 'password'}
+                              value={currentPass}
+                              onChange={(e) => setEditingMentorPasswords(prev => ({ ...prev, [m.id]: e.target.value }))}
+                              placeholder="Password..."
+                              className="w-full px-2.5 py-1.5 pr-7 text-xs font-mono font-black text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-indigo-600 shadow-2xs"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setVisibleMentorPasswords(prev => ({ ...prev, [m.id]: !prev[m.id] }))}
+                              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors"
+                              title={isPassVisible ? 'Hide password' : 'Show password'}
+                            >
+                              {isPassVisible ? <EyeOff size={13} /> : <Eye size={13} />}
+                            </button>
+                          </div>
+
+                          {hasCredChanges && (
+                            <button
+                              type="button"
+                              onClick={() => handleSaveMentorCredentials(m.id)}
+                              className="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs shrink-0 flex items-center gap-1 shadow-sm transition-all animate-pulse"
+                              title="Save Credentials"
+                            >
+                              <Save size={12} /> Save
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 1-Click WhatsApp Share Button (No Email) */}
+                      <div className="pt-1">
+                        <a
+                          href={getMentorWhatsAppUrl(m)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="w-full py-2.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black flex items-center justify-center gap-1.5 shadow-md shadow-emerald-500/20 transition-all hover:scale-[1.01]"
+                          title={`Send WhatsApp credentials to ${targetMobile}`}
+                        >
+                          <MessageCircle size={15} /> WhatsApp Share ({targetMobile})
+                        </a>
+                      </div>
+                    </div>
+                  );
+                })()}
+
                 <div className="pt-1 flex items-center justify-between text-[11px] font-semibold text-slate-600 border-t border-slate-200/60">
                   <span className="flex items-center gap-1 text-emerald-700 font-bold">
                     <Users size={13} /> {assignedStudentsCount} Students
                   </span>
-                  <a 
-                    href={`mailto:${m.email}`}
-                    className="text-indigo-600 hover:text-indigo-700 flex items-center gap-1 font-bold truncate max-w-[160px]"
-                    title={m.email}
-                  >
-                    <Mail size={13} /> {m.email}
-                  </a>
+                  <span className="flex items-center gap-1 text-slate-600 font-bold">
+                    <Phone size={12} className="text-emerald-600" /> 78560 30646
+                  </span>
                 </div>
               </div>
             );
@@ -520,18 +831,18 @@ export default function AdminMentorship({ flash }) {
                       </td>
                       <td className="p-3.5">
                         <div className="flex flex-col gap-1.5 min-w-[130px]">
-                          {/* 1-Click Direct Email with pre-filled Roll & Password */}
+                          {/* 1-Click Direct Email with pre-filled Username, Roll & Password */}
                           <a 
-                            href={`mailto:${stu.email}?subject=${encodeURIComponent('Apna College Bihar: Aapka Free BEU Mentorship Login ID & Password')}&body=${encodeURIComponent(`Namaste ${stu.name} ji,\n\nApna College Bihar ke Free BEU Mentorship Portal me aapka account create ho gaya hai!\n\nAapke Login Credentials:\n• Portal Link: https://www.apnacollegebihar.online/mentorship\n• Roll Number: ${stu.roll}\n• Login Password: ${stu.password}\n\nKripya portal par login karke apna daily study tracker ('Kya Padha') aur roadmap use karein.\n\nBest Wishes,\nApna College Bihar Team`)}`}
+                            href={`mailto:${stu.email}?subject=${encodeURIComponent('Apna College Bihar: Aapka Free BEU Mentorship Login ID & Password')}&body=${encodeURIComponent(`Namaste ${stu.name} ji,\n\nApna College Bihar ke Free BEU Mentorship Portal me aapka account create ho gaya hai!\n\nAapke Login Credentials:\n• Portal Link: https://www.apnacollegebihar.online/mentorship\n• Username (Phone): ${stu.whatsapp}\n• Roll Number: ${stu.roll}\n• Branch: ${stu.branchCode || stu.branch}\n• Login Password: ${stu.password}\n\nKripya portal par login karke apna daily study tracker ('Kya Padha') aur roadmap use karein.\n\nBest Wishes,\nApna College Bihar Team`)}`}
                             className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-[10px] border border-blue-200 transition-colors"
                             title={`Send Email to ${stu.email}`}
                           >
                             <Mail size={11} /> Email Password
                           </a>
 
-                          {/* 1-Click Direct WhatsApp with pre-filled Roll & Password */}
+                          {/* 1-Click Direct WhatsApp with pre-filled Username, Roll & Password */}
                           <a 
-                            href={`https://wa.me/91${stu.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${stu.name}! 👋\nApna College Bihar - Free Mentorship Portal me aapka account ready hai:\n\n🔗 Portal: https://www.apnacollegebihar.online/mentorship\n👤 Roll: ${stu.roll}\n🔑 Password: ${stu.password}\n\nAbhi login karke apna 'Kya Padha' tracker check karein!`)}`}
+                            href={`https://wa.me/91${(stu.whatsapp || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${stu.name}! 👋\nApna College Bihar - Free Mentorship Portal me aapka account ready hai:\n\n🔗 Portal: https://www.apnacollegebihar.online/mentorship\n📱 Username (Phone): ${stu.whatsapp}\n👤 Roll: ${stu.roll}\n🔑 Password: ${stu.password}\n\nAbhi login karke apna 'Kya Padha' tracker check karein!`)}`}
                             target="_blank"
                             rel="noreferrer"
                             className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-[10px] border border-emerald-200 transition-colors"
@@ -626,76 +937,115 @@ export default function AdminMentorship({ flash }) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Branch Domain</label>
-                  <select 
-                    value={mentorForm.branch}
-                    onChange={(e) => setMentorForm({ ...mentorForm, branch: e.target.value })}
-                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
-                  >
-                    <option value="CSE">Computer Science (CSE)</option>
-                    <option value="ECE">Electronics (ECE)</option>
-                    <option value="EEE">Electrical & Electronics (EEE)</option>
-                    <option value="EE">Electrical (EE)</option>
-                    <option value="CE">Civil Engineering (CE)</option>
-                    <option value="ME">Mechanical Engineering (ME)</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">CGPA / Score</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. 8.92 CGPA"
-                    value={mentorForm.cgpa}
-                    onChange={(e) => setMentorForm({ ...mentorForm, cgpa: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
+              <div>
+                <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Branch Domain</label>
+                <select 
+                  value={mentorForm.branch}
+                  onChange={(e) => setMentorForm({ ...mentorForm, branch: e.target.value })}
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
+                >
+                  <option value="CSE">Computer Science (CSE)</option>
+                  <option value="ECE">Electronics (ECE)</option>
+                  <option value="EEE">Electrical & Electronics (EEE)</option>
+                  <option value="EE">Electrical (EE)</option>
+                  <option value="CE">Civil Engineering (CE)</option>
+                  <option value="ME">Mechanical Engineering (ME)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Mentor Photo (Optional)</label>
+                <div className="flex items-center gap-3">
+                  {mentorForm.avatar ? (
+                    <div className="relative">
+                      <img src={mentorForm.avatar} alt="Preview" className="w-12 h-12 rounded-xl object-cover border border-blue-400" />
+                      <button
+                        type="button"
+                        onClick={() => setMentorForm({ ...mentorForm, avatar: '' })}
+                        className="absolute -top-1.5 -right-1.5 bg-rose-600 hover:bg-rose-700 text-white w-5 h-5 rounded-full text-[11px] flex items-center justify-center"
+                        title="Remove photo"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-300 flex items-center justify-center text-slate-400 font-bold text-xs">
+                      No Photo
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="new-mentor-photo-input"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (ev) => setMentorForm({ ...mentorForm, avatar: ev.target.result });
+                        reader.readAsDataURL(file);
+                      }
+                    }}
                   />
+                  <label
+                    htmlFor="new-mentor-photo-input"
+                    className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl cursor-pointer border border-slate-200 flex items-center gap-1.5 transition-colors"
+                  >
+                    <Camera size={13} /> Choose Photo File
+                  </label>
+                  <span className="text-[10px] text-slate-400 font-medium">Khali chhodne par initials dikhega.</span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Mentor Email Address</label>
-                  <input 
-                    type="email" 
-                    placeholder="e.g. mentor@gmail.com"
-                    value={mentorForm.email}
-                    onChange={(e) => setMentorForm({ ...mentorForm, email: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Live Meeting Schedule</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. Every Saturday · 8:00 PM"
-                    value={mentorForm.meetTime}
-                    onChange={(e) => setMentorForm({ ...mentorForm, meetTime: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
-                  />
+              {/* Login Credentials Box */}
+              <div className="p-3.5 rounded-xl bg-indigo-50 border border-indigo-200 space-y-3">
+                <p className="text-[11px] font-black uppercase text-indigo-600 flex items-center gap-1.5">
+                  <KeyRound size={13} /> Mentor Login Credentials (Mentor ise use karega portal me)
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Phone Number (Username)</label>
+                    <input
+                      type="tel"
+                      placeholder="e.g. 9876543210"
+                      value={mentorForm.phone}
+                      onChange={(e) => setMentorForm({ ...mentorForm, phone: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
+                    />
+                    <p className="text-[10px] text-slate-400 mt-0.5">Mentor is phone se login karega</p>
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Password</label>
+                    <input
+                      type="text"
+                      placeholder="Default: Mentor@123"
+                      value={mentorForm.password}
+                      onChange={(e) => setMentorForm({ ...mentorForm, password: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
+                    />
+                    <p className="text-[10px] text-slate-400 mt-0.5">Default: Mentor@123</p>
+                  </div>
                 </div>
               </div>
 
               <div>
-                <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Telegram / Discussion Group Link (Optional)</label>
+                <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Worked On</label>
                 <input 
                   type="text" 
-                  placeholder="https://t.me/your_guidance_channel"
-                  value={mentorForm.meetLink}
-                  onChange={(e) => setMentorForm({ ...mentorForm, meetLink: e.target.value })}
+                  placeholder="e.g. Web Development, AI/ML Projects, Core Electronics, Robotics"
+                  value={mentorForm.workedOn}
+                  onChange={(e) => setMentorForm({ ...mentorForm, workedOn: e.target.value })}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
                 />
               </div>
 
               <div>
-                <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Specialties (comma separated)</label>
+                <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Expertise In</label>
                 <input 
                   type="text" 
-                  placeholder="BEU Exams, C Programming, Backlog Clearance, Placements"
-                  value={mentorForm.specialties}
-                  onChange={(e) => setMentorForm({ ...mentorForm, specialties: e.target.value })}
+                  placeholder="e.g. BEU Semester Exams, C++, DSA, GATE Prep, Placement Guidance"
+                  value={mentorForm.expertiseIn}
+                  onChange={(e) => setMentorForm({ ...mentorForm, expertiseIn: e.target.value })}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
                 />
               </div>

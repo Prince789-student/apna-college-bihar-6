@@ -674,41 +674,123 @@ const privacyBody = `
     </div>
 
     <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-      <h2 class="text-xl font-black text-slate-900 uppercase">1. Introduction</h2>
+      <h2 class="text-xl font-black text-slate-900 uppercase">1. Introduction & Overview</h2>
       <p>
-        At <strong>Apna College Bihar</strong>, accessible from https://www.apnacollegebihar.online, one of our main priorities is the privacy of our visitors. This Privacy Policy document outlines the types of information that is collected and recorded by Apna College Bihar and how we use it.
+        At <strong>Apna College Bihar</strong>, accessible from <a href="https://www.apnacollegebihar.online" class="text-blue-600 underline font-semibold">https://www.apnacollegebihar.online</a>, one of our main priorities is the privacy of our visitors. This comprehensive Privacy Policy document outlines the types of information that is collected and recorded by Apna College Bihar and how we use it.
+      </p>
+      <p>
+        If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact our data protection team at <a href="mailto:prince86944@gmail.com" class="text-blue-600 underline font-bold">prince86944@gmail.com</a>.
       </p>
 
       <h2 class="text-xl font-black text-slate-900 uppercase">2. Information We Collect</h2>
       <p>
-        When you register for an account or interact with our learning hub, we may collect minimal data necessary to deliver your academic experience:
+        When you register for an account, calculate CGPA, search university notes, or interact with our learning hub, we collect minimal data necessary to deliver your academic experience:
       </p>
       <ul class="list-disc pl-5 space-y-1">
-        <li>Account Information: Name, email address, college, and branch provided via secure Google authentication.</li>
-        <li>Academic Progress Data: Saved timetable entries, attendance percentages, and CGPA calculations stored securely in Google Firestore.</li>
-        <li>Log Files: Like standard websites, we use log files that capture IP addresses, browser types, Internet Service Providers (ISP), date/time stamps, and referring pages.</li>
+        <li><strong>Account Information:</strong> Name, email address, college, and branch provided via secure Google authentication (Firebase).</li>
+        <li><strong>Academic Progress Data:</strong> Saved timetable entries, attendance records, study streak timers, and CGPA calculations stored securely in Google Cloud Firestore.</li>
+        <li><strong>Log Files & Technical Telemetry:</strong> Like standard websites, we use log files that capture IP addresses, browser types, Internet Service Providers (ISP), date/time stamps, referring/exit pages, and click counts for performance monitoring. None of this data is linked to personally identifiable information.</li>
       </ul>
 
-      <h2 class="text-xl font-black text-slate-900 uppercase">3. Google AdSense & DoubleClick DART Cookies</h2>
+      <h2 class="text-xl font-black text-slate-900 uppercase">3. How We Use Your Information</h2>
       <p>
-        Google is a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to our site and other sites on the internet.
+        We use the information we collect in various ways to support and improve your learning journey:
+      </p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Provide, operate, and maintain our study resources, syllabus databases, and calculators.</li>
+        <li>Improve, personalize, and expand our educational platform features.</li>
+        <li>Understand and analyze how visitors interact with our study portal.</li>
+        <li>Develop new academic tools, semester question banks, and counseling algorithms.</li>
+        <li>Send notifications regarding university exam dates, admit cards, and study milestones.</li>
+        <li>Detect and prevent fraud, spam, or platform abuse.</li>
+      </ul>
+
+      <h2 class="text-xl font-black text-slate-900 uppercase">4. Data Sharing & Security</h2>
+      <p>
+        We take your privacy seriously. <strong>Apna College Bihar does NOT sell, rent, or trade student personal information to any commercial third parties.</strong>
       </p>
       <p>
-        Visitors may choose to decline the use of DART cookies by visiting the Google ad and content network Privacy Policy at the following URL: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline">https://policies.google.com/technologies/ads</a>.
-      </p>
-      <p>
-        Third-party ad servers or ad networks use technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on Apna College Bihar. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of advertising campaigns and to personalize the advertising content that you see. Apna College Bihar has no access to or control over these cookies used by third-party advertisers.
+        All student records are encrypted both in transit (TLS 1.3 / HTTPS) and at rest utilizing Google Cloud / Firebase enterprise security infrastructure.
       </p>
 
-      <h2 class="text-xl font-black text-slate-900 uppercase">4. Data Security</h2>
+      <h2 class="text-xl font-black text-slate-900 uppercase">5. Log Files & Standard Web Tracking</h2>
       <p>
-        We employ industry-standard encryption protocols (HTTPS, TLS 1.3) provided by Google Cloud Infrastructure to protect your personal information against unauthorized access, alteration, or disclosure.
+        Apna College Bihar follows a standard procedure of using log files. These files log visitors when they visit websites. The information collected by log files includes internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users' movement on the website, and gathering demographic information.
       </p>
 
-      <h2 class="text-xl font-black text-slate-900 uppercase">5. Contact Information</h2>
+      <h2 class="text-xl font-black text-slate-900 uppercase">6. Cookies & Web Beacons</h2>
       <p>
-        If you have questions or require more information about our Privacy Policy, please contact us at <a href="mailto:prince86944@gmail.com" class="text-blue-600 underline font-bold">prince86944@gmail.com</a>.
+        Like any other website, Apna College Bihar uses 'cookies'. These cookies are used to store information including visitors' preferences and the pages on the website that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.
       </p>
+
+      <h2 class="text-xl font-black text-slate-900 uppercase">7. Google DoubleClick DART Cookie & Google AdSense</h2>
+      <p>
+        Google is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to www.apnacollegebihar.online and other sites on the internet.
+      </p>
+      <p>
+        Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to our sites and/or other sites on the Internet.
+      </p>
+      <p>
+        Visitors may choose to decline the use of DART cookies by visiting the Google ad and content network Privacy Policy at the following URL: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline font-bold">https://policies.google.com/technologies/ads</a> or adjust personalized ad preferences via <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline font-bold">Google Ads Settings</a>.
+      </p>
+      <p>
+        You can also opt out of interest-based advertising by visiting the Network Advertising Initiative opt-out page at <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline font-bold">https://www.aboutads.info/choices/</a>.
+      </p>
+
+      <h2 class="text-xl font-black text-slate-900 uppercase">8. CCPA Privacy Rights (Do Not Sell My Personal Information)</h2>
+      <p>
+        Under the California Consumer Privacy Act (CCPA), among other rights, California consumers have the right to:
+      </p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Request that a business that collects a consumer's personal data disclose the categories and specific pieces of personal data that a business has collected about consumers.</li>
+        <li>Request that a business delete any personal data about the consumer that a business has collected.</li>
+        <li>Request that a business that sells a consumer's personal data, not sell the consumer's personal data.</li>
+      </ul>
+      <p>
+        <strong>Apna College Bihar does NOT sell any personal information of any student or user.</strong> If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us at <a href="mailto:prince86944@gmail.com" class="text-blue-600 underline font-bold">prince86944@gmail.com</a>.
+      </p>
+
+      <h2 class="text-xl font-black text-slate-900 uppercase">9. GDPR Data Protection Rights</h2>
+      <p>
+        We would like to make sure you are fully aware of all of your data protection rights. Every user is entitled to the following:
+      </p>
+      <ul class="list-disc pl-5 space-y-1">
+        <li><strong>The right to access:</strong> You have the right to request copies of your personal data.</li>
+        <li><strong>The right to rectification:</strong> You have the right to request that we correct any information you believe is inaccurate or complete information you believe is incomplete.</li>
+        <li><strong>The right to erasure:</strong> You have the right to request that we erase your personal data, under certain conditions.</li>
+        <li><strong>The right to restrict processing:</strong> You have the right to request that we restrict the processing of your personal data, under certain conditions.</li>
+        <li><strong>The right to object to processing:</strong> You have the right to object to our processing of your personal data, under certain conditions.</li>
+        <li><strong>The right to data portability:</strong> You have the right to request that we transfer the data that we have collected to another organization, or directly to you, under certain conditions.</li>
+      </ul>
+      <p>
+        If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us at <a href="mailto:prince86944@gmail.com" class="text-blue-600 underline font-bold">prince86944@gmail.com</a>.
+      </p>
+
+      <h2 class="text-xl font-black text-slate-900 uppercase">10. Children's Online Privacy Protection (COPPA)</h2>
+      <p>
+        Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity.
+      </p>
+      <p>
+        Apna College Bihar does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our website, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.
+      </p>
+
+      <h2 class="text-xl font-black text-slate-900 uppercase">11. Third-Party Privacy Policies & Cookie Management</h2>
+      <p>
+        Apna College Bihar's Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options.
+      </p>
+      <p>
+        You can choose to disable cookies through your individual browser options. To know more detailed information about cookie management with specific web browsers, it can be found at the browsers' respective websites.
+      </p>
+
+      <h2 class="text-xl font-black text-slate-900 uppercase">12. Contact Information</h2>
+      <p>
+        If you have any questions or suggestions regarding our Privacy Policy, do not hesitate to contact us:
+      </p>
+      <ul class="list-disc pl-5 space-y-1 font-semibold">
+        <li>Email: <a href="mailto:prince86944@gmail.com" class="text-blue-600 underline">prince86944@gmail.com</a></li>
+        <li>Platform: Apna College Bihar (https://www.apnacollegebihar.online)</li>
+        <li>Patna, Bihar 800001, India</li>
+      </ul>
     </div>
   </main>
 

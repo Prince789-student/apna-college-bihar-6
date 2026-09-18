@@ -126,13 +126,73 @@ export default function PrivacyPolicy() {
           <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-4">
             <div className="flex items-center gap-3 text-yellow-600">
               <Eye size={24} />
-              <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">7. Google DoubleClick DART Cookie & AdSense</h2>
+              <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">7. Google DoubleClick DART Cookie & Google AdSense</h2>
             </div>
             <p className="text-xs font-medium text-slate-700 leading-relaxed">
-              Google is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to our site and other sites on the internet. However, visitors may choose to decline the use of DART cookies by visiting the Google ad and content network Privacy Policy at the following URL – https://policies.google.com/technologies/ads.
+              Google is a third-party vendor on our platform. It uses cookies, commonly known as DART cookies, to serve advertisements to our website visitors based upon their visit to Apna College Bihar and other websites on the Internet.
             </p>
-            <p className="text-xs font-medium text-slate-700 leading-relaxed mt-2">
-              Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on Apna College Bihar, which are sent directly to users' browser. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on websites that you visit.
+            <p className="text-xs font-medium text-slate-700 leading-relaxed">
+              Google's use of advertising cookies enables it and its partners to serve ads based on your visits to our site and/or other sites on the Internet. Users may opt out of personalized advertising at any time by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-bold">Google Ads Settings</a> or through the <a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-bold">Network Advertising Initiative (NAI)</a>.
+            </p>
+            <p className="text-xs font-medium text-slate-700 leading-relaxed">
+              Third-party ad servers or ad networks use technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links appearing on Apna College Bihar. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see. Note that Apna College Bihar has no access to or control over these cookies that are used by third-party advertisers.
+            </p>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-4">
+            <div className="flex items-center gap-3 text-indigo-600">
+              <Shield size={24} />
+              <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">8. CCPA Privacy Rights (Do Not Sell My Personal Information)</h2>
+            </div>
+            <p className="text-xs font-medium text-slate-700 leading-relaxed">
+              Under the California Consumer Privacy Act (CCPA), California consumers have the right to request that a business disclose the categories and specific pieces of personal data that a business has collected about consumers, request that a business delete any personal data about the consumer, and request that a business that sells a consumer's personal data, not sell the consumer's personal data.
+            </p>
+            <p className="text-xs font-medium text-slate-700 leading-relaxed">
+              <strong className="text-slate-900">Apna College Bihar does NOT sell any personal information of any user or student.</strong> If you make a request, we have one month to respond to you. If you would like to exercise any of these rights, please contact us at prince86944@gmail.com.
+            </p>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-4">
+            <div className="flex items-center gap-3 text-blue-600">
+              <Lock size={24} />
+              <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">9. GDPR Data Protection Rights</h2>
+            </div>
+            <p className="text-xs font-medium text-slate-700 leading-relaxed">
+              We would like to make sure you are fully aware of all of your data protection rights. Every user is entitled to the following:
+            </p>
+            <ul className="space-y-1.5 text-xs text-slate-600 pl-4 list-disc font-medium">
+              <li><strong className="text-slate-900">The right to access:</strong> You have the right to request copies of your personal data.</li>
+              <li><strong className="text-slate-900">The right to rectification:</strong> You have the right to request that we correct any information you believe is inaccurate.</li>
+              <li><strong className="text-slate-900">The right to erasure:</strong> You have the right to request that we erase your personal data under certain conditions.</li>
+              <li><strong className="text-slate-900">The right to restrict processing:</strong> You have the right to request that we restrict the processing of your personal data.</li>
+              <li><strong className="text-slate-900">The right to object to processing:</strong> You have the right to object to our processing of your personal data.</li>
+              <li><strong className="text-slate-900">The right to data portability:</strong> You have the right to request that we transfer the data that we have collected to another organization.</li>
+            </ul>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-4">
+            <div className="flex items-center gap-3 text-rose-600">
+              <FileText size={24} />
+              <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">10. Children's Online Privacy Protection (COPPA)</h2>
+            </div>
+            <p className="text-xs font-medium text-slate-700 leading-relaxed">
+              Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity.
+            </p>
+            <p className="text-xs font-medium text-slate-700 leading-relaxed">
+              Apna College Bihar does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our website, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.
+            </p>
+          </div>
+
+          <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-4">
+            <div className="flex items-center gap-3 text-slate-700">
+              <Database size={24} />
+              <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">11. Third-Party Privacy Policies & Cookie Management</h2>
+            </div>
+            <p className="text-xs font-medium text-slate-700 leading-relaxed">
+              Apna College Bihar's Privacy Policy does not apply to other advertisers or websites. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options.
+            </p>
+            <p className="text-xs font-medium text-slate-700 leading-relaxed">
+              You can choose to disable cookies through your individual browser options. To know more detailed information about cookie management with specific web browsers, it can be found at the browsers' respective websites.
             </p>
           </div>
         </div>
