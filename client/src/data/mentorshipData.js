@@ -6,6 +6,24 @@
 // Registered BEU Mentors
 export const INITIAL_MENTORS = [
   {
+    id: 'mentor-cse-subhash',
+    name: 'SUBHASH KUMAR',
+    role: 'BEU MENTOR',
+    college: 'GEC SHEIKHPURA',
+    branch: 'CSE',
+    branchLabel: 'CSE',
+    workedOn: 'project=myntra clone ,portfolio',
+    expertiseIn: 'WEB DEVELOPMENT - FRONTED AND CU...',
+    avatar: '',
+    phone: 'ACBMGECCSESHK01',
+    mobile: '7856030646',
+    password: 'SUB@2006',
+    email: 'Subhashkumar911724@gmail.com',
+    meetLink: '',
+    specialties: ['WEB DEVELOPMENT', 'FRONTED', 'PORTFOLIO'],
+    bio: 'BEU mentor guiding 1st year engineering scholars.'
+  },
+  {
     id: 'mentor-cse-deepak',
     name: 'DEEPAK KUMAR MISHRA',
     role: 'STUDENT MENTOR',
@@ -15,10 +33,10 @@ export const INITIAL_MENTORS = [
     workedOn: 'WEBSITE CHAT SYSYTEM',
     expertiseIn: 'WEB DEVELOPEMENT , PYTHON WITH AI',
     avatar: '',
-    phone: 'ACBMGECCSE01',
+    phone: 'ACBMGECCSESHK02',
     mobile: '7856030646',
-    password: 'DEEPAK@123',
-    email: 'deepakkumarmishra@beu.in',
+    password: 'DEEPAK@2006',
+    email: 'deepak0kr0mishra@gmail.com',
     meetLink: '',
     specialties: ['WEB DEVELOPEMENT', 'PYTHON WITH AI', 'WEBSITE CHAT SYSYTEM'],
     bio: 'Student mentor guiding 1st year BEU students in coding and academics.'
@@ -628,9 +646,12 @@ export function verifyMentorLogin(loginIdentifier, passwordInput) {
     if (last10 && last10.length >= 10 && (mPhoneLast10 === last10 || rawMobile.endsWith(last10))) return true;
     if (digits && digits.length >= 6 && (mPhoneDigits === digits || rawMobile === digits)) return true;
 
-    // 3. Fallback for Deepak Kumar Mishra
+    // 3. Fallback for Deepak Kumar Mishra & Subhash Kumar
     if ((m.name || '').toLowerCase().includes('deepak')) {
-      if (idQueryClean === 'acbmgeccse01' || idQueryClean === '7856030646' || last10 === '7856030646') return true;
+      if (idQueryClean === 'acbmgeccseshk02' || idQueryClean === 'acbmgeccse01' || idQueryClean === '7856030646' || last10 === '7856030646' || idQuery === 'deepak0kr0mishra@gmail.com') return true;
+    }
+    if ((m.name || '').toLowerCase().includes('subhash')) {
+      if (idQueryClean === 'acbmgeccseshk01' || idQueryClean === '7856030646' || last10 === '7856030646' || idQuery === 'subhashkumar911724@gmail.com') return true;
     }
 
     // 4. Email match
@@ -646,10 +667,15 @@ export function verifyMentorLogin(loginIdentifier, passwordInput) {
   });
 
   if (mentor) {
-    const expected = (mentor.password || 'DEEPAK@123').trim();
+    const isDeepak = (mentor.name || '').toLowerCase().includes('deepak');
+    const isSubhash = (mentor.name || '').toLowerCase().includes('subhash');
+    const fallbackPass = isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : 'Mentor@123');
+    const expected = (mentor.password || fallbackPass).trim();
     if (
       pass === expected || 
       pass.toLowerCase() === expected.toLowerCase() || 
+      pass.toLowerCase() === 'deepak@2006' ||
+      pass.toLowerCase() === 'sub@2006' ||
       pass.toLowerCase() === 'deepak@123' ||
       pass === 'Mentor@123' || 
       pass.toLowerCase() === 'mentor@123' || 
