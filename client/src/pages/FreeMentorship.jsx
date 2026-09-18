@@ -675,47 +675,6 @@ export default function FreeMentorship() {
                   )}
                 </button>
               </form>
-
-              {/* Quick Login for Enrolled Students */}
-              <div className="pt-4 border-t border-slate-100 space-y-3">
-                <div className="p-3 bg-blue-50/80 border border-blue-100 rounded-xl text-blue-900 text-[11px] space-y-1">
-                  <span className="font-bold flex items-center gap-1.5">
-                    <KeyRound size={14} className="text-blue-600" /> Registered Students Login Notice:
-                  </span>
-                  <p className="text-slate-600">
-                    BEU 1st Year ke sabhi 30 enrolled students ke unique passwords generate ho chuke hain. Instant check karne ke liye niche click karein:
-                  </p>
-                </div>
-
-                <p className="text-xs font-black text-slate-600 uppercase tracking-wider">
-                  Quick Autofill Enrolled Student:
-                </p>
-
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    { name: 'Rohit kumar', roll: '26/EEE/46', pass: 'SkyHawk#724' },
-                    { name: 'Nandani Preyashi', roll: '26/EEE/10P', pass: 'AmberMoon@819' },
-                    { name: 'Harshit Kumar', roll: '25/CSE/02', pass: 'BoldPixel!538' },
-                    { name: 'Khushi Anand', roll: '26/EEE/50', pass: 'SunGlow#293' },
-                    { name: 'Aryan Kumar', roll: '26cse47', pass: 'IronClad!364' },
-                    { name: 'Prince Raj', roll: 'W26A33', pass: 'ApexFalcon!639' }
-                  ].map((demo) => (
-                    <button
-                      key={demo.roll}
-                      type="button"
-                      onClick={() => {
-                        setLoginRoll(demo.roll);
-                        setLoginPassword(demo.pass);
-                        toast.success(`Autofilled for ${demo.name}! Ab Login button dabayein.`);
-                      }}
-                      className="px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 rounded-xl text-xs font-bold border border-slate-200 transition-all flex items-center gap-1"
-                    >
-                      <span>👤 {demo.name}</span>
-                      <span className="text-[10px] text-slate-400 font-mono">({demo.roll})</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
             </div>
           ) : (
             /* ── TAB 2: MENTOR LOGIN FORM ── */
@@ -787,62 +746,6 @@ export default function FreeMentorship() {
                   )}
                 </button>
               </form>
-
-              {/* Quick Demo Login for Mentors */}
-              <div className="pt-4 border-t border-slate-100 space-y-3">
-                <div className="p-3.5 bg-indigo-50/80 border border-indigo-100 rounded-xl text-indigo-950 text-[11px] space-y-1.5">
-                  <span className="font-black flex items-center gap-1.5 text-indigo-700">
-                    <ShieldCheck size={15} /> Mentor Access & Live Study Tracker:
-                  </span>
-                  <p className="text-slate-600">
-                    Login hone ke baad aapko aapke batch ke sabhi enrolled students show honge, unka WhatsApp/Email contact aur unka <strong>"Kya Padha & Kitna Padha" live study tracker</strong> dikhai dega.
-                  </p>
-                </div>
-
-                <p className="text-xs font-black text-slate-600 uppercase tracking-wider">
-                  Quick Demo Mentor Login:
-                </p>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMentorEmail('mentor@beu.in');
-                    setMentorPassword('mentor123');
-                    toast.success('Demo Mentor credentials autofilled! Ab Login karein.');
-                  }}
-                  className="w-full py-2.5 px-4 bg-slate-100 hover:bg-indigo-50 text-indigo-800 rounded-xl text-xs font-bold border border-slate-200 transition-all flex items-center justify-between"
-                >
-                  <span className="flex items-center gap-2">
-                    <span>👨‍🏫 Senior BEU Academic Mentor</span>
-                    <span className="font-mono text-[10px] text-slate-500">(mentor@beu.in)</span>
-                  </span>
-                  <span className="text-[10px] bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full font-black">
-                    Autofill & Login
-                  </span>
-                </button>
-
-                {mentorsList && mentorsList.length > 0 && (
-                  <div className="space-y-1.5 pt-1">
-                    <p className="text-[10px] font-black uppercase text-slate-400">Admin Registered Mentors:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {mentorsList.map((m) => (
-                        <button
-                          key={m.id}
-                          type="button"
-                          onClick={() => {
-                            setMentorEmail(m.email || m.name);
-                            setMentorPassword(m.password || 'mentor123');
-                            toast.success(`Autofilled for ${m.name}!`);
-                          }}
-                          className="px-2.5 py-1 bg-white hover:bg-indigo-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700"
-                        >
-                          {m.name} ({m.branch})
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
             </div>
           )}
 

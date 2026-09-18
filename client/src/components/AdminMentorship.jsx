@@ -4,8 +4,10 @@ import {
   MessageCircle, Trash2, Search, Filter, Plus, 
   CheckCircle2, ExternalLink, RefreshCw, Star, 
   Calendar, Video, ShieldCheck, Mail, BookOpen, Clock,
-  Copy, Download, Send, KeyRound
+  Copy, Download, Send, KeyRound, Eye, EyeOff, Check, Save, Sparkles
 } from 'lucide-react';
+import { db } from '../firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { 
   getEnrolledStudents, 
   saveEnrolledStudents, 
@@ -21,6 +23,11 @@ export default function AdminMentorship({ flash }) {
   const [selectedCollege, setSelectedCollege] = useState('ALL');
   const [showAddMentorModal, setShowAddMentorModal] = useState(false);
   const [showAddStudentModal, setShowAddStudentModal] = useState(false);
+
+  // Password Management State
+  const [editingPasswords, setEditingPasswords] = useState({});
+  const [visiblePasswords, setVisiblePasswords] = useState({});
+  const [isCloudSaving, setIsCloudSaving] = useState(false);
 
   // New Mentor Form State
   const [mentorForm, setMentorForm] = useState({
@@ -201,6 +208,20 @@ export default function AdminMentorship({ flash }) {
     setStudents(updated);
     saveEnrolledStudents(updated);
     if (flash) flash('Mentor re-assigned successfully! ✅');
+  };
+
+  // Save edited password for a student
+  const handleSavePassword = (studentId) => {
+    const newPass = editingPasswords[studentId];
+    if (!newPass || newPass.trim() === '') {
+      if (flash) flash('Password khali nahi ho sakta!', 'err');
+      return;
+    }
+    const updated = students.map(s => s.id === studentId ? { ...s, password: newPass.trim() } : s);
+    setStudents(updated);
+    saveEnrolledStudents(updated);
+    setEditingPasswords(prev => ({ ...prev, [studentId]: undefined }));
+    if (flash) flash('Password successfully save ho gaya! ✅', 'suc');
   };
 
   // Unique Colleges for Filter
@@ -463,9 +484,35 @@ export default function AdminMentorship({ flash }) {
                         </span>
                       </td>
                       <td className="p-3.5">
-                        <span className="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 font-mono text-[11px]">
-                          {stu.password}
-                        </span>
+                        <div className="flex items-center gap-1 min-w-[140px]">
+                          <div className="relative flex-1">
+                            <input
+                              type={visiblePasswords[stu.id] ? 'text' : 'password'}
+                              value={editingPasswords[stu.id] !== undefined ? editingPasswords[stu.id] : (stu.password || '')}
+                              onChange={(e) => setEditingPasswords(prev => ({ ...prev, [stu.id]: e.target.value }))}
+                              className="w-full px-2 py-1 pr-6 text-[11px] font-mono font-bold rounded-md border border-emerald-200 bg-emerald-50 text-emerald-800 focus:outline-none focus:border-blue-400 focus:bg-white transition-colors"
+                              placeholder="New password..."
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setVisiblePasswords(prev => ({ ...prev, [stu.id]: !prev[stu.id] }))}
+                              className="absolute right-1.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors"
+                              title={visiblePasswords[stu.id] ? 'Hide' : 'Show'}
+                            >
+                              {visiblePasswords[stu.id] ? <EyeOff size={11} /> : <Eye size={11} />}
+                            </button>
+                          </div>
+                          {editingPasswords[stu.id] !== undefined && editingPasswords[stu.id] !== (stu.password || '') && (
+                            <button
+                              type="button"
+                              onClick={() => handleSavePassword(stu.id)}
+                              className="flex-shrink-0 p-1 rounded-md bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+                              title="Save Password"
+                            >
+                              <Save size={11} />
+                            </button>
+                          )}
+                        </div>
                       </td>
                       <td className="p-3.5 max-w-[200px]">
                         <p className="font-bold text-slate-800 text-[11px] truncate" title={stu.college}>{stu.college}</p>
