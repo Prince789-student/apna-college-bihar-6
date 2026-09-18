@@ -528,8 +528,9 @@ export function getMentorsList() {
             ...m,
             id: canonicalId,
             avatar: avatarClean,
-            phone: m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')),
-            mobile: m.mobile || '7856030646',
+            username: m.username || m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')),
+            phone: m.phone || m.username || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')),
+            mobile: m.mobile !== undefined ? m.mobile : '',
             password: m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : 'Mentor@123')),
             email: m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'Subhashkumar911724@gmail.com' : ''))
           };

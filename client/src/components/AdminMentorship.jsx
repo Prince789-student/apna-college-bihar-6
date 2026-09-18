@@ -34,10 +34,11 @@ export default function AdminMentorship({ flash }) {
   const [visiblePasswords, setVisiblePasswords] = useState({});
   const [isCloudSaving, setIsCloudSaving] = useState(false);
 
-  // Mentor Password & Phone Management State
-  const [editingMentorPhones, setEditingMentorPhones] = useState({});
-  const [editingMentorPasswords, setEditingMentorPasswords] = useState({});
+  // Mentor Credentials Management State (Username, Mobile, Email, Password)
+  const [editingMentorUsernames, setEditingMentorUsernames] = useState({});
+  const [editingMentorMobiles, setEditingMentorMobiles] = useState({});
   const [editingMentorEmails, setEditingMentorEmails] = useState({});
+  const [editingMentorPasswords, setEditingMentorPasswords] = useState({});
   const [visibleMentorPasswords, setVisibleMentorPasswords] = useState({});
 
   // New Mentor Form State
@@ -49,8 +50,10 @@ export default function AdminMentorship({ flash }) {
     workedOn: '',
     expertiseIn: '',
     avatar: '',
+    username: '',
     phone: '',
-    password: 'DEEPAK@123',
+    mobile: '',
+    password: 'Mentor@123',
     email: '',
     meetLink: '',
     bio: ''
@@ -89,8 +92,9 @@ export default function AdminMentorship({ flash }) {
         ...m,
         id: canonicalId,
         avatar: cleanAvatar,
-        phone: m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')),
-        mobile: m.mobile || '7856030646',
+        username: m.username || m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')),
+        phone: m.phone || m.username || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')),
+        mobile: m.mobile !== undefined ? m.mobile : (isDeepak || isSubhash ? '7856030646' : ''),
         password: m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : 'Mentor@123')),
         email: m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'Subhashkumar911724@gmail.com' : ''))
       };
@@ -106,7 +110,28 @@ export default function AdminMentorship({ flash }) {
         setStudents(cloud.students);
       }
       if (cloud && cloud.mentors && cloud.mentors.length > 0) {
-        setMentors(cloud.mentors);
+        const cloudUnique = new Map();
+        (cloud.mentors || []).forEach(m => {
+          const isDeepak = (m.name || '').toLowerCase().includes('deepak');
+          const isSubhash = (m.name || '').toLowerCase().includes('subhash');
+          const key = isDeepak ? 'deepak' : (isSubhash ? 'subhash' : m.id);
+          const canonicalId = isDeepak ? 'mentor-cse-deepak' : (isSubhash ? 'mentor-cse-subhash' : m.id);
+          const cleanAvatar = (m.avatar && !m.avatar.includes('unsplash')) ? m.avatar : '';
+          const cleaned = {
+            ...m,
+            id: canonicalId,
+            avatar: cleanAvatar,
+            username: m.username || m.phone || '',
+            phone: m.phone || m.username || '',
+            mobile: m.mobile !== undefined ? m.mobile : '',
+            email: m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'Subhashkumar911724@gmail.com' : '')),
+            password: m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : 'Mentor@123'))
+          };
+          if (!cloudUnique.has(key)) cloudUnique.set(key, cleaned);
+        });
+        const cloudSanitized = Array.from(cloudUnique.values());
+        setMentors(cloudSanitized);
+        saveMentorsList(cloudSanitized);
       }
     }).catch(() => {});
   };
@@ -154,6 +179,7 @@ export default function AdminMentorship({ flash }) {
       ...(mentorForm.workedOn ? mentorForm.workedOn.split(',').map(s => s.trim()) : [])
     ].filter(Boolean);
 
+    const generatedUsername = (mentorForm.username || mentorForm.phone || `ACBM${Date.now().toString().slice(-4)}`).trim();
     const newMentor = {
       id: `mentor-${mentorForm.branch.toLowerCase()}-${Date.now()}`,
       name: mentorForm.name.trim(),
@@ -164,7 +190,9 @@ export default function AdminMentorship({ flash }) {
       workedOn: mentorForm.workedOn.trim(),
       expertiseIn: mentorForm.expertiseIn.trim(),
       avatar: mentorForm.avatar.trim() || '',
-      phone: mentorForm.phone.trim(),
+      username: generatedUsername,
+      phone: generatedUsername,
+      mobile: (mentorForm.mobile || '').trim(),
       password: mentorForm.password.trim() || 'Mentor@123',
       email: mentorForm.email.trim() || `${mentorForm.name.toLowerCase().replace(/[^a-z0-9]/g, '') || 'mentor'}@beu.in`,
       meetLink: '',
@@ -175,6 +203,7 @@ export default function AdminMentorship({ flash }) {
     const updated = [newMentor, ...mentors];
     setMentors(updated);
     saveMentorsList(updated);
+    saveCloudMentorshipData(students, updated);
     setShowAddMentorModal(false);
     setMentorForm({
       name: '',
@@ -184,14 +213,16 @@ export default function AdminMentorship({ flash }) {
       workedOn: '',
       expertiseIn: '',
       avatar: '',
+      username: '',
       phone: '',
-      password: '',
+      mobile: '',
+      password: 'Mentor@123',
       email: '',
       meetLink: '',
       bio: ''
     });
 
-    if (flash) flash(`Naya Mentor "${newMentor.name}" add ho gaya! 🚀`);
+    if (flash) flash(`Naya Mentor "${newMentor.name}" add ho gaya! 🚀`, 'suc');
   };
 
   // Delete Mentor Handler
@@ -200,6 +231,7 @@ export default function AdminMentorship({ flash }) {
     const updated = mentors.filter(m => m.id !== id);
     setMentors(updated);
     saveMentorsList(updated);
+    saveCloudMentorshipData(students, updated);
     if (flash) flash('Mentor remove ho gaya.');
   };
 
@@ -208,6 +240,7 @@ export default function AdminMentorship({ flash }) {
     const updated = mentors.map(m => m.id === mentorId ? { ...m, meetLink: (newLink || '').trim() } : m);
     setMentors(updated);
     saveMentorsList(updated);
+    saveCloudMentorshipData(students, updated);
     if (newLink && newLink.trim()) {
       if (flash) flash('Google Meet link lag gaya! Students ko live join dikhega. 🔴', 'suc');
     } else {
@@ -215,31 +248,46 @@ export default function AdminMentorship({ flash }) {
     }
   };
 
-  // Save Mentor Credentials (Phone, Password & Email)
+  // Save Mentor Credentials (Username, Mobile, Email & Password)
   const handleSaveMentorCredentials = (mentorId) => {
     const currentMentor = mentors.find(m => m.id === mentorId);
     if (!currentMentor) return;
 
-    const isDeepak = (currentMentor.name || '').toLowerCase().includes('deepak');
-    const isSubhash = (currentMentor.name || '').toLowerCase().includes('subhash');
-    const newPhone = editingMentorPhones[mentorId] !== undefined ? editingMentorPhones[mentorId].trim() : (currentMentor.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')));
-    const newPassword = editingMentorPasswords[mentorId] !== undefined ? editingMentorPasswords[mentorId].trim() : (currentMentor.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : 'Mentor@123')));
-    const newEmail = editingMentorEmails[mentorId] !== undefined ? editingMentorEmails[mentorId].trim() : (currentMentor.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'Subhashkumar911724@gmail.com' : '')));
+    const newUsername = editingMentorUsernames[mentorId] !== undefined ? editingMentorUsernames[mentorId].trim() : (currentMentor.username || currentMentor.phone || '');
+    const newMobile = editingMentorMobiles[mentorId] !== undefined ? editingMentorMobiles[mentorId].trim() : (currentMentor.mobile || '');
+    const newEmail = editingMentorEmails[mentorId] !== undefined ? editingMentorEmails[mentorId].trim() : (currentMentor.email || '');
+    const newPassword = editingMentorPasswords[mentorId] !== undefined ? editingMentorPasswords[mentorId].trim() : (currentMentor.password || '');
 
     if (!newPassword) {
       if (flash) flash('Password khali nahi ho sakta!', 'err');
       return;
     }
 
-    const updated = mentors.map(m => m.id === mentorId ? { ...m, phone: newPhone, password: newPassword, email: newEmail } : m);
+    const updated = mentors.map(m => {
+      if (m.id === mentorId) {
+        return {
+          ...m,
+          username: newUsername,
+          phone: newUsername, // keep in sync
+          mobile: newMobile,
+          email: newEmail,
+          password: newPassword
+        };
+      }
+      return m;
+    });
+
     setMentors(updated);
+    saveMentorsList(updated);
     saveCloudMentorshipData(students, updated);
 
-    setEditingMentorPhones(prev => ({ ...prev, [mentorId]: undefined }));
-    setEditingMentorPasswords(prev => ({ ...prev, [mentorId]: undefined }));
-    setEditingMentorEmails(prev => ({ ...prev, [mentorId]: undefined }));
+    // Clear editing states for this mentor so view shows newly saved values
+    setEditingMentorUsernames(prev => { const next = { ...prev }; delete next[mentorId]; return next; });
+    setEditingMentorMobiles(prev => { const next = { ...prev }; delete next[mentorId]; return next; });
+    setEditingMentorEmails(prev => { const next = { ...prev }; delete next[mentorId]; return next; });
+    setEditingMentorPasswords(prev => { const next = { ...prev }; delete next[mentorId]; return next; });
 
-    if (flash) flash(`Mentor "${currentMentor.name}" ke Credentials & Email save ho gaye! ✅`, 'suc');
+    if (flash) flash(`Mentor "${currentMentor.name}" ki sabhi details (Username, Phone, Email, Password) successfully save ho gayi! ✅`, 'suc');
   };
 
   // Upload Mentor Photo
@@ -255,6 +303,7 @@ export default function AdminMentorship({ flash }) {
       const updated = mentors.map(m => m.id === mentorId ? { ...m, avatar: base64 } : m);
       setMentors(updated);
       saveMentorsList(updated);
+      saveCloudMentorshipData(students, updated);
       if (flash) flash('Mentor photo successfully update ho gayi! 📸', 'suc');
     };
     reader.readAsDataURL(file);
@@ -265,54 +314,52 @@ export default function AdminMentorship({ flash }) {
     const updated = mentors.map(m => m.id === mentorId ? { ...m, avatar: '' } : m);
     setMentors(updated);
     saveMentorsList(updated);
-    if (flash) flash('Photo hata di gayi! Ab koi stock photo nahi dikhegi. ✅', 'suc');
+    saveCloudMentorshipData(students, updated);
+    if (flash) flash('Photo hata di gayi! Ab koi stock photo nahi dikhega. ✅', 'suc');
   };
 
   // 1-Click Copy Mentor Credentials
   const copyMentorCredentials = (m) => {
-    const isDeepak = (m.name || '').toLowerCase().includes('deepak');
-    const isSubhash = (m.name || '').toLowerCase().includes('subhash');
-    const username = editingMentorPhones[m.id] !== undefined ? editingMentorPhones[m.id] : (m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')));
-    const pass = editingMentorPasswords[m.id] !== undefined ? editingMentorPasswords[m.id] : (m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : 'Mentor@123')));
-    const targetEmail = editingMentorEmails[m.id] !== undefined ? editingMentorEmails[m.id] : (m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'Subhashkumar911724@gmail.com' : '')));
+    const username = editingMentorUsernames[m.id] !== undefined ? editingMentorUsernames[m.id] : (m.username || m.phone || '');
+    const mobile = editingMentorMobiles[m.id] !== undefined ? editingMentorMobiles[m.id] : (m.mobile || '');
+    const email = editingMentorEmails[m.id] !== undefined ? editingMentorEmails[m.id] : (m.email || '');
+    const pass = editingMentorPasswords[m.id] !== undefined ? editingMentorPasswords[m.id] : (m.password || '');
     const origin = typeof window !== 'undefined' ? window.location.origin : 'https://www.apnacollegebihar.online';
-    const text = `Mentor: ${m.name}\nPortal: ${origin}/mentorship\nUsername: ${username}\nEmail: ${targetEmail}\nMobile: 7856030646\nPassword: ${pass}`;
+    const text = `Mentor: ${m.name}\nPortal: ${origin}/mentorship\nUsername: ${username}\nMobile: ${mobile || 'N/A'}\nEmail: ${email}\nPassword: ${pass}`;
     navigator.clipboard.writeText(text);
-    if (flash) flash(`Mentor "${m.name}" ke credentials & email copy ho gaye! 📋`, 'suc');
+    if (flash) flash(`Mentor "${m.name}" ke credentials & phone copy ho gaye! 📋`, 'suc');
   };
 
   // Generate WhatsApp Share Link for Mentor
   const getMentorWhatsAppUrl = (m) => {
-    const isDeepak = (m.name || '').toLowerCase().includes('deepak');
-    const isSubhash = (m.name || '').toLowerCase().includes('subhash');
-    const rawUsername = editingMentorPhones[m.id] !== undefined ? editingMentorPhones[m.id] : (m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')));
-    const targetMobile = (rawUsername.replace(/\D/g, '').length >= 10)
-      ? rawUsername.replace(/\D/g, '')
-      : (m.mobile || '7856030646').replace(/\D/g, '');
-
-    const pass = editingMentorPasswords[m.id] !== undefined ? editingMentorPasswords[m.id] : (m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : 'Mentor@123')));
+    const rawUsername = editingMentorUsernames[m.id] !== undefined ? editingMentorUsernames[m.id] : (m.username || m.phone || 'ACBMGECCSE01');
+    const rawMobile = editingMentorMobiles[m.id] !== undefined ? editingMentorMobiles[m.id] : (m.mobile || '');
+    const cleanMobile = rawMobile.replace(/\D/g, '');
+    const pass = editingMentorPasswords[m.id] !== undefined ? editingMentorPasswords[m.id] : (m.password || 'Mentor@123');
     const origin = typeof window !== 'undefined' ? window.location.origin : 'https://www.apnacollegebihar.online';
     const portalUrl = `${origin}/mentorship`;
 
-    const message = `Namaste ${m.name} ji! 👋\n\nApna College Bihar ke *Free BEU Mentorship Portal* me aapka Mentor Account successfully set ho gaya hai.\n\n🔗 *Portal Login Link:* ${portalUrl}\n👤 *Username:* ${rawUsername || 'ACBMGECCSESHK01'}\n📱 *Mobile:* ${targetMobile}\n🔑 *Login Password:* ${pass}\n\n*Portal me aap:*\n1️⃣ Apne assigned 1st-year students ki list check kar sakte hain.\n2️⃣ Google Meet link add/remove karke live guidance sessions le sakte hain.\n\nAap abhi login karke check kar lijiye!\n\nShukriya,\nApna College Bihar Team`;
+    const message = `Namaste ${m.name} ji! 👋\n\nApna College Bihar ke *Free BEU Mentorship Portal* me aapka Mentor Account successfully set ho gaya hai.\n\n🔗 *Portal Login Link:* ${portalUrl}\n👤 *Username:* ${rawUsername}\n📱 *Mobile:* ${rawMobile || 'Apna Registered Mobile'}\n🔑 *Login Password:* ${pass}\n\n*Portal me aap:*\n1️⃣ Apne assigned 1st-year students ki list check kar sakte hain.\n2️⃣ Google Meet link add/remove karke live guidance sessions le sakte hain.\n\nAap abhi login karke check kar lijiye!\n\nShukriya,\nApna College Bihar Team`;
 
-    return `https://wa.me/91${targetMobile}?text=${encodeURIComponent(message)}`;
+    if (cleanMobile.length >= 10) {
+      return `https://wa.me/91${cleanMobile.slice(-10)}?text=${encodeURIComponent(message)}`;
+    }
+    return `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
   };
 
   // Generate Direct Gmail Link for Mentor
   const getMentorGmailUrl = (m) => {
-    const isDeepak = (m.name || '').toLowerCase().includes('deepak');
-    const isSubhash = (m.name || '').toLowerCase().includes('subhash');
-    const defaultEmail = isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'Subhashkumar911724@gmail.com' : (m.email || ''));
-    const targetEmail = editingMentorEmails[m.id] !== undefined ? editingMentorEmails[m.id].trim() : (m.email || defaultEmail);
-
-    const rawUsername = editingMentorPhones[m.id] !== undefined ? editingMentorPhones[m.id] : (m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')));
-    const pass = editingMentorPasswords[m.id] !== undefined ? editingMentorPasswords[m.id] : (m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : 'Mentor@123')));
+    const targetEmail = editingMentorEmails[m.id] !== undefined ? editingMentorEmails[m.id].trim() : (m.email || '');
+    const rawUsername = editingMentorUsernames[m.id] !== undefined ? editingMentorUsernames[m.id] : (m.username || m.phone || '');
+    const rawMobile = editingMentorMobiles[m.id] !== undefined ? editingMentorMobiles[m.id] : (m.mobile || '');
+    const pass = editingMentorPasswords[m.id] !== undefined ? editingMentorPasswords[m.id] : (m.password || '');
     const origin = typeof window !== 'undefined' ? window.location.origin : 'https://www.apnacollegebihar.online';
     const portalUrl = `${origin}/mentorship`;
 
+    const mobileLine = rawMobile ? `📱 Mobile: ${rawMobile}\n` : '';
+
     const subject = `🎓 ${m.name} Ji, Aapka Free BEU Mentor Portal Login ID & Password | Apna College Bihar`;
-    const body = `Namaste ${m.name} Ji! 👋\n\nApna College Bihar ke official Free BEU Mentorship Portal me aapka Mentor Account successfully activate ho gaya hai.\n\nAapke Mentor Login Credentials:\n🔗 Portal Login Link: ${portalUrl}\n👤 Username (Login ID): ${rawUsername}\n📱 Mobile: 7856030646\n🔑 Login Password: ${pass}\n📧 Registered Email: ${targetEmail}\n\nMentor Portal me aap:\n1️⃣ Apne assigned 1st-year students ki list check kar sakte hain.\n2️⃣ Har student ka "Kya Padha, Kitna Padha" live study tracker record dekh sakte hain.\n3️⃣ Google Meet link add/remove karke live guidance sessions le sakte hain.\n\nAap abhi login karke check kar lijiye!\n\nWebsite: ${portalUrl} (Tab: "Mentor Login")\n\nShukriya,\nApna College Bihar Team`;
+    const body = `Namaste ${m.name} Ji! 👋\n\nApna College Bihar ke official Free BEU Mentorship Portal me aapka Mentor Account successfully activate ho gaya hai.\n\nAapke Mentor Login Credentials:\n🔗 Portal Login Link: ${portalUrl}\n👤 Username (Login ID): ${rawUsername}\n${mobileLine}🔑 Login Password: ${pass}\n📧 Registered Email: ${targetEmail || 'Aapka Email'}\n\nMentor Portal me aap:\n1️⃣ Apne assigned 1st-year students ki list check kar sakte hain.\n2️⃣ Har student ka "Kya Padha, Kitna Padha" live study tracker record dekh sakte hain.\n3️⃣ Google Meet link add/remove karke live guidance sessions le sakte hain.\n\nAap abhi login karke check kar lijiye!\n\nWebsite: ${portalUrl} (Tab: "Mentor Login")\n\nShukriya,\nApna College Bihar Team`;
 
     return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(targetEmail)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
@@ -670,18 +717,25 @@ Team Apna College Bihar
                 {(() => {
                   const isDeepak = (m.name || '').toLowerCase().includes('deepak');
                   const isSubhash = (m.name || '').toLowerCase().includes('subhash');
-                  const defaultUsername = isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (m.phone || 'ACBMGECCSE01'));
+                  const defaultUsername = isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (m.username || m.phone || 'ACBMGECCSE01'));
                   const defaultPass = isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : (m.password || 'Mentor@123'));
                   const defaultEmail = isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'Subhashkumar911724@gmail.com' : (m.email || ''));
+                  const defaultMobile = m.mobile || (isDeepak || isSubhash ? '7856030646' : '');
 
-                  const currentPhone = editingMentorPhones[m.id] !== undefined ? editingMentorPhones[m.id] : (m.phone || defaultUsername);
+                  const currentUsername = editingMentorUsernames[m.id] !== undefined ? editingMentorUsernames[m.id] : (m.username || m.phone || defaultUsername);
+                  const currentMobile = editingMentorMobiles[m.id] !== undefined ? editingMentorMobiles[m.id] : defaultMobile;
                   const currentEmail = editingMentorEmails[m.id] !== undefined ? editingMentorEmails[m.id] : (m.email || defaultEmail);
                   const currentPass = editingMentorPasswords[m.id] !== undefined ? editingMentorPasswords[m.id] : (m.password || defaultPass);
                   const isPassVisible = visibleMentorPasswords[m.id];
-                  const hasCredChanges = (editingMentorPhones[m.id] !== undefined && editingMentorPhones[m.id] !== (m.phone || defaultUsername)) ||
-                                         (editingMentorEmails[m.id] !== undefined && editingMentorEmails[m.id] !== (m.email || defaultEmail)) ||
-                                         (editingMentorPasswords[m.id] !== undefined && editingMentorPasswords[m.id] !== (m.password || defaultPass));
-                  const targetMobile = (currentPhone.replace(/\D/g, '').length >= 10) ? currentPhone.replace(/\D/g, '') : '7856030646';
+
+                  const hasCredChanges = 
+                    (editingMentorUsernames[m.id] !== undefined && editingMentorUsernames[m.id] !== (m.username || m.phone || defaultUsername)) ||
+                    (editingMentorMobiles[m.id] !== undefined && editingMentorMobiles[m.id] !== defaultMobile) ||
+                    (editingMentorEmails[m.id] !== undefined && editingMentorEmails[m.id] !== (m.email || defaultEmail)) ||
+                    (editingMentorPasswords[m.id] !== undefined && editingMentorPasswords[m.id] !== (m.password || defaultPass));
+
+                  const cleanMobileDigits = currentMobile.replace(/\D/g, '');
+                  const targetMobile = cleanMobileDigits.length >= 10 ? cleanMobileDigits.slice(-10) : cleanMobileDigits;
                   const targetEmail = currentEmail.trim();
 
                   return (
@@ -694,28 +748,43 @@ Team Apna College Bihar
                           type="button"
                           onClick={() => copyMentorCredentials(m)}
                           className="text-[10px] font-bold text-indigo-700 hover:text-indigo-900 flex items-center gap-1 bg-white hover:bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200 transition-all shadow-2xs"
-                          title="Copy credentials & email"
+                          title="Copy credentials & contact info"
                         >
                           <Copy size={11} /> Copy
                         </button>
                       </div>
 
-                      {/* Username (Login ID) */}
+                      {/* 1. Username (Login ID) */}
                       <div className="space-y-1">
                         <div className="flex items-center justify-between text-[10px] font-black text-slate-500 uppercase tracking-wider">
-                          <span className="flex items-center gap-1"><Phone size={10} className="text-indigo-500" /> Username (Login ID / Phone):</span>
-                          <span className="text-[9px] text-indigo-600 font-bold lowercase">portal username</span>
+                          <span className="flex items-center gap-1"><KeyRound size={10} className="text-indigo-500" /> Username (Login ID):</span>
+                          <span className="text-[9px] text-indigo-600 font-bold lowercase">portal login id</span>
                         </div>
                         <input
                           type="text"
-                          value={currentPhone}
-                          onChange={(e) => setEditingMentorPhones(prev => ({ ...prev, [m.id]: e.target.value }))}
-                          placeholder="e.g. ACBMGECCSESHK01 ya 7856030646"
+                          value={currentUsername}
+                          onChange={(e) => setEditingMentorUsernames(prev => ({ ...prev, [m.id]: e.target.value }))}
+                          placeholder="e.g. ACBMGECCSESHK01"
                           className="w-full px-2.5 py-1.5 text-xs font-mono font-black text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-indigo-600 shadow-2xs"
                         />
                       </div>
 
-                      {/* Registered Email */}
+                      {/* 2. Phone Number (Mobile / WhatsApp) — Dedicated Field */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-[10px] font-black text-slate-500 uppercase tracking-wider">
+                          <span className="flex items-center gap-1"><Phone size={10} className="text-emerald-600" /> Phone Number (Mobile / WhatsApp):</span>
+                          <span className="text-[9px] text-emerald-600 font-bold lowercase">contact / calling</span>
+                        </div>
+                        <input
+                          type="tel"
+                          value={currentMobile}
+                          onChange={(e) => setEditingMentorMobiles(prev => ({ ...prev, [m.id]: e.target.value }))}
+                          placeholder="e.g. 9117240000 ya 10-digit number"
+                          className="w-full px-2.5 py-1.5 text-xs font-mono font-black text-slate-900 bg-white border border-slate-300 rounded-lg focus:outline-none focus:border-emerald-500 shadow-2xs"
+                        />
+                      </div>
+
+                      {/* 3. Registered Email */}
                       <div className="space-y-1">
                         <div className="flex items-center justify-between text-[10px] font-black text-slate-500 uppercase tracking-wider">
                           <span className="flex items-center gap-1"><Mail size={10} className="text-rose-500" /> Mentor Email:</span>
@@ -730,7 +799,7 @@ Team Apna College Bihar
                         />
                       </div>
 
-                      {/* Password with Show/Hide toggle */}
+                      {/* 4. Password with Show/Hide toggle */}
                       <div className="space-y-1">
                         <div className="flex items-center justify-between text-[10px] font-black text-slate-500 uppercase tracking-wider">
                           <span className="flex items-center gap-1"><KeyRound size={10} className="text-indigo-500" /> Password:</span>
@@ -762,7 +831,7 @@ Team Apna College Bihar
                               type="button"
                               onClick={() => handleSaveMentorCredentials(m.id)}
                               className="px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-black text-xs shrink-0 flex items-center gap-1 shadow-sm transition-all animate-pulse"
-                              title="Save Credentials & Email"
+                              title="Save All Changes (Username, Phone, Email, Password)"
                             >
                               <Save size={12} /> Save
                             </button>
@@ -787,9 +856,9 @@ Team Apna College Bihar
                           target="_blank"
                           rel="noreferrer"
                           className="w-full py-2 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black flex items-center justify-center gap-1.5 shadow-md shadow-emerald-500/20 transition-all hover:scale-[1.01]"
-                          title={`Send WhatsApp credentials to ${targetMobile}`}
+                          title={`Send WhatsApp credentials to ${targetMobile || 'Mentor'}`}
                         >
-                          <MessageCircle size={14} /> WhatsApp Share ({targetMobile})
+                          <MessageCircle size={14} /> WhatsApp Share ({targetMobile || 'Mobile'})
                         </a>
                       </div>
                     </div>
@@ -800,8 +869,8 @@ Team Apna College Bihar
                   <span className="flex items-center gap-1 text-emerald-700 font-bold">
                     <Users size={13} /> {assignedStudentsCount} Students
                   </span>
-                  <span className="flex items-center gap-1 text-slate-600 font-bold">
-                    <Phone size={12} className="text-emerald-600" /> 78560 30646
+                  <span className="flex items-center gap-1 text-slate-600 font-bold" title="Mentor Phone Number">
+                    <Phone size={12} className="text-emerald-600" /> {m.mobile || m.phone || 'No phone set'}
                   </span>
                 </div>
               </div>
@@ -1150,19 +1219,44 @@ Team Apna College Bihar
               {/* Login Credentials Box */}
               <div className="p-3.5 rounded-xl bg-indigo-50 border border-indigo-200 space-y-3">
                 <p className="text-[11px] font-black uppercase text-indigo-600 flex items-center gap-1.5">
-                  <KeyRound size={13} /> Mentor Login Credentials (Mentor ise use karega portal me)
+                  <KeyRound size={13} /> Mentor Login Credentials (Portal Login aur Contact ke liye)
                 </p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Phone Number (Username)</label>
+                    <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Username (Login ID)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. ACBMGECCSESHK04"
+                      value={mentorForm.username}
+                      onChange={(e) => setMentorForm({ ...mentorForm, username: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
+                    />
+                    <p className="text-[10px] text-slate-400 mt-0.5">Portal username</p>
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Phone Number (Mobile / WhatsApp)</label>
                     <input
                       type="tel"
                       placeholder="e.g. 9876543210"
-                      value={mentorForm.phone}
-                      onChange={(e) => setMentorForm({ ...mentorForm, phone: e.target.value })}
+                      value={mentorForm.mobile}
+                      onChange={(e) => setMentorForm({ ...mentorForm, mobile: e.target.value })}
                       className="w-full px-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
                     />
-                    <p className="text-[10px] text-slate-400 mt-0.5">Mentor is phone se login karega</p>
+                    <p className="text-[10px] text-slate-400 mt-0.5">Calling / WhatsApp number</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Mentor Email</label>
+                    <input
+                      type="email"
+                      placeholder="e.g. mentor@gmail.com"
+                      value={mentorForm.email}
+                      onChange={(e) => setMentorForm({ ...mentorForm, email: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-white border border-indigo-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
+                    />
+                    <p className="text-[10px] text-slate-400 mt-0.5">Credentials bhejne ke liye</p>
                   </div>
                   <div>
                     <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Password</label>
