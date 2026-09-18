@@ -14,6 +14,11 @@ import {
   getMentorsList, 
   saveMentorsList 
 } from '../data/mentorshipData';
+import { 
+  fetchCloudMentorshipData, 
+  saveCloudMentorshipData, 
+  subscribeMentorshipUpdates 
+} from '../services/mentorshipSync';
 
 export default function AdminMentorship({ flash }) {
   const [students, setStudents] = useState([]);
@@ -73,21 +78,44 @@ export default function AdminMentorship({ flash }) {
   const loadData = () => {
     setStudents(getEnrolledStudents());
     const rawMentors = getMentorsList();
-    const sanitized = (rawMentors || []).map(m => {
+    const unique = new Map();
+    (rawMentors || []).forEach(m => {
       const isDeepak = (m.name || '').toLowerCase().includes('deepak');
       const isSubhash = (m.name || '').toLowerCase().includes('subhash');
+      const key = isDeepak ? 'deepak' : (isSubhash ? 'subhash' : m.id);
+      const canonicalId = isDeepak ? 'mentor-cse-deepak' : (isSubhash ? 'mentor-cse-subhash' : m.id);
       const cleanAvatar = (m.avatar && !m.avatar.includes('unsplash')) ? m.avatar : '';
-      return {
+      const cleanMentor = {
         ...m,
+        id: canonicalId,
         avatar: cleanAvatar,
         phone: m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')),
         mobile: m.mobile || '7856030646',
         password: m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : 'Mentor@123')),
         email: m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'Subhashkumar911724@gmail.com' : ''))
       };
+      if (!unique.has(key)) unique.set(key, cleanMentor);
     });
+    const sanitized = Array.from(unique.values());
     setMentors(sanitized);
     saveMentorsList(sanitized);
+
+    // Also fetch latest cloud data
+    fetchCloudMentorshipData().then(cloud => {
+      if (cloud && cloud.students && cloud.students.length > 0) {
+        setStudents(cloud.students);
+      }
+      if (cloud && cloud.mentors && cloud.mentors.length > 0) {
+        setMentors(cloud.mentors);
+      }
+    }).catch(() => {});
+  };
+
+  const handleManualCloudSync = async () => {
+    setIsCloudSaving(true);
+    await saveCloudMentorshipData(students, mentors);
+    setIsCloudSaving(false);
+    if (flash) flash('Mentorship Data successfully Cloud Sync ho gaya! Ab laptop aur mobile phone dono pe same dikhega. ☁️✅', 'suc');
   };
 
   const copyAllCredentials = () => {
@@ -205,7 +233,7 @@ export default function AdminMentorship({ flash }) {
 
     const updated = mentors.map(m => m.id === mentorId ? { ...m, phone: newPhone, password: newPassword, email: newEmail } : m);
     setMentors(updated);
-    saveMentorsList(updated);
+    saveCloudMentorshipData(students, updated);
 
     setEditingMentorPhones(prev => ({ ...prev, [mentorId]: undefined }));
     setEditingMentorPasswords(prev => ({ ...prev, [mentorId]: undefined }));
@@ -350,8 +378,8 @@ export default function AdminMentorship({ flash }) {
   const handleAssignMentor = (studentId, mentorId) => {
     const updated = students.map(s => s.id === studentId ? { ...s, assignedMentorId: mentorId } : s);
     setStudents(updated);
-    saveEnrolledStudents(updated);
-    if (flash) flash('Mentor re-assigned successfully! ✅');
+    saveCloudMentorshipData(updated, mentors);
+    if (flash) flash('Mentor assigned! Cloud pe sync ho gaya (Laptop & Mobile dono me update). ✅', 'suc');
   };
 
   // Save edited password for a student
@@ -745,6 +773,16 @@ export default function AdminMentorship({ flash }) {
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
+            <button 
+              onClick={handleManualCloudSync}
+              disabled={isCloudSaving}
+              className="px-3.5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black flex items-center gap-1.5 shadow-md shadow-blue-500/20 transition-all disabled:opacity-50"
+              title="Laptop aur Mobile dono me same mentees dikhane ke liye Cloud Sync karein"
+            >
+              <RefreshCw size={14} className={isCloudSaving ? "animate-spin" : ""} /> 
+              {isCloudSaving ? 'Syncing...' : 'Sync Cloud (Laptop & Mobile)'}
+            </button>
+
             <button 
               onClick={copyAllCredentials}
               className="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold flex items-center gap-1.5 border border-indigo-200 transition-all"

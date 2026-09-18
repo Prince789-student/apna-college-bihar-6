@@ -21,6 +21,7 @@ import {
   verifyStudentLogin,
   verifyMentorLogin
 } from '../data/mentorshipData';
+import { fetchCloudMentorshipData, subscribeMentorshipUpdates } from '../services/mentorshipSync';
 
 // ─── BEU College Code Mapping ───────────────────────────────────────────────
 const BEU_COLLEGE_CODES = {
@@ -151,12 +152,32 @@ export default function FreeMentorship() {
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   };
 
-  // Load mentors and students on mount
+  // Load mentors and students on mount and subscribe to live cloud sync
   useEffect(() => {
     const students = getEnrolledStudents();
     const mentors = getMentorsList();
     setEnrolledList(students);
     setMentorsList(mentors);
+
+    // Fetch latest from Cloud / Server API
+    fetchCloudMentorshipData().then(cloud => {
+      if (cloud && cloud.students && cloud.students.length > 0) {
+        setEnrolledList(cloud.students);
+      }
+      if (cloud && cloud.mentors && cloud.mentors.length > 0) {
+        setMentorsList(cloud.mentors);
+      }
+    }).catch(() => {});
+
+    // Real-time Firestore sync (instant update if Admin re-assigns on laptop)
+    const unsub = subscribeMentorshipUpdates(({ students: updatedStudents, mentors: updatedMentors }) => {
+      if (updatedStudents && updatedStudents.length > 0) {
+        setEnrolledList(updatedStudents);
+      }
+      if (updatedMentors && updatedMentors.length > 0) {
+        setMentorsList(updatedMentors);
+      }
+    });
 
     // Check if student session is already active
     const savedRoll = localStorage.getItem('beu_mentorship_active_roll');
@@ -1110,7 +1131,28 @@ export default function FreeMentorship() {
 
           {/* Mentee Portal: Show only students assigned to this mentor */}
           {(() => {
-            const myMentees = enrolledList.filter(s => s.assignedMentorId === activeMentor.id);
+            const isDeepak = (activeMentor.name || '').toLowerCase().includes('deepak');
+            const isSubhash = (activeMentor.name || '').toLowerCase().includes('subhash');
+
+            const myMentees = enrolledList.filter(s => {
+              const sAssigned = (s.assignedMentorId || '').trim();
+              if (sAssigned && sAssigned === activeMentor.id) return true;
+              if (isDeepak) {
+                if (
+                  sAssigned === 'mentor-cse-deepak' ||
+                  sAssigned === 'mentor-cse-1789726326697' ||
+                  sAssigned.toLowerCase().includes('deepak')
+                ) return true;
+              }
+              if (isSubhash) {
+                if (
+                  sAssigned === 'mentor-cse-subhash' ||
+                  sAssigned === 'mentor-cse-1789731436566' ||
+                  sAssigned.toLowerCase().includes('subhash')
+                ) return true;
+              }
+              return false;
+            });
             const collegesCount = new Set(myMentees.map(s => s.college)).size;
             const filteredMentees = myMentees.filter(stu => {
               if (mentorSearchQuery.trim()) {

@@ -132,6 +132,7 @@ app.use(express.static(publicPath));
 // 4. API Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/documents', require('./routes/documentRoutes'));
+app.use('/api/mentorship', require('./routes/mentorshipRoutes'));
 
 // Manual Sync Endpoint for BEU Scraper (Moved here to use CORS)
 app.post('/api/admin/sync-beu', async (req, res) => {

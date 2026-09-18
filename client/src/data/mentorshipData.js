@@ -58,7 +58,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     goals: 'Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna',
     codingExperience: 'Nahi, main bilkul beginner hoon.',
     mentorExpectations: 'Notes, lecture placement information, how to score good cgpa',
-    assignedMentorId: null,
+    assignedMentorId: 'mentor-cse-deepak',
     status: 'Active'
   },
   {
@@ -143,7 +143,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     goals: 'Padhai me guidance (Achha CGPA kaise layein), Coding/Programming',
     codingExperience: 'Haan, mujhe thodi bahut basic knowledge hai.',
     mentorExpectations: 'Just a bit guidance',
-    assignedMentorId: null,
+    assignedMentorId: 'mentor-cse-deepak',
     status: 'Active'
   },
   {
@@ -160,7 +160,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     goals: 'Coding/Programming seekhna (C, C++, Java, Python, etc.)',
     codingExperience: 'Haan, mujhe thodi bahut basic knowledge hai.',
     mentorExpectations: 'Coding aur Class syllabus maintain',
-    assignedMentorId: null,
+    assignedMentorId: 'mentor-cse-deepak',
     status: 'Active'
   },
   {
@@ -177,7 +177,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     goals: 'Padhai me guidance (Achha CGPA kaise layein), Coding/Programming',
     codingExperience: 'Haan, mujhe thodi bahut basic knowledge hai.',
     mentorExpectations: 'Coding and cgpa',
-    assignedMentorId: null,
+    assignedMentorId: 'mentor-cse-deepak',
     status: 'Active'
   },
   {
@@ -211,7 +211,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     goals: 'Padhai me guidance (Achha CGPA kaise layein), Coding/Programming',
     codingExperience: 'Nahi, main bilkul beginner hoon.',
     mentorExpectations: 'Study guidance and branch advice',
-    assignedMentorId: null,
+    assignedMentorId: 'mentor-cse-subhash',
     status: 'Active'
   },
   {
@@ -228,7 +228,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     goals: 'Padhai me guidance (Achha CGPA kaise layein), Coding/Programming',
     codingExperience: 'Haan, mujhe thodi bahut basic knowledge hai.',
     mentorExpectations: 'Coding, skills, Hackathons, internships, Notes',
-    assignedMentorId: null,
+    assignedMentorId: 'mentor-cse-deepak',
     status: 'Active'
   },
   {
@@ -296,7 +296,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     goals: 'Padhai me guidance (Achha CGPA kaise layein), Coding/Programming',
     codingExperience: 'Nahi, main bilkul beginner hoon.',
     mentorExpectations: 'Coding',
-    assignedMentorId: null,
+    assignedMentorId: 'mentor-cse-deepak',
     status: 'Active'
   },
   {
@@ -313,7 +313,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     goals: 'Padhai me guidance (Achha CGPA kaise layein), Coding/Programming',
     codingExperience: 'Haan, mujhe thodi bahut basic knowledge hai.',
     mentorExpectations: 'Semester prep and skill development',
-    assignedMentorId: null,
+    assignedMentorId: 'mentor-cse-subhash',
     status: 'Active'
   },
   {
@@ -364,7 +364,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     goals: 'Padhai me guidance (Achha CGPA kaise layein), Coding/Programming',
     codingExperience: 'Nahi, main bilkul beginner hoon.',
     mentorExpectations: 'In academic and also develop skills that can help in future',
-    assignedMentorId: null,
+    assignedMentorId: 'mentor-cse-subhash',
     status: 'Active'
   },
   {
@@ -381,7 +381,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     goals: 'Coding/Programming seekhna (C, C++, Java, Python, etc.)',
     codingExperience: 'Haan, mujhe thodi bahut basic knowledge hai.',
     mentorExpectations: 'Managing college syllabus with extra skills and speaking skills',
-    assignedMentorId: null,
+    assignedMentorId: 'mentor-cse-subhash',
     status: 'Active'
   },
   {
@@ -398,7 +398,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     goals: 'Padhai me guidance (Achha CGPA kaise layein), Coding/Programming',
     codingExperience: 'Nahi, main bilkul beginner hoon.',
     mentorExpectations: 'Coding and gate',
-    assignedMentorId: null,
+    assignedMentorId: 'mentor-cse-subhash',
     status: 'Active'
   },
   {
@@ -484,7 +484,17 @@ export function getEnrolledStudents() {
     const saved = localStorage.getItem('beu_enrolled_students_v5');
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map(s => {
+          let assigned = s.assignedMentorId;
+          if (assigned === 'mentor-cse-1789726326697' || (assigned && assigned.toLowerCase().includes('deepak'))) {
+            assigned = 'mentor-cse-deepak';
+          } else if (assigned === 'mentor-cse-1789731436566' || (assigned && assigned.toLowerCase().includes('subhash'))) {
+            assigned = 'mentor-cse-subhash';
+          }
+          return { ...s, assignedMentorId: assigned };
+        });
+      }
     }
   } catch (e) {
     console.error('Error reading enrolled students:', e);
@@ -500,24 +510,33 @@ export function saveEnrolledStudents(students) {
   }
 }
 
-// Helper to get mentors (localStorage persistent)
+// Helper to get mentors (localStorage persistent, deduplicated)
 export function getMentorsList() {
   try {
     const saved = localStorage.getItem('beu_mentors_list_v3');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed.map(m => {
+        const unique = new Map();
+        parsed.forEach(m => {
           const isDeepak = (m.name || '').toLowerCase().includes('deepak');
+          const isSubhash = (m.name || '').toLowerCase().includes('subhash');
+          const key = isDeepak ? 'deepak' : (isSubhash ? 'subhash' : m.id);
+          const canonicalId = isDeepak ? 'mentor-cse-deepak' : (isSubhash ? 'mentor-cse-subhash' : m.id);
           const avatarClean = (m.avatar && !m.avatar.includes('unsplash')) ? m.avatar : '';
-          return {
+          const cleaned = {
             ...m,
+            id: canonicalId,
             avatar: avatarClean,
-            phone: m.phone || (isDeepak ? 'ACBMGECCSE01' : ''),
-            mobile: m.mobile || (isDeepak ? '7856030646' : ''),
-            password: m.password || (isDeepak ? 'DEEPAK@123' : 'Mentor@123')
+            phone: m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')),
+            mobile: m.mobile || '7856030646',
+            password: m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : 'Mentor@123')),
+            email: m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'Subhashkumar911724@gmail.com' : ''))
           };
+          if (!unique.has(key)) unique.set(key, cleaned);
         });
+        const list = Array.from(unique.values());
+        if (list.length > 0) return list;
       }
     }
   } catch (e) {
