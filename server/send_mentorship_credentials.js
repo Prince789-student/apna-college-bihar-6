@@ -82,28 +82,32 @@ async function sendAllCredentials() {
         <!-- Body -->
         <div style="padding: 32px 24px; color: #1e293b;">
           <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-top: 0;">
-            Namaste ${student.name}! 👋
+            Dear ${student.name},
           </h2>
 
           <p style="font-size: 14px; line-height: 1.6; color: #475569;">
-            Aapne <strong>Free Mentorship for 1st Year Students</strong> ke liye register kiya tha. Aapka mentorship account successfully activate ho gaya hai!
-          </p>
-
-          <p style="font-size: 14px; line-height: 1.6; color: #475569;">
-            Niche diye gaye credentials se aap apna <strong>Mentorship & Study Tracker Portal</strong> access kar sakte hain:
+            Welcome to the <strong>Free BEU Mentorship Program (Batch 2026-2030)</strong> by Apna College Bihar. 
+            Your mentorship account has been successfully activated.
           </p>
 
           <!-- Credentials Card -->
           <div style="background-color: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; margin: 24px 0;">
             <div style="margin-bottom: 12px;">
-              <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #64748b; letter-spacing: 1px;">BEU Roll / Registration No:</span>
-              <div style="font-size: 18px; font-weight: 800; color: #1d4ed8; font-family: monospace; margin-top: 4px;">
+              <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #64748b; letter-spacing: 1px;">Portal Link:</span>
+              <div style="font-size: 14px; font-weight: 700; color: #1d4ed8; margin-top: 4px;">
+                <a href="https://www.apnacollegebihar.online/mentorship" style="color: #2563eb; text-decoration: none;">https://www.apnacollegebihar.online/mentorship</a>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 12px;">
+              <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #64748b; letter-spacing: 1px;">Roll Number:</span>
+              <div style="font-size: 18px; font-weight: 800; color: #0f172a; font-family: monospace; margin-top: 4px;">
                 ${student.roll}
               </div>
             </div>
 
             <div>
-              <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #64748b; letter-spacing: 1px;">Aapka Login Password:</span>
+              <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #64748b; letter-spacing: 1px;">Password:</span>
               <div style="font-size: 20px; font-weight: 900; color: #059669; font-family: monospace; margin-top: 4px; letter-spacing: 1px;">
                 ${student.password}
               </div>
@@ -111,31 +115,34 @@ async function sendAllCredentials() {
           </div>
 
           <!-- CTA Button -->
-          <div style="text-align: center; margin: 32px 0;">
+          <div style="text-align: center; margin: 28px 0;">
             <a href="https://www.apnacollegebihar.online/mentorship" style="background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 12px; font-weight: 800; font-size: 14px; display: inline-block; box-shadow: 0 4px 12px rgba(37,99,235,0.3);">
               Login to Mentorship Portal →
             </a>
-            <p style="font-size: 11px; color: #94a3b8; margin-top: 10px;">
-              Website: <a href="https://www.apnacollegebihar.online/mentorship" style="color: #2563eb;">apnacollegebihar.online/mentorship</a>
-            </p>
           </div>
 
           <!-- Features highlight -->
-          <div style="background-color: #eff6ff; border-radius: 12px; padding: 16px; font-size: 13px; color: #1e40af; line-height: 1.5;">
-            <strong style="display: block; margin-bottom: 6px;">Portal Me Aapko Kya Milega:</strong>
-            • <strong>Assigned Senior Mentor:</strong> Dedicated senior guidance regarding BEU syllabus & high scoring tips.<br/>
-            • <strong>Kya Padha Study Tracker:</strong> Roz kya padha log karein aur apna progress track karein.<br/>
-            • <strong>Doubt Box & 1-on-1 Sessions:</strong> Exam preparation ke sawal poochein.
+          <div style="background-color: #eff6ff; border-radius: 12px; padding: 18px; font-size: 13px; color: #1e40af; line-height: 1.6;">
+            <strong style="display: block; margin-bottom: 8px; font-size: 14px;">What you get on the portal:</strong>
+            • <strong>Senior Academic Guidance:</strong> Direct roadmap to score 9+ CGPA in BEU semester exams.<br/>
+            • <strong>Daily Study Tracker:</strong> Log your daily study hours and topics to maintain consistency.<br/>
+            • <strong>Verified Study Resources:</strong> Free access to semester syllabus, curated notes, and PYQs.
           </div>
 
-          <p style="font-size: 12px; color: #64748b; margin-top: 24px; line-height: 1.5;">
-            Agar aapko login karne me koi samasya aati hai, toh kripya humein directly contact karein.
+          <p style="font-size: 13px; color: #64748b; margin-top: 24px; line-height: 1.5;">
+            Please log in using the link above to get started with your mentorship journey.
+          </p>
+
+          <p style="font-size: 13px; color: #334155; margin-top: 20px; line-height: 1.5;">
+            Warm regards,<br/>
+            <strong>Team Apna College Bihar</strong><br/>
+            🌐 <a href="https://www.apnacollegebihar.online" style="color: #2563eb; text-decoration: none;">www.apnacollegebihar.online</a>
           </p>
         </div>
 
         <!-- Footer -->
         <div style="background-color: #f1f5f9; padding: 20px; text-align: center; font-size: 11px; color: #64748b; border-top: 1px solid #e2e8f0;">
-          <p style="margin: 0 font-weight: 600;">© 2026 Apna College Bihar · Engineering Academic Platform</p>
+          <p style="margin: 0; font-weight: 600;">© 2026 Apna College Bihar · Engineering Academic Platform</p>
           <p style="margin: 4px 0 0 0;">Dedicated to Bihar Engineering University Students</p>
         </div>
       </div>

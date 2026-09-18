@@ -317,6 +317,40 @@ export default function AdminMentorship({ flash }) {
     return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(targetEmail)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
+  // Generate Direct Gmail & Email Link for Student (Professional English, No Phone Number)
+  const getStudentEmailUrl = (stu) => {
+    const assignedMentor = mentors.find(m => m.id === stu.assignedMentorId);
+    const mentorName = assignedMentor ? assignedMentor.name : 'Senior BEU Academic Mentor';
+
+    const subject = 'Welcome to Free BEU Mentorship | Your Login Credentials - Apna College Bihar';
+    const body = `Dear ${stu.name},
+
+Welcome to the Free BEU Mentorship Program (Batch 2026-2030) by Apna College Bihar. 
+Your mentorship account has been successfully activated.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔐 YOUR LOGIN CREDENTIALS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔗 Portal Link: https://www.apnacollegebihar.online/mentorship
+👤 Roll Number:        ${stu.roll}
+🔑 Password:           ${stu.password}
+👨‍🏫 Assigned Mentor:    ${mentorName}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+What you get on the portal:
+• Senior Academic Guidance: Direct roadmap to score 9+ CGPA in BEU semester exams.
+• Daily Study Tracker: Log your daily study hours and topics to maintain consistency.
+• Verified Study Resources: Free access to semester syllabus, curated notes, and PYQs.
+
+Please log in using the link above to get started with your mentorship journey.
+
+Warm regards,
+Team Apna College Bihar
+🌐 Website: https://www.apnacollegebihar.online`;
+
+    return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(stu.email || '')}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
   // Add Student Handler
   const handleAddStudent = (e) => {
     e.preventDefault();
@@ -929,10 +963,12 @@ export default function AdminMentorship({ flash }) {
                       </td>
                       <td className="p-3.5">
                         <div className="flex flex-col gap-1.5 min-w-[130px]">
-                          {/* 1-Click Direct Email with pre-filled Username, Roll & Password */}
+                          {/* 1-Click Direct Email with pre-filled English Credentials Template */}
                           <a 
-                            href={`mailto:${stu.email}?subject=${encodeURIComponent('Apna College Bihar: Aapka Free BEU Mentorship Login ID & Password')}&body=${encodeURIComponent(`Namaste ${stu.name} ji,\n\nApna College Bihar ke Free BEU Mentorship Portal me aapka account create ho gaya hai!\n\nAapke Login Credentials:\n• Portal Link: https://www.apnacollegebihar.online/mentorship\n• Username (Phone): ${stu.whatsapp}\n• Roll Number: ${stu.roll}\n• Branch: ${stu.branchCode || stu.branch}\n• Login Password: ${stu.password}\n\nKripya portal par login karke apna daily study tracker ('Kya Padha') aur roadmap use karein.\n\nBest Wishes,\nApna College Bihar Team`)}`}
-                            className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-[10px] border border-blue-200 transition-colors"
+                            href={getStudentEmailUrl(stu)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold text-[10px] border border-blue-200 transition-colors shadow-2xs hover:scale-[1.02]"
                             title={`Send Email to ${stu.email}`}
                           >
                             <Mail size={11} /> Email Password
