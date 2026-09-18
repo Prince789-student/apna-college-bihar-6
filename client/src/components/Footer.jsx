@@ -59,6 +59,7 @@ export default function Footer() {
         <div className="space-y-6">
            <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-900">Resources</h4>
            <div className="flex flex-col gap-4">
+              <Link to="/mentorship" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">Free BEU Mentorship</Link>
               <Link to="/notes" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">B.Tech Notes</Link>
               <Link to="/pyq" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">PYQ Papers</Link>
               <Link to="/syllabus" className="text-sm font-bold text-slate-500 hover:text-blue-600 transition-colors">BEU Syllabus</Link>

@@ -122,9 +122,14 @@ export function StudyProvider({ children }) {
   const setTimerActive = (val) => {
     if (!val) {
       setOvertimeActive(false);
+      localStorage.removeItem('study_timer_started_at');
+    } else {
+      localStorage.setItem('study_timer_started_at', String(Date.now()));
+      localStorage.setItem('study_timer_mode', timerMode);
     }
     _setTimerActive(val);
     localStorage.setItem('timerActive', JSON.stringify(val));
+    window.dispatchEvent(new Event('study_timer_updated'));
     
     if (isNativeApp()) {
       try {
@@ -190,7 +195,9 @@ export function StudyProvider({ children }) {
   }, [timerMode, customHours, customMinutes, customSeconds, timerActive]);
 
   const saveGlobalSession = async (manualTime = null) => {
-    if (!user) return;
+    const activeMentorshipRoll = localStorage.getItem('beu_mentorship_active_roll');
+    if (!user && !activeMentorshipRoll) return;
+
     const timeToSave = manualTime || (
       overtimeActive 
         ? (customHours * 3600 + customMinutes * 60 + customSeconds + timerTime)
@@ -204,18 +211,75 @@ export function StudyProvider({ children }) {
 
     const todayStr = new Date().toLocaleDateString('en-CA');
     const sessionData = {
-      userId: user.uid,
-      userName: user.name || 'Scholar',
-      subject: timerSubject,
+      userId: user ? user.uid : (activeMentorshipRoll || 'guest'),
+      userName: user ? (user.name || 'Scholar') : (localStorage.getItem('beu_mentorship_active_student_name') || 'BEU Student'),
+      subject: timerSubject || 'Core Engineering Subject',
       duration: timeToSave,
       date: todayStr,
       createdAt: new Date().toISOString()
     };
 
+    // ── SYNC WITH BEU MENTORSHIP TRACKER ─────────────────────
+    try {
+      const activeRoll = activeMentorshipRoll || user?.roll || user?.phone;
+      if (activeRoll) {
+        const currentLogs = JSON.parse(localStorage.getItem(`beu_study_logs_${activeRoll}`) || '[]');
+        const hoursVal = (timeToSave / 3600).toFixed(2);
+        const newMentorshipEntry = {
+          id: Date.now(),
+          date: 'Today · ' + new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+          subject: timerSubject || 'Core Engineering Subject',
+          topic: 'Built-in Focus Hub Session (' + formatDuration(timeToSave) + ')',
+          hours: hoursVal < 0.1 ? '0.2' : hoursVal,
+          duration: timeToSave,
+          dateStr: todayStr,
+          today: true,
+          status: 'Completed ✅',
+          durationText: formatDuration(timeToSave) + ' (Built-in /study Hub)',
+          byTimer: true,
+          source: 'Focus Hub (/study)',
+          createdAt: new Date().toISOString()
+        };
+        const updatedLogs = [newMentorshipEntry, ...currentLogs];
+        localStorage.setItem(`beu_study_logs_${activeRoll}`, JSON.stringify(updatedLogs));
+
+        // Update dedicated today's study seconds
+        const todayKey = `beu_today_study_${activeRoll}_${todayStr}`;
+        const prevTodaySecs = parseInt(localStorage.getItem(todayKey) || '0', 10);
+        localStorage.setItem(todayKey, String(prevTodaySecs + timeToSave));
+
+        const genKey = `beu_today_study_seconds_${todayStr}`;
+        const prevGenSecs = parseInt(localStorage.getItem(genKey) || '0', 10);
+        localStorage.setItem(genKey, String(prevGenSecs + timeToSave));
+
+        // Global registry for mentor access
+        const allLogs = JSON.parse(localStorage.getItem('beu_all_study_logs_registry') || '{}');
+        allLogs[activeRoll] = updatedLogs;
+        localStorage.setItem('beu_all_study_logs_registry', JSON.stringify(allLogs));
+
+        localStorage.removeItem('study_timer_started_at');
+        window.dispatchEvent(new Event('study_timer_updated'));
+
+        toast.success(`Session automatically synced to your BEU Mentor! (${formatDuration(timeToSave)})`, {
+          icon: '👨‍🏫',
+          duration: 4000
+        });
+      }
+    } catch (err) {
+      console.error('Mentorship auto-sync error:', err);
+    }
+
+    // If only mentorship student and no Firebase account, finish timer
+    if (!user) {
+      setOvertimeActive(false);
+      setTimerActive(false);
+      return;
+    }
+
     // ── OFFLINE CHECK ────────────────────────────────────────
     if (!navigator.onLine) {
       queueOfflineSession(sessionData);
-      toast('💾 Session saved locally. Will sync when online!', {
+      toast('💾 Session saved locally & synced to mentor!', {
         duration: 4000,
         style: { background: '#1e293b', color: '#f8fafc', fontWeight: '800', fontSize: '12px' }
       });

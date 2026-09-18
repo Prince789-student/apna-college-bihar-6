@@ -18,8 +18,17 @@ import {
   ArrowRight, ClipboardList,
   CheckCircle2, Shield, Timer, AlertTriangle,
   BookOpen, Activity, Calendar, Users, Search, X,
-  ChevronLeft, ChevronRight
+  ChevronLeft, ChevronRight, GraduationCap
 } from 'lucide-react';
+
+const DEFAULT_BEU_SUBJECTS = [
+  { id: 'sub-1', subjectName: 'ENGINEERING MATHEMATICS-I', targetHours: 2 },
+  { id: 'sub-2', subjectName: 'C PROGRAMMING (PPS)', targetHours: 2 },
+  { id: 'sub-3', subjectName: 'BASIC ELECTRICAL ENGINEERING', targetHours: 2 },
+  { id: 'sub-4', subjectName: 'ENGINEERING MECHANICS', targetHours: 1.5 },
+  { id: 'sub-5', subjectName: 'ENGINEERING PHYSICS', targetHours: 1.5 },
+  { id: 'sub-6', subjectName: 'ENGINEERING CHEMISTRY', targetHours: 1.5 }
+];
 
 // ── Helpers ──
 function formatDuration(sec) {
@@ -68,10 +77,14 @@ export default function StudyDashboard() {
   } = useStudy();
 
   const [userData, setUserData] = useState(null);
-  const [subjects, setSubjects] = useState([]);
+  const [subjects, setSubjects] = useState(DEFAULT_BEU_SUBJECTS);
   const [sessions, setSessions] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const activeMentorshipRoll = typeof window !== 'undefined' ? localStorage.getItem('beu_mentorship_active_roll') : null;
+  const activeMentorName = typeof window !== 'undefined' ? (localStorage.getItem('beu_mentorship_active_mentor_name') || 'Assigned Senior Mentor') : 'Assigned Senior Mentor';
+  const activeStudentName = typeof window !== 'undefined' ? (localStorage.getItem('beu_mentorship_active_student_name') || 'Student') : 'Student';
   const [goals, setGoals] = useState({ daily: 2, weekly: 14, monthly: 60 });
   const [showGoalModal, setShowGoalModal] = useState(false);
   const [showWhitelist, setShowWhitelist] = useState(false);
@@ -234,12 +247,33 @@ export default function StudyDashboard() {
           setGoals({ daily: d?.dailyGoal || 2, weekly: d?.weeklyGoal || 14, monthly: d?.monthlyGoal || 60 });
         }
         const subSnap = await getDocs(query(collection(db, 'Subjects'), where('userId', '==', user.uid)));
-        setSubjects(subSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+        if (subSnap.docs.length > 0) {
+          setSubjects(subSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+        }
       } catch (e) { console.error(e); }
       setLoading(false);
     };
     fetchStatic();
   }, [user]);
+
+  useEffect(() => {
+    if (!user && activeMentorshipRoll) {
+      try {
+        const mentLogs = JSON.parse(localStorage.getItem(`beu_study_logs_${activeMentorshipRoll}`) || '[]');
+        if (mentLogs.length > 0) {
+          const adaptedSessions = mentLogs.map(m => ({
+            userId: activeMentorshipRoll,
+            userName: activeStudentName,
+            subject: (m.subject || 'OTHERS').toUpperCase(),
+            duration: Math.round((parseFloat(m.hours) || 1) * 3600),
+            date: todayStr,
+            createdAt: new Date().toISOString()
+          }));
+          setSessions(adaptedSessions);
+        }
+      } catch (e) {}
+    }
+  }, [user, activeMentorshipRoll, activeStudentName, todayStr]);
 
   useEffect(() => {
     if (!user) return;
@@ -749,8 +783,27 @@ export default function StudyDashboard() {
             Focus Active
           </span>
         )}
-      </div>      {/* Guest Login Banner — only shown when not logged in */}
-      {!user && (
+      </div>      {/* Mentorship Sync Banner or Guest Login Banner */}
+      {activeMentorshipRoll ? (
+        <div className="flex items-center gap-3 bg-gradient-to-r from-slate-900 via-blue-950 to-indigo-950 border border-blue-500/40 rounded-2xl px-4 py-3 mb-3 text-white shadow-xl shadow-blue-900/20">
+          <div className="w-10 h-10 bg-blue-500/20 border border-blue-400/30 text-blue-300 rounded-xl flex items-center justify-center shrink-0">
+            <GraduationCap size={20} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <p className="text-[10px] font-black text-emerald-300 uppercase tracking-widest leading-none">Mentor Live Auto-Sync Active 📡</p>
+              <span className="text-[9px] font-mono text-slate-300 bg-white/10 px-2 py-0.5 rounded-md">Roll: {activeMentorshipRoll}</span>
+            </div>
+            <p className="text-[11px] text-slate-300 font-medium mt-1">
+              Aapka ye built-in study timer & focus session automatically aapke assigned senior mentor <strong>({activeMentorName})</strong> ko live access me sync ho raha hai!
+            </p>
+          </div>
+          <Link to="/mentorship" className="shrink-0 px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-black rounded-xl uppercase tracking-widest active:scale-95 transition-all shadow-md">
+            Mentorship
+          </Link>
+        </div>
+      ) : (!user && (
         <div className="flex items-center gap-3 bg-blue-50 border border-blue-200/80 rounded-2xl px-4 py-3 mb-2">
           <div className="w-8 h-8 bg-blue-600/10 text-blue-600 rounded-xl flex items-center justify-center shrink-0">
             <Shield size={16} />
@@ -763,7 +816,7 @@ export default function StudyDashboard() {
             Login
           </Link>
         </div>
-      )}
+      ))}
 
 
       {/* ── STICKY 4-TAB BAR ── */}

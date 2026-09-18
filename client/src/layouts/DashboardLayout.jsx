@@ -64,6 +64,7 @@ export default function DashboardLayout() {
       title: 'BEU Tools',
       items: [
         { name: 'BEU Result', path: '/beu-result', icon: <Globe size={16} /> },
+        { name: 'Free Mentorship', path: '/mentorship', icon: <GraduationCap size={16} /> },
         { name: 'Attendance', path: '/attendance', icon: <UserCheck size={16} /> },
         { name: 'Timetable', path: '/timetable', icon: <Calendar size={16} /> },
         { name: 'Notes', path: '/notes', icon: <BookOpen size={16} /> },

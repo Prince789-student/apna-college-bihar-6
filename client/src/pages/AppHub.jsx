@@ -75,6 +75,7 @@ export default function AppHub() {
       title: "🎓 BEU",
       items: [
         { name: 'BEU Result', icon: <Globe size={24} />, path: '/beu-result?standalone=true', color: 'text-blue-600' },
+        { name: 'Free Mentorship', icon: <GraduationCap size={24} />, path: '/mentorship?standalone=true', color: 'text-emerald-600' },
         { name: 'Attendance', icon: <UserCheck size={24} />, path: '/attendance?standalone=true', color: 'text-emerald-600' },
         { name: 'Timetable', icon: <Calendar size={24} />, path: '/timetable?standalone=true', color: 'text-amber-600' },
         { name: 'Notes', icon: <BookOpen size={24} />, path: '/notes?standalone=true', color: 'text-indigo-600' },

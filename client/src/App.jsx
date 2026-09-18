@@ -43,6 +43,7 @@ const GroupDetail = React.lazy(() => import('./pages/GroupDetail'));
 const Timetable = React.lazy(() => import('./pages/Timetable'));
 const Attendance = React.lazy(() => import('./pages/Attendance'));
 const BeuResult = React.lazy(() => import('./pages/BeuResult'));
+const FreeMentorship = React.lazy(() => import('./pages/FreeMentorship'));
 const Extras = React.lazy(() => import('./pages/PersonalManager')); // Mapping Extras to PersonalManager
 const Calendar = React.lazy(() => import('./pages/Calendar'));
 const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
@@ -354,7 +355,7 @@ function SplashUI() {
 function App() {
   const { user } = useAuth();
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const isNative = Capacitor.isNativePlatform() || !!window.Capacitor?.isNative || window.location.protocol === 'file:' || window.location.hostname === 'localhost';
+  const isNative = Capacitor.isNativePlatform() || !!window.Capacitor?.isNative || window.location.protocol === 'file:';
 
   useEffect(() => {
     if (isNative) {
@@ -541,8 +542,12 @@ function App() {
               <Route path="/cgpa" element={<BeuCgpa />} />
               <Route path="/ugeac-predictor" element={<UgeacPredictor />} />
               <Route path="/beu-result" element={<BeuResult />} />
+              <Route path="/mentorship" element={<FreeMentorship />} />
+              <Route path="/free-mentorship" element={<FreeMentorship />} />
               <Route path="/syllabus" element={<BeuSyllabus />} />
               <Route path="/syllabus/:branchId" element={<BeuSyllabus />} />
+              <Route path="/beu-syllabus" element={<BeuSyllabus />} />
+              <Route path="/beu-syllabus/:branchId" element={<BeuSyllabus />} />
               <Route path="/colleges" element={<CollegeDirectory />} />
               <Route path="/college/:collegeSlug" element={<CollegeProfile />} />
               <Route path="/college/:collegeSlug/:section" element={<CollegeProfile />} />

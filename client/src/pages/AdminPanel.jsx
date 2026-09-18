@@ -16,6 +16,7 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '../context/AuthContext';
 import { isValidPDF } from '../utils/validation';
 import LoadingOverlay from '../components/LoadingOverlay';
+import AdminMentorship from '../components/AdminMentorship';
 
 export default function AdminPanel() {
   const { user, ROLES, loading: authLoading } = useAuth();
@@ -635,10 +636,10 @@ if (!isAdmin) return (
           </div>
         </div>
         <div className="flex flex-wrap bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 overflow-x-auto">
-           {['overview', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu', 'donors', 'shortlinks'].map(t => (
+           {['overview', 'mentorship', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu', 'donors', 'shortlinks'].map(t => (
              <button key={t} onClick={()=>setTab(t)}
-               className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${tab===t?'bg-indigo-600 text-slate-900 shadow-xl shadow-indigo-900/20':'text-slate-500 hover:text-slate-700'}`}>
-               {t}
+               className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${tab===t?'bg-indigo-600 text-white shadow-xl shadow-indigo-900/20':'text-slate-500 hover:text-slate-700'}`}>
+               {t === 'mentorship' ? '🎓 Mentorship' : t}
              </button>
            ))}
         </div>
@@ -648,6 +649,11 @@ if (!isAdmin) return (
         <div className={`p-4 rounded-2xl border flex items-center gap-3 animate-in zoom-in duration-300 ${msg.type==='ok'?'bg-emerald-600/20 text-emerald-400 border-emerald-50-30':'bg-red-600/20 text-red-400 border-red-500/30'}`}>
           <AlertCircle size={18}/> <span className="text-[13px] font-bold uppercase tracking-tight">{msg.text}</span>
         </div>
+      )}
+
+      {/* ── MENTORSHIP TAB ── */}
+      {tab === 'mentorship' && (
+        <AdminMentorship flash={flash} />
       )}
 
       {/* ── SHORTLINKS TAB ── */}
