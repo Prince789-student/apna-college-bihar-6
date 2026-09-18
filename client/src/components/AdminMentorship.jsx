@@ -317,10 +317,25 @@ export default function AdminMentorship({ flash }) {
     return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(targetEmail)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   };
 
-  // Generate Direct Gmail & Email Link for Student (Professional English, No Phone Number)
+  // Generate Direct Gmail & Email Link for Student (Professional English)
   const getStudentEmailUrl = (stu) => {
+    let mentorName = 'Senior BEU Academic Mentor';
+    const assignedId = (stu.assignedMentorId || '').toLowerCase();
     const assignedMentor = mentors.find(m => m.id === stu.assignedMentorId);
-    const mentorName = assignedMentor ? assignedMentor.name : 'Senior BEU Academic Mentor';
+
+    if (assignedMentor) {
+      mentorName = assignedMentor.name;
+    } else if (assignedId.includes('deepak')) {
+      mentorName = 'Deepak Kumar Mishra';
+    } else if (assignedId.includes('subhash')) {
+      mentorName = 'Subhash Kumar';
+    } else if (stu.branchCode === 'CSE' || (stu.branch || '').toLowerCase().includes('computer') || (stu.branch || '').toLowerCase().includes('cse')) {
+      mentorName = 'Deepak Kumar Mishra / Subhash Kumar';
+    }
+
+    const phoneLine = stu.whatsapp 
+      ? `📱 Registered Phone:   ${stu.whatsapp} (Can also be used as Username)\n` 
+      : '';
 
     const subject = 'Welcome to Free BEU Mentorship | Your Login Credentials - Apna College Bihar';
     const body = `Dear ${stu.name},
@@ -333,9 +348,10 @@ Your mentorship account has been successfully activated.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🔗 Portal Link: https://www.apnacollegebihar.online/mentorship
 👤 Roll Number:        ${stu.roll}
-🔑 Password:           ${stu.password}
+${phoneLine}🔑 Password:           ${stu.password}
 👨‍🏫 Assigned Mentor:    ${mentorName}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+*(Note: You can log in using either your Roll Number or your registered Phone Number as your Username)*
 
 What you get on the portal:
 • Senior Academic Guidance: Direct roadmap to score 9+ CGPA in BEU semester exams.
