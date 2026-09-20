@@ -69,6 +69,31 @@ export default function MentorshipChat({
     setIsSending(true);
     setInputText('');
 
+    const now = Date.now();
+    const optimisticMsg = {
+      id: `local_${now}_${Math.random().toString(36).substr(2, 6)}`,
+      threadId,
+      studentRoll,
+      studentName: student?.name || 'Student',
+      mentorId,
+      mentorName: mentor?.name || 'Senior Mentor',
+      senderRole: currentUserRole,
+      senderName: isStudent ? (student?.name || 'Student') : (mentor?.name || 'Mentor'),
+      text,
+      timestamp: now,
+      read: false
+    };
+
+    // 1. Immediately update UI state so user sees it right away!
+    setMessages(prev => {
+      if (prev.some(m => m.id === optimisticMsg.id || (m.text === text && Math.abs((m.timestamp || 0) - now) < 1000))) {
+        return prev;
+      }
+      return [...prev, optimisticMsg];
+    });
+
+    setTimeout(() => scrollToBottom(true), 50);
+
     try {
       await sendChatMessage({
         threadId,
@@ -81,7 +106,7 @@ export default function MentorshipChat({
         text
       });
 
-      setTimeout(() => scrollToBottom(true), 50);
+      setTimeout(() => scrollToBottom(true), 80);
       if (inputRef.current) {
         inputRef.current.focus();
       }

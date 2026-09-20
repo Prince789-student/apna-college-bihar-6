@@ -96,6 +96,14 @@ service cloud.firestore {
       allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
     }
 
+    // Free BEU Mentorship Direct 1-on-1 Messages & Data Sync
+    match /MentorshipMessages/{docId} {
+      allow read, create, update: if true;
+    }
+    match /mentorship/{docId} {
+      allow read, write: if true;
+    }
+
     // Default deny for anything else
     match /{document=**} {
       allow read, write: if false;
