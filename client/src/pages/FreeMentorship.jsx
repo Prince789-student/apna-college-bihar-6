@@ -22,6 +22,7 @@ import {
   verifyMentorLogin
 } from '../data/mentorshipData';
 import { fetchCloudMentorshipData, subscribeMentorshipUpdates } from '../services/mentorshipSync';
+import MentorshipChat from '../components/MentorshipChat';
 
 // ─── BEU College Code Mapping ───────────────────────────────────────────────
 const BEU_COLLEGE_CODES = {
@@ -97,6 +98,7 @@ export default function FreeMentorship() {
   const [mentorBranchFilter, setMentorBranchFilter] = useState('ALL');
   const [mentorAssignmentFilter, setMentorAssignmentFilter] = useState('all'); // 'all' | 'assigned'
   const [selectedMenteeLogs, setSelectedMenteeLogs] = useState(null);
+  const [activeChatMentee, setActiveChatMentee] = useState(null);
   const [mentorMeetInput, setMentorMeetInput] = useState('');
 
   // Study Tracker & Live Timer State
@@ -1343,11 +1345,18 @@ export default function FreeMentorship() {
                             </div>
                           </div>
 
-                          {/* Action Buttons: Kya Padha Log & WhatsApp only */}
+                          {/* Action Buttons: Live Chat, Kya Padha Log & WhatsApp */}
                           <div className="space-y-2 pt-2 border-t border-slate-100">
                             <button
+                              onClick={() => setActiveChatMentee(stu)}
+                              className="w-full py-2.5 px-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 active:scale-[0.98]"
+                            >
+                              <MessageCircle size={15} /> 💬 Live Chat With Mentee
+                            </button>
+
+                            <button
                               onClick={() => setSelectedMenteeLogs({ ...stu, logs })}
-                              className="w-full py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 shadow-md shadow-indigo-600/20 active:scale-[0.98]"
+                              className="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 active:scale-[0.98]"
                             >
                               <TrendingUp size={14} /> Kya Padha & Study Timer Logs
                             </button>
@@ -1356,7 +1365,7 @@ export default function FreeMentorship() {
                               href={`https://wa.me/91${stu.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${stu.name}! Main ${activeMentor.name} bol raha hoon (Aapka BEU Senior Mentor). Padhai aur semester guidance ke baare me baat karte hain.`)}`}
                               target="_blank"
                               rel="noreferrer"
-                              className="w-full py-2.5 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 border border-emerald-200"
+                              className="w-full py-2 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 border border-emerald-200"
                             >
                               <MessageCircle size={15} /> WhatsApp Pe Guidance Dein
                             </a>
@@ -1496,20 +1505,27 @@ export default function FreeMentorship() {
                   </div>
                 )}
 
-                {/* Live Meeting Action (No Email, No Book Guidance) */}
-                <div className="pt-2">
+                {/* Live Meeting & Chat Actions */}
+                <div className="pt-2 space-y-2">
+                  <a
+                    href="#mentor-live-chat"
+                    className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 active:scale-[0.98]"
+                  >
+                    <MessageCircle size={16} /> 💬 Live Chat with {activeStudent.mentor.name}
+                  </a>
+
                   {activeStudent.mentor.meetLink ? (
                     <a
                       href={activeStudent.mentor.meetLink}
                       target="_blank"
                       rel="noreferrer"
-                      className="w-full py-3.5 px-4 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-rose-600/25 active:scale-[0.98] animate-pulse"
+                      className="w-full py-3 px-4 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-rose-600/25 active:scale-[0.98] animate-pulse"
                     >
                       <span className="w-2 h-2 rounded-full bg-white animate-ping" />
                       <Video size={16} /> Join Live Google Meet Session
                     </a>
                   ) : (
-                    <div className="p-3 bg-slate-100/80 rounded-xl flex items-center justify-between text-xs text-slate-500 font-semibold border border-slate-200">
+                    <div className="p-2.5 bg-slate-100/80 rounded-xl flex items-center justify-between text-xs text-slate-500 font-semibold border border-slate-200">
                       <span className="flex items-center gap-2"><Video size={15} className="text-slate-400" /> No Live Meet Scheduled Right Now</span>
                       <span className="text-[10px] text-slate-500 font-bold bg-white px-2 py-0.5 rounded border border-slate-200">Mentor will notify</span>
                     </div>
@@ -1790,76 +1806,25 @@ export default function FreeMentorship() {
             </div>
           </div>
 
-          {/* 4. ASK A DOUBT DIRECTLY TO MENTOR */}
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-md p-6 sm:p-8 space-y-5 max-w-3xl mx-auto w-full">
-            <div>
-              <h3 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-                <HelpCircle size={20} className="text-blue-600" /> Ask Mentor a Doubt
-              </h3>
-              <p className="text-xs text-slate-500 font-medium mt-1">
-                Exam preparation, semester syllabus queries, ya personal guidance ka sawal apne mentor se poochein:
-              </p>
-            </div>
-
-            {doubtSubmitted ? (
-              <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-2xl text-center space-y-2">
-                <CheckCircle2 size={32} className="text-emerald-600 mx-auto" />
-                <h4 className="text-sm font-black text-emerald-900">Sawal Successfully Bhej Diya!</h4>
-                <p className="text-xs text-emerald-700">
-                  Aapka sawal {activeStudent.mentor ? activeStudent.mentor.name : 'senior mentor team'} ko notify ho gaya hai. Response aate hi aapko update milega.
-                </p>
-                <button 
-                  onClick={() => { setDoubtSubmitted(false); setDoubtText(''); }}
-                  className="text-xs font-bold text-emerald-800 underline mt-2"
-                >
-                  Naya sawal poochein
-                </button>
-              </div>
+          {/* 4. LIVE 1-ON-1 DIRECT CHAT WITH SENIOR MENTOR */}
+          <div id="mentor-live-chat" className="max-w-3xl mx-auto w-full space-y-4">
+            {activeStudent.mentor ? (
+              <MentorshipChat
+                student={activeStudent}
+                mentor={activeStudent.mentor}
+                currentUserRole="student"
+                isModal={false}
+              />
             ) : (
-              <form onSubmit={handleDoubtSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1.5">Doubt Category</label>
-                  <select 
-                    value={doubtCategory}
-                    onChange={(e) => setDoubtCategory(e.target.value)}
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
-                  >
-                    <option value="Exams & CGPA">Semester Exams & CGPA Strategy</option>
-                    <option value="Coding & Skills">Coding & Programming Fundamentals</option>
-                    <option value="College Syllabus">College Syllabus & Subject Difficulties</option>
-                    <option value="Internships & Placements">Internships & Campus Hiring</option>
-                  </select>
+              <div className="bg-white rounded-3xl border border-slate-200 shadow-md p-8 text-center space-y-3">
+                <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto text-2xl">
+                  ⏳
                 </div>
-
-                <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1.5">Aapka Sawal (Detailed)</label>
-                  <textarea 
-                    rows={3}
-                    placeholder="e.g. Bhaiya/Sir, 1st year me college syllabus ke sath coding kaise manage karein?"
-                    value={doubtText}
-                    onChange={(e) => setDoubtText(e.target.value)}
-                    className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-medium text-slate-800 focus:outline-none focus:border-blue-600"
-                  />
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-3 pt-1">
-                  <button 
-                    type="submit"
-                    className="flex-1 py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95"
-                  >
-                    <Send size={15} /> Send Question
-                  </button>
-                  {activeStudent.mentor && (
-                    <a 
-                      href={`mailto:${activeStudent.mentor.email}?subject=${encodeURIComponent(`BEU Mentorship Question: ${doubtCategory} - ${activeStudent.name}`)}&body=${encodeURIComponent(`Hello ${activeStudent.mentor.name},\n\nStudent: ${activeStudent.name} (${activeStudent.college})\nRoll: ${activeStudent.roll}\nCategory: ${doubtCategory}\n\nQuestion:\n${doubtText}`)}`}
-                      className="px-5 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95"
-                      title="Email direct to mentor"
-                    >
-                      <Mail size={16} /> Email Mentor
-                    </a>
-                  )}
-                </div>
-              </form>
+                <h3 className="text-lg font-black text-slate-900">Senior Mentor Assignment In Progress</h3>
+                <p className="text-xs text-slate-500 max-w-md mx-auto">
+                  Aapka verified senior mentor assign hote hi aap yahan seedhe 1-on-1 real-time chat kar sakenge aur koi bhi sawal pooch sakenge.
+                </p>
+              </div>
             )}
 
             {/* Instant Quick Tips */}
@@ -1993,14 +1958,27 @@ export default function FreeMentorship() {
 
             {/* Mentor Actions on Mentee */}
             <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
-              <a
-                href={`https://wa.me/91${selectedMenteeLogs.whatsapp?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${selectedMenteeLogs.name}! Main ${activeMentor?.name} (Aapka BEU Senior Mentor). Maine aapka study tracker dekha. Padhai me bahut achhi consistency hai! Koi doubt ho toh pooch sakte hain.`)}`}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full sm:w-auto px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20"
-              >
-                <MessageCircle size={16} /> WhatsApp Pe Study Feedback Bhejo
-              </a>
+              <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+                <button
+                  onClick={() => {
+                    const student = selectedMenteeLogs;
+                    setSelectedMenteeLogs(null);
+                    setActiveChatMentee(student);
+                  }}
+                  className="w-full sm:w-auto px-5 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 active:scale-95"
+                >
+                  <MessageCircle size={16} /> 💬 Live Chat With Mentee
+                </button>
+
+                <a
+                  href={`https://wa.me/91${selectedMenteeLogs.whatsapp?.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${selectedMenteeLogs.name}! Main ${activeMentor?.name} (Aapka BEU Senior Mentor). Maine aapka study tracker dekha. Padhai me bahut achhi consistency hai! Koi doubt ho toh pooch sakte hain.`)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full sm:w-auto px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20"
+                >
+                  <MessageCircle size={16} /> WhatsApp Feedback
+                </a>
+              </div>
 
               <button
                 onClick={() => setSelectedMenteeLogs(null)}
@@ -2012,6 +1990,17 @@ export default function FreeMentorship() {
 
           </div>
         </div>
+      )}
+
+      {/* ── Modal: Live Mentorship Chat (Mentor View) ── */}
+      {activeChatMentee && activeMentor && (
+        <MentorshipChat
+          student={activeChatMentee}
+          mentor={activeMentor}
+          currentUserRole="mentor"
+          isModal={true}
+          onClose={() => setActiveChatMentee(null)}
+        />
       )}
 
       {/* ── Booking Modal ── */}
