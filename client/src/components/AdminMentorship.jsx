@@ -59,6 +59,77 @@ export default function AdminMentorship({ flash }) {
     bio: ''
   });
 
+  // Helper to compress uploaded mentor images to avoid Firestore doc size limit
+  const compressImage = (file, callback) => {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxDim = 256;
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > maxDim) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          }
+        } else {
+          if (height > maxDim) {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        callback(canvas.toDataURL('image/jpeg', 0.8));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Helper to auto-generate next password in format: 26ACB + BRANCH + 01, 02, 03...
+  const getNextStudentPassword = (branchCode = 'CSE') => {
+    const b = (branchCode || 'CSE').toUpperCase().trim();
+    const branchStudents = (students || []).filter(s => {
+      const sb = (s.branchCode || '').toUpperCase().trim();
+      const sBranch = (s.branch || '').toUpperCase().trim();
+      if (sb === b) return true;
+      if (b === 'CSE' && (sBranch.includes('COMPUTER') || sBranch.includes('CSE') || sBranch.includes('DATA SCIENCE') || sBranch.includes('IOT'))) return true;
+      if (b === 'ECE' && (sBranch.includes('ELECTRONIC') || sBranch.includes('ECE'))) return true;
+      if (b === 'EEE' && (sBranch.includes('ELECTRICAL & ELECTRONIC') || sb === 'EEE')) return true;
+      if (b === 'EE' && (sBranch === 'ELECTRICAL ENGINEERING' || sb === 'EE')) return true;
+      if (b === 'CE' && (sBranch.includes('CIVIL') || sb === 'CE')) return true;
+      if (b === 'ME' && (sBranch.includes('MECHANICAL') || sb === 'ME')) return true;
+      return false;
+    });
+
+    let maxSeq = branchStudents.length;
+    branchStudents.forEach(s => {
+      const match = (s.password || '').toUpperCase().match(new RegExp(`26ACB${b}(\\d+)`));
+      if (match) {
+        const num = parseInt(match[1], 10);
+        if (!isNaN(num) && num > maxSeq) {
+          maxSeq = num;
+        }
+      }
+    });
+
+    const nextSeq = String(maxSeq + 1).padStart(2, '0');
+    return `26ACB${b}${nextSeq}`;
+  };
+
+  const getNextMentorUsername = (branch = 'CSE') => {
+    const b = (branch || 'CSE').toUpperCase();
+    const branchMentorsCount = (mentors || []).filter(m => (m.branch || '').toUpperCase() === b).length;
+    const seq = String(branchMentorsCount + 1).padStart(2, '0');
+    return `ACBM${b}${seq}`;
+  };
+
   // New Student Form State
   const [studentForm, setStudentForm] = useState({
     name: '',
@@ -68,7 +139,8 @@ export default function AdminMentorship({ flash }) {
     branch: 'Computer Science & Engineering',
     branchCode: 'CSE',
     roll: '',
-    password: 'beu@2026',
+    studentId: '',
+    password: '',
     goals: 'Padhai me guidance (Achha CGPA kaise layein)',
     codingExperience: 'Nahi, main bilkul beginner hoon.',
     mentorExpectations: 'Exam guidance and study roadmap'
@@ -167,7 +239,7 @@ export default function AdminMentorship({ flash }) {
   };
 
   // Add Mentor Handler
-  const handleAddMentor = (e) => {
+  const handleAddMentor = async (e) => {
     e.preventDefault();
     if (!mentorForm.name.trim() || !mentorForm.college.trim()) {
       if (flash) flash('Mentor Name aur College zaroori hai!', 'err');
@@ -179,14 +251,19 @@ export default function AdminMentorship({ flash }) {
       ...(mentorForm.workedOn ? mentorForm.workedOn.split(',').map(s => s.trim()) : [])
     ].filter(Boolean);
 
-    const generatedUsername = (mentorForm.username || mentorForm.phone || `ACBM${Date.now().toString().slice(-4)}`).trim();
+    const branch = (mentorForm.branch || 'CSE').toUpperCase();
+    const branchMentorsCount = (mentors || []).filter(m => (m.branch || '').toUpperCase() === branch).length;
+    const mentorSeq = String(branchMentorsCount + 1).padStart(2, '0');
+    const autoMentorUsername = `ACBM${branch}${mentorSeq}`;
+
+    const generatedUsername = (mentorForm.username || mentorForm.phone || autoMentorUsername).trim();
     const newMentor = {
-      id: `mentor-${mentorForm.branch.toLowerCase()}-${Date.now()}`,
+      id: `mentor-${branch.toLowerCase()}-${Date.now()}`,
       name: mentorForm.name.trim(),
       role: mentorForm.role.trim() || 'Senior BEU Scholar & Mentor',
       college: mentorForm.college.trim(),
-      branch: mentorForm.branch,
-      branchLabel: mentorForm.branch,
+      branch: branch,
+      branchLabel: branch,
       workedOn: mentorForm.workedOn.trim(),
       expertiseIn: mentorForm.expertiseIn.trim(),
       avatar: mentorForm.avatar.trim() || '',
@@ -203,7 +280,7 @@ export default function AdminMentorship({ flash }) {
     const updated = [newMentor, ...mentors];
     setMentors(updated);
     saveMentorsList(updated);
-    saveCloudMentorshipData(students, updated);
+    await saveCloudMentorshipData(students, updated);
     setShowAddMentorModal(false);
     setMentorForm({
       name: '',
@@ -222,7 +299,7 @@ export default function AdminMentorship({ flash }) {
       bio: ''
     });
 
-    if (flash) flash(`Naya Mentor "${newMentor.name}" add ho gaya! 🚀`, 'suc');
+    if (flash) flash(`✅ Naya Mentor "${newMentor.name}" add ho gaya aur Cloud Sync ho gaya! 🚀`, 'suc');
   };
 
   // Delete Mentor Handler
@@ -293,20 +370,13 @@ export default function AdminMentorship({ flash }) {
   // Upload Mentor Photo
   const handleUploadMentorPhoto = (mentorId, file) => {
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) {
-      if (flash) flash('Photo size 2MB se kam honi chahiye!', 'err');
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const base64 = event.target.result;
+    compressImage(file, (base64) => {
       const updated = mentors.map(m => m.id === mentorId ? { ...m, avatar: base64 } : m);
       setMentors(updated);
       saveMentorsList(updated);
       saveCloudMentorshipData(students, updated);
       if (flash) flash('Mentor photo successfully update ho gayi! 📸', 'suc');
-    };
-    reader.readAsDataURL(file);
+    });
   };
 
   // Remove Mentor Photo (Nothing / Initials instead)
@@ -394,11 +464,12 @@ Your mentorship account has been successfully activated.
 🔐 YOUR LOGIN CREDENTIALS:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🔗 Portal Link: https://www.apnacollegebihar.online/mentorship
+🆔 Student ID:          ${stu.id || stu.studentId}
 👤 Roll Number:        ${stu.roll}
 ${phoneLine}🔑 Password:           ${stu.password}
 👨‍🏫 Assigned Mentor:    ${mentorName}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-*(Note: You can log in using either your Roll Number or your registered Phone Number as your Username)*
+*(Note: You can log in using your Student ID, Roll Number, or registered Phone Number)*
 
 What you get on the portal:
 • Senior Academic Guidance: Direct roadmap to score 9+ CGPA in BEU semester exams.
@@ -417,53 +488,72 @@ Team Apna College Bihar
   // Add Student Handler
   const handleAddStudent = async (e) => {
     e.preventDefault();
-    if (!studentForm.name.trim() || !studentForm.roll.trim()) {
-      if (flash) flash('Student Name aur Roll Number zaroori hai!', 'err');
+    const cleanRoll = (studentForm.roll || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    const cleanPhone = (studentForm.whatsapp || '').replace(/\D/g, '');
+
+    if (!studentForm.name.trim()) {
+      if (flash) flash('Student Name bharna zaroori hai!', 'err');
+      return;
+    }
+    if (!cleanRoll && !cleanPhone) {
+      if (flash) flash('Roll Number ya Phone Number me se kam se kam ek zaroori hai! (Yehi unka Login ID banega)', 'err');
       return;
     }
 
-    const matchedMentor = mentors.find(m => m.branch === studentForm.branchCode) || mentors[0];
+    try {
+      const branch = (studentForm.branchCode || 'CSE').toUpperCase();
+      const autoPass = getNextStudentPassword(branch);
+      // Student ID: roll number if provided, otherwise phone number
+      const finalId = cleanRoll || cleanPhone;
+      const finalPassword = (studentForm.password || '').trim() || autoPass;
 
-    const derivedPass = studentForm.roll.replace(/[^a-zA-Z0-9]/g, '').toUpperCase() || 'beu@2026';
-    const newStudent = {
-      id: `beu-stu-${Date.now()}`,
-      timestamp: new Date().toLocaleString('en-IN'),
-      email: studentForm.email.trim(),
-      name: studentForm.name.trim(),
-      whatsapp: studentForm.whatsapp.trim(),
-      college: studentForm.college.trim(),
-      branch: studentForm.branch.trim(),
-      branchCode: studentForm.branchCode,
-      roll: studentForm.roll.trim(),
-      password: studentForm.password.trim() || derivedPass,
-      goals: studentForm.goals.trim(),
-      codingExperience: studentForm.codingExperience,
-      mentorExpectations: studentForm.mentorExpectations.trim(),
-      assignedMentorId: studentForm.assignedMentorId || null,
-      status: 'Active'
-    };
+      const matchedMentor = mentors.find(m => (m.branch || '').toUpperCase() === branch) || mentors[0];
 
-    const updated = [newStudent, ...students];
-    setStudents(updated);
-    saveEnrolledStudents(updated);
-    await saveCloudMentorshipData(updated, mentors);
-    setShowAddStudentModal(false);
-    setStudentForm({
-      name: '',
-      email: '',
-      whatsapp: '',
-      college: 'Gaya College of Engineering (GCE), Gaya',
-      branch: 'Computer Science & Engineering',
-      branchCode: 'CSE',
-      roll: '',
-      password: 'beu@2026',
-      goals: 'Padhai me guidance (Achha CGPA kaise layein)',
-      codingExperience: 'Nahi, main bilkul beginner hoon.',
-      mentorExpectations: 'Exam guidance and study roadmap',
-      assignedMentorId: null
-    });
+      const newStudent = {
+        id: finalId,
+        studentId: finalId,
+        timestamp: new Date().toLocaleString('en-IN'),
+        email: (studentForm.email || '').trim(),
+        name: studentForm.name.trim(),
+        whatsapp: (studentForm.whatsapp || '').trim(),
+        college: (studentForm.college || '').trim() || 'Bihar Engineering University College',
+        branch: studentForm.branch.trim() || branch,
+        branchCode: branch,
+        roll: (studentForm.roll || '').trim() || finalId,
+        password: finalPassword,
+        goals: (studentForm.goals || '').trim() || 'Padhai me guidance (Achha CGPA kaise layein)',
+        codingExperience: studentForm.codingExperience || 'Nahi, main bilkul beginner hoon.',
+        mentorExpectations: (studentForm.mentorExpectations || '').trim() || 'Study guidance',
+        assignedMentorId: studentForm.assignedMentorId || (matchedMentor ? matchedMentor.id : null),
+        status: 'Active'
+      };
 
-    if (flash) flash(`Student "${newStudent.name}" enroll ho gaya aur Cloud Sync complete! 🎓`, 'suc');
+      const updated = [newStudent, ...students.filter(s => s.id !== finalId)];
+      setStudents(updated);
+      saveEnrolledStudents(updated);
+      await saveCloudMentorshipData(updated, mentors);
+      setShowAddStudentModal(false);
+      setStudentForm({
+        name: '',
+        email: '',
+        whatsapp: '',
+        college: 'Gaya College of Engineering (GCE), Gaya',
+        branch: 'Computer Science & Engineering',
+        branchCode: 'CSE',
+        roll: '',
+        studentId: '',
+        password: '',
+        goals: 'Padhai me guidance (Achha CGPA kaise layein)',
+        codingExperience: 'Nahi, main bilkul beginner hoon.',
+        mentorExpectations: 'Exam guidance and study roadmap',
+        assignedMentorId: null
+      });
+
+      if (flash) flash(`✅ Naya Mentee "${newStudent.name}" jud gaya! ID: ${newStudent.id} | Password: ${newStudent.password} 🎓`, 'suc');
+    } catch (err) {
+      console.error('Error adding student:', err);
+      if (flash) flash(`Student add karne me problem aayi: ${err.message}`, 'err');
+    }
   };
 
   // Delete Student Handler
@@ -586,7 +676,25 @@ Team Apna College Bihar
           </div>
 
           <button 
-            onClick={() => setShowAddMentorModal(true)}
+            onClick={() => {
+              setMentorForm({
+                name: '',
+                role: 'Senior BEU Scholar & Mentor',
+                college: '',
+                branch: 'CSE',
+                workedOn: '',
+                expertiseIn: '',
+                avatar: '',
+                username: getNextMentorUsername('CSE'),
+                phone: '',
+                mobile: '',
+                password: 'Mentor@123',
+                email: '',
+                meetLink: '',
+                bio: ''
+              });
+              setShowAddMentorModal(true);
+            }}
             className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-md shadow-blue-500/20 transition-all self-start sm:self-auto"
           >
             <Plus size={16} /> Add New Mentor
@@ -933,7 +1041,26 @@ Team Apna College Bihar
             </button>
 
             <button 
-              onClick={() => setShowAddStudentModal(true)}
+              onClick={() => {
+                const defaultBranch = 'CSE';
+                const nextPass = getNextStudentPassword(defaultBranch);
+                setStudentForm({
+                  name: '',
+                  email: '',
+                  whatsapp: '',
+                  college: 'Gaya College of Engineering (GCE), Gaya',
+                  branch: 'Computer Science & Engineering',
+                  branchCode: defaultBranch,
+                  roll: '',
+                  studentId: '',
+                  password: nextPass,
+                  goals: 'Padhai me guidance (Achha CGPA kaise layein)',
+                  codingExperience: 'Nahi, main bilkul beginner hoon.',
+                  mentorExpectations: 'Exam guidance and study roadmap',
+                  assignedMentorId: null
+                });
+                setShowAddStudentModal(true);
+              }}
               className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-md shadow-emerald-500/20 transition-all"
             >
               <UserPlus size={15} /> + Enroll Student
@@ -1021,9 +1148,16 @@ Team Apna College Bihar
                         </span>
                       </td>
                       <td className="p-3.5">
-                        <span className="font-black text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100 font-mono">
-                          {stu.roll}
-                        </span>
+                        <div className="space-y-1">
+                          <span className="inline-block font-black text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100 font-mono text-[11px]">
+                            {stu.roll}
+                          </span>
+                          {(stu.id || stu.studentId) && (
+                            <span className="block text-[10px] font-bold text-slate-500 font-mono">
+                              ID: <strong className="text-slate-700">{stu.id || stu.studentId}</strong>
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td className="p-3.5">
                         <div className="flex items-center gap-1 min-w-[140px]">
@@ -1075,7 +1209,7 @@ Team Apna College Bihar
 
                           {/* 1-Click Direct WhatsApp with pre-filled Username, Roll & Password */}
                           <a 
-                            href={`https://wa.me/91${(stu.whatsapp || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${stu.name}! 👋\nApna College Bihar - Free Mentorship Portal me aapka account ready hai:\n\n🔗 Portal: https://www.apnacollegebihar.online/mentorship\n📱 Username (Phone): ${stu.whatsapp}\n👤 Roll: ${stu.roll}\n🔑 Password: ${stu.password}\n\nAbhi login karke apna 'Kya Padha' tracker check karein!`)}`}
+                            href={`https://wa.me/91${(stu.whatsapp || '').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Namaste ${stu.name}! 👋\nApna College Bihar - Free Mentorship Portal me aapka account ready hai:\n\n🔗 Portal: https://www.apnacollegebihar.online/mentorship\n🆔 Student ID: ${stu.id || stu.studentId}\n📱 Phone: ${stu.whatsapp}\n👤 Roll: ${stu.roll}\n🔑 Password: ${stu.password}\n\nAbhi login karke apna 'Kya Padha' tracker check karein!`)}`}
                             target="_blank"
                             rel="noreferrer"
                             className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-[10px] border border-emerald-200 transition-colors"
@@ -1214,9 +1348,9 @@ Team Apna College Bihar
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (ev) => setMentorForm({ ...mentorForm, avatar: ev.target.result });
-                        reader.readAsDataURL(file);
+                        compressImage(file, (base64) => {
+                          setMentorForm(prev => ({ ...prev, avatar: base64 }));
+                        });
                       }
                     }}
                   />
@@ -1370,42 +1504,68 @@ Team Apna College Bihar
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Roll / Registration No.</label>
+                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1 flex items-center justify-between">
+                    <span>Roll No.</span>
+                    <span className="text-[9px] text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded font-bold font-mono">Student ID banega</span>
+                  </label>
                   <input 
                     type="text" 
-                    placeholder="e.g. 26/CSE/55"
+                    placeholder="e.g. 26/CSE/55 ya 26CSE55"
                     value={studentForm.roll}
                     onChange={(e) => {
                       const newRoll = e.target.value;
-                      const autoPass = newRoll.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                      const cleanId = newRoll.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                      // Auto-detect branch from roll
+                      let detectedBranch = studentForm.branchCode;
+                      if (cleanId.includes('CSE')) detectedBranch = 'CSE';
+                      else if (cleanId.includes('ECE')) detectedBranch = 'ECE';
+                      else if (cleanId.includes('EEE')) detectedBranch = 'EEE';
+                      else if (cleanId.includes('EE')) detectedBranch = 'EE';
+                      else if (cleanId.includes('CE')) detectedBranch = 'CE';
+                      else if (cleanId.includes('ME')) detectedBranch = 'ME';
+
+                      const nextPass = detectedBranch !== studentForm.branchCode ? getNextStudentPassword(detectedBranch) : (studentForm.password || getNextStudentPassword(studentForm.branchCode));
+
                       setStudentForm(prev => ({
                         ...prev,
                         roll: newRoll,
-                        password: (!prev.password || prev.password === 'beu@2026' || prev.password === prev.roll.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()) ? autoPass : prev.password
+                        studentId: cleanId || prev.studentId,
+                        branchCode: detectedBranch,
+                        password: nextPass
                       }));
                     }}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
-                    required
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600 font-mono"
                   />
+                  <p className="text-[10px] text-slate-400 mt-0.5 font-bold">
+                    Login ID: <strong className="text-blue-600 font-mono">{studentForm.roll ? studentForm.roll.replace(/[^a-zA-Z0-9]/g, '').toUpperCase() : (studentForm.whatsapp ? studentForm.whatsapp.replace(/\D/g, '') : 'Roll No. ya Phone No.')}</strong>
+                  </p>
                 </div>
                 <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Login Password</label>
+                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1 flex items-center justify-between">
+                    <span>Login Password</span>
+                    <span className="text-[9px] text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded font-bold font-mono">⚡ Auto</span>
+                  </label>
                   <input 
                     type="text" 
-                    placeholder="e.g. 26CSE55"
-                    value={studentForm.password}
+                    placeholder="e.g. 26ACBCSE12"
+                    value={studentForm.password || getNextStudentPassword(studentForm.branchCode)}
                     onChange={(e) => setStudentForm({ ...studentForm, password: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600 font-mono"
-                    required
+                    className="w-full px-3.5 py-2.5 bg-emerald-50/60 border border-emerald-300 rounded-xl text-xs font-bold text-emerald-900 focus:outline-none focus:border-blue-600 font-mono"
                   />
+                  <p className="text-[10px] text-emerald-700 mt-0.5 font-bold">
+                    Auto Pass: 26ACB + {studentForm.branchCode || 'CSE'} + Student No. ({studentForm.password || getNextStudentPassword(studentForm.branchCode)})
+                  </p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">WhatsApp Number</label>
+                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1 flex items-center justify-between">
+                    <span>Phone / WhatsApp</span>
+                    <span className="text-[9px] text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded font-bold font-mono">Roll na ho toh ID</span>
+                  </label>
                   <input 
-                    type="text" 
+                    type="tel" 
                     placeholder="e.g. 9876543210"
                     value={studentForm.whatsapp}
                     onChange={(e) => setStudentForm({ ...studentForm, whatsapp: e.target.value })}
@@ -1441,15 +1601,24 @@ Team Apna College Bihar
                   <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Branch Code</label>
                   <select 
                     value={studentForm.branchCode}
-                    onChange={(e) => setStudentForm({ ...studentForm, branchCode: e.target.value, branch: e.target.value === 'CSE' ? 'Computer Science & Engineering' : e.target.value === 'ECE' ? 'Electronics & Communication' : e.target.value === 'EEE' ? 'Electrical & Electronics' : e.target.value === 'CE' ? 'Civil Engineering' : 'Mechanical Engineering' })}
-                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
+                    onChange={(e) => {
+                      const newBranch = e.target.value;
+                      const nextPass = getNextStudentPassword(newBranch);
+                      setStudentForm(prev => ({
+                        ...prev,
+                        branchCode: newBranch,
+                        branch: newBranch === 'CSE' ? 'Computer Science & Engineering' : newBranch === 'ECE' ? 'Electronics & Communication' : newBranch === 'EEE' ? 'Electrical & Electronics' : newBranch === 'EE' ? 'Electrical Engineering' : newBranch === 'CE' ? 'Civil Engineering' : newBranch === 'ME' ? 'Mechanical Engineering' : newBranch,
+                        password: nextPass
+                      }));
+                    }}
+                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600 font-bold"
                   >
-                    <option value="CSE">CSE</option>
-                    <option value="ECE">ECE</option>
-                    <option value="EEE">EEE</option>
-                    <option value="EE">EE</option>
-                    <option value="CE">Civil</option>
-                    <option value="ME">Mechanical</option>
+                    <option value="CSE">CSE (Computer Science)</option>
+                    <option value="ECE">ECE (Electronics)</option>
+                    <option value="EEE">EEE (Electrical & Electronics)</option>
+                    <option value="EE">EE (Electrical)</option>
+                    <option value="CE">Civil Engineering</option>
+                    <option value="ME">Mechanical Engineering</option>
                   </select>
                 </div>
                 <div>

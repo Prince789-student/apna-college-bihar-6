@@ -739,13 +739,13 @@ export default function FreeMentorship() {
               <form onSubmit={handleLogin} className="space-y-4">
                 <div>
                   <label className="block text-[11px] font-black uppercase text-slate-600 mb-1 flex items-center justify-between">
-                    <span>Username (Phone Number / BEU Roll No.)</span>
-                    <span className="text-[10px] text-blue-600 font-bold normal-case">Phone ya Roll daalein</span>
+                    <span>Username (Student ID / Roll / Phone)</span>
+                    <span className="text-[10px] text-blue-600 font-bold normal-case">ID, Roll ya Phone daalein</span>
                   </label>
                   <div className="relative">
                     <input 
                       type="text" 
-                      placeholder="Apna WhatsApp Phone Number ya BEU Roll No. daalein..."
+                      placeholder="Student ID (e.g. 26EEE46), Roll No, ya Phone..."
                       value={loginRoll}
                       onChange={(e) => setLoginRoll(e.target.value)}
                       className="w-full pl-4 pr-10 py-3.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-900 font-bold tracking-wider placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition-all text-sm"
@@ -762,10 +762,10 @@ export default function FreeMentorship() {
                   <div className="relative">
                     <input 
                       type={showPassword ? 'text' : 'password'}
-                      placeholder="Apna password daalein"
+                      placeholder="Apna password (e.g. 26ACBEEE01) daalein"
                       value={loginPassword}
                       onChange={(e) => setLoginPassword(e.target.value)}
-                      className="w-full pl-4 pr-12 py-3.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-900 font-bold tracking-wider placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition-all text-sm"
+                      className="w-full pl-4 pr-12 py-3.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-900 font-bold tracking-wider placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition-all text-sm font-mono"
                       required
                     />
                     <button
@@ -1464,8 +1464,14 @@ export default function FreeMentorship() {
                     <CheckCircle2 size={12} /> Logged In
                   </span>
                 </div>
-                <p className="text-xs font-bold text-blue-600 mt-0.5">
-                  Roll: <span className="font-black text-slate-800">{activeStudent.roll}</span> · {activeStudent.branch} ({activeStudent.yearText || '1st Year'})
+                <p className="text-xs font-bold text-blue-600 mt-0.5 flex items-center gap-2 flex-wrap">
+                  {(activeStudent.studentId || activeStudent.id) && (
+                    <span className="px-2 py-0.5 rounded-md bg-blue-100 text-blue-800 font-mono font-black text-[11px] border border-blue-200">
+                      ID: {activeStudent.studentId || activeStudent.id}
+                    </span>
+                  )}
+                  <span>Roll: <strong className="text-slate-800">{activeStudent.roll}</strong></span>
+                  <span>· {activeStudent.branch} ({activeStudent.yearText || '1st Year'})</span>
                 </p>
                 <p className="text-[11px] text-slate-500 font-medium">
                   {activeStudent.college}
