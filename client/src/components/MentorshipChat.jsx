@@ -24,9 +24,9 @@ export default function MentorshipChat({
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const studentRoll = student?.roll || '';
-  const mentorId = mentor?.id || (mentor?.name?.toLowerCase().includes('deepak') ? 'mentor-cse-deepak' : 'mentor-cse-subhash');
-  const threadId = getChatThreadId(studentRoll, mentorId);
+  const studentRoll = student?.roll || student?.whatsapp || '';
+  const mentorId = mentor?.id || (mentor?.name?.toLowerCase().includes('subhash') ? 'mentor-cse-subhash' : 'mentor-cse-deepak');
+  const threadId = getChatThreadId(student, mentor);
 
   const isStudent = currentUserRole === 'student';
   const partnerName = isStudent ? (mentor?.name || 'Senior Academic Mentor') : (student?.name || 'Student');

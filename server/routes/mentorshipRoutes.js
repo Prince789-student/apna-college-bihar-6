@@ -206,12 +206,20 @@ router.get('/chat/messages', async (req, res) => {
     let messages = [];
 
     // 1. Try Firebase Admin Firestore first
+    const baseThread = threadId.replace(/__deepak|__subhash/g, '');
+    const candidateIds = Array.from(new Set([
+      threadId,
+      baseThread,
+      `${baseThread}__deepak`,
+      `${baseThread}__subhash`
+    ]));
+
     if (admin && admin.firestore) {
       try {
         const firestore = admin.firestore();
         const snap = await firestore
           .collection('MentorshipMessages')
-          .where('threadId', '==', threadId)
+          .where('threadId', 'in', candidateIds)
           .get();
 
         if (!snap.empty) {
@@ -231,7 +239,12 @@ router.get('/chat/messages', async (req, res) => {
 
     // 2. Merge with local file cache
     const chats = readChatsData();
-    const localMsgs = Array.isArray(chats[threadId]) ? chats[threadId] : [];
+    let localMsgs = [];
+    candidateIds.forEach(cid => {
+      if (Array.isArray(chats[cid])) {
+        localMsgs = localMsgs.concat(chats[cid]);
+      }
+    });
 
     const map = new Map();
     localMsgs.forEach(m => {

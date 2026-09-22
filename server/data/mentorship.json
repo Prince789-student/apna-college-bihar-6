@@ -31,7 +31,7 @@
       "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna",
       "codingExperience": "Nahi, main bilkul beginner hoon.",
       "mentorExpectations": "Skills in cse and ai",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-deepak",
       "status": "Active"
     },
     {
@@ -48,7 +48,7 @@
       "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Govt Exam",
       "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
       "mentorExpectations": "CGPA",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-deepak",
       "status": "Active"
     },
     {
@@ -65,7 +65,7 @@
       "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
       "codingExperience": "Nahi, main bilkul beginner hoon.",
       "mentorExpectations": "Guidance and resources",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-deepak",
       "status": "Active"
     },
     {
@@ -82,7 +82,7 @@
       "goals": "Coding/Programming seekhna (C, C++, Java, Python, etc.)",
       "codingExperience": "Nahi, main bilkul beginner hoon.",
       "mentorExpectations": "Coding guidance h",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-deepak",
       "status": "Active"
     },
     {
@@ -150,7 +150,7 @@
       "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
       "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
       "mentorExpectations": "Regarding how to get excellent cgpa, where we can improve",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-deepak",
       "status": "Active"
     },
     {
@@ -201,7 +201,7 @@
       "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Govt Exam",
       "codingExperience": "Nahi, main bilkul beginner hoon.",
       "mentorExpectations": "Mujhe confidence chahiye jisse main bol saku kisi ke samne",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-deepak",
       "status": "Active"
     },
     {
@@ -218,7 +218,7 @@
       "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
       "codingExperience": "Nahi, main bilkul beginner hoon.",
       "mentorExpectations": "Kaha se padhai kare aur resources",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-deepak",
       "status": "Active"
     },
     {
@@ -235,7 +235,7 @@
       "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Govt Exam",
       "codingExperience": "Nahi, main bilkul beginner hoon.",
       "mentorExpectations": "Communication skills and syllabus",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-subhash",
       "status": "Active"
     },
     {
@@ -286,7 +286,7 @@
       "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
       "codingExperience": "Nahi, main bilkul beginner hoon.",
       "mentorExpectations": "Guidance to become better version of myself",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-subhash",
       "status": "Active"
     },
     {
@@ -303,7 +303,7 @@
       "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
       "codingExperience": "Nahi, main bilkul beginner hoon.",
       "mentorExpectations": "Coding and Gate exam",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-subhash",
       "status": "Active"
     },
     {
@@ -371,7 +371,7 @@
       "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
       "codingExperience": "Nahi, main bilkul beginner hoon.",
       "mentorExpectations": "It's very uncomfortable to speak something when teachers ask, so communication guidance",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-subhash",
       "status": "Active"
     },
     {
@@ -388,7 +388,7 @@
       "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
       "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
       "mentorExpectations": "Doubt about future placements and gate",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-subhash",
       "status": "Active"
     },
     {
@@ -405,7 +405,7 @@
       "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
       "codingExperience": "Nahi, main bilkul beginner hoon.",
       "mentorExpectations": "How to manage time and improve CGPA and communication skill",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-subhash",
       "status": "Active"
     },
     {
@@ -422,7 +422,7 @@
       "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna",
       "codingExperience": "Nahi, main bilkul beginner hoon.",
       "mentorExpectations": "About managing and investing my time on right direction",
-      "assignedMentorId": null,
+      "assignedMentorId": "mentor-cse-subhash",
       "status": "Active"
     }
   ],
@@ -472,5 +472,5 @@
       "bio": "Student mentor guiding 1st year BEU students in coding and academics."
     }
   ],
-  "updatedAt": "2026-09-18T12:21:10.520Z"
+  "updatedAt": "2026-09-22T15:58:23.386Z"
 }

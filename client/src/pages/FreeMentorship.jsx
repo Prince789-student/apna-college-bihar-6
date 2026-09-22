@@ -163,11 +163,15 @@ export default function FreeMentorship() {
 
     // Fetch latest from Cloud / Server API
     fetchCloudMentorshipData().then(cloud => {
-      if (cloud && cloud.students && cloud.students.length > 0) {
-        setEnrolledList(cloud.students);
-      }
-      if (cloud && cloud.mentors && cloud.mentors.length > 0) {
-        setMentorsList(cloud.mentors);
+      const studentsList = (cloud && cloud.students && cloud.students.length > 0) ? cloud.students : null;
+      const mentorsListFresh = (cloud && cloud.mentors && cloud.mentors.length > 0) ? cloud.mentors : null;
+      if (studentsList) setEnrolledList(studentsList);
+      if (mentorsListFresh) setMentorsList(mentorsListFresh);
+
+      const savedRoll = localStorage.getItem('beu_mentorship_active_roll');
+      if (savedRoll) {
+        const freshStu = findStudent(savedRoll);
+        if (freshStu) setLoggedInStudent(freshStu, mentorsListFresh || mentors);
       }
     }).catch(() => {});
 
@@ -175,6 +179,11 @@ export default function FreeMentorship() {
     const unsub = subscribeMentorshipUpdates(({ students: updatedStudents, mentors: updatedMentors }) => {
       if (updatedStudents && updatedStudents.length > 0) {
         setEnrolledList(updatedStudents);
+        const savedRoll = localStorage.getItem('beu_mentorship_active_roll');
+        if (savedRoll) {
+          const freshStu = findStudent(savedRoll);
+          if (freshStu) setLoggedInStudent(freshStu, updatedMentors || mentors);
+        }
       }
       if (updatedMentors && updatedMentors.length > 0) {
         setMentorsList(updatedMentors);
@@ -252,10 +261,24 @@ export default function FreeMentorship() {
   };
 
   const setLoggedInStudent = (stu, mentors = mentorsList) => {
-    // Only assign mentor if stu.assignedMentorId matches a real mentor
-    const mentor = (stu.assignedMentorId && mentors && mentors.length > 0)
-      ? (mentors.find(m => m.id === stu.assignedMentorId) || null)
-      : null;
+    const mentorsPool = (mentors && mentors.length > 0) ? mentors : getMentorsList();
+    let mentor = null;
+
+    if (stu.assignedMentorId && mentorsPool && mentorsPool.length > 0) {
+      const assignedLower = (stu.assignedMentorId || '').toLowerCase();
+      mentor = mentorsPool.find(m => {
+        if (m.id === stu.assignedMentorId) return true;
+        if (assignedLower.includes('deepak') && (m.name?.toLowerCase().includes('deepak') || m.id?.includes('deepak'))) return true;
+        if (assignedLower.includes('subhash') && (m.name?.toLowerCase().includes('subhash') || m.id?.includes('subhash'))) return true;
+        return false;
+      }) || null;
+    }
+
+    // Always ensure every enrolled student is assigned to Deepak or Subhash
+    if (!mentor && mentorsPool && mentorsPool.length > 0) {
+      const isSubhash = (stu.assignedMentorId?.toLowerCase().includes('subhash') || (stu.branchCode === 'ECE' && parseInt(String(stu.id || '').replace(/\D/g, '') || '0') > 17));
+      mentor = mentorsPool.find(m => isSubhash ? m.name?.toLowerCase().includes('subhash') : m.name?.toLowerCase().includes('deepak')) || mentorsPool[0];
+    }
 
     const studentData = {
       ...stu,
@@ -1136,25 +1159,24 @@ export default function FreeMentorship() {
             const isDeepak = (activeMentor.name || '').toLowerCase().includes('deepak');
             const isSubhash = (activeMentor.name || '').toLowerCase().includes('subhash');
 
-            const myMentees = enrolledList.filter(s => {
-              const sAssigned = (s.assignedMentorId || '').trim();
-              if (sAssigned && sAssigned === activeMentor.id) return true;
-              if (isDeepak) {
-                if (
-                  sAssigned === 'mentor-cse-deepak' ||
-                  sAssigned === 'mentor-cse-1789726326697' ||
-                  sAssigned.toLowerCase().includes('deepak')
-                ) return true;
-              }
-              if (isSubhash) {
-                if (
-                  sAssigned === 'mentor-cse-subhash' ||
-                  sAssigned === 'mentor-cse-1789731436566' ||
-                  sAssigned.toLowerCase().includes('subhash')
-                ) return true;
-              }
+            const myMentees = mentorAssignmentFilter === 'all' 
+              ? enrolledList 
+              : enrolledList.filter(s => {
+                  const sAssigned = (s.assignedMentorId || '').trim().toLowerCase();
+                  if (sAssigned && sAssigned === (activeMentor.id || '').toLowerCase()) return true;
+                  if (isDeepak && (sAssigned.includes('deepak') || sAssigned === 'mentor-cse-1789726326697')) return true;
+                  if (isSubhash && (sAssigned.includes('subhash') || sAssigned === 'mentor-cse-1789731436566')) return true;
+                  return false;
+                });
+
+            const assignedToMeCount = enrolledList.filter(s => {
+              const sAssigned = (s.assignedMentorId || '').trim().toLowerCase();
+              if (sAssigned && sAssigned === (activeMentor.id || '').toLowerCase()) return true;
+              if (isDeepak && (sAssigned.includes('deepak') || sAssigned === 'mentor-cse-1789726326697')) return true;
+              if (isSubhash && (sAssigned.includes('subhash') || sAssigned === 'mentor-cse-1789731436566')) return true;
               return false;
-            });
+            }).length;
+
             const collegesCount = new Set(myMentees.map(s => s.college)).size;
             const filteredMentees = myMentees.filter(stu => {
               if (mentorSearchQuery.trim()) {
@@ -1175,7 +1197,9 @@ export default function FreeMentorship() {
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-1">
                     <div className="flex items-center justify-between text-slate-500">
-                      <span className="text-[11px] font-bold uppercase tracking-wider">Aapke Assigned Mentees</span>
+                      <span className="text-[11px] font-bold uppercase tracking-wider">
+                        {mentorAssignmentFilter === 'all' ? 'Sabhi Enrolled Mentees' : 'Aapke Assigned Mentees'}
+                      </span>
                       <GraduationCap size={20} className="text-indigo-600" />
                     </div>
                     <div className="text-2xl font-black text-slate-900">
@@ -1207,14 +1231,42 @@ export default function FreeMentorship() {
 
                 {/* Toolbar */}
                 <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-                  <div className="space-y-1">
-                    <h3 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
-                      <Users size={20} className="text-indigo-600" />
-                      Aapke Mentee Students ({myMentees.length})
-                    </h3>
-                    <p className="text-xs text-slate-500 font-medium">
-                      Aapko assign kiye gaye students ke 'Kya Padha' study records ko yahan se monitor karein aur WhatsApp pe direct guidance dein.
-                    </p>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <h3 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
+                        <Users size={20} className="text-indigo-600" />
+                        Mentee Students ({myMentees.length})
+                      </h3>
+                      <p className="text-xs text-slate-500 font-medium">
+                        Aapke assigned students ke study tracker records aur direct live chat guidance.
+                      </p>
+                    </div>
+
+                    {/* Filter Tabs: Assigned to Me vs All Enrolled */}
+                    <div className="flex items-center gap-1.5 p-1.5 bg-slate-100 rounded-2xl shrink-0 self-start sm:self-auto">
+                      <button
+                        type="button"
+                        onClick={() => setMentorAssignmentFilter('assigned')}
+                        className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all ${
+                          mentorAssignmentFilter === 'assigned'
+                            ? 'bg-white text-indigo-700 shadow-sm'
+                            : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        ⭐ Mere Assigned ({assignedToMeCount})
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setMentorAssignmentFilter('all')}
+                        className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all ${
+                          mentorAssignmentFilter === 'all'
+                            ? 'bg-white text-indigo-700 shadow-sm'
+                            : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        👥 Sabhi Mentees ({enrolledList.length})
+                      </button>
+                    </div>
                   </div>
 
                   {myMentees.length > 0 && (
