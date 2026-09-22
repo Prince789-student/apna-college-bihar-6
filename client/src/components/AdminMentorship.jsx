@@ -12,7 +12,9 @@ import {
   getEnrolledStudents, 
   saveEnrolledStudents, 
   getMentorsList, 
-  saveMentorsList 
+  saveMentorsList,
+  BEU_OFFICIAL_BRANCHES,
+  ALL_BEU_BRANCHES
 } from '../data/mentorshipData';
 import { 
   fetchCloudMentorshipData, 
@@ -98,13 +100,50 @@ export default function AdminMentorship({ flash }) {
     const branchStudents = (students || []).filter(s => {
       const sb = (s.branchCode || '').toUpperCase().trim();
       const sBranch = (s.branch || '').toUpperCase().trim();
+      const sPass = (s.password || '').toUpperCase().trim();
+
+      // Direct branch code match or password pattern match
       if (sb === b) return true;
-      if (b === 'CSE' && (sb === 'CSE' || sBranch.includes('COMPUTER') || sBranch.includes('CSE') || sBranch.includes('DATA SCIENCE') || sBranch.includes('IOT'))) return true;
-      if (b === 'ECE' && (sb === 'ECE' || ((sBranch.includes('ELECTRONIC') || sBranch.includes('ECE')) && !sBranch.includes('ELECTRICAL')))) return true;
-      if (b === 'EEE' && (sb === 'EEE' || sBranch.includes('ELECTRICAL & ELECTRONIC') || sb === 'EEE')) return true;
+      if (sPass.includes(`26ACB${b}`)) return true;
+
+      // Group/Name match based on code
+      if (b === 'CSE' && (sb === 'CSE' || sBranch === 'COMPUTER SCIENCE & ENGINEERING' || sBranch === 'COMPUTER SCIENCE AND ENGINEERING' || sBranch.includes('CSE'))) return true;
+      if (b === 'CSAI' && (sBranch.includes('AI') && !sBranch.includes('AI & ML') && !sBranch.includes('AIML'))) return true;
+      if (b === 'CSCS' && sBranch.includes('CYBER')) return true;
+      if (b === 'CSDS' && sBranch.includes('DATA SCIENCE')) return true;
+      if (b === 'CSAIML' && (sBranch.includes('AI & ML') || sBranch.includes('AIML'))) return true;
+      if (b === 'CSIOT' && (sBranch.includes('IOT') && !sBranch.includes('CYBER'))) return true;
+      if (b === 'CSIOTBC' && (sBranch.includes('BLOCK') || (sBranch.includes('IOT') && sBranch.includes('CYBER')))) return true;
+      if (b === 'CSNET' && sBranch.includes('NETWORK')) return true;
+      if (b === 'IT' && (sb === 'IT' || sBranch.includes('INFORMATION TECHNOLOGY'))) return true;
+      if (b === 'ANIM' && (sBranch.includes('ANIMATION') || sBranch.includes('GRAPHIC'))) return true;
+      if (b === 'MC' && (sBranch.includes('MATHEMATIC') || sBranch.includes('COMPUTING'))) return true;
+
+      if (b === 'ECE' && (sb === 'ECE' || ((sBranch.includes('ELECTRONIC') || sBranch.includes('ECE')) && !sBranch.includes('ELECTRICAL') && !sBranch.includes('VLSI') && !sBranch.includes('INSTRUMENTATION') && !sBranch.includes('ADVANCE')))) return true;
+      if (b === 'ECEACT' && (sBranch.includes('ADVANCE') || sBranch.includes('COMMUNICATION TECHNOLOGY'))) return true;
+      if (b === 'ECVLSI' && sBranch.includes('VLSI')) return true;
+      if (b === 'EIE' && (sBranch.includes('INSTRUMENTATION') || sb === 'EIE')) return true;
+      if (b === 'EEE' && (sb === 'EEE' || sBranch.includes('ELECTRICAL & ELECTRONIC') || sBranch.includes('ELECTRICAL AND ELECTRONIC'))) return true;
       if (b === 'EE' && (sb === 'EE' || (sBranch.includes('ELECTRICAL') && !sBranch.includes('ELECTRONIC')))) return true;
-      if (b === 'CE' && (sb === 'CE' || sBranch.includes('CIVIL'))) return true;
-      if (b === 'ME' && (sb === 'ME' || sBranch.includes('MECHANICAL'))) return true;
+
+      if (b === 'ME' && (sb === 'ME' || (sBranch.includes('MECHANICAL') && !sBranch.includes('SMART')))) return true;
+      if (b === 'MSME' && (sBranch.includes('SMART') || sBranch.includes('MANUFACTURING'))) return true;
+      if (b === 'ROBOT' && (sBranch.includes('ROBOT') && !sBranch.includes('BIOMEDICAL'))) return true;
+      if (b === 'CE' && (sb === 'CE' || (sBranch.includes('CIVIL') && !sBranch.includes('COMPUTER')))) return true;
+      if (b === 'CECA' && (sBranch.includes('CIVIL') && sBranch.includes('COMPUTER'))) return true;
+      if (b === 'PETRO' && sBranch.includes('PETRO')) return true;
+      if (b === 'CHELT' && sBranch.includes('LEATHER')) return true;
+      if (b === 'CHEPP' && (sBranch.includes('PLASTIC') || sBranch.includes('POLYMER'))) return true;
+      if (b === 'WM' && sBranch.includes('WASTE')) return true;
+      if (b === 'AERO' && sBranch.includes('AERO')) return true;
+      if (b === 'BMRE' && (sBranch.includes('BIOMEDICAL') || (sBranch.includes('BIO') && sBranch.includes('ROBOT')))) return true;
+      if (b === 'MCT' && (sb === 'MCT' || sBranch.includes('MECHATRONIC'))) return true;
+      if (b === 'MIN' && (sb === 'MIN' || sBranch.includes('MINING'))) return true;
+      if (b === 'CHE' && (sb === 'CHE' || (sBranch.includes('CHEMICAL') && !sBranch.includes('LEATHER') && !sBranch.includes('PLASTIC') && !sBranch.includes('POLYMER')))) return true;
+      if (b === 'FTS' && (sBranch.includes('FIRE') || sBranch.includes('SAFETY'))) return true;
+      if (b === 'FPP' && (sBranch.includes('FOOD') && sBranch.includes('PRESERVATION'))) return true;
+      if (b === 'FTM' && (sBranch.includes('FOOD') && sBranch.includes('MANAGEMENT'))) return true;
+
       return false;
     });
 
@@ -121,6 +160,56 @@ export default function AdminMentorship({ flash }) {
 
     const nextSeq = String(maxSeq + 1).padStart(2, '0');
     return `26ACB${b}${nextSeq}`;
+  };
+
+  // Helper to auto-detect branch code from roll number or text
+  const detectBranchFromRoll = (rollText = '') => {
+    const raw = (rollText || '').toUpperCase();
+    if (!raw) return null;
+    
+    const priorityChecks = [
+      { code: 'CSIOTBC', test: /CSIOTBC|BLOCK\s*CHAIN|IOT.*CYBER/i },
+      { code: 'CSAIML', test: /CSAIML|AI\s*&?\s*ML|AIML/i },
+      { code: 'ECEACT', test: /ECEACT|ADV.*COMM/i },
+      { code: 'ECVLSI', test: /ECVLSI|VLSI/i },
+      { code: 'CHELT', test: /CHELT|LEATHER/i },
+      { code: 'CHEPP', test: /CHEPP|PLASTIC|POLYMER/i },
+      { code: 'BMRE', test: /BMRE|BIOMED/i },
+      { code: 'MSME', test: /MSME|SMART/i },
+      { code: 'CECA', test: /CECA|CIVIL.*COMP/i },
+      { code: 'ROBOT', test: /ROBOT/i },
+      { code: 'PETRO', test: /PETRO/i },
+      { code: 'CSCS', test: /CSCS|CYBER/i },
+      { code: 'CSDS', test: /CSDS|DATA\s*SC/i },
+      { code: 'CSAI', test: /CSAI|CSE.*AI\b/i },
+      { code: 'CSIOT', test: /CSIOT|IOT/i },
+      { code: 'CSNET', test: /CSNET|NETWORK/i },
+      { code: 'ANIM', test: /ANIM|GRAPHIC/i },
+      { code: 'AERO', test: /AERO/i },
+      { code: 'EEE', test: /EEE|ELECTRICAL.*ELECTRONIC/i },
+      { code: 'ECE', test: /ECE|ELECTRONIC/i },
+      { code: 'EIE', test: /EIE|INSTRUMENT/i },
+      { code: 'MCT', test: /MCT|MECHATRONIC/i },
+      { code: 'MIN', test: /MIN|MINING/i },
+      { code: 'FTS', test: /FTS|FIRE/i },
+      { code: 'FPP', test: /FPP|FOOD.*PRES/i },
+      { code: 'FTM', test: /FTM|FOOD.*MGT|FOOD.*MAN/i },
+      { code: 'CHE', test: /CHE|CHEMICAL/i },
+      { code: 'CSE', test: /CSE|COMP/i },
+      { code: 'EE', test: /EE\b|ELECTRICAL/i },
+      { code: 'CE', test: /CE\b|CIVIL/i },
+      { code: 'ME', test: /ME\b|MECH/i },
+      { code: 'IT', test: /IT\b|INFO/i },
+      { code: 'MC', test: /\bMC\b|MATH/i },
+      { code: 'WM', test: /\bWM\b|WASTE/i }
+    ];
+
+    for (const item of priorityChecks) {
+      if (item.test.test(raw)) {
+        return item.code;
+      }
+    }
+    return null;
   };
 
   const getNextMentorUsername = (branch = 'CSE') => {
@@ -506,6 +595,8 @@ Team Apna College Bihar
       // Student ID: roll number if provided, otherwise phone number
       const finalId = cleanRoll || cleanPhone;
       const finalPassword = (studentForm.password || '').trim() || autoPass;
+      const branchObj = ALL_BEU_BRANCHES.find(b => b.code === branch);
+      const branchFullName = studentForm.branch || (branchObj ? branchObj.name : branch);
 
       const matchedMentor = mentors.find(m => (m.branch || '').toUpperCase() === branch) || mentors[0];
 
@@ -517,13 +608,13 @@ Team Apna College Bihar
         name: studentForm.name.trim(),
         whatsapp: (studentForm.whatsapp || '').trim(),
         college: (studentForm.college || '').trim() || 'Bihar Engineering University College',
-        branch: studentForm.branch.trim() || branch,
+        branch: branchFullName,
         branchCode: branch,
         roll: (studentForm.roll || '').trim() || finalId,
         password: finalPassword,
         goals: (studentForm.goals || '').trim() || 'Padhai me guidance (Achha CGPA kaise layein)',
         codingExperience: studentForm.codingExperience || 'Nahi, main bilkul beginner hoon.',
-        mentorExpectations: (studentForm.mentorExpectations || '').trim() || 'Study guidance',
+        mentorExpectations: (studentForm.mentorExpectations || '').trim() || 'Exam guidance and study roadmap',
         assignedMentorId: studentForm.assignedMentorId || (matchedMentor ? matchedMentor.id : null),
         status: 'Active'
       };
@@ -611,7 +702,11 @@ Team Apna College Bihar
       (s.whatsapp || '').includes(q) ||
       (s.email || '').toLowerCase().includes(q);
 
-    const matchesBranch = selectedBranch === 'ALL' || s.branchCode === selectedBranch;
+    const matchesBranch = selectedBranch === 'ALL' || 
+      s.branchCode === selectedBranch || 
+      (s.branch || '').toUpperCase() === selectedBranch ||
+      (s.branch || '').toUpperCase().includes(selectedBranch) ||
+      (s.password || '').toUpperCase().includes(`26ACB${selectedBranch}`);
     const matchesCollege = selectedCollege === 'ALL' || s.college === selectedCollege;
 
     return matchesQuery && matchesBranch && matchesCollege;
@@ -1087,13 +1182,16 @@ Team Apna College Bihar
               onChange={(e) => setSelectedBranch(e.target.value)}
               className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
             >
-              <option value="ALL">All Branches</option>
-              <option value="CSE">Computer Science & Engg. (CSE)</option>
-              <option value="ECE">Electronics & Communication (ECE)</option>
-              <option value="EEE">Electrical & Electronics (EEE)</option>
-              <option value="EE">Electrical Engg. (EE)</option>
-              <option value="CE">Civil Engineering (CE)</option>
-              <option value="ME">Mechanical Engineering (ME)</option>
+              <option value="ALL">All Branches ({ALL_BEU_BRANCHES.length} BEU Branches)</option>
+              {BEU_OFFICIAL_BRANCHES.map(group => (
+                <optgroup key={group.group} label={group.groupName}>
+                  {group.branches.map(b => (
+                    <option key={b.code} value={b.code}>
+                      {b.code} - {b.name}
+                    </option>
+                  ))}
+                </optgroup>
+              ))}
             </select>
           </div>
 
@@ -1308,15 +1406,26 @@ Team Apna College Bihar
                 <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Branch Domain</label>
                 <select 
                   value={mentorForm.branch}
-                  onChange={(e) => setMentorForm({ ...mentorForm, branch: e.target.value })}
+                  onChange={(e) => {
+                    const newB = e.target.value;
+                    const newAutoUser = getNextMentorUsername(newB);
+                    setMentorForm({
+                      ...mentorForm,
+                      branch: newB,
+                      username: (!mentorForm.username || mentorForm.username.startsWith('ACBM')) ? newAutoUser : mentorForm.username
+                    });
+                  }}
                   className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
                 >
-                  <option value="CSE">Computer Science (CSE)</option>
-                  <option value="ECE">Electronics (ECE)</option>
-                  <option value="EEE">Electrical & Electronics (EEE)</option>
-                  <option value="EE">Electrical (EE)</option>
-                  <option value="CE">Civil Engineering (CE)</option>
-                  <option value="ME">Mechanical Engineering (ME)</option>
+                  {BEU_OFFICIAL_BRANCHES.map(group => (
+                    <optgroup key={group.group} label={group.groupName}>
+                      {group.branches.map(b => (
+                        <option key={b.code} value={b.code}>
+                          {b.code} - {b.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
                 </select>
               </div>
 
@@ -1515,22 +1624,23 @@ Team Apna College Bihar
                     onChange={(e) => {
                       const newRoll = e.target.value;
                       const cleanId = newRoll.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                      
                       // Auto-detect branch from roll
-                      let detectedBranch = studentForm.branchCode;
-                      if (cleanId.includes('CSE')) detectedBranch = 'CSE';
-                      else if (cleanId.includes('ECE')) detectedBranch = 'ECE';
-                      else if (cleanId.includes('EEE')) detectedBranch = 'EEE';
-                      else if (cleanId.includes('EE')) detectedBranch = 'EE';
-                      else if (cleanId.includes('CE')) detectedBranch = 'CE';
-                      else if (cleanId.includes('ME')) detectedBranch = 'ME';
+                      const detected = detectBranchFromRoll(newRoll);
+                      const targetBranch = detected || studentForm.branchCode || 'CSE';
+                      const targetObj = ALL_BEU_BRANCHES.find(b => b.code === targetBranch);
+                      const targetBranchName = targetObj ? targetObj.name : studentForm.branch;
 
-                      const nextPass = detectedBranch !== studentForm.branchCode ? getNextStudentPassword(detectedBranch) : (studentForm.password || getNextStudentPassword(studentForm.branchCode));
+                      const nextPass = (detected && detected !== studentForm.branchCode) 
+                        ? getNextStudentPassword(targetBranch) 
+                        : (studentForm.password || getNextStudentPassword(targetBranch));
 
                       setStudentForm(prev => ({
                         ...prev,
                         roll: newRoll,
                         studentId: cleanId || prev.studentId,
-                        branchCode: detectedBranch,
+                        branchCode: targetBranch,
+                        branch: targetBranchName,
                         password: nextPass
                       }));
                     }}
@@ -1603,22 +1713,26 @@ Team Apna College Bihar
                     value={studentForm.branchCode}
                     onChange={(e) => {
                       const newBranch = e.target.value;
+                      const branchObj = ALL_BEU_BRANCHES.find(b => b.code === newBranch);
                       const nextPass = getNextStudentPassword(newBranch);
                       setStudentForm(prev => ({
                         ...prev,
                         branchCode: newBranch,
-                        branch: newBranch === 'CSE' ? 'Computer Science & Engineering' : newBranch === 'ECE' ? 'Electronics & Communication' : newBranch === 'EEE' ? 'Electrical & Electronics' : newBranch === 'EE' ? 'Electrical Engineering' : newBranch === 'CE' ? 'Civil Engineering' : newBranch === 'ME' ? 'Mechanical Engineering' : newBranch,
+                        branch: branchObj ? branchObj.name : newBranch,
                         password: nextPass
                       }));
                     }}
                     className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600 font-bold"
                   >
-                    <option value="CSE">CSE (Computer Science)</option>
-                    <option value="ECE">ECE (Electronics)</option>
-                    <option value="EEE">EEE (Electrical & Electronics)</option>
-                    <option value="EE">EE (Electrical)</option>
-                    <option value="CE">Civil Engineering</option>
-                    <option value="ME">Mechanical Engineering</option>
+                    {BEU_OFFICIAL_BRANCHES.map(group => (
+                      <optgroup key={group.group} label={group.groupName}>
+                        {group.branches.map(b => (
+                          <option key={b.code} value={b.code}>
+                            {b.code} - {b.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))}
                   </select>
                 </div>
                 <div>

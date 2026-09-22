@@ -3,6 +3,66 @@
 // Synced from Official Google Form: "Free Mentorship for 1st Year Students (BEU - Batch 2026-2030)"
 // ═══════════════════════════════════════════════════════════════════════════
 
+// Official Bihar Engineering University (BEU) 34 B.Tech Branches (Group A, Group B, Group C)
+export const BEU_OFFICIAL_BRANCHES = [
+  {
+    group: 'Group A',
+    groupName: 'Group A: Computer Science, IT & Computing Disciplines (11 Branches)',
+    branches: [
+      { code: 'CSE', name: 'Computer Science & Engineering', short: 'CSE' },
+      { code: 'CSAI', name: 'Computer Science & Engineering (AI)', short: 'CSE (AI)' },
+      { code: 'CSCS', name: 'Computer Science & Engineering (Cyber Security)', short: 'CSE (Cyber Security)' },
+      { code: 'CSDS', name: 'Computer Science & Engineering (Data Science)', short: 'CSE (Data Science)' },
+      { code: 'CSAIML', name: 'Computer Science & Engineering(AI & ML)', short: 'CSE (AI & ML)' },
+      { code: 'CSIOT', name: 'Computer Science & Engineering (IoT)', short: 'CSE (IoT)' },
+      { code: 'CSIOTBC', name: 'Computer Science & Engg (IOT & Cyber Security including Block Chain Technology)', short: 'CSE (IoT, Cyber & Blockchain)' },
+      { code: 'CSNET', name: 'Computer Science & Engineering (Networks)', short: 'CSE (Networks)' },
+      { code: 'IT', name: 'Information Technology', short: 'IT' },
+      { code: 'ANIM', name: '3-D Animation & Graphics', short: '3-D Animation & Graphics' },
+      { code: 'MC', name: 'Mathematics & Computing', short: 'Mathematics & Computing' }
+    ]
+  },
+  {
+    group: 'Group B',
+    groupName: 'Group B: Electrical, Electronics & Instrumentation (6 Branches)',
+    branches: [
+      { code: 'EE', name: 'Electrical Engineering', short: 'Electrical (EE)' },
+      { code: 'EEE', name: 'Electrical and Electronics Engineering', short: 'EEE' },
+      { code: 'ECE', name: 'Electronics and Communication Engineering', short: 'ECE' },
+      { code: 'ECEACT', name: 'Electronics and Communication Engineering(Advance Communication Technology)', short: 'ECE (Advance Comm. Tech)' },
+      { code: 'ECVLSI', name: 'Electronics Engineering(VLSI Design & Technology)', short: 'Electronics (VLSI Design)' },
+      { code: 'EIE', name: 'Electronics and Instrumentation Engineering', short: 'Electronics & Instrumentation' }
+    ]
+  },
+  {
+    group: 'Group C',
+    groupName: 'Group C: Mechanical, Civil, Chemical, Robotics & Allied (17 Branches)',
+    branches: [
+      { code: 'ME', name: 'Mechanical Engineering', short: 'Mechanical (ME)' },
+      { code: 'MSME', name: 'Mechanical and Smart Manufacturing Engineering', short: 'Mech. & Smart Manufacturing' },
+      { code: 'ROBOT', name: 'Robotics and Automation', short: 'Robotics and Automation' },
+      { code: 'CE', name: 'Civil Engineering', short: 'Civil Engineering (CE)' },
+      { code: 'CECA', name: 'Civil Engineering with Computer Applications', short: 'Civil with Computer Apps' },
+      { code: 'PETRO', name: 'Petrochemical Engineering', short: 'Petrochemical Engineering' },
+      { code: 'CHELT', name: 'Chemical Engineering (Leather Technology)', short: 'Chemical (Leather Tech)' },
+      { code: 'CHEPP', name: 'Chemical Engineering (Plastic & Polymer)', short: 'Chemical (Plastic & Polymer)' },
+      { code: 'WM', name: 'Waste Management', short: 'Waste Management' },
+      { code: 'AERO', name: 'Aeronautical Engineering', short: 'Aeronautical Engineering' },
+      { code: 'BMRE', name: 'Biomedical & Robotics Engineering', short: 'Biomedical & Robotics' },
+      { code: 'MCT', name: 'Mechatronics Engineering', short: 'Mechatronics Engineering' },
+      { code: 'MIN', name: 'Mining Engineering', short: 'Mining Engineering' },
+      { code: 'CHE', name: 'Chemical Engineering', short: 'Chemical Engineering' },
+      { code: 'FTS', name: 'Fire Technology and Safety', short: 'Fire Technology and Safety' },
+      { code: 'FPP', name: 'Food Processing and Preservation', short: 'Food Processing & Preservation' },
+      { code: 'FTM', name: 'Food Technology and Management', short: 'Food Technology & Management' }
+    ]
+  }
+];
+
+export const ALL_BEU_BRANCHES = BEU_OFFICIAL_BRANCHES.flatMap(g => 
+  g.branches.map(b => ({ ...b, group: g.group, groupName: g.groupName }))
+);
+
 // Registered BEU Mentors
 export const INITIAL_MENTORS = [
   {
