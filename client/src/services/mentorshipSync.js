@@ -1,6 +1,6 @@
 import { db } from '../firebase';
 import { doc, getDoc, setDoc, onSnapshot } from 'firebase/firestore';
-import { saveEnrolledStudents, saveMentorsList } from '../data/mentorshipData';
+import { saveEnrolledStudents, saveMentorsList, INITIAL_ENROLLED_STUDENTS } from '../data/mentorshipData';
 
 // Fetch mentorship data from Firestore or backend server API
 export async function fetchCloudMentorshipData() {
@@ -42,8 +42,15 @@ export async function fetchCloudMentorshipData() {
     }
   }
 
-  // If cloud data was found, cache in localStorage
+  // Ensure any newly added INITIAL_ENROLLED_STUDENTS are merged in
   if (cloudStudents) {
+    const existingIds = new Set(cloudStudents.map(s => s.id));
+    const missing = INITIAL_ENROLLED_STUDENTS.filter(s => !existingIds.has(s.id));
+    if (missing.length > 0) {
+      cloudStudents = [...cloudStudents, ...missing];
+      // Sync back to cloud in background
+      saveCloudMentorshipData(cloudStudents, cloudMentors);
+    }
     saveEnrolledStudents(cloudStudents);
   }
   if (cloudMentors) {
@@ -93,9 +100,12 @@ export function subscribeMentorshipUpdates(onUpdate) {
       if (snap.exists()) {
         const data = snap.data();
         if (Array.isArray(data.students) && data.students.length > 0) {
-          saveEnrolledStudents(data.students);
+          const existingIds = new Set(data.students.map(s => s.id));
+          const missing = INITIAL_ENROLLED_STUDENTS.filter(s => !existingIds.has(s.id));
+          const mergedStudents = missing.length > 0 ? [...data.students, ...missing] : data.students;
+          saveEnrolledStudents(mergedStudents);
           if (Array.isArray(data.mentors)) saveMentorsList(data.mentors);
-          if (onUpdate) onUpdate({ students: data.students, mentors: data.mentors });
+          if (onUpdate) onUpdate({ students: mergedStudents, mentors: data.mentors });
         }
       }
     }, (err) => {
