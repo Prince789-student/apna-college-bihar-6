@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BEU Mentorship - WhatsApp Group Invite Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #25D366;
+      --primary-dark: #128C7E;
+      --bg: #0b141a;
+      --card-bg: #111b21;
+      --card-border: #222e35;
+      --text: #e9edef;
+      --text-muted: #8696a0;
+      --accent: #00a884;
+      --link-color: #53bdeb;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 30px 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(37, 211, 102, 0.15);
+      color: var(--primary);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      border: 1px solid rgba(37, 211, 102, 0.3);
+    }
+    h1 {
+      font-size: 2.1rem;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+    .group-banner {
+      background: linear-gradient(135deg, rgba(37, 211, 102, 0.12), rgba(18, 140, 126, 0.25));
+      border: 1px solid rgba(37, 211, 102, 0.4);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 25px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+    .group-info h2 {
+      color: #fff;
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .group-link-display {
+      background: rgba(0,0,0,0.3);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-family: monospace;
+      color: var(--link-color);
+      font-size: 0.95rem;
+      word-break: break-all;
+    }
+    .action-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card h3 {
+      color: var(--primary);
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      margin-bottom: 16px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 18px;
+      border-radius: 9px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s all ease;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: #0b141a;
+    }
+    .btn-primary:hover {
+      background: #1ebc59;
+      transform: translateY(-2px);
+    }
+    .btn-accent {
+      background: #00a884;
+      color: white;
+    }
+    .btn-accent:hover {
+      background: #009373;
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--card-border);
+    }
+    .btn-outline:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: var(--text-muted);
+    }
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      border-radius: 6px;
+    }
+    .table-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .table-header {
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.01);
+    }
+    .table-header h3 {
+      font-size: 1.2rem;
+      color: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th, td {
+      padding: 13px 18px;
+      font-size: 0.92rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+    th {
+      background: rgba(255,255,255,0.02);
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 0.5px;
+    }
+    tr:hover {
+      background: rgba(255,255,255,0.02);
+    }
+    .tag-branch {
+      display: inline-block;
+      padding: 2px 8px;
+      background: rgba(0,168,132,0.15);
+      color: var(--accent);
+      border-radius: 5px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+    .tag-college {
+      display: inline-block;
+      padding: 2px 8px;
+      background: rgba(83,189,235,0.15);
+      color: var(--link-color);
+      border-radius: 5px;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--accent);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      display: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="badge">BEU Mentorship (2026 - 2030)</div>
+    <h1>WhatsApp Group Invite Dashboard</h1>
+    <p class="subtitle">Total 32 students ke contacts update kar diye gaye hain!</p>
+  </header>
+
+  <div class="group-banner">
+    <div class="group-info">
+      <h2>🎉 WhatsApp Group Ready!</h2>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 6px;">Invite Link:</p>
+      <div class="group-link-display">https://chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg</div>
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button onclick="copyGroupLink()" class="btn btn-primary">📋 Copy Link</button>
+      <button onclick="copyInviteMessage()" class="btn btn-outline">📝 Copy Message</button>
+    </div>
+  </div>
+
+  <div class="action-cards">
+    <div class="card">
+      <div>
+        <h3>📇 Updated Contacts (.VCF)</h3>
+        <p>Sabhi 32 students ab <strong>"BEU - [Naam] (College - Branch)"</strong> format me hain. Phone me tap karke save karein.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <a href="New_11_Contacts.vcf" download="New_11_Contacts.vcf" class="btn btn-primary">
+          ✨ Download Only New 11 Contacts (.VCF)
+        </a>
+        <a href="BEU_Mentorship_Contacts.vcf" download="BEU_Mentorship_Contacts.vcf" class="btn btn-outline">
+          📥 Download All 32 Contacts (.VCF)
+        </a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h3>📨 1-Click Email to All 32</h3>
+        <p>Sabhi 32 students ke Gmail par 1-click me invite link bhejein (BCC me sabhi emails rahenge).</p>
+      </div>
+      <a href="mailto:?bcc=shivamraj8092@gmail.com,nandanipreyashi9@gmail.com,himanshukumarsingh9931@gmail.com,kritianand01012008@gmail.com,harshkumar.sahuka25@gmail.com,adityaraushan943094@gmail.com,rajpalkr586@gmail.com,kumar.aryan22209@gmail.com,ak5976987@gmail.com,sanjana.7354@gmail.com,akritisarraf721@gmail.com,patelji919961@gmail.com,kishankrstroyai@gmail.com,princyraj271@gmail.com,riyaisua1@gmail.com,sandhyarani892008@gmail.com,nandanisubhanpur@gmail.com,anubhutik37@gmail.com,golujaykar4@gmail.com,igodayush@gmail.com,an6388172@gmail.com,khushnuma0575@gmail.com,saziyakhanam90@gmail.com,krsna72111@gmail.com,ramveerrajprajapati@gmail.com,parikshitraj3105@gmail.com,kumari.rupam.rk0@gmail.com,ayushsangamb@gmail.com,kshashiranjan1234@gmail.com,classmateclg78@gmail.com,tanyasakshi8460@gmail.com,jhas7936@gmail.com&subject=BEU%20Mentorship%20Program%20-%20Official%20WhatsApp%20Group%20Link&body=Dear%20Students%2C%0A%0AAapne%20BEU%201st%20Year%20Mentorship%20Program%20%28Batch%202026-2030%29%20ke%20liye%20register%20kiya%20tha.%0A%0AOfficial%20Mentorship%20updates%2C%20guidance%2C%20notes%20aur%20classes%20ke%20liye%20niche%20diye%20gaye%20WhatsApp%20group%20ko%20join%20karein%3A%0A%0A%F0%9F%91%89%20Group%20Link%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg%0A%0ADhanyawad%21" class="btn btn-accent">
+        📧 Open Gmail with All 32 Emails
+      </a>
+    </div>
+
+    <div class="card">
+      <div>
+        <h3>📋 Copy All 32 Emails</h3>
+        <p>Agar aap manually Gmail app se bhejna chahte hain, to yahan se sabhi 32 emails ek sath copy kar sakte hain.</p>
+      </div>
+      <button onclick="copyAllEmails()" class="btn btn-outline">
+        📋 Copy Emails List
+      </button>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <div class="table-header">
+      <h3>Updated Contacts List (32 Total)</h3>
+      <span class="tag-branch">BEU Mentorship 2026</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Saved Contact Name in Phone</th>
+          <th>College</th>
+          <th>Branch</th>
+          <th>1-Click WhatsApp Invite</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>BEU - Rohit kumar (Gaya - EEE)</strong></td>
+          <td><span class="tag-college">Gaya</span></td>
+          <td><span class="tag-branch">EEE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/916206404658?text=Namaste%20Rohit%20kumar%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>BEU - Nandani Preyashi (Bakhtiyarpur - EEE)</strong></td>
+          <td><span class="tag-college">Bakhtiyarpur</span></td>
+          <td><span class="tag-branch">EEE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919241068744?text=Namaste%20Nandani%20Preyashi%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>BEU - Himanshu Kumar (Gaya - CSE)</strong></td>
+          <td><span class="tag-college">Gaya</span></td>
+          <td><span class="tag-branch">CSE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/917462982629?text=Namaste%20Himanshu%20Kumar%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>BEU - KRITI ANAND (Gaya - EEE)</strong></td>
+          <td><span class="tag-college">Gaya</span></td>
+          <td><span class="tag-branch">EEE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919934240606?text=Namaste%20KRITI%20ANAND%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>BEU - HARSH KUMAR SHARMA (Gaya - M&C)</strong></td>
+          <td><span class="tag-college">Gaya</span></td>
+          <td><span class="tag-branch">M&C</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919570437725?text=Namaste%20HARSH%20KUMAR%20SHARMA%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>BEU - Aditya Raushan (Gaya - CSE)</strong></td>
+          <td><span class="tag-college">Gaya</span></td>
+          <td><span class="tag-branch">CSE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/917632941081?text=Namaste%20Aditya%20Raushan%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>BEU - Deepak Kumar (Sheikhpura - ECE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">ECE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919940050839?text=Namaste%20Deepak%20Kumar%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>BEU - Aryan Kumar (Sheikhpura - CSE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">CSE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/918368352928?text=Namaste%20Aryan%20Kumar%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><strong>BEU - Abhishek kumar (Sheikhpura - CSE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">CSE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919798773944?text=Namaste%20Abhishek%20kumar%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><strong>BEU - Sanjana Swaraj (Sheikhpura - CSE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">CSE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/918271901768?text=Namaste%20Sanjana%20Swaraj%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><strong>BEU - Akriti Sarraf (Bakhtiyarpur - EEE)</strong></td>
+          <td><span class="tag-college">Bakhtiyarpur</span></td>
+          <td><span class="tag-branch">EEE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919288180662?text=Namaste%20Akriti%20Sarraf%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><strong>BEU - Patel Ji (Gopalganj - CSE-IoT/Cyber)</strong></td>
+          <td><span class="tag-college">Gopalganj</span></td>
+          <td><span class="tag-branch">CSE-IoT/Cyber</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919199612480?text=Namaste%20Patel%20Ji%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td><strong>BEU - Kishan kumar (Jehanabad - EE)</strong></td>
+          <td><span class="tag-college">Jehanabad</span></td>
+          <td><span class="tag-branch">EE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/916206324393?text=Namaste%20Kishan%20kumar%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><strong>BEU - Princy Raj (West Champaran - CSE-Cyber)</strong></td>
+          <td><span class="tag-college">West Champaran</span></td>
+          <td><span class="tag-branch">CSE-Cyber</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919931634898?text=Namaste%20Princy%20Raj%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><strong>BEU - Riya Kumari (Sheikhpura - ECE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">ECE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919142899937?text=Namaste%20Riya%20Kumari%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td><strong>BEU - SANDHYA RANI (Sheikhpura - ECE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">ECE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919942367962?text=Namaste%20SANDHYA%20RANI%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td><strong>BEU - Nandani kumari (Sheikhpura - ECE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">ECE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919955566243?text=Namaste%20Nandani%20kumari%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td><strong>BEU - Anubhuti Kumari (Sheikhpura - ECE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">ECE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/918709323241?text=Namaste%20Anubhuti%20Kumari%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td><strong>BEU - Golu Raj (Sheikhpura - CSE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">CSE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919162722680?text=Namaste%20Golu%20Raj%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td><strong>BEU - Ayush Kumar (Saharsa - CSE-DS)</strong></td>
+          <td><span class="tag-college">Saharsa</span></td>
+          <td><span class="tag-branch">CSE-DS</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/918252055886?text=Namaste%20Ayush%20Kumar%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>21</td>
+          <td><strong>BEU - Nishu Kumari (Bakhtiyarpur - EEE)</strong></td>
+          <td><span class="tag-college">Bakhtiyarpur</span></td>
+          <td><span class="tag-branch">EEE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919241635946?text=Namaste%20Nishu%20Kumari%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>22</td>
+          <td><strong>BEU - Khushnuma perween (Sheikhpura - ECE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">ECE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/916200613246?text=Namaste%20Khushnuma%20perween%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>23</td>
+          <td><strong>BEU - Saziya Khanam (Sheikhpura - CSE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">CSE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/918521027482?text=Namaste%20Saziya%20Khanam%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>24</td>
+          <td><strong>BEU - Krishna Raj (Gaya - CSE)</strong></td>
+          <td><span class="tag-college">Gaya</span></td>
+          <td><span class="tag-branch">CSE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919905546052?text=Namaste%20Krishna%20Raj%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>25</td>
+          <td><strong>BEU - Ranvir kumar (Jehanabad - CE)</strong></td>
+          <td><span class="tag-college">Jehanabad</span></td>
+          <td><span class="tag-branch">CE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/917079212386?text=Namaste%20Ranvir%20kumar%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>26</td>
+          <td><strong>BEU - Raushan raj (Sheikhpura - CSE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">CSE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919006521022?text=Namaste%20Raushan%20raj%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>27</td>
+          <td><strong>BEU - Rupam Kumari (Bhagalpur - ECE)</strong></td>
+          <td><span class="tag-college">Bhagalpur</span></td>
+          <td><span class="tag-branch">ECE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919229509645?text=Namaste%20Rupam%20Kumari%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>28</td>
+          <td><strong>BEU - Ayush Singh (Sheikhpura - ECE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">ECE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/918235051716?text=Namaste%20Ayush%20Singh%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>29</td>
+          <td><strong>BEU - Ritik Raushan (Sheikhpura - ECE)</strong></td>
+          <td><span class="tag-college">Sheikhpura</span></td>
+          <td><span class="tag-branch">ECE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/918540814461?text=Namaste%20Ritik%20Raushan%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>30</td>
+          <td><strong>BEU - Dhanraj (Vaishali - CSE-IoT)</strong></td>
+          <td><span class="tag-college">Vaishali</span></td>
+          <td><span class="tag-branch">CSE-IoT</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/919264568693?text=Namaste%20Dhanraj%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>31</td>
+          <td><strong>BEU - TANYA SAKSHI (Chandi - CSE)</strong></td>
+          <td><span class="tag-college">Chandi</span></td>
+          <td><span class="tag-branch">CSE</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/916287040915?text=Namaste%20TANYA%20SAKSHI%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+        <tr>
+          <td>32</td>
+          <td><strong>BEU - Sudhanshu Kumar Jha (Gopalganj - CSE-AI)</strong></td>
+          <td><span class="tag-college">Gopalganj</span></td>
+          <td><span class="tag-branch">CSE-AI</span></td>
+          <td><a class="btn btn-accent btn-sm" target="_blank" href="https://wa.me/916203592124?text=Namaste%20Sudhanshu%20Kumar%20Jha%2C%20BEU%20Mentorship%20Program%20ka%20official%20WhatsApp%20group%20join%20karne%20ke%20liye%20is%20link%20par%20click%20karein%3A%20https%3A//chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg">💬 Invite</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="toast" class="toast">Copied!</div>
+
+<script>
+  const emails = [
+    "shivamraj8092@gmail.com",
+    "nandanipreyashi9@gmail.com",
+    "himanshukumarsingh9931@gmail.com",
+    "kritianand01012008@gmail.com",
+    "harshkumar.sahuka25@gmail.com",
+    "adityaraushan943094@gmail.com",
+    "rajpalkr586@gmail.com",
+    "kumar.aryan22209@gmail.com",
+    "ak5976987@gmail.com",
+    "sanjana.7354@gmail.com",
+    "akritisarraf721@gmail.com",
+    "patelji919961@gmail.com",
+    "kishankrstroyai@gmail.com",
+    "princyraj271@gmail.com",
+    "riyaisua1@gmail.com",
+    "sandhyarani892008@gmail.com",
+    "nandanisubhanpur@gmail.com",
+    "anubhutik37@gmail.com",
+    "golujaykar4@gmail.com",
+    "igodayush@gmail.com",
+    "an6388172@gmail.com",
+    "khushnuma0575@gmail.com",
+    "saziyakhanam90@gmail.com",
+    "krsna72111@gmail.com",
+    "ramveerrajprajapati@gmail.com",
+    "parikshitraj3105@gmail.com",
+    "kumari.rupam.rk0@gmail.com",
+    "ayushsangamb@gmail.com",
+    "kshashiranjan1234@gmail.com",
+    "classmateclg78@gmail.com",
+    "tanyasakshi8460@gmail.com",
+    "jhas7936@gmail.com"
+  ];
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.innerText = msg;
+    toast.style.display = 'block';
+    setTimeout(() => {
+      toast.style.display = 'none';
+    }, 3000);
+  }
+
+  function copyGroupLink() {
+    navigator.clipboard.writeText("https://chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg").then(() => {
+      showToast("WhatsApp Group Link copied!");
+    });
+  }
+
+  function copyInviteMessage() {
+    const msg = `Dear Student,\n\nAapne BEU 1st Year Mentorship Program (Batch 2026-2030) ke liye register kiya tha.\n\nOfficial updates, study material, guidance aur session links ke liye kripya official WhatsApp group join karein:\n\n👉 Join Link: https://chat.whatsapp.com/KCfW3b9B00XFzpi6MrP6Wg\n\nDhanyawad!`;
+    navigator.clipboard.writeText(msg).then(() => {
+      showToast("Ready invite message copied!");
+    });
+  }
+
+  function copyAllEmails() {
+    navigator.clipboard.writeText(emails.join(", ")).then(() => {
+      showToast("Saare 32 emails copy ho gaye!");
+    });
+  }
+</script>
+
+</body>
+</html>

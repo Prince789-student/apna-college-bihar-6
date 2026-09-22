@@ -553,24 +553,63 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "assignedMentorId": "mentor-cse-subhash",
     "status": "Active",
     "studentId": "26IOT27"
+  },
+  {
+    "id": "26CS37",
+    "timestamp": "22/09/2026 10:40:50",
+    "email": "tanyasakshi8460@gmail.com",
+    "name": "TANYA SAKSHI",
+    "whatsapp": "6287040915",
+    "college": "Nalanda College of Engineering (NCE), Chandi, Nalanda",
+    "branch": "Computer Science & Engineering",
+    "branchCode": "CSE",
+    "roll": "26CS37",
+    "password": "26ACBCSE12",
+    "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna",
+    "codingExperience": "Nahi, main bilkul beginner hoon.",
+    "mentorExpectations": "First of all I need a brief intro about engineering, how to score good cgpa",
+    "assignedMentorId": "mentor-cse-deepak",
+    "status": "Active",
+    "studentId": "26CS37"
+  },
+  {
+    "id": "26CSAI53",
+    "timestamp": "22/09/2026 10:44:29",
+    "email": "jhas7936@gmail.com",
+    "name": "Sudhanshu Kumar Jha",
+    "whatsapp": "6203592124",
+    "college": "Government Engineering College, Gopalganj",
+    "branch": "Computer Science & Engineering (AI)",
+    "branchCode": "CSAI",
+    "roll": "26-CSAI-53",
+    "password": "26ACBCSAI01",
+    "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna",
+    "codingExperience": "Nahi, main bilkul beginner hoon.",
+    "mentorExpectations": "Skills",
+    "assignedMentorId": "mentor-cse-subhash",
+    "status": "Active",
+    "studentId": "26CSAI53"
   }
 ];
 
 // Helper to get students (localStorage persistent)
-// v5 key = fresh start: removes Kishan, Riya, Harshit/Himanshu (Gaya CSE), updates branch passwords & phone username
 export function getEnrolledStudents() {
   try {
     // Purge old keys once
     if (typeof window !== 'undefined' && window.localStorage) {
-      ['beu_enrolled_students', 'beu_enrolled_students_v2', 'beu_enrolled_students_v3', 'beu_enrolled_students_v4', 'beu_enrolled_students_v5', 'beu_enrolled_students_v6', 'beu_enrolled_students_v7'].forEach(k => {
+      ['beu_enrolled_students', 'beu_enrolled_students_v2', 'beu_enrolled_students_v3', 'beu_enrolled_students_v4', 'beu_enrolled_students_v5', 'beu_enrolled_students_v6', 'beu_enrolled_students_v7', 'beu_enrolled_students_v8'].forEach(k => {
         try { localStorage.removeItem(k); } catch(e) {}
       });
     }
-    const saved = localStorage.getItem('beu_enrolled_students_v8');
+    const saved = localStorage.getItem('beu_enrolled_students_v9');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return parsed.map(s => {
+        // Ensure any newly added INITIAL_ENROLLED_STUDENTS exist
+        const existingIds = new Set(parsed.map(s => s.id));
+        const missing = INITIAL_ENROLLED_STUDENTS.filter(s => !existingIds.has(s.id));
+        const combined = [...parsed, ...missing];
+        return combined.map(s => {
           let assigned = s.assignedMentorId;
           if (assigned === 'mentor-cse-1789726326697' || (assigned && assigned.toLowerCase().includes('deepak'))) {
             assigned = 'mentor-cse-deepak';
@@ -589,11 +628,12 @@ export function getEnrolledStudents() {
 
 export function saveEnrolledStudents(students) {
   try {
-    localStorage.setItem('beu_enrolled_students_v8', JSON.stringify(students));
+    localStorage.setItem('beu_enrolled_students_v9', JSON.stringify(students));
   } catch (e) {
     console.error('Error saving enrolled students:', e);
   }
 }
+
 
 // Helper to get mentors (localStorage persistent, deduplicated)
 export function getMentorsList() {
