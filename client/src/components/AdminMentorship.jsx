@@ -415,7 +415,7 @@ Team Apna College Bihar
   };
 
   // Add Student Handler
-  const handleAddStudent = (e) => {
+  const handleAddStudent = async (e) => {
     e.preventDefault();
     if (!studentForm.name.trim() || !studentForm.roll.trim()) {
       if (flash) flash('Student Name aur Roll Number zaroori hai!', 'err');
@@ -438,13 +438,14 @@ Team Apna College Bihar
       goals: studentForm.goals.trim(),
       codingExperience: studentForm.codingExperience,
       mentorExpectations: studentForm.mentorExpectations.trim(),
-      assignedMentorId: null,
+      assignedMentorId: studentForm.assignedMentorId || null,
       status: 'Active'
     };
 
     const updated = [newStudent, ...students];
     setStudents(updated);
     saveEnrolledStudents(updated);
+    await saveCloudMentorshipData(updated, mentors);
     setShowAddStudentModal(false);
     setStudentForm({
       name: '',
@@ -454,29 +455,40 @@ Team Apna College Bihar
       branch: 'Computer Science & Engineering',
       branchCode: 'CSE',
       roll: '',
+      password: 'beu@2026',
       goals: 'Padhai me guidance (Achha CGPA kaise layein)',
       codingExperience: 'Nahi, main bilkul beginner hoon.',
-      mentorExpectations: 'Exam guidance and study roadmap'
+      mentorExpectations: 'Exam guidance and study roadmap',
+      assignedMentorId: null
     });
 
-    if (flash) flash(`Student "${newStudent.name}" enroll ho gaya! 🎓`);
+    if (flash) flash(`Student "${newStudent.name}" enroll ho gaya aur Cloud Sync complete! 🎓`, 'suc');
   };
 
   // Delete Student Handler
-  const handleDeleteStudent = (id) => {
+  const handleDeleteStudent = async (id) => {
     if (!window.confirm('Kya aap is student ko enrollment list se hatana chahte hain?')) return;
     const updated = students.filter(s => s.id !== id);
     setStudents(updated);
     saveEnrolledStudents(updated);
-    if (flash) flash('Student enrollment list se hata diya gaya.');
+    await saveCloudMentorshipData(updated, mentors);
+    if (flash) flash('Student enrollment list se hata diya gaya aur Cloud Sync ho gaya.');
   };
 
-  // Assign Mentor to a student
-  const handleAssignMentor = (studentId, mentorId) => {
-    const updated = students.map(s => s.id === studentId ? { ...s, assignedMentorId: mentorId } : s);
+  // Assign Mentor to a student (Admin Controlled)
+  const handleAssignMentor = async (studentId, mentorId) => {
+    const updated = students.map(s => s.id === studentId ? { ...s, assignedMentorId: mentorId || null } : s);
     setStudents(updated);
-    saveCloudMentorshipData(updated, mentors);
-    if (flash) flash('Mentor assigned! Cloud pe sync ho gaya (Laptop & Mobile dono me update). ✅', 'suc');
+    saveEnrolledStudents(updated);
+    await saveCloudMentorshipData(updated, mentors);
+    const assigned = mentors.find(m => m.id === mentorId);
+    if (flash) {
+      if (assigned) {
+        flash(`Mentor "${assigned.name}" successfully assign ho gaye! Cloud pe update ho gaya. ✅`, 'suc');
+      } else {
+        flash('Student ka mentor assignment hata diya gaya (Pending). ✅', 'ok');
+      }
+    }
   };
 
   // Save edited password for a student
@@ -1417,6 +1429,22 @@ Team Apna College Bihar
                     <option value="Haan, mujhe thodi bahut basic knowledge hai.">Basic Knowledge</option>
                   </select>
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Assign Senior Mentor (Optional)</label>
+                <select 
+                  value={studentForm.assignedMentorId || ''}
+                  onChange={(e) => setStudentForm({ ...studentForm, assignedMentorId: e.target.value || null })}
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
+                >
+                  <option value="">-- Mentor Pending (Baad me assign karein) --</option>
+                  {mentors.map(m => (
+                    <option key={m.id} value={m.id}>
+                      {m.name} ({m.branch || m.branchLabel || 'BEU'})
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>

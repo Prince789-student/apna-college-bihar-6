@@ -22,6 +22,7 @@ export default function MentorshipChat({
   const [inputText, setInputText] = useState('');
   const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const inputRef = useRef(null);
 
   const studentRoll = student?.roll || student?.whatsapp || '';
@@ -33,10 +34,13 @@ export default function MentorshipChat({
   const partnerRole = isStudent ? (mentor?.role || 'Senior BEU Mentor') : `${student?.branchCode || 'BEU'} 1st Year (Roll: ${student?.roll || ''})`;
   const partnerCollege = isStudent ? (mentor?.college || 'Bihar Engineering University') : (student?.college || '');
 
-  // Auto-scroll to bottom of chat
+  // Auto-scroll to bottom inside chat container ONLY (never scroll outer window/page)
   const scrollToBottom = (smooth = true) => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: smooth ? 'smooth' : 'auto'
+      });
     }
   };
 
@@ -46,7 +50,9 @@ export default function MentorshipChat({
 
     const unsubscribe = subscribeThreadMessages(threadId, (updatedMsgs) => {
       setMessages(updatedMsgs);
-      setTimeout(() => scrollToBottom(true), 100);
+      if (updatedMsgs.length > 0) {
+        setTimeout(() => scrollToBottom(true), 100);
+      }
       // Mark as read for this role
       markThreadAsRead(threadId, currentUserRole);
     });
@@ -56,9 +62,11 @@ export default function MentorshipChat({
     };
   }, [threadId, currentUserRole]);
 
-  // Initial scroll
+  // Initial scroll inside container only when messages exist
   useEffect(() => {
-    scrollToBottom(false);
+    if (messages.length > 0) {
+      scrollToBottom(false);
+    }
   }, [messages.length]);
 
   // Handle Send Message
@@ -108,7 +116,7 @@ export default function MentorshipChat({
 
       setTimeout(() => scrollToBottom(true), 80);
       if (inputRef.current) {
-        inputRef.current.focus();
+        inputRef.current.focus({ preventScroll: true });
       }
     } catch (err) {
       console.error('Error sending message:', err);
@@ -148,8 +156,8 @@ export default function MentorshipChat({
 
   const quickPrompts = isStudent ? studentQuickPrompts : mentorQuickPrompts;
 
-  return (
-    <div className={`flex flex-col bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-lg ${isModal ? 'max-w-2xl w-full h-[85vh] max-h-[700px]' : 'w-full h-[540px]'}`}>
+  const chatContent = (
+    <div className={`flex flex-col bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-2xl ${isModal ? 'w-full h-[88vh] max-h-[720px]' : 'w-full h-[540px]'}`}>
       {/* ── Chat Header ── */}
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-blue-950 p-4 sm:p-5 text-white flex items-center justify-between gap-3 shrink-0 shadow-sm border-b border-indigo-900/50">
         <div className="flex items-center gap-3">
@@ -202,7 +210,10 @@ export default function MentorshipChat({
       </div>
 
       {/* ── Message Stream ── */}
-      <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 bg-slate-50/60">
+      <div 
+        ref={messagesContainerRef}
+        className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 bg-slate-50/60"
+      >
         {/* Welcome Banner */}
         <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 border border-indigo-100 text-center space-y-1.5 shadow-2xs">
           <span className="text-[10px] font-black uppercase tracking-widest text-indigo-700 bg-white px-2.5 py-0.5 rounded-full border border-indigo-200 shadow-2xs inline-flex items-center gap-1">
@@ -354,4 +365,21 @@ export default function MentorshipChat({
       </div>
     </div>
   );
+
+  if (isModal) {
+    return (
+      <div 
+        className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200"
+        onClick={(e) => {
+          if (e.target === e.currentTarget && onClose) onClose();
+        }}
+      >
+        <div className="w-full max-w-2xl animate-in zoom-in-95 duration-200">
+          {chatContent}
+        </div>
+      </div>
+    );
+  }
+
+  return chatContent;
 }

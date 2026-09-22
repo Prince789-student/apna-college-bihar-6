@@ -274,11 +274,7 @@ export default function FreeMentorship() {
       }) || null;
     }
 
-    // Always ensure every enrolled student is assigned to Deepak or Subhash
-    if (!mentor && mentorsPool && mentorsPool.length > 0) {
-      const isSubhash = (stu.assignedMentorId?.toLowerCase().includes('subhash') || (stu.branchCode === 'ECE' && parseInt(String(stu.id || '').replace(/\D/g, '') || '0') > 17));
-      mentor = mentorsPool.find(m => isSubhash ? m.name?.toLowerCase().includes('subhash') : m.name?.toLowerCase().includes('deepak')) || mentorsPool[0];
-    }
+    // Strictly honor Admin Panel assignment. If stu.assignedMentorId is null, mentor remains null (Pending)
 
     const studentData = {
       ...stu,
@@ -1559,12 +1555,13 @@ export default function FreeMentorship() {
 
                 {/* Live Meeting & Chat Actions */}
                 <div className="pt-2 space-y-2">
-                  <a
-                    href="#mentor-live-chat"
+                  <button
+                    type="button"
+                    onClick={() => document.getElementById('mentor-live-chat')?.scrollIntoView({ behavior: 'smooth' })}
                     className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 active:scale-[0.98]"
                   >
                     <MessageCircle size={16} /> 💬 Live Chat with {activeStudent.mentor.name}
-                  </a>
+                  </button>
 
                   {activeStudent.mentor.meetLink ? (
                     <a
