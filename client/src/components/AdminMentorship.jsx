@@ -99,12 +99,12 @@ export default function AdminMentorship({ flash }) {
       const sb = (s.branchCode || '').toUpperCase().trim();
       const sBranch = (s.branch || '').toUpperCase().trim();
       if (sb === b) return true;
-      if (b === 'CSE' && (sBranch.includes('COMPUTER') || sBranch.includes('CSE') || sBranch.includes('DATA SCIENCE') || sBranch.includes('IOT'))) return true;
-      if (b === 'ECE' && (sBranch.includes('ELECTRONIC') || sBranch.includes('ECE'))) return true;
-      if (b === 'EEE' && (sBranch.includes('ELECTRICAL & ELECTRONIC') || sb === 'EEE')) return true;
-      if (b === 'EE' && (sBranch === 'ELECTRICAL ENGINEERING' || sb === 'EE')) return true;
-      if (b === 'CE' && (sBranch.includes('CIVIL') || sb === 'CE')) return true;
-      if (b === 'ME' && (sBranch.includes('MECHANICAL') || sb === 'ME')) return true;
+      if (b === 'CSE' && (sb === 'CSE' || sBranch.includes('COMPUTER') || sBranch.includes('CSE') || sBranch.includes('DATA SCIENCE') || sBranch.includes('IOT'))) return true;
+      if (b === 'ECE' && (sb === 'ECE' || ((sBranch.includes('ELECTRONIC') || sBranch.includes('ECE')) && !sBranch.includes('ELECTRICAL')))) return true;
+      if (b === 'EEE' && (sb === 'EEE' || sBranch.includes('ELECTRICAL & ELECTRONIC') || sb === 'EEE')) return true;
+      if (b === 'EE' && (sb === 'EE' || (sBranch.includes('ELECTRICAL') && !sBranch.includes('ELECTRONIC')))) return true;
+      if (b === 'CE' && (sb === 'CE' || sBranch.includes('CIVIL'))) return true;
+      if (b === 'ME' && (sb === 'ME' || sBranch.includes('MECHANICAL'))) return true;
       return false;
     });
 
