@@ -13,7 +13,8 @@ import {
   serverTimestamp,
   updateDoc,
   doc,
-  getDocs
+  getDocs,
+  setDoc
 } from 'firebase/firestore';
 
 /**
@@ -362,13 +363,18 @@ export async function markThreadAsRead(threadId, currentRole) {
     const messagesCol = collection(db, 'MentorshipMessages');
     const q = query(
       messagesCol, 
-      where('threadId', '==', threadId),
-      where('senderRole', '==', oppositeRole),
-      where('read', '==', false)
+      where('threadId', '==', threadId)
     );
     getDocs(q).then(snap => {
-      snap.docs.forEach(d => updateDoc(doc(db, 'MentorshipMessages', d.id), { read: true }));
-    }).catch(() => {});
+      snap.docs.forEach(d => {
+        const data = d.data();
+        if (data.senderRole === oppositeRole && !data.read) {
+          updateDoc(doc(db, 'MentorshipMessages', d.id), { read: true });
+        }
+      });
+    }).catch((err) => {
+      console.warn('[Mentorship Chat] markThreadAsRead notice:', err?.message);
+    });
   } catch (e) {}
 }
 
@@ -392,6 +398,48 @@ export function subscribeUnreadCount(role, identifier, callback) {
     return onSnapshot(q, (snap) => {
       if (callback) callback(snap.size);
     }, () => {});
+  } catch (e) {
+    return () => {};
+  }
+}
+
+/**
+ * Update real-time presence (heartbeat) for mentor or student
+ */
+export async function updatePresence(role, identifier) {
+  if (!identifier) return;
+  try {
+    const cleanId = String(identifier).toLowerCase().replace(/[^a-z0-9]/g, '');
+    const presenceDoc = doc(db, 'MentorshipPresence', `${role}_${cleanId}`);
+    await setDoc(presenceDoc, {
+      lastActive: Date.now(),
+      role,
+      identifier,
+      updatedAt: serverTimestamp()
+    }, { merge: true });
+  } catch (e) {
+    // Non-blocking
+  }
+}
+
+/**
+ * Subscribe to partner's real-time presence (Online: true if active in last 60 seconds)
+ */
+export function subscribePresence(role, identifier, callback) {
+  if (!identifier) return () => {};
+  try {
+    const cleanId = String(identifier).toLowerCase().replace(/[^a-z0-9]/g, '');
+    const presenceDoc = doc(db, 'MentorshipPresence', `${role}_${cleanId}`);
+    return onSnapshot(presenceDoc, (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        const lastActive = data.lastActive || (data.updatedAt?.toMillis ? data.updatedAt.toMillis() : 0);
+        const isOnline = Date.now() - lastActive < 60000;
+        callback(isOnline, lastActive);
+      } else {
+        callback(false, 0);
+      }
+    }, () => callback(false, 0));
   } catch (e) {
     return () => {};
   }

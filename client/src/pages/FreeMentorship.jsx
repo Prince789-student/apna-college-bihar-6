@@ -23,6 +23,7 @@ import {
 } from '../data/mentorshipData';
 import { fetchCloudMentorshipData, subscribeMentorshipUpdates } from '../services/mentorshipSync';
 import MentorshipChat from '../components/MentorshipChat';
+import { subscribePresence } from '../services/mentorshipChatService';
 
 // ─── BEU College Code Mapping ───────────────────────────────────────────────
 const BEU_COLLEGE_CODES = {
@@ -80,6 +81,7 @@ export default function FreeMentorship() {
   const [activeMentor, setActiveMentor] = useState(null);
   const [enrolledList, setEnrolledList] = useState([]);
   const [mentorsList, setMentorsList] = useState([]);
+  const [isMentorOnline, setIsMentorOnline] = useState(false);
 
   // Student Login Form State
   const [loginRoll, setLoginRoll] = useState('');
@@ -295,6 +297,20 @@ export default function FreeMentorship() {
     }
     loadSavedStudyLogs(stu.roll);
   };
+
+  // Subscribe to Mentor Presence for Active Student Card
+  useEffect(() => {
+    if (activeStudent?.mentor) {
+      const unsub = subscribePresence('mentor', activeStudent.mentor.id || activeStudent.mentor.name, (online) => {
+        setIsMentorOnline(online);
+      });
+      return () => {
+        if (unsub) unsub();
+      };
+    } else {
+      setIsMentorOnline(false);
+    }
+  }, [activeStudent?.mentor?.id, activeStudent?.mentor?.name]);
 
   const loadSavedStudyLogs = (roll) => {
     try {
@@ -1527,6 +1543,18 @@ export default function FreeMentorship() {
                       <span className="px-2 py-0.5 rounded-md bg-blue-100 text-blue-700 text-[11px] font-black uppercase">
                         {activeStudent.mentor.branch || activeStudent.mentor.branchLabel}
                       </span>
+                      {isMentorOnline ? (
+                        <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 border border-emerald-500/30 text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5 shadow-2xs">
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                          Live Online
+                        </span>
+                      ) : (
+                        <span className="px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-600 border border-rose-500/25 text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                          Offline
+                        </span>
+                      )}
                     </div>
                     <p className="text-xs sm:text-sm font-bold text-blue-600">
                       {activeStudent.mentor.role}

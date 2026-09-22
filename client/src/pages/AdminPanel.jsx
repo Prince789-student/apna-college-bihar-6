@@ -37,6 +37,8 @@ export default function AdminPanel() {
   const [newAnn, setNewAnn] = useState({ title: '', content: '', type: 'INFO' });
   const [adForm, setAdForm] = useState({ title: '', link: '', file: null, type: 'BANNER', externalUrl: '', useAdSense: false, adSlot: '' });
   const [msg, setMsg] = useState(null);
+  const [newAdminEmail, setNewAdminEmail] = useState('');
+  const [newAdminRole, setNewAdminRole] = useState('ADMIN');
   // ── BEU NOTIFICATIONS STATE ──
   const [beuNotifications, setBeuNotifications] = useState([]);
   const [beuForm, setBeuForm] = useState({ board: '', noticedate: new Date().toISOString().split('T')[0], pdfUrl: '', isimportant: 0 });
@@ -61,8 +63,8 @@ export default function AdminPanel() {
   }, [docs, docForm.branch, docForm.semester, docForm.category]);
 
   // Access Control
-  const isSuper = user?.role === ROLES.SUPER_ADMIN;
-  const isAdmin = user?.email === 'prince86944@gmail.com' || user?.role === ROLES.SUPER_ADMIN; 
+  const isSuper = user?.email === 'prince86944@gmail.com' || user?.role === ROLES.SUPER_ADMIN || user?.role === 'SUPER_ADMIN';
+  const isAdmin = isSuper || user?.role === ROLES.ADMIN || user?.role === 'ADMIN'; 
 
   const flash = (text, type = 'ok') => {
     setMsg({ text, type });
@@ -277,6 +279,41 @@ export default function AdminPanel() {
     if (!window.confirm('Delete this user permanently?')) return;
     await deleteDoc(doc(db, 'users', uid));
     flash('User deleted');
+  };
+
+  const handleAddOrPromoteAdmin = async (e) => {
+    e.preventDefault();
+    if (!isSuper) {
+      flash('Sirf Super Admin naye Admin add ya promote kar sakte hain!', 'err');
+      return;
+    }
+    const emailToSet = newAdminEmail.trim().toLowerCase();
+    if (!emailToSet || !emailToSet.includes('@')) {
+      flash('Kripya valid email address daalein!', 'err');
+      return;
+    }
+
+    try {
+      const existingUser = users.find(u => (u.email || '').toLowerCase() === emailToSet);
+      if (existingUser) {
+        await updateDoc(doc(db, 'users', existingUser.id), { role: newAdminRole });
+        flash(`✅ ${emailToSet} ko successfully "${newAdminRole}" bana diya gaya!`, 'ok');
+      } else {
+        await addDoc(collection(db, 'users'), {
+          email: emailToSet,
+          name: emailToSet.split('@')[0],
+          role: newAdminRole,
+          createdAt: serverTimestamp(),
+          status: 'ACTIVE',
+          isVerified: true
+        });
+        flash(`✅ ${emailToSet} ko new Admin user ke roop me add kar diya gaya!`, 'ok');
+      }
+      setNewAdminEmail('');
+    } catch (err) {
+      console.error('Error adding admin:', err);
+      flash(`Admin add karne me error: ${err.message}`, 'err');
+    }
   };
 
   // ── GROUP ACTIONS ──
@@ -738,8 +775,54 @@ if (!isAdmin) return (
 
       {/* ── USERS TAB ── */}
       {tab==='users' && (
-        <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] border border-slate-200/80 overflow-hidden shadow-2xl animate-in fade-in duration-500">
-           <div className="p-4 md:p-8 border-b border-slate-200/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-6">
+          {/* Admin Management Card */}
+          {isSuper && (
+            <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-6 md:p-8 rounded-[2rem] md:rounded-[3rem] border border-indigo-500/30 text-white shadow-xl">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+                <div>
+                  <h3 className="text-base font-black uppercase tracking-tight flex items-center gap-2 text-white">
+                    <Shield size={20} className="text-indigo-400" /> Admin & Super Admin Management
+                  </h3>
+                  <p className="text-xs text-indigo-200/80 font-medium mt-1">
+                    Kisi bhi user ka email daal kar use turant <strong>ADMIN</strong> ya <strong>SUPER_ADMIN</strong> banayein.
+                  </p>
+                </div>
+                <span className="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-[10px] font-black uppercase tracking-wider self-start md:self-auto">
+                  👑 Super Admin Access
+                </span>
+              </div>
+
+              <form onSubmit={handleAddOrPromoteAdmin} className="flex flex-col sm:flex-row items-center gap-3">
+                <input 
+                  type="email" 
+                  value={newAdminEmail}
+                  onChange={(e) => setNewAdminEmail(e.target.value)}
+                  placeholder="admin-email@gmail.com"
+                  className="w-full sm:flex-1 bg-white/10 border border-white/20 rounded-2xl px-4 py-3 text-xs font-bold text-white placeholder-slate-400 outline-none focus:border-indigo-400"
+                  required
+                />
+                <select 
+                  value={newAdminRole}
+                  onChange={(e) => setNewAdminRole(e.target.value)}
+                  className="w-full sm:w-auto bg-slate-800 border border-white/20 rounded-2xl px-4 py-3 text-xs font-bold text-white outline-none cursor-pointer"
+                >
+                  <option value="ADMIN">ADMIN Role</option>
+                  <option value="SUPER_ADMIN">SUPER_ADMIN Role</option>
+                  <option value="STUDENT">STUDENT (Demote)</option>
+                </select>
+                <button 
+                  type="submit"
+                  className="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-xs font-black uppercase tracking-wider transition-all shadow-lg shadow-indigo-600/30 active:scale-95 whitespace-nowrap"
+                >
+                  + Add / Assign Admin
+                </button>
+              </form>
+            </div>
+          )}
+
+          <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] border border-slate-200/80 overflow-hidden shadow-2xl animate-in fade-in duration-500">
+            <div className="p-4 md:p-8 border-b border-slate-200/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest">Scholar Directory</h2>
               <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
                 <div className="relative group w-full md:w-72">
@@ -907,6 +990,7 @@ if (!isAdmin) return (
              </table>
            </div>
         </div>
+      </div>
       )}
 
       {/* ── NOTES UPLOAD ── */}

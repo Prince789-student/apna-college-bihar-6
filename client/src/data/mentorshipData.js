@@ -54,7 +54,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electrical & Electronics Engineering",
     "branchCode": "EEE",
     "roll": "26/EEE/46",
-    "password": "26EEEACB01",
+    "password": "26EEE46",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Notes, lecture placement information, how to score good cgpa",
@@ -71,7 +71,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electrical & Electronics Engineering",
     "branchCode": "EEE",
     "roll": "26/EEE/10P",
-    "password": "26EEEACB01",
+    "password": "26EEE10P",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Skills in cse and ai",
@@ -88,7 +88,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electrical & Electronics Engineering",
     "branchCode": "EEE",
     "roll": "26/EEE/50",
-    "password": "26EEEACB01",
+    "password": "26EEE50",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Govt Exam",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "CGPA",
@@ -105,7 +105,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electrical & Electronics Engineering",
     "branchCode": "EEE",
     "roll": "26/EEE/44",
-    "password": "26EEEACB01",
+    "password": "26EEE44",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Guidance and resources",
@@ -122,7 +122,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electronics & Communication Engineering",
     "branchCode": "ECE",
     "roll": "26/ECE/21",
-    "password": "26ECEACB01",
+    "password": "26ECE21",
     "goals": "Coding/Programming seekhna (C, C++, Java, Python, etc.)",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Coding guidance h",
@@ -139,7 +139,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Computer Science & Engineering",
     "branchCode": "CSE",
     "roll": "26cse47",
-    "password": "26CSEACB01",
+    "password": "26CSE47",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Just a bit guidance",
@@ -156,7 +156,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Computer Science & Engineering",
     "branchCode": "CSE",
     "roll": "Cse07",
-    "password": "26CSEACB01",
+    "password": "26CSE07",
     "goals": "Coding/Programming seekhna (C, C++, Java, Python, etc.)",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Coding aur Class syllabus maintain",
@@ -173,7 +173,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Computer Science & Engineering",
     "branchCode": "CSE",
     "roll": "26cse04",
-    "password": "26CSEACB01",
+    "password": "26CSE04",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Coding and cgpa",
@@ -190,7 +190,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electrical & Electronics Engineering",
     "branchCode": "EEE",
     "roll": "26EEE11P",
-    "password": "26EEEACB01",
+    "password": "26EEE11P",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Regarding how to get excellent cgpa, where we can improve",
@@ -207,7 +207,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "CSE (IOT & Cyber Security)",
     "branchCode": "CSE",
     "roll": "26-cse-05",
-    "password": "26CSEACB01",
+    "password": "26CSE05",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Study guidance and branch advice",
@@ -224,7 +224,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "CSE (Cyber Security)",
     "branchCode": "CSE",
     "roll": "W26A33",
-    "password": "26CSEACB01",
+    "password": "26W26A33",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Coding, skills, Hackathons, internships, Notes",
@@ -241,7 +241,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electronics & Communication Engineering",
     "branchCode": "ECE",
     "roll": "26ECE29",
-    "password": "26ECEACB01",
+    "password": "26ECE29",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Govt Exam",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Mujhe confidence chahiye jisse main bol saku kisi ke samne",
@@ -258,7 +258,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electronics & Communication Engineering",
     "branchCode": "ECE",
     "roll": "26Ece46",
-    "password": "26ECEACB01",
+    "password": "26ECE46",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Kaha se padhai kare aur resources",
@@ -275,7 +275,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electronics & Communication Engineering",
     "branchCode": "ECE",
     "roll": "26ECE20",
-    "password": "26ECEACB01",
+    "password": "26ECE20",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Govt Exam",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Communication skills and syllabus",
@@ -292,7 +292,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Computer Science & Engineering",
     "branchCode": "CSE",
     "roll": "26Cse112",
-    "password": "26CSEACB01",
+    "password": "26CSE112",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Coding",
@@ -309,7 +309,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "CSE (Data Science)",
     "branchCode": "CSE",
     "roll": "26-CSE-DS-15",
-    "password": "26CSEACB01",
+    "password": "26CSEDS15",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Semester prep and skill development",
@@ -326,7 +326,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electrical & Electronics Engineering",
     "branchCode": "EEE",
     "roll": "26eee14p",
-    "password": "26EEEACB01",
+    "password": "26EEE14P",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Guidance to become better version of myself",
@@ -343,7 +343,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electronics & Communication Engineering",
     "branchCode": "ECE",
     "roll": "26ECE32",
-    "password": "26ECEACB01",
+    "password": "26ECE32",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Coding and Gate exam",
@@ -360,7 +360,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Computer Science & Engineering",
     "branchCode": "CSE",
     "roll": "2605001",
-    "password": "26CSEACB01",
+    "password": "26CSE01",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "In academic and also develop skills that can help in future",
@@ -377,7 +377,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Computer Science & Engineering",
     "branchCode": "CSE",
     "roll": "26105110033",
-    "password": "26CSEACB01",
+    "password": "26CSE33",
     "goals": "Coding/Programming seekhna (C, C++, Java, Python, etc.)",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Managing college syllabus with extra skills and speaking skills",
@@ -394,7 +394,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Computer Science & Engineering",
     "branchCode": "CSE",
     "roll": "26CSE71",
-    "password": "26CSEACB01",
+    "password": "26CSE71",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Coding and gate",
@@ -411,7 +411,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electronics & Communication Engineering",
     "branchCode": "ECE",
     "roll": "26E08",
-    "password": "26ECEACB01",
+    "password": "26ECE08",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "It's very uncomfortable to speak something when teachers ask, so communication guidance",
@@ -428,7 +428,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electronics & Communication Engineering",
     "branchCode": "ECE",
     "roll": "26ECE44",
-    "password": "26ECEACB01",
+    "password": "26ECE44",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Doubt about future placements and gate",
@@ -445,7 +445,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Electronics & Communication Engineering",
     "branchCode": "ECE",
     "roll": "26ece11",
-    "password": "26ECEACB01",
+    "password": "26ECE11",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "How to manage time and improve CGPA and communication skill",
@@ -462,7 +462,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "branch": "Internet of Things (IoT)",
     "branchCode": "CSE",
     "roll": "26-IOT-27",
-    "password": "26CSEACB01",
+    "password": "26IOT27",
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "About managing and investing my time on right direction",
@@ -477,11 +477,11 @@ export function getEnrolledStudents() {
   try {
     // Purge old keys once
     if (typeof window !== 'undefined' && window.localStorage) {
-      ['beu_enrolled_students', 'beu_enrolled_students_v2', 'beu_enrolled_students_v3', 'beu_enrolled_students_v4', 'beu_enrolled_students_v5'].forEach(k => {
+      ['beu_enrolled_students', 'beu_enrolled_students_v2', 'beu_enrolled_students_v3', 'beu_enrolled_students_v4', 'beu_enrolled_students_v5', 'beu_enrolled_students_v6'].forEach(k => {
         try { localStorage.removeItem(k); } catch(e) {}
       });
     }
-    const saved = localStorage.getItem('beu_enrolled_students_v6');
+    const saved = localStorage.getItem('beu_enrolled_students_v7');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -504,7 +504,7 @@ export function getEnrolledStudents() {
 
 export function saveEnrolledStudents(students) {
   try {
-    localStorage.setItem('beu_enrolled_students_v6', JSON.stringify(students));
+    localStorage.setItem('beu_enrolled_students_v7', JSON.stringify(students));
   } catch (e) {
     console.error('Error saving enrolled students:', e);
   }
@@ -617,17 +617,14 @@ export function verifyStudentLogin(loginQuery, passwordInput) {
     return { success: false, message: 'Kripya apna Password daalein!' };
   }
 
-  // Branch default passwords mapping
-  const branchPasswords = {
-    'CSE': '26CSEACB01',
-    'EEE': '26EEEACB01',
-    'ECE': '26ECEACB01'
-  };
-  const expectedBranchPass = branchPasswords[student.branchCode] || student.password;
-
   const pass = passwordInput.trim();
-  // Allow exact assigned password, branch password, or admin master key
-  if (pass === student.password || pass === expectedBranchPass || pass === 'admin123') {
+  const studentPass = (student.password || '').trim();
+  // Allow exact assigned unique password (case-insensitive) or admin master key
+  if (
+    (studentPass && pass.toLowerCase() === studentPass.toLowerCase()) ||
+    pass === 'admin123' ||
+    pass === 'ACB@2026'
+  ) {
     return { success: true, student };
   }
 

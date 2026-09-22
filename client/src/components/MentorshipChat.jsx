@@ -8,7 +8,9 @@ import {
   getChatThreadId, 
   subscribeThreadMessages, 
   sendChatMessage, 
-  markThreadAsRead 
+  markThreadAsRead,
+  updatePresence,
+  subscribePresence
 } from '../services/mentorshipChatService';
 
 export default function MentorshipChat({
@@ -21,6 +23,7 @@ export default function MentorshipChat({
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const [isPartnerOnline, setIsPartnerOnline] = useState(false);
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
   const inputRef = useRef(null);
@@ -44,7 +47,7 @@ export default function MentorshipChat({
     }
   };
 
-  // Real-time message subscription
+  // Real-time message subscription & read receipt
   useEffect(() => {
     if (!threadId) return;
 
@@ -61,6 +64,29 @@ export default function MentorshipChat({
       if (unsubscribe) unsubscribe();
     };
   }, [threadId, currentUserRole]);
+
+  // Real-time Presence Tracking (Green if Online/Live, Red if Offline)
+  useEffect(() => {
+    const myId = isStudent ? (student?.roll || student?.whatsapp) : (mentor?.id || mentor?.name);
+    const partnerRole = isStudent ? 'mentor' : 'student';
+    const partnerId = isStudent ? (mentor?.id || mentor?.name) : (student?.roll || student?.whatsapp);
+
+    if (myId) {
+      updatePresence(currentUserRole, myId);
+      const interval = setInterval(() => {
+        updatePresence(currentUserRole, myId);
+      }, 25000);
+
+      const unsubPresence = subscribePresence(partnerRole, partnerId, (online) => {
+        setIsPartnerOnline(online);
+      });
+
+      return () => {
+        clearInterval(interval);
+        if (unsubPresence) unsubPresence();
+      };
+    }
+  }, [isStudent, currentUserRole, student?.roll, student?.whatsapp, mentor?.id, mentor?.name]);
 
   // Initial scroll inside container only when messages exist
   useEffect(() => {
@@ -173,7 +199,11 @@ export default function MentorshipChat({
                 {partnerName.split(' ').map(w => w[0]).join('').slice(0, 2) || (isStudent ? 'SM' : 'ST')}
               </div>
             )}
-            <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 rounded-full ring-2 ring-slate-900 animate-pulse" title="Live Mentorship Online" />
+            {isPartnerOnline ? (
+              <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 rounded-full ring-2 ring-slate-900 animate-pulse" title="Online Live Now" />
+            ) : (
+              <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-rose-500 rounded-full ring-2 ring-slate-900" title="Offline" />
+            )}
           </div>
 
           <div>
@@ -181,9 +211,15 @@ export default function MentorshipChat({
               <h3 className="text-sm sm:text-base font-black tracking-tight text-white leading-tight">
                 {partnerName}
               </h3>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[9px] font-black uppercase tracking-wider flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> Live Chat
-              </span>
+              {isPartnerOnline ? (
+                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[9px] font-black uppercase tracking-wider flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> Live Online
+                </span>
+              ) : (
+                <span className="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[9px] font-black uppercase tracking-wider flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500" /> Offline
+                </span>
+              )}
             </div>
             <p className="text-[11px] text-indigo-200 font-bold leading-tight mt-0.5">
               {partnerRole}
@@ -282,9 +318,11 @@ export default function MentorshipChat({
                     <span>{formatTime(msg.timestamp)}</span>
                     {isMe && (
                       msg.read ? (
-                        <CheckCheck size={12} className="text-sky-300" title="Read by mentor" />
+                        <CheckCheck size={14} className="text-emerald-300 font-bold stroke-[2.5] drop-shadow-xs" title="Seen (Hara Double Tick)" />
+                      ) : msg.id?.startsWith('local_') ? (
+                        <Check size={13} className="text-indigo-200/70 font-medium" title="Sent" />
                       ) : (
-                        <Check size={12} className="text-indigo-200" title="Delivered" />
+                        <CheckCheck size={14} className="text-indigo-200/90 font-medium" title="Delivered" />
                       )
                     )}
                   </div>

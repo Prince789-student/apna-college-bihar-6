@@ -424,6 +424,7 @@ Team Apna College Bihar
 
     const matchedMentor = mentors.find(m => m.branch === studentForm.branchCode) || mentors[0];
 
+    const derivedPass = studentForm.roll.replace(/[^a-zA-Z0-9]/g, '').toUpperCase() || 'beu@2026';
     const newStudent = {
       id: `beu-stu-${Date.now()}`,
       timestamp: new Date().toLocaleString('en-IN'),
@@ -434,7 +435,7 @@ Team Apna College Bihar
       branch: studentForm.branch.trim(),
       branchCode: studentForm.branchCode,
       roll: studentForm.roll.trim(),
-      password: studentForm.password.trim() || 'beu@2026',
+      password: studentForm.password.trim() || derivedPass,
       goals: studentForm.goals.trim(),
       codingExperience: studentForm.codingExperience,
       mentorExpectations: studentForm.mentorExpectations.trim(),
@@ -492,7 +493,7 @@ Team Apna College Bihar
   };
 
   // Save edited password for a student
-  const handleSavePassword = (studentId) => {
+  const handleSavePassword = async (studentId) => {
     const newPass = editingPasswords[studentId];
     if (!newPass || newPass.trim() === '') {
       if (flash) flash('Password khali nahi ho sakta!', 'err');
@@ -502,7 +503,8 @@ Team Apna College Bihar
     setStudents(updated);
     saveEnrolledStudents(updated);
     setEditingPasswords(prev => ({ ...prev, [studentId]: undefined }));
-    if (flash) flash('Password successfully save ho gaya! ✅', 'suc');
+    await saveCloudMentorshipData(updated, mentors);
+    if (flash) flash('Password successfully save ho gaya aur Cloud Sync ho gaya! ✅', 'suc');
   };
 
   // Unique Colleges for Filter
@@ -1373,11 +1375,33 @@ Team Apna College Bihar
                     type="text" 
                     placeholder="e.g. 26/CSE/55"
                     value={studentForm.roll}
-                    onChange={(e) => setStudentForm({ ...studentForm, roll: e.target.value })}
+                    onChange={(e) => {
+                      const newRoll = e.target.value;
+                      const autoPass = newRoll.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                      setStudentForm(prev => ({
+                        ...prev,
+                        roll: newRoll,
+                        password: (!prev.password || prev.password === 'beu@2026' || prev.password === prev.roll.replace(/[^a-zA-Z0-9]/g, '').toUpperCase()) ? autoPass : prev.password
+                      }));
+                    }}
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
                     required
                   />
                 </div>
+                <div>
+                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Login Password</label>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. 26CSE55"
+                    value={studentForm.password}
+                    onChange={(e) => setStudentForm({ ...studentForm, password: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600 font-mono"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">WhatsApp Number</label>
                   <input 
@@ -1385,6 +1409,16 @@ Team Apna College Bihar
                     placeholder="e.g. 9876543210"
                     value={studentForm.whatsapp}
                     onChange={(e) => setStudentForm({ ...studentForm, whatsapp: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-black uppercase text-slate-500 mb-1">Email ID (Optional)</label>
+                  <input 
+                    type="email" 
+                    placeholder="e.g. student@gmail.com"
+                    value={studentForm.email}
+                    onChange={(e) => setStudentForm({ ...studentForm, email: e.target.value })}
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-600"
                   />
                 </div>
