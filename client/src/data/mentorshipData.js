@@ -642,6 +642,8 @@ export function getEnrolledStudents() {
             assigned = 'mentor-cse-deepak';
           } else if (assigned === 'mentor-cse-1789731436566' || (assigned && assigned.toLowerCase().includes('subhash'))) {
             assigned = 'mentor-cse-subhash';
+          } else if (assigned && assigned.toLowerCase().includes('shivam')) {
+            assigned = 'mentor-cse-shivam';
           }
           return { ...s, assignedMentorId: assigned };
         });

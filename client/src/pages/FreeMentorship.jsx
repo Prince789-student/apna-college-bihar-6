@@ -272,6 +272,7 @@ export default function FreeMentorship() {
         if (m.id === stu.assignedMentorId) return true;
         if (assignedLower.includes('deepak') && (m.name?.toLowerCase().includes('deepak') || m.id?.includes('deepak'))) return true;
         if (assignedLower.includes('subhash') && (m.name?.toLowerCase().includes('subhash') || m.id?.includes('subhash'))) return true;
+        if (assignedLower.includes('shivam') && (m.name?.toLowerCase().includes('shivam') || m.id?.includes('shivam'))) return true;
         return false;
       }) || null;
     }
@@ -1170,6 +1171,7 @@ export default function FreeMentorship() {
           {(() => {
             const isDeepak = (activeMentor.name || '').toLowerCase().includes('deepak');
             const isSubhash = (activeMentor.name || '').toLowerCase().includes('subhash');
+            const isShivam = (activeMentor.name || '').toLowerCase().includes('shivam');
 
             const myMentees = mentorAssignmentFilter === 'all' 
               ? enrolledList 
@@ -1178,6 +1180,7 @@ export default function FreeMentorship() {
                   if (sAssigned && sAssigned === (activeMentor.id || '').toLowerCase()) return true;
                   if (isDeepak && (sAssigned.includes('deepak') || sAssigned === 'mentor-cse-1789726326697')) return true;
                   if (isSubhash && (sAssigned.includes('subhash') || sAssigned === 'mentor-cse-1789731436566')) return true;
+                  if (isShivam && (sAssigned.includes('shivam') || sAssigned === 'mentor-cse-shivam')) return true;
                   return false;
                 });
 
@@ -1186,6 +1189,7 @@ export default function FreeMentorship() {
               if (sAssigned && sAssigned === (activeMentor.id || '').toLowerCase()) return true;
               if (isDeepak && (sAssigned.includes('deepak') || sAssigned === 'mentor-cse-1789726326697')) return true;
               if (isSubhash && (sAssigned.includes('subhash') || sAssigned === 'mentor-cse-1789731436566')) return true;
+              if (isShivam && (sAssigned.includes('shivam') || sAssigned === 'mentor-cse-shivam')) return true;
               return false;
             }).length;
 
