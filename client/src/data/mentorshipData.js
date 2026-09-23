@@ -68,38 +68,65 @@ export const INITIAL_MENTORS = [
   {
     id: 'mentor-cse-subhash',
     name: 'SUBHASH KUMAR',
-    role: 'BEU MENTOR',
-    college: 'GEC SHEIKHPURA',
+    role: 'Student Mentor',
+    college: 'Government Engineering College, Sheikhpura',
     branch: 'CSE',
     branchLabel: 'CSE',
-    workedOn: 'project=myntra clone ,portfolio',
-    expertiseIn: 'WEB DEVELOPMENT - FRONTED AND CU...',
+    cgpa: '7.45',
+    workedOn: 'web development',
+    expertiseIn: 'gate student and fronted dev',
     avatar: '',
     phone: 'ACBMGECCSESHK01',
-    mobile: '7856030646',
+    username: 'ACBMGECCSESHK01',
+    mobile: '9117242808',
     password: 'SUB@2006',
-    email: 'Subhashkumar911724@gmail.com',
+    email: 'subhashkumar911724@gmail.com',
     meetLink: '',
-    specialties: ['WEB DEVELOPMENT', 'FRONTED', 'PORTFOLIO'],
-    bio: 'BEU mentor guiding 1st year engineering scholars.'
+    specialties: ['Web Development', 'Frontend Dev', 'GATE Prep'],
+    bio: 'Government Engineering College, Sheikhpura senior mentor.',
+    capacity: 10
   },
   {
     id: 'mentor-cse-deepak',
     name: 'DEEPAK KUMAR MISHRA',
-    role: 'STUDENT MENTOR',
-    college: 'GEC SHEIKHPURA (2025-2029)',
+    role: 'Student Mentor',
+    college: 'GEC Sheikhpura (2025-2029)',
     branch: 'CSE',
     branchLabel: 'CSE',
-    workedOn: 'WEBSITE CHAT SYSYTEM',
-    expertiseIn: 'WEB DEVELOPEMENT , PYTHON WITH AI',
+    cgpa: '7.4',
+    workedOn: 'Web development',
+    expertiseIn: 'DSA with CPP , C programming , DSA',
     avatar: '',
     phone: 'ACBMGECCSESHK02',
+    username: 'ACBMGECCSESHK02',
     mobile: '7856030646',
     password: 'DEEPAK@2006',
     email: 'deepak0kr0mishra@gmail.com',
     meetLink: '',
-    specialties: ['WEB DEVELOPEMENT', 'PYTHON WITH AI', 'WEBSITE CHAT SYSYTEM'],
-    bio: 'Student mentor guiding 1st year BEU students in coding and academics.'
+    specialties: ['Web Development', 'DSA with C++', 'C Programming'],
+    bio: 'Not a tutorial guy . Let your hand be dirty in bad code!',
+    capacity: 10
+  },
+  {
+    id: 'mentor-cse-shivam',
+    name: 'SHIVAM KUMAR',
+    role: 'Student Mentor',
+    college: 'GEC Sheikhpura (2025-2029)',
+    branch: 'CSE',
+    branchLabel: 'CSE',
+    cgpa: '8.35',
+    workedOn: 'Web Dev , DSA',
+    expertiseIn: 'Web Dev , DSA',
+    avatar: '',
+    phone: 'ACBMGECCSESHK03',
+    username: 'ACBMGECCSESHK03',
+    mobile: '9304742665',
+    password: 'SHIVAM@2006',
+    email: 'heyshiivam556@gmail.com',
+    meetLink: '',
+    specialties: ['Web Dev', 'DSA'],
+    bio: 'Keep grinding',
+    capacity: 6
   }
 ];
 
@@ -118,7 +145,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Notes, lecture placement information, how to score good cgpa",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26EEE46"
   },
@@ -136,7 +163,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Skills in cse and ai",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26EEE10P"
   },
@@ -154,7 +181,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Govt Exam",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "CGPA",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26EEE50"
   },
@@ -172,7 +199,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Guidance and resources",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26EEE44"
   },
@@ -190,7 +217,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Coding/Programming seekhna (C, C++, Java, Python, etc.)",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Coding guidance h",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26ECE21"
   },
@@ -208,7 +235,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Just a bit guidance",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26CSE47"
   },
@@ -226,7 +253,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Coding/Programming seekhna (C, C++, Java, Python, etc.)",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Coding aur Class syllabus maintain",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26CSE07"
   },
@@ -244,7 +271,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Coding and cgpa",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26CSE04"
   },
@@ -262,7 +289,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Regarding how to get excellent cgpa, where we can improve",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26EEE11P"
   },
@@ -280,7 +307,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Study guidance and branch advice",
-    "assignedMentorId": "mentor-cse-subhash",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26CSE05"
   },
@@ -298,7 +325,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Coding, skills, Hackathons, internships, Notes",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26W26A33"
   },
@@ -316,7 +343,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Govt Exam",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Mujhe confidence chahiye jisse main bol saku kisi ke samne",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26ECE29"
   },
@@ -334,7 +361,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Kaha se padhai kare aur resources",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26ECE46"
   },
@@ -352,7 +379,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Govt Exam",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Communication skills and syllabus",
-    "assignedMentorId": "mentor-cse-subhash",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26ECE20"
   },
@@ -370,7 +397,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Coding",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26CSE112"
   },
@@ -388,7 +415,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Semester prep and skill development",
-    "assignedMentorId": "mentor-cse-subhash",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26CSEDS15"
   },
@@ -406,7 +433,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Guidance to become better version of myself",
-    "assignedMentorId": "mentor-cse-subhash",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26EEE14P"
   },
@@ -424,7 +451,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Coding and Gate exam",
-    "assignedMentorId": "mentor-cse-subhash",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26ECE32"
   },
@@ -442,7 +469,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "In academic and also develop skills that can help in future",
-    "assignedMentorId": "mentor-cse-subhash",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26CSE01"
   },
@@ -460,7 +487,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Coding/Programming seekhna (C, C++, Java, Python, etc.)",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Managing college syllabus with extra skills and speaking skills",
-    "assignedMentorId": "mentor-cse-subhash",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26CSE33"
   },
@@ -478,7 +505,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Coding and gate",
-    "assignedMentorId": "mentor-cse-subhash",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26CSE71"
   },
@@ -496,7 +523,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "It's very uncomfortable to speak something when teachers ask, so communication guidance",
-    "assignedMentorId": "mentor-cse-subhash",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26ECE08"
   },
@@ -514,7 +541,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Doubt about future placements and gate",
-    "assignedMentorId": "mentor-cse-subhash",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26ECE44"
   },
@@ -532,7 +559,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "How to manage time and improve CGPA and communication skill",
-    "assignedMentorId": "mentor-cse-subhash",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26ECE11"
   },
@@ -550,7 +577,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "About managing and investing my time on right direction",
-    "assignedMentorId": "mentor-cse-subhash",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26IOT27"
   },
@@ -568,7 +595,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "First of all I need a brief intro about engineering, how to score good cgpa",
-    "assignedMentorId": "mentor-cse-deepak",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26CS37"
   },
@@ -586,7 +613,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Skills",
-    "assignedMentorId": "mentor-cse-subhash",
+    "assignedMentorId": null,
     "status": "Active",
     "studentId": "26CSAI53"
   }
@@ -638,26 +665,33 @@ export function saveEnrolledStudents(students) {
 // Helper to get mentors (localStorage persistent, deduplicated)
 export function getMentorsList() {
   try {
-    const saved = localStorage.getItem('beu_mentors_list_v3');
+    if (typeof window !== 'undefined' && window.localStorage) {
+      ['beu_mentors_list', 'beu_mentors_list_v2', 'beu_mentors_list_v3', 'beu_mentors_list_v4'].forEach(k => {
+        try { localStorage.removeItem(k); } catch(e) {}
+      });
+    }
+    const saved = localStorage.getItem('beu_mentors_list_v5');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
         const unique = new Map();
         parsed.forEach(m => {
           const isDeepak = (m.name || '').toLowerCase().includes('deepak');
-          const isSubhash = (m.name || '').toLowerCase().includes('subhash');
-          const key = isDeepak ? 'deepak' : (isSubhash ? 'subhash' : m.id);
-          const canonicalId = isDeepak ? 'mentor-cse-deepak' : (isSubhash ? 'mentor-cse-subhash' : m.id);
+          const isSubhash = (m.name || '').toLowerCase().includes('subhash') || (m.name || '').toLowerCase().includes('golu');
+          const isShivam = (m.name || '').toLowerCase().includes('shivam');
+          const key = isDeepak ? 'deepak' : (isSubhash ? 'subhash' : (isShivam ? 'shivam' : m.id));
+          const canonicalId = isDeepak ? 'mentor-cse-deepak' : (isSubhash ? 'mentor-cse-subhash' : (isShivam ? 'mentor-cse-shivam' : m.id));
           const avatarClean = (m.avatar && !m.avatar.includes('unsplash')) ? m.avatar : '';
           const cleaned = {
             ...m,
             id: canonicalId,
+            name: isSubhash ? 'SUBHASH KUMAR' : (isShivam ? 'SHIVAM KUMAR' : (isDeepak ? 'DEEPAK KUMAR MISHRA' : m.name)),
             avatar: avatarClean,
-            username: m.username || m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')),
-            phone: m.phone || m.username || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : '')),
-            mobile: m.mobile !== undefined ? m.mobile : '',
-            password: m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : 'Mentor@123')),
-            email: m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'Subhashkumar911724@gmail.com' : ''))
+            username: m.username || m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : ''))),
+            phone: m.phone || m.username || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : ''))),
+            mobile: m.mobile !== undefined && m.mobile !== '' ? m.mobile : (isDeepak ? '7856030646' : (isSubhash ? '9117242808' : (isShivam ? '9304742665' : ''))),
+            password: m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : (isShivam ? 'SHIVAM@2006' : 'Mentor@123'))),
+            email: m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'subhashkumar911724@gmail.com' : (isShivam ? 'heyshiivam556@gmail.com' : '')))
           };
           if (!unique.has(key)) unique.set(key, cleaned);
         });
@@ -673,7 +707,7 @@ export function getMentorsList() {
 
 export function saveMentorsList(mentors) {
   try {
-    localStorage.setItem('beu_mentors_list_v3', JSON.stringify(mentors));
+    localStorage.setItem('beu_mentors_list_v5', JSON.stringify(mentors));
   } catch (e) {
     console.error('Error saving mentors:', e);
   }
@@ -795,12 +829,15 @@ export function verifyMentorLogin(loginIdentifier, passwordInput) {
     if (last10 && last10.length >= 10 && (mPhoneLast10 === last10 || rawMobile.endsWith(last10))) return true;
     if (digits && digits.length >= 6 && (mPhoneDigits === digits || rawMobile === digits)) return true;
 
-    // 3. Fallback for Deepak Kumar Mishra & Subhash Kumar
+    // 3. Fallback for Deepak Kumar Mishra, Subhash Kumar & Shivam Kumar
     if ((m.name || '').toLowerCase().includes('deepak')) {
-      if (idQueryClean === 'acbmgeccseshk02' || idQueryClean === 'acbmgeccse01' || idQueryClean === '7856030646' || last10 === '7856030646' || idQuery === 'deepak0kr0mishra@gmail.com') return true;
+      if (idQueryClean === 'acbmgeccseshk02' || idQueryClean === 'acbmgeccse02' || idQueryClean === '7856030646' || last10 === '7856030646' || idQuery === 'deepak0kr0mishra@gmail.com') return true;
     }
-    if ((m.name || '').toLowerCase().includes('subhash')) {
-      if (idQueryClean === 'acbmgeccseshk01' || idQueryClean === '7856030646' || last10 === '7856030646' || idQuery === 'subhashkumar911724@gmail.com') return true;
+    if ((m.name || '').toLowerCase().includes('subhash') || (m.name || '').toLowerCase().includes('golu')) {
+      if (idQueryClean === 'acbmgeccseshk01' || idQueryClean === 'acbmgeccse01' || idQueryClean === '9117242808' || last10 === '9117242808' || idQuery === 'subhashkumar911724@gmail.com') return true;
+    }
+    if ((m.name || '').toLowerCase().includes('shivam')) {
+      if (idQueryClean === 'acbmgeccseshk03' || idQueryClean === 'acbmgeccse03' || idQueryClean === 'ugotshiivam' || idQueryClean === '9304742665' || last10 === '9304742665' || idQuery === 'heyshiivam556@gmail.com') return true;
     }
 
     // 4. Email match
@@ -817,14 +854,18 @@ export function verifyMentorLogin(loginIdentifier, passwordInput) {
 
   if (mentor) {
     const isDeepak = (mentor.name || '').toLowerCase().includes('deepak');
-    const isSubhash = (mentor.name || '').toLowerCase().includes('subhash');
-    const fallbackPass = isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : 'Mentor@123');
+    const isSubhash = (mentor.name || '').toLowerCase().includes('subhash') || (mentor.name || '').toLowerCase().includes('golu');
+    const isShivam = (mentor.name || '').toLowerCase().includes('shivam');
+    const fallbackPass = isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : (isShivam ? 'SHIVAM@2006' : 'Mentor@123'));
     const expected = (mentor.password || fallbackPass).trim();
     if (
       pass === expected || 
       pass.toLowerCase() === expected.toLowerCase() || 
       pass.toLowerCase() === 'deepak@2006' ||
       pass.toLowerCase() === 'sub@2006' ||
+      pass.toLowerCase() === 'shivam@2006' ||
+      pass === 'UGotShiivam' ||
+      pass.toLowerCase() === 'ugotshiivam' ||
       pass.toLowerCase() === 'deepak@123' ||
       pass === 'Mentor@123' || 
       pass.toLowerCase() === 'mentor@123' || 

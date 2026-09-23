@@ -1,205 +1,156 @@
 /**
  * ══════════════════════════════════════════════════════════════════════════════
- * APNA COLLEGE BIHAR — CORE MENTORSHIP TEAM APPLICATION GOOGLE FORM SCRIPT
+ * APNA COLLEGE BIHAR — MENTOR APPLICATION FORM SCRIPT (SINGLE PAGE / CLEAN ENGLISH)
  * ══════════════════════════════════════════════════════════════════════════════
  * 
- * Yeh Google Apps Script automatically create karega:
- * 1. Streamlined Google Form for "Apna College Bihar Core Mentorship Team"
- * 2. Connected Google Sheet (jahan saare responses auto-save honge)
- * 3. Execution Log me Form ka Edit link, Public shareable link aur Sheet link
+ * Includes only:
+ * 1. Modal questions (Name, Phone, Email, Role, College/Passout, Branch, Photo, 
+ *    Username, Password, Worked On, Expertise In, Mentor Bio)
+ * 2. Current CGPA
+ * 3. Student Capacity
+ * 4. Last 2 Agreement Checkboxes
  * 
- * KAISE RUN KAREIN:
- * 1. https://script.google.com open karein.
- * 2. "+ New project" par click karein aur yeh script paste karein.
- * 3. Dropdown se "createMentorRegistrationForm" chunein aur "Run" (▶) click karein.
- * 4. Execution log se public link copy karke share karein!
+ * Everything in ONE single section (no page breaks) & simple, clean English.
  * ══════════════════════════════════════════════════════════════════════════════
  */
 
 function createMentorRegistrationForm() {
-  const formTitle = "Apna College Bihar | Core Mentorship Team Application";
+  const formTitle = "Apna College Bihar | Mentor Application Form";
   
   // 1. Create Google Form
   const form = FormApp.create(formTitle);
   
-  // 2. Inspiring Description — Core Team & Ecosystem
+  // 2. Simple, Professional English Description
   const formDescription = 
-    "🔥 Welcome to the Core Mentorship Team of Apna College Bihar!\n\n" +
-    "You are NOT just a mentor; you are the CORE PILLAR of this movement.\n\n" +
-    "Yahan aap poore Bihar Engineering University (BEU) ke students aur ambitious peers ke saath personalize connect karenge. " +
-    "Hum milkar ek aisa powerful tech ecosystem build kar rahe hain jo Bihar ke har engineering college ke student ko elevate kare, " +
-    "unka confidence badhaye, aur pure state me ek solid network create kare.\n\n" +
-    "🌟 What You Will Do as Core Mentorship Team:\n" +
-    "• Direct & Personalized Connect: 1-on-1 aur group sessions me juniors ko guide karein.\n" +
-    "• Build a Thriving Ecosystem: Bihar ke 38+ engineering colleges ke students ke sath strong network banayein.\n" +
-    "• Elevate Bihar's Tech Culture: Coding, BEU exams aur placement guidance me unhe aage layein.\n" +
-    "• Core Team Recognition: Aapka profile Apna College Bihar ke official portal par Core Mentor ke roop me feature hoga.\n\n" +
-    "🤝 NOTE (100% VOLUNTARY & UNPAID ROLE):\n" +
-    "Yeh role puri tarah se VOLUNTARY (स्वैच्छिक / Pro-Bono) hai. Isme koi salary ya monetary payment nahi hai. " +
-    "Yeh community upliftment aur Bihar ke juniors ki niswarth madad ke liye ek mission hai.";
+    "Welcome to Apna College Bihar Mentorship Program!\n\n" +
+    "Please fill in your details below to join our core mentorship network for Bihar Engineering University (BEU) students. " +
+    "These details will be used to set up your official Mentor Profile on our portal.\n\n" +
+    "Note: This is a 100% voluntary (unpaid) community initiative to empower engineering students across Bihar.";
   
   form.setDescription(formDescription);
   form.setAllowResponseEdits(false);
-  form.setCollectEmail(true); // Verified email collection
-  form.setProgressBar(true);
+  form.setCollectEmail(true);
+  form.setProgressBar(false);
   form.setShowLinkToRespondAgain(false);
   form.setConfirmationMessage(
-    "🎉 Welcome to the Core Mentorship Team of Apna College Bihar!\n\n" +
-    "Aapka application successfully receive ho gaya hai. Hum aapse jald hi direct WhatsApp par connect karenge taaki milkar poore BEU ka sabse powerful tech & mentorship ecosystem build kar sakein! 🚀\n\n" +
-    "🌐 Website: https://apnacollegebihar.online\n" +
+    "Thank you! Your mentor application has been submitted successfully.\n\n" +
+    "Our team will review your profile and activate your mentor account shortly. We will reach out on your WhatsApp number.\n\n" +
+    "Website: https://apnacollegebihar.online\n" +
     "— Team Apna College Bihar"
   );
 
   // ═════════════════════════════════════════════════════════════════════════════
-  // SECTION 1: PERSONAL & CONTACT INFORMATION
+  // ALL QUESTIONS ON A SINGLE PAGE (NO PAGE BREAKS)
   // ═════════════════════════════════════════════════════════════════════════════
-  
+
   // 1. Full Name
   form.addTextItem()
-    .setTitle("1. Full Name (पूरा नाम)")
-    .setHelpText("Apna pura official naam likhein.")
+    .setTitle("1. Full Name")
+    .setHelpText("e.g. Saurabh Verma or Subhash Kumar")
     .setRequired(true);
 
-  // 2. Email Address
-  const emailItem = form.addTextItem()
-    .setTitle("2. Email Address (ईमेल आईडी)")
-    .setHelpText("Active Gmail address enter karein jahan core team aapse communicate kar sake.")
-    .setRequired(true);
-  const emailValidation = FormApp.createTextValidation()
-    .requireTextIsEmail()
-    .setHelpText("Kripya ek valid email address enter karein.")
-    .build();
-  emailItem.setValidation(emailValidation);
-
-  // 3. WhatsApp Mobile Number
-  const whatsappItem = form.addTextItem()
-    .setTitle("3. WhatsApp Number (व्हाट्सएप नंबर)")
-    .setHelpText("10-digit ka active WhatsApp number (bina +91 ya 0 ke).")
+  // 2. Phone Number (WhatsApp / Calling)
+  const phoneItem = form.addTextItem()
+    .setTitle("2. Phone Number (WhatsApp / Calling)")
+    .setHelpText("10-digit mobile number for contact")
     .setRequired(true);
   const phoneValidation = FormApp.createTextValidation()
     .requireTextMatchesPattern("^[6-9][0-9]{9}$")
-    .setHelpText("Kripya 10-digit ka valid mobile number enter karein.")
+    .setHelpText("Please enter a valid 10-digit Indian mobile number.")
     .build();
-  whatsappItem.setValidation(phoneValidation);
+  phoneItem.setValidation(phoneValidation);
 
-  // 4. Gender
-  form.addMultipleChoiceItem()
-    .setTitle("4. Gender (लिंग)")
-    .setChoiceValues(["Male (पुरुष)", "Female (महिला)", "Prefer not to say"])
+  // 3. Email Address
+  const emailItem = form.addTextItem()
+    .setTitle("3. Email Address")
+    .setHelpText("Your active Gmail address to receive login credentials")
+    .setRequired(true);
+  const emailValidation = FormApp.createTextValidation()
+    .requireTextIsEmail()
+    .setHelpText("Please enter a valid email address.")
+    .build();
+  emailItem.setValidation(emailValidation);
+
+  // 4. Role / Job Title
+  form.addTextItem()
+    .setTitle("4. Role / Job Title")
+    .setHelpText("e.g. Senior BEU Scholar & Mentor, Student Mentor, Software Engineer, Web Developer")
     .setRequired(true);
 
-  // ═════════════════════════════════════════════════════════════════════════════
-  // SECTION 2: COLLEGE & BRANCH DETAILS (Direct Typing)
-  // ═════════════════════════════════════════════════════════════════════════════
-  form.addPageBreakItem()
-    .setTitle("Section 2: College & Academic Background (कॉलेज एवं ब्रांच)")
-    .setHelpText("Aapke college aur branch ki jaankari.");
-
-  // 5. College Name (Direct Input)
+  // 5. College & Passout Batch
   form.addTextItem()
-    .setTitle("5. Engineering College Name (कॉलेज का नाम)")
-    .setHelpText("Apne Engineering College ka naam likhein (e.g. GEC Sheikhpura, BCE Bhagalpur, MIT Muzaffarpur, GCE Gaya, BCE Bakhtiyarpur, etc.)")
+    .setTitle("5. College Name & Passout Batch")
+    .setHelpText("e.g. BCE Bhagalpur (2020-24), GEC Sheikhpura (2022-26), MIT Muzaffarpur (2021-25)")
     .setRequired(true);
 
-  // 6. Branch / Stream (Direct Input)
+  // 6. Branch / Domain
   form.addTextItem()
-    .setTitle("6. Branch / Specialization (इंजीनियरिंग ब्रांच)")
-    .setHelpText("Apni Branch likhein (e.g. CSE, CSE-AIML, CSE-DS, ECE, EEE, EE, ME, CE, etc.)")
+    .setTitle("6. Branch / Domain")
+    .setHelpText("e.g. Computer Science & Engineering (CSE), ECE, EEE, EE, ME, CE, AI/ML")
     .setRequired(true);
 
   // 7. Current CGPA / Percentage
   form.addTextItem()
-    .setTitle("7. Current CGPA or Percentage (CGPA या प्रतिशत)")
-    .setHelpText("e.g. 8.45 CGPA ya 80%")
+    .setTitle("7. Current CGPA or Percentage")
+    .setHelpText("e.g. 8.45 CGPA or 82%")
     .setRequired(true);
 
-  // ═════════════════════════════════════════════════════════════════════════════
-  // SECTION 3: SKILLS, TECH STACK & PROJECTS
-  // ═════════════════════════════════════════════════════════════════════════════
-  form.addPageBreakItem()
-    .setTitle("Section 3: Skills & Domain Expertise (कौशल एवं अनुभव)")
-    .setHelpText("Aap kin technologies ya subjects me juniors ko guide kar sakte hain.");
-
-  // 8. Areas of Expertise / Tech Stack
-  form.addCheckboxItem()
-    .setTitle("8. Areas of Expertise / Tech Stack (Aap kin vishayo me mentor kar sakte hain?)")
-    .setHelpText("Ek se zyada options select kar sakte hain.")
-    .setChoiceValues([
-      "Frontend Web Development (HTML, CSS, JavaScript, React, Tailwind)",
-      "Backend & Full Stack Development (Node.js, Express, MongoDB, SQL, Next.js)",
-      "Data Structures & Algorithms (DSA in C++ / Java / Python)",
-      "Python, AI & Machine Learning / Data Science",
-      "Mobile App Development (Flutter, React Native, Android)",
-      "BEU Semester Exam Guidance & Subject Strategy",
-      "BEU Core Branch Subjects (Electrical, Civil, Mechanical, Electronics)",
-      "Competitive Programming (LeetCode / CodeChef / Codeforces)",
-      "Git, GitHub & Open Source",
-      "Placement Strategy & Resume Guidance",
-      "GATE / ESE Exam Strategy"
-    ])
-    .showOtherOption(true)
-    .setRequired(true);
-
-  // 9. Key Projects
-  form.addParagraphTextItem()
-    .setTitle("9. Projects You Have Built or Worked On (प्रोजेक्ट्स का विवरण)")
-    .setHelpText("Aapne jin projects par kaam kiya hai unke naam aur brief details likhein (e.g., Portfolio, Chat App, E-Commerce, ML model, etc.).")
-    .setRequired(true);
-
-  // 10. GitHub / Project Link (Optional)
+  // 8. Preferred Username / Login ID (Optional)
   form.addTextItem()
-    .setTitle("10. GitHub Profile / Live Project Link (गिटहब या प्रोजेक्ट लिंक - Optional)")
-    .setHelpText("e.g. https://github.com/yourusername ya live project link")
+    .setTitle("8. Preferred Username / Login ID (Optional)")
+    .setHelpText("e.g. ACBMGECCSE01 or your custom username (leave blank to auto-generate)")
     .setRequired(false);
 
-  // ═════════════════════════════════════════════════════════════════════════════
-  // SECTION 4: STUDENT HANDLING CAPACITY (Without Time Wastage)
-  // ═════════════════════════════════════════════════════════════════════════════
-  form.addPageBreakItem()
-    .setTitle("Section 4: Student Mentorship Capacity (स्टूडेंट क्षमता)")
-    .setHelpText("Bina apna time waste kiye aap kitne students ko smoothly handle kar sakte hain.");
-
-  // 11. Student Capacity (Direct Text Input - No predefined options)
+  // 9. Preferred Password (Optional)
   form.addTextItem()
-    .setTitle("11. How many students can you comfortably handle & guide without wastage of your time?")
-    .setHelpText("Aap chahe 5 ko mentor karein lekin acche se karein, isliye aap apni ichha anusaar jitne students ko chunna chahte hain utna hi chunein aur likhein.")
-    .setRequired(true);
+    .setTitle("9. Preferred Portal Password (Optional)")
+    .setHelpText("Your portal login password (leave blank for Default: Mentor@123)")
+    .setRequired(false);
 
-  // ═════════════════════════════════════════════════════════════════════════════
-  // SECTION 5: VISION & VOLUNTARY CONFIRMATION
-  // ═════════════════════════════════════════════════════════════════════════════
-  form.addPageBreakItem()
-    .setTitle("Section 5: Vision & Voluntary Agreement (उद्देश्य एवं सहमति)")
-    .setHelpText("Ecosystem ko elevate karne ke liye aapka sankalp.");
-
-  // 12. Why Join Core Team
+  // 10. Worked On
   form.addParagraphTextItem()
-    .setTitle("12. Why do you want to join the Core Mentorship Team of Apna College Bihar?")
-    .setHelpText("Aap Bihar ke engineering ecosystem ko personalize connect karke kaise elevate karenge?")
+    .setTitle("10. Worked On")
+    .setHelpText("Projects, technologies, or stacks you have worked on (e.g. Web Development, AI/ML Projects, Core Electronics, Robotics, Chat Apps)")
     .setRequired(true);
 
-  // 13. Voluntary & Unpaid Confirmation
+  // 11. Expertise In
+  form.addTextItem()
+    .setTitle("11. Expertise In")
+    .setHelpText("Subjects or domains you can guide students in (e.g. BEU Semester Exams, C++, DSA, Python, Web Dev, GATE Prep, Placement Guidance)")
+    .setRequired(true);
+
+  // 12. Mentor Bio / Guidance Message
+  form.addParagraphTextItem()
+    .setTitle("12. Mentor Bio / Guidance Message")
+    .setHelpText("Brief advice or bio for students (displayed on your official profile card on the website)")
+    .setRequired(true);
+
+  // 13. Student Mentorship Capacity
+  form.addTextItem()
+    .setTitle("13. How many students can you comfortably mentor without affecting your time?")
+    .setHelpText("Even if you mentor only 5 students, quality guidance is what matters. Write the number of students you can comfortably handle (e.g. 5, 10, 25, etc.)")
+    .setRequired(true);
+
+  // 14. Voluntary Role Confirmation (Checkbox 1)
   form.addCheckboxItem()
-    .setTitle("13. Voluntary & Unpaid Role Confirmation (स्वैच्छिक एवं अवैतनिक सहमति)")
-    .setHelpText("Kripya confirm karein ki aap samajhte hain ki yeh ek 100% voluntary seva hai.")
+    .setTitle("14. Voluntary Role Confirmation")
     .setChoiceValues([
-      "Main spasht roop se samajhta/samajhti hoon ki yeh role 100% VOLUNTARY (स्वैच्छिक / Unpaid) hai. Isme koi salary ya monetary payment nahi hai. Main poore BEU ke sath ek strong network banane aur Bihar ke students ko elevate karne ke liye Core Mentorship Team se jud raha/rahi hoon."
+      "I understand and agree that this is a 100% voluntary (unpaid) mentorship role to support Bihar engineering students."
     ])
     .setRequired(true);
 
-  // 14. Mentorship Commitment
+  // 15. Mentorship Commitment (Checkbox 2)
   form.addCheckboxItem()
-    .setTitle("14. Mentorship Commitment (मेंटरशिप संकल्प)")
-    .setHelpText("Kripya apna commitment confirm karein.")
+    .setTitle("15. Mentorship Commitment")
     .setChoiceValues([
-      "Main acche se mentor karunga ya karungi"
+      "I will mentor students genuinely and properly."
     ])
     .setRequired(true);
 
   // ═════════════════════════════════════════════════════════════════════════════
   // LINK TO GOOGLE SHEET FOR RESPONSES
   // ═════════════════════════════════════════════════════════════════════════════
-  const sheetName = "Apna College Bihar - Core Mentor Applications (Responses)";
+  const sheetName = "Apna College Bihar - Mentor Applications (Responses)";
   const spreadsheet = SpreadsheetApp.create(sheetName);
   form.setDestination(FormApp.DestinationType.SPREADSHEET, spreadsheet.getId());
 
@@ -211,7 +162,7 @@ function createMentorRegistrationForm() {
   const sheetUrl = spreadsheet.getUrl();
 
   Logger.log("==================================================================");
-  Logger.log("🔥 SUCCESS: Apna College Bihar Core Mentorship Form Created!");
+  Logger.log("🎉 SUCCESS: Apna College Bihar Mentor Google Form Created!");
   Logger.log("==================================================================");
   Logger.log("📝 FORM EDIT URL: \n" + editUrl);
   Logger.log("------------------------------------------------------------------");
