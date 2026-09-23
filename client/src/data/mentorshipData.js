@@ -127,6 +127,27 @@ export const INITIAL_MENTORS = [
     specialties: ['Web Dev', 'DSA'],
     bio: 'Keep grinding',
     capacity: 6
+  },
+  {
+    id: 'mentor-cse-piyush',
+    name: 'PIYUSH',
+    role: 'Student Mentor',
+    college: 'Government Engineering College, Sheikhpura',
+    branch: 'CSE',
+    branchLabel: 'CSE',
+    cgpa: '8.05',
+    workedOn: 'Web development',
+    expertiseIn: 'Beu semester',
+    avatar: '',
+    phone: 'ACBMGECCSESHK04',
+    username: 'ACBMGECCSESHK04',
+    mobile: '9263026782',
+    password: 'PIYUSH@2006',
+    email: 'piyushraj2903@gmail.com',
+    meetLink: '',
+    specialties: ['BEU Semester Guidance', 'Web Development'],
+    bio: 'Government Engineering College, Sheikhpura senior mentor.',
+    capacity: 5
   }
 ];
 
@@ -644,6 +665,8 @@ export function getEnrolledStudents() {
             assigned = 'mentor-cse-subhash';
           } else if (assigned && assigned.toLowerCase().includes('shivam')) {
             assigned = 'mentor-cse-shivam';
+          } else if (assigned && assigned.toLowerCase().includes('piyush')) {
+            assigned = 'mentor-cse-piyush';
           }
           return { ...s, assignedMentorId: assigned };
         });
@@ -668,11 +691,11 @@ export function saveEnrolledStudents(students) {
 export function getMentorsList() {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
-      ['beu_mentors_list', 'beu_mentors_list_v2', 'beu_mentors_list_v3', 'beu_mentors_list_v4'].forEach(k => {
+      ['beu_mentors_list', 'beu_mentors_list_v2', 'beu_mentors_list_v3', 'beu_mentors_list_v4', 'beu_mentors_list_v5'].forEach(k => {
         try { localStorage.removeItem(k); } catch(e) {}
       });
     }
-    const saved = localStorage.getItem('beu_mentors_list_v5');
+    const saved = localStorage.getItem('beu_mentors_list_v6');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -681,19 +704,20 @@ export function getMentorsList() {
           const isDeepak = (m.name || '').toLowerCase().includes('deepak');
           const isSubhash = (m.name || '').toLowerCase().includes('subhash') || (m.name || '').toLowerCase().includes('golu');
           const isShivam = (m.name || '').toLowerCase().includes('shivam');
-          const key = isDeepak ? 'deepak' : (isSubhash ? 'subhash' : (isShivam ? 'shivam' : m.id));
-          const canonicalId = isDeepak ? 'mentor-cse-deepak' : (isSubhash ? 'mentor-cse-subhash' : (isShivam ? 'mentor-cse-shivam' : m.id));
+          const isPiyush = (m.name || '').toLowerCase().includes('piyush');
+          const key = isDeepak ? 'deepak' : (isSubhash ? 'subhash' : (isShivam ? 'shivam' : (isPiyush ? 'piyush' : m.id)));
+          const canonicalId = isDeepak ? 'mentor-cse-deepak' : (isSubhash ? 'mentor-cse-subhash' : (isShivam ? 'mentor-cse-shivam' : (isPiyush ? 'mentor-cse-piyush' : m.id)));
           const avatarClean = (m.avatar && !m.avatar.includes('unsplash')) ? m.avatar : '';
           const cleaned = {
             ...m,
             id: canonicalId,
-            name: isSubhash ? 'SUBHASH KUMAR' : (isShivam ? 'SHIVAM KUMAR' : (isDeepak ? 'DEEPAK KUMAR MISHRA' : m.name)),
+            name: isSubhash ? 'SUBHASH KUMAR' : (isShivam ? 'SHIVAM KUMAR' : (isPiyush ? 'PIYUSH' : (isDeepak ? 'DEEPAK KUMAR MISHRA' : m.name))),
             avatar: avatarClean,
-            username: m.username || m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : ''))),
-            phone: m.phone || m.username || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : ''))),
-            mobile: m.mobile !== undefined && m.mobile !== '' ? m.mobile : (isDeepak ? '7856030646' : (isSubhash ? '9117242808' : (isShivam ? '9304742665' : ''))),
-            password: m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : (isShivam ? 'SHIVAM@2006' : 'Mentor@123'))),
-            email: m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'subhashkumar911724@gmail.com' : (isShivam ? 'heyshiivam556@gmail.com' : '')))
+            username: m.username || m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : (isPiyush ? 'ACBMGECCSESHK04' : '')))),
+            phone: m.phone || m.username || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : (isPiyush ? 'ACBMGECCSESHK04' : '')))),
+            mobile: m.mobile !== undefined && m.mobile !== '' ? m.mobile : (isDeepak ? '7856030646' : (isSubhash ? '9117242808' : (isShivam ? '9304742665' : (isPiyush ? '9263026782' : '')))),
+            password: m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : (isShivam ? 'SHIVAM@2006' : (isPiyush ? 'PIYUSH@2006' : 'Mentor@123')))),
+            email: m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'subhashkumar911724@gmail.com' : (isShivam ? 'heyshiivam556@gmail.com' : (isPiyush ? 'piyushraj2903@gmail.com' : ''))))
           };
           if (!unique.has(key)) unique.set(key, cleaned);
         });
@@ -709,7 +733,7 @@ export function getMentorsList() {
 
 export function saveMentorsList(mentors) {
   try {
-    localStorage.setItem('beu_mentors_list_v5', JSON.stringify(mentors));
+    localStorage.setItem('beu_mentors_list_v6', JSON.stringify(mentors));
   } catch (e) {
     console.error('Error saving mentors:', e);
   }
@@ -841,6 +865,9 @@ export function verifyMentorLogin(loginIdentifier, passwordInput) {
     if ((m.name || '').toLowerCase().includes('shivam')) {
       if (idQueryClean === 'acbmgeccseshk03' || idQueryClean === 'acbmgeccse03' || idQueryClean === 'ugotshiivam' || idQueryClean === '9304742665' || last10 === '9304742665' || idQuery === 'heyshiivam556@gmail.com') return true;
     }
+    if ((m.name || '').toLowerCase().includes('piyush')) {
+      if (idQueryClean === 'acbmgeccseshk04' || idQueryClean === 'acbmgeccse04' || idQueryClean === '9263026782' || last10 === '9263026782' || idQuery === 'piyushraj2903@gmail.com') return true;
+    }
 
     // 4. Email match
     if (m.email && m.email.toLowerCase() === idQuery) return true;
@@ -858,7 +885,8 @@ export function verifyMentorLogin(loginIdentifier, passwordInput) {
     const isDeepak = (mentor.name || '').toLowerCase().includes('deepak');
     const isSubhash = (mentor.name || '').toLowerCase().includes('subhash') || (mentor.name || '').toLowerCase().includes('golu');
     const isShivam = (mentor.name || '').toLowerCase().includes('shivam');
-    const fallbackPass = isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : (isShivam ? 'SHIVAM@2006' : 'Mentor@123'));
+    const isPiyush = (mentor.name || '').toLowerCase().includes('piyush');
+    const fallbackPass = isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : (isShivam ? 'SHIVAM@2006' : (isPiyush ? 'PIYUSH@2006' : 'Mentor@123')));
     const expected = (mentor.password || fallbackPass).trim();
     if (
       pass === expected || 
@@ -866,6 +894,7 @@ export function verifyMentorLogin(loginIdentifier, passwordInput) {
       pass.toLowerCase() === 'deepak@2006' ||
       pass.toLowerCase() === 'sub@2006' ||
       pass.toLowerCase() === 'shivam@2006' ||
+      pass.toLowerCase() === 'piyush@2006' ||
       pass === 'UGotShiivam' ||
       pass.toLowerCase() === 'ugotshiivam' ||
       pass.toLowerCase() === 'deepak@123' ||

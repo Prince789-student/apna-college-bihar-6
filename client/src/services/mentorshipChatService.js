@@ -43,6 +43,9 @@ export function getCanonicalMentorKey(mentor) {
   if (str.includes('shivam') || str.includes('shk03') || str.includes('ugotshiivam')) {
     return 'shivam';
   }
+  if (str.includes('piyush') || str.includes('shk04')) {
+    return 'piyush';
+  }
   return 'deepak';
 }
 
@@ -194,13 +197,14 @@ export function subscribeThreadMessages(threadId, onUpdate) {
   let firestoreUnsub = null;
   try {
     const messagesCol = collection(db, 'MentorshipMessages');
-    const baseThread = threadId.replace(/__deepak|__subhash|__shivam/g, '');
+    const baseThread = threadId.replace(/__deepak|__subhash|__shivam|__piyush/g, '');
     const candidateIds = Array.from(new Set([
       threadId,
       baseThread,
       `${baseThread}__deepak`,
       `${baseThread}__subhash`,
-      `${baseThread}__shivam`
+      `${baseThread}__shivam`,
+      `${baseThread}__piyush`
     ]));
     const q = query(messagesCol, where('threadId', 'in', candidateIds));
 

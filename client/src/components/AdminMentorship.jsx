@@ -247,19 +247,20 @@ export default function AdminMentorship({ flash }) {
       const isDeepak = (m.name || '').toLowerCase().includes('deepak');
       const isSubhash = (m.name || '').toLowerCase().includes('subhash') || (m.name || '').toLowerCase().includes('golu');
       const isShivam = (m.name || '').toLowerCase().includes('shivam');
-      const key = isDeepak ? 'deepak' : (isSubhash ? 'subhash' : (isShivam ? 'shivam' : m.id));
-      const canonicalId = isDeepak ? 'mentor-cse-deepak' : (isSubhash ? 'mentor-cse-subhash' : (isShivam ? 'mentor-cse-shivam' : m.id));
+      const isPiyush = (m.name || '').toLowerCase().includes('piyush');
+      const key = isDeepak ? 'deepak' : (isSubhash ? 'subhash' : (isShivam ? 'shivam' : (isPiyush ? 'piyush' : m.id)));
+      const canonicalId = isDeepak ? 'mentor-cse-deepak' : (isSubhash ? 'mentor-cse-subhash' : (isShivam ? 'mentor-cse-shivam' : (isPiyush ? 'mentor-cse-piyush' : m.id)));
       const cleanAvatar = (m.avatar && !m.avatar.includes('unsplash')) ? m.avatar : '';
       const cleanMentor = {
         ...m,
         id: canonicalId,
-        name: isSubhash ? 'SUBHASH KUMAR' : (isShivam ? 'SHIVAM KUMAR' : (isDeepak ? 'DEEPAK KUMAR MISHRA' : m.name)),
+        name: isSubhash ? 'SUBHASH KUMAR' : (isShivam ? 'SHIVAM KUMAR' : (isPiyush ? 'PIYUSH' : (isDeepak ? 'DEEPAK KUMAR MISHRA' : m.name))),
         avatar: cleanAvatar,
-        username: m.username || m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : ''))),
-        phone: m.phone || m.username || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : ''))),
-        mobile: m.mobile !== undefined && m.mobile !== '' ? m.mobile : (isDeepak ? '7856030646' : (isSubhash ? '9117242808' : (isShivam ? '9304742665' : ''))),
-        password: m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : (isShivam ? 'SHIVAM@2006' : 'Mentor@123'))),
-        email: m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'subhashkumar911724@gmail.com' : (isShivam ? 'heyshiivam556@gmail.com' : '')))
+        username: m.username || m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : (isPiyush ? 'ACBMGECCSESHK04' : '')))),
+        phone: m.phone || m.username || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : (isPiyush ? 'ACBMGECCSESHK04' : '')))),
+        mobile: m.mobile !== undefined && m.mobile !== '' ? m.mobile : (isDeepak ? '7856030646' : (isSubhash ? '9117242808' : (isShivam ? '9304742665' : (isPiyush ? '9263026782' : '')))),
+        password: m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : (isShivam ? 'SHIVAM@2006' : (isPiyush ? 'PIYUSH@2006' : 'Mentor@123')))),
+        email: m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'subhashkumar911724@gmail.com' : (isShivam ? 'heyshiivam556@gmail.com' : (isPiyush ? 'piyushraj2903@gmail.com' : ''))))
       };
       if (!unique.has(key)) unique.set(key, cleanMentor);
     });
@@ -278,19 +279,20 @@ export default function AdminMentorship({ flash }) {
           const isDeepak = (m.name || '').toLowerCase().includes('deepak');
           const isSubhash = (m.name || '').toLowerCase().includes('subhash') || (m.name || '').toLowerCase().includes('golu');
           const isShivam = (m.name || '').toLowerCase().includes('shivam');
-          const key = isDeepak ? 'deepak' : (isSubhash ? 'subhash' : (isShivam ? 'shivam' : m.id));
-          const canonicalId = isDeepak ? 'mentor-cse-deepak' : (isSubhash ? 'mentor-cse-subhash' : (isShivam ? 'mentor-cse-shivam' : m.id));
+          const isPiyush = (m.name || '').toLowerCase().includes('piyush');
+          const key = isDeepak ? 'deepak' : (isSubhash ? 'subhash' : (isShivam ? 'shivam' : (isPiyush ? 'piyush' : m.id)));
+          const canonicalId = isDeepak ? 'mentor-cse-deepak' : (isSubhash ? 'mentor-cse-subhash' : (isShivam ? 'mentor-cse-shivam' : (isPiyush ? 'mentor-cse-piyush' : m.id)));
           const cleanAvatar = (m.avatar && !m.avatar.includes('unsplash')) ? m.avatar : '';
           const cleaned = {
             ...m,
             id: canonicalId,
-            name: isSubhash ? 'SUBHASH KUMAR' : (isShivam ? 'SHIVAM KUMAR' : (isDeepak ? 'DEEPAK KUMAR MISHRA' : m.name)),
+            name: isSubhash ? 'SUBHASH KUMAR' : (isShivam ? 'SHIVAM KUMAR' : (isPiyush ? 'PIYUSH' : (isDeepak ? 'DEEPAK KUMAR MISHRA' : m.name))),
             avatar: cleanAvatar,
-            username: m.username || m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : ''))),
-            phone: m.phone || m.username || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : ''))),
-            mobile: m.mobile !== undefined && m.mobile !== '' ? m.mobile : (isDeepak ? '7856030646' : (isSubhash ? '9117242808' : (isShivam ? '9304742665' : ''))),
-            email: m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'subhashkumar911724@gmail.com' : (isShivam ? 'heyshiivam556@gmail.com' : ''))),
-            password: m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : (isShivam ? 'SHIVAM@2006' : 'Mentor@123')))
+            username: m.username || m.phone || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : (isPiyush ? 'ACBMGECCSESHK04' : '')))),
+            phone: m.phone || m.username || (isDeepak ? 'ACBMGECCSESHK02' : (isSubhash ? 'ACBMGECCSESHK01' : (isShivam ? 'ACBMGECCSESHK03' : (isPiyush ? 'ACBMGECCSESHK04' : '')))),
+            mobile: m.mobile !== undefined && m.mobile !== '' ? m.mobile : (isDeepak ? '7856030646' : (isSubhash ? '9117242808' : (isShivam ? '9304742665' : (isPiyush ? '9263026782' : '')))),
+            email: m.email || (isDeepak ? 'deepak0kr0mishra@gmail.com' : (isSubhash ? 'subhashkumar911724@gmail.com' : (isShivam ? 'heyshiivam556@gmail.com' : (isPiyush ? 'piyushraj2903@gmail.com' : '')))),
+            password: m.password || (isDeepak ? 'DEEPAK@2006' : (isSubhash ? 'SUB@2006' : (isShivam ? 'SHIVAM@2006' : (isPiyush ? 'PIYUSH@2006' : 'Mentor@123'))))
           };
           if (!cloudUnique.has(key)) cloudUnique.set(key, cleaned);
         });

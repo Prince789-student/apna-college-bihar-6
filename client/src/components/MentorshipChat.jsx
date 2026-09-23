@@ -29,7 +29,7 @@ export default function MentorshipChat({
   const inputRef = useRef(null);
 
   const studentRoll = student?.roll || student?.whatsapp || '';
-  const mentorId = mentor?.id || (mentor?.name?.toLowerCase().includes('subhash') ? 'mentor-cse-subhash' : (mentor?.name?.toLowerCase().includes('shivam') ? 'mentor-cse-shivam' : 'mentor-cse-deepak'));
+  const mentorId = mentor?.id || (mentor?.name?.toLowerCase().includes('subhash') ? 'mentor-cse-subhash' : (mentor?.name?.toLowerCase().includes('shivam') ? 'mentor-cse-shivam' : (mentor?.name?.toLowerCase().includes('piyush') ? 'mentor-cse-piyush' : 'mentor-cse-deepak')));
   const threadId = getChatThreadId(student, mentor);
 
   const isStudent = currentUserRole === 'student';
