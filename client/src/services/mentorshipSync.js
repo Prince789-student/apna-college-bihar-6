@@ -42,8 +42,29 @@ export async function fetchCloudMentorshipData() {
     }
   }
 
-  // Ensure any newly added INITIAL_ENROLLED_STUDENTS are merged in
+  // Ensure any newly added or updated INITIAL_ENROLLED_STUDENTS are merged in
   if (cloudStudents) {
+    const initialMap = new Map(INITIAL_ENROLLED_STUDENTS.map(s => [s.id, s]));
+    
+    // Update existing records with verified details (phone, email, roll, status)
+    cloudStudents = cloudStudents.map(cs => {
+      const init = initialMap.get(cs.id);
+      if (init) {
+        return {
+          ...cs,
+          name: init.name,
+          email: init.email,
+          whatsapp: init.whatsapp,
+          college: init.college,
+          branch: init.branch,
+          branchCode: init.branchCode,
+          roll: init.roll,
+          status: init.status || cs.status || 'Active'
+        };
+      }
+      return cs;
+    });
+
     const existingIds = new Set(cloudStudents.map(s => s.id));
     const missing = INITIAL_ENROLLED_STUDENTS.filter(s => !existingIds.has(s.id));
     if (missing.length > 0) {

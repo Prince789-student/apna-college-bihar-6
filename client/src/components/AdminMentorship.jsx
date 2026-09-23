@@ -4,7 +4,7 @@ import {
   MessageCircle, Trash2, Search, Filter, Plus, 
   CheckCircle2, ExternalLink, RefreshCw, Star, 
   Calendar, Video, ShieldCheck, Mail, BookOpen, Clock,
-  Copy, Download, Send, KeyRound, Eye, EyeOff, Check, Save, Sparkles, Camera
+  Copy, Download, Send, KeyRound, Eye, EyeOff, Check, Save, Sparkles, Camera, RotateCcw, Archive
 } from 'lucide-react';
 import { db } from '../firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -28,6 +28,7 @@ export default function AdminMentorship({ flash }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBranch, setSelectedBranch] = useState('ALL');
   const [selectedCollege, setSelectedCollege] = useState('ALL');
+  const [studentStatusFilter, setStudentStatusFilter] = useState('Active');
   const [showAddMentorModal, setShowAddMentorModal] = useState(false);
   const [showAddStudentModal, setShowAddStudentModal] = useState(false);
 
@@ -653,14 +654,33 @@ Team Apna College Bihar
     }
   };
 
-  // Delete Student Handler
-  const handleDeleteStudent = async (id) => {
-    if (!window.confirm('Kya aap is student ko enrollment list se hatana chahte hain?')) return;
+  // Move Student to Removed list (Mentorship Admin me safe rahega)
+  const handleMoveToRemoved = async (id) => {
+    if (!window.confirm('Kya aap is student ko "Removed" me daalna chahte hain? (Data Mentorship Admin ke Removed list me safe rahega)')) return;
+    const updated = students.map(s => s.id === id ? { ...s, status: 'Removed' } : s);
+    setStudents(updated);
+    saveEnrolledStudents(updated);
+    await saveCloudMentorshipData(updated, mentors);
+    if (flash) flash('Student ko "Removed" list me daal diya gaya. Ye Mentorship Admin me hamesha rahega. ✅', 'suc');
+  };
+
+  // Restore Student back to Active
+  const handleRestoreStudent = async (id) => {
+    const updated = students.map(s => s.id === id ? { ...s, status: 'Active' } : s);
+    setStudents(updated);
+    saveEnrolledStudents(updated);
+    await saveCloudMentorshipData(updated, mentors);
+    if (flash) flash('Student successfully Active list me restore ho gaya! 🚀', 'suc');
+  };
+
+  // Permanent Delete Student (Admin only)
+  const handlePermanentDelete = async (id) => {
+    if (!window.confirm('WARNING: Kya aap is student ko permanently delete karna chahte hain?')) return;
     const updated = students.filter(s => s.id !== id);
     setStudents(updated);
     saveEnrolledStudents(updated);
     await saveCloudMentorshipData(updated, mentors);
-    if (flash) flash('Student enrollment list se hata diya gaya aur Cloud Sync ho gaya.');
+    if (flash) flash('Student permanently delete ho gaya.');
   };
 
   // Assign Mentor to a student (Admin Controlled)
@@ -699,6 +719,11 @@ Team Apna College Bihar
 
   // Filtered Students
   const filteredStudents = students.filter(s => {
+    const status = s.status || 'Active';
+    if (studentStatusFilter !== 'ALL' && status !== studentStatusFilter) {
+      return false;
+    }
+
     const q = searchQuery.trim().toLowerCase();
     const matchesQuery = !q || 
       (s.name || '').toLowerCase().includes(q) ||
@@ -1169,6 +1194,45 @@ Team Apna College Bihar
           </div>
         </div>
 
+        {/* Status Filter Tabs (Active vs Removed) */}
+        <div className="flex flex-wrap items-center gap-2 pt-1 pb-1">
+          <button 
+            type="button"
+            onClick={() => setStudentStatusFilter('Active')}
+            className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
+              studentStatusFilter === 'Active'
+                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/20'
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+            }`}
+          >
+            <CheckCircle2 size={14} /> Active Students ({students.filter(s => (s.status || 'Active') === 'Active').length})
+          </button>
+
+          <button 
+            type="button"
+            onClick={() => setStudentStatusFilter('Removed')}
+            className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
+              studentStatusFilter === 'Removed'
+                ? 'bg-rose-600 text-white shadow-md shadow-rose-500/20'
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+            }`}
+          >
+            <Trash2 size={14} /> Removed Students ({students.filter(s => s.status === 'Removed').length})
+          </button>
+
+          <button 
+            type="button"
+            onClick={() => setStudentStatusFilter('ALL')}
+            className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
+              studentStatusFilter === 'ALL'
+                ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20'
+                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+            }`}
+          >
+            <Users size={14} /> All Records ({students.length})
+          </button>
+        </div>
+
         {/* Search & Filter Controls */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="relative sm:col-span-1">
@@ -1247,9 +1311,16 @@ Team Apna College Bihar
                       <td className="p-3.5">
                         <p className="font-black text-slate-900 text-xs">{stu.name}</p>
                         <p className="text-[10px] text-slate-400 font-mono">{stu.email}</p>
-                        <span className="inline-block mt-0.5 text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-bold">
-                          {stu.codingExperience?.includes('beginner') ? '🌱 Beginner' : '💻 Has Knowledge'}
-                        </span>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span className="inline-block text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-bold">
+                            {stu.codingExperience?.includes('beginner') ? '🌱 Beginner' : '💻 Has Knowledge'}
+                          </span>
+                          <span className={`inline-block text-[9px] px-1.5 py-0.5 rounded font-black ${
+                            stu.status === 'Removed' ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'
+                          }`}>
+                            {stu.status === 'Removed' ? '❌ Removed' : '✅ Active'}
+                          </span>
+                        </div>
                       </td>
                       <td className="p-3.5">
                         <div className="space-y-1">
@@ -1338,13 +1409,35 @@ Team Apna College Bihar
                         </select>
                       </td>
                       <td className="p-3.5 text-center">
-                        <button 
-                          onClick={() => handleDeleteStudent(stu.id)}
-                          className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-                          title="Remove from enrollment"
-                        >
-                          <Trash2 size={15} />
-                        </button>
+                        {stu.status === 'Removed' ? (
+                          <div className="flex items-center justify-center gap-1">
+                            <button 
+                              type="button"
+                              onClick={() => handleRestoreStudent(stu.id)}
+                              className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
+                              title="Active list me wapas Restore karein"
+                            >
+                              <RotateCcw size={15} />
+                            </button>
+                            <button 
+                              type="button"
+                              onClick={() => handlePermanentDelete(stu.id)}
+                              className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors"
+                              title="Permanently Delete karein"
+                            >
+                              <Trash2 size={15} />
+                            </button>
+                          </div>
+                        ) : (
+                          <button 
+                            type="button"
+                            onClick={() => handleMoveToRemoved(stu.id)}
+                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                            title="Removed list me move karein (Mentorship Admin me safe rahega)"
+                          >
+                            <Trash2 size={15} />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   );
