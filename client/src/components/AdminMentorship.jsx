@@ -312,16 +312,18 @@ export default function AdminMentorship({ flash }) {
   };
 
   const copyAllCredentials = () => {
-    const lines = students.map((s, idx) => 
+    const targetList = (students || []).filter(s => (s.status || 'Active') === 'Active');
+    const lines = targetList.map((s, idx) => 
       `${idx + 1}. ${s.name} | Username (Phone): ${s.whatsapp} | Roll: ${s.roll} | Branch: ${s.branchCode || s.branch} | Pass: ${s.password} | College: ${s.college}`
     ).join('\n');
     navigator.clipboard.writeText(lines);
-    if (flash) flash(`Sabhi ${students.length} students ke Passwords clipboard me copy ho gaye!`, 'suc');
+    if (flash) flash(`Sabhi ${targetList.length} Active students ke Passwords clipboard me copy ho gaye!`, 'suc');
   };
 
   const downloadCSV = () => {
+    const targetList = (students || []).filter(s => (s.status || 'Active') === 'Active');
     const headers = 'ID,Name,Username_Phone,Roll,Password,Branch,College,Email\n';
-    const rows = students.map(s => 
+    const rows = targetList.map(s => 
       `"${s.id}","${s.name}","${s.whatsapp}","${s.roll}","${s.password}","${s.branchCode || s.branch}","${s.college}","${s.email}"`
     ).join('\n');
     const blob = new Blob([headers + rows], { type: 'text/csv;charset=utf-8;' });
@@ -331,7 +333,7 @@ export default function AdminMentorship({ flash }) {
     a.download = `BEU_Mentorship_Student_Credentials_${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-    if (flash) flash('Credentials CSV file successfully download ho gayi!', 'suc');
+    if (flash) flash(`Credentials CSV file (${targetList.length} Active students) successfully download ho gayi!`, 'suc');
   };
 
   // Add Mentor Handler
@@ -714,8 +716,12 @@ Team Apna College Bihar
     if (flash) flash('Password successfully save ho gaya aur Cloud Sync ho gaya! ✅', 'suc');
   };
 
-  // Unique Colleges for Filter
-  const collegesList = Array.from(new Set(students.map(s => s.college))).filter(Boolean);
+  // Active and Removed student lists
+  const activeStudents = students.filter(s => (s.status || 'Active') === 'Active');
+  const removedStudents = students.filter(s => s.status === 'Removed');
+
+  // Unique Colleges for Active Students
+  const collegesList = Array.from(new Set(activeStudents.map(s => s.college))).filter(Boolean);
 
   // Filtered Students
   const filteredStudents = students.filter(s => {
@@ -754,7 +760,7 @@ Team Apna College Bihar
           </div>
           <div>
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Total Enrolled</p>
-            <p className="text-2xl font-[1000] text-slate-900">{students.length} Students</p>
+            <p className="text-2xl font-[1000] text-slate-900">{activeStudents.length} Students</p>
           </div>
         </div>
 
