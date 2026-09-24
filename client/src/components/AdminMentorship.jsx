@@ -28,7 +28,8 @@ export default function AdminMentorship({ flash }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBranch, setSelectedBranch] = useState('ALL');
   const [selectedCollege, setSelectedCollege] = useState('ALL');
-  const [studentStatusFilter, setStudentStatusFilter] = useState('Active');
+  const [removedSearchQuery, setRemovedSearchQuery] = useState('');
+  const [editingRemovedPhones, setEditingRemovedPhones] = useState({});
   const [showAddMentorModal, setShowAddMentorModal] = useState(false);
   const [showAddStudentModal, setShowAddStudentModal] = useState(false);
 
@@ -685,6 +686,22 @@ Team Apna College Bihar
     if (flash) flash('Student permanently delete ho gaya.');
   };
 
+  // Save phone number for removed or active student
+  const handleSaveStudentPhone = async (studentId) => {
+    const newPhone = editingRemovedPhones[studentId];
+    if (!newPhone || !newPhone.trim()) {
+      if (flash) flash('Phone number khali nahi ho sakta!', 'err');
+      return;
+    }
+    const cleanPhone = newPhone.replace(/\D/g, '');
+    const updated = students.map(s => s.id === studentId ? { ...s, whatsapp: cleanPhone } : s);
+    setStudents(updated);
+    saveEnrolledStudents(updated);
+    await saveCloudMentorshipData(updated, mentors);
+    setEditingRemovedPhones(prev => { const n = { ...prev }; delete n[studentId]; return n; });
+    if (flash) flash('Phone number successfully update ho gaya aur Cloud Sync ho gaya! 📱✅', 'suc');
+  };
+
   // Assign Mentor to a student (Admin Controlled)
   const handleAssignMentor = async (studentId, mentorId) => {
     const updated = students.map(s => s.id === studentId ? { ...s, assignedMentorId: mentorId || null } : s);
@@ -723,13 +740,8 @@ Team Apna College Bihar
   // Unique Colleges for Active Students
   const collegesList = Array.from(new Set(activeStudents.map(s => s.college))).filter(Boolean);
 
-  // Filtered Students
-  const filteredStudents = students.filter(s => {
-    const status = s.status || 'Active';
-    if (studentStatusFilter !== 'ALL' && status !== studentStatusFilter) {
-      return false;
-    }
-
+  // Filtered Active Students for Section 2
+  const filteredActiveStudents = activeStudents.filter(s => {
     const q = searchQuery.trim().toLowerCase();
     const matchesQuery = !q || 
       (s.name || '').toLowerCase().includes(q) ||
@@ -747,6 +759,18 @@ Team Apna College Bihar
     const matchesCollege = selectedCollege === 'ALL' || s.college === selectedCollege;
 
     return matchesQuery && matchesBranch && matchesCollege;
+  });
+
+  // Filtered Removed Students for Section 3
+  const filteredRemovedStudents = removedStudents.filter(s => {
+    const q = removedSearchQuery.trim().toLowerCase();
+    if (!q) return true;
+    return (s.name || '').toLowerCase().includes(q) ||
+      (s.roll || '').toLowerCase().includes(q) ||
+      (s.college || '').toLowerCase().includes(q) ||
+      (s.branch || '').toLowerCase().includes(q) ||
+      (s.whatsapp || '').includes(q) ||
+      (s.email || '').toLowerCase().includes(q);
   });
 
   return (
@@ -1138,14 +1162,22 @@ Team Apna College Bihar
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
           <div>
             <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight flex items-center gap-2">
-              <GraduationCap className="text-indigo-600" size={24} /> Enrolled Students Directory ({filteredStudents.length})
+              <GraduationCap className="text-indigo-600" size={24} /> Active Enrolled Students Directory ({filteredActiveStudents.length})
             </h2>
             <p className="text-xs text-slate-500 font-medium mt-1">
-              Google Form se registered sabhi 1st year students ka complete database. Direct WhatsApp / Email credentials bhejein.
+              Google Form se registered sabhi 1st year active students ka complete database. Direct WhatsApp / Email credentials bhejein.
             </p>
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
+            <a 
+              href="#removed-students-section"
+              className="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-black flex items-center gap-1.5 border border-rose-200 transition-all shadow-xs"
+              title="Removed students list par jump karein"
+            >
+              <Trash2 size={14} /> Removed Section ({removedStudents.length})
+            </a>
+
             <button 
               onClick={handleManualCloudSync}
               disabled={isCloudSaving}
@@ -1159,7 +1191,7 @@ Team Apna College Bihar
             <button 
               onClick={copyAllCredentials}
               className="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold flex items-center gap-1.5 border border-indigo-200 transition-all"
-              title="Sabhi students ke password clipboard me copy karein"
+              title="Sabhi active students ke password clipboard me copy karein"
             >
               <Copy size={14} /> Copy All Passwords
             </button>
@@ -1200,43 +1232,17 @@ Team Apna College Bihar
           </div>
         </div>
 
-        {/* Status Filter Tabs (Active vs Removed) */}
-        <div className="flex flex-wrap items-center gap-2 pt-1 pb-1">
-          <button 
-            type="button"
-            onClick={() => setStudentStatusFilter('Active')}
-            className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-              studentStatusFilter === 'Active'
-                ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/20'
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-            }`}
-          >
-            <CheckCircle2 size={14} /> Active Students ({students.filter(s => (s.status || 'Active') === 'Active').length})
-          </button>
-
-          <button 
-            type="button"
-            onClick={() => setStudentStatusFilter('Removed')}
-            className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-              studentStatusFilter === 'Removed'
-                ? 'bg-rose-600 text-white shadow-md shadow-rose-500/20'
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-            }`}
-          >
-            <Trash2 size={14} /> Removed Students ({students.filter(s => s.status === 'Removed').length})
-          </button>
-
-          <button 
-            type="button"
-            onClick={() => setStudentStatusFilter('ALL')}
-            className={`px-4 py-2 rounded-xl text-xs font-black transition-all flex items-center gap-2 ${
-              studentStatusFilter === 'ALL'
-                ? 'bg-slate-900 text-white shadow-md shadow-slate-900/20'
-                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-            }`}
-          >
-            <Users size={14} /> All Records ({students.length})
-          </button>
+        {/* Active Students Counter Banner */}
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-50 border border-slate-200/80 rounded-2xl">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span className="text-xs font-bold text-slate-700">
+              Showing <strong className="text-slate-900">{filteredActiveStudents.length} Active Mentees</strong> enrolled in BEU Mentorship.
+            </span>
+          </div>
+          <span className="text-[11px] text-slate-500 font-medium">
+            Kisi ko remove karne ke liye Action column ke <Trash2 size={12} className="inline text-rose-500" /> icon par click karein.
+          </span>
         </div>
 
         {/* Search & Filter Controls */}
@@ -1301,14 +1307,14 @@ Team Apna College Bihar
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
-              {filteredStudents.length === 0 ? (
+              {filteredActiveStudents.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="p-8 text-center text-slate-400 text-xs">
-                    Koi student match nahi hua. Search filter check karein!
+                    Koi active student match nahi hua. Search filter check karein!
                   </td>
                 </tr>
               ) : (
-                filteredStudents.map((stu, index) => {
+                filteredActiveStudents.map((stu, index) => {
                   const assignedMentor = mentors.find(m => m.id === stu.assignedMentorId);
 
                   return (
@@ -1321,10 +1327,8 @@ Team Apna College Bihar
                           <span className="inline-block text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-bold">
                             {stu.codingExperience?.includes('beginner') ? '🌱 Beginner' : '💻 Has Knowledge'}
                           </span>
-                          <span className={`inline-block text-[9px] px-1.5 py-0.5 rounded font-black ${
-                            stu.status === 'Removed' ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'
-                          }`}>
-                            {stu.status === 'Removed' ? '❌ Removed' : '✅ Active'}
+                          <span className="inline-block text-[9px] px-1.5 py-0.5 rounded font-black bg-emerald-100 text-emerald-700">
+                            ✅ Active
                           </span>
                         </div>
                       </td>
@@ -1415,35 +1419,169 @@ Team Apna College Bihar
                         </select>
                       </td>
                       <td className="p-3.5 text-center">
-                        {stu.status === 'Removed' ? (
-                          <div className="flex items-center justify-center gap-1">
-                            <button 
-                              type="button"
-                              onClick={() => handleRestoreStudent(stu.id)}
-                              className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
-                              title="Active list me wapas Restore karein"
-                            >
-                              <RotateCcw size={15} />
-                            </button>
-                            <button 
-                              type="button"
-                              onClick={() => handlePermanentDelete(stu.id)}
-                              className="p-1.5 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors"
-                              title="Permanently Delete karein"
-                            >
-                              <Trash2 size={15} />
-                            </button>
+                        <button 
+                          type="button"
+                          onClick={() => handleMoveToRemoved(stu.id)}
+                          className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                          title="Removed Section me move karein (Mentorship Admin me safe rahega)"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* ── Section 3: Dedicated Removed Students Section ── */}
+      <div id="removed-students-section" className="bg-white rounded-3xl border-2 border-rose-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-rose-100">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-black">
+                <Trash2 size={20} />
+              </div>
+              <h2 className="text-xl font-black text-rose-900 uppercase tracking-tight">
+                Removed Students Section ({removedStudents.length})
+              </h2>
+            </div>
+            <p className="text-xs text-slate-500 font-medium mt-1.5">
+              Yeh wo students hain jinhe active mentorship list se remove kiya gaya hai. Sabhi students ke Phone Numbers aur details yahan safe hain. Kisi bhi student ko wapas active karne ke liye <strong className="text-emerald-700">"Restore"</strong> button dabayein.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="px-3.5 py-1.5 bg-rose-100 text-rose-800 font-black text-xs rounded-xl border border-rose-300 flex items-center gap-1.5">
+              <Archive size={14} /> Total {removedStudents.length} Removed Records
+            </span>
+          </div>
+        </div>
+
+        {/* Removed Students Search */}
+        <div className="max-w-md">
+          <div className="relative">
+            <input 
+              type="text"
+              placeholder="Search in removed (Name, Phone, Roll, College)..."
+              value={removedSearchQuery}
+              onChange={(e) => setRemovedSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2.5 bg-rose-50/50 border border-rose-200 rounded-xl text-xs font-bold text-slate-800 placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-rose-500 focus:bg-white transition-colors"
+            />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-rose-400" />
+          </div>
+        </div>
+
+        {/* Removed Students Table */}
+        <div className="overflow-x-auto border border-rose-200 rounded-2xl bg-white shadow-xs">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-rose-50 border-b border-rose-200 text-[10px] font-black uppercase tracking-wider text-rose-900">
+              <tr>
+                <th className="p-3.5">#</th>
+                <th className="p-3.5">Student Details</th>
+                <th className="p-3.5">Phone / WhatsApp Number (Accurate)</th>
+                <th className="p-3.5">Roll No</th>
+                <th className="p-3.5">College & Branch</th>
+                <th className="p-3.5">Status</th>
+                <th className="p-3.5 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-rose-100 font-medium text-slate-700">
+              {filteredRemovedStudents.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-slate-400 text-xs">
+                    Koi removed student match nahi hua.
+                  </td>
+                </tr>
+              ) : (
+                filteredRemovedStudents.map((stu, index) => {
+                  const isEditingPhone = editingRemovedPhones[stu.id] !== undefined;
+                  const currentPhone = isEditingPhone ? editingRemovedPhones[stu.id] : (stu.whatsapp || '');
+
+                  return (
+                    <tr key={stu.id} className="hover:bg-rose-50/40 transition-colors">
+                      <td className="p-3.5 text-slate-400 font-bold">{index + 1}</td>
+                      <td className="p-3.5">
+                        <p className="font-black text-slate-900 text-xs">{stu.name}</p>
+                        <p className="text-[10px] text-slate-400 font-mono">{stu.email || 'No Email'}</p>
+                        {stu.codingExperience && (
+                          <span className="inline-block mt-0.5 text-[9px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 font-bold">
+                            {stu.codingExperience.includes('beginner') ? '🌱 Beginner' : '💻 Has Knowledge'}
+                          </span>
+                        )}
+                      </td>
+                      <td className="p-3.5">
+                        <div className="flex items-center gap-1.5 min-w-[190px]">
+                          <div className="relative flex-1">
+                            <input
+                              type="text"
+                              value={currentPhone}
+                              onChange={(e) => setEditingRemovedPhones(prev => ({ ...prev, [stu.id]: e.target.value }))}
+                              placeholder="Phone number..."
+                              className="w-full px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-rose-200 bg-rose-50/40 text-slate-900 focus:outline-none focus:border-rose-500 focus:bg-white transition-colors"
+                            />
                           </div>
-                        ) : (
+
+                          {isEditingPhone && editingRemovedPhones[stu.id] !== (stu.whatsapp || '') && (
+                            <button
+                              type="button"
+                              onClick={() => handleSaveStudentPhone(stu.id)}
+                              className="px-2 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-md text-[10px] font-bold shrink-0 shadow-xs transition-all animate-pulse"
+                              title="Save Phone Number"
+                            >
+                              <Save size={12} /> Save
+                            </button>
+                          )}
+
+                          {stu.whatsapp && (
+                            <a
+                              href={`https://wa.me/91${stu.whatsapp.replace(/\D/g, '')}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 transition-colors shrink-0 border border-emerald-200"
+                              title={`Direct WhatsApp to ${stu.whatsapp}`}
+                            >
+                              <MessageCircle size={13} />
+                            </a>
+                          )}
+                        </div>
+                      </td>
+                      <td className="p-3.5">
+                        <span className="inline-block font-black text-slate-700 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200 font-mono text-[11px]">
+                          {stu.roll}
+                        </span>
+                      </td>
+                      <td className="p-3.5 max-w-[200px]">
+                        <p className="font-bold text-slate-800 text-[11px] truncate" title={stu.college}>{stu.college}</p>
+                        <p className="text-[10px] text-slate-500 font-medium truncate" title={stu.branch}>{stu.branch}</p>
+                      </td>
+                      <td className="p-3.5">
+                        <span className="inline-block text-[10px] px-2.5 py-1 rounded-full font-black bg-rose-100 text-rose-700 border border-rose-200">
+                          ❌ Removed
+                        </span>
+                      </td>
+                      <td className="p-3.5 text-center">
+                        <div className="flex items-center justify-center gap-1.5">
                           <button 
                             type="button"
-                            onClick={() => handleMoveToRemoved(stu.id)}
-                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-                            title="Removed list me move karein (Mentorship Admin me safe rahega)"
+                            onClick={() => handleRestoreStudent(stu.id)}
+                            className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold flex items-center gap-1 shadow-xs transition-all hover:scale-105"
+                            title="Active list me wapas Restore karein"
                           >
-                            <Trash2 size={15} />
+                            <RotateCcw size={12} /> Restore
                           </button>
-                        )}
+                          <button 
+                            type="button"
+                            onClick={() => handlePermanentDelete(stu.id)}
+                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
+                            title="Permanently Delete karein"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
