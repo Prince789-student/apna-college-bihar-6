@@ -29,6 +29,7 @@ export default function AdminMentorship({ flash }) {
   const [selectedBranch, setSelectedBranch] = useState('ALL');
   const [selectedCollege, setSelectedCollege] = useState('ALL');
   const [removedSearchQuery, setRemovedSearchQuery] = useState('');
+  const [editingPhones, setEditingPhones] = useState({});
   const [editingRemovedPhones, setEditingRemovedPhones] = useState({});
   const [showAddMentorModal, setShowAddMentorModal] = useState(false);
   const [showAddStudentModal, setShowAddStudentModal] = useState(false);
@@ -688,7 +689,7 @@ Team Apna College Bihar
 
   // Save phone number for removed or active student
   const handleSaveStudentPhone = async (studentId) => {
-    const newPhone = editingRemovedPhones[studentId];
+    const newPhone = editingPhones[studentId] !== undefined ? editingPhones[studentId] : editingRemovedPhones[studentId];
     if (!newPhone || !newPhone.trim()) {
       if (flash) flash('Phone number khali nahi ho sakta!', 'err');
       return;
@@ -698,6 +699,7 @@ Team Apna College Bihar
     setStudents(updated);
     saveEnrolledStudents(updated);
     await saveCloudMentorshipData(updated, mentors);
+    setEditingPhones(prev => { const n = { ...prev }; delete n[studentId]; return n; });
     setEditingRemovedPhones(prev => { const n = { ...prev }; delete n[studentId]; return n; });
     if (flash) flash('Phone number successfully update ho gaya aur Cloud Sync ho gaya! 📱✅', 'suc');
   };
@@ -1298,6 +1300,7 @@ Team Apna College Bihar
               <tr>
                 <th className="p-3.5">#</th>
                 <th className="p-3.5">Student Details</th>
+                <th className="p-3.5">Phone / WhatsApp Number (Accurate)</th>
                 <th className="p-3.5">Roll No</th>
                 <th className="p-3.5">Password</th>
                 <th className="p-3.5">College & Branch</th>
@@ -1309,7 +1312,7 @@ Team Apna College Bihar
             <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
               {filteredActiveStudents.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="p-8 text-center text-slate-400 text-xs">
+                  <td colSpan={9} className="p-8 text-center text-slate-400 text-xs">
                     Koi active student match nahi hua. Search filter check karein!
                   </td>
                 </tr>
@@ -1330,6 +1333,51 @@ Team Apna College Bihar
                           <span className="inline-block text-[9px] px-1.5 py-0.5 rounded font-black bg-emerald-100 text-emerald-700">
                             ✅ Active
                           </span>
+                        </div>
+                      </td>
+                      <td className="p-3.5">
+                        <div className="flex items-center gap-1.5 min-w-[190px]">
+                          <div className="relative flex-1">
+                            <input
+                              type="text"
+                              value={editingPhones[stu.id] !== undefined ? editingPhones[stu.id] : (stu.whatsapp || '')}
+                              onChange={(e) => setEditingPhones(prev => ({ ...prev, [stu.id]: e.target.value }))}
+                              placeholder="Phone number..."
+                              className="w-full px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-slate-200 bg-slate-50 text-slate-900 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
+                            />
+                          </div>
+
+                          {editingPhones[stu.id] !== undefined && editingPhones[stu.id] !== (stu.whatsapp || '') && (
+                            <button
+                              type="button"
+                              onClick={() => handleSaveStudentPhone(stu.id)}
+                              className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-[10px] font-bold shrink-0 shadow-xs transition-all animate-pulse flex items-center gap-1"
+                              title="Save Phone Number"
+                            >
+                              <Save size={11} /> Save
+                            </button>
+                          )}
+
+                          {stu.whatsapp && (
+                            <a
+                              href={`https://wa.me/91${stu.whatsapp.replace(/\D/g, '')}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 transition-colors shrink-0 border border-emerald-200"
+                              title={`Direct WhatsApp to ${stu.whatsapp}`}
+                            >
+                              <MessageCircle size={13} />
+                            </a>
+                          )}
+                          {stu.whatsapp && (
+                            <a
+                              href={`tel:${stu.whatsapp.replace(/\D/g, '')}`}
+                              className="p-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 transition-colors shrink-0 border border-blue-200"
+                              title={`Direct Call to ${stu.whatsapp}`}
+                            >
+                              <Phone size={13} />
+                            </a>
+                          )}
                         </div>
                       </td>
                       <td className="p-3.5">
