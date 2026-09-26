@@ -15,7 +15,9 @@
     "electron:dev": "electron .",
     "electron:build": "npm run build --prefix client && electron-builder",
     "electron:package": "npm run build --prefix client && electron-packager . \"Apna College Bihar\" --platform=win32 --arch=x64 --out=dist-electron --overwrite",
-    "save": "git add . && git commit -m \"auto commit\" && git push"
+    "save": "git add . && git commit -m \"auto commit\" && git push",
+    "ralph": "run-ralph.bat",
+    "worktree": "run-worktree.bat"
   },
   "build": {
     "appId": "com.apnacollegebihar.app",

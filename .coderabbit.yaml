@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+tone_instructions: "Provide practical, actionable engineering feedback. Focus on security, React/Vite performance, and clean Node/Express architecture."
+early_access: false
+enable_free_tier: true
+
+reviews:
+  profile: "assertive"
+  request_changes_workflow: false
+  high_level_summary: true
+  high_level_summary_placeholder: "@coderabbitai summary"
+  auto_title_placeholder: "@coderabbitai"
+  review_status: true
+  poem: false
+  collapse_walkthrough: false
+  sequence_diagrams: true
+  path_filters:
+    - "!node_modules/**"
+    - "!dist/**"
+    - "!dist-electron/**"
+    - "!client/dist/**"
+    - "!server/.wpp_session/**"
+    - "!**/*.apk"
+    - "!**/*.pdf"
+  path_instructions:
+    - path: "client/src/**"
+      instructions: "Ensure React best practices, hook dependency correctness, mobile-responsive layout for Bihar students, and proper state management."
+    - path: "server/**"
+      instructions: "Check for secure API endpoints, input sanitation, Firestore query performance, and resilient WhatsApp bot / BEU scraper error handling."
+    - path: "firestore.rules"
+      instructions: "Ensure strict role-based access control (RBAC) so students cannot modify administrative or college notice documents."
+  abort_on_close: true
+  auto_review:
+    enabled: true
+    auto_incremental_review: true
+    drafts: false
+  tools:
+    eslint:
+      enabled: true
+    gitleaks:
+      enabled: true
+    yamllint:
+      enabled: true
+    markdownlint:
+      enabled: true
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  opt_out: false
+  learnings:
+    scope: auto
+  issues:
+    scope: auto

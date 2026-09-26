@@ -1,0 +1,26 @@
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "Apna College Bihar",
+  "url": "https://apnacollegebihar.com",
+  "logo": "https://apnacollegebihar.com/logo-acb.png",
+  "description": "Comprehensive engineering educational portal for Bihar Engineering University (BEU) and AKU students offering study materials, PYQs, syllabus, and instant WhatsApp notice alerts.",
+  "areaServed": {
+    "@type": "AdministrativeArea",
+    "name": "Bihar, India"
+  },
+  "keywords": [
+    "BEU Bihar",
+    "Bihar Engineering University",
+    "BEU Previous Year Questions",
+    "BEU Syllabus 1st to 8th Semester",
+    "AKU Patna PYQ",
+    "BCECE Counselling Bihar",
+    "Bihar Engineering Colleges List"
+  ],
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://apnacollegebihar.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
