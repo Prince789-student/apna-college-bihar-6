@@ -551,6 +551,8 @@ function App() {
               <Route path="/colleges" element={<CollegeDirectory />} />
               <Route path="/college/:collegeSlug" element={<CollegeProfile />} />
               <Route path="/college/:collegeSlug/:section" element={<CollegeProfile />} />
+              <Route path="/branches" element={<BranchHub />} />
+              <Route path="/branch" element={<BranchHub />} />
               <Route path="/branch/:branchId" element={<BranchHub />} />
               <Route path="/branch/:branchId/:section" element={<BranchHub />} />
               <Route path="/ugeac/:page" element={<UgeacInfo />} />
@@ -558,6 +560,7 @@ function App() {
               <Route path="/subject/:subjectSlug/:section" element={<SubjectPage />} />
               <Route path="/hackathons" element={<HackathonHub />} />
               <Route path="/compare" element={<CompareColleges />} />
+              <Route path="/compare-colleges" element={<CompareColleges />} />
               <Route path="/compare/:college1VsCollege2" element={<CompareColleges />} />
               <Route path="/percentile-predictor" element={<PercentilePredictor />} />
               {/* BEU Tool SEO Routes – Attendance, Timetable, CGPA, Result */}

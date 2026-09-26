@@ -2,9 +2,20 @@ import React, { useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
   GraduationCap, Briefcase, IndianRupee, Cpu, BookOpen, 
-  HelpCircle, ChevronRight, BarChart3, Users, Building2 
+  HelpCircle, ChevronRight, BarChart3, Users, Building2,
+  ArrowRight, Sparkles, Layers, ShieldCheck
 } from 'lucide-react';
 import SEO from '../components/SEO';
+
+const availableBranches = [
+  { id: 'cse', label: 'Computer Science (CSE)', badge: 'Most Popular' },
+  { id: 'civil', label: 'Civil Engineering', badge: 'High Govt Scope' },
+  { id: 'me', label: 'Mechanical Engineering', badge: 'Core Core' },
+  { id: 'ee', label: 'Electrical Engineering', badge: 'PSU & Power' },
+  { id: 'ece', label: 'Electronics & Comm (ECE)', badge: 'VLSI & Telecom' },
+  { id: 'cse_ai_ml', label: 'CSE (AI & ML)', badge: 'New Tech' },
+  { id: 'cse_ds', label: 'CSE (Data Science)', badge: 'High Demand' },
+];
 
 const branchMetadata = {
   cse: {
@@ -55,14 +66,13 @@ const branchMetadata = {
 };
 
 export function getBranchMetadata(branchId) {
-  const normalizedId = branchId.toLowerCase().trim();
+  const normalizedId = (branchId || 'cse').toLowerCase().trim();
   if (branchMetadata[normalizedId]) {
     return branchMetadata[normalizedId];
   }
   
-  // Dynamic generation for sub-branches
   if (normalizedId.startsWith('cse_') || normalizedId.includes('cs')) {
-    const suffix = normalizedId.replace('cse_', '').replace('_', ' ').toUpperCase();
+    const suffix = normalizedId.replace('cse_', '').replace(/_/g, ' ').toUpperCase();
     return {
       name: `Computer Science & Engineering (${suffix})`,
       description: `This is a specialized B.Tech course focusing on Computer Science & Engineering with a core concentration on ${suffix}. It trains students in standard computer science subjects along with advanced tools and methodologies specific to ${suffix}.`,
@@ -75,7 +85,7 @@ export function getBranchMetadata(branchId) {
   }
   
   if (normalizedId.startsWith('ece_')) {
-    const suffix = normalizedId.replace('ece_', '').replace('_', ' ').toUpperCase();
+    const suffix = normalizedId.replace('ece_', '').replace(/_/g, ' ').toUpperCase();
     return {
       name: `Electronics & Communication Engineering (${suffix})`,
       description: `A specialized branch of ECE focusing on the advanced study of ${suffix}. It covers semiconductor design, hardware description languages, and microelectronics.`,
@@ -87,8 +97,7 @@ export function getBranchMetadata(branchId) {
     };
   }
   
-  // Default fallback
-  const prettyName = branchId.toUpperCase().replace('_', ' ');
+  const prettyName = normalizedId.toUpperCase().replace(/_/g, ' ');
   return {
     name: `${prettyName} Engineering`,
     description: `B.Tech program in ${prettyName} Engineering under Bihar Engineering University (BEU). This branch provides technical education and specialized engineering skills.`,
@@ -104,13 +113,14 @@ export default function BranchHub() {
   const { branchId, section } = useParams();
   const navigate = useNavigate();
   
+  const currentBranchId = (branchId || 'cse').toLowerCase().trim();
   const currentSection = section || 'overview';
-  const meta = useMemo(() => getBranchMetadata(branchId), [branchId]);
+  const meta = useMemo(() => getBranchMetadata(currentBranchId), [currentBranchId]);
   
   const tabs = [
     { id: 'overview', name: 'Overview' },
     { id: 'career', name: 'Career Prospects' },
-    { id: 'salary', name: 'Salary trends' },
+    { id: 'salary', name: 'Salary Trends' },
     { id: 'skills', name: 'Core Skills' },
     { id: 'placement', name: 'Bihar Placements' },
     { id: 'internship', name: 'Internships' }
@@ -131,57 +141,97 @@ export default function BranchHub() {
   const seoKeywords = `${meta.name} scope, ${meta.name} career options, ${meta.name} salary in India, Bihar Engineering branches`;
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 font-['Inter'] relative overflow-hidden">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans relative overflow-hidden py-10 px-4 sm:px-6 md:px-12">
       <SEO 
         title={seoTitle}
         description={seoDescription}
         keywords={seoKeywords}
       />
       
-      {/* Background gradients */}
-      <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-blue-600/10 via-transparent to-transparent pointer-events-none"></div>
-      <div className="absolute top-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      {/* Background ambient accents */}
+      <div className="absolute top-0 left-0 w-full h-[350px] bg-gradient-to-b from-blue-100/40 via-transparent to-transparent pointer-events-none"></div>
+      <div className="absolute top-20 right-10 w-96 h-96 bg-indigo-100/30 rounded-full blur-3xl pointer-events-none"></div>
       
-      <div className="max-w-7xl mx-auto px-4 py-8 relative z-10">
+      <div className="max-w-6xl mx-auto relative z-10 space-y-8">
         
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 mb-6">
-          <Link to="/hub" className="hover:text-blue-500 transition-colors">Home</Link>
+        <div className="flex items-center gap-2 text-[10px] font-heading font-black uppercase tracking-widest text-slate-400">
+          <Link to="/" className="hover:text-blue-600 transition-colors">Home</Link>
           <ChevronRight size={10} />
-          <span className="text-slate-400">Branches</span>
+          <Link to="/branches" className="hover:text-blue-600 transition-colors">Branches</Link>
           <ChevronRight size={10} />
-          <span className="text-slate-300">{branchId.toUpperCase()}</span>
+          <span className="text-slate-700">{currentBranchId.toUpperCase()}</span>
         </div>
 
-        {/* Hero Header */}
-        <div className="bg-[#0f172a]/40 backdrop-blur-md border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-2xl mb-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        {/* Branch Switcher Pill Bar */}
+        <div className="bg-white border border-slate-200/90 p-3 sm:p-4 rounded-3xl shadow-sm">
+          <div className="flex items-center justify-between gap-3 mb-2 px-1">
+            <span className="text-[10px] font-heading font-black text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+              <Layers size={13} className="text-blue-600" /> Explore Engineering Branches
+            </span>
+          </div>
+          <div className="flex overflow-x-auto gap-2 pb-1 scrollbar-hide">
+            {availableBranches.map((b) => (
+              <button
+                key={b.id}
+                onClick={() => navigate(`/branch/${b.id}`)}
+                className={`px-3.5 py-2 rounded-xl text-xs font-heading font-bold whitespace-nowrap transition-all flex items-center gap-2 ${
+                  currentBranchId === b.id
+                    ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/25 scale-102'
+                    : 'bg-slate-50 text-slate-700 border border-slate-200/70 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50/30'
+                }`}
+              >
+                <span>{b.label}</span>
+                {b.badge && (
+                  <span className={`text-[9px] px-1.5 py-0.2 rounded-full font-black uppercase tracking-tight ${
+                    currentBranchId === b.id ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-600'
+                  }`}>
+                    {b.badge}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Hero Header Card */}
+        <div className="bg-white border border-slate-200/90 p-6 sm:p-8 rounded-3xl shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="flex items-center gap-5">
-            <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-indigo-600 to-blue-800 rounded-3xl flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl shadow-indigo-500/10">
-              {branchId.substring(0, 2).toUpperCase()}
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl flex items-center justify-center text-white font-heading font-black text-2xl sm:text-3xl shadow-md shadow-blue-500/20 shrink-0">
+              {currentBranchId.substring(0, 2).toUpperCase()}
             </div>
             <div>
-              <span className="px-2 py-0.5 bg-indigo-500/15 border border-indigo-500/20 text-indigo-400 rounded-lg text-[9px] font-black uppercase tracking-wider block w-fit mb-1.5">B.Tech Specialization</span>
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-tighter text-white uppercase leading-none">{meta.name}</h1>
-              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-2 flex items-center gap-1.5">BEU Patna Curriculum Compliant</p>
+              <span className="px-2.5 py-0.5 bg-blue-50 border border-blue-200/80 text-blue-700 rounded-lg text-[9px] font-heading font-black uppercase tracking-wider block w-fit mb-1.5">
+                B.Tech Specialization
+              </span>
+              <h1 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
+                {meta.name}
+              </h1>
+              <p className="text-xs text-slate-500 font-heading font-bold uppercase tracking-wider mt-1 flex items-center gap-1.5">
+                BEU Patna Curriculum Compliant
+              </p>
             </div>
           </div>
           <div className="flex gap-3 w-full md:w-auto">
-            <Link to={`/notes/${branchId}/1`} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-blue-500/20">
+            <Link 
+              to={`/notes/${currentBranchId}/1`} 
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-heading text-xs font-bold transition-all shadow-sm shadow-blue-500/20 active:scale-95"
+            >
               Get Semester Notes <ArrowRight size={14} />
             </Link>
           </div>
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex overflow-x-auto pb-1 mb-8 gap-2 border-b border-white/5 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
+        <div className="flex overflow-x-auto gap-2 pb-1 border-b border-slate-200/80">
           {tabs.map(tab => (
             <button
               key={tab.id}
-              onClick={() => navigate(`/branch/${branchId}/${tab.id}`)}
-              className={`px-6 py-4 text-xs font-black uppercase tracking-widest rounded-t-xl transition-all whitespace-nowrap border-b-2 ${
+              onClick={() => navigate(`/branch/${currentBranchId}/${tab.id}`)}
+              className={`px-5 py-3 text-xs font-heading font-bold uppercase tracking-wider rounded-t-xl transition-all whitespace-nowrap border-b-2 ${
                 currentSection === tab.id 
-                  ? 'bg-indigo-600/10 text-indigo-500 border-indigo-600' 
-                  : 'text-slate-400 border-transparent hover:text-white hover:bg-white/[0.02]'
+                  ? 'bg-white text-blue-600 border-blue-600 shadow-xs' 
+                  : 'text-slate-500 border-transparent hover:text-slate-900 hover:bg-white/50'
               }`}
             >
               {tab.name}
@@ -191,34 +241,34 @@ export default function BranchHub() {
 
         {/* Main Content Area */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-8 space-y-8">
+          <div className="lg:col-span-8 space-y-6">
             
             {/* Overview Section */}
             {currentSection === 'overview' && (
-              <div className="space-y-8 animate-in fade-in duration-300">
-                <div className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl">
-                  <h2 className="text-lg font-black text-white uppercase tracking-wider mb-6 flex items-center gap-2.5">
-                    <GraduationCap className="text-indigo-500" size={20} /> Branch Summary
+              <div className="space-y-6">
+                <div className="bg-white border border-slate-200/90 p-6 sm:p-8 rounded-3xl shadow-sm space-y-4">
+                  <h2 className="font-heading text-lg font-black text-slate-900 uppercase tracking-wider flex items-center gap-2.5">
+                    <GraduationCap className="text-blue-600" size={20} /> Branch Summary
                   </h2>
-                  <p className="text-slate-300 text-sm leading-relaxed font-medium">
+                  <p className="text-slate-600 text-sm leading-relaxed font-sans font-medium">
                     {meta.description}
                   </p>
                 </div>
 
-                <div className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl">
-                  <h2 className="text-lg font-black text-white uppercase tracking-wider mb-6 flex items-center gap-2.5">
-                    <Cpu className="text-indigo-500" size={20} /> Core Subjects in BEU Syllabus
+                <div className="bg-white border border-slate-200/90 p-6 sm:p-8 rounded-3xl shadow-sm space-y-4">
+                  <h2 className="font-heading text-lg font-black text-slate-900 uppercase tracking-wider flex items-center gap-2.5">
+                    <Cpu className="text-blue-600" size={20} /> Core Subjects in BEU Syllabus
                   </h2>
-                  <p className="text-slate-300 text-xs leading-relaxed font-semibold mb-6">
-                    Students will cover various foundation, core, and elective subjects throughout the 8 semesters. The curriculum is designed in alignment with AICTE guidelines to ensure industry readiness.
+                  <p className="text-slate-600 text-xs leading-relaxed font-medium">
+                    Students will cover essential foundation, core engineering, and elective subjects throughout the 8 semesters. The curriculum aligns strictly with AICTE guidelines for industry readiness.
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                     {meta.skills.slice(0, 4).map((skill, i) => (
-                      <div key={i} className="flex items-center gap-3 p-4 bg-slate-900/40 border border-white/5 rounded-2xl">
-                        <div className="p-2 bg-indigo-500/10 text-indigo-400 rounded-xl">
+                      <div key={i} className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-200/80 rounded-2xl">
+                        <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
                           <BookOpen size={16} />
                         </div>
-                        <span className="text-xs font-black text-slate-300 uppercase tracking-wide">{skill}</span>
+                        <span className="text-xs font-heading font-bold text-slate-800">{skill}</span>
                       </div>
                     ))}
                   </div>
@@ -228,48 +278,46 @@ export default function BranchHub() {
 
             {/* Career Prospects Section */}
             {currentSection === 'career' && (
-              <div className="space-y-8 animate-in fade-in duration-300">
-                <div className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl">
-                  <h2 className="text-lg font-black text-white uppercase tracking-wider mb-6 flex items-center gap-2.5">
-                    <Briefcase className="text-indigo-500" size={20} /> Career Opportunities
-                  </h2>
-                  <p className="text-slate-300 text-sm leading-relaxed font-medium mb-6">
-                    B.Tech graduates in {meta.name} can seek employment in various private sectors, multinational corporations, research organizations, and public sector undertakings (PSUs).
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {meta.careers.map((career, i) => (
-                      <div key={i} className="p-5 bg-slate-900/40 border border-white/5 rounded-2xl flex items-center justify-between">
-                        <span className="text-xs font-black text-slate-300 uppercase tracking-tight">{career}</span>
-                        <ChevronRight size={14} className="text-indigo-500" />
-                      </div>
-                    ))}
-                  </div>
+              <div className="bg-white border border-slate-200/90 p-6 sm:p-8 rounded-3xl shadow-sm space-y-6">
+                <h2 className="font-heading text-lg font-black text-slate-900 uppercase tracking-wider flex items-center gap-2.5">
+                  <Briefcase className="text-blue-600" size={20} /> Career Opportunities
+                </h2>
+                <p className="text-slate-600 text-sm leading-relaxed font-sans font-medium">
+                  B.Tech graduates in {meta.name} can seek employment in various private sector firms, multinational technology companies, government engineering departments, and public sector undertakings (PSUs).
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {meta.careers.map((career, i) => (
+                    <div key={i} className="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl flex items-center justify-between hover:border-blue-300 transition-colors">
+                      <span className="text-xs font-heading font-bold text-slate-800">{career}</span>
+                      <ChevronRight size={14} className="text-blue-600" />
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
 
             {/* Salary Trends Section */}
             {currentSection === 'salary' && (
-              <div className="space-y-8 animate-in fade-in duration-300">
-                <div className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl">
-                  <h2 className="text-lg font-black text-white uppercase tracking-wider mb-2 flex items-center gap-2.5">
-                    <IndianRupee className="text-indigo-500" size={20} /> Salary Packages in India
+              <div className="bg-white border border-slate-200/90 p-6 sm:p-8 rounded-3xl shadow-sm space-y-6">
+                <div>
+                  <h2 className="font-heading text-lg font-black text-slate-900 uppercase tracking-wider flex items-center gap-2.5">
+                    <IndianRupee className="text-blue-600" size={20} /> Salary Packages in India
                   </h2>
-                  <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-6">Average package distributions based on experience levels</p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="p-5 bg-slate-900/40 border border-white/5 rounded-2xl text-center space-y-1">
-                      <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest block">Entry Level (0-2 Yrs)</span>
-                      <span className="text-lg font-black text-white block">{meta.salary.entry}</span>
-                    </div>
-                    <div className="p-5 bg-slate-900/40 border border-white/5 rounded-2xl text-center space-y-1">
-                      <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest block">Mid Level (3-6 Yrs)</span>
-                      <span className="text-lg font-black text-indigo-500 block">{meta.salary.mid}</span>
-                    </div>
-                    <div className="p-5 bg-slate-900/40 border border-white/5 rounded-2xl text-center space-y-1">
-                      <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest block">Senior Level (8+ Yrs)</span>
-                      <span className="text-lg font-black text-emerald-500 block">{meta.salary.top}</span>
-                    </div>
+                  <p className="text-slate-500 text-xs font-medium mt-1">Average package distributions based on experience levels</p>
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="p-5 bg-slate-50 border border-slate-200/80 rounded-2xl text-center space-y-1">
+                    <span className="text-[10px] font-heading font-black text-slate-400 uppercase tracking-widest block">Entry Level (0-2 Yrs)</span>
+                    <span className="text-xl font-heading font-black text-slate-900 block">{meta.salary.entry}</span>
+                  </div>
+                  <div className="p-5 bg-blue-50/60 border border-blue-100 rounded-2xl text-center space-y-1">
+                    <span className="text-[10px] font-heading font-black text-blue-600 uppercase tracking-widest block">Mid Level (3-6 Yrs)</span>
+                    <span className="text-xl font-heading font-black text-blue-700 block">{meta.salary.mid}</span>
+                  </div>
+                  <div className="p-5 bg-emerald-50/60 border border-emerald-100 rounded-2xl text-center space-y-1">
+                    <span className="text-[10px] font-heading font-black text-emerald-600 uppercase tracking-widest block">Senior Level (8+ Yrs)</span>
+                    <span className="text-xl font-heading font-black text-emerald-700 block">{meta.salary.top}</span>
                   </div>
                 </div>
               </div>
@@ -277,118 +325,99 @@ export default function BranchHub() {
 
             {/* Core Skills Section */}
             {currentSection === 'skills' && (
-              <div className="space-y-8 animate-in fade-in duration-300">
-                <div className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl">
-                  <h2 className="text-lg font-black text-white uppercase tracking-wider mb-6 flex items-center gap-2.5">
-                    <Cpu className="text-indigo-500" size={20} /> Crucial Practical Skills to Develop
-                  </h2>
-                  <p className="text-slate-300 text-sm leading-relaxed font-medium mb-6">
-                    To remain competitive in the current job market, students must build a strong foundation in these key professional skills alongside university examinations:
-                  </p>
-                  <div className="space-y-3.5">
-                    {meta.skills.map((skill, i) => (
-                      <div key={i} className="flex items-center gap-3 p-4 bg-slate-900/40 border border-white/5 rounded-xl">
-                        <div className="w-2 h-2 rounded-full bg-indigo-500"></div>
-                        <span className="text-xs font-black text-slate-300 uppercase tracking-wider">{skill}</span>
-                      </div>
-                    ))}
-                  </div>
+              <div className="bg-white border border-slate-200/90 p-6 sm:p-8 rounded-3xl shadow-sm space-y-6">
+                <h2 className="font-heading text-lg font-black text-slate-900 uppercase tracking-wider flex items-center gap-2.5">
+                  <Cpu className="text-blue-600" size={20} /> High-Yield Industry Skills
+                </h2>
+                <p className="text-slate-600 text-sm leading-relaxed font-sans font-medium">
+                  To secure top packages, mastering these core practical tools alongside university semester examinations is essential:
+                </p>
+                <div className="space-y-2.5">
+                  {meta.skills.map((skill, i) => (
+                    <div key={i} className="flex items-center gap-3 p-3.5 bg-slate-50 border border-slate-200/80 rounded-2xl">
+                      <div className="w-2 h-2 rounded-full bg-blue-600"></div>
+                      <span className="text-xs font-heading font-bold text-slate-800">{skill}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
 
             {/* Bihar Placements Section */}
             {currentSection === 'placement' && (
-              <div className="space-y-8 animate-in fade-in duration-300">
-                <div className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl">
-                  <h2 className="text-lg font-black text-white uppercase tracking-wider mb-4 flex items-center gap-2.5">
-                    <BarChart3 className="text-indigo-500" size={20} /> Placement Scope in Bihar Colleges
-                  </h2>
-                  <p className="text-slate-300 text-xs leading-relaxed font-semibold">
-                    {meta.placements}
-                  </p>
-                </div>
+              <div className="bg-white border border-slate-200/90 p-6 sm:p-8 rounded-3xl shadow-sm space-y-4">
+                <h2 className="font-heading text-lg font-black text-slate-900 uppercase tracking-wider flex items-center gap-2.5">
+                  <BarChart3 className="text-blue-600" size={20} /> Placement Scope in Bihar Colleges
+                </h2>
+                <p className="text-slate-600 text-sm leading-relaxed font-sans font-medium">
+                  {meta.placements}
+                </p>
               </div>
             )}
 
             {/* Internships Section */}
             {currentSection === 'internship' && (
-              <div className="space-y-8 animate-in fade-in duration-300">
-                <div className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl">
-                  <h2 className="text-lg font-black text-white uppercase tracking-wider mb-4 flex items-center gap-2.5">
-                    <Users className="text-indigo-500" size={20} /> Internships & Industrial Training
-                  </h2>
-                  <p className="text-slate-300 text-xs leading-relaxed font-semibold">
-                    {meta.internships}
-                  </p>
-                </div>
+              <div className="bg-white border border-slate-200/90 p-6 sm:p-8 rounded-3xl shadow-sm space-y-4">
+                <h2 className="font-heading text-lg font-black text-slate-900 uppercase tracking-wider flex items-center gap-2.5">
+                  <Users className="text-blue-600" size={20} /> Internships & Industrial Training
+                </h2>
+                <p className="text-slate-600 text-sm leading-relaxed font-sans font-medium">
+                  {meta.internships}
+                </p>
               </div>
             )}
 
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-4 space-y-8">
+          <div className="lg:col-span-4 space-y-6">
             
-            {/* Quick Links */}
-            <div className="bg-[#0f172a]/30 border border-white/5 p-6 rounded-[2rem] shadow-xl space-y-4">
-              <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Branch Guide Directory</h3>
-              <div className="flex flex-col gap-2.5">
+            {/* Quick Directory */}
+            <div className="bg-white border border-slate-200/90 p-6 rounded-3xl shadow-sm space-y-4">
+              <h3 className="text-xs font-heading font-black text-slate-900 uppercase tracking-widest">
+                Branch Guide Sections
+              </h3>
+              <div className="flex flex-col gap-2">
                 {tabs.map(tab => (
                   <button
                     key={tab.id}
-                    onClick={() => navigate(`/branch/${branchId}/${tab.id}`)}
-                    className={`flex items-center justify-between p-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${
+                    onClick={() => navigate(`/branch/${currentBranchId}/${tab.id}`)}
+                    className={`flex items-center justify-between p-3 rounded-xl text-xs font-heading font-bold uppercase tracking-wider border transition-all ${
                       currentSection === tab.id
-                        ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-500/10'
-                        : 'bg-slate-900/40 border-white/5 text-slate-400 hover:text-white hover:border-white/10'
+                        ? 'bg-blue-600 border-blue-600 text-white shadow-sm shadow-blue-500/20'
+                        : 'bg-slate-50 border-slate-200/70 text-slate-600 hover:text-blue-600 hover:border-blue-300 hover:bg-blue-50/40'
                     }`}
                   >
                     <span>{tab.name}</span>
-                    <ChevronRight size={12} />
+                    <ChevronRight size={14} />
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Telegram / WhatsApp banner */}
-            <div className="bg-gradient-to-br from-indigo-900/40 to-blue-900/40 border border-indigo-500/15 p-6 rounded-[2rem] shadow-xl text-center space-y-4">
-              <div className="w-12 h-12 bg-indigo-600/15 rounded-2xl flex items-center justify-center text-indigo-500 mx-auto border border-indigo-500/20">
-                <HelpCircle size={24} />
+            {/* Telegram / Community banner */}
+            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white p-6 rounded-3xl shadow-md shadow-blue-500/20 text-center space-y-4">
+              <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-white mx-auto border border-white/20">
+                <Users size={22} />
               </div>
               <div>
-                <h4 className="text-sm font-black text-white uppercase tracking-tight">Bihar Engineering Community</h4>
-                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-1">Connect with branch seniors</p>
+                <h4 className="font-heading text-sm font-black uppercase tracking-tight">Bihar Engineering Community</h4>
+                <p className="text-[11px] text-blue-100 font-medium mt-1 leading-relaxed">
+                  Connect with branch seniors across MIT, BCE, GCE, and all 38 colleges.
+                </p>
               </div>
-              <div className="space-y-2">
-                <a href="https://t.me/apnacollegebihar" target="_blank" rel="noreferrer" className="w-full flex items-center justify-center gap-2 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-black text-[9px] uppercase tracking-widest transition-all">
-                  Join Telegram Group
-                </a>
-              </div>
+              <a 
+                href="https://t.me/apnacollegebihar" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="w-full flex items-center justify-center gap-2 py-3 bg-white text-blue-700 rounded-xl font-heading text-xs font-black uppercase tracking-wider hover:bg-blue-50 transition-colors shadow-sm"
+              >
+                Join Telegram Community
+              </a>
             </div>
 
           </div>
         </div>
-
-        {/* ── Educational SEO Content ── */}
-        <section className="mt-16 pt-16 border-t border-white/10 relative z-10">
-          <div className="bg-[#0f172a]/50 p-8 md:p-12 rounded-[2.5rem] border border-white/5 prose prose-invert max-w-none text-left">
-            <h2 className="text-2xl font-black text-white uppercase tracking-tighter mb-4">A Comprehensive Guide to Engineering Branches in Bihar (BEU)</h2>
-            <p className="text-slate-300">
-              Choosing the right engineering branch is one of the most critical decisions for any UGEAC or JEE Main aspirant. Through this dedicated <strong>Branch Hub</strong>, we provide detailed insights into the core branches offered by Bihar Engineering University (BEU) affiliated colleges, including Computer Science Engineering (CSE), Civil Engineering, Mechanical Engineering, Electrical Engineering, and Electronics & Communication Engineering (ECE).
-            </p>
-
-            <h3 className="text-xl font-bold text-white mt-8 mb-4">Why is Branch Selection Crucial in BEU?</h3>
-            <p className="text-slate-300">
-              Each engineering branch offers a distinct curriculum, distinct placement prospects, and requires different core skills. In Bihar's Government Engineering Colleges (GECs), Civil Engineering often leads to highly coveted government jobs and PSU roles. Conversely, Computer Science and its specializations (like AI/ML, Data Science, Cyber Security) dominate the private sector IT placements. By exploring our branch profiles, you get a clear breakdown of the exact BEU syllabus, necessary technical skills, and average starting salaries in India.
-            </p>
-
-            <h3 className="text-xl font-bold text-white mt-8 mb-4">Core Skills & Syllabus Insights</h3>
-            <p className="text-slate-300">
-              To excel in your chosen branch, simply passing semester exams is not enough. You must build practical, industry-relevant skills. Our branch guides highlight the exact tools and technologies you need to learn. For CSE, this means mastering Data Structures, Algorithms, React, and Node.js. For Mechanical, it involves CAD, Thermodynamics, and AutoDesk. Combine this knowledge with our BEU study notes, PYQs, and interactive syllabus tracker to ensure a 360-degree academic preparation.
-            </p>
-          </div>
-        </section>
 
       </div>
     </div>

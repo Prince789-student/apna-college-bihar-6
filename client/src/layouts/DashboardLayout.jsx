@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate, Link } from 'react-router-dom';
-import { ChevronLeft, Shield, Timer, X, LayoutDashboard, Library, BookOpen, Calendar, Clock, FileText, GraduationCap, Calculator, User, LogOut, Menu, UserCheck, Flame, Send, ChevronDown, Globe, Award, Link2, ArrowRight, UserX, Youtube } from 'lucide-react';
+import { 
+  ChevronLeft, Shield, Timer, X, LayoutDashboard, Library, BookOpen, Calendar, 
+  Clock, FileText, GraduationCap, Calculator, User, LogOut, Menu, UserCheck, 
+  Flame, Send, ChevronDown, Globe, Award, Link2, ArrowRight, UserX, Youtube,
+  Layers, Download, Sparkles, Building2, Smartphone
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStudy } from '../context/StudyContext';
 import { Capacitor, registerPlugin } from '@capacitor/core';
@@ -61,36 +66,37 @@ export default function DashboardLayout() {
 
   const featureCategories = [
     {
-      title: 'BEU Tools',
+      title: 'BEU Academic',
       items: [
         { name: 'BEU Result', path: '/beu-result', icon: <Globe size={16} /> },
-        { name: 'Free Mentorship', path: '/mentorship', icon: <GraduationCap size={16} /> },
-        { name: 'Attendance', path: '/attendance', icon: <UserCheck size={16} /> },
-        { name: 'Timetable', path: '/timetable', icon: <Calendar size={16} /> },
-        { name: 'Notes', path: '/notes', icon: <BookOpen size={16} /> },
+        { name: 'Notes Hub', path: '/notes', icon: <BookOpen size={16} /> },
         { name: 'PYQ Papers', path: '/pyq', icon: <FileText size={16} /> },
-        { name: 'Lecture Finder', path: '/lecture-finder', icon: <Youtube size={16} /> },
+        { name: 'BEU Syllabus', path: '/syllabus', icon: <Library size={16} /> },
         { name: 'SGPA / CGPA', path: '/cgpa', icon: <GraduationCap size={16} /> },
-        { name: 'Syllabus', path: '/syllabus', icon: <Library size={16} /> },
+        { name: 'Lecture Finder', path: '/lecture-finder', icon: <Youtube size={16} /> },
+        { name: 'Attendance Tracker', path: '/attendance', icon: <UserCheck size={16} /> },
+        { name: 'Class Timetable', path: '/timetable', icon: <Calendar size={16} /> },
       ],
     },
     {
-      title: 'Study Tools',
-      items: [
-        { name: 'Blog & Articles', path: '/blog', icon: <FileText size={16} /> },
-        { name: 'Study Timer', path: '/study', icon: <Timer size={16} /> },
-        { name: 'Scientific Calc', path: '/calculator', icon: <Calculator size={16} /> },
-        { name: 'Study Resources', path: '/study-resources', icon: <Link2 size={16} /> },
-        { name: 'Personal Manager', path: '/extras', icon: <User size={16} /> },
-        { name: 'Achievements', path: '/achievements', icon: <Award size={16} /> },
-      ],
-    },
-    {
-      title: 'Counselling',
+      title: 'Counselling & Colleges',
       items: [
         { name: 'College Predictor', path: '/ugeac-predictor?tab=finder', icon: <Send size={16} /> },
         { name: 'Rank Predictor', path: '/ugeac-predictor?tab=predictor', icon: <Calculator size={16} /> },
         { name: 'Counselling Guide', path: '/ugeac-predictor?tab=guide', icon: <BookOpen size={16} /> },
+        { name: 'Compare Colleges', path: '/compare-colleges', icon: <Send size={16} /> },
+        { name: 'Colleges Directory', path: '/colleges', icon: <Building2 size={16} /> },
+      ],
+    },
+    {
+      title: 'Study & Productivity',
+      items: [
+        { name: 'Free Senior Mentorship', path: '/mentorship', icon: <GraduationCap size={16} /> },
+        { name: 'Focus Study Timer', path: '/study', icon: <Timer size={16} /> },
+        { name: 'Scientific Calc', path: '/calculator', icon: <Calculator size={16} /> },
+        { name: 'Study Resources', path: '/study-resources', icon: <Link2 size={16} /> },
+        { name: 'Blog & Guidance', path: '/blog', icon: <FileText size={16} /> },
+        { name: 'Achievements', path: '/achievements', icon: <Award size={16} /> },
       ],
     }
   ];
@@ -470,7 +476,7 @@ export default function DashboardLayout() {
         className="flex items-center gap-2 px-3 md:px-4 py-2 md:py-2.5 bg-slate-900 border border-slate-700 hover:border-blue-500/50 rounded-xl md:rounded-2xl cursor-pointer hover:bg-slate-800 transition-all shadow-lg active:scale-95 group animate-pulse"
       >
         <Timer size={14} className="text-blue-500 group-hover:text-white transition-colors" />
-        <span className="text-[10px] md:text-xs font-black text-white tabular-nums tracking-tighter">
+        <span className="text-xs font-bold text-white tabular-nums">
           {m.toString().padStart(2, '0')}:{sec.toString().padStart(2, '0')}
         </span>
       </div>
@@ -510,7 +516,7 @@ export default function DashboardLayout() {
         <div className={`p-1.5 rounded-xl transition-all ${isActive ? 'bg-blue-100 text-blue-600' : 'text-slate-400'}`}>
           <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
         </div>
-        <span className={`text-[8px] font-black uppercase tracking-widest ${isActive ? 'text-blue-600' : 'text-slate-400'}`}>{label}</span>
+        <span className={`text-xs font-semibold ${isActive ? 'text-blue-600' : 'text-slate-400'}`}>{label}</span>
       </Link>
     );
   };
@@ -526,7 +532,7 @@ export default function DashboardLayout() {
         <div className={`${isActive ? 'text-white' : 'text-slate-400'}`}>
           {typeof Icon === 'function' ? <Icon size={18} /> : Icon}
         </div>
-        <span className="text-[12px] uppercase tracking-wider font-black">{label}</span>
+        <span className="text-xs uppercase tracking-wide font-bold">{label}</span>
       </Link>
     );
   };
@@ -545,7 +551,7 @@ export default function DashboardLayout() {
             <ChevronLeft size={20} strokeWidth={3} />
           </button>
           <div className="flex items-center justify-center">
-            <span className="text-[12px] font-black tracking-widest uppercase text-slate-900 truncate px-2">{pageTitle}</span>
+            <span className="text-xs font-bold text-slate-900 truncate px-2">{pageTitle}</span>
           </div>
           <div className="flex items-center gap-2">
             <HeaderTimer />
@@ -555,122 +561,144 @@ export default function DashboardLayout() {
 
       {/* Top Header Navigation (Desktop) & Top Bar (Mobile) */}
       {!isNative && (
-        <header className="bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-sm z-[200] shrink-0 sticky top-0">
-          <div className="max-w-[1400px] mx-auto px-4 md:px-8 py-3 md:py-4 flex items-center justify-between">
+        <header className="bg-white/80 backdrop-blur-2xl border-b border-slate-200/80 shadow-[0_4px_25px_rgba(0,0,0,0.03)] z-[200] shrink-0 sticky top-0 transition-all">
+          <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500/80 to-transparent"></div>
+          <div className="max-w-[1440px] mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
             
             {/* Logo & Brand */}
-          <div className="flex items-center gap-2 md:gap-3 group cursor-pointer" onClick={() => navigate('/')}>
-            <img src="/logo-acb.png?v=99" alt="Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl object-cover shadow-sm group-hover:scale-105 transition-transform" />
-            <div className="block min-w-0">
-              <span className="text-[11px] sm:text-sm md:text-xl font-[1000] tracking-tighter uppercase text-slate-900 block leading-none truncate">Apna College Bihar</span>
-              <span className="text-[6px] md:text-[7px] text-blue-500 font-bold uppercase tracking-[0.3em] md:tracking-[0.5em] mt-0.5 md:mt-1 block">Official App</span>
+            <div className="flex items-center gap-2.5 sm:gap-3 group cursor-pointer" onClick={() => navigate('/')}>
+              <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-0.5 bg-gradient-to-tr from-blue-600 via-indigo-500 to-blue-400 shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform shrink-0">
+                <img src="/logo-acb.png?v=99" alt="Logo" className="w-full h-full object-cover rounded-[10px] bg-white" />
+              </div>
+              <div className="block min-w-0">
+                <span className="font-heading font-black text-sm sm:text-base md:text-lg tracking-tight uppercase text-slate-900 leading-none block">
+                  Apna College <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Bihar</span>
+                </span>
+                <span className="text-xs text-blue-600 font-bold tracking-wider block mt-0.5">
+                  Academic Portal
+                </span>
+              </div>
             </div>
-          </div>
 
-          {/* Desktop Navigation Links (Dropdowns) */}
-          <nav className="hidden lg:flex items-center gap-6">
-            <Link to="/" className="text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors">Home</Link>
-            
-            {featureCategories.map((category, idx) => (
-              <div key={category.title} className="relative">
+            {/* Desktop Navigation Links (Issue 15: Streamlined clean navigation) */}
+            <nav className="hidden xl:flex items-center gap-1.5 text-xs font-heading font-bold">
+              <Link to="/" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors">
+                Home
+              </Link>
+              <Link to="/notes" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors">
+                Notes
+              </Link>
+              <Link to="/pyq" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors">
+                PYQ
+              </Link>
+              <Link to="/ugeac-predictor?tab=finder" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors">
+                Predictor
+              </Link>
+              <Link to="/compare-colleges" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors whitespace-nowrap">
+                Compare Colleges
+              </Link>
+              <Link to="/mentorship" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors inline-flex items-center gap-1.5">
+                <span>Mentorship</span>
+                <span className="px-1.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-[10px] font-bold text-blue-600">Free</span>
+              </Link>
+
+              {/* All Tools Dropdown */}
+              <div className="relative ml-1">
                 <button
-                  onClick={() => setActiveFeatureIndex(activeFeatureIndex === idx ? null : idx)}
-                  className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 transition-colors"
+                  onClick={() => setActiveFeatureIndex(activeFeatureIndex === 0 ? null : 0)}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100/90 hover:bg-slate-200 text-slate-700 hover:text-slate-900 transition-colors text-xs font-heading font-bold"
                 >
-                  {category.title}
-                  <ChevronDown size={12} className={`transition-transform duration-200 ${activeFeatureIndex === idx ? 'rotate-180' : ''}`} />
+                  <span>All Tools</span>
+                  <ChevronDown size={14} className={`transition-transform duration-200 ${activeFeatureIndex === 0 ? 'rotate-180' : ''}`} />
                 </button>
 
-                {activeFeatureIndex === idx && (
+                {activeFeatureIndex === 0 && (
                   <>
                     <div className="fixed inset-0 z-[1900]" onClick={() => setActiveFeatureIndex(null)} />
-                    <div className="absolute left-1/2 -translate-x-1/2 mt-3 w-56 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-2xl shadow-2xl p-2 z-[2000] animate-in fade-in duration-150 origin-top">
-                      {category.items.map((it) => (
-                        <Link
-                          key={it.name}
-                          to={it.path}
-                          className="flex items-center gap-3 w-full p-3 hover:bg-blue-50 text-slate-700 hover:text-blue-600 rounded-xl transition-all font-bold"
-                          onClick={() => setActiveFeatureIndex(null)}
-                        >
-                          <span className="w-4 h-4 text-slate-500">{it.icon}</span>
-                          <span className="text-[11px] font-black uppercase tracking-widest">{it.name}</span>
-                        </Link>
+                    <div className="absolute right-0 mt-3 w-80 bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-2xl shadow-2xl p-3.5 z-[2000] animate-in fade-in zoom-in-95 duration-150 origin-top-right">
+                      {featureCategories.map((cat) => (
+                        <div key={cat.title} className="mb-3 last:mb-0">
+                          <span className="text-xs font-heading font-bold text-slate-400 px-3 py-1 block">
+                            {cat.title}
+                          </span>
+                          <div className="grid grid-cols-2 gap-1 mt-1">
+                            {cat.items.map((it) => (
+                              <Link
+                                key={it.name}
+                                to={it.path}
+                                onClick={() => setActiveFeatureIndex(null)}
+                                className="flex items-center gap-2 p-2 rounded-xl hover:bg-blue-50 text-slate-700 hover:text-blue-600 transition-colors text-xs font-heading font-semibold"
+                              >
+                                <span className="w-4 h-4 text-blue-600 shrink-0">{it.icon}</span>
+                                <span className="truncate">{it.name}</span>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
                       ))}
                     </div>
                   </>
                 )}
               </div>
-            ))}
-          </nav>
+            </nav>
 
-          {/* User Profile & Actions */}
-          <div className="flex items-center gap-3">
-             {loading ? (
-               <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-             ) : user ? (
-               <div className="flex items-center gap-2 md:gap-4">
-                 <HeaderTimer />
-                 
-                 <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
-                   <a 
-                     href="/apna-college-bihar-v54.apk"
-                     download="apna-college-bihar-v54.apk"
-                     className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
-                   >
-                     <span className="hidden md:inline">Download</span> APK
-                   </a>
-                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[6px] md:text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
-                     New
-                   </span>
-                 </div>
-                 
-                 {/* Open App Button (Deep Link) */}
-                 <div className={`relative ${isNative ? 'hidden' : 'block lg:hidden'}`}>
-                   <a 
-                     href="apnacollegebihar://open"
-                     className="flex items-center gap-2 px-3 py-2 bg-emerald-600/10 hover:bg-emerald-600 text-emerald-600 hover:text-white border border-emerald-500/20 rounded-xl text-[8px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
-                   >
-                     Open App
-                   </a>
-                 </div>
-                 <div className="relative">
-                   <button 
-                     onClick={() => setShowProfileMenu(!showProfileMenu)}
-                     className="flex items-center gap-2 px-4 py-2.5 md:px-6 md:py-3 bg-slate-50 border border-slate-200 hover:border-blue-500/50 text-slate-900 rounded-xl md:rounded-2xl font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-all shadow-sm active:scale-95 group"
-                   >
-                     <div className="w-5 h-5 rounded-lg overflow-hidden bg-slate-100">
-                       <img src="/logo-acb.png?v=99" alt="Profile" className="w-full h-full object-cover" />
-                     </div>
-                     <span className="hidden md:inline">My Profile</span>
-                     <ChevronDown size={12} className={`transition-transform duration-300 ${showProfileMenu ? 'rotate-180' : ''}`} />
-                   </button>
+            {/* User Profile & Actions */}
+            <div className="flex items-center gap-2.5 sm:gap-3">
+              {loading ? (
+                <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              ) : user ? (
+                <div className="flex items-center gap-2 md:gap-3">
+                  <HeaderTimer />
+                  
+                  <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
+                    <a 
+                      href="/apna-college-bihar-v54.apk"
+                      download="apna-college-bihar-v54.apk"
+                      className="h-9 px-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-blue-600 border border-slate-200 hover:border-blue-400 text-xs font-heading font-semibold transition-all shadow-xs active:scale-95 flex items-center gap-1.5 shrink-0"
+                    >
+                      <Smartphone size={14} className="text-slate-500" />
+                      <span>Android App</span>
+                    </a>
+                  </div>
+                  
+                  <div className="relative">
+                    <button 
+                      onClick={() => setShowProfileMenu(!showProfileMenu)}
+                      className="h-9 flex items-center gap-2 px-3 bg-slate-50 border border-slate-200 hover:border-blue-500/50 text-slate-900 rounded-xl font-heading font-bold text-xs transition-all shadow-xs active:scale-95 group shrink-0"
+                    >
+                      <div className="w-5 h-5 rounded-lg overflow-hidden bg-slate-100">
+                        <img src="/logo-acb.png?v=99" alt="Profile" className="w-full h-full object-cover" />
+                      </div>
+                      <span className="hidden sm:inline">My Profile</span>
+                      <ChevronDown size={14} className={`transition-transform duration-300 ${showProfileMenu ? 'rotate-180' : ''}`} />
+                    </button>
 
-                   {showProfileMenu && (
-                     <>
-                      <div className="fixed inset-0 z-[1900]" onClick={() => setShowProfileMenu(false)}></div>
-                      <div className="absolute right-0 mt-3 w-64 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-[2rem] shadow-2xl p-2 z-[2000] animate-in fade-in zoom-in-95 duration-200 origin-top-right">
-                         <div className="px-5 py-5 border-b border-slate-100 mb-2 text-center">
-                            <div className="w-16 h-16 rounded-2xl overflow-hidden mb-3 mx-auto border border-slate-100 shadow-lg">
-                               <img src="/logo-acb.png?v=99" alt="ACB" className="w-full h-full object-cover" />
+                    {showProfileMenu && (
+                      <>
+                        <div className="fixed inset-0 z-[1900]" onClick={() => setShowProfileMenu(false)}></div>
+                        <div className="absolute right-0 mt-3 w-64 bg-white/95 backdrop-blur-xl border border-slate-200 rounded-2xl shadow-2xl p-2 z-[2000] animate-in fade-in zoom-in-95 duration-200 origin-top-right">
+                          <div className="px-5 py-5 border-b border-slate-100 mb-2 text-center">
+                            <div className="w-16 h-16 rounded-xl overflow-hidden mb-3 mx-auto border border-slate-100 shadow-md">
+                              <img src="/logo-acb.png?v=99" alt="ACB" className="w-full h-full object-cover" />
                             </div>
-                            <p className="text-[8px] font-black text-blue-600 uppercase tracking-widest leading-none mb-1">ACB Official Account</p>
-                            <p className="text-[10px] font-bold text-slate-900 truncate">{user.email}</p>
-                            <div className="flex items-center justify-center gap-1 text-[8px] text-slate-500 mt-1.5 font-bold">
-                              <Calendar size={10} className="text-blue-500" />
+                            <p className="text-xs font-bold text-blue-600 leading-none mb-1">ACB Official Account</p>
+                            <p className="text-xs font-bold text-slate-900 truncate">{user.email}</p>
+                            <div className="flex items-center justify-center gap-1 text-xs text-slate-500 mt-1.5 font-medium">
+                              <Calendar size={12} className="text-blue-500" />
                               <span>Joined: <strong className="text-slate-900">{joinDate}</strong></span>
                             </div>
-                         </div>
-                         
-                         <div className="p-2 space-y-1">
+                          </div>
+                          
+                          <div className="p-2 space-y-1">
                             {(user?.email === 'prince8694@gmail.com' || user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN') && (
                               <Link 
                                 to="/dashboard/admin"
-                                className="flex items-center gap-3 w-full p-3 hover:bg-blue-50 text-blue-600 rounded-2xl transition-all group"
+                                className="flex items-center gap-3 w-full p-2.5 hover:bg-blue-50 text-blue-600 rounded-xl transition-all group"
                               >
-                                 <div className="p-2 bg-blue-50 group-hover:bg-blue-100 rounded-xl transition-colors">
-                                   <Shield size={14} />
-                                 </div>
-                                 <span className="text-[10px] font-black uppercase tracking-widest">Admin Panel</span>
+                                <div className="p-2 bg-blue-50 group-hover:bg-blue-100 rounded-lg transition-colors">
+                                  <Shield size={14} />
+                                </div>
+                                <span className="text-xs font-bold">Admin Panel</span>
                               </Link>
                             )}
                             
@@ -680,12 +708,12 @@ export default function DashboardLayout() {
                                   setShowProfileMenu(false);
                                   setShowSupportModal(true);
                                 }}
-                                className="flex items-center gap-3 w-full p-3 hover:bg-indigo-50 text-indigo-600 rounded-2xl transition-all group"
+                                className="flex items-center gap-3 w-full p-2.5 hover:bg-blue-50 text-blue-600 rounded-xl transition-all group"
                               >
-                                 <div className="p-2 bg-indigo-50 group-hover:bg-indigo-100 rounded-xl transition-colors">
-                                   <Award size={14} />
-                                 </div>
-                                 <span className="text-[10px] font-black uppercase tracking-widest">Support Us / Donate</span>
+                                <div className="p-2 bg-blue-50 group-hover:bg-blue-100 rounded-lg transition-colors">
+                                  <Award size={14} />
+                                </div>
+                                <span className="text-xs font-bold">Support Us / Donate</span>
                               </button>
                             )}
 
@@ -708,62 +736,63 @@ export default function DashboardLayout() {
                                   // console.log removed
                                 }
                               }}
-                              className="flex items-center gap-3 w-full p-3 hover:bg-emerald-50 text-slate-500 hover:text-emerald-600 rounded-2xl transition-all group"
+                              className="flex items-center gap-3 w-full p-2.5 hover:bg-emerald-50 text-slate-600 hover:text-emerald-600 rounded-xl transition-all group"
                             >
-                               <div className="p-2 bg-slate-100 group-hover:bg-emerald-600/10 rounded-xl transition-colors">
-                                 <Send size={14} />
-                               </div>
-                               <span className="text-[10px] font-black uppercase tracking-widest">Share App Link</span>
+                              <div className="p-2 bg-slate-100 group-hover:bg-emerald-600/10 rounded-lg transition-colors">
+                                <Send size={14} />
+                              </div>
+                              <span className="text-xs font-bold">Share App Link</span>
                             </button>
 
                             <button 
                               onClick={() => logout()}
-                              className="flex items-center gap-3 w-full p-3 hover:bg-red-50 text-slate-500 hover:text-red-600 rounded-2xl transition-all group"
+                              className="flex items-center gap-3 w-full p-2.5 hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-xl transition-all group"
                             >
-                               <div className="p-2 bg-slate-100 group-hover:bg-red-600/10 rounded-xl transition-colors">
-                                 <LogOut size={14} />
-                               </div>
-                               <span className="text-[10px] font-black uppercase tracking-widest">Logout Session</span>
+                              <div className="p-2 bg-slate-100 group-hover:bg-red-600/10 rounded-lg transition-colors">
+                                <LogOut size={14} />
+                              </div>
+                              <span className="text-xs font-bold">Logout Session</span>
                             </button>
-                         </div>
-                      </div>
-                     </>
-                   )}
-                 </div>
-               </div>
-             ) : (
-               <div className="flex items-center gap-2 md:gap-4">
-                 <HeaderTimer />
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <HeaderTimer />
 
-                 <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
-                   <a 
-                     href="/apna-college-bihar-v54.apk"
-                     download="apna-college-bihar-v54.apk"
-                     className="flex items-center gap-2 px-3 md:px-5 py-2 md:py-2.5 bg-blue-600/10 hover:bg-blue-600 text-blue-600 hover:text-white border border-blue-500/20 rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95"
-                   >
-                     <span className="hidden md:inline">Download</span> APK
-                   </a>
-                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[6px] md:text-[7px] font-black uppercase px-1.5 py-0.5 rounded-full shadow-md animate-pulse">
-                     New
-                   </span>
-                 </div>
-                 <Link to="/login" className="hidden md:block px-4 py-2.5 md:px-5 md:py-3 text-slate-600 hover:text-slate-900 font-black text-[9px] md:text-[10px] uppercase tracking-widest transition-colors">
-                   Login
-                 </Link>
-                 <Link to="/signup" className="px-3 py-2 md:px-6 md:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl md:rounded-2xl font-black text-[8px] md:text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-blue-500/30 active:scale-95 shrink-0">
-                   Sign Up
-                 </Link>
-               </div>
-             )}
-                <button 
-                  onClick={() => setMobileMenuOpen(true)} 
-                  className="flex lg:hidden items-center justify-center p-2.5 text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors ml-1 shrink-0"
-                >
-                  <Menu size={24} />
-                </button>
+                  <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
+                    <a 
+                      href="/apna-college-bihar-v54.apk"
+                      download="apna-college-bihar-v54.apk"
+                      className="h-9 px-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-blue-600 border border-slate-200 hover:border-blue-400 text-xs font-heading font-semibold transition-all shadow-xs active:scale-95 flex items-center gap-1.5 shrink-0"
+                    >
+                      <Smartphone size={14} className="text-slate-500" />
+                      <span>Android App</span>
+                    </a>
+                  </div>
+                  <Link to="/login" className="hidden sm:flex h-9 items-center px-3 text-slate-600 hover:text-slate-900 font-heading font-bold text-xs transition-colors">
+                    Login
+                  </Link>
+                  <Link to="/signup" className="h-9 flex items-center px-4 bg-slate-900 hover:bg-blue-600 text-white rounded-xl font-heading font-bold text-xs transition-all shadow-sm active:scale-95 shrink-0">
+                    Sign Up
+                  </Link>
+                </div>
+              )}
+
+              {/* Mobile Menu Hamburger */}
+              <button 
+                onClick={() => setMobileMenuOpen(true)} 
+                className="flex xl:hidden items-center justify-center p-2 text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors ml-1 shrink-0"
+                aria-label="Open Navigation Menu"
+              >
+                <Menu size={22} />
+              </button>
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
       )}
 
       {/* Main Content Area */}
@@ -772,7 +801,7 @@ export default function DashboardLayout() {
           <React.Suspense fallback={
             <div className="flex flex-col items-center justify-center w-full h-[60vh]">
               <div className="w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-4">Loading Module...</p>
+              <p className="text-xs font-bold text-slate-400 mt-4">Loading Module...</p>
             </div>
           }>
             <Outlet />
@@ -791,7 +820,7 @@ export default function DashboardLayout() {
       {/* Mobile Sidebar/Drawer (Slide from right) */}
       <aside className={`fixed inset-y-0 right-0 w-72 bg-white border-l border-slate-200 shadow-2xl z-[300] transform transition-transform duration-300 ease-in-out flex flex-col lg:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
         <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 bg-slate-50">
-          <span className="text-[10px] font-black tracking-widest uppercase text-slate-400 block leading-none">Navigation Menu</span>
+          <span className="text-xs font-bold text-slate-400 block leading-none">Navigation Menu</span>
           <button onClick={() => setMobileMenuOpen(false)} className="text-slate-400 hover:text-slate-900 bg-white p-2 rounded-xl shadow-sm border border-slate-200">
             <X size={16} strokeWidth={3} />
           </button>
@@ -800,8 +829,8 @@ export default function DashboardLayout() {
         <div className="flex-1 overflow-y-auto py-4 px-3 space-y-6 custom-scrollbar">
           {featureCategories.map((cat) => (
              <div key={cat.title}>
-               <p className="px-4 text-[9px] font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div> {cat.title}
+               <p className="px-4 text-xs font-bold text-slate-400 mb-3 flex items-center gap-2">
+                 <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span> {cat.title}
                </p>
                <div className="space-y-1">
                  {cat.items.map(it => (
@@ -818,14 +847,14 @@ export default function DashboardLayout() {
                    setMobileMenuOpen(false);
                    setShowSupportModal(true);
                  }}
-                 className="flex items-center gap-3 w-full p-3 hover:bg-indigo-50 text-indigo-600 rounded-2xl transition-all group border border-indigo-100 bg-indigo-50/50"
+                 className="flex items-center gap-3 w-full p-3 hover:bg-indigo-50 text-indigo-600 rounded-xl transition-all group border border-indigo-100 bg-indigo-50/50"
                >
                   <div className="p-2 bg-white rounded-xl shadow-sm">
                     <Award size={16} className="text-indigo-600" />
                   </div>
                   <div className="text-left">
-                    <span className="text-[11px] font-black uppercase tracking-widest block text-indigo-700">Support Us</span>
-                    <span className="text-[8px] font-bold text-indigo-500 uppercase tracking-wider">Help maintain server cost</span>
+                    <span className="text-xs font-bold block text-indigo-700">Support Us</span>
+                    <span className="text-xs text-indigo-500 font-medium">Help maintain server cost</span>
                   </div>
                </button>
             </div>
@@ -833,19 +862,19 @@ export default function DashboardLayout() {
         </div>
 
         <div className="p-4 border-t border-slate-100 bg-slate-50">
-          <button onClick={() => logout()} className="w-full flex items-center justify-center gap-2 px-4 py-4 bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-2xl transition-all font-black uppercase text-[10px] tracking-widest shadow-sm border border-slate-200">
+          <button onClick={() => logout()} className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-xl transition-all font-bold text-xs shadow-sm border border-slate-200">
             <LogOut size={16} strokeWidth={2.5} /> Logout Session
           </button>
         </div>
       </aside>
       
       {/* Verification Modal */}
-      {isPhoneModalOpen && isOnline && <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-slate-50/80 backdrop-blur-xl"><div className="w-full max-w-md bg-white border border-slate-200 rounded-[3rem] p-10 text-center space-y-8 shadow-2xl relative overflow-hidden"><div className="inline-flex p-5 bg-blue-600/20 text-blue-500 rounded-3xl"><Shield size={32} /></div><h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">Security Update</h2><p className="text-slate-500 text-sm">Please link your active mobile number to secure your college portal access.</p><form onSubmit={handlePhoneSubmit} className="space-y-6"><div className="flex gap-2"><div className="bg-slate-100 px-4 py-4 rounded-2xl text-xs font-black">+91</div><input type="tel" maxLength={10} value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} placeholder="10-DIGIT MOBILE NO." className="flex-1 bg-slate-100 rounded-2xl p-4 text-sm font-black outline-none" /></div><button type="submit" className="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest transition-all">Save & Continue</button></form></div></div>}
+      {isPhoneModalOpen && isOnline && <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-slate-50/80 backdrop-blur-xl"><div className="w-full max-w-md bg-white border border-slate-200 rounded-2xl p-8 text-center space-y-6 shadow-2xl relative overflow-hidden"><div className="inline-flex p-4 bg-blue-600/20 text-blue-500 rounded-2xl"><Shield size={32} /></div><h2 className="text-2xl font-bold text-slate-900 tracking-tight">Security Update</h2><p className="text-slate-500 text-sm">Please link your active mobile number to secure your college portal access.</p><form onSubmit={handlePhoneSubmit} className="space-y-4"><div className="flex gap-2"><div className="bg-slate-100 px-4 py-3 rounded-xl text-xs font-bold flex items-center">+91</div><input type="tel" maxLength={10} value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} placeholder="10-digit mobile number" className="flex-1 bg-slate-100 rounded-xl p-3 text-sm font-semibold outline-none" /></div><button type="submit" className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-all shadow-md">Save & Continue</button></form></div></div>}
 
       {/* Support / Payment Scanner Modal (Frontend Only) */}
       {showSupportModal && !isNative && (
         <div className="fixed inset-0 z-[5000] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="w-full max-w-sm bg-white rounded-[2rem] shadow-2xl relative overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+          <div className="w-full max-w-sm bg-white rounded-2xl shadow-2xl relative overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
             <div className="bg-gradient-to-r from-indigo-600 to-blue-600 p-6 text-center relative">
               <button 
                 onClick={() => setShowSupportModal(false)}
@@ -856,8 +885,8 @@ export default function DashboardLayout() {
               <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-inner">
                 <Award size={28} className="text-white" />
               </div>
-              <h3 className="text-lg font-black text-white uppercase tracking-wider mb-1">Support Our Team</h3>
-              <p className="text-indigo-100 text-[10px] font-bold uppercase tracking-widest">Help us pay server bills!</p>
+              <h3 className="text-lg font-bold text-white mb-1">Support Our Team</h3>
+              <p className="text-indigo-100 text-xs font-medium">Help us pay server bills!</p>
             </div>
             
             <div className="p-6 flex flex-col items-center">
@@ -866,9 +895,8 @@ export default function DashboardLayout() {
                 <p>Maintaining our servers, website, and developing new features requires continuous support. If our platform has helped you in any way, please consider making a small contribution.</p>
               </div>
               
-              <div className="p-2 bg-slate-50 border-2 border-dashed border-indigo-200 rounded-3xl mb-4">
-                {/* Fallback placeholder QR if image is missing. User can replace the image at /scanner-qr.jpg */}
-                <div className="w-48 h-48 bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative group flex items-center justify-center flex-col gap-2">
+              <div className="p-2 bg-slate-50 border-2 border-dashed border-indigo-200 rounded-2xl mb-4">
+                <div className="w-48 h-48 bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden relative group flex items-center justify-center flex-col gap-2">
                   <img 
                     src="/scanner-qr.jpg" 
                     alt="Payment QR Code" 
@@ -880,20 +908,20 @@ export default function DashboardLayout() {
                   />
                   <div className="absolute inset-0 bg-slate-100 flex flex-col items-center justify-center hidden">
                     <span className="text-xs font-bold text-slate-400">QR Code Image</span>
-                    <span className="text-[9px] text-slate-400 uppercase">(Place scanner-qr.jpg in public folder)</span>
+                    <span className="text-xs text-slate-400">(Place scanner-qr.jpg in public folder)</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-indigo-50 px-4 py-3 rounded-2xl w-full flex items-center justify-between group cursor-copy" onClick={() => {
+              <div className="bg-indigo-50 px-4 py-3 rounded-xl w-full flex items-center justify-between group cursor-copy" onClick={() => {
                 navigator.clipboard.writeText("apnacollegebihar@slc");
                 toast.success("UPI ID Copied!");
               }}>
                 <div>
-                  <p className="text-[9px] font-black uppercase text-indigo-500 mb-0.5">UPI ID (Tap to Copy)</p>
+                  <p className="text-xs font-bold text-indigo-600 mb-0.5">UPI ID (Tap to Copy)</p>
                   <p className="text-sm font-bold text-slate-900">apnacollegebihar@slc</p>
                 </div>
-                <div className="p-2 bg-indigo-100 text-indigo-600 rounded-xl group-hover:scale-110 transition-transform">
+                <div className="p-2 bg-indigo-100 text-indigo-600 rounded-lg group-hover:scale-110 transition-transform">
                   <Link2 size={16} />
                 </div>
               </div>

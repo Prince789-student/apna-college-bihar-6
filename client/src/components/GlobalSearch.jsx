@@ -115,10 +115,10 @@ export default function GlobalSearch() {
                     {res.category === 'PYQ' ? <FileText size={16} /> : <BookOpen size={16} />}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <h4 className="text-xs font-black text-slate-900 uppercase tracking-tight truncate group-hover:text-blue-600 transition-colors">
+                    <h4 className="text-xs font-bold text-slate-900 truncate group-hover:text-blue-600 transition-colors">
                       {res.title}
                     </h4>
-                    <p className="text-[10px] text-slate-500 font-bold truncate mt-0.5">
+                    <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
                       {res.subject || 'General'} • {res.category || 'NOTES'} • {res.branch || 'ALL'} {res.semester ? `SEM ${res.semester}` : ''}
                     </p>
                   </div>
@@ -129,9 +129,9 @@ export default function GlobalSearch() {
               <div className="pt-2 pb-1 border-t border-slate-100 px-2 mt-2">
                 <button
                   onClick={handleSearchSubmit}
-                  className="w-full py-2 text-center text-[10px] font-black text-blue-600 hover:text-blue-700 uppercase tracking-widest flex items-center justify-center gap-1"
+                  className="w-full py-2 text-center text-xs font-bold text-blue-600 hover:text-blue-700 flex items-center justify-center gap-1"
                 >
-                  See all results for "{query}" <Search size={12} />
+                  See all results for "{query}" <Search size={14} />
                 </button>
               </div>
             </div>
@@ -141,7 +141,7 @@ export default function GlobalSearch() {
               <p className="text-xs font-bold text-slate-600">No results found for "{query}"</p>
               <button
                   onClick={handleSearchSubmit}
-                  className="mt-3 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-blue-100 transition-colors"
+                  className="mt-3 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-xs font-bold hover:bg-blue-100 transition-colors"
                 >
                   Deep Search Entire Site
                 </button>
