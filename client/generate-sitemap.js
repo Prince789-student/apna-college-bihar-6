@@ -52,6 +52,7 @@ if (Array.isArray(collegeData)) {
 }
 
 // Add static HTML pages from public/ (e.g. cutoff rank pages, percentile guides)
+// Strip .html extension — Vercel cleanUrls serves them without extension
 const publicDir = path.join(__dirname, 'public');
 if (fs.existsSync(publicDir)) {
   const publicFiles = fs.readdirSync(publicDir);
@@ -62,9 +63,22 @@ if (fs.existsSync(publicDir)) {
       file !== 'index.html' &&
       file !== 'offline.html'
     ) {
-      urls.add(`/${file}`);
+      // Remove .html so URL matches cleanUrls canonical
+      const slug = file.replace(/\.html$/, '');
+      urls.add(`/${slug}`);
     }
   });
+
+  // Also add blog subdirectory pages
+  const blogSubDir = path.join(publicDir, '..', '..', 'server', 'public', 'blog');
+  if (fs.existsSync(blogSubDir)) {
+    fs.readdirSync(blogSubDir).forEach(file => {
+      if (file.endsWith('.html') && file !== 'index.html') {
+        const slug = file.replace(/\.html$/, '');
+        urls.add(`/blog/${slug}`);
+      }
+    });
+  }
 }
 
 let xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -73,7 +87,13 @@ let xml = `<?xml version="1.0" encoding="UTF-8"?>
 
 for (const url of urls) {
   let changefreq = url === '/' || url === '/blog' || url === '/notes' ? 'daily' : 'weekly';
-  let priority = url === '/' ? '1.0' : url.startsWith('/blog') || url === '/notes' || url === '/pyq' ? '0.8' : '0.7';
+  let priority;
+  if (url === '/') priority = '1.0';
+  else if (['/notes', '/pyq', '/syllabus', '/blog', '/ugeac-predictor', '/cgpa'].includes(url)) priority = '0.9';
+  else if (url.startsWith('/blog/')) priority = '0.8';
+  else if (url.includes('-cutoff-rank-') || url.includes('colleges-at-')) priority = '0.8';
+  else if (url.startsWith('/college/') || url.startsWith('/compare/')) priority = '0.7';
+  else priority = '0.6';
   const loc = url === '/' ? `${DOMAIN}/` : `${DOMAIN}${url}`;
 
   xml += `  <url>
