@@ -11,7 +11,7 @@ const API_BASE = window.location.hostname === 'localhost'
 
 const DEFAULT_CHANNEL_URL = 'https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a';
 
-export default function AdminBeuWhatsApp({ flash }) {
+export default function AdminBeuWhatsApp({ flash, onSwitchToNotices }) {
   const [notices, setNotices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
@@ -333,6 +333,17 @@ export default function AdminBeuWhatsApp({ flash }) {
               <ExternalLink size={15} />
               Channel
             </a>
+
+            {onSwitchToNotices && (
+              <button
+                onClick={onSwitchToNotices}
+                className="px-4 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs uppercase tracking-widest rounded-2xl transition-all flex items-center gap-1.5 cursor-pointer"
+                title="BEU Notice Database & Sync Section par jayein"
+              >
+                <Bell size={15} />
+                Notice Sync & DB
+              </button>
+            )}
           </div>
         </div>
 

@@ -18,10 +18,12 @@ router.get('/notices', async (req, res) => {
     const localNotices = loadLocalNotices();
     let noticesList = Object.values(localNotices);
 
-    // If Firestore is available, attempt to merge
+    // If Firestore is available, attempt to merge with a 2000ms timeout
     if (admin && admin.apps && admin.apps.length > 0) {
       try {
-        const snap = await admin.firestore().collection('beu_notifications').get();
+        const firestorePromise = admin.firestore().collection('beu_notifications').get();
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Firestore timeout')), 2000));
+        const snap = await Promise.race([firestorePromise, timeoutPromise]);
         snap.forEach(doc => {
           const data = doc.data();
           const id = String(data.id || doc.id);
@@ -36,7 +38,7 @@ router.get('/notices', async (req, res) => {
         });
         noticesList = Object.values(localNotices);
       } catch (fsErr) {
-        // Fallback to local cache seamlessly
+        // Fallback to local cache seamlessly without blocking
       }
     }
 
@@ -237,7 +239,7 @@ router.post('/whatsapp-start', async (req, res) => {
 
 /**
  * POST /api/beu/whatsapp-test-post
- * Posts a test update to verify channel posting
+ * Posts a test update with official visual notice card to verify channel posting
  */
 router.post('/whatsapp-test-post', async (req, res) => {
   try {
@@ -248,11 +250,27 @@ router.post('/whatsapp-test-post', async (req, res) => {
       });
     }
 
-    const testMessage = `🤖 *Apna College Bihar - Test Broadcast*\n\nWhatsApp Automation is successfully linked and active!\n🗓️ ${new Date().toLocaleString('en-IN')}\n\n#BEU #ApnaCollegeBihar`;
-    const result = await whatsappBotService.sendChannelPost(testMessage);
+    const testTitle = 'B.Tech 8th Semester Exam Form Fill-Up & Project Viva Schedule 2026';
+    const testNoticeId = 'TEST_' + Date.now();
+    const testMessage = `🚨 *BEU PATNA: Official Academic Notification* 📢\n\n` +
+      `📌 *${testTitle}*\n` +
+      `🗓️ *Date:* ${new Date().toLocaleDateString('en-IN')}\n\n` +
+      `🌐 *Apna College Bihar Portal (All Notices & Study Material):*\n👉 https://apnacollegebihar.online/notifications\n\n` +
+      `📄 *Official Notice PDF Download:*\n👉 https://beu-bih.ac.in/notification\n\n` +
+      `📲 *Official WhatsApp Channel Join Karein (Daily Updates):*\n👉 ${CHANNEL_URL}\n\n` +
+      `📢 *Apne college batchmates aur WhatsApp groups ke saath share karein!*\n` +
+      `🚀 *Team Apna College Bihar* | https://apnacollegebihar.online\n` +
+      `#BEU #BiharEngineering #ApnaCollegeBihar #AcademicUpdate`;
+
+    const result = await whatsappService.sendMessage({
+      caption: testMessage,
+      title: testTitle,
+      noticeId: testNoticeId,
+      pdfUrl: 'https://beu-bih.ac.in/notification'
+    });
 
     res.json({
-      success: result.success,
+      success: result.status === 'SENT',
       result
     });
   } catch (err) {
@@ -290,200 +308,5 @@ router.get('/whatsapp-debug-screenshot', async (req, res) => {
     res.status(500).send('Screenshot error: ' + e.message);
   }
 });
-
-router.get('/inspect-leftrail', async (req, res) => {
-  try {
-    if (!whatsappBotService.page) return res.send('No page');
-    const result = await whatsappBotService.page.evaluate(() => {
-      const all = Array.from(document.querySelectorAll('*'));
-      const leftRailElements = all.filter(el => {
-        const rect = el.getBoundingClientRect();
-        return rect.width > 0 && rect.height > 0 && rect.right <= 70 && rect.top < 400;
-      }).map(el => ({
-        tag: el.tagName,
-        ariaLabel: el.getAttribute('aria-label'),
-        title: el.getAttribute('title'),
-        dataIcon: el.getAttribute('data-icon'),
-        dataTestid: el.getAttribute('data-testid'),
-        role: el.getAttribute('role'),
-        className: el.className ? String(el.className).substring(0, 40) : '',
-        rect: { x: Math.round(el.getBoundingClientRect().x), y: Math.round(el.getBoundingClientRect().y), w: Math.round(el.getBoundingClientRect().width), h: Math.round(el.getBoundingClientRect().height) }
-      }));
-      return leftRailElements;
-    });
-    res.json(result);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-router.get('/test-tab-switch', async (req, res) => {
-  try {
-    const page = whatsappBotService.page;
-    if (!page) return res.status(400).send('No page');
-
-    await whatsappBotService.dismissAllModals();
-
-    console.log('[Test Tab Switch] Moving mouse to (32, 162) and clicking...');
-    await page.mouse.move(32, 162);
-    await page.mouse.down();
-    await new Promise(r => setTimeout(r, 150));
-    await page.mouse.up();
-
-    await new Promise(r => setTimeout(r, 2500));
-    const shotPath = path.join(__dirname, '..', 'public', 'whatsapp_react_click_test.png');
-    await page.screenshot({ path: shotPath });
-
-    const isChannelsActive = await page.evaluate(() => {
-      const btn = document.querySelector('button[aria-label="Channels"]');
-      return btn ? btn.getAttribute('data-navbar-item-selected') : null;
-    });
-
-    res.json({ isChannelsActive });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-router.get('/inspect-cdp', async (req, res) => {
-  try {
-    const page = whatsappBotService.page;
-    if (!page) return res.status(400).send('No page');
-
-    await whatsappBotService.dismissAllModals();
-
-    const btn = await page.$('button[aria-label="Channels"]');
-    if (!btn) return res.status(400).json({ error: 'button not found' });
-
-    const tree = await page.evaluate(() => {
-      const btn = document.querySelector('button[aria-label="Channels"]');
-      if (!btn) return { error: 'no btn' };
-      
-      const chain = [];
-      let cur = btn;
-      while (cur && cur !== document.body) {
-        chain.push({
-          tag: cur.tagName,
-          id: cur.id,
-          className: cur.className ? String(cur.className).substring(0, 50) : '',
-          role: cur.getAttribute('role'),
-          ariaLabel: cur.getAttribute('aria-label'),
-          dataTab: cur.getAttribute('data-tab'),
-          keys: Object.keys(cur).filter(k => k.startsWith('__'))
-        });
-        cur = cur.parentElement;
-      }
-      return chain;
-    });
-
-    res.json({ success: true, tree });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-router.get('/inspect-button-props', async (req, res) => {
-  try {
-    const page = whatsappBotService.page;
-    if (!page) return res.status(400).send('No page');
-
-    await whatsappBotService.dismissAllModals();
-
-    const result = await page.evaluate(async () => {
-      const btn = document.querySelector('button[aria-label="Channels"]');
-      if (!btn) return { error: 'No button found' };
-
-      const propsKey = Object.keys(btn).find(k => k.startsWith('__reactProps'));
-      const fiberKey = Object.keys(btn).find(k => k.startsWith('__reactFiber'));
-      
-      const props = propsKey ? btn[propsKey] : null;
-      const propNames = props ? Object.keys(props) : [];
-
-      // Check inner children
-      const innerSvg = btn.querySelector('svg');
-      const innerSpan = btn.querySelector('span');
-
-      return {
-        tag: btn.tagName,
-        ariaLabel: btn.getAttribute('aria-label'),
-        dataNavbarItemSelected: btn.getAttribute('data-navbar-item-selected'),
-        propNames,
-        hasOnClick: typeof props?.onClick === 'function',
-        hasOnPointerDown: typeof props?.onPointerDown === 'function',
-        hasOnMouseDown: typeof props?.onMouseDown === 'function',
-        innerSvg: !!innerSvg,
-        innerSpan: !!innerSpan
-      };
-    });
-
-    // Test click methods:
-    // 1. Hardware CDP click
-    await page.mouse.move(32, 162);
-    await page.mouse.down({ button: 'left' });
-    await new Promise(r => setTimeout(r, 100));
-    await page.mouse.up({ button: 'left' });
-    await new Promise(r => setTimeout(r, 1500));
-
-    let check1 = await page.evaluate(() => {
-      const btn = document.querySelector('button[aria-label="Channels"]');
-      return btn ? btn.getAttribute('data-navbar-item-selected') : null;
-    });
-
-    let checkMethod = 'mouse.click';
-
-    if (check1 !== 'true') {
-      // 2. Try React props trigger
-      await page.evaluate(() => {
-        const btn = document.querySelector('button[aria-label="Channels"]');
-        if (!btn) return;
-        const pk = Object.keys(btn).find(k => k.startsWith('__reactProps'));
-        if (pk && btn[pk]) {
-          if (btn[pk].onClick) btn[pk].onClick({ preventDefault: () => {}, stopPropagation: () => {} });
-          if (btn[pk].onPointerDown) btn[pk].onPointerDown({ preventDefault: () => {}, stopPropagation: () => {} });
-        }
-      });
-      await new Promise(r => setTimeout(r, 1500));
-      check1 = await page.evaluate(() => {
-        const btn = document.querySelector('button[aria-label="Channels"]');
-        return btn ? btn.getAttribute('data-navbar-item-selected') : null;
-      });
-      checkMethod = 'reactProps';
-    }
-
-    if (check1 !== 'true') {
-      // 3. Try pointer events on button and its children
-      await page.evaluate(() => {
-        const btn = document.querySelector('button[aria-label="Channels"]');
-        if (!btn) return;
-        const targets = [btn, ...btn.querySelectorAll('*')];
-        for (const t of targets) {
-          t.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, cancelable: true }));
-          t.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
-          t.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, cancelable: true }));
-          t.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true }));
-          t.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-        }
-      });
-      await new Promise(r => setTimeout(r, 1500));
-      check1 = await page.evaluate(() => {
-        const btn = document.querySelector('button[aria-label="Channels"]');
-        return btn ? btn.getAttribute('data-navbar-item-selected') : null;
-      });
-      checkMethod = 'dispatchedEvents';
-    }
-
-    const shotPath = path.join(__dirname, '..', 'public', 'whatsapp_click_diagnostic.png');
-    await page.screenshot({ path: shotPath });
-
-    res.json({
-      initial: result,
-      workingMethod: checkMethod,
-      isChannelsActive: check1
-    });
-  } catch (err) {
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
-
 
 module.exports = router;

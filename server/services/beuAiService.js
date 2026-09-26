@@ -89,16 +89,20 @@ STRUCTURE & FORMAT FOR THE WHATSAPP MESSAGE:
 5. ACTIONABLE STEPS (Kya karna hai?):
    - 3 to 4 clear numbered steps on how students should proceed (e.g., login, select papers carefully, pay fee, submit receipt to examination cell).
 
-6. OFFICIAL DOWNLOAD LINK:
-   - Link: ${pdfUrl || 'https://beu-bih.ac.in/notification'}
+6. OFFICIAL DOWNLOAD & ACB PORTAL LINKS (MANDATORY):
+   - Apna College Bihar Portal: https://apnacollegebihar.online/notifications
+   - Official Notice PDF: ${pdfUrl || 'https://beu-bih.ac.in/notification'}
 
 7. COMMUNITY SIGN-OFF & WHATSAPP CHANNEL JOIN LINK:
-   - MUST include this exact channel join call-to-action:
-     "📲 *Official WhatsApp Channel Join Karein (Daily Updates):*"
+   - MUST include these exact links and call-to-action:
+     "🌐 *Apna College Bihar Portal (All Notices & Study Material):*"
+     "https://apnacollegebihar.online/notifications"
+     ""
+     "📲 *Official WhatsApp Channel Join Karein (Daily Fast Updates):*"
      "${CHANNEL_URL}"
      ""
      "📢 *Apne sabhi college WhatsApp groups aur batchmates ke saath share karein!*"
-     "🚀 *Team Apna College Bihar* | apnacollegebihar.online"
+     "🚀 *Team Apna College Bihar* | https://apnacollegebihar.online"
      "#BEU #BiharEngineering #ApnaCollegeBihar #BEUNotice"
 
 GUIDELINES:
@@ -151,10 +155,11 @@ GUIDELINES:
     `Bihar Engineering University (BEU) has released a new notice:\n` +
     `📌 *${title}*\n` +
     `🗓️ *Date:* ${date || 'Latest'}\n\n` +
+    `🌐 *Apna College Bihar Portal (All Notices & Study Material):*\n👉 https://apnacollegebihar.online/notifications\n\n` +
     `📄 *Official Notice PDF Download:*\n👉 ${pdfUrl || 'https://beu-bih.ac.in/notification'}\n\n` +
-    `📲 *Official WhatsApp Channel Join Karein:*\n👉 ${CHANNEL_URL}\n\n` +
+    `📲 *Official WhatsApp Channel Join Karein (Daily Updates):*\n👉 ${CHANNEL_URL}\n\n` +
     `📢 *Apne batchmates ke saath share karein!*\n` +
-    `🚀 *Team Apna College Bihar* | apnacollegebihar.online\n` +
+    `🚀 *Team Apna College Bihar* | https://apnacollegebihar.online\n` +
     `#BEU #BiharEngineering #ApnaCollegeBihar`;
 
   return {

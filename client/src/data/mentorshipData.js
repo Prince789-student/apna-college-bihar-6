@@ -189,42 +189,6 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "studentId": "26EEE18P"
   },
   {
-    "id": "26CSE63",
-    "timestamp": "05/09/2026 00:42:20",
-    "email": "himanshukumarsingh9931@gmail.com",
-    "name": "Himanshu Kumar",
-    "whatsapp": "7462982629",
-    "college": "Gaya College of Engineering (GCE), Gaya",
-    "branch": "Computer Science & Engineering",
-    "branchCode": "CSE",
-    "roll": "26/CSE/63",
-    "password": "26ACBCSE01",
-    "goals": "Coding/Programming seekhna (C, C++, Java, Python, etc.), GATE/ESE ya Sarkari Naukri (Govt Jobs) ki abhi se tyari karna, Nayi tech skills explore karna (Web Dev, AI, App Dev, IoT), Placements/Internships ke liye abhi se tyari karna",
-    "codingExperience": "Haan, mujhe thodi basic knowledge hai.",
-    "mentorExpectations": "Placement and Internship",
-    "assignedMentorId": null,
-    "status": "Active",
-    "studentId": "26CSE63"
-  },
-  {
-    "id": "26EEE68",
-    "timestamp": "05/09/2026 00:44:59",
-    "email": "kritianand01012008@gmail.com",
-    "name": "KRITI ANAND",
-    "whatsapp": "9934240606",
-    "college": "Gaya College of Engineering (GCE), Gaya",
-    "branch": "Electrical & Electronics Engineering",
-    "branchCode": "EEE",
-    "roll": "68",
-    "password": "26ACBEEE03",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Sarkari Naukri (Govt Jobs) ki abhi se tyari karna, College aur extra-curricular activities manage karna",
-    "codingExperience": "Nahi, main bilkul beginner hoon.",
-    "mentorExpectations": "CGPA",
-    "assignedMentorId": null,
-    "status": "Active",
-    "studentId": "26EEE68"
-  },
-  {
     "id": "26MC48",
     "timestamp": "05/09/2026 00:47:09",
     "email": "harshkumar.sahuka25@gmail.com",
@@ -405,24 +369,6 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "studentId": "W26503"
   },
   {
-    "id": "26ECE24",
-    "timestamp": "07/09/2026 19:16:12",
-    "email": "riyaisua1@gmail.com",
-    "name": "Riya Kumari",
-    "whatsapp": "9142899937",
-    "college": "Government Engineering College, Sheikhpura",
-    "branch": "Electronics & Communication Engineering",
-    "branchCode": "ECE",
-    "roll": "26ece24",
-    "password": "26ACBECE02",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein)",
-    "codingExperience": "Nahi, main bilkul beginner hoon.",
-    "mentorExpectations": "Padhai related suggestions",
-    "assignedMentorId": null,
-    "status": "Active",
-    "studentId": "26ECE24"
-  },
-  {
     "id": "26ECE29",
     "timestamp": "07/09/2026 19:53:04",
     "email": "sandhyarani892008@gmail.com",
@@ -457,24 +403,6 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "assignedMentorId": null,
     "status": "Active",
     "studentId": "26ECE46"
-  },
-  {
-    "id": "26ECE30",
-    "timestamp": "08/09/2026 12:18:48",
-    "email": "anubhutik37@gmail.com",
-    "name": "Anubhuti Kumari",
-    "whatsapp": "8709523241",
-    "college": "Government Engineering College, Sheikhpura",
-    "branch": "Electronics & Communication Engineering",
-    "branchCode": "ECE",
-    "roll": "26ECE30",
-    "password": "26ACBECE04",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Sarkari Naukri (Govt Jobs) ki abhi se tyari karna, Placements/Internships ke liye abhi se tyari karna",
-    "codingExperience": "Nahi, main bilkul beginner hoon.",
-    "mentorExpectations": "Communication skills and syllabus",
-    "assignedMentorId": null,
-    "status": "Active",
-    "studentId": "26ECE30"
   },
   {
     "id": "26CSE113",
@@ -585,24 +513,6 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "studentId": "26105110083"
   },
   {
-    "id": "26CE123",
-    "timestamp": "15/09/2026 08:53:26",
-    "email": "ranveerrajprajapati@gmail.com",
-    "name": "Ranvir kumar",
-    "whatsapp": "7079212386",
-    "college": "Government Engineering College, Jehanabad",
-    "branch": "Civil Engineering",
-    "branchCode": "CE",
-    "roll": "26-CE-123",
-    "password": "26ACBCE01",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein), College aur extra-curricular activities manage karna, Placements/Internships ke liye abhi se tyari karna",
-    "codingExperience": "Nahi, main bilkul beginner hoon.",
-    "mentorExpectations": "Mujhe kya kaise taiyari Krna hai iska guidance chayie",
-    "assignedMentorId": null,
-    "status": "Active",
-    "studentId": "26CE123"
-  },
-  {
     "id": "26CSE71",
     "timestamp": "15/09/2026 10:10:31",
     "email": "parikshitraj3105@gmail.com",
@@ -655,24 +565,6 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "assignedMentorId": null,
     "status": "Active",
     "studentId": "26ECE44"
-  },
-  {
-    "id": "26ECE11",
-    "timestamp": "15/09/2026 22:13:28",
-    "email": "kshashiranjan1234@gmail.com",
-    "name": "Ritik Raushan",
-    "whatsapp": "8540814461",
-    "college": "Government Engineering College, Sheikhpura",
-    "branch": "Electronics & Communication Engineering",
-    "branchCode": "ECE",
-    "roll": "26ece11",
-    "password": "26ACBECE08",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna (C, C++, Java, Python, etc.), Core Branch skills seekhna (AutoCAD, MATLAB, Circuit Design, etc.), GATE/ESE ya Sarkari Naukri (Govt Jobs) ki abhi se tyari karna, Nayi tech skills explore karna (Web Dev, AI, App Dev, IoT), College aur extra-curricular activities manage karna, Placements/Internships ke liye abhi se tyari karna, cse and core nahin hian lekin coding sikhna hain",
-    "codingExperience": "Nahi, main bilkul beginner hoon.",
-    "mentorExpectations": "How to study to maintain CGPA and from where ?",
-    "assignedMentorId": null,
-    "status": "Active",
-    "studentId": "26ECE11"
   },
   {
     "id": "26IOT37",
@@ -748,169 +640,115 @@ export const INITIAL_ENROLLED_STUDENTS = [
   }
 ];
 
-// Dedicated List for Removed / Inactive Students (Separate from Enrolled)
+// Dedicated List for Removed / Inactive Students
 export const INITIAL_REMOVED_STUDENTS = [
   {
-    "id": "26EEE50_REMOVED",
-    "timestamp": "05/09/2026 00:45:39",
-    "email": "khushianand18102005@gmail.com",
-    "name": "KHUSHI ANAND",
-    "whatsapp": "8905245805",
+    "id": "26CSE63",
+    "timestamp": "05/09/2026 00:42:20",
+    "email": "himanshukumarsingh9931@gmail.com",
+    "name": "Himanshu Kumar",
+    "whatsapp": "7462982629",
+    "college": "Gaya College of Engineering (GCE), Gaya",
+    "branch": "Computer Science & Engineering",
+    "branchCode": "CSE",
+    "roll": "26/CSE/63",
+    "password": "26ACBCSE01",
+    "goals": "Coding/Programming seekhna (C, C++, Java, Python, etc.), GATE/ESE ya Sarkari Naukri (Govt Jobs) ki abhi se tyari karna, Nayi tech skills explore karna (Web Dev, AI, App Dev, IoT), Placements/Internships ke liye abhi se tyari karna",
+    "codingExperience": "Haan, mujhe thodi basic knowledge hai.",
+    "mentorExpectations": "Placement and Internship",
+    "assignedMentorId": null,
+    "status": "Inactive",
+    "studentId": "26CSE63"
+  },
+  {
+    "id": "26EEE68",
+    "timestamp": "05/09/2026 00:44:59",
+    "email": "kritianand01012008@gmail.com",
+    "name": "KRITI ANAND",
+    "whatsapp": "9934240606",
     "college": "Gaya College of Engineering (GCE), Gaya",
     "branch": "Electrical & Electronics Engineering",
     "branchCode": "EEE",
-    "roll": "26/EEE/50",
+    "roll": "68",
     "password": "26ACBEEE03",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Govt Exam",
-    "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
+    "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Sarkari Naukri (Govt Jobs) ki abhi se tyari karna, College aur extra-curricular activities manage karna",
+    "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "CGPA",
     "assignedMentorId": null,
     "status": "Inactive",
-    "studentId": "26EEE50"
+    "studentId": "26EEE68"
   },
   {
-    "id": "26EEE44_REMOVED",
-    "timestamp": "05/09/2026 07:32:40",
-    "email": "adityavardanraj8264@gmail.com",
-    "name": "Aditya Bardhan",
-    "whatsapp": "7631941681",
-    "college": "Gaya College of Engineering (GCE), Gaya",
-    "branch": "Electrical & Electronics Engineering",
-    "branchCode": "EEE",
-    "roll": "26/EEE/44",
-    "password": "26ACBEEE04",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
-    "codingExperience": "Nahi, main bilkul beginner hoon.",
-    "mentorExpectations": "Guidance and resources",
-    "assignedMentorId": null,
-    "status": "Inactive",
-    "studentId": "26EEE44"
-  },
-  {
-    "id": "26EEE11P_OLD_REMOVED",
-    "timestamp": "06/09/2026 20:45:43",
-    "email": "akashanand1472@gmail.com",
-    "name": "Akash Anand",
-    "whatsapp": "6287193645",
-    "college": "Bakhtiyarpur College of Engineering, Bakhtiyarpur",
-    "branch": "Electrical & Electronics Engineering",
-    "branchCode": "EEE",
-    "roll": "26EEE11P",
-    "password": "26ACBEEE05",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
-    "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
-    "mentorExpectations": "Regarding how to get excellent cgpa",
-    "assignedMentorId": null,
-    "status": "Inactive",
-    "studentId": "26EEE11P_OLD"
-  },
-  {
-    "id": "W26A33_OLD_REMOVED",
-    "timestamp": "06/09/2026 23:33:00",
-    "email": "princeraj731@gmail.com",
-    "name": "Prince Raj",
-    "whatsapp": "9534165430",
-    "college": "Government Engineering College, West Champaran",
-    "branch": "CSE (Cyber Security)",
-    "branchCode": "CSE",
-    "roll": "W26A33",
-    "password": "26ACBCSE05",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
-    "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
-    "mentorExpectations": "Coding, skills, Hackathons",
-    "assignedMentorId": null,
-    "status": "Inactive",
-    "studentId": "W26A33_OLD"
-  },
-  {
-    "id": "26ECE46_OLD_REMOVED",
-    "timestamp": "07/09/2026 21:00:30",
-    "email": "nandankushwahaampur@gmail.com",
-    "name": "nandan kumar",
-    "whatsapp": "9955560341",
+    "id": "26ECE24",
+    "timestamp": "07/09/2026 19:16:12",
+    "email": "riyaisua1@gmail.com",
+    "name": "Riya Kumari",
+    "whatsapp": "9142899937",
     "college": "Government Engineering College, Sheikhpura",
     "branch": "Electronics & Communication Engineering",
     "branchCode": "ECE",
-    "roll": "26Ece46",
-    "password": "26ACBECE03",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
+    "roll": "26ece24",
+    "password": "26ACBECE02",
+    "goals": "Padhai me guidance (Achha CGPA kaise layein)",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
-    "mentorExpectations": "Kaha se padhai kare aur resources",
+    "mentorExpectations": "Padhai related suggestions",
     "assignedMentorId": null,
     "status": "Inactive",
-    "studentId": "26ECE46_OLD"
+    "studentId": "26ECE24"
   },
   {
-    "id": "26ECE20_OLD_REMOVED",
-    "timestamp": "08/09/2026 12:19:49",
-    "email": "anubhav143@gmail.com",
-    "name": "Anubhav kumar",
-    "whatsapp": "8709322211",
+    "id": "26ECE30",
+    "timestamp": "08/09/2026 12:18:48",
+    "email": "anubhutik37@gmail.com",
+    "name": "Anubhuti Kumari",
+    "whatsapp": "8709523241",
     "college": "Government Engineering College, Sheikhpura",
     "branch": "Electronics & Communication Engineering",
     "branchCode": "ECE",
-    "roll": "26ECE20",
+    "roll": "26ECE30",
     "password": "26ACBECE04",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Govt Exam",
+    "goals": "Padhai me guidance (Achha CGPA kaise layein), GATE/ESE ya Sarkari Naukri (Govt Jobs) ki abhi se tyari karna, Placements/Internships ke liye abhi se tyari karna",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Communication skills and syllabus",
     "assignedMentorId": null,
     "status": "Inactive",
-    "studentId": "26ECE20"
+    "studentId": "26ECE30"
   },
   {
-    "id": "26EEE14P_OLD_REMOVED",
-    "timestamp": "10/09/2026 11:54:04",
-    "email": "aak388177@gmail.com",
-    "name": "Aniket Kumar",
-    "whatsapp": "9241369949",
-    "college": "Bakhtiyarpur College of Engineering, Bakhtiyarpur",
-    "branch": "Electrical & Electronics Engineering",
-    "branchCode": "EEE",
-    "roll": "26eee14p",
-    "password": "26ACBEEE06",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
+    "id": "26CE123",
+    "timestamp": "15/09/2026 08:53:26",
+    "email": "ranveerrajprajapati@gmail.com",
+    "name": "Ranvir kumar",
+    "whatsapp": "7079212386",
+    "college": "Government Engineering College, Jehanabad",
+    "branch": "Civil Engineering",
+    "branchCode": "CE",
+    "roll": "26-CE-123",
+    "password": "26ACBCE01",
+    "goals": "Padhai me guidance (Achha CGPA kaise layein), College aur extra-curricular activities manage karna, Placements/Internships ke liye abhi se tyari karna",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
-    "mentorExpectations": "Guidance to become better version of myself",
+    "mentorExpectations": "Mujhe kya kaise taiyari Krna hai iska guidance chayie",
     "assignedMentorId": null,
     "status": "Inactive",
-    "studentId": "26EEE14P_OLD"
+    "studentId": "26CE123"
   },
   {
-    "id": "26ECE08_OLD_REMOVED",
-    "timestamp": "16/09/2026 14:49:50",
-    "email": "kumarrohanraj321@gmail.com",
-    "name": "Rohan kumar",
-    "whatsapp": "6205399645",
-    "college": "Bhagalpur College of Engineering (BCE), Bhagalpur",
+    "id": "26ECE11",
+    "timestamp": "15/09/2026 22:13:28",
+    "email": "kshashiranjan1234@gmail.com",
+    "name": "Ritik Raushan",
+    "whatsapp": "8540814461",
+    "college": "Government Engineering College, Sheikhpura",
     "branch": "Electronics & Communication Engineering",
     "branchCode": "ECE",
-    "roll": "26E08",
-    "password": "26ACBECE06",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming",
+    "roll": "26ece11",
+    "password": "26ACBECE08",
+    "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna (C, C++, Java, Python, etc.), Core Branch skills seekhna (AutoCAD, MATLAB, Circuit Design, etc.), GATE/ESE ya Sarkari Naukri (Govt Jobs) ki abhi se tyari karna, Nayi tech skills explore karna (Web Dev, AI, App Dev, IoT), College aur extra-curricular activities manage karna, Placements/Internships ke liye abhi se tyari karna, cse and core nahin hian lekin coding sikhna hain",
     "codingExperience": "Nahi, main bilkul beginner hoon.",
-    "mentorExpectations": "Communication guidance",
+    "mentorExpectations": "How to study to maintain CGPA and from where ?",
     "assignedMentorId": null,
     "status": "Inactive",
-    "studentId": "26ECE08"
-  },
-  {
-    "id": "26IOT27_OLD_REMOVED",
-    "timestamp": "17/09/2026 21:18:23",
-    "email": "classmatepks75@gmail.com",
-    "name": "Pankaj kumar singh",
-    "whatsapp": "7643916298",
-    "college": "Government Engineering College, Vaishali",
-    "branch": "Internet of Things (IoT)",
-    "branchCode": "CSE",
-    "roll": "26-IOT-27",
-    "password": "26ACBCSE11",
-    "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna",
-    "codingExperience": "Nahi, main bilkul beginner hoon.",
-    "mentorExpectations": "About managing and investing my time on right direction",
-    "assignedMentorId": null,
-    "status": "Inactive",
-    "studentId": "26IOT27"
+    "studentId": "26ECE11"
   }
 ];
 
@@ -919,11 +757,11 @@ export function getEnrolledStudents() {
   try {
     // Purge old keys once to clear mixed state
     if (typeof window !== 'undefined' && window.localStorage) {
-      ['beu_enrolled_students', 'beu_enrolled_students_v2', 'beu_enrolled_students_v3', 'beu_enrolled_students_v4', 'beu_enrolled_students_v5', 'beu_enrolled_students_v6', 'beu_enrolled_students_v7', 'beu_enrolled_students_v8', 'beu_enrolled_students_v9', 'beu_enrolled_students_v10', 'beu_enrolled_students_v11'].forEach(k => {
+      ['beu_enrolled_students', 'beu_enrolled_students_v2', 'beu_enrolled_students_v3', 'beu_enrolled_students_v4', 'beu_enrolled_students_v5', 'beu_enrolled_students_v6', 'beu_enrolled_students_v7', 'beu_enrolled_students_v8', 'beu_enrolled_students_v9', 'beu_enrolled_students_v10', 'beu_enrolled_students_v11', 'beu_enrolled_students_v12', 'beu_enrolled_students_v13', 'beu_enrolled_students_v14', 'beu_enrolled_students_v16'].forEach(k => {
         try { localStorage.removeItem(k); } catch(e) {}
       });
     }
-    const saved = localStorage.getItem('beu_enrolled_students_v12');
+    const saved = localStorage.getItem('beu_enrolled_students_v16');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -956,7 +794,7 @@ export function getEnrolledStudents() {
 export function saveEnrolledStudents(students) {
   try {
     const cleanActive = (students || []).filter(s => s.status !== 'Removed' && s.status !== 'Inactive' && !s.removed && !s.id.includes('_REMOVED'));
-    localStorage.setItem('beu_enrolled_students_v12', JSON.stringify(cleanActive));
+    localStorage.setItem('beu_enrolled_students_v16', JSON.stringify(cleanActive));
   } catch (e) {
     console.error('Error saving enrolled students:', e);
   }
@@ -965,7 +803,12 @@ export function saveEnrolledStudents(students) {
 // Helper to get strictly Inactive / Removed Students
 export function getRemovedStudents() {
   try {
-    const saved = localStorage.getItem('beu_removed_students_v12');
+    if (typeof window !== 'undefined' && window.localStorage) {
+      ['beu_removed_students', 'beu_removed_students_v12', 'beu_removed_students_v13', 'beu_removed_students_v14', 'beu_removed_students_v16'].forEach(k => {
+        try { localStorage.removeItem(k); } catch(e) {}
+      });
+    }
+    const saved = localStorage.getItem('beu_removed_students_v16');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -983,7 +826,7 @@ export function getRemovedStudents() {
 export function saveRemovedStudents(removed) {
   try {
     const cleanInactive = (removed || []).map(s => ({ ...s, status: 'Inactive' }));
-    localStorage.setItem('beu_removed_students_v12', JSON.stringify(cleanInactive));
+    localStorage.setItem('beu_removed_students_v16', JSON.stringify(cleanInactive));
   } catch (e) {
     console.error('Error saving removed/inactive students:', e);
   }

@@ -245,7 +245,7 @@ export default function AdminMentorship({ flash }) {
     loadData();
     const unsub = subscribeMentorshipUpdates(({ students: updatedStudents, removedStudents: updatedRemoved, mentors: updatedMentors }) => {
       if (updatedStudents && updatedStudents.length > 0) setStudents(updatedStudents);
-      if (updatedRemoved && updatedRemoved.length > 0) setRemovedStudents(updatedRemoved);
+      if (updatedRemoved !== undefined) setRemovedStudents(updatedRemoved);
       if (updatedMentors && updatedMentors.length > 0) setMentors(updatedMentors);
     });
     return () => unsub();
@@ -286,7 +286,7 @@ export default function AdminMentorship({ flash }) {
       if (cloud && cloud.students && cloud.students.length > 0) {
         setStudents(cloud.students);
       }
-      if (cloud && cloud.removedStudents && cloud.removedStudents.length > 0) {
+      if (cloud && cloud.removedStudents !== undefined) {
         setRemovedStudents(cloud.removedStudents);
       }
       if (cloud && cloud.mentors && cloud.mentors.length > 0) {

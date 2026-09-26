@@ -58,15 +58,32 @@ export async function fetchCloudMentorshipData() {
     }
   }
 
-  // Segregate active enrolled students vs removed students strictly
-  const removedIdSet = new Set(INITIAL_REMOVED_STUDENTS.map(s => s.id));
-  const removedRollSet = new Set(INITIAL_REMOVED_STUDENTS.map(s => (s.roll || '').toLowerCase().trim()));
+  // Filter out any obsolete dummy removed IDs so removed list is clean
+  const DUMMY_REMOVED_IDS = new Set([
+    '26EEE50_REMOVED', '26EEE44_REMOVED', '26EEE11P_OLD_REMOVED', 
+    'W26A33_OLD_REMOVED', '26ECE46_OLD_REMOVED', '26ECE20_OLD_REMOVED', 
+    '26EEE14P_OLD_REMOVED', '26ECE08_OLD_REMOVED', '26IOT27_OLD_REMOVED',
+    '26EEE11P_REMOVED', '26ECE46_REMOVED', '26EEE14P_REMOVED'
+  ]);
 
   const cleanActive = [];
-  const cleanRemovedMap = new Map((cloudRemoved || INITIAL_REMOVED_STUDENTS).map(s => [s.id, s]));
+  const cleanRemovedMap = new Map();
+  (cloudRemoved || INITIAL_REMOVED_STUDENTS).forEach(s => {
+    if (!DUMMY_REMOVED_IDS.has(s.id)) {
+      cleanRemovedMap.set(s.id, { ...s, status: 'Inactive' });
+    }
+  });
+
+  INITIAL_REMOVED_STUDENTS.forEach(init => {
+    if (!DUMMY_REMOVED_IDS.has(init.id) && !cleanRemovedMap.has(init.id)) {
+      cleanRemovedMap.set(init.id, { ...init, status: 'Inactive' });
+    }
+  });
 
   (cloudStudents || INITIAL_ENROLLED_STUDENTS).forEach(s => {
-    const isRemoved = s.status === 'Removed' || s.status === 'Inactive' || s.removed || removedIdSet.has(s.id) || (s.id && s.id.includes('_REMOVED')) || removedRollSet.has((s.roll || '').toLowerCase().trim());
+    const isRemoved = s.status === 'Removed' || s.status === 'Inactive' || s.removed || 
+                      cleanRemovedMap.has(s.id) ||
+                      (s.id && s.id.includes('_REMOVED') && !DUMMY_REMOVED_IDS.has(s.id));
     if (isRemoved) {
       if (!cleanRemovedMap.has(s.id)) {
         cleanRemovedMap.set(s.id, { ...s, status: 'Inactive' });
@@ -79,31 +96,29 @@ export async function fetchCloudMentorshipData() {
     }
   });
 
-  // Ensure all INITIAL_ENROLLED_STUDENTS are in cleanActive
-  const activeIds = new Set(cleanActive.map(s => s.id));
-  INITIAL_ENROLLED_STUDENTS.forEach(init => {
-    if (!activeIds.has(init.id)) {
-      cleanActive.push(init);
-    }
+  // Strict active list (strictly active enrolled students)
+  const strictlyActive = cleanActive.filter(s => {
+    return !DUMMY_REMOVED_IDS.has(s.id) && !cleanRemovedMap.has(s.id);
   });
 
-  // Ensure all INITIAL_REMOVED_STUDENTS are in cleanRemoved
-  INITIAL_REMOVED_STUDENTS.forEach(init => {
-    if (!cleanRemovedMap.has(init.id)) {
-      cleanRemovedMap.set(init.id, { ...init, status: 'Inactive' });
+  // Ensure all INITIAL_ENROLLED_STUDENTS are in strictlyActive
+  const activeIds = new Set(strictlyActive.map(s => s.id));
+  INITIAL_ENROLLED_STUDENTS.forEach(init => {
+    if (!activeIds.has(init.id) && !cleanRemovedMap.has(init.id)) {
+      strictlyActive.push(init);
     }
   });
 
   const finalRemoved = Array.from(cleanRemovedMap.values()).map(s => ({ ...s, status: 'Inactive' }));
 
   // Save to separate local caches
-  saveEnrolledStudents(cleanActive);
+  saveEnrolledStudents(strictlyActive);
   saveRemovedStudents(finalRemoved);
   if (cloudMentors) {
     saveMentorsList(cloudMentors);
   }
 
-  return { students: cleanActive, removedStudents: finalRemoved, mentors: cloudMentors };
+  return { students: strictlyActive, removedStudents: finalRemoved, mentors: cloudMentors };
 }
 
 // Push updated mentorship data to Firestore and Backend Server
@@ -150,11 +165,18 @@ export function subscribeMentorshipUpdates(onUpdate) {
     return onSnapshot(docRef, (snap) => {
       if (snap.exists()) {
         const data = snap.data();
-        const removedIdSet = new Set(INITIAL_REMOVED_STUDENTS.map(s => s.id));
+        const DUMMY_REMOVED_IDS = new Set([
+          '26EEE50_REMOVED', '26EEE44_REMOVED', '26EEE11P_OLD_REMOVED', 
+          'W26A33_OLD_REMOVED', '26ECE46_OLD_REMOVED', '26ECE20_OLD_REMOVED', 
+          '26EEE14P_OLD_REMOVED', '26ECE08_OLD_REMOVED', '26IOT27_OLD_REMOVED',
+          '26EEE11P_REMOVED', '26ECE46_REMOVED', '26EEE14P_REMOVED'
+        ]);
         const rawStudents = Array.isArray(data.students) ? data.students : [];
-        const cleanActive = rawStudents.filter(s => s.status !== 'Removed' && s.status !== 'Inactive' && !s.removed && !removedIdSet.has(s.id) && !s.id.includes('_REMOVED'));
+        const cleanActive = rawStudents.filter(s => s.status !== 'Removed' && s.status !== 'Inactive' && !s.removed && !DUMMY_REMOVED_IDS.has(s.id) && !s.id.includes('_REMOVED'));
         
-        const rawRemoved = (Array.isArray(data.removedStudents) ? data.removedStudents : INITIAL_REMOVED_STUDENTS).map(s => ({ ...s, status: 'Inactive' }));
+        const rawRemoved = (Array.isArray(data.removedStudents) ? data.removedStudents : [])
+          .filter(s => !DUMMY_REMOVED_IDS.has(s.id))
+          .map(s => ({ ...s, status: 'Inactive' }));
         saveEnrolledStudents(cleanActive);
         saveRemovedStudents(rawRemoved);
         if (Array.isArray(data.mentors)) saveMentorsList(data.mentors);

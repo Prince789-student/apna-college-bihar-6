@@ -10,6 +10,14 @@ const helmet = require('helmet');
 
 const app = express();
 
+// Prevent process crash from unhandled async errors or puppeteer disconnects
+process.on('uncaughtException', (err) => {
+    console.error('[Global Uncaught Exception]:', err?.message || err);
+});
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('[Global Unhandled Rejection]:', reason?.message || reason);
+});
+
 // Connect Mongoose
 if (process.env.MONGO_URI) {
     mongoose.connect(process.env.MONGO_URI, {

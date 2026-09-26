@@ -5,7 +5,8 @@ import {
   Trash2, Ban, UserCheck, UploadCloud, 
   Search, RefreshCw, BarChart3, 
   ChevronRight, AlertCircle, Loader2,
-  FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye, Calendar, Heart
+  FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye, Calendar, Heart,
+  Sparkles
 } from 'lucide-react';
 import { db, storage } from '../firebase';
 import { 
@@ -43,6 +44,9 @@ export default function AdminPanel() {
   // ── BEU NOTIFICATIONS STATE ──
   const [beuNotifications, setBeuNotifications] = useState([]);
   const [beuForm, setBeuForm] = useState({ board: '', noticedate: new Date().toISOString().split('T')[0], pdfUrl: '', isimportant: 0 });
+  const [beuSearch, setBeuSearch] = useState('');
+  const [lastAutoCheck, setLastAutoCheck] = useState(null);
+  const [autoChecking, setAutoChecking] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [loadingOverlayVisible, setLoadingOverlayVisible] = useState(false);
@@ -62,6 +66,17 @@ export default function AdminPanel() {
       d.category === docForm.category
     );
   }, [docs, docForm.branch, docForm.semester, docForm.category]);
+
+  // Filtered BEU notices based on search
+  const filteredBeuNotices = React.useMemo(() => {
+    if (!beuSearch.trim()) return beuNotifications;
+    const q = beuSearch.toLowerCase();
+    return beuNotifications.filter(n => 
+      (n.title || n.board || '').toLowerCase().includes(q) ||
+      (n.date || n.noticedate || '').toLowerCase().includes(q) ||
+      String(n.id).includes(q)
+    );
+  }, [beuNotifications, beuSearch]);
 
   // Access Control
   const isSuper = user?.email === 'prince86944@gmail.com' || user?.role === ROLES.SUPER_ADMIN || user?.role === 'SUPER_ADMIN';
@@ -177,6 +192,34 @@ export default function AdminPanel() {
       if(unsubShortlinks) unsubShortlinks();
     };
   }, [isAdmin, authLoading]);
+
+  // ── SILENT AUTOMATIC SYNC FOR BEU NOTIFICATIONS ──
+  useEffect(() => {
+    if (!isAdmin || (tab !== 'beu_notices' && tab !== 'beu')) return;
+
+    let isMounted = true;
+    const runSilentAutoSync = async () => {
+      try {
+        setAutoChecking(true);
+        const url = window.location.hostname === 'localhost' ? 'http://localhost:5000/api/admin/sync-beu' : 'https://apna-college-bihar-6.onrender.com/api/admin/sync-beu';
+        await fetch(url, { method: 'POST' });
+        if (isMounted) {
+          setLastAutoCheck(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }));
+        }
+      } catch (e) {
+        // silent background check
+      } finally {
+        if (isMounted) setAutoChecking(false);
+      }
+    };
+
+    runSilentAutoSync();
+    const interval = setInterval(runSilentAutoSync, 2 * 60 * 1000);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
+  }, [tab, isAdmin]);
 
   // Compute and update global unique file stats whenever docs change
   useEffect(() => {
@@ -674,12 +717,15 @@ if (!isAdmin) return (
           </div>
         </div>
         <div className="flex flex-wrap bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 overflow-x-auto">
-           {['overview', 'mentorship', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu', 'donors', 'shortlinks'].map(t => (
-             <button key={t} onClick={()=>setTab(t)}
-               className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${tab===t?'bg-indigo-600 text-white shadow-xl shadow-indigo-900/20':'text-slate-500 hover:text-slate-700'}`}>
-               {t === 'mentorship' ? '🎓 Mentorship' : t === 'beu' ? '📢 BEU WhatsApp' : t}
-             </button>
-           ))}
+           {['overview', 'mentorship', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu_notices', 'beu_whatsapp', 'donors', 'shortlinks'].map(t => {
+             const isActive = tab === t || (t === 'beu_notices' && tab === 'beu');
+             return (
+               <button key={t} onClick={()=>setTab(t)}
+                 className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isActive ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-900/20' : 'text-slate-500 hover:text-slate-700'}`}>
+                 {t === 'mentorship' ? '🎓 Mentorship' : t === 'beu_notices' ? '🔔 BEU Notices' : t === 'beu_whatsapp' ? '📢 BEU WhatsApp' : t}
+               </button>
+             );
+           })}
         </div>
       </div>
 
@@ -1517,9 +1563,191 @@ if (!isAdmin) return (
         </div>
       )}
 
-      {/* ── BEU NOTIFICATIONS & WHATSAPP AI BROADCASTER ── */}
-      {tab==='beu' && (
-        <AdminBeuWhatsApp flash={flash} />
+      {/* ── BEU NOTIFICATIONS (OFFICIAL SYNC & NOTICE MANAGEMENT) ── */}
+      {(tab === 'beu_notices' || tab === 'beu') && (
+        <div className="space-y-6 animate-in fade-in duration-500">
+          {/* Top Sync Banner */}
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-gradient-to-r from-emerald-50/80 via-indigo-50/50 to-blue-50/80 p-6 md:p-8 rounded-[2.5rem] border border-emerald-200/60 shadow-md">
+            <div className="space-y-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="flex items-center gap-1.5 px-3 py-1 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider rounded-full shadow-sm">
+                  <span className="w-2 h-2 rounded-full bg-emerald-200 animate-ping"></span>
+                  🟢 24/7 Auto-Sync Chalu Hai
+                </span>
+                <span className="text-[10px] text-slate-600 font-bold bg-white/80 border border-slate-200 px-3 py-1 rounded-full">
+                  Total in Database: <b>{beuNotifications.length} Notices</b>
+                </span>
+                {lastAutoCheck && (
+                  <span className="text-[10px] text-emerald-800 font-bold bg-emerald-100/80 border border-emerald-200 px-3 py-0.5 rounded-full flex items-center gap-1">
+                    ✓ Last auto-check: {lastAutoCheck} {autoChecking && '🔄'}
+                  </span>
+                )}
+              </div>
+              <h2 className="text-xl md:text-2xl font-[1000] text-slate-900 uppercase tracking-tight">BEU Notification Sync & Management</h2>
+              <p className="text-xs text-slate-700 font-medium max-w-2xl leading-relaxed">
+                ⚡ <b className="text-emerald-700 font-bold">Aapko manually Sync karne ki bilkul zaroorat nahi hai!</b> Hamara system background me har 2 minute me official BEU website check karta hai. Jaise hi naya notice aayega, ye yahan, website, Android app aur WhatsApp Channel par <b>apne aap live publish</b> ho jayega.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3">
+              <button 
+                onClick={handleSyncBEU} 
+                disabled={uploading}
+                className="px-5 py-3.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-black text-xs uppercase tracking-wider rounded-2xl transition-all shadow-sm active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                title="Optional: Force check immediately without waiting for the 2-minute auto check"
+              >
+                {uploading ? <Loader2 className="animate-spin w-4 h-4 text-indigo-600" /> : <RefreshCw className="w-4 h-4 text-slate-500" />} 
+                {uploading ? 'Checking BEU...' : 'Force Sync Now (Optional)'}
+              </button>
+              <button
+                onClick={() => setTab('beu_whatsapp')}
+                className="px-6 py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black text-xs uppercase tracking-widest rounded-2xl transition-all shadow-lg shadow-emerald-700/20 active:scale-95 flex items-center gap-2 cursor-pointer"
+                title="Open WhatsApp Auto-Broadcaster"
+              >
+                <Sparkles size={15} /> WhatsApp Broadcaster ➔
+              </button>
+            </div>
+          </div>
+
+          {/* Add Notice Form */}
+          <div className="bg-white border border-slate-200/80 rounded-[2.5rem] p-6 md:p-8 shadow-xl">
+            <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+              <Bell size={18} className="text-amber-500" /> Manual BEU Notice Add Karo
+            </h2>
+            <form onSubmit={addBeuNotification} className="space-y-5">
+              <div>
+                <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Notice Title *</label>
+                <input
+                  value={beuForm.board}
+                  onChange={e => setBeuForm(f => ({ ...f, board: e.target.value }))}
+                  placeholder="e.g. Notice for B.Tech 5th Semester Examination 2025"
+                  className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500 transition-colors"
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Notice Date *</label>
+                  <input
+                    type="date"
+                    value={beuForm.noticedate}
+                    onChange={e => setBeuForm(f => ({ ...f, noticedate: e.target.value }))}
+                    className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500 transition-colors"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">Priority / Important?</label>
+                  <select
+                    value={beuForm.isimportant}
+                    onChange={e => setBeuForm(f => ({ ...f, isimportant: Number(e.target.value) }))}
+                    className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500 transition-colors"
+                  >
+                    <option value={0}>Normal Notice</option>
+                    <option value={1}>⚡ Important Notice</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1.5">PDF URL * (Official BEU link ya direct PDF link)</label>
+                <input
+                  value={beuForm.pdfUrl}
+                  onChange={e => setBeuForm(f => ({ ...f, pdfUrl: e.target.value }))}
+                  placeholder="https://beu-bih.ac.in/backend/1234567890-NOTICE.pdf"
+                  className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none focus:border-indigo-500 transition-colors font-mono"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={uploading}
+                className="w-full py-4 bg-amber-500 hover:bg-amber-400 text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg active:scale-95 disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                {uploading ? <Loader2 className="animate-spin w-4 h-4" /> : <Bell size={16} />}
+                {uploading ? 'Adding...' : 'Add BEU Notification to Database'}
+              </button>
+            </form>
+          </div>
+
+          {/* Existing Notifications */}
+          <div className="bg-white border border-slate-200/80 rounded-[2.5rem] shadow-xl overflow-hidden">
+            <div className="px-6 md:px-8 py-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-sm font-[1000] text-slate-900 uppercase tracking-[0.2em]">
+                  Existing Database Notifications ({filteredBeuNotices.length})
+                </h3>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">
+                  Ye sabhi notices website aur Android app par live visible hain
+                </p>
+              </div>
+              <div className="relative w-full md:w-80">
+                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  value={beuSearch}
+                  onChange={e => setBeuSearch(e.target.value)}
+                  placeholder="Search notices by title, date, ID..."
+                  className="w-full bg-slate-50 border border-slate-200 pl-10 pr-4 py-2.5 rounded-xl text-xs font-bold text-slate-800 outline-none focus:border-indigo-500 transition-colors"
+                />
+              </div>
+            </div>
+
+            <div className="divide-y divide-slate-100 max-h-[700px] overflow-y-auto">
+              {filteredBeuNotices.map(n => (
+                <div key={n.id} className="flex flex-col sm:flex-row sm:items-center justify-between px-6 md:px-8 py-4 hover:bg-slate-50/70 transition-colors gap-3 group">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <span className="text-[9px] font-mono font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
+                        #{n.id}
+                      </span>
+                      {n.isimportant === 1 && (
+                        <span className="text-[8px] font-black bg-amber-100 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full uppercase">
+                          ⚡ Important
+                        </span>
+                      )}
+                      <span className="text-[10px] text-slate-400 font-mono">
+                        🗓️ {n.date || n.noticedate || 'N/A'}
+                      </span>
+                    </div>
+                    <p className="text-[13px] font-bold text-slate-800 leading-snug line-clamp-2 group-hover:text-indigo-600 transition-colors">
+                      {n.title || n.board}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+                    {(n.pdfUrl || n.link) && (
+                      <a 
+                        href={n.pdfUrl || n.link} 
+                        target="_blank" 
+                        rel="noreferrer" 
+                        className="px-3 py-2 bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center gap-1.5"
+                        title="View Notice PDF"
+                      >
+                        <Eye size={13}/> PDF
+                      </a>
+                    )}
+                    <button 
+                      onClick={() => deleteBeuNotification(n.id)} 
+                      className="p-2 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all cursor-pointer"
+                      title="Delete Notice"
+                    >
+                      <Trash2 size={14}/>
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {filteredBeuNotices.length === 0 && (
+                <div className="text-center py-16 text-slate-400">
+                  <Bell className="w-10 h-10 mx-auto text-slate-300 mb-2" />
+                  <p className="text-xs font-black uppercase tracking-widest">Koi notification nahi mili</p>
+                  <p className="text-[10px] text-slate-400 mt-1">Upar diye gaye "Sync BEU Now" button se sync karein ya manual add karein.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── BEU WHATSAPP AI BROADCASTER ── */}
+      {tab === 'beu_whatsapp' && (
+        <AdminBeuWhatsApp flash={flash} onSwitchToNotices={() => setTab('beu_notices')} />
       )}
 
       {/* ── DONORS TAB ── */}

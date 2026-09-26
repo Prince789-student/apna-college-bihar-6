@@ -83,13 +83,16 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
       const noticeId = String(notice.id);
       let existingData = localCache[noticeId];
 
-      // Check Firestore if local cache is empty for this notice
+      // Check Firestore if local cache is empty for this notice (with 1500ms timeout)
       if (!existingData && beuRef) {
         try {
-          const docSnap = await beuRef.doc(noticeId).get();
-          if (docSnap.exists) existingData = docSnap.data();
+          const docSnap = await Promise.race([
+            beuRef.doc(noticeId).get(),
+            new Promise((_, r) => setTimeout(() => r(new Error('timeout')), 1500))
+          ]);
+          if (docSnap && docSnap.exists) existingData = docSnap.data();
         } catch (qErr) {
-          // Firestore quota or network error; proceed with local cache
+          // Firestore quota, timeout or network error; proceed with local cache
         }
       }
 
@@ -261,10 +264,18 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
  * Initialize automatic periodic cron job (every 2 minutes for real-time alerts)
  */
 function initBeuBroadcaster() {
-  // Run initial check after 3s
+  const whatsappBotService = require('../services/whatsappBotService');
+  // Auto-start WhatsApp Bot session if saved session exists
+  setTimeout(() => {
+    whatsappBotService.start().catch(err => {
+      console.warn('[WhatsApp Bot Auto-Start]:', err.message);
+    });
+  }, 1000);
+
+  // Run initial sync after 6s to allow WhatsApp session to initialize
   setTimeout(() => {
     syncBeuAndBroadcast().catch(err => console.error('[BEU Broadcaster Startup Error]:', err.message));
-  }, 3000);
+  }, 6000);
 
   // Run every 2 minutes: '*/2 * * * *'
   cron.schedule('*/2 * * * *', () => {

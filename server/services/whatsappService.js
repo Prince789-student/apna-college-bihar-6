@@ -7,6 +7,8 @@ const whatsappBotService = require('./whatsappBotService');
  * WhatsApp Dispatcher Service
  * Integrates WhatsApp Web automated bot (1-time QR scan) and external Webhooks.
  */
+const { getNoticeMediaAsset } = require('./noticeMediaService');
+
 class WhatsAppService {
   constructor() {
     this.apiUrl = process.env.WHATSAPP_API_URL || process.env.WHATSAPP_WEBHOOK_URL || '';
@@ -22,7 +24,7 @@ class WhatsAppService {
    * Automatically send message to WhatsApp
    * Prioritizes the free WhatsApp Web Bot, then falls back to Webhook / Manual.
    */
-  async sendMessage({ caption, pdfUrl, title, noticeId }) {
+  async sendMessage({ caption, pdfUrl, title, noticeId, filePath }) {
     console.log(`[WhatsApp Dispatcher] Dispatching notice ${noticeId || ''}: "${title}"`);
 
     const result = {
@@ -34,14 +36,30 @@ class WhatsAppService {
       error: null
     };
 
+    // If no media filePath provided, generate or download official notice asset
+    let mediaPath = filePath;
+    if (!mediaPath && (noticeId || title)) {
+      try {
+        console.log(`[WhatsApp Dispatcher] Generating/retrieving official visual asset for notice #${noticeId || 'new'}...`);
+        const asset = await getNoticeMediaAsset({ id: noticeId, title, pdfUrl }, whatsappBotService.browser);
+        if (asset && asset.imagePath) {
+          mediaPath = asset.imagePath;
+          console.log(`[WhatsApp Dispatcher] Visual notice card ready: ${mediaPath}`);
+        }
+      } catch (assetErr) {
+        console.warn(`[WhatsApp Dispatcher] Could not generate visual asset:`, assetErr.message);
+      }
+    }
+
     // 1. PRIMARY: Automated WhatsApp Web Bot (Scan QR Once - 100% Free)
     if (whatsappBotService.isConnected()) {
-      console.log(`[WhatsApp Dispatcher] 🤖 Posting directly to WhatsApp Channel via connected session...`);
-      const botRes = await whatsappBotService.sendChannelPost(caption);
+      console.log(`[WhatsApp Dispatcher] 🤖 Posting directly to WhatsApp Channel via connected session (media: ${mediaPath ? 'YES' : 'NO'})...`);
+      const botRes = await whatsappBotService.sendChannelPost(caption, { filePath: mediaPath });
       if (botRes.success) {
         result.status = 'SENT';
         result.method = 'WHATSAPP_BOT_AUTO';
         result.response = botRes;
+        result.hasMedia = !!mediaPath;
         console.log(`[WhatsApp Dispatcher] ✅ Message successfully posted to channel via Bot!`);
         return result;
       } else {

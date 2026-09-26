@@ -86,9 +86,6 @@ class WhatsAppBotService {
 
   async dismissAllModals() {
     if (!this.page || this.page.isClosed()) return;
-    try {
-      await this.page.keyboard.press('Escape');
-    } catch (e) {}
 
     try {
       await this.page.evaluate(() => {
@@ -102,20 +99,13 @@ class WhatsAppBotService {
           const btns = Array.from(dialog.querySelectorAll('button, div[role="button"]'));
           const target = btns.find(b => {
             const txt = (b.innerText || '').trim().toLowerCase();
-            return ['continue', 'ok', 'cancel', 'done', 'close', 'get started', 'agree'].includes(txt);
+            return ['continue', 'ok', 'done', 'close', 'get started', 'agree'].includes(txt);
           });
           if (target) {
             target.click();
             return;
           }
         }
-
-        const allBtns = Array.from(document.querySelectorAll('button, div[role="button"]'));
-        const cont = allBtns.find(b => {
-          const txt = (b.innerText || '').trim().toLowerCase();
-          return txt === 'continue' || txt === 'ok' || txt === 'cancel';
-        });
-        if (cont) cont.click();
       });
     } catch (e) {}
   }
@@ -185,11 +175,11 @@ class WhatsAppBotService {
   /**
    * Post message directly to the official WhatsApp Channel (strictly queued)
    */
-  sendChannelPost(caption) {
+  sendChannelPost(caption, options = {}) {
     return new Promise((resolve) => {
       this.queue = this.queue.then(async () => {
         try {
-          const res = await this._executeSendChannelPost(caption);
+          const res = await this._executeSendChannelPost(caption, options);
           resolve(res);
         } catch (err) {
           resolve({ success: false, error: err.message });
@@ -200,7 +190,7 @@ class WhatsAppBotService {
     });
   }
 
-  async _executeSendChannelPost(caption) {
+  async _executeSendChannelPost(caption, options = {}) {
     if (!this.isConnected() || !this.page) {
       console.warn('[WhatsApp Bot] Cannot send: WhatsApp is not connected.');
       return { success: false, reason: 'NOT_CONNECTED' };
@@ -215,115 +205,230 @@ class WhatsAppBotService {
 
       // 2. Ensure Channels tab is selected
       console.log('[WhatsApp Bot] Ensuring Channels tab is active in WhatsApp Web...');
-      const isChannelsActive = await this.page.evaluate(() => {
+      let isChannelsActive = await this.page.evaluate(() => {
         const btn = document.querySelector('button[aria-label="Channels"]');
         return btn && (btn.getAttribute('data-navbar-item-selected') === 'true' || btn.getAttribute('aria-pressed') === 'true');
       });
 
       if (!isChannelsActive) {
-        console.log('[WhatsApp Bot] Channels tab is not active. Switching to Channels tab via hardware mouse click...');
-        await this.page.mouse.move(32, 162);
-        await this.page.mouse.down({ button: 'left' });
-        await new Promise(r => setTimeout(r, 120));
-        await this.page.mouse.up({ button: 'left' });
+        console.log('[WhatsApp Bot] Channels tab is not active. Switching to Channels tab...');
+        const btn = await this.page.$('button[aria-label="Channels"]');
+        if (btn) {
+          const box = await btn.boundingBox();
+          if (box) {
+            await this.page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+          } else {
+            await btn.click();
+          }
+        } else {
+          // Fallback to coordinates
+          await this.page.mouse.click(32, 162);
+        }
         await new Promise(r => setTimeout(r, 2000));
         await this.dismissAllModals();
       }
 
+      // Wait for Channels panel header to appear
+      await this.page.waitForFunction(() => {
+        const btn = document.querySelector('button[aria-label="Channels"]');
+        return btn && btn.getAttribute('data-navbar-item-selected') === 'true';
+      }, { timeout: 5000 }).catch(() => {});
+
       // 3. Find and click channel "Apna College Bihar" in the channels list
       console.log(`[WhatsApp Bot] Locating and clicking channel "${CHANNEL_NAME}"...`);
       const targetPos = await this.page.evaluate((targetName) => {
-        const elements = Array.from(document.querySelectorAll('*'));
-        for (const el of elements) {
+        // Find exact title match first
+        const allSpans = Array.from(document.querySelectorAll('span[title], div[title], [aria-label]'));
+        const exactMatch = allSpans.find(el => {
+          const t = (el.getAttribute('title') || el.getAttribute('aria-label') || '').trim();
+          const rect = el.getBoundingClientRect();
+          return t.toLowerCase() === targetName.toLowerCase() && rect.x > 40 && rect.x < 450 && rect.y > 70 && rect.y < 700;
+        });
+
+        if (exactMatch) {
+          const rect = exactMatch.getBoundingClientRect();
+          const row = exactMatch.closest('div[role="listitem"], div[role="row"], div[role="button"], div[tabindex]') || exactMatch;
+          row.click();
+          return { x: Math.round(rect.x + rect.width / 2), y: Math.round(rect.y + rect.height / 2), matchedText: exactMatch.getAttribute('title') };
+        }
+
+        // Fallback: look for text that strictly equals targetName
+        const all = Array.from(document.querySelectorAll('span, div, p'));
+        for (const el of all) {
           const rect = el.getBoundingClientRect();
           if (rect.x >= 50 && rect.x <= 400 && rect.y >= 80 && rect.y <= 650 && rect.width > 20 && rect.height > 15) {
-            const text = (el.innerText || el.textContent || '').trim().toLowerCase();
-            const title = (el.getAttribute('title') || '').trim().toLowerCase();
-            if (title.includes(targetName.toLowerCase()) || text.includes(targetName.toLowerCase())) {
-              return { x: Math.round(rect.x + rect.width / 2), y: Math.round(rect.y + rect.height / 2) };
+            const text = (el.innerText || el.textContent || '').trim();
+            if (text.toLowerCase() === targetName.toLowerCase()) {
+              const row = el.closest('div[role="listitem"], div[role="row"], div[role="button"], div[tabindex]') || el;
+              row.click();
+              return { x: Math.round(rect.x + rect.width / 2), y: Math.round(rect.y + rect.height / 2), matchedText: text };
             }
           }
         }
-        return null;
+
+        // Fallback: First item in channels list (x=200, y=205)
+        return { x: 200, y: 205, isFallback: true };
       }, CHANNEL_NAME);
 
       if (targetPos) {
-        console.log(`[WhatsApp Bot] Found "${CHANNEL_NAME}" at (${targetPos.x}, ${targetPos.y}). Clicking...`);
-        await this.page.mouse.move(targetPos.x, targetPos.y);
-        await this.page.mouse.down({ button: 'left' });
-        await new Promise(r => setTimeout(r, 100));
-        await this.page.mouse.up({ button: 'left' });
-      } else {
-        console.log(`[WhatsApp Bot] "${CHANNEL_NAME}" fallback click at (200, 205)...`);
-        await this.page.mouse.move(200, 205);
-        await this.page.mouse.down({ button: 'left' });
-        await new Promise(r => setTimeout(r, 100));
-        await this.page.mouse.up({ button: 'left' });
+        console.log(`[WhatsApp Bot] Found "${CHANNEL_NAME}" (matched: ${targetPos.matchedText || 'fallback'}) at (${targetPos.x}, ${targetPos.y}). Clicking...`);
+        await this.page.mouse.click(targetPos.x, targetPos.y);
       }
 
       await new Promise(r => setTimeout(r, 2500));
       await this.dismissAllModals();
 
+      // Diagnostic screenshot after clicking channel
+      try {
+        const afterClickPath = path.join(__dirname, '..', 'public', 'whatsapp_after_channel_click.png');
+        await this.page.screenshot({ path: afterClickPath });
+      } catch (e) {}
+
       // 4. Locate message composer input area in channel
       console.log('[WhatsApp Bot] Locating message input area in channel...');
-      const composerHandle = await this.page.waitForFunction(() => {
-        const editables = Array.from(document.querySelectorAll('div[contenteditable="true"], footer [contenteditable], div[role="textbox"]'));
+      let composerHandle = null;
+      try {
+        composerHandle = await this.page.waitForFunction(() => {
+          const editables = Array.from(document.querySelectorAll('div[contenteditable="true"], footer [contenteditable], div[role="textbox"]'));
+          const valid = editables.filter(el => {
+            const rect = el.getBoundingClientRect();
+            const isSearch = el.getAttribute('data-tab') === '3' || !!el.closest('[data-testid="chat-list-search"]') || !!el.closest('div[role="search"]');
+            return rect.x > 300 && !isSearch && rect.width > 50;
+          });
+          return valid[valid.length - 1] || null;
+        }, { timeout: 15000 });
+      } catch (waitErr) {
+        try {
+          const debugPath = path.join(__dirname, '..', 'public', 'whatsapp_composer_debug.png');
+          await this.page.screenshot({ path: debugPath });
+        } catch (sErr) {}
+        throw new Error(`Message composer not found in "${CHANNEL_NAME}". Check if channel opened properly: ${waitErr.message}`);
+      }
+
+      // Check if media file is requested to be attached
+      let isMediaUploaded = false;
+      if (options && options.filePath && fs.existsSync(options.filePath)) {
+        console.log(`[WhatsApp Bot] Attaching media file to post: ${options.filePath}`);
+        try {
+          // Click attach paperclip button to ensure menu/fileInput is initialized
+          const attachBtn = await this.page.$('footer button[aria-label="Attach"], footer [title="Attach"], span[data-icon="clip"]');
+          if (attachBtn) {
+            await attachBtn.click();
+            await new Promise(r => setTimeout(r, 600));
+          }
+
+          const fileInput = await this.page.$('input[type="file"][accept*="image"], footer input[type="file"], input[type="file"]');
+          if (fileInput) {
+            console.log('[WhatsApp Bot] Uploading media asset to WhatsApp Web...');
+            await fileInput.uploadFile(options.filePath);
+            // Wait for WhatsApp media preview dialog to appear
+            await new Promise(r => setTimeout(r, 2500));
+            isMediaUploaded = true;
+            console.log('[WhatsApp Bot] Media file uploaded, caption editor modal is active.');
+          }
+        } catch (uploadErr) {
+          console.warn('[WhatsApp Bot] Media upload failed, falling back to text post:', uploadErr.message);
+        }
+      }
+
+      // 5. Focus the active caption/composer box
+      await this.page.evaluate((hasMedia) => {
+        const editables = Array.from(document.querySelectorAll('div[contenteditable="true"], div[role="textbox"]'));
         const valid = editables.filter(el => {
           const rect = el.getBoundingClientRect();
           const isSearch = el.getAttribute('data-tab') === '3' || !!el.closest('[data-testid="chat-list-search"]') || !!el.closest('div[role="search"]');
-          return rect.x > 350 && !isSearch;
+          return rect.x > 250 && !isSearch;
         });
-        return valid[valid.length - 1] || null;
-      }, { timeout: 15000 });
-
-      if (!composerHandle) {
-        throw new Error(`Message composer not found in "${CHANNEL_NAME}". Make sure this logged-in WhatsApp account is an Admin of the channel.`);
-      }
-
-      const inputEl = composerHandle.asElement();
-      if (inputEl) {
-        await inputEl.click();
-      }
-      await new Promise(r => setTimeout(r, 400));
-
-      // 5. Insert formatted text preserving newlines
-      await this.page.evaluate((text) => {
-        const editables = Array.from(document.querySelectorAll('div[contenteditable="true"], footer [contenteditable], div[role="textbox"]'));
-        const target = editables.filter(el => {
-          const rect = el.getBoundingClientRect();
-          return rect.x > 350 && el.getAttribute('data-tab') !== '3';
-        }).pop();
-
+        const target = valid[valid.length - 1];
         if (target) {
           target.focus();
-          document.execCommand('insertText', false, text);
+          target.click();
+        }
+      }, isMediaUploaded);
+
+      await new Promise(r => setTimeout(r, 400));
+
+      // 6. Insert formatted text preserving clean newlines and emojis
+      const lines = caption.split('\n');
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (line.length > 0) {
+          await this.page.evaluate((l) => {
+            document.execCommand('insertText', false, l);
+          }, line);
+        }
+        if (i < lines.length - 1) {
+          await this.page.keyboard.down('Shift');
+          await this.page.keyboard.press('Enter');
+          await this.page.keyboard.up('Shift');
+        }
+      }
+
+      await this.page.evaluate(() => {
+        const editables = Array.from(document.querySelectorAll('div[contenteditable="true"], div[role="textbox"]'));
+        const valid = editables.filter(el => el.getAttribute('data-tab') !== '3');
+        const target = valid[valid.length - 1];
+        if (target) {
           target.dispatchEvent(new Event('input', { bubbles: true }));
           target.dispatchEvent(new Event('change', { bubbles: true }));
         }
-      }, caption);
-
-      await new Promise(r => setTimeout(r, 1000));
-
-      // 6. Click Send button or press Enter
-      const sendSuccess = await this.page.evaluate(() => {
-        const sendIcon = document.querySelector('span[data-icon="send"], span[data-icon="wds-ic-send-filled"]');
-        if (sendIcon) {
-          const btn = sendIcon.closest('button') || sendIcon.closest('div[role="button"]') || sendIcon;
-          btn.click();
-          return true;
-        }
-        const footerBtns = Array.from(document.querySelectorAll('footer button, [data-testid="compose-btn-send"], footer div[role="button"]'));
-        const lastBtn = footerBtns[footerBtns.length - 1];
-        if (lastBtn) {
-          lastBtn.click();
-          return true;
-        }
-        return false;
       });
 
-      if (!sendSuccess) {
-        console.log('[WhatsApp Bot] Send button not clicked directly, pressing Enter...');
+      await new Promise(r => setTimeout(r, 800));
+
+      // 7. Click Send button or press Enter
+      console.log('[WhatsApp Bot] Clicking Send button for caption...');
+      const sendPos = await this.page.evaluate(() => {
+        // Priority 1: Send icon inside media modal or composer
+        const sendIcon = document.querySelector('span[data-icon="send"], span[data-icon="wds-ic-send-filled"], [data-icon*="send"]');
+        if (sendIcon) {
+          const r = sendIcon.getBoundingClientRect();
+          return { x: Math.round(r.x + r.width / 2), y: Math.round(r.y + r.height / 2), type: 'icon' };
+        }
+
+        // Priority 2: Button with aria-label "Send"
+        const sendAria = document.querySelector('button[aria-label="Send"], button[aria-label="send"], [data-testid="send"], [data-testid="compose-btn-send"]');
+        if (sendAria) {
+          const r = sendAria.getBoundingClientRect();
+          return { x: Math.round(r.x + r.width / 2), y: Math.round(r.y + r.height / 2), type: 'aria' };
+        }
+
+        // Priority 3: The last button in the footer (which replaces mic with send when text is present)
+        const footerBtns = Array.from(document.querySelectorAll('footer button, [data-testid="conversation-footer"] button'));
+        for (let i = footerBtns.length - 1; i >= 0; i--) {
+          const b = footerBtns[i];
+          const aria = (b.getAttribute('aria-label') || '').toLowerCase();
+          const r = b.getBoundingClientRect();
+          if (!aria.includes('attach') && !aria.includes('emoji') && r.x > 800) {
+            return { x: Math.round(r.x + r.width / 2), y: Math.round(r.y + r.height / 2), type: 'lastFooter' };
+          }
+        }
+
+        return null;
+      });
+
+      if (sendPos) {
+        console.log(`[WhatsApp Bot] Found send button (${sendPos.type}) at (${sendPos.x}, ${sendPos.y}). Clicking...`);
+        await this.page.mouse.click(sendPos.x, sendPos.y);
+      } else {
+        console.log('[WhatsApp Bot] Send button not found by selector, pressing Enter...');
         await this.page.keyboard.press('Enter');
+      }
+
+      await new Promise(r => setTimeout(r, 2000));
+
+      // Check if text is still in composer, press Enter as fail-safe
+      const isStillInComposer = await this.page.evaluate(() => {
+        const editables = Array.from(document.querySelectorAll('div[contenteditable="true"], div[role="textbox"]'));
+        const valid = editables.filter(el => el.getAttribute('data-tab') !== '3');
+        const target = valid[valid.length - 1];
+        return target && target.innerText && target.innerText.trim().length > 0;
+      });
+
+      if (isStillInComposer) {
+        console.log('[WhatsApp Bot] Text still in composer, pressing Enter key to submit...');
+        await this.page.keyboard.press('Enter');
+        await new Promise(r => setTimeout(r, 1500));
       }
 
       await new Promise(r => setTimeout(r, 2000));
