@@ -11,6 +11,8 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { 
   getEnrolledStudents, 
   saveEnrolledStudents, 
+  getRemovedStudents,
+  saveRemovedStudents,
   getMentorsList, 
   saveMentorsList,
   BEU_OFFICIAL_BRANCHES,
@@ -23,7 +25,8 @@ import {
 } from '../services/mentorshipSync';
 
 export default function AdminMentorship({ flash }) {
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState([]); // Strictly Active Enrolled Students (33)
+  const [removedStudents, setRemovedStudents] = useState([]); // Strictly Removed Students (9)
   const [mentors, setMentors] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBranch, setSelectedBranch] = useState('ALL');
@@ -240,10 +243,17 @@ export default function AdminMentorship({ flash }) {
 
   useEffect(() => {
     loadData();
+    const unsub = subscribeMentorshipUpdates(({ students: updatedStudents, removedStudents: updatedRemoved, mentors: updatedMentors }) => {
+      if (updatedStudents && updatedStudents.length > 0) setStudents(updatedStudents);
+      if (updatedRemoved && updatedRemoved.length > 0) setRemovedStudents(updatedRemoved);
+      if (updatedMentors && updatedMentors.length > 0) setMentors(updatedMentors);
+    });
+    return () => unsub();
   }, []);
 
   const loadData = () => {
     setStudents(getEnrolledStudents());
+    setRemovedStudents(getRemovedStudents());
     const rawMentors = getMentorsList();
     const unique = new Map();
     (rawMentors || []).forEach(m => {
@@ -275,6 +285,9 @@ export default function AdminMentorship({ flash }) {
     fetchCloudMentorshipData().then(cloud => {
       if (cloud && cloud.students && cloud.students.length > 0) {
         setStudents(cloud.students);
+      }
+      if (cloud && cloud.removedStudents && cloud.removedStudents.length > 0) {
+        setRemovedStudents(cloud.removedStudents);
       }
       if (cloud && cloud.mentors && cloud.mentors.length > 0) {
         const cloudUnique = new Map();
@@ -308,13 +321,13 @@ export default function AdminMentorship({ flash }) {
 
   const handleManualCloudSync = async () => {
     setIsCloudSaving(true);
-    await saveCloudMentorshipData(students, mentors);
+    await saveCloudMentorshipData(students, mentors, removedStudents);
     setIsCloudSaving(false);
     if (flash) flash('Mentorship Data successfully Cloud Sync ho gaya! Ab laptop aur mobile phone dono pe same dikhega. ☁️✅', 'suc');
   };
 
   const copyAllCredentials = () => {
-    const targetList = (students || []).filter(s => (s.status || 'Active') === 'Active');
+    const targetList = students || [];
     const lines = targetList.map((s, idx) => 
       `${idx + 1}. ${s.name} | Username (Phone): ${s.whatsapp} | Roll: ${s.roll} | Branch: ${s.branchCode || s.branch} | Pass: ${s.password} | College: ${s.college}`
     ).join('\n');
@@ -323,7 +336,7 @@ export default function AdminMentorship({ flash }) {
   };
 
   const downloadCSV = () => {
-    const targetList = (students || []).filter(s => (s.status || 'Active') === 'Active');
+    const targetList = students || [];
     const headers = 'ID,Name,Username_Phone,Roll,Password,Branch,College,Email\n';
     const rows = targetList.map(s => 
       `"${s.id}","${s.name}","${s.whatsapp}","${s.roll}","${s.password}","${s.branchCode || s.branch}","${s.college}","${s.email}"`
@@ -633,7 +646,7 @@ Team Apna College Bihar
       const updated = [newStudent, ...students.filter(s => s.id !== finalId)];
       setStudents(updated);
       saveEnrolledStudents(updated);
-      await saveCloudMentorshipData(updated, mentors);
+      await saveCloudMentorshipData(updated, mentors, removedStudents);
       setShowAddStudentModal(false);
       setStudentForm({
         name: '',
@@ -661,29 +674,39 @@ Team Apna College Bihar
   // Move Student to Removed list (Mentorship Admin me safe rahega)
   const handleMoveToRemoved = async (id) => {
     if (!window.confirm('Kya aap is student ko "Removed" me daalna chahte hain? (Data Mentorship Admin ke Removed list me safe rahega)')) return;
-    const updated = students.map(s => s.id === id ? { ...s, status: 'Removed' } : s);
-    setStudents(updated);
-    saveEnrolledStudents(updated);
-    await saveCloudMentorshipData(updated, mentors);
-    if (flash) flash('Student ko "Removed" list me daal diya gaya. Ye Mentorship Admin me hamesha rahega. ✅', 'suc');
+    const target = students.find(s => s.id === id);
+    if (!target) return;
+    const updatedActive = students.filter(s => s.id !== id);
+    const updatedRemoved = [{ ...target, status: 'Removed' }, ...removedStudents.filter(s => s.id !== id)];
+    setStudents(updatedActive);
+    setRemovedStudents(updatedRemoved);
+    saveEnrolledStudents(updatedActive);
+    saveRemovedStudents(updatedRemoved);
+    await saveCloudMentorshipData(updatedActive, mentors, updatedRemoved);
+    if (flash) flash(`Student "${target.name}" ko Removed section me daal diya gaya. Ye Mentorship Admin me hamesha safe rahega. ✅`, 'suc');
   };
 
   // Restore Student back to Active
   const handleRestoreStudent = async (id) => {
-    const updated = students.map(s => s.id === id ? { ...s, status: 'Active' } : s);
-    setStudents(updated);
-    saveEnrolledStudents(updated);
-    await saveCloudMentorshipData(updated, mentors);
-    if (flash) flash('Student successfully Active list me restore ho gaya! 🚀', 'suc');
+    const target = removedStudents.find(s => s.id === id);
+    if (!target) return;
+    const updatedRemoved = removedStudents.filter(s => s.id !== id);
+    const updatedActive = [{ ...target, status: 'Active' }, ...students.filter(s => s.id !== id)];
+    setStudents(updatedActive);
+    setRemovedStudents(updatedRemoved);
+    saveEnrolledStudents(updatedActive);
+    saveRemovedStudents(updatedRemoved);
+    await saveCloudMentorshipData(updatedActive, mentors, updatedRemoved);
+    if (flash) flash(`Student "${target.name}" successfully Active list me restore ho gaya! 🚀`, 'suc');
   };
 
   // Permanent Delete Student (Admin only)
   const handlePermanentDelete = async (id) => {
     if (!window.confirm('WARNING: Kya aap is student ko permanently delete karna chahte hain?')) return;
-    const updated = students.filter(s => s.id !== id);
-    setStudents(updated);
-    saveEnrolledStudents(updated);
-    await saveCloudMentorshipData(updated, mentors);
+    const updatedRemoved = removedStudents.filter(s => s.id !== id);
+    setRemovedStudents(updatedRemoved);
+    saveRemovedStudents(updatedRemoved);
+    await saveCloudMentorshipData(students, mentors, updatedRemoved);
     if (flash) flash('Student permanently delete ho gaya.');
   };
 
@@ -695,10 +718,22 @@ Team Apna College Bihar
       return;
     }
     const cleanPhone = newPhone.replace(/\D/g, '');
-    const updated = students.map(s => s.id === studentId ? { ...s, whatsapp: cleanPhone } : s);
-    setStudents(updated);
-    saveEnrolledStudents(updated);
-    await saveCloudMentorshipData(updated, mentors);
+    
+    let updatedActive = students;
+    let updatedRemoved = removedStudents;
+
+    if (students.some(s => s.id === studentId)) {
+      updatedActive = students.map(s => s.id === studentId ? { ...s, whatsapp: cleanPhone } : s);
+      setStudents(updatedActive);
+    }
+    if (removedStudents.some(s => s.id === studentId)) {
+      updatedRemoved = removedStudents.map(s => s.id === studentId ? { ...s, whatsapp: cleanPhone } : s);
+      setRemovedStudents(updatedRemoved);
+    }
+
+    saveEnrolledStudents(updatedActive);
+    saveRemovedStudents(updatedRemoved);
+    await saveCloudMentorshipData(updatedActive, mentors, updatedRemoved);
     setEditingPhones(prev => { const n = { ...prev }; delete n[studentId]; return n; });
     setEditingRemovedPhones(prev => { const n = { ...prev }; delete n[studentId]; return n; });
     if (flash) flash('Phone number successfully update ho gaya aur Cloud Sync ho gaya! 📱✅', 'suc');
@@ -709,7 +744,7 @@ Team Apna College Bihar
     const updated = students.map(s => s.id === studentId ? { ...s, assignedMentorId: mentorId || null } : s);
     setStudents(updated);
     saveEnrolledStudents(updated);
-    await saveCloudMentorshipData(updated, mentors);
+    await saveCloudMentorshipData(updated, mentors, removedStudents);
     const assigned = mentors.find(m => m.id === mentorId);
     if (flash) {
       if (assigned) {
@@ -731,19 +766,15 @@ Team Apna College Bihar
     setStudents(updated);
     saveEnrolledStudents(updated);
     setEditingPasswords(prev => ({ ...prev, [studentId]: undefined }));
-    await saveCloudMentorshipData(updated, mentors);
+    await saveCloudMentorshipData(updated, mentors, removedStudents);
     if (flash) flash('Password successfully save ho gaya aur Cloud Sync ho gaya! ✅', 'suc');
   };
 
-  // Active and Removed student lists
-  const activeStudents = students.filter(s => (s.status || 'Active') === 'Active');
-  const removedStudents = students.filter(s => s.status === 'Removed');
-
   // Unique Colleges for Active Students
-  const collegesList = Array.from(new Set(activeStudents.map(s => s.college))).filter(Boolean);
+  const collegesList = Array.from(new Set(students.map(s => s.college))).filter(Boolean);
 
   // Filtered Active Students for Section 2
-  const filteredActiveStudents = activeStudents.filter(s => {
+  const filteredActiveStudents = students.filter(s => {
     const q = searchQuery.trim().toLowerCase();
     const matchesQuery = !q || 
       (s.name || '').toLowerCase().includes(q) ||
@@ -786,7 +817,7 @@ Team Apna College Bihar
           </div>
           <div>
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Total Enrolled</p>
-            <p className="text-2xl font-[1000] text-slate-900">{activeStudents.length} Students</p>
+            <p className="text-2xl font-[1000] text-slate-900">{students.length} Students</p>
           </div>
         </div>
 

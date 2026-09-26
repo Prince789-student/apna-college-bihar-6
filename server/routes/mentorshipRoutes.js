@@ -73,13 +73,14 @@ router.get('/data', async (req, res) => {
 // POST /api/mentorship/sync - Save updated students and mentors from Admin Panel
 router.post('/sync', async (req, res) => {
   try {
-    const { students, mentors } = req.body;
+    const { students, mentors, removedStudents } = req.body;
     if (!Array.isArray(students)) {
       return res.status(400).json({ success: false, message: 'Invalid students array' });
     }
 
     const payload = {
       students,
+      removedStudents: Array.isArray(removedStudents) ? removedStudents : [],
       mentors: Array.isArray(mentors) ? mentors : [],
       updatedAt: new Date().toISOString()
     };
@@ -91,7 +92,7 @@ router.post('/sync', async (req, res) => {
     if (admin && admin.firestore) {
       try {
         const firestore = admin.firestore();
-        await firestore.collection('mentorship').doc('data').set(payload, { merge: true });
+        await firestore.collection('mentorship').doc('data').set(payload, { merge: false });
       } catch (fErr) {
         console.warn('[Mentorship API] Firestore write error:', fErr.message);
       }
@@ -101,6 +102,7 @@ router.post('/sync', async (req, res) => {
       success: true,
       message: 'Mentorship data synced successfully across all devices!',
       count: students.length,
+      removedCount: (payload.removedStudents || []).length,
       updatedAt: payload.updatedAt
     });
   } catch (err) {

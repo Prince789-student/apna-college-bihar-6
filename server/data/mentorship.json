@@ -693,7 +693,9 @@
       "assignedMentorId": null,
       "status": "Active",
       "studentId": "26CSEIOT43"
-    },
+    }
+  ],
+  "removedStudents": [
     {
       "id": "26EEE50_REMOVED",
       "timestamp": "05/09/2026 00:45:39",
@@ -857,5 +859,5 @@
       "studentId": "26IOT27"
     }
   ],
-  "updatedAt": "2026-09-23T18:18:35.482Z"
+  "updatedAt": "2026-09-26T11:01:23.198Z"
 }

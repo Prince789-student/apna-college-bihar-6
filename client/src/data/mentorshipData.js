@@ -745,7 +745,11 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "assignedMentorId": null,
     "status": "Active",
     "studentId": "26CSEIOT43"
-  },
+  }
+];
+
+// Dedicated List for Removed Students (Separate from Enrolled)
+export const INITIAL_REMOVED_STUDENTS = [
   {
     "id": "26EEE50_REMOVED",
     "timestamp": "05/09/2026 00:45:39",
@@ -910,23 +914,24 @@ export const INITIAL_ENROLLED_STUDENTS = [
   }
 ];
 
-// Helper to get students (localStorage persistent)
+// Helper to get strictly Enrolled Students (localStorage persistent)
 export function getEnrolledStudents() {
   try {
-    // Purge old keys once
+    // Purge old keys once to clear mixed state
     if (typeof window !== 'undefined' && window.localStorage) {
-      ['beu_enrolled_students', 'beu_enrolled_students_v2', 'beu_enrolled_students_v3', 'beu_enrolled_students_v4', 'beu_enrolled_students_v5', 'beu_enrolled_students_v6', 'beu_enrolled_students_v7', 'beu_enrolled_students_v8', 'beu_enrolled_students_v9', 'beu_enrolled_students_v10'].forEach(k => {
+      ['beu_enrolled_students', 'beu_enrolled_students_v2', 'beu_enrolled_students_v3', 'beu_enrolled_students_v4', 'beu_enrolled_students_v5', 'beu_enrolled_students_v6', 'beu_enrolled_students_v7', 'beu_enrolled_students_v8', 'beu_enrolled_students_v9', 'beu_enrolled_students_v10', 'beu_enrolled_students_v11'].forEach(k => {
         try { localStorage.removeItem(k); } catch(e) {}
       });
     }
-    const saved = localStorage.getItem('beu_enrolled_students_v11');
+    const saved = localStorage.getItem('beu_enrolled_students_v12');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        // Ensure any newly added INITIAL_ENROLLED_STUDENTS exist
-        const existingIds = new Set(parsed.map(s => s.id));
+        // Exclude any removed student
+        const clean = parsed.filter(s => s.status !== 'Removed' && !s.removed && !s.id.includes('_REMOVED'));
+        const existingIds = new Set(clean.map(s => s.id));
         const missing = INITIAL_ENROLLED_STUDENTS.filter(s => !existingIds.has(s.id));
-        const combined = [...parsed, ...missing];
+        const combined = [...clean, ...missing];
         return combined.map(s => {
           let assigned = s.assignedMentorId;
           if (assigned === 'mentor-cse-1789726326697' || (assigned && assigned.toLowerCase().includes('deepak'))) {
@@ -938,7 +943,7 @@ export function getEnrolledStudents() {
           } else if (assigned && assigned.toLowerCase().includes('piyush')) {
             assigned = 'mentor-cse-piyush';
           }
-          return { ...s, assignedMentorId: assigned };
+          return { ...s, assignedMentorId: assigned, status: 'Active' };
         });
       }
     }
@@ -950,9 +955,36 @@ export function getEnrolledStudents() {
 
 export function saveEnrolledStudents(students) {
   try {
-    localStorage.setItem('beu_enrolled_students_v11', JSON.stringify(students));
+    const cleanActive = (students || []).filter(s => s.status !== 'Removed' && !s.removed && !s.id.includes('_REMOVED'));
+    localStorage.setItem('beu_enrolled_students_v12', JSON.stringify(cleanActive));
   } catch (e) {
     console.error('Error saving enrolled students:', e);
+  }
+}
+
+// Helper to get strictly Removed Students
+export function getRemovedStudents() {
+  try {
+    const saved = localStorage.getItem('beu_removed_students_v12');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const existingIds = new Set(parsed.map(s => s.id));
+        const missing = INITIAL_REMOVED_STUDENTS.filter(s => !existingIds.has(s.id));
+        return [...parsed, ...missing];
+      }
+    }
+  } catch (e) {
+    console.error('Error reading removed students:', e);
+  }
+  return INITIAL_REMOVED_STUDENTS;
+}
+
+export function saveRemovedStudents(removed) {
+  try {
+    localStorage.setItem('beu_removed_students_v12', JSON.stringify(removed || []));
+  } catch (e) {
+    console.error('Error saving removed students:', e);
   }
 }
 
