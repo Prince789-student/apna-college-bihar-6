@@ -1,0 +1,61 @@
+{
+  "subject": "Object-Oriented Programming with Java",
+  "category": "PYQ",
+  "semester": 3,
+  "branches": [
+    "CSE",
+    "IT",
+    "CSE_AIML",
+    "CSE_AI",
+    "CSE_DS",
+    "CSE_CYBER",
+    "CSE_IOT",
+    "CSE_NETWORKS",
+    "CSE_IOT_CS_BC"
+  ],
+  "pyq": {
+    "title": "Chapter-Wise PYQ",
+    "type": "file",
+    "googleDriveUrl": "https://drive.google.com/file/d/1xZt0KOzAC-Nxr7iksIRYv1-2e5jUAeAT/view?usp=drivesdk",
+    "fileId": "1xZt0KOzAC-Nxr7iksIRYv1-2e5jUAeAT",
+    "verified": true
+  },
+  "unitWiseNotes": [
+    {
+      "unit": 1,
+      "title": "Unit 1: OOP Concepts and Java Programming",
+      "googleDriveUrl": "https://drive.google.com/file/d/1GzQFYs66MDy9QZU5NocnrMdgGRepXih4/view",
+      "fileId": "1GzQFYs66MDy9QZU5NocnrMdgGRepXih4"
+    },
+    {
+      "unit": 2,
+      "title": "Unit 2: Objects, Classes and Constructors in Java",
+      "googleDriveUrl": "https://drive.google.com/file/d/1sDfuLIa-X4loO4F49VEZkh80_PQrWamZ/view?usp=sharing",
+      "fileId": "1sDfuLIa-X4loO4F49VEZkh80_PQrWamZ"
+    },
+    {
+      "unit": 3,
+      "title": "Unit 3: Inheritance, Interfaces and Packages",
+      "googleDriveUrl": "https://drive.google.com/file/d/1qWe5ksdPyxbAhSs43rwZ8QXbd2QCFJ-L/view?usp=sharing",
+      "fileId": "1qWe5ksdPyxbAhSs43rwZ8QXbd2QCFJ-L"
+    },
+    {
+      "unit": 4,
+      "title": "Unit 4: Exception Handling",
+      "googleDriveUrl": "https://drive.google.com/file/d/1C67nxpoy1TtBaokzk9hnf5dnd90J8thX/view?usp=drive_link",
+      "fileId": "1C67nxpoy1TtBaokzk9hnf5dnd90J8thX"
+    },
+    {
+      "unit": 5,
+      "title": "Unit 5: Introduction to Multithreading",
+      "googleDriveUrl": "https://drive.google.com/file/d/1OmXaRRWB9UtmaNsXubC3GcTrXk9ncP_T/view?usp=sharing",
+      "fileId": "1OmXaRRWB9UtmaNsXubC3GcTrXk9ncP_T"
+    },
+    {
+      "unit": 6,
+      "title": "Unit 6: Collection Framework and Database Connectivity",
+      "googleDriveUrl": "https://drive.google.com/file/d/1WTQQgEE8sGLWsEMoQVS50PzaJ6YIezlU/view?usp=sharing",
+      "fileId": "1WTQQgEE8sGLWsEMoQVS50PzaJ6YIezlU"
+    }
+  ]
+}

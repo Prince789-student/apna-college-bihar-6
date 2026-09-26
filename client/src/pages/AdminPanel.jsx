@@ -17,6 +17,7 @@ import { useAuth } from '../context/AuthContext';
 import { isValidPDF } from '../utils/validation';
 import LoadingOverlay from '../components/LoadingOverlay';
 import AdminMentorship from '../components/AdminMentorship';
+import AdminBeuWhatsApp from '../components/AdminBeuWhatsApp';
 
 export default function AdminPanel() {
   const { user, ROLES, loading: authLoading } = useAuth();
@@ -676,7 +677,7 @@ if (!isAdmin) return (
            {['overview', 'mentorship', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu', 'donors', 'shortlinks'].map(t => (
              <button key={t} onClick={()=>setTab(t)}
                className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${tab===t?'bg-indigo-600 text-white shadow-xl shadow-indigo-900/20':'text-slate-500 hover:text-slate-700'}`}>
-               {t === 'mentorship' ? '🎓 Mentorship' : t}
+               {t === 'mentorship' ? '🎓 Mentorship' : t === 'beu' ? '📢 BEU WhatsApp' : t}
              </button>
            ))}
         </div>
@@ -1516,114 +1517,9 @@ if (!isAdmin) return (
         </div>
       )}
 
-      {/* ── BEU NOTIFICATIONS TAB ── */}
+      {/* ── BEU NOTIFICATIONS & WHATSAPP AI BROADCASTER ── */}
       {tab==='beu' && (
-        <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-indigo-50/50 p-6 rounded-[2rem] border border-indigo-100">
-            <div>
-              <h2 className="text-[12px] font-[1000] text-slate-900 uppercase tracking-widest">BEU Notification Sync</h2>
-              <p className="text-[10px] text-slate-500 font-bold mt-1">Automatically scrapes the official BEU portal. The system also runs this check in the background.</p>
-            </div>
-            <button 
-                onClick={handleSyncBEU} 
-                disabled={uploading}
-                className="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2 shadow-xl shadow-indigo-500/20 disabled:opacity-50"
-            >
-                {uploading ? <Loader2 className="animate-spin w-4 h-4" /> : <RefreshCw className="w-4 h-4" />} 
-                Sync Now
-            </button>
-          </div>
-
-          {/* Add Form */}
-          <div className="bg-white border border-slate-200/80 rounded-[2rem] p-6 shadow-xl">
-            <h2 className="text-[11px] font-[1000] text-slate-900 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-              <Bell size={16} className="text-amber-500" /> BEU Notification Add Karo
-            </h2>
-            <form onSubmit={addBeuNotification} className="space-y-4">
-              <div>
-                <label className="block text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Notice Title *</label>
-                <input
-                  value={beuForm.board}
-                  onChange={e => setBeuForm(f => ({ ...f, board: e.target.value }))}
-                  placeholder="e.g. Notice for B.Tech 5th Semester Examination 2025"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  required
-                />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Notice Date *</label>
-                  <input
-                    type="date"
-                    value={beuForm.noticedate}
-                    onChange={e => setBeuForm(f => ({ ...f, noticedate: e.target.value }))}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">Important?</label>
-                  <select
-                    value={beuForm.isimportant}
-                    onChange={e => setBeuForm(f => ({ ...f, isimportant: Number(e.target.value) }))}
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  >
-                    <option value={0}>Normal</option>
-                    <option value={1}>⚡ Important</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label className="block text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1">PDF URL * (BEU site se copy karo)</label>
-                <input
-                  value={beuForm.pdfUrl}
-                  onChange={e => setBeuForm(f => ({ ...f, pdfUrl: e.target.value }))}
-                  placeholder="https://beu-bih.ac.in/backend/1234567890-NOTICE.pdf"
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-amber-400"
-                  required
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={uploading}
-                className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-white font-black text-[11px] uppercase tracking-widest rounded-xl transition-all active:scale-95 disabled:opacity-50"
-              >
-                {uploading ? 'Adding...' : '🔔 Add BEU Notification'}
-              </button>
-            </form>
-          </div>
-
-          {/* Existing Notifications */}
-          <div className="bg-white border border-slate-200/80 rounded-[2rem] shadow-xl overflow-hidden">
-            <div className="px-6 py-5 border-b border-slate-100">
-              <h3 className="text-[11px] font-[1000] text-slate-900 uppercase tracking-[0.2em]">Existing Notifications ({beuNotifications.length})</h3>
-            </div>
-            <div className="divide-y divide-slate-100">
-              {beuNotifications.map(n => (
-                <div key={n.id} className="flex items-center justify-between px-6 py-4 hover:bg-slate-50/50 transition-colors">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2">
-                      {n.isimportant === 1 && <span className="text-[8px] font-black bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full uppercase">Important</span>}
-                      <span className="text-[13px] font-bold text-slate-800 truncate">{n.title || n.board}</span>
-                    </div>
-                    <span className="text-[10px] text-slate-400 font-mono">{n.date || n.noticedate} • ID: {n.id}</span>
-                  </div>
-                  <div className="flex items-center gap-2 ml-4">
-                    <a href={n.pdfUrl || n.link} target="_blank" rel="noreferrer" className="p-2 bg-blue-50 text-blue-500 hover:bg-blue-500 hover:text-white rounded-lg transition-all">
-                      <Eye size={13}/>
-                    </a>
-                    <button onClick={() => deleteBeuNotification(n.id)} className="p-2 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all">
-                      <Trash2 size={13}/>
-                    </button>
-                  </div>
-                </div>
-              ))}
-              {beuNotifications.length === 0 && (
-                <div className="text-center py-12 text-slate-400 text-sm">Koi notification nahi mili</div>
-              )}
-            </div>
-          </div>
-        </div>
+        <AdminBeuWhatsApp flash={flash} />
       )}
 
       {/* ── DONORS TAB ── */}

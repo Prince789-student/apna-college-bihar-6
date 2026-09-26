@@ -27,16 +27,15 @@ startDailyCron();
 const { startHackathonCron } = require('./cron/hackathonFetcher');
 startHackathonCron();
 
-// Start BEU Notification Scraper
-const scrapeBEUNotifications = require('./cron/beuNotificationFetcher');
-// Set up cron for BEU Scraper (runs every 6 hours)
-const cron = require('node-cron');
-cron.schedule('0 */6 * * *', () => {
-    console.log('[Cron] Running BEU Scraper...');
-    scrapeBEUNotifications();
-});
-// Initial run
-scrapeBEUNotifications();
+// Start BEU Notification Scraper & AI Auto-Broadcaster (Gemini 2.5 Flash + WhatsApp)
+const { initBeuBroadcaster, syncBeuAndBroadcast } = require('./cron/beuAutoBroadcaster');
+initBeuBroadcaster();
+
+// Start WhatsApp Bot Session (only starts headless browser if explicitly enabled or via Admin UI)
+const whatsappBotService = require('./services/whatsappBotService');
+if (process.env.ENABLE_WHATSAPP_BOT === 'true') {
+    whatsappBotService.start().catch(err => console.warn('[WhatsApp Bot Auto-Start]:', err.message));
+}
 
 // Removed route to place it below CORS middleware
 
@@ -133,13 +132,14 @@ app.use(express.static(publicPath));
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/documents', require('./routes/documentRoutes'));
 app.use('/api/mentorship', require('./routes/mentorshipRoutes'));
+app.use('/api/beu', require('./routes/beuRoutes'));
 
-// Manual Sync Endpoint for BEU Scraper (Moved here to use CORS)
+// Manual Sync Endpoint for BEU Scraper (with AI WhatsApp pipeline)
 app.post('/api/admin/sync-beu', async (req, res) => {
     try {
-        const result = await scrapeBEUNotifications();
+        const result = await syncBeuAndBroadcast();
         if (result && result.success) {
-            res.json({ success: true, message: `Synced successfully. Added ${result.added} notices out of ${result.totalFound} found.` });
+            res.json({ success: true, message: `Synced successfully! Found ${result.newCount} new notices, processed ${result.aiCount} AI captions.` });
         } else {
             res.status(500).json({ success: false, message: result?.error || result?.message || 'Sync failed.' });
         }
