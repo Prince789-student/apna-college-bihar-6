@@ -58,7 +58,7 @@ function syncBuild() {
 
 
         // 1. Clean conflicting directories in server/public so Vercel cleanUrls maps cleanly to flat .html files without directory collision
-        const conflictingDirs = ['about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca'];
+        const conflictingDirs = ['about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca', 'notes', 'pyq', 'syllabus', 'ugeac-predictor', 'cgpa'];
         conflictingDirs.forEach(dir => {
             const p = path.join(destDir, dir);
             if (fs.existsSync(p)) fs.rmSync(p, { recursive: true, force: true });
@@ -75,6 +75,12 @@ function syncBuild() {
                     fs.rmSync(p, { recursive: true, force: true });
                 }
             });
+        }
+
+        // Clean stale assets in server/public/assets to remove old unused hash bundles
+        if (fs.existsSync(assetsDestDir)) {
+            fs.rmSync(assetsDestDir, { recursive: true, force: true });
+            console.log('Cleaned old asset bundles from server/public/assets');
         }
 
         // 2. Copy from dist to server/public

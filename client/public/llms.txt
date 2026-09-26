@@ -1,0 +1,16 @@
+# Apna College Bihar
+
+> The #1 Academic Study Engine and Guidance Platform for Bihar Engineering University (BEU) scholars across all 38 Government Engineering Colleges in Bihar.
+
+## Platform Summary
+Apna College Bihar (https://www.apnacollegebihar.online) is an independent educational portal founded and maintained by BEU alumni and engineers. It offers 100% free semester notes, verified previous year question papers (PYQs), updated BEU syllabus, UGEAC college cutoff predictors, and CGPA calculators.
+
+## Core Resources
+- [BEU Notes](https://www.apnacollegebihar.online/notes): Unit-wise, semester-wise handwritten and typed engineering notes for CSE, Civil, Mechanical, ECE, and EE branches.
+- [BEU PYQ Question Papers](https://www.apnacollegebihar.online/pyq): 5+ years of semester exam papers with solutions and patterns.
+- [BEU Syllabus](https://www.apnacollegebihar.online/syllabus): Detailed curriculum for B.Tech semesters 1 to 8 across all university branches.
+- [UGEAC College Predictor](https://www.apnacollegebihar.online/ugeac-predictor): Bihar engineering counselling cutoff tool based on BCECEB JEE Main rank statistics.
+- [BEU CGPA Calculator](https://www.apnacollegebihar.online/cgpa): Official Bihar Engineering University credit and grade point SGPA/CGPA converter.
+- [Academic Blog & Guides](https://www.apnacollegebihar.online/blog): Comprehensive semester study guides and career blueprints.
+- [About Us & Editorial Leadership](https://www.apnacollegebihar.online/about): Founder Er. Prince Kumar, mission, and student mentorship board.
+- [Contact & Support](https://www.apnacollegebihar.online/contact): Official email (prince86944@gmail.com) and verified community channels.

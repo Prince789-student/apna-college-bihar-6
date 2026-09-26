@@ -1,1 +1,0 @@
-import{r as e}from"./vendor.a1433aa6.js";function r(t){e.useEffect(()=>{const o=document.getElementById("main-scroll-container");o?o.scrollTo({top:0,left:0,behavior:"instant"}):window.scrollTo({top:0,left:0,behavior:"instant"})},t)}export{r as u};

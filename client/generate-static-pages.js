@@ -27,7 +27,7 @@ function injectIntoRoot(template, bodyContent) {
 
 
 // Clean up any conflicting directories so Vercel cleanUrls maps cleanly to flat .html files without directory collision
-const conflictingDirs = ['about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca'];
+const conflictingDirs = ['about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca', 'notes', 'pyq', 'syllabus', 'ugeac-predictor', 'cgpa'];
 conflictingDirs.forEach(dir => {
   const p = path.join(distDir, dir);
   if (fs.existsSync(p)) fs.rmSync(p, { recursive: true, force: true });
@@ -286,8 +286,18 @@ const footerHtml = `
 </footer>
 `;
 
-// Helper to replace <head> meta tags
-function injectHeadMetadata(html, { title, description, canonical, schemaJson }) {
+function setMetaTag(html, attr, attrVal, content) {
+  const safeContent = (content || '').replace(/"/g, '&quot;');
+  const regex = new RegExp(`<meta\\s+${attr}="${attrVal}"\\s+content=".*?"\\s*\\/?>`, 'i');
+  const tag = `<meta ${attr}="${attrVal}" content="${safeContent}" />`;
+  if (regex.test(html)) {
+    return html.replace(regex, tag);
+  }
+  return html.replace('</head>', `   ${tag}\n</head>`);
+}
+
+// Helper to replace and inject comprehensive <head> meta tags, OpenGraph, Twitter, and Schema
+function injectHeadMetadata(html, { title, description, canonical, ogType = 'website', ogImage = 'https://www.apnacollegebihar.online/logo-acb.png', schemaJson }) {
   let modified = html;
   
   // Replace Title
@@ -297,13 +307,11 @@ function injectHeadMetadata(html, { title, description, canonical, schemaJson })
   
   // Replace Meta Description
   if (description) {
-    const descTag = `<meta name="description" content="${description.replace(/"/g, '&quot;')}" />`;
-    if (modified.includes('<meta name="description"')) {
-      modified = modified.replace(/<meta\s+name="description"\s+content=".*?"\s*\/?>/i, descTag);
-    } else {
-      modified = modified.replace('</head>', `   ${descTag}\n</head>`);
-    }
+    modified = setMetaTag(modified, 'name', 'description', description);
   }
+
+  // Ensure Google robots tag
+  modified = setMetaTag(modified, 'name', 'robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
 
   // Canonical tag
   if (canonical) {
@@ -315,10 +323,29 @@ function injectHeadMetadata(html, { title, description, canonical, schemaJson })
     }
   }
 
+  // Open Graph / Facebook
+  modified = setMetaTag(modified, 'property', 'og:type', ogType);
+  if (canonical) modified = setMetaTag(modified, 'property', 'og:url', canonical);
+  if (title) modified = setMetaTag(modified, 'property', 'og:title', title);
+  if (description) modified = setMetaTag(modified, 'property', 'og:description', description);
+  modified = setMetaTag(modified, 'property', 'og:site_name', 'Apna College Bihar');
+  modified = setMetaTag(modified, 'property', 'og:image', ogImage);
+  modified = setMetaTag(modified, 'property', 'og:locale', 'en_IN');
+
+  // Twitter Card
+  modified = setMetaTag(modified, 'name', 'twitter:card', 'summary_large_image');
+  if (title) modified = setMetaTag(modified, 'name', 'twitter:title', title);
+  if (description) modified = setMetaTag(modified, 'name', 'twitter:description', description);
+  modified = setMetaTag(modified, 'name', 'twitter:image', ogImage);
+
   // Schema JSON-LD
   if (schemaJson) {
-    const schemaTag = `\n   <script type="application/ld+json">${JSON.stringify(schemaJson)}</script>\n`;
-    modified = modified.replace('</head>', `${schemaTag}</head>`);
+    const formattedSchema = `<script type="application/ld+json">\n${JSON.stringify(schemaJson, null, 2)}\n   </script>`;
+    if (/<script type="application\/ld\+json">[\s\S]*?<\/script>/i.test(modified)) {
+      modified = modified.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/i, formattedSchema);
+    } else {
+      modified = modified.replace('</head>', `   ${formattedSchema}\n</head>`);
+    }
   }
 
   return modified;
@@ -584,7 +611,26 @@ let aboutHtml = injectIntoRoot(baseTemplate, aboutBody);
 aboutHtml = injectHeadMetadata(aboutHtml, {
   title: 'About Apna College Bihar | Official Study Engine & Guidance Platform',
   description: 'Learn about Apna College Bihar, our editorial board, leadership, and mission to deliver 100% free BEU Notes, PYQs, and UGEAC counselling tools to engineering students across Bihar.',
-  canonical: 'https://www.apnacollegebihar.online/about'
+  canonical: 'https://www.apnacollegebihar.online/about',
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.apnacollegebihar.online/" },
+          { "@type": "ListItem", "position": 2, "name": "About Us", "item": "https://www.apnacollegebihar.online/about" }
+        ]
+      },
+      {
+        "@type": "AboutPage",
+        "@id": "https://www.apnacollegebihar.online/about",
+        "url": "https://www.apnacollegebihar.online/about",
+        "name": "About Apna College Bihar",
+        "description": "Empowering Bihar Engineering University (BEU) scholars through structured study notes, previous year question papers, counselling predictors, and digital academic tools."
+      }
+    ]
+  }
 });
 writeStaticHtml('about', aboutHtml);
 
@@ -655,7 +701,26 @@ let contactHtml = injectIntoRoot(baseTemplate, contactBody);
 contactHtml = injectHeadMetadata(contactHtml, {
   title: 'Contact Us | Apna College Bihar Support & Mentorship',
   description: 'Get in touch with the Apna College Bihar support team. Official email, WhatsApp community, and verified academic assistance for BEU students.',
-  canonical: 'https://www.apnacollegebihar.online/contact'
+  canonical: 'https://www.apnacollegebihar.online/contact',
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.apnacollegebihar.online/" },
+          { "@type": "ListItem", "position": 2, "name": "Contact", "item": "https://www.apnacollegebihar.online/contact" }
+        ]
+      },
+      {
+        "@type": "ContactPage",
+        "@id": "https://www.apnacollegebihar.online/contact",
+        "url": "https://www.apnacollegebihar.online/contact",
+        "name": "Contact Apna College Bihar",
+        "description": "Get in touch with the Apna College Bihar support team. Official email, WhatsApp community, and verified academic assistance for BEU students."
+      }
+    ]
+  }
 });
 writeStaticHtml('contact', contactHtml);
 
@@ -802,7 +867,25 @@ let privacyHtml = injectIntoRoot(baseTemplate, privacyBody);
 privacyHtml = injectHeadMetadata(privacyHtml, {
   title: 'Privacy Policy | Apna College Bihar',
   description: 'Official Privacy Policy of Apna College Bihar. Learn about our data collection practices, Google AdSense cookie compliance, and user rights.',
-  canonical: 'https://www.apnacollegebihar.online/privacy-policy'
+  canonical: 'https://www.apnacollegebihar.online/privacy-policy',
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.apnacollegebihar.online/" },
+          { "@type": "ListItem", "position": 2, "name": "Privacy Policy", "item": "https://www.apnacollegebihar.online/privacy-policy" }
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.apnacollegebihar.online/privacy-policy",
+        "url": "https://www.apnacollegebihar.online/privacy-policy",
+        "name": "Privacy Policy | Apna College Bihar"
+      }
+    ]
+  }
 });
 writeStaticHtml('privacy-policy', privacyHtml);
 
@@ -846,7 +929,25 @@ let termsHtml = injectIntoRoot(baseTemplate, termsBody);
 termsHtml = injectHeadMetadata(termsHtml, {
   title: 'Terms of Service | Apna College Bihar',
   description: 'Terms of Service for Apna College Bihar educational platform and study resources.',
-  canonical: 'https://www.apnacollegebihar.online/terms'
+  canonical: 'https://www.apnacollegebihar.online/terms',
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.apnacollegebihar.online/" },
+          { "@type": "ListItem", "position": 2, "name": "Terms of Service", "item": "https://www.apnacollegebihar.online/terms" }
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.apnacollegebihar.online/terms",
+        "url": "https://www.apnacollegebihar.online/terms",
+        "name": "Terms of Service | Apna College Bihar"
+      }
+    ]
+  }
 });
 writeStaticHtml('terms', termsHtml);
 
@@ -889,7 +990,25 @@ let disclaimerHtml = injectIntoRoot(baseTemplate, disclaimerBody);
 disclaimerHtml = injectHeadMetadata(disclaimerHtml, {
   title: 'Disclaimer | Apna College Bihar',
   description: 'Official disclaimer clarifying that Apna College Bihar is an independent educational platform not affiliated with government agencies.',
-  canonical: 'https://www.apnacollegebihar.online/disclaimer'
+  canonical: 'https://www.apnacollegebihar.online/disclaimer',
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.apnacollegebihar.online/" },
+          { "@type": "ListItem", "position": 2, "name": "Disclaimer", "item": "https://www.apnacollegebihar.online/disclaimer" }
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.apnacollegebihar.online/disclaimer",
+        "url": "https://www.apnacollegebihar.online/disclaimer",
+        "name": "Disclaimer | Apna College Bihar"
+      }
+    ]
+  }
 });
 writeStaticHtml('disclaimer', disclaimerHtml);
 
@@ -932,12 +1051,388 @@ let dmcaHtml = injectIntoRoot(baseTemplate, dmcaBody);
 dmcaHtml = injectHeadMetadata(dmcaHtml, {
   title: 'DMCA Copyright Policy | Apna College Bihar',
   description: 'DMCA copyright and takedown policy for Apna College Bihar.',
-  canonical: 'https://www.apnacollegebihar.online/dmca'
+  canonical: 'https://www.apnacollegebihar.online/dmca',
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.apnacollegebihar.online/" },
+          { "@type": "ListItem", "position": 2, "name": "DMCA Policy", "item": "https://www.apnacollegebihar.online/dmca" }
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://www.apnacollegebihar.online/dmca",
+        "url": "https://www.apnacollegebihar.online/dmca",
+        "name": "DMCA Copyright Policy | Apna College Bihar"
+      }
+    ]
+  }
 });
 writeStaticHtml('dmca', dmcaHtml);
 
 // ─────────────────────────────────────────────────────────────
-// 9. ENRICH HOMEPAGE (client/dist/index.html)
+// 9. GENERATE BEU NOTES PAGE (/notes)
+// ─────────────────────────────────────────────────────────────
+const notesBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Academic Repository</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Semester Notes & Study Material</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Download 100% free, unit-wise handwritten and typed engineering notes curated strictly according to the latest Bihar Engineering University (BEU) syllabus.
+      </p>
+    </div>
+
+    <!-- Branch Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
+        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">💻</div>
+        <h3 class="font-black text-slate-900 text-base uppercase mb-1">Computer Science & Engineering (CSE)</h3>
+        <p class="text-xs text-slate-500 leading-relaxed mb-4">DSA, Operating Systems, DBMS, Computer Networks, Theory of Computation, AI & ML unit notes.</p>
+        <a href="/notes" class="text-blue-600 text-xs font-bold hover:underline">Access CSE Notes &rarr;</a>
+      </div>
+
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
+        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">🏗️</div>
+        <h3 class="font-black text-slate-900 text-base uppercase mb-1">Civil Engineering (CE)</h3>
+        <p class="text-xs text-slate-500 leading-relaxed mb-4">Structural Analysis, Geotechnical, Fluid Mechanics, Environmental, Surveying, and Transportation notes.</p>
+        <a href="/notes" class="text-emerald-600 text-xs font-bold hover:underline">Access Civil Notes &rarr;</a>
+      </div>
+
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
+        <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">⚙️</div>
+        <h3 class="font-black text-slate-900 text-base uppercase mb-1">Mechanical Engineering (ME)</h3>
+        <p class="text-xs text-slate-500 leading-relaxed mb-4">Thermodynamics, Heat Transfer, Machine Design, Fluid Machines, Strength of Materials lecture notes.</p>
+        <a href="/notes" class="text-orange-600 text-xs font-bold hover:underline">Access Mechanical Notes &rarr;</a>
+      </div>
+
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
+        <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">⚡</div>
+        <h3 class="font-black text-slate-900 text-base uppercase mb-1">Electrical & Electronics (EEE / EE)</h3>
+        <p class="text-xs text-slate-500 leading-relaxed mb-4">Network Theory, Electrical Machines, Power Systems, Control Systems, Power Electronics unit notes.</p>
+        <a href="/notes" class="text-amber-600 text-xs font-bold hover:underline">Access Electrical Notes &rarr;</a>
+      </div>
+
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
+        <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">📡</div>
+        <h3 class="font-black text-slate-900 text-base uppercase mb-1">Electronics & Communication (ECE)</h3>
+        <p class="text-xs text-slate-500 leading-relaxed mb-4">Signals & Systems, Analog & Digital Communication, Microprocessors, VLSI Design semester PDFs.</p>
+        <a href="/notes" class="text-indigo-600 text-xs font-bold hover:underline">Access ECE Notes &rarr;</a>
+      </div>
+
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
+        <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">📐</div>
+        <h3 class="font-black text-slate-900 text-base uppercase mb-1">1st Year Common (Sem 1 & 2)</h3>
+        <p class="text-xs text-slate-500 leading-relaxed mb-4">Engineering Mathematics, Physics, Chemistry, Basic Electrical, Programming for Problem Solving (PPS).</p>
+        <a href="/notes" class="text-purple-600 text-xs font-bold hover:underline">Access 1st Year Notes &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Explanatory Guide Box -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <h2 class="text-2xl font-black text-slate-900 uppercase">How to Use Apna College Bihar Notes for Maximum SGPA</h2>
+      <p>
+        Scoring an 8.5+ SGPA in Bihar Engineering University exams requires prioritizing high-weightage chapters and past exam questions. Our notes are structured module-by-module matching the official BEU course syllabus. Each PDF contains solved sample derivations, clear diagrams, and summary bullet points suitable for quick revision during midterm and semester end exams.
+      </p>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+
+let notesHtml = injectIntoRoot(baseTemplate, notesBody);
+notesHtml = injectHeadMetadata(notesHtml, {
+  title: 'BEU Notes Download 2026 | Bihar Engineering University B.Tech Study Material',
+  description: 'Download free handwritten & typed BEU Notes for Semesters 1 to 8 across CSE, Civil, Mechanical, EEE, ECE, IT. Unit-wise syllabus-aligned notes for Bihar engineering colleges.',
+  canonical: 'https://www.apnacollegebihar.online/notes',
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.apnacollegebihar.online/" },
+          { "@type": "ListItem", "position": 2, "name": "BEU Notes", "item": "https://www.apnacollegebihar.online/notes" }
+        ]
+      },
+      {
+        "@type": "EducationalResource",
+        "@id": "https://www.apnacollegebihar.online/notes",
+        "url": "https://www.apnacollegebihar.online/notes",
+        "name": "BEU Notes Download - Bihar Engineering Study Material",
+        "description": "Comprehensive semester notes for Bihar Engineering University students across 38 government engineering colleges."
+      }
+    ]
+  }
+});
+writeStaticHtml('notes', notesHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 10. GENERATE BEU PYQ PAGE (/pyq)
+// ─────────────────────────────────────────────────────────────
+const pyqBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Exam Archives</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Previous Year Question Papers (PYQ)</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Download 5+ years of verified BEU end-semester question papers with answer outlines and recurring question analysis for all engineering branches.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm text-center">
+        <div class="text-3xl font-black text-indigo-600 mb-2">1st Year</div>
+        <h4 class="font-bold text-slate-900 text-sm uppercase mb-1">Semesters 1 & 2</h4>
+        <p class="text-xs text-slate-500 mb-4">Maths, Chemistry, Physics, PPS, Basic Electrical papers.</p>
+        <a href="/pyq" class="text-indigo-600 font-bold text-xs hover:underline">Download 1st Year PYQ &rarr;</a>
+      </div>
+
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm text-center">
+        <div class="text-3xl font-black text-blue-600 mb-2">2nd Year</div>
+        <h4 class="font-bold text-slate-900 text-sm uppercase mb-1">Semesters 3 & 4</h4>
+        <p class="text-xs text-slate-500 mb-4">Core department fundamentals and applied mathematics papers.</p>
+        <a href="/pyq" class="text-blue-600 font-bold text-xs hover:underline">Download 2nd Year PYQ &rarr;</a>
+      </div>
+
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm text-center">
+        <div class="text-3xl font-black text-emerald-600 mb-2">3rd Year</div>
+        <h4 class="font-bold text-slate-900 text-sm uppercase mb-1">Semesters 5 & 6</h4>
+        <p class="text-xs text-slate-500 mb-4">Advanced branch subjects, design problems, and laboratory vivas.</p>
+        <a href="/pyq" class="text-emerald-600 font-bold text-xs hover:underline">Download 3rd Year PYQ &rarr;</a>
+      </div>
+
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm text-center">
+        <div class="text-3xl font-black text-rose-600 mb-2">4th Year</div>
+        <h4 class="font-bold text-slate-900 text-sm uppercase mb-1">Semesters 7 & 8</h4>
+        <p class="text-xs text-slate-500 mb-4">Electives, open courses, and final year comprehensive tests.</p>
+        <a href="/pyq" class="text-rose-600 font-bold text-xs hover:underline">Download 4th Year PYQ &rarr;</a>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+
+let pyqHtml = injectIntoRoot(baseTemplate, pyqBody);
+pyqHtml = injectHeadMetadata(pyqHtml, {
+  title: 'BEU PYQ Papers Download | Bihar Engineering Previous Year Questions PDF',
+  description: 'Download 5+ years of BEU Previous Year Question Papers (PYQs) for Semester 1 to 8 across all branches. Solved university exam question banks and blueprints.',
+  canonical: 'https://www.apnacollegebihar.online/pyq',
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.apnacollegebihar.online/" },
+          { "@type": "ListItem", "position": 2, "name": "BEU PYQ Papers", "item": "https://www.apnacollegebihar.online/pyq" }
+        ]
+      },
+      {
+        "@type": "EducationalResource",
+        "@id": "https://www.apnacollegebihar.online/pyq",
+        "url": "https://www.apnacollegebihar.online/pyq",
+        "name": "BEU Previous Year Questions (PYQs)",
+        "description": "5+ years of verified Bihar Engineering University previous year question papers for all branches."
+      }
+    ]
+  }
+});
+writeStaticHtml('pyq', pyqHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 11. GENERATE BEU SYLLABUS PAGE (/syllabus)
+// ─────────────────────────────────────────────────────────────
+const syllabusBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Curriculum Database</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU B.Tech Syllabus 2026 PDF</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Official Bihar Engineering University (BEU Patna) B.Tech curriculum covering credit systems, subject codes, and module topics across all semesters.
+      </p>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <h2 class="text-xl font-black text-slate-900 uppercase">AICTE Model Curriculum & BEU Credit Breakdown</h2>
+      <p>
+        Bihar Engineering University follows the AICTE Model Curriculum guidelines with a total of 160 credits required for B.Tech degree completion. Students must complete Mandatory Induction Programs, Humanities and Social Sciences (HSMC), Basic Science Courses (BSC), Engineering Science Courses (ESC), Professional Core Courses (PCC), and Open Electives.
+      </p>
+      <div class="pt-4 flex flex-wrap gap-4">
+        <a href="/syllabus" class="px-5 py-3 bg-emerald-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors">Download Full Syllabus PDF</a>
+        <a href="/notes" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">View Corresponding Notes</a>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+
+let syllabusHtml = injectIntoRoot(baseTemplate, syllabusBody);
+syllabusHtml = injectHeadMetadata(syllabusHtml, {
+  title: 'BEU B.Tech Syllabus 2026 PDF Download | Bihar Engineering University',
+  description: 'Official BEU Patna B.Tech Syllabus 2026 for all 8 semesters. Complete subject codes, course credits, and unit breakdowns for all 38 Bihar engineering colleges.',
+  canonical: 'https://www.apnacollegebihar.online/syllabus',
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.apnacollegebihar.online/" },
+          { "@type": "ListItem", "position": 2, "name": "BEU Syllabus", "item": "https://www.apnacollegebihar.online/syllabus" }
+        ]
+      },
+      {
+        "@type": "EducationalResource",
+        "@id": "https://www.apnacollegebihar.online/syllabus",
+        "url": "https://www.apnacollegebihar.online/syllabus",
+        "name": "BEU B.Tech Official Syllabus",
+        "description": "Complete syllabus outline for Bihar Engineering University B.Tech courses."
+      }
+    ]
+  }
+});
+writeStaticHtml('syllabus', syllabusHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 12. GENERATE UGEAC PREDICTOR PAGE (/ugeac-predictor)
+// ─────────────────────────────────────────────────────────────
+const ugeacBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Admission Guidance</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">UGEAC College Predictor 2026</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Predict your engineering admission chances across all 38 Government Engineering Colleges in Bihar based on your JEE Main percentile and category rank.
+      </p>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <h2 class="text-xl font-black text-slate-900 uppercase">Understanding BCECEB UGEAC Cutoffs</h2>
+      <p>
+        The Bihar Combined Entrance Competitive Examination Board (BCECEB) conducts Under Graduate Engineering Admission Counselling (UGEAC) each year for 10,000+ B.Tech seats across 38 Government Engineering Colleges (GECs) including MIT Muzaffarpur, BCE Bhagalpur, GCE Gaya, and DCE Darbhanga.
+      </p>
+      <div class="pt-4 flex flex-wrap gap-4">
+        <a href="/ugeac-predictor" class="px-5 py-3 bg-purple-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-purple-700 transition-colors">Launch Predictor Engine</a>
+        <a href="/directory" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Browse 38 Colleges</a>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+
+let ugeacHtml = injectIntoRoot(baseTemplate, ugeacBody);
+ugeacHtml = injectHeadMetadata(ugeacHtml, {
+  title: 'UGEAC College Predictor 2026 | Bihar Engineering Counselling Tool',
+  description: 'Free UGEAC 2026 College Predictor based on JEE Main percentile & category cutoffs. Check admission chances across MIT Muzaffarpur, BCE Bhagalpur, GCE Gaya, and all 38 GECs.',
+  canonical: 'https://www.apnacollegebihar.online/ugeac-predictor',
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.apnacollegebihar.online/" },
+          { "@type": "ListItem", "position": 2, "name": "UGEAC Predictor", "item": "https://www.apnacollegebihar.online/ugeac-predictor" }
+        ]
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://www.apnacollegebihar.online/ugeac-predictor",
+        "url": "https://www.apnacollegebihar.online/ugeac-predictor",
+        "name": "UGEAC College Predictor 2026",
+        "applicationCategory": "EducationalApplication"
+      }
+    ]
+  }
+});
+writeStaticHtml('ugeac-predictor', ugeacHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 13. GENERATE CGPA CALCULATOR PAGE (/cgpa)
+// ─────────────────────────────────────────────────────────────
+const cgpaBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-rose-100 text-rose-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Academic Utility</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU CGPA & SGPA Calculator</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Calculate your semester SGPA and cumulative CGPA strictly according to official Bihar Engineering University grade point formulas and credit weighting.
+      </p>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <h2 class="text-xl font-black text-slate-900 uppercase">Official BEU SGPA & CGPA Calculation Formula</h2>
+      <p>
+        In Bihar Engineering University (BEU Patna), SGPA (Semester Grade Point Average) is calculated as: <code>SGPA = &Sigma;(Ci &times; Gi) / &Sigma;(Ci)</code>, where <code>Ci</code> is the credit of the i-th course and <code>Gi</code> is the grade point earned.
+      </p>
+      <p>
+        To convert BEU CGPA into percentage: <code>Percentage (%) = (CGPA - 0.75) &times; 10</code>.
+      </p>
+      <div class="pt-4 flex flex-wrap gap-4">
+        <a href="/cgpa" class="px-5 py-3 bg-rose-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-rose-700 transition-colors">Open Interactive Calculator</a>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+
+let cgpaHtml = injectIntoRoot(baseTemplate, cgpaBody);
+cgpaHtml = injectHeadMetadata(cgpaHtml, {
+  title: 'BEU CGPA & SGPA Calculator | Bihar Engineering University Grade Converter',
+  description: 'Official BEU CGPA & SGPA Calculator. Accurately calculate semester grade points and percentage following Bihar Engineering University evaluation formulas.',
+  canonical: 'https://www.apnacollegebihar.online/cgpa',
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.apnacollegebihar.online/" },
+          { "@type": "ListItem", "position": 2, "name": "BEU CGPA Calculator", "item": "https://www.apnacollegebihar.online/cgpa" }
+        ]
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://www.apnacollegebihar.online/cgpa",
+        "url": "https://www.apnacollegebihar.online/cgpa",
+        "name": "BEU CGPA & SGPA Calculator",
+        "applicationCategory": "EducationalApplication"
+      }
+    ]
+  }
+});
+writeStaticHtml('cgpa', cgpaHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 14. ENRICH HOMEPAGE (client/dist/index.html)
 // ─────────────────────────────────────────────────────────────
 console.log('[SSG] Enriching Homepage root with comprehensive semantic content...');
 

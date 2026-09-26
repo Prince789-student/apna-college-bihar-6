@@ -3,7 +3,14 @@
 # https://www.apnacollegebihar.online
 # ==========================================
 
+# Standard Search Crawlers
 User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Google-Extended
 Allow: /
 
 User-agent: Mediapartners-Google
@@ -12,19 +19,38 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
-User-agent: Slurp
-Allow: /
-
 User-agent: DuckDuckBot
 Allow: /
 
+User-agent: YandexBot
+Allow: /
+
+# Generative AI & Citability Crawlers (GEO Optimization)
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Default Rules
 User-agent: *
 Allow: /
 
-# Block private/admin areas only
+# Block private / admin areas only
 Disallow: /dashboard/admin
+Disallow: /admin
 Disallow: /backend/
 Disallow: /uploads/
+Disallow: /api/
 
-# Sitemap location
+# Official Sitemap location
 Sitemap: https://www.apnacollegebihar.online/sitemap.xml
