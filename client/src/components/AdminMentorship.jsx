@@ -26,7 +26,7 @@ import {
 
 export default function AdminMentorship({ flash }) {
   const [students, setStudents] = useState([]); // Strictly Active Enrolled Students (33)
-  const [removedStudents, setRemovedStudents] = useState([]); // Strictly Removed Students (9)
+  const [removedStudents, setRemovedStudents] = useState([]); // Strictly Inactive Students (9)
   const [mentors, setMentors] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBranch, setSelectedBranch] = useState('ALL');
@@ -671,19 +671,19 @@ Team Apna College Bihar
     }
   };
 
-  // Move Student to Removed list (Mentorship Admin me safe rahega)
+  // Move Student to Inactive list (Mentorship Admin me safe rahega)
   const handleMoveToRemoved = async (id) => {
-    if (!window.confirm('Kya aap is student ko "Removed" me daalna chahte hain? (Data Mentorship Admin ke Removed list me safe rahega)')) return;
+    if (!window.confirm('Kya aap is student ko "Inactive" me daalna chahte hain? (Data Mentorship Admin ke Inactive list me safe rahega)')) return;
     const target = students.find(s => s.id === id);
     if (!target) return;
     const updatedActive = students.filter(s => s.id !== id);
-    const updatedRemoved = [{ ...target, status: 'Removed' }, ...removedStudents.filter(s => s.id !== id)];
+    const updatedRemoved = [{ ...target, status: 'Inactive' }, ...removedStudents.filter(s => s.id !== id)];
     setStudents(updatedActive);
     setRemovedStudents(updatedRemoved);
     saveEnrolledStudents(updatedActive);
     saveRemovedStudents(updatedRemoved);
     await saveCloudMentorshipData(updatedActive, mentors, updatedRemoved);
-    if (flash) flash(`Student "${target.name}" ko Removed section me daal diya gaya. Ye Mentorship Admin me hamesha safe rahega. ✅`, 'suc');
+    if (flash) flash(`Student "${target.name}" ko Inactive section me daal diya gaya. Ye Mentorship Admin me hamesha safe rahega. ✅`, 'suc');
   };
 
   // Restore Student back to Active
@@ -1205,10 +1205,10 @@ Team Apna College Bihar
           <div className="flex items-center gap-2 flex-wrap">
             <a 
               href="#removed-students-section"
-              className="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-black flex items-center gap-1.5 border border-rose-200 transition-all shadow-xs"
-              title="Removed students list par jump karein"
+              className="px-3.5 py-2 bg-amber-50 hover:bg-amber-100 text-amber-800 rounded-xl text-xs font-black flex items-center gap-1.5 border border-amber-200 transition-all shadow-xs"
+              title="Inactive students list par jump karein"
             >
-              <Trash2 size={14} /> Removed Section ({removedStudents.length})
+              <Trash2 size={14} /> Inactive Section ({removedStudents.length})
             </a>
 
             <button 
@@ -1501,8 +1501,8 @@ Team Apna College Bihar
                         <button 
                           type="button"
                           onClick={() => handleMoveToRemoved(stu.id)}
-                          className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-                          title="Removed Section me move karein (Mentorship Admin me safe rahega)"
+                          className="p-1.5 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+                          title="Inactive Section me move karein (Mentorship Admin me safe rahega)"
                         >
                           <Trash2 size={15} />
                         </button>
@@ -1516,48 +1516,48 @@ Team Apna College Bihar
         </div>
       </div>
 
-      {/* ── Section 3: Dedicated Removed Students Section ── */}
-      <div id="removed-students-section" className="bg-white rounded-3xl border-2 border-rose-200 shadow-sm p-6 sm:p-8 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-rose-100">
+      {/* ── Section 3: Dedicated Inactive Students Section ── */}
+      <div id="removed-students-section" className="bg-white rounded-3xl border-2 border-amber-200 shadow-sm p-6 sm:p-8 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-amber-100">
           <div>
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-black">
+              <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-black">
                 <Trash2 size={20} />
               </div>
-              <h2 className="text-xl font-black text-rose-900 uppercase tracking-tight">
-                Removed Students Section ({removedStudents.length})
+              <h2 className="text-xl font-black text-amber-950 uppercase tracking-tight">
+                Inactive Students Section ({removedStudents.length})
               </h2>
             </div>
             <p className="text-xs text-slate-500 font-medium mt-1.5">
-              Yeh wo students hain jinhe active mentorship list se remove kiya gaya hai. Sabhi students ke Phone Numbers aur details yahan safe hain. Kisi bhi student ko wapas active karne ke liye <strong className="text-emerald-700">"Restore"</strong> button dabayein.
+              Yeh wo students hain jinhe active mentorship list se inactive kiya gaya hai. Sabhi students ke Phone Numbers aur details yahan safe hain. Kisi bhi student ko wapas active karne ke liye <strong className="text-emerald-700">"Restore"</strong> button dabayein.
             </p>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="px-3.5 py-1.5 bg-rose-100 text-rose-800 font-black text-xs rounded-xl border border-rose-300 flex items-center gap-1.5">
-              <Archive size={14} /> Total {removedStudents.length} Removed Records
+            <span className="px-3.5 py-1.5 bg-amber-100 text-amber-900 font-black text-xs rounded-xl border border-amber-300 flex items-center gap-1.5">
+              <Archive size={14} /> Total {removedStudents.length} Inactive Records
             </span>
           </div>
         </div>
 
-        {/* Removed Students Search */}
+        {/* Inactive Students Search */}
         <div className="max-w-md">
           <div className="relative">
             <input 
               type="text"
-              placeholder="Search in removed (Name, Phone, Roll, College)..."
+              placeholder="Search in inactive (Name, Phone, Roll, College)..."
               value={removedSearchQuery}
               onChange={(e) => setRemovedSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2.5 bg-rose-50/50 border border-rose-200 rounded-xl text-xs font-bold text-slate-800 placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-rose-500 focus:bg-white transition-colors"
+              className="w-full pl-9 pr-4 py-2.5 bg-amber-50/50 border border-amber-200 rounded-xl text-xs font-bold text-slate-800 placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-amber-500 focus:bg-white transition-colors"
             />
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-rose-400" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-500" />
           </div>
         </div>
 
-        {/* Removed Students Table */}
-        <div className="overflow-x-auto border border-rose-200 rounded-2xl bg-white shadow-xs">
+        {/* Inactive Students Table */}
+        <div className="overflow-x-auto border border-amber-200 rounded-2xl bg-white shadow-xs">
           <table className="w-full text-left text-xs">
-            <thead className="bg-rose-50 border-b border-rose-200 text-[10px] font-black uppercase tracking-wider text-rose-900">
+            <thead className="bg-amber-50 border-b border-amber-200 text-[10px] font-black uppercase tracking-wider text-amber-950">
               <tr>
                 <th className="p-3.5">#</th>
                 <th className="p-3.5">Student Details</th>
@@ -1568,11 +1568,11 @@ Team Apna College Bihar
                 <th className="p-3.5 text-center">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-rose-100 font-medium text-slate-700">
+            <tbody className="divide-y divide-amber-100 font-medium text-slate-700">
               {filteredRemovedStudents.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="p-8 text-center text-slate-400 text-xs">
-                    Koi removed student match nahi hua.
+                    Koi inactive student match nahi hua.
                   </td>
                 </tr>
               ) : (
@@ -1581,7 +1581,7 @@ Team Apna College Bihar
                   const currentPhone = isEditingPhone ? editingRemovedPhones[stu.id] : (stu.whatsapp || '');
 
                   return (
-                    <tr key={stu.id} className="hover:bg-rose-50/40 transition-colors">
+                    <tr key={stu.id} className="hover:bg-amber-50/40 transition-colors">
                       <td className="p-3.5 text-slate-400 font-bold">{index + 1}</td>
                       <td className="p-3.5">
                         <p className="font-black text-slate-900 text-xs">{stu.name}</p>
@@ -1600,7 +1600,7 @@ Team Apna College Bihar
                               value={currentPhone}
                               onChange={(e) => setEditingRemovedPhones(prev => ({ ...prev, [stu.id]: e.target.value }))}
                               placeholder="Phone number..."
-                              className="w-full px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-rose-200 bg-rose-50/40 text-slate-900 focus:outline-none focus:border-rose-500 focus:bg-white transition-colors"
+                              className="w-full px-2.5 py-1 text-xs font-mono font-bold rounded-lg border border-amber-200 bg-amber-50/40 text-slate-900 focus:outline-none focus:border-amber-500 focus:bg-white transition-colors"
                             />
                           </div>
 
@@ -1608,7 +1608,7 @@ Team Apna College Bihar
                             <button
                               type="button"
                               onClick={() => handleSaveStudentPhone(stu.id)}
-                              className="px-2 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-md text-[10px] font-bold shrink-0 shadow-xs transition-all animate-pulse"
+                              className="px-2 py-1 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-[10px] font-bold shrink-0 shadow-xs transition-all animate-pulse"
                               title="Save Phone Number"
                             >
                               <Save size={12} /> Save
@@ -1638,8 +1638,8 @@ Team Apna College Bihar
                         <p className="text-[10px] text-slate-500 font-medium truncate" title={stu.branch}>{stu.branch}</p>
                       </td>
                       <td className="p-3.5">
-                        <span className="inline-block text-[10px] px-2.5 py-1 rounded-full font-black bg-rose-100 text-rose-700 border border-rose-200">
-                          ❌ Removed
+                        <span className="inline-block text-[10px] px-2.5 py-1 rounded-full font-black bg-amber-100 text-amber-800 border border-amber-300">
+                          ⏸ Inactive
                         </span>
                       </td>
                       <td className="p-3.5 text-center">

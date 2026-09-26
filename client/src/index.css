@@ -131,4 +131,14 @@
   .btn-shimmer:hover::after {
     transform: rotate(25deg) translateY(100%);
   }
+
+  /* Hide scrollbar for swipeable carousels & chip lists */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
+

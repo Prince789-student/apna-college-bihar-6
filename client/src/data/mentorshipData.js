@@ -748,7 +748,7 @@ export const INITIAL_ENROLLED_STUDENTS = [
   }
 ];
 
-// Dedicated List for Removed Students (Separate from Enrolled)
+// Dedicated List for Removed / Inactive Students (Separate from Enrolled)
 export const INITIAL_REMOVED_STUDENTS = [
   {
     "id": "26EEE50_REMOVED",
@@ -765,7 +765,7 @@ export const INITIAL_REMOVED_STUDENTS = [
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "CGPA",
     "assignedMentorId": null,
-    "status": "Removed",
+    "status": "Inactive",
     "studentId": "26EEE50"
   },
   {
@@ -783,7 +783,7 @@ export const INITIAL_REMOVED_STUDENTS = [
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Guidance and resources",
     "assignedMentorId": null,
-    "status": "Removed",
+    "status": "Inactive",
     "studentId": "26EEE44"
   },
   {
@@ -801,7 +801,7 @@ export const INITIAL_REMOVED_STUDENTS = [
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Regarding how to get excellent cgpa",
     "assignedMentorId": null,
-    "status": "Removed",
+    "status": "Inactive",
     "studentId": "26EEE11P_OLD"
   },
   {
@@ -819,7 +819,7 @@ export const INITIAL_REMOVED_STUDENTS = [
     "codingExperience": "Haan, mujhe thodi bahut basic knowledge hai.",
     "mentorExpectations": "Coding, skills, Hackathons",
     "assignedMentorId": null,
-    "status": "Removed",
+    "status": "Inactive",
     "studentId": "W26A33_OLD"
   },
   {
@@ -837,7 +837,7 @@ export const INITIAL_REMOVED_STUDENTS = [
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Kaha se padhai kare aur resources",
     "assignedMentorId": null,
-    "status": "Removed",
+    "status": "Inactive",
     "studentId": "26ECE46_OLD"
   },
   {
@@ -855,7 +855,7 @@ export const INITIAL_REMOVED_STUDENTS = [
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Communication skills and syllabus",
     "assignedMentorId": null,
-    "status": "Removed",
+    "status": "Inactive",
     "studentId": "26ECE20"
   },
   {
@@ -873,7 +873,7 @@ export const INITIAL_REMOVED_STUDENTS = [
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Guidance to become better version of myself",
     "assignedMentorId": null,
-    "status": "Removed",
+    "status": "Inactive",
     "studentId": "26EEE14P_OLD"
   },
   {
@@ -891,7 +891,7 @@ export const INITIAL_REMOVED_STUDENTS = [
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "Communication guidance",
     "assignedMentorId": null,
-    "status": "Removed",
+    "status": "Inactive",
     "studentId": "26ECE08"
   },
   {
@@ -909,7 +909,7 @@ export const INITIAL_REMOVED_STUDENTS = [
     "codingExperience": "Nahi, main bilkul beginner hoon.",
     "mentorExpectations": "About managing and investing my time on right direction",
     "assignedMentorId": null,
-    "status": "Removed",
+    "status": "Inactive",
     "studentId": "26IOT27"
   }
 ];
@@ -927,8 +927,8 @@ export function getEnrolledStudents() {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        // Exclude any removed student
-        const clean = parsed.filter(s => s.status !== 'Removed' && !s.removed && !s.id.includes('_REMOVED'));
+        // Exclude any removed or inactive student
+        const clean = parsed.filter(s => s.status !== 'Removed' && s.status !== 'Inactive' && !s.removed && !s.id.includes('_REMOVED'));
         const existingIds = new Set(clean.map(s => s.id));
         const missing = INITIAL_ENROLLED_STUDENTS.filter(s => !existingIds.has(s.id));
         const combined = [...clean, ...missing];
@@ -955,14 +955,14 @@ export function getEnrolledStudents() {
 
 export function saveEnrolledStudents(students) {
   try {
-    const cleanActive = (students || []).filter(s => s.status !== 'Removed' && !s.removed && !s.id.includes('_REMOVED'));
+    const cleanActive = (students || []).filter(s => s.status !== 'Removed' && s.status !== 'Inactive' && !s.removed && !s.id.includes('_REMOVED'));
     localStorage.setItem('beu_enrolled_students_v12', JSON.stringify(cleanActive));
   } catch (e) {
     console.error('Error saving enrolled students:', e);
   }
 }
 
-// Helper to get strictly Removed Students
+// Helper to get strictly Inactive / Removed Students
 export function getRemovedStudents() {
   try {
     const saved = localStorage.getItem('beu_removed_students_v12');
@@ -971,20 +971,21 @@ export function getRemovedStudents() {
       if (Array.isArray(parsed) && parsed.length > 0) {
         const existingIds = new Set(parsed.map(s => s.id));
         const missing = INITIAL_REMOVED_STUDENTS.filter(s => !existingIds.has(s.id));
-        return [...parsed, ...missing];
+        return [...parsed, ...missing].map(s => ({ ...s, status: 'Inactive' }));
       }
     }
   } catch (e) {
-    console.error('Error reading removed students:', e);
+    console.error('Error reading removed/inactive students:', e);
   }
-  return INITIAL_REMOVED_STUDENTS;
+  return INITIAL_REMOVED_STUDENTS.map(s => ({ ...s, status: 'Inactive' }));
 }
 
 export function saveRemovedStudents(removed) {
   try {
-    localStorage.setItem('beu_removed_students_v12', JSON.stringify(removed || []));
+    const cleanInactive = (removed || []).map(s => ({ ...s, status: 'Inactive' }));
+    localStorage.setItem('beu_removed_students_v12', JSON.stringify(cleanInactive));
   } catch (e) {
-    console.error('Error saving removed students:', e);
+    console.error('Error saving removed/inactive students:', e);
   }
 }
 
@@ -1092,6 +1093,36 @@ export function findStudent(query) {
   }) || null;
 }
 
+// Search inactive/removed student by Username (Phone Number), Roll, Email, or Name
+export function findInactiveStudent(query) {
+  if (!query) return null;
+  const qTrim = query.trim();
+  const q = qTrim.toLowerCase().replace(/[\s\/-]/g, '');
+  const digits = qTrim.replace(/\D/g, '');
+  const last10 = digits.length >= 10 ? digits.slice(-10) : digits;
+  
+  const list = getRemovedStudents();
+  
+  return list.find(s => {
+    const sId = (s.id || '').toLowerCase().replace(/[\s\/-]/g, '');
+    const sStudentId = (s.studentId || '').toLowerCase().replace(/[\s\/-]/g, '');
+    const sRoll = (s.roll || '').toLowerCase().replace(/[\s\/-]/g, '');
+
+    if ((sId && sId === q) || (sStudentId && sStudentId === q)) return true;
+    const sEmail = (s.email || '').toLowerCase();
+    const sPhoneRaw = (s.whatsapp || '').replace(/\D/g, '');
+    const sPhoneLast10 = sPhoneRaw.length >= 10 ? sPhoneRaw.slice(-10) : sPhoneRaw;
+    const sName = (s.name || '').toLowerCase();
+    
+    if (last10 && last10.length >= 10 && sPhoneLast10 === last10) return true;
+    if (digits && digits.length >= 6 && (sPhoneRaw === digits || sPhoneRaw.includes(digits))) return true;
+    if (sRoll === q || sRoll.includes(q)) return true;
+    if (sEmail === qTrim.toLowerCase()) return true;
+    if (qTrim.length >= 4 && sName.includes(qTrim.toLowerCase())) return true;
+    return false;
+  }) || null;
+}
+
 // Verify Student Login with Username (Phone Number ya Roll Number) and Password
 export function verifyStudentLogin(loginQuery, passwordInput) {
   if (!loginQuery || !loginQuery.trim()) {
@@ -1100,6 +1131,14 @@ export function verifyStudentLogin(loginQuery, passwordInput) {
   
   const student = findStudent(loginQuery);
   if (!student) {
+    const inactiveStudent = findInactiveStudent(loginQuery);
+    if (inactiveStudent) {
+      return { 
+        success: false, 
+        isInactive: true,
+        message: `Aapka mentorship account (${inactiveStudent.name}) filhal Inactive hai. Guidance access ke liye Admin se sampark karein.` 
+      };
+    }
     return { 
       success: false, 
       notFound: true,

@@ -66,7 +66,7 @@ export default function CompareColleges() {
         </div>
 
         {/* College Selector Controls */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 bg-white border border-slate-200/90 p-6 rounded-3xl shadow-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 bg-white border border-slate-200/90 p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm">
           <div className="space-y-2">
             <label className="text-[10px] font-heading font-black text-slate-400 uppercase tracking-widest block flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-blue-600"></span> Select College A

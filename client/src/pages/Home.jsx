@@ -230,48 +230,51 @@ export default function Home() {
           </div>
 
           {/* Main Headline */}
-          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.12] mb-6 text-slate-900">
+          <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.12] mb-6 text-slate-900">
             Bihar's <span className="text-gradient-hero">#1 Next-Gen</span> Academic Ecosystem
           </h1>
 
           {/* Subtitle */}
-          <p className="text-slate-600 text-base md:text-xl font-normal leading-relaxed max-w-3xl mb-8">
+          <p className="text-slate-600 text-sm sm:text-base md:text-xl font-normal leading-relaxed max-w-3xl mb-8">
             Engineered exclusively for <strong className="text-slate-900 font-bold">38+ Bihar Government Engineering Colleges</strong> & BEU students. Access unit-wise notes, 5+ years verified PYQs, accurate CGPA calculators, and instant exam notifications.
           </p>
 
-          {/* Action Buttons Row with Clear Hierarchy (Issue 14: 1 Primary, 1 Secondary, 1 Ghost) */}
-          <div className="flex flex-wrap items-center justify-center gap-3.5 w-full max-w-xl mb-10">
+          {/* Action Buttons Row with Clear Mobile-Friendly Hierarchy */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3.5 w-full max-w-xl mb-10">
             {/* Primary CTA */}
             <Link
               to="/mentorship"
-              className="btn-shimmer px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-heading font-bold text-sm transition-all shadow-md shadow-blue-500/20 active:scale-95 flex items-center justify-center gap-2"
+              className="btn-shimmer w-full sm:w-auto px-6 py-3.5 sm:py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-heading font-bold text-sm transition-all shadow-md shadow-blue-500/20 active:scale-95 flex items-center justify-center gap-2"
             >
               <GraduationCap size={18} /> Free Senior Mentorship
             </Link>
 
-            {/* Secondary CTA */}
-            <a
-              href="#beu-radar"
-              className="px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-heading font-semibold text-sm transition-all active:scale-95 flex items-center justify-center gap-2"
-            >
-              <Radio size={15} className="text-emerald-600 animate-pulse" /> Live BEU Notices
-            </a>
+            {/* Secondary CTAs Group on Mobile */}
+            <div className="grid grid-cols-2 sm:flex sm:items-center gap-2.5 w-full sm:w-auto">
+              <a
+                href="#beu-radar"
+                className="px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-heading font-semibold text-xs sm:text-sm transition-all active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2"
+              >
+                <Radio size={15} className="text-emerald-600 animate-pulse shrink-0" />
+                <span className="truncate">Live Notices</span>
+              </a>
 
-            {/* Ghost CTA */}
-            <a
-              href="/apna-college-bihar-v54.apk"
-              download="apna-college-bihar-v54.apk"
-              className="px-5 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 font-heading font-semibold text-sm transition-all shadow-xs active:scale-95 flex items-center justify-center gap-2"
-            >
-              <Smartphone size={15} className="text-slate-500" /> Android App
-            </a>
+              <a
+                href="/apna-college-bihar-v54.apk"
+                download="apna-college-bihar-v54.apk"
+                className="px-4 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 font-heading font-semibold text-xs sm:text-sm transition-all shadow-xs active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2"
+              >
+                <Smartphone size={15} className="text-slate-500 shrink-0" />
+                <span className="truncate">Android App</span>
+              </a>
+            </div>
           </div>
 
-          {/* Elevated Quick Search Command HUD with clear interactive chips (Issues 6, 7, 9) */}
-          <div className="w-full max-w-2xl bg-white/95 border border-slate-200/80 p-3.5 rounded-2xl shadow-lg shadow-slate-200/50 backdrop-blur-xl mb-4">
+          {/* Elevated Quick Search Command HUD with clear interactive chips */}
+          <div className="w-full max-w-2xl bg-white/95 border border-slate-200/80 p-3 sm:p-4 rounded-2xl shadow-lg shadow-slate-200/50 backdrop-blur-xl mb-4">
             <GlobalSearch placeholder="Search 500+ Notes, BEU PYQs, Syllabus, Colleges..." />
-            <div className="flex flex-wrap items-center justify-start sm:justify-center gap-1.5 pt-3 px-1 text-xs text-slate-500">
-              <span className="font-semibold text-slate-400 mr-0.5">Quick:</span>
+            <div className="flex items-center gap-1.5 pt-3 px-1 text-xs text-slate-500 overflow-x-auto no-scrollbar sm:overflow-x-visible pb-1 sm:pb-0 sm:flex-wrap sm:justify-center">
+              <span className="font-semibold text-slate-400 mr-0.5 shrink-0 hidden xs:inline">Quick:</span>
               {[
                 { name: 'BEU Notes', path: '/notes' },
                 { name: 'PYQ Papers', path: '/pyq' },
@@ -283,7 +286,7 @@ export default function Home() {
                 <Link
                   key={idx}
                   to={chip.path}
-                  className="px-2.5 py-1 rounded-xl bg-slate-100/90 hover:bg-blue-50 border border-slate-200 hover:border-blue-400 text-slate-700 hover:text-blue-600 font-semibold text-xs shadow-xs transition-all hover:scale-105 active:scale-95 inline-flex items-center gap-1.5"
+                  className="px-2.5 py-1.5 sm:py-1 rounded-xl bg-slate-100/90 hover:bg-blue-50 border border-slate-200 hover:border-blue-400 text-slate-700 hover:text-blue-600 font-semibold text-xs shadow-xs transition-all hover:scale-105 active:scale-95 inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" aria-hidden="true" />
                   {chip.name}
@@ -341,7 +344,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {beuNotices.length > 0 ? (
               beuNotices.map((notice, idx) => (
                 <a
@@ -349,7 +352,9 @@ export default function Home() {
                   href={notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`)}
                   target="_blank"
                   rel="noreferrer"
-                  className="glass-card-light p-5 rounded-2xl flex flex-col justify-between group hover:border-blue-400 relative overflow-hidden bg-white"
+                  className={`glass-card-light p-5 rounded-2xl flex flex-col justify-between group hover:border-blue-400 relative overflow-hidden bg-white ${
+                    idx === 2 ? 'sm:col-span-2 lg:col-span-1' : ''
+                  }`}
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-3">
@@ -374,7 +379,7 @@ export default function Home() {
                 </a>
               ))
             ) : (
-              <div className="col-span-3 glass-card-light p-8 rounded-2xl text-center text-slate-500 text-sm">
+              <div className="col-span-1 sm:col-span-2 lg:col-span-3 glass-card-light p-8 rounded-2xl text-center text-slate-500 text-sm">
                 Fetching latest BEU notices...
               </div>
             )}
@@ -410,11 +415,11 @@ export default function Home() {
               Explore specialized tools built for preparation, counselling, and campus productivity.
             </p>
 
-            {/* Pillar Selector Tabs - Segmented Control with ARIA (Issue 10) */}
+            {/* Pillar Selector Tabs - Responsive Segmented Control */}
             <div
               role="tablist"
               aria-label="Academic and Tool Pillars"
-              className="inline-flex p-1.5 rounded-xl bg-slate-100 border border-slate-200/80 shadow-inner mt-7 max-w-full overflow-x-auto gap-1"
+              className="grid grid-cols-3 sm:inline-flex p-1.5 rounded-xl bg-slate-100 border border-slate-200/80 shadow-inner mt-7 w-full sm:w-auto max-w-xl mx-auto gap-1"
             >
               {Object.entries(featurePillars).map(([key, data]) => {
                 const isActive = activeTab === key;
@@ -426,7 +431,7 @@ export default function Home() {
                     aria-selected={isActive}
                     aria-controls="pillar-grid"
                     onClick={() => setActiveTab(key)}
-                    className={`px-4 py-2 rounded-lg text-xs font-heading font-extrabold transition-all whitespace-nowrap ${
+                    className={`px-2.5 sm:px-4 py-2 rounded-lg text-xs font-heading font-extrabold transition-all text-center truncate ${
                       isActive
                         ? 'bg-white text-blue-600 shadow-xs border border-slate-200/60'
                         : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'

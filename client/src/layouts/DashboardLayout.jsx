@@ -785,10 +785,10 @@ export default function DashboardLayout() {
               {/* Mobile Menu Hamburger */}
               <button 
                 onClick={() => setMobileMenuOpen(true)} 
-                className="flex xl:hidden items-center justify-center p-2 text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors ml-1 shrink-0"
+                className="w-10 h-10 flex xl:hidden items-center justify-center text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all ml-1 shrink-0 active:scale-95"
                 aria-label="Open Navigation Menu"
               >
-                <Menu size={22} />
+                <Menu size={20} />
               </button>
             </div>
           </div>
@@ -814,15 +814,15 @@ export default function DashboardLayout() {
 
       {/* Mobile Drawer Overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[250] lg:hidden" onClick={() => setMobileMenuOpen(false)} />
+        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[250] xl:hidden" onClick={() => setMobileMenuOpen(false)} />
       )}
 
       {/* Mobile Sidebar/Drawer (Slide from right) */}
-      <aside className={`fixed inset-y-0 right-0 w-72 bg-white border-l border-slate-200 shadow-2xl z-[300] transform transition-transform duration-300 ease-in-out flex flex-col lg:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 bg-slate-50">
+      <aside className={`fixed inset-y-0 right-0 w-[85vw] max-w-xs sm:w-80 bg-white border-l border-slate-200 shadow-2xl z-[300] transform transition-transform duration-300 ease-in-out flex flex-col xl:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="flex items-center justify-between px-5 sm:px-6 py-4 sm:py-5 border-b border-slate-100 bg-slate-50">
           <span className="text-xs font-bold text-slate-400 block leading-none">Navigation Menu</span>
-          <button onClick={() => setMobileMenuOpen(false)} className="text-slate-400 hover:text-slate-900 bg-white p-2 rounded-xl shadow-sm border border-slate-200">
-            <X size={16} strokeWidth={3} />
+          <button onClick={() => setMobileMenuOpen(false)} className="text-slate-400 hover:text-slate-900 bg-white w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl shadow-xs border border-slate-200 active:scale-95" aria-label="Close Navigation Menu">
+            <X size={18} strokeWidth={2.5} />
           </button>
         </div>
 

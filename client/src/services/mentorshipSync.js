@@ -66,10 +66,13 @@ export async function fetchCloudMentorshipData() {
   const cleanRemovedMap = new Map((cloudRemoved || INITIAL_REMOVED_STUDENTS).map(s => [s.id, s]));
 
   (cloudStudents || INITIAL_ENROLLED_STUDENTS).forEach(s => {
-    const isRemoved = s.status === 'Removed' || s.removed || removedIdSet.has(s.id) || (s.id && s.id.includes('_REMOVED')) || removedRollSet.has((s.roll || '').toLowerCase().trim());
+    const isRemoved = s.status === 'Removed' || s.status === 'Inactive' || s.removed || removedIdSet.has(s.id) || (s.id && s.id.includes('_REMOVED')) || removedRollSet.has((s.roll || '').toLowerCase().trim());
     if (isRemoved) {
       if (!cleanRemovedMap.has(s.id)) {
-        cleanRemovedMap.set(s.id, { ...s, status: 'Removed' });
+        cleanRemovedMap.set(s.id, { ...s, status: 'Inactive' });
+      } else {
+        const existing = cleanRemovedMap.get(s.id);
+        cleanRemovedMap.set(s.id, { ...existing, ...s, status: 'Inactive' });
       }
     } else {
       cleanActive.push({ ...s, status: 'Active' });
@@ -87,11 +90,11 @@ export async function fetchCloudMentorshipData() {
   // Ensure all INITIAL_REMOVED_STUDENTS are in cleanRemoved
   INITIAL_REMOVED_STUDENTS.forEach(init => {
     if (!cleanRemovedMap.has(init.id)) {
-      cleanRemovedMap.set(init.id, init);
+      cleanRemovedMap.set(init.id, { ...init, status: 'Inactive' });
     }
   });
 
-  const finalRemoved = Array.from(cleanRemovedMap.values());
+  const finalRemoved = Array.from(cleanRemovedMap.values()).map(s => ({ ...s, status: 'Inactive' }));
 
   // Save to separate local caches
   saveEnrolledStudents(cleanActive);
@@ -105,8 +108,8 @@ export async function fetchCloudMentorshipData() {
 
 // Push updated mentorship data to Firestore and Backend Server
 export async function saveCloudMentorshipData(students, mentors, removedStudents) {
-  const cleanActive = (students || []).filter(s => s.status !== 'Removed' && !s.removed && !s.id.includes('_REMOVED'));
-  const cleanRemoved = removedStudents || getRemovedStudents();
+  const cleanActive = (students || []).filter(s => s.status !== 'Removed' && s.status !== 'Inactive' && !s.removed && !s.id.includes('_REMOVED'));
+  const cleanRemoved = (removedStudents || getRemovedStudents()).map(s => ({ ...s, status: 'Inactive' }));
 
   // Always update local caches
   saveEnrolledStudents(cleanActive);
@@ -115,7 +118,7 @@ export async function saveCloudMentorshipData(students, mentors, removedStudents
 
   const payload = {
     students: cleanActive, // STRICTLY 33 Active Enrolled Students!
-    removedStudents: cleanRemoved, // STRICTLY 9 Removed Students!
+    removedStudents: cleanRemoved, // STRICTLY 9 Inactive Students!
     mentors: mentors || [],
     updatedAt: new Date().toISOString()
   };
@@ -149,9 +152,9 @@ export function subscribeMentorshipUpdates(onUpdate) {
         const data = snap.data();
         const removedIdSet = new Set(INITIAL_REMOVED_STUDENTS.map(s => s.id));
         const rawStudents = Array.isArray(data.students) ? data.students : [];
-        const cleanActive = rawStudents.filter(s => s.status !== 'Removed' && !s.removed && !removedIdSet.has(s.id) && !s.id.includes('_REMOVED'));
+        const cleanActive = rawStudents.filter(s => s.status !== 'Removed' && s.status !== 'Inactive' && !s.removed && !removedIdSet.has(s.id) && !s.id.includes('_REMOVED'));
         
-        const rawRemoved = Array.isArray(data.removedStudents) ? data.removedStudents : INITIAL_REMOVED_STUDENTS;
+        const rawRemoved = (Array.isArray(data.removedStudents) ? data.removedStudents : INITIAL_REMOVED_STUDENTS).map(s => ({ ...s, status: 'Inactive' }));
         saveEnrolledStudents(cleanActive);
         saveRemovedStudents(rawRemoved);
         if (Array.isArray(data.mentors)) saveMentorsList(data.mentors);

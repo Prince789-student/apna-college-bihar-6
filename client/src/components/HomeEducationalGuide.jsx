@@ -40,12 +40,12 @@ export default function HomeEducationalGuide() {
           </div>
         </Reveal>
 
-        {/* Phase Selector Tabs (Issue 5: Condensed tabbed interface to manage vertical page length) */}
-        <div className="flex items-center justify-center mb-8">
+        {/* Phase Selector Tabs - Mobile 2x2 Grid, sm/md 4-column Segmented Bar */}
+        <div className="w-full max-w-4xl mx-auto mb-8">
           <div
             role="tablist"
             aria-label="Master Guide Phases"
-            className="inline-flex p-1.5 rounded-xl bg-slate-100 border border-slate-200/80 shadow-inner max-w-full overflow-x-auto gap-1"
+            className="grid grid-cols-2 sm:grid-cols-4 p-1.5 rounded-2xl bg-slate-100/90 border border-slate-200/80 shadow-inner gap-1.5"
           >
             {guideSections.map((sec, idx) => {
               const isActive = activeSection === sec.id;
@@ -57,15 +57,15 @@ export default function HomeEducationalGuide() {
                   aria-selected={isActive}
                   aria-controls={`guide-panel-${sec.id}`}
                   onClick={() => setActiveSection(sec.id)}
-                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-heading font-extrabold transition-all whitespace-nowrap ${
+                  className={`flex items-center justify-center sm:justify-start gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2.5 rounded-xl text-xs font-heading font-extrabold transition-all min-h-[44px] ${
                     isActive
                       ? 'bg-white text-blue-600 shadow-xs border border-slate-200/60'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
                   }`}
                 >
-                  <span className="opacity-60">0{idx + 1}</span>
-                  {sec.icon}
-                  <span>{sec.label}</span>
+                  <span className="opacity-60 text-[11px] shrink-0">0{idx + 1}</span>
+                  <span className="shrink-0">{sec.icon}</span>
+                  <span className="truncate">{sec.label}</span>
                 </button>
               );
             })}
@@ -365,6 +365,45 @@ export default function HomeEducationalGuide() {
                 </div>
               </div>
             )}
+
+            {/* Mobile / Tablet Callout HUD */}
+            <div className="mt-6 lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-md shadow-blue-500/10 flex items-center justify-between gap-3">
+                <div>
+                  <span className="px-2 py-0.5 rounded-md bg-white/20 text-white text-[10px] font-heading font-bold inline-block mb-1">
+                    100% Free Tool
+                  </span>
+                  <h5 className="font-heading text-xs font-bold text-white">Need Bihar Rank Guidance?</h5>
+                  <p className="text-[11px] text-blue-100 font-sans mt-0.5 leading-snug">
+                    Predict GEC admission chances based on opening/closing ranks.
+                  </p>
+                </div>
+                <Link
+                  to="/ugeac-predictor?tab=finder"
+                  className="shrink-0 px-3 py-2 bg-white text-blue-700 rounded-xl font-heading text-xs font-bold shadow-xs hover:bg-blue-50 active:scale-95"
+                >
+                  Predictor
+                </Link>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-white border border-slate-200/90 shadow-xs flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 shrink-0">
+                    <HelpCircle size={20} />
+                  </div>
+                  <div>
+                    <h6 className="font-heading text-xs font-bold text-slate-900">Have specific questions?</h6>
+                    <p className="text-[11px] text-slate-500 font-medium">Free 1-on-1 Senior Guidance</p>
+                  </div>
+                </div>
+                <Link
+                  to="/mentorship"
+                  className="shrink-0 px-3 py-2 bg-blue-600 text-white rounded-xl font-heading text-xs font-bold shadow-xs hover:bg-blue-700 active:scale-95"
+                >
+                  Ask Senior
+                </Link>
+              </div>
+            </div>
 
           </div>
 
