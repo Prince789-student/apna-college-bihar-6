@@ -1434,9 +1434,7 @@ export const lectureData = [
         "unit": "Unit 4.0 - Development of Surfaces & Isometric Projection",
         "title": "Parallel Line Method",
         "videoIds": [
-          "ZTGzclpnrqE",
-          "perH0rRDGn0",
-          "ebAmD7JwfM8"
+          "RrMKMFXGhUM"
         ],
         "searchUrl": null
       },
@@ -1444,9 +1442,7 @@ export const lectureData = [
         "unit": "Unit 4.0 - Development of Surfaces & Isometric Projection",
         "title": "Radial Line Method",
         "videoIds": [
-          "perH0rRDGn0",
-          "panq7Om1Qe0",
-          "ZTGzclpnrqE"
+          "qfrgIe0Lack"
         ],
         "searchUrl": null
       },
@@ -1932,7 +1928,7 @@ export const lectureData = [
         "unit": "Unit 4.0 - Transformer",
         "title": "Transformer Load test",
         "videoIds": [
-          "v6RZcI1CrCg"
+          "HWdJ8x2bAt0"
         ],
         "searchUrl": null
       },
@@ -1940,7 +1936,7 @@ export const lectureData = [
         "unit": "Unit 4.0 - Transformer",
         "title": "Audio transformer, Radio Frequency (RF) Transformer",
         "videoIds": [
-          "v6RZcI1CrCg"
+          "SlBWBWJ3ZNA"
         ],
         "searchUrl": null
       },
@@ -1948,7 +1944,7 @@ export const lectureData = [
         "unit": "Unit 4.0 - Transformer",
         "title": "Intermediate Frequency (IF) transformer, Pulse transformer",
         "videoIds": [
-          "v6RZcI1CrCg"
+          "zGcNSubpIEM"
         ],
         "searchUrl": null
       },
@@ -1956,7 +1952,7 @@ export const lectureData = [
         "unit": "Unit 4.0 - Transformer",
         "title": "Isolation transformer, Impedance matching transformer",
         "videoIds": [
-          "v6RZcI1CrCg"
+          "ZfheaSuAvbc"
         ],
         "searchUrl": null
       },
