@@ -45,7 +45,7 @@ export const lectureData = [
         "unit": "Unit 1.0 - Introduction to Artificial Intelligence",
         "title": "Foundations of AI - Philosophy",
         "videoIds": [
-          "D1eL1EnxXXQ"
+          "2jXdzPaCIWk"
         ],
         "searchUrl": null
       },
@@ -53,7 +53,7 @@ export const lectureData = [
         "unit": "Unit 1.0 - Introduction to Artificial Intelligence",
         "title": "Foundations of AI - Cognitive-science influences",
         "videoIds": [
-          "0gv8TtsnzLU"
+          "mT83XPIH6Iw"
         ],
         "searchUrl": null
       },
@@ -285,7 +285,7 @@ export const lectureData = [
         "unit": "Unit 3.0 - Knowledge Representation and Reasoning",
         "title": "Propositional logic - Semantics",
         "videoIds": [
-          "wX-8RzW2J7I"
+          "rXTI_hN_EiA"
         ],
         "searchUrl": null
       },
@@ -533,7 +533,7 @@ export const lectureData = [
         "unit": "Unit 5.0 - Introduction to Machine Learning and AI Applications",
         "title": "Robotics and AI",
         "videoIds": [
-          "y39OlGrVFD8"
+          "cjCmiXS6JwQ"
         ],
         "searchUrl": null
       },
@@ -697,7 +697,8 @@ export const lectureData = [
         "unit": "Unit 1.0 - Fundamentals of Computer Systems",
         "title": "Assembly language",
         "videoIds": [
-          "Yr3PtjNR5OY"
+          "P6SWPayq7KU",
+          "3gcpSVCTI6A"
         ],
         "searchUrl": null
       },
@@ -713,7 +714,7 @@ export const lectureData = [
         "unit": "Unit 1.0 - Fundamentals of Computer Systems",
         "title": "Compiler",
         "videoIds": [
-          "7ICf62fp_4I"
+          "15_8wKnqj7U"
         ],
         "searchUrl": null
       },
@@ -2245,7 +2246,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit 2.0 - Basics of English Grammar",
-        "title": "Redundancies and Clich\u00e9s",
+        "title": "Redundancies and Clichés",
         "videoIds": [
           "afDVm0LvFTM"
         ],
@@ -2319,7 +2320,7 @@ export const lectureData = [
         "unit": "Unit 4.0 - Techniques of Professional Writing",
         "title": "Formal and informal Letter Writing",
         "videoIds": [
-          "Z1IyazuG0ag"
+          "lzGKRSvs5HM"
         ],
         "searchUrl": null
       },
@@ -2383,7 +2384,7 @@ export const lectureData = [
         "unit": "Unit 4.0 - Techniques of Professional Writing",
         "title": "Essay Writing",
         "videoIds": [
-          "ykTuooKDVRU"
+          "8sDl7rOyBGc"
         ],
         "searchUrl": null
       },
@@ -3221,7 +3222,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit 4.0: Quantum Mechanics",
-        "title": "Schr\u00f6dinger's equation (time-dependent):",
+        "title": "Schrödinger's equation (time-dependent):",
         "videoIds": [
           "aO3LsD-qYZo"
         ],
@@ -3229,7 +3230,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit 4.0: Quantum Mechanics",
-        "title": "Schr\u00f6dinger's equation (independent):",
+        "title": "Schrödinger's equation (independent):",
         "videoIds": [
           "FAcihvwkZ1g"
         ],
@@ -3425,28 +3426,28 @@ export const lectureData = [
     "topics": [
       {
         "unit": "Unit 1",
-        "title": "Unit 1 DC Circuits (BEE) Introduction  Potential, Power, Current, Resistance etc. (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "Unit 1 DC Circuits (BEE) Introduction  Potential, Power, Current, Resistance etc. (in हिन्दी)",
         "videoIds": [
           "XrHtU713vJA"
         ]
       },
       {
         "unit": "Unit 1",
-        "title": "Unit 1 DC Circuits (BEE) Inductor (Energy stored and Power Absorbed by Inductor) in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "Unit 1 DC Circuits (BEE) Inductor (Energy stored and Power Absorbed by Inductor) in हिन्दी",
         "videoIds": [
           "Abgy3ITy2_Q"
         ]
       },
       {
         "unit": "Unit 1",
-        "title": "Unit 1 DC Circuits (BEE)Capacitor (Energy stored and Power Absorbed by Capacitor) in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "Unit 1 DC Circuits (BEE)Capacitor (Energy stored and Power Absorbed by Capacitor) in हिन्दी",
         "videoIds": [
           "HXA6FFtZKY4"
         ]
       },
       {
         "unit": "Unit 1",
-        "title": "Unit 1 DC Circuits (BEE) Dependent & Independent Electrical Sources (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "Unit 1 DC Circuits (BEE) Dependent & Independent Electrical Sources (in हिन्दी)",
         "videoIds": [
           "tndrf6ZNS2Q"
         ]
@@ -3460,7 +3461,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit 1",
-        "title": "Ohm's Law (with numericals) Unit 1DC Circuits (BEE) in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "Ohm's Law (with numericals) Unit 1DC Circuits (BEE) in हिन्दी",
         "videoIds": [
           "u5hx9L1ndaU"
         ]
@@ -3474,14 +3475,14 @@ export const lectureData = [
       },
       {
         "unit": "Unit 1",
-        "title": "Kirchhoffs Voltage Law (KVL) Second law (Unit 1 DC circuits) BEE (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "Kirchhoffs Voltage Law (KVL) Second law (Unit 1 DC circuits) BEE (in हिन्दी)",
         "videoIds": [
           "aZIizOWnuB8"
         ]
       },
       {
         "unit": "Unit 1",
-        "title": "Star Delta Transformation with examples (Unit 1 DC circuits) (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "Star Delta Transformation with examples (Unit 1 DC circuits) (in हिन्दी)",
         "videoIds": [
           "AHHa448vR0g"
         ]
@@ -3495,14 +3496,14 @@ export const lectureData = [
       },
       {
         "unit": "Unit 1",
-        "title": "Formula derivation for Star to Delta transformation (Unit 1 DC circuit) BEE  in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "Formula derivation for Star to Delta transformation (Unit 1 DC circuit) BEE  in हिन्दी",
         "videoIds": [
           "bw8_uOnrF_E"
         ]
       },
       {
         "unit": "Unit 1",
-        "title": "Numerical 1 (Star Delta transformation) Unit 1 DC circuits (BEE) in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "Numerical 1 (Star Delta transformation) Unit 1 DC circuits (BEE) in हिन्दी",
         "videoIds": [
           "8LluX7KKncU"
         ]
@@ -3544,42 +3545,42 @@ export const lectureData = [
       },
       {
         "unit": "Unit 1",
-        "title": "Numerical 1 on Thevenin's Theorem(Unit 1 DC circuits) BEE (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "Numerical 1 on Thevenin's Theorem(Unit 1 DC circuits) BEE (in हिन्दी)",
         "videoIds": [
           "X9t50SsU1c8"
         ]
       },
       {
         "unit": "Unit 1",
-        "title": "Numerical 2 on Thevenin's Theorem (Unit 1 DC circuits) BEE (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "Numerical 2 on Thevenin's Theorem (Unit 1 DC circuits) BEE (in हिन्दी)",
         "videoIds": [
           "-XxrRHIV7JQ"
         ]
       },
       {
         "unit": "Unit 1",
-        "title": "Problem 1 (KVL and KCL) Unit 1 DC circuit (BEE)  in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "Problem 1 (KVL and KCL) Unit 1 DC circuit (BEE)  in हिन्दी",
         "videoIds": [
           "2pqD9Q3Gh0w"
         ]
       },
       {
         "unit": "Unit 1",
-        "title": "Problem 2 (KVL and KCL) Unit 1 DC circuit (BEE) in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "Problem 2 (KVL and KCL) Unit 1 DC circuit (BEE) in हिन्दी",
         "videoIds": [
           "JeanJRnvBPk"
         ]
       },
       {
         "unit": "Unit 1",
-        "title": "Norton's Theorem (Unit 1 DC circuits) BEE (in \u0939\u093f\u0928\u094d\u0926\u0940) BE 1st year engineering",
+        "title": "Norton's Theorem (Unit 1 DC circuits) BEE (in हिन्दी) BE 1st year engineering",
         "videoIds": [
           "T7MJpfhXGjs"
         ]
       },
       {
         "unit": "Unit 1",
-        "title": "Numerical 1 on Norton's Theorem (Unit 1 DC circuits) BEE (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "Numerical 1 on Norton's Theorem (Unit 1 DC circuits) BEE (in हिन्दी)",
         "videoIds": [
           "7G9Bm-kdLfI"
         ]
@@ -3712,21 +3713,21 @@ export const lectureData = [
       },
       {
         "unit": "Unit 2",
-        "title": "Pure Inductive Circuit (Current Legs the Voltage by 90\u00b0) Unit 2 AC Circuit (BEE)",
+        "title": "Pure Inductive Circuit (Current Legs the Voltage by 90°) Unit 2 AC Circuit (BEE)",
         "videoIds": [
           "yHLfhZU9pMw"
         ]
       },
       {
         "unit": "Unit 2",
-        "title": "Pure Capacitive Circuit (Current Leads the Voltage by 90\u00b0) Unit 2 AC Circuits (BEE)",
+        "title": "Pure Capacitive Circuit (Current Leads the Voltage by 90°) Unit 2 AC Circuits (BEE)",
         "videoIds": [
           "LUE5e8xDRDM"
         ]
       },
       {
         "unit": "Unit 2",
-        "title": "Series RL circuit (Current Legs behind voltage by \u2206) unit 2 AC circuits (BEE)",
+        "title": "Series RL circuit (Current Legs behind voltage by ∆) unit 2 AC circuits (BEE)",
         "videoIds": [
           "t84h_XKoR6M"
         ]
@@ -3740,7 +3741,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit 2",
-        "title": "Series RC circuit (Current Leads the voltage by \u2206) unit 2 AC circuits",
+        "title": "Series RC circuit (Current Leads the voltage by ∆) unit 2 AC circuits",
         "videoIds": [
           "f95eLukESvA"
         ]
@@ -4055,7 +4056,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit 3",
-        "title": "Parts of DC Machine (Electrical Machines) 1st year engineering (BEE) EEE(IMP for exam) in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "Parts of DC Machine (Electrical Machines) 1st year engineering (BEE) EEE(IMP for exam) in हिन्दी",
         "videoIds": [
           "5ljmD7kHQuI"
         ]
@@ -4272,7 +4273,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit 4",
-        "title": "Stability Factor (Transistor) Basics Electronics (BE/Btech) 1st year (in \u0939\u093f\u0928\u094d\u0926\u0940) BJT",
+        "title": "Stability Factor (Transistor) Basics Electronics (BE/Btech) 1st year (in हिन्दी) BJT",
         "videoIds": [
           "4RA7oOtNipw"
         ]
@@ -4286,7 +4287,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit 4",
-        "title": "Collector to Base Bias (Transistor Biasing) Basic Electronics (BE/BTech 1st year  in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "Collector to Base Bias (Transistor Biasing) Basic Electronics (BE/BTech 1st year  in हिन्दी",
         "videoIds": [
           "1YalqxRJUAI"
         ]
@@ -4321,21 +4322,21 @@ export const lectureData = [
       },
       {
         "unit": "Unit 4",
-        "title": "Transistor as a Switch (Biasing BJT Switching Circuits) Basic Electronics (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "Transistor as a Switch (Biasing BJT Switching Circuits) Basic Electronics (in हिन्दी)",
         "videoIds": [
           "SFhexy3emhE"
         ]
       },
       {
         "unit": "Unit 4",
-        "title": "Testing of BJT with Multimeter (Testing of Transistor with Multimeter) in \u0939\u093f\u0928\u094d\u0926\u0940 (BE/Btech 1st year)",
+        "title": "Testing of BJT with Multimeter (Testing of Transistor with Multimeter) in हिन्दी (BE/Btech 1st year)",
         "videoIds": [
           "PB4Jdz17oXM"
         ]
       },
       {
         "unit": "Unit 4",
-        "title": "LED light Emitting Diode (Unit 3 Special purpose diode and Transistors) in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "LED light Emitting Diode (Unit 3 Special purpose diode and Transistors) in हिन्दी",
         "videoIds": [
           "DYLuJ9n_8Vs"
         ]
@@ -4447,7 +4448,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit 4",
-        "title": "Bypass Capacitor (Basic Electronics) AC analysis of BJT (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "Bypass Capacitor (Basic Electronics) AC analysis of BJT (in हिन्दी)",
         "videoIds": [
           "CX_8GGWf_1I"
         ]
@@ -4622,14 +4623,14 @@ export const lectureData = [
       },
       {
         "unit": "Unit 5",
-        "title": "MCB construction and working (Short note on MCB) BEE (BTECH 1st year) in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "MCB construction and working (Short note on MCB) BEE (BTECH 1st year) in हिन्दी",
         "videoIds": [
           "1YP__NYQ-8k"
         ]
       },
       {
         "unit": "Unit 5",
-        "title": "Fuse and MCB difference (Comparison) Basic electrical engineering (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "Fuse and MCB difference (Comparison) Basic electrical engineering (in हिन्दी)",
         "videoIds": [
           "p4yyAXnKDg4"
         ]
@@ -4650,7 +4651,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit 5",
-        "title": "Electrical Wires (Basic Electrical Engineering) Electrical Insulations (BE/BTECH 1st year) in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "Electrical Wires (Basic Electrical Engineering) Electrical Insulations (BE/BTECH 1st year) in हिन्दी",
         "videoIds": [
           "nuDgVYsRlY4"
         ]
@@ -4664,7 +4665,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit 5",
-        "title": "Earthing (Electrical Insulations) Basic Electrical Engineering  (BE/BTECH 1st year) in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "Earthing (Electrical Insulations) Basic Electrical Engineering  (BE/BTECH 1st year) in हिन्दी",
         "videoIds": [
           "M5hP-EQ5GoM"
         ]
@@ -4678,21 +4679,21 @@ export const lectureData = [
       },
       {
         "unit": "Unit 5",
-        "title": "Safety Precaution for Electrical appliances  (Unit 5 electrical insulations) BE/BTECH (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "Safety Precaution for Electrical appliances  (Unit 5 electrical insulations) BE/BTECH (in हिन्दी)",
         "videoIds": [
           "NJxyP4F7Og0"
         ]
       },
       {
         "unit": "Unit 5",
-        "title": "What is Battery (Basic of Battery) Basic Electrical engineering (BE/BTECH 1st year) (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "What is Battery (Basic of Battery) Basic Electrical engineering (BE/BTECH 1st year) (in हिन्दी)",
         "videoIds": [
           "8GSMgVmlQy0"
         ]
       },
       {
         "unit": "Unit 5",
-        "title": "Lead Acid Battery (Construction, Working, Chemical Reactions) BE/BTECH 1st year (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "Lead Acid Battery (Construction, Working, Chemical Reactions) BE/BTECH 1st year (in हिन्दी)",
         "videoIds": [
           "Y6S9IS3Wp3E"
         ]
@@ -4720,7 +4721,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit 5",
-        "title": "Unit of Electrical energy (How to Calculate Electricity Bill (BE/BTECH 1st year) BEE in \u0939\u093f\u0928\u094d\u0926\u0940",
+        "title": "Unit of Electrical energy (How to Calculate Electricity Bill (BE/BTECH 1st year) BEE in हिन्दी",
         "videoIds": [
           "BP49K2ct5iI"
         ]
@@ -4741,7 +4742,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit 5",
-        "title": "Induction Motor Speed control (Methods) Electrical Machines (BE/Btech 1st year) (in \u0939\u093f\u0928\u094d\u0926\u0940)",
+        "title": "Induction Motor Speed control (Methods) Electrical Machines (BE/Btech 1st year) (in हिन्दी)",
         "videoIds": [
           "PWKIlNphBKE"
         ]
@@ -4804,7 +4805,7 @@ export const lectureData = [
       },
       {
         "unit": "Unit-1: Quantum Mechanics & Molecular Structure",
-        "title": "Schr\u00f6dinger's wave equation (concept & postulates only)",
+        "title": "Schrödinger's wave equation (concept & postulates only)",
         "videoIds": [
           "pvlpTlqrVVk"
         ]
@@ -4827,7 +4828,8 @@ export const lectureData = [
         "unit": "Unit-1: Quantum Mechanics & Molecular Structure",
         "title": "Coordination number",
         "videoIds": [
-          "cHl8vsh1dtA"
+          "ZzfAUjNAGe4",
+          "cUC0DZpG3mY"
         ]
       },
       {
@@ -5142,14 +5144,14 @@ export const lectureData = [
         "unit": "Unit-4: Electrochemistry, Corrosion & Colloidal",
         "title": "coatings",
         "videoIds": [
-          "7zS5IUCmTuo"
+          "O2sC-bA_TQ4"
         ]
       },
       {
         "unit": "Unit-4: Electrochemistry, Corrosion & Colloidal",
         "title": "e-coat",
         "videoIds": [
-          "knu5pyLHmsI"
+          "IM922-er3Ns"
         ]
       },
       {
@@ -5274,7 +5276,9 @@ export const lectureData = [
       {
         "unit": "Unit-5: Water Chemistry & Environmental Sustainability",
         "title": "E-waste management",
-        "videoIds": []
+        "videoIds": [
+          "ItXMQj06MEo"
+        ]
       }
     ]
   }
