@@ -14,10 +14,10 @@ const CHANNEL_URL = process.env.WHATSAPP_CHANNEL_URL || 'https://whatsapp.com/ch
 
 // List of fallback models to ensure 100% uptime even if one model experiences high demand
 const CANDIDATE_MODELS = [
-  'gemini-2.5-flash',
-  'gemini-2.5-flash-lite',
-  'gemini-flash-latest',
-  'gemini-2.5-pro'
+  'gemini-3.8-flash',
+  'gemini-3.5-flash-lite',
+  'gemini-3.1-pro-preview',
+  'gemini-2.5-flash'
 ];
 
 /**
@@ -30,8 +30,11 @@ async function generateWhatsAppCaption(notice) {
     throw new Error('GEMINI_API_KEY is not configured in .env');
   }
 
-  const { title, pdfUrl, date, id } = notice;
-  console.log(`[BEU AI] Processing notice ID ${id || ''}: "${title}"`);
+  const { title, pdfUrl, date, id, isCollegeNotice, collegeName, shortName, district, domain } = notice;
+  const collegeHeaderName = shortName || (isCollegeNotice ? 'COLLEGE NOTICE' : 'BEU PATNA');
+  const locationTag = district || 'BIHAR';
+  
+  console.log(`[BEU AI] Processing notice ID ${id || ''} [${collegeHeaderName}]: "${title}"`);
 
   let base64Data = null;
   let mimeType = 'application/pdf';
@@ -58,11 +61,12 @@ async function generateWhatsAppCaption(notice) {
 
   // 2. Build Prompt for Gemini
   const prompt = `You are the lead academic coordinator at 'Apna College Bihar' (ACB), Bihar's largest student education community.
-A new official notification has been published by Bihar Engineering University (BEU), Patna.
+A new official notification has been published ${isCollegeNotice ? `by ${collegeName || collegeHeaderName} (${locationTag}, Bihar)` : 'by Bihar Engineering University (BEU), Patna'}.
 
 Notice Title: "${title}"
 Notice Date: "${date || 'Latest'}"
-Official Attachment Link: "${pdfUrl || 'https://beu-bih.ac.in/notification'}"
+College / Authority: "${collegeName || 'BEU Patna'}" (${locationTag})
+Official Attachment Link: "${pdfUrl || domain || 'https://apnacollegebihar.online/notifications'}"
 Official WhatsApp Channel Link: "${CHANNEL_URL}"
 
 TASK:
@@ -70,7 +74,7 @@ Analyze the attached official notification document (or the title if no attachme
 
 STRUCTURE & FORMAT FOR THE WHATSAPP MESSAGE:
 1. HEADER:
-   - High attention emoji headline (e.g. 🚨 *BEU PATNA: [Short Notice Title]* 📢)
+   - High attention emoji headline (e.g. 🏛️ *${collegeHeaderName.toUpperCase()} [${locationTag.toUpperCase()}]: [Short Notice Title]* 📢)
    - Short explanation of what has been announced.
 
 2. TARGET AUDIENCE:
@@ -91,11 +95,11 @@ STRUCTURE & FORMAT FOR THE WHATSAPP MESSAGE:
 
 6. OFFICIAL DOWNLOAD & ACB PORTAL LINKS (MANDATORY):
    - Apna College Bihar Portal: https://apnacollegebihar.online/notifications
-   - Official Notice PDF: ${pdfUrl || 'https://beu-bih.ac.in/notification'}
+   - Official Notice PDF / Link: ${pdfUrl || domain || 'https://apnacollegebihar.online/notifications'}
 
 7. COMMUNITY SIGN-OFF & WHATSAPP CHANNEL JOIN LINK:
    - MUST include these exact links and call-to-action:
-     "🌐 *Apna College Bihar Portal (All Notices & Study Material):*"
+     "🌐 *Apna College Bihar Portal (All 38 Colleges Notices & Material):*"
      "https://apnacollegebihar.online/notifications"
      ""
      "📲 *Official WhatsApp Channel Join Karein (Daily Fast Updates):*"
@@ -103,7 +107,7 @@ STRUCTURE & FORMAT FOR THE WHATSAPP MESSAGE:
      ""
      "📢 *Apne sabhi college WhatsApp groups aur batchmates ke saath share karein!*"
      "🚀 *Team Apna College Bihar* | https://apnacollegebihar.online"
-     "#BEU #BiharEngineering #ApnaCollegeBihar #BEUNotice"
+     "#${collegeHeaderName.replace(/\s+/g, '')} #BEU #BiharEngineering #ApnaCollegeBihar #CollegeNotice"
 
 GUIDELINES:
 - Output ONLY the ready-to-send WhatsApp formatted message with bold (*text*), italic (_text_), and emojis.
@@ -151,16 +155,16 @@ GUIDELINES:
   }
 
   // Fallback template if all AI models are unreachable
-  const fallbackCaption = `🚨 *BEU PATNA: New Official Notice Update!* 📢\n\n` +
-    `Bihar Engineering University (BEU) has released a new notice:\n` +
+  const fallbackCaption = `🚨 *${collegeHeaderName.toUpperCase()} [${locationTag.toUpperCase()}]: Official Notice Update!* 📢\n\n` +
+    `${isCollegeNotice ? (collegeName || collegeHeaderName) : 'Bihar Engineering University (BEU)'} has released a new notice:\n` +
     `📌 *${title}*\n` +
     `🗓️ *Date:* ${date || 'Latest'}\n\n` +
-    `🌐 *Apna College Bihar Portal (All Notices & Study Material):*\n👉 https://apnacollegebihar.online/notifications\n\n` +
-    `📄 *Official Notice PDF Download:*\n👉 ${pdfUrl || 'https://beu-bih.ac.in/notification'}\n\n` +
+    `🌐 *Apna College Bihar Portal (All 38 Colleges Notices):*\n👉 https://apnacollegebihar.online/notifications\n\n` +
+    `📄 *Official Notice Download / Link:*\n👉 ${pdfUrl || domain || 'https://apnacollegebihar.online/notifications'}\n\n` +
     `📲 *Official WhatsApp Channel Join Karein (Daily Updates):*\n👉 ${CHANNEL_URL}\n\n` +
     `📢 *Apne batchmates ke saath share karein!*\n` +
     `🚀 *Team Apna College Bihar* | https://apnacollegebihar.online\n` +
-    `#BEU #BiharEngineering #ApnaCollegeBihar`;
+    `#${collegeHeaderName.replace(/\s+/g, '')} #BEU #BiharEngineering #ApnaCollegeBihar`;
 
   return {
     success: false,

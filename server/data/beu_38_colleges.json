@@ -1,0 +1,306 @@
+[
+  {
+    "id": "mit-muzaffarpur",
+    "name": "Muzaffarpur Institute of Technology",
+    "shortName": "MIT Muzaffarpur",
+    "district": "Muzaffarpur",
+    "domain": "https://www.mitmuzaffarpur.org",
+    "noticeBoardUrl": "https://www.mitmuzaffarpur.org"
+  },
+  {
+    "id": "bce-bhagalpur",
+    "name": "Bhagalpur College of Engineering",
+    "shortName": "BCE Bhagalpur",
+    "district": "Bhagalpur",
+    "domain": "https://www.bcebhagalpur.ac.in",
+    "noticeBoardUrl": "https://www.bcebhagalpur.ac.in"
+  },
+  {
+    "id": "gce-gaya",
+    "name": "Gaya College of Engineering",
+    "shortName": "GCE Gaya",
+    "district": "Gaya",
+    "domain": "https://www.gcegaya.ac.in",
+    "noticeBoardUrl": "https://www.gcegaya.ac.in"
+  },
+  {
+    "id": "nce-chandi",
+    "name": "Nalanda College of Engineering",
+    "shortName": "NCE Chandi",
+    "district": "Nalanda",
+    "domain": "https://ncechandi.ac.in",
+    "noticeBoardUrl": "https://ncechandi.ac.in"
+  },
+  {
+    "id": "dce-darbhanga",
+    "name": "Darbhanga College of Engineering",
+    "shortName": "DCE Darbhanga",
+    "district": "Darbhanga",
+    "domain": "https://dcedarbhanga.ac.in",
+    "noticeBoardUrl": "https://dcedarbhanga.ac.in"
+  },
+  {
+    "id": "mce-motihari",
+    "name": "Motihari College of Engineering",
+    "shortName": "MCE Motihari",
+    "district": "East Champaran",
+    "domain": "https://mcemotihari.ac.in",
+    "noticeBoardUrl": "https://mcemotihari.ac.in"
+  },
+  {
+    "id": "lnjpit-chapra",
+    "name": "Lok Nayak Jai Prakash Institute of Technology",
+    "shortName": "LNJPIT Chapra",
+    "district": "Saran (Chapra)",
+    "domain": "https://www.lnjpitchapra.ac.in",
+    "noticeBoardUrl": "https://www.lnjpitchapra.ac.in"
+  },
+  {
+    "id": "bce-bakhtiyarpur",
+    "name": "Bakhtiyarpur College of Engineering",
+    "shortName": "BCE Bakhtiyarpur",
+    "district": "Patna",
+    "domain": "https://bcebakhtiyarpur.ac.in",
+    "noticeBoardUrl": "https://bcebakhtiyarpur.ac.in"
+  },
+  {
+    "id": "sit-sitamarhi",
+    "name": "Sitamarhi Institute of Technology",
+    "shortName": "SIT Sitamarhi",
+    "district": "Sitamarhi",
+    "domain": "https://sitsitamarhi.ac.in",
+    "noticeBoardUrl": "https://sitsitamarhi.ac.in"
+  },
+  {
+    "id": "rrsdce-begusarai",
+    "name": "Rashtrakavi Ramdhari Singh Dinkar College of Engineering",
+    "shortName": "RRSDCE Begusarai",
+    "district": "Begusarai",
+    "domain": "https://www.rrsdcebegusarai.ac.in",
+    "noticeBoardUrl": "https://www.rrsdcebegusarai.ac.in"
+  },
+  {
+    "id": "pce-purnea",
+    "name": "Purnea College of Engineering",
+    "shortName": "PCE Purnea",
+    "district": "Purnea",
+    "domain": "https://pcepurnea.ac.in",
+    "noticeBoardUrl": "https://pcepurnea.ac.in"
+  },
+  {
+    "id": "kec-katihar",
+    "name": "Katihar Engineering College",
+    "shortName": "KEC Katihar",
+    "district": "Katihar",
+    "domain": "https://keckatihar.ac.in",
+    "noticeBoardUrl": "https://keckatihar.ac.in"
+  },
+  {
+    "id": "sce-saharsa",
+    "name": "Saharsa College of Engineering",
+    "shortName": "SCE Saharsa",
+    "district": "Saharsa",
+    "domain": "https://scesaharsa.ac.in",
+    "noticeBoardUrl": "https://scesaharsa.ac.in"
+  },
+  {
+    "id": "spce-sasaram",
+    "name": "Shershah College of Engineering",
+    "shortName": "SPCE Sasaram",
+    "district": "Rohtas (Sasaram)",
+    "domain": "https://spcesasaram.ac.in",
+    "noticeBoardUrl": "https://spcesasaram.ac.in"
+  },
+  {
+    "id": "bpmce-madhepura",
+    "name": "B. P. Mandal College of Engineering",
+    "shortName": "BPMCE Madhepura",
+    "district": "Madhepura",
+    "domain": "https://bpmcemadhepura.org",
+    "noticeBoardUrl": "https://bpmcemadhepura.org"
+  },
+  {
+    "id": "gec-vaishali",
+    "name": "Government Engineering College, Vaishali",
+    "shortName": "GEC Vaishali",
+    "district": "Vaishali",
+    "domain": "https://gecvaishali.ac.in",
+    "noticeBoardUrl": "https://gecvaishali.ac.in"
+  },
+  {
+    "id": "gec-jamui",
+    "name": "Government Engineering College, Jamui",
+    "shortName": "GEC Jamui",
+    "district": "Jamui",
+    "domain": "https://www.gecjamui.org",
+    "noticeBoardUrl": "https://www.gecjamui.org"
+  },
+  {
+    "id": "gec-banka",
+    "name": "Government Engineering College, Banka",
+    "shortName": "GEC Banka",
+    "district": "Banka",
+    "domain": "https://www.gecbanka.org",
+    "noticeBoardUrl": "https://www.gecbanka.org"
+  },
+  {
+    "id": "gec-nawada",
+    "name": "Government Engineering College, Nawada",
+    "shortName": "GEC Nawada",
+    "district": "Nawada",
+    "domain": "https://gecnawada.org",
+    "noticeBoardUrl": "https://gecnawada.org"
+  },
+  {
+    "id": "gec-kishanganj",
+    "name": "Government Engineering College, Kishanganj",
+    "shortName": "GEC Kishanganj",
+    "district": "Kishanganj",
+    "domain": "https://www.geckishanganj.org",
+    "noticeBoardUrl": "https://www.geckishanganj.org"
+  },
+  {
+    "id": "gec-arwal",
+    "name": "Government Engineering College, Arwal",
+    "shortName": "GEC Arwal",
+    "district": "Arwal",
+    "domain": "https://gecarwal.ac.in",
+    "noticeBoardUrl": "https://gecarwal.ac.in"
+  },
+  {
+    "id": "gec-aurangabad",
+    "name": "Government Engineering College, Aurangabad",
+    "shortName": "GEC Aurangabad",
+    "district": "Aurangabad",
+    "domain": "https://gecaurangabad.ac.in",
+    "noticeBoardUrl": "https://gecaurangabad.ac.in"
+  },
+  {
+    "id": "gec-buxar",
+    "name": "Government Engineering College, Buxar",
+    "shortName": "GEC Buxar",
+    "district": "Buxar",
+    "domain": "https://gecbuxar.ac.in",
+    "noticeBoardUrl": "https://gecbuxar.ac.in"
+  },
+  {
+    "id": "gec-bhojpur",
+    "name": "Government Engineering College, Bhojpur",
+    "shortName": "GEC Bhojpur",
+    "district": "Bhojpur (Ara)",
+    "domain": "https://www.gecbhojpur.org",
+    "noticeBoardUrl": "https://www.gecbhojpur.org"
+  },
+  {
+    "id": "gec-sheikhpura",
+    "name": "Government Engineering College, Sheikhpura",
+    "shortName": "GEC Sheikhpura",
+    "district": "Sheikhpura",
+    "domain": "https://www.gecsheikhpura.ac.in",
+    "noticeBoardUrl": "https://www.gecsheikhpura.ac.in"
+  },
+  {
+    "id": "gec-munger",
+    "name": "Government Engineering College, Munger",
+    "shortName": "GEC Munger",
+    "district": "Munger",
+    "domain": "https://gecmunger.ac.in",
+    "noticeBoardUrl": "https://gecmunger.ac.in"
+  },
+  {
+    "id": "gec-lakhisarai",
+    "name": "Government Engineering College, Lakhisarai",
+    "shortName": "GEC Lakhisarai",
+    "district": "Lakhisarai",
+    "domain": "https://geclakhisarai.ac.in",
+    "noticeBoardUrl": "https://geclakhisarai.ac.in"
+  },
+  {
+    "id": "gec-khagaria",
+    "name": "Government Engineering College, Khagaria",
+    "shortName": "GEC Khagaria",
+    "district": "Khagaria",
+    "domain": "https://www.geckhagaria.org.in",
+    "noticeBoardUrl": "https://www.geckhagaria.org.in"
+  },
+  {
+    "id": "gec-samastipur",
+    "name": "Government Engineering College, Samastipur",
+    "shortName": "GEC Samastipur",
+    "district": "Samastipur",
+    "domain": "https://www.gecsamastipur.ac.in",
+    "noticeBoardUrl": "https://www.gecsamastipur.ac.in"
+  },
+  {
+    "id": "gec-gopalganj",
+    "name": "Government Engineering College, Gopalganj",
+    "shortName": "GEC Gopalganj",
+    "district": "Gopalganj",
+    "domain": "https://www.gecgopalganj.org",
+    "noticeBoardUrl": "https://www.gecgopalganj.org"
+  },
+  {
+    "id": "gec-madhubani",
+    "name": "Government Engineering College, Madhubani",
+    "shortName": "GEC Madhubani",
+    "district": "Madhubani",
+    "domain": "https://gecmadhubani.ac.in",
+    "noticeBoardUrl": "https://gecmadhubani.ac.in"
+  },
+  {
+    "id": "gec-siwan",
+    "name": "Government Engineering College, Siwan",
+    "shortName": "GEC Siwan",
+    "district": "Siwan",
+    "domain": "https://www.gecsiwan.org",
+    "noticeBoardUrl": "https://www.gecsiwan.org"
+  },
+  {
+    "id": "gec-jehanabad",
+    "name": "Government Engineering College, Jehanabad",
+    "shortName": "GEC Jehanabad",
+    "district": "Jehanabad",
+    "domain": "https://gecjehanabad.ac.in",
+    "noticeBoardUrl": "https://gecjehanabad.ac.in"
+  },
+  {
+    "id": "gec-araria",
+    "name": "Shri Phanishwar Nath Renu Engineering College, Araria",
+    "shortName": "GEC Araria",
+    "district": "Araria",
+    "domain": "https://gecararia.org",
+    "noticeBoardUrl": "https://gecararia.org"
+  },
+  {
+    "id": "gec-west-champaran",
+    "name": "Government Engineering College, West Champaran",
+    "shortName": "GEC West Champaran",
+    "district": "West Champaran",
+    "domain": "https://gecwestchamparan.org",
+    "noticeBoardUrl": "https://gecwestchamparan.org"
+  },
+  {
+    "id": "gec-kaimur",
+    "name": "Government Engineering College, Kaimur",
+    "shortName": "GEC Kaimur",
+    "district": "Kaimur (Bhabua)",
+    "domain": "https://geckaimur.ac.in",
+    "noticeBoardUrl": "https://geckaimur.ac.in"
+  },
+  {
+    "id": "gec-sheohar",
+    "name": "Government Engineering College, Sheohar",
+    "shortName": "GEC Sheohar",
+    "district": "Sheohar",
+    "domain": "https://gecsheohar.ac.in",
+    "noticeBoardUrl": "https://gecsheohar.ac.in"
+  },
+  {
+    "id": "wit-darbhanga",
+    "name": "Women's Institute of Technology, Darbhanga",
+    "shortName": "WIT Darbhanga",
+    "district": "Darbhanga",
+    "domain": "https://witlnmu.ac.in",
+    "noticeBoardUrl": "https://witlnmu.ac.in"
+  }
+]

@@ -60,6 +60,8 @@ async function getNoticeMediaAsset(notice, browser = null) {
       const safeTitle = (title || 'Official BEU Notification').replace(/</g, '&lt;').replace(/>/g, '&gt;');
       const safeDate = date || new Date().toISOString().split('T')[0];
       const isUrgent = isimportant === 1 || isimportant === '1';
+      const collegeTag = notice.shortName || 'BEU PATNA';
+      const districtTag = notice.district || 'BIHAR';
 
       const html = `
       <!DOCTYPE html>
@@ -227,16 +229,16 @@ async function getNoticeMediaAsset(notice, browser = null) {
 
         <div class="header">
           <div class="brand-badge">
-            <div class="logo-box">🎓</div>
+            <div class="logo-box">🏛️</div>
             <div class="brand-text">
               <h3>Apna College Bihar</h3>
               <p>Official Academic Alert</p>
             </div>
           </div>
           <div class="meta-pill ${isUrgent ? 'pill-urgent' : 'pill-normal'}">
-            <span>${isUrgent ? '🚨 URGENT' : '🔔 OFFICIAL'}</span>
+            <span>${isUrgent ? '🚨 URGENT' : '🏛️ ' + collegeTag.toUpperCase()}</span>
             <span>•</span>
-            <span>BEU PATNA</span>
+            <span>${districtTag.toUpperCase()}</span>
           </div>
         </div>
 
@@ -247,7 +249,7 @@ async function getNoticeMediaAsset(notice, browser = null) {
 
         <div class="footer">
           <div class="footer-info">
-            <div class="info-item">🏛️ <b>Bihar Engineering University</b></div>
+            <div class="info-item">🏛️ <b>${notice.collegeName || 'Bihar Engineering University'}</b></div>
             <div class="info-item">📱 <b>Live WhatsApp Channel Broadcast</b></div>
           </div>
           <div class="portal-link">🌐 apnacollegebihar.online/notifications</div>

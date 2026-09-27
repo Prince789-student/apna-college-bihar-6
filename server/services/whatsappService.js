@@ -24,8 +24,8 @@ class WhatsAppService {
    * Automatically send message to WhatsApp
    * Prioritizes the free WhatsApp Web Bot, then falls back to Webhook / Manual.
    */
-  async sendMessage({ caption, pdfUrl, title, noticeId, filePath }) {
-    console.log(`[WhatsApp Dispatcher] Dispatching notice ${noticeId || ''}: "${title}"`);
+  async sendMessage({ caption, pdfUrl, title, noticeId, filePath, date, isimportant, shortName, district, collegeName, isCollegeNotice }) {
+    console.log(`[WhatsApp Dispatcher] Dispatching notice ${noticeId || ''} [${shortName || 'BEU'}]: "${title}"`);
 
     const result = {
       noticeId,
@@ -41,7 +41,17 @@ class WhatsAppService {
     if (!mediaPath && (noticeId || title)) {
       try {
         console.log(`[WhatsApp Dispatcher] Generating/retrieving official visual asset for notice #${noticeId || 'new'}...`);
-        const asset = await getNoticeMediaAsset({ id: noticeId, title, pdfUrl }, whatsappBotService.browser);
+        const asset = await getNoticeMediaAsset({
+          id: noticeId,
+          title,
+          pdfUrl,
+          date,
+          isimportant,
+          shortName,
+          district,
+          collegeName,
+          isCollegeNotice
+        }, whatsappBotService.browser);
         if (asset && asset.imagePath) {
           mediaPath = asset.imagePath;
           console.log(`[WhatsApp Dispatcher] Visual notice card ready: ${mediaPath}`);

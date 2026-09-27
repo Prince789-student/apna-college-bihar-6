@@ -47,9 +47,11 @@ function getLastAutoCheckTime() {
   return lastServerAutoCheckTimestamp;
 }
 
+const { scrapeAll38CollegesNotices } = require('../services/collegeScraperService');
+
 /**
- * Syncs BEU Notifications, runs AI analysis via Gemini 2.5 Flash,
- * and automatically dispatches formatted updates to WhatsApp & App Push.
+ * Syncs BEU Notifications & 38 Bihar Engineering Colleges,
+ * runs AI analysis via Gemini 2.5 Flash, and automatically dispatches to WhatsApp & App Push.
  */
 async function syncBeuAndBroadcast(options = { forceAll: false }) {
   if (isRunning) {
@@ -59,11 +61,24 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
 
   isRunning = true;
   lastServerAutoCheckTimestamp = new Date().toISOString();
-  console.log('[BEU Broadcaster] Starting BEU notice sync & AI WhatsApp pipeline...');
+  console.log('[BEU Broadcaster] Starting BEU Central & 38 Colleges notice sync pipeline...');
 
   try {
-    const response = await axios.get(BEU_API_URL, { timeout: 30000 });
-    const notices = response.data;
+    let centralNotices = [];
+    try {
+      const response = await axios.get(BEU_API_URL, { timeout: 30000 });
+      if (Array.isArray(response.data)) centralNotices = response.data;
+    } catch (apiErr) {
+      console.warn('[BEU Broadcaster] Central BEU API fetch warning:', apiErr.message);
+    }
+
+    // Crawl 38 BEU Engineering Colleges notice boards
+    let collegeNotices = [];
+    try {
+      collegeNotices = await scrapeAll38CollegesNotices();
+    } catch (colErr) {
+      console.warn('[BEU Broadcaster] 38 Colleges scrape warning:', colErr.message);
+    }
 
     const localCache = loadLocalNotices();
     localCache._meta = {
@@ -72,14 +87,27 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
     };
     saveLocalNotices(localCache);
 
-    if (!Array.isArray(notices) || notices.length === 0) {
-      console.log('[BEU Broadcaster] No notices returned by BEU API.');
+    const formattedCentral = centralNotices.slice(0, 10).map(n => ({
+      id: String(n.id),
+      title: (n.board || 'BEU Notice').trim(),
+      rawTitle: (n.board || 'BEU Notice').trim(),
+      pdfUrl: n.link ? `https://beu-bih.ac.in/backend/${encodeURIComponent(n.link.trim())}` : '',
+      date: n.noticedate || new Date().toISOString().split('T')[0],
+      isimportant: n.isimportant,
+      isCollegeNotice: false,
+      shortName: 'BEU PATNA',
+      district: 'PATNA'
+    }));
+
+    const combinedNotices = [...formattedCentral, ...collegeNotices];
+
+    if (combinedNotices.length === 0) {
+      console.log('[BEU Broadcaster] No notices returned from BEU API or Colleges.');
       isRunning = false;
-      return { success: false, message: 'No notices found from BEU API.' };
+      return { success: false, message: 'No notices found.' };
     }
 
-    console.log(`[BEU Broadcaster] Fetched ${notices.length} notices from BEU.`);
-    const recentNotices = notices.slice(0, 10);
+    console.log(`[BEU Broadcaster] Checking ${combinedNotices.length} candidates (${formattedCentral.length} BEU Central, ${collegeNotices.length} 38 Colleges)...`);
     let newNoticesCount = 0;
     let aiProcessedCount = 0;
     const processedResults = [];
@@ -96,7 +124,7 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
       }
     }
 
-    for (const notice of recentNotices) {
+    for (const notice of combinedNotices) {
       const noticeId = String(notice.id);
       let existingData = localCache[noticeId];
 
@@ -116,32 +144,40 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
       const isNew = !existingData;
       const needsAi = isNew || !existingData?.whatsappCaption || options.forceAll;
 
-      const fullPdfUrl = notice.link 
-        ? `https://beu-bih.ac.in/backend/${encodeURIComponent(notice.link.trim())}`
-        : '';
-      
-      const title = (notice.board || 'BEU Notice').trim();
-      const noticeDate = notice.noticedate || new Date().toISOString().split('T')[0];
+      const fullPdfUrl = notice.pdfUrl || (notice.link ? `https://beu-bih.ac.in/backend/${encodeURIComponent(notice.link.trim())}` : '');
+      const title = (notice.title || notice.board || 'BEU Notice').trim();
+      const noticeDate = notice.date || notice.noticedate || new Date().toISOString().split('T')[0];
 
       if (needsAi) {
-        console.log(`[BEU Broadcaster] Processing Notice #${noticeId}: "${title}"`);
+        console.log(`[BEU Broadcaster] Processing Notice #${noticeId} [${notice.shortName || 'BEU'}]: "${title}"`);
 
         // 1. Generate Full Detailed WhatsApp caption using Gemini 2.5 Flash
         const aiResult = await generateWhatsAppCaption({
           id: noticeId,
           title: title,
           pdfUrl: fullPdfUrl,
-          date: noticeDate
+          date: noticeDate,
+          isCollegeNotice: notice.isCollegeNotice,
+          collegeName: notice.collegeName,
+          shortName: notice.shortName,
+          district: notice.district,
+          domain: notice.domain
         });
 
         const whatsappCaption = aiResult.caption;
 
-        // 2. Dispatch to WhatsApp
+        // 2. Dispatch to WhatsApp Channel
         const dispatchResult = await whatsappService.sendMessage({
           caption: whatsappCaption,
           pdfUrl: fullPdfUrl,
           title: title,
-          noticeId: noticeId
+          noticeId: noticeId,
+          date: noticeDate,
+          isimportant: notice.isimportant,
+          shortName: notice.shortName,
+          district: notice.district,
+          collegeName: notice.collegeName,
+          isCollegeNotice: notice.isCollegeNotice
         });
 
         // 3. Save into local persistent cache
@@ -149,11 +185,15 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
           id: notice.id,
           board: title,
           title: title,
-          link: notice.link,
+          link: notice.link || notice.pdfUrl,
           pdfUrl: fullPdfUrl,
           noticedate: noticeDate,
           date: noticeDate,
           isimportant: notice.isimportant,
+          isCollegeNotice: !!notice.isCollegeNotice,
+          collegeName: notice.collegeName || 'Bihar Engineering University',
+          shortName: notice.shortName || 'BEU PATNA',
+          district: notice.district || 'PATNA',
           whatsappCaption: whatsappCaption,
           aiProcessed: true,
           aiProcessedAt: new Date().toISOString(),
