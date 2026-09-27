@@ -16,7 +16,9 @@ const ProtectedRoute = () => {
     return <Navigate to="/login" replace />;
   }
 
-  const needsPhone = !user?.phone || user?.phone?.trim() === "" || user?.phone === "NOT LINKED";
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin' || user?.role === 'SUPER_ADMIN' || user?.email === 'prince86944@gmail.com';
+  const isPhoneSkipped = sessionStorage.getItem('phone_check_skipped') === 'true';
+  const needsPhone = !isAdmin && !isPhoneSkipped && (!user?.phone || user?.phone?.trim() === "" || user?.phone === "NOT LINKED");
 
   const handlePhoneSubmit = async (e) => {
     e.preventDefault();
