@@ -16,11 +16,25 @@ export default function SearchSEO() {
     const fetchResults = async () => {
       setLoading(true);
       try {
+        const cached = sessionStorage.getItem('acb_documents_cache');
+        if (cached) {
+          try {
+            const parsed = JSON.parse(cached);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setDocuments(parsed);
+              setLoading(false);
+              return;
+            }
+          } catch (e) {}
+        }
         const snap = await getDocs(collection(db, 'documents'));
         const docs = snap.docs
           .map(d => ({ id: d.id, ...d.data() }))
           .filter(d => d.type !== 'folder');
         setDocuments(docs);
+        try {
+          sessionStorage.setItem('acb_documents_cache', JSON.stringify(docs));
+        } catch (e) {}
       } catch (err) {
         console.error("Search fetch error:", err);
       } finally {

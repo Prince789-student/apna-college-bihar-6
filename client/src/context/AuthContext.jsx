@@ -89,53 +89,45 @@ export function AuthProvider({ children }) {
     // Set loading to false now that we have at least a basic user or cached user
     setLoading(false);
 
-    // Step 2: Try Firestore for fresh data (requires internet)
+    const docRef = doc(db, "users", u.uid);
+    const isFounder = u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com';
+
+    // Step 2A: Guaranteed Firestore Write (Always write/merge user into Firestore immediately)
+    // Uses setDoc with merge: true which NEVER fails due to read quota exhaustion!
     try {
-      const docRef = doc(db, "users", u.uid);
+      const basePayload = {
+        uid: u.uid,
+        name: u.displayName || 'Scholar',
+        email: u.email || '',
+        phone: u.phoneNumber || '',
+        role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT,
+        lastLogin: serverTimestamp()
+      };
+      await setDoc(docRef, basePayload, { merge: true });
+    } catch (writeErr) {
+      console.warn("[AUTH] Base profile write warning:", writeErr?.code || writeErr?.message);
+    }
+
+    // Step 2B: Try reading full user profile if read quota is available
+    try {
       const userDoc = await getDoc(docRef);
-      
-      const isFounder = u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com';
-      
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        
         let finalData;
         if (isFounder && userData.role !== ROLES.SUPER_ADMIN) {
-           await updateDoc(docRef, { role: ROLES.SUPER_ADMIN });
+           await setDoc(docRef, { role: ROLES.SUPER_ADMIN }, { merge: true });
            finalData = { ...u, ...userData, role: ROLES.SUPER_ADMIN };
         } else {
            finalData = { ...u, ...userData };
         }
         setUser(finalData);
-        // Step 3: Update localStorage cache with fresh Firestore data
         localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ ...userData, uid: u.uid }));
-      } else {
-
-        const data = {
-          uid: u.uid,
-          name: u.displayName || 'Scholar',
-          email: u.email,
-          phone: u.phoneNumber || "",
-          createdAt: serverTimestamp(),
-          role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT,
-          groupsCreatedToday: 0,
-          lastGroupCreateDate: null
-        };
-        await setDoc(docRef, data);
-        const newUserData = { ...u, ...data };
-        setUser(newUserData);
-        // Cache the new profile
-        localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ ...data, uid: u.uid }));
       }
-    } catch (err) {
-      console.warn("[AUTH] Firestore sync failed (possibly offline):", err.code || err.message);
-      // Fallback: check if we already set user from cache above
-      // If not (no cache existed), set basic user info from Firebase Auth
+    } catch (readErr) {
+      console.warn("[AUTH] Firestore profile read failed (quota or offline):", readErr?.code || readErr?.message);
       const cachedRaw = localStorage.getItem(USER_CACHE_KEY);
       const hasCacheForUser = cachedRaw && JSON.parse(cachedRaw).uid === u.uid;
       if (!hasCacheForUser) {
-        // No cache available — set minimal user info so they stay logged in
-        const isFounder = u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com';
         setUser({
           uid: u.uid,
           email: u.email,
@@ -143,7 +135,6 @@ export function AuthProvider({ children }) {
           role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT
         });
       }
-      // If cache existed, user is already set from Step 1 — do nothing here
     } finally {
       isSyncing.current = false;
     }
@@ -228,13 +219,8 @@ export function AuthProvider({ children }) {
     const updatedUser = { ...user, ...data };
     
     try {
-      if (navigator.onLine) {
-        await updateDoc(doc(db, "users", user.uid), data);
-      } else {
-        // If offline, don't await because it might hang until online.
-        // Firestore will queue this write in IndexedDB automatically.
-        updateDoc(doc(db, "users", user.uid), data).catch(console.error);
-      }
+      // Use setDoc with merge: true so it creates or updates safely without failing on missing doc
+      await setDoc(doc(db, "users", user.uid), data, { merge: true });
     } catch (err) {
       console.warn("Error updating profile in firestore:", err);
     }

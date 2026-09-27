@@ -238,6 +238,89 @@ app.get('/sitemap.xml', async (req, res) => {
     }
 });
 
+// 5.5 ADMIN USERS MANAGEMENT API (Bypasses client-side Firestore read limits)
+app.get('/api/admin/users', async (req, res) => {
+    try {
+        const adminSdk = require('./firebaseAdmin');
+        if (!adminSdk || !adminSdk.apps.length) {
+            return res.status(500).json({ error: 'Firebase Admin not initialized' });
+        }
+        
+        const authUsers = [];
+        let pageToken;
+        do {
+            const result = await adminSdk.auth().listUsers(1000, pageToken);
+            authUsers.push(...result.users);
+            pageToken = result.pageToken;
+        } while (pageToken);
+
+        const usersList = authUsers.map(u => ({
+            id: u.uid,
+            uid: u.uid,
+            email: u.email || '',
+            name: u.displayName || 'Scholar',
+            phone: u.phoneNumber || '',
+            role: (u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com') ? 'SUPER_ADMIN' : 'STUDENT',
+            createdAt: u.metadata.creationTime,
+            lastLogin: u.metadata.lastSignInTime
+        }));
+
+        res.json({ success: true, count: usersList.length, users: usersList });
+    } catch (err) {
+        console.error('Error fetching admin users:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/admin/sync-users', async (req, res) => {
+    try {
+        const adminSdk = require('./firebaseAdmin');
+        if (!adminSdk || !adminSdk.apps.length) {
+            return res.status(500).json({ error: 'Firebase Admin not initialized' });
+        }
+        const db = adminSdk.firestore();
+        const authUsers = [];
+        let pageToken;
+        do {
+            const result = await adminSdk.auth().listUsers(1000, pageToken);
+            authUsers.push(...result.users);
+            pageToken = result.pageToken;
+        } while (pageToken);
+
+        const batchSize = 400;
+        let batch = db.batch();
+        let count = 0;
+
+        for (const u of authUsers) {
+            const isFounder = u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com';
+            const userDocRef = db.collection('users').doc(u.uid);
+            const data = {
+                uid: u.uid,
+                email: u.email || '',
+                name: u.displayName || 'Scholar',
+                phone: u.phoneNumber || '',
+                role: isFounder ? 'SUPER_ADMIN' : 'STUDENT',
+                createdAt: u.metadata.creationTime ? new Date(u.metadata.creationTime) : new Date(),
+                lastLogin: u.metadata.lastSignInTime ? new Date(u.metadata.lastSignInTime) : new Date()
+            };
+            batch.set(userDocRef, data, { merge: true });
+            count++;
+            if (count % batchSize === 0) {
+                await batch.commit();
+                batch = db.batch();
+            }
+        }
+        if (count % batchSize !== 0) {
+            await batch.commit();
+        }
+
+        res.json({ success: true, message: `Synced ${count} users successfully!`, count });
+    } catch (err) {
+        console.error('Error syncing users:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // 6. SPA Catch-all with Dynamic SEO
 let cachedHtml = null;
 app.get('*', (req, res) => {

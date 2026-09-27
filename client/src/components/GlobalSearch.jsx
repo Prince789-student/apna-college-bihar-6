@@ -19,12 +19,27 @@ export default function GlobalSearch() {
     if (!hasFetched) {
       setLoading(true);
       try {
+        const cached = sessionStorage.getItem('acb_documents_cache');
+        if (cached) {
+          try {
+            const parsed = JSON.parse(cached);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setDocuments(parsed);
+              setHasFetched(true);
+              setLoading(false);
+              return;
+            }
+          } catch (e) {}
+        }
         const snap = await getDocs(collection(db, 'documents'));
         const docs = snap.docs
           .map(d => ({ id: d.id, ...d.data() }))
           .filter(d => d.type !== 'folder'); // We only want files
         setDocuments(docs);
         setHasFetched(true);
+        try {
+          sessionStorage.setItem('acb_documents_cache', JSON.stringify(docs));
+        } catch (e) {}
       } catch (err) {
         console.error("Failed to fetch documents for search:", err);
       } finally {

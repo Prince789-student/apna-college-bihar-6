@@ -50,6 +50,8 @@ export default function AdminPanel() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [loadingOverlayVisible, setLoadingOverlayVisible] = useState(false);
+  const [syncingUsers, setSyncingUsers] = useState(false);
+  const [quotaExceededError, setQuotaExceededError] = useState(false);
 
   // ── UPLOAD STATE ──
   const [docForm, setDocForm] = useState({ title: '', subject: '', selectedSubjectId: 'new', category: 'NOTES', branch: 'CSE', semester: '1', file: null, externalUrl: '' });
@@ -127,6 +129,20 @@ export default function AdminPanel() {
 
     const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
       setUsers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      setQuotaExceededError(false);
+    }, async (err) => {
+      console.warn("Firestore users listener quota or connection error:", err.message);
+      setQuotaExceededError(true);
+      // Fallback: Fetch directly from server API (Firebase Auth list)
+      try {
+        const resp = await fetch('/api/admin/users');
+        const json = await resp.json();
+        if (json.success && Array.isArray(json.users)) {
+          setUsers(json.users);
+        }
+      } catch (fetchErr) {
+        console.error("Failed to fetch admin users from fallback API:", fetchErr);
+      }
     });
 
     const unsubGroups = onSnapshot(collection(db, 'groups'), (snap) => {
@@ -357,6 +373,30 @@ export default function AdminPanel() {
     } catch (err) {
       console.error('Error adding admin:', err);
       flash(`Admin add karne me error: ${err.message}`, 'err');
+    }
+  };
+
+  const handleSyncUsers = async () => {
+    try {
+      setSyncingUsers(true);
+      flash('Syncing all Firebase Auth users to database... ⏳');
+      const res = await fetch('/api/admin/sync-users', { method: 'POST' });
+      const json = await res.json();
+      if (json.success) {
+        flash(`✅ ${json.message || `Synced ${json.count} users successfully!`}`, 'ok');
+        // Refresh users list from API
+        const usersRes = await fetch('/api/admin/users');
+        const usersJson = await usersRes.json();
+        if (usersJson.success && Array.isArray(usersJson.users)) {
+          setUsers(usersJson.users);
+        }
+      } else {
+        flash(json.error || 'User sync failed', 'err');
+      }
+    } catch (e) {
+      flash('Sync error: ' + e.message, 'err');
+    } finally {
+      setSyncingUsers(false);
     }
   };
 
@@ -868,10 +908,40 @@ if (!isAdmin) return (
             </div>
           )}
 
+          {quotaExceededError && (
+            <div className="bg-amber-50 border border-amber-200/80 p-5 rounded-[2rem] flex flex-col sm:flex-row items-center justify-between gap-4 text-amber-900 shadow-sm">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-amber-100 rounded-xl text-amber-700">
+                  <AlertCircle size={18} />
+                </div>
+                <div>
+                  <p className="text-xs font-black uppercase tracking-tight">Firebase Firestore Read Quota Exceeded (50k Free Limit)</p>
+                  <p className="text-[11px] text-amber-700/80 font-medium">Real-time listener paused temporarily. User list is loaded from server backend. Quota resets daily at midnight PST.</p>
+                </div>
+              </div>
+              <button 
+                onClick={handleSyncUsers} 
+                disabled={syncingUsers}
+                className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-[10px] font-black uppercase tracking-wider whitespace-nowrap shadow transition-all active:scale-95 disabled:opacity-50"
+              >
+                {syncingUsers ? "Syncing..." : "Sync All 160+ Users"}
+              </button>
+            </div>
+          )}
+
           <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] border border-slate-200/80 overflow-hidden shadow-2xl animate-in fade-in duration-500">
             <div className="p-4 md:p-8 border-b border-slate-200/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest">Scholar Directory</h2>
               <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
+                <button
+                   onClick={handleSyncUsers}
+                   disabled={syncingUsers}
+                   className="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-50 text-blue-600 hover:bg-blue-100 active:scale-95 rounded-2xl text-[11px] font-black uppercase tracking-wider transition-all disabled:opacity-50 border border-blue-200/60 shadow-sm"
+                   title="Sync all registered Firebase Auth users into the database"
+                >
+                   <RefreshCw size={13} className={syncingUsers ? "animate-spin" : ""} />
+                   <span>{syncingUsers ? "Syncing..." : "Sync Auth Users"}</span>
+                </button>
                 <div className="relative group w-full md:w-72">
                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500" size={16} />
                    <input 
