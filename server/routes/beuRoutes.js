@@ -48,11 +48,14 @@ router.get('/notices', async (req, res) => {
       }
     }
 
-    // Sort descending by noticedate / ID
+    // Sort descending by date / timestamp
     noticesList.sort((a, b) => {
-      const idA = Number(a.id) || 0;
-      const idB = Number(b.id) || 0;
-      return idB - idA;
+      const timeA = new Date(a.date || a.noticedate || a.createdAt || 0).getTime() || 0;
+      const timeB = new Date(b.date || b.noticedate || b.createdAt || 0).getTime() || 0;
+      if (timeB !== timeA) return timeB - timeA;
+      const numA = Number(String(a.id).replace(/\D/g, '')) || 0;
+      const numB = Number(String(b.id).replace(/\D/g, '')) || 0;
+      return numB - numA;
     });
 
     res.json({

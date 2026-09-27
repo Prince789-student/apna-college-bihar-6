@@ -69,16 +69,27 @@ export default function AdminPanel() {
     );
   }, [docs, docForm.branch, docForm.semester, docForm.category]);
 
-  // Filtered BEU notices based on search
+  const [beuNoticeFilter, setBeuNoticeFilter] = React.useState('all'); // 'all', 'central', 'colleges'
+
+  // Filtered BEU notices based on search & source filter
   const filteredBeuNotices = React.useMemo(() => {
-    if (!beuSearch.trim()) return beuNotifications;
+    let list = beuNotifications;
+    if (beuNoticeFilter === 'central') {
+      list = list.filter(n => !n.isCollegeNotice);
+    } else if (beuNoticeFilter === 'colleges') {
+      list = list.filter(n => n.isCollegeNotice);
+    }
+
+    if (!beuSearch.trim()) return list;
     const q = beuSearch.toLowerCase();
-    return beuNotifications.filter(n => 
+    return list.filter(n => 
       (n.title || n.board || '').toLowerCase().includes(q) ||
       (n.date || n.noticedate || '').toLowerCase().includes(q) ||
+      (n.shortName || '').toLowerCase().includes(q) ||
+      (n.district || '').toLowerCase().includes(q) ||
       String(n.id).includes(q)
     );
-  }, [beuNotifications, beuSearch]);
+  }, [beuNotifications, beuSearch, beuNoticeFilter]);
 
   // Access Control
   const isSuper = user?.email === 'prince86944@gmail.com' || user?.role === ROLES.SUPER_ADMIN || user?.role === 'SUPER_ADMIN';
@@ -1758,14 +1769,36 @@ if (!isAdmin) return (
                   Ye sabhi notices website aur Android app par live visible hain
                 </p>
               </div>
-              <div className="relative w-full md:w-80">
-                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-                <input
-                  value={beuSearch}
-                  onChange={e => setBeuSearch(e.target.value)}
-                  placeholder="Search notices by title, date, ID..."
-                  className="w-full bg-slate-50 border border-slate-200 pl-10 pr-4 py-2.5 rounded-xl text-xs font-bold text-slate-800 outline-none focus:border-indigo-500 transition-colors"
-                />
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <div className="flex items-center bg-slate-100 p-1 rounded-xl">
+                  <button
+                    onClick={() => setBeuNoticeFilter('all')}
+                    className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${beuNoticeFilter === 'all' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                  >
+                    All ({beuNotifications.length})
+                  </button>
+                  <button
+                    onClick={() => setBeuNoticeFilter('central')}
+                    className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${beuNoticeFilter === 'central' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                  >
+                    BEU Central ({beuNotifications.filter(n => !n.isCollegeNotice).length})
+                  </button>
+                  <button
+                    onClick={() => setBeuNoticeFilter('colleges')}
+                    className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${beuNoticeFilter === 'colleges' ? 'bg-white text-purple-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                  >
+                    🏛️ 38 Colleges ({beuNotifications.filter(n => n.isCollegeNotice).length})
+                  </button>
+                </div>
+                <div className="relative w-full md:w-72">
+                  <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    value={beuSearch}
+                    onChange={e => setBeuSearch(e.target.value)}
+                    placeholder="Search title, college, district..."
+                    className="w-full bg-slate-50 border border-slate-200 pl-10 pr-4 py-2 rounded-xl text-xs font-bold text-slate-800 outline-none focus:border-indigo-500 transition-colors"
+                  />
+                </div>
               </div>
             </div>
 
@@ -1774,6 +1807,14 @@ if (!isAdmin) return (
                 <div key={n.id} className="flex flex-col sm:flex-row sm:items-center justify-between px-6 md:px-8 py-4 hover:bg-slate-50/70 transition-colors gap-3 group">
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase border ${n.isCollegeNotice ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-blue-50 text-blue-700 border-blue-200'}`}>
+                        🏛️ {n.shortName || (n.isCollegeNotice ? 'COLLEGE' : 'BEU PATNA')}
+                      </span>
+                      {n.district && (
+                        <span className="text-[8px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded uppercase">
+                          📍 {n.district}
+                        </span>
+                      )}
                       <span className="text-[9px] font-mono font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded">
                         #{n.id}
                       </span>

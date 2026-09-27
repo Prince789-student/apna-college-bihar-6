@@ -135,11 +135,19 @@ export default function Notifications() {
                     <FileText size={20} />
                   </div>
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      {notice.isimportant === 1 && (
-                        <span className="px-2 py-1 bg-red-600 text-white text-[9px] font-black uppercase tracking-widest rounded-md animate-pulse">Important</span>
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <span className={`px-2.5 py-0.5 text-[9px] font-black uppercase tracking-wider rounded-md border ${notice.isCollegeNotice ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-blue-50 text-blue-700 border-blue-200'}`}>
+                        🏛️ {notice.shortName || (notice.isCollegeNotice ? 'COLLEGE NOTICE' : 'BEU PATNA')}
+                      </span>
+                      {notice.district && (
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                          📍 {notice.district}
+                        </span>
                       )}
-                      <div className="flex items-center text-[11px] font-bold text-slate-500 uppercase tracking-widest mt-4">
+                      {notice.isimportant === 1 && (
+                        <span className="px-2 py-0.5 bg-red-600 text-white text-[9px] font-black uppercase tracking-widest rounded-md animate-pulse">Important</span>
+                      )}
+                      <div className="flex items-center gap-1 text-[11px] font-bold text-slate-400 uppercase tracking-widest ml-auto">
                         <Calendar size={12} /> {notice.date || notice.noticedate ? (notice.date?.includes('/') ? notice.date : new Date(notice.date || notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })) : 'Unknown Date'}
                       </div>
                     </div>
