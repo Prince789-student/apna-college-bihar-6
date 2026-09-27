@@ -24,6 +24,8 @@ import {
 import { fetchCloudMentorshipData, subscribeMentorshipUpdates } from '../services/mentorshipSync';
 import MentorshipChat from '../components/MentorshipChat';
 import { subscribePresence } from '../services/mentorshipChatService';
+import { db } from '../firebase';
+import { collection, addDoc, query, where, onSnapshot, serverTimestamp } from 'firebase/firestore';
 
 // ─── BEU College Code Mapping ───────────────────────────────────────────────
 const BEU_COLLEGE_CODES = {
@@ -103,6 +105,95 @@ export default function FreeMentorship() {
   const [menteeModalTab, setMenteeModalTab] = useState('overview'); // 'overview' | 'logs' | 'goals'
   const [activeChatMentee, setActiveChatMentee] = useState(null);
   const [mentorMeetInput, setMentorMeetInput] = useState('');
+
+  // Mentor Group State
+  const [mentorGroups, setMentorGroups] = useState([]);
+  const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
+  const [creatingMentorGroup, setCreatingMentorGroup] = useState(false);
+  const [newGroupTitle, setNewGroupTitle] = useState('');
+  const [newGroupDesc, setNewGroupDesc] = useState('');
+
+  // Real-time listener for groups created by activeMentor
+  useEffect(() => {
+    if (!activeMentor) {
+      setMentorGroups([]);
+      return;
+    }
+
+    const mentorId = (activeMentor.id || activeMentor.email || '').toLowerCase();
+    const mentorName = (activeMentor.name || '').toLowerCase();
+
+    const unsub = onSnapshot(collection(db, 'groups'), (snap) => {
+      const allGroups = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const myGroups = allGroups.filter(g => {
+        const creator = (g.createdBy || g.mentorId || g.creatorName || '').toLowerCase();
+        return creator === mentorId || (mentorName && creator.includes(mentorName)) || g.isMentorGroup;
+      });
+      setMentorGroups(myGroups);
+    }, () => {});
+
+    return () => unsub();
+  }, [activeMentor]);
+
+  const handleCreateMentorGroup = async (e) => {
+    if (e) e.preventDefault();
+    if (!activeMentor) return;
+
+    try {
+      setCreatingMentorGroup(true);
+      const genCode = () => Math.random().toString(36).substring(2, 8).toUpperCase();
+      const code = genCode();
+
+      const isDeepak = (activeMentor.name || '').toLowerCase().includes('deepak');
+      const isSubhash = (activeMentor.name || '').toLowerCase().includes('subhash');
+      const isShivam = (activeMentor.name || '').toLowerCase().includes('shivam');
+      const isPiyush = (activeMentor.name || '').toLowerCase().includes('piyush');
+
+      const myMenteesList = enrolledList.filter(s => {
+        const sAssigned = (s.assignedMentorId || s.assignedMentor || '').trim().toLowerCase();
+        const mId = (activeMentor.id || '').trim().toLowerCase();
+        const mName = (activeMentor.name || '').trim().toLowerCase();
+        const mEmail = (activeMentor.email || '').trim().toLowerCase();
+
+        if (sAssigned) {
+          if (sAssigned === mId || sAssigned === mName || (mEmail && sAssigned === mEmail)) return true;
+          if (mName && (sAssigned.includes(mName) || mName.includes(sAssigned))) return true;
+        }
+        if (isDeepak && (sAssigned.includes('deepak') || sAssigned === 'mentor-cse-1789726326697')) return true;
+        if (isSubhash && (sAssigned.includes('subhash') || sAssigned === 'mentor-cse-1789731436566')) return true;
+        if (isShivam && (sAssigned.includes('shivam') || sAssigned === 'mentor-cse-shivam')) return true;
+        if (isPiyush && (sAssigned.includes('piyush') || sAssigned === 'mentor-cse-piyush')) return true;
+        return false;
+      });
+
+      const menteeIds = myMenteesList.map(s => s.id || s.roll).filter(Boolean);
+      const newGroup = {
+        name: newGroupTitle.trim() || `${activeMentor.name}'s BEU Guidance Group`,
+        description: newGroupDesc.trim() || `Official study, discussion & guidance group for senior mentor ${activeMentor.name} and assigned BEU mentees.`,
+        code,
+        createdBy: activeMentor.id || activeMentor.email || 'mentor',
+        creatorName: activeMentor.name,
+        isMentorGroup: true,
+        mentorId: activeMentor.id || activeMentor.email,
+        members: Array.from(new Set([activeMentor.id || activeMentor.email, ...menteeIds])),
+        memberCount: Math.max(1, menteeIds.length + 1),
+        maxMembers: 150,
+        meetingLink: (activeMentor.meetLink || '').trim(),
+        createdAt: serverTimestamp()
+      };
+
+      await addDoc(collection(db, 'groups'), newGroup);
+      toast.success(`Group "${newGroup.name}" created! Code: ${code} 🎉`);
+      setShowCreateGroupModal(false);
+      setNewGroupTitle('');
+      setNewGroupDesc('');
+    } catch (err) {
+      console.error("Error creating mentor group:", err);
+      toast.error("Failed to create group: " + err.message);
+    } finally {
+      setCreatingMentorGroup(false);
+    }
+  };
 
   // Study Tracker & Live Timer State
   const [studyLogs, setStudyLogs] = useState([]);
@@ -1247,6 +1338,82 @@ export default function FreeMentorship() {
                   </div>
                 </div>
 
+                {/* ── MENTOR STUDY GROUPS HUB SECTION ── */}
+                <div className="bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 text-white p-6 rounded-3xl border border-indigo-800/40 shadow-xl space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-black uppercase tracking-wider border border-indigo-400/30">
+                        <Users size={12} className="text-indigo-400" /> Mentor Group Hub
+                      </div>
+                      <h3 className="text-xl font-black text-white tracking-tight flex items-center gap-2">
+                        <span>👥 Assigned Mentees Batch Group</span>
+                        <span className="text-xs font-bold text-indigo-300 bg-white/10 px-2 py-0.5 rounded-full">
+                          {mentorGroups.length} Active {mentorGroups.length === 1 ? 'Group' : 'Groups'}
+                        </span>
+                      </h3>
+                      <p className="text-xs text-slate-300 font-medium max-w-xl">
+                        Aap apne sabhi assigned mentees ke saath 1-Click me official BEU Study Group create kar sakte hain taaki sabhi mentees ek saath doubt discussion aur padhai kar sakein.
+                      </p>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setNewGroupTitle(`${activeMentor.name}'s BEU Guidance Group`);
+                        setNewGroupDesc(`Official study, discussion & guidance group for senior mentor ${activeMentor.name} and assigned BEU mentees.`);
+                        setShowCreateGroupModal(true);
+                      }}
+                      className="px-5 py-3.5 bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/30 transition-all active:scale-95 shrink-0 self-start sm:self-auto cursor-pointer"
+                    >
+                      <Plus size={16} /> ➕ Create Group With Mentees
+                    </button>
+                  </div>
+
+                  {/* List of Mentor Groups */}
+                  {mentorGroups.length > 0 && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-white/10">
+                      {mentorGroups.map(g => (
+                        <div key={g.id} className="p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 space-y-3 transition-all">
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <h4 className="text-sm font-black text-white">{g.name}</h4>
+                              <span className="text-[10px] font-mono text-indigo-300 bg-indigo-500/20 px-2 py-0.5 rounded border border-indigo-400/30 mt-0.5 inline-block">
+                                Code: {g.code}
+                              </span>
+                            </div>
+                            <span className="text-xs font-black text-emerald-400 bg-emerald-500/20 px-2.5 py-1 rounded-xl border border-emerald-500/30 shrink-0">
+                              👥 {g.memberCount || g.members?.length || 1} Members
+                            </span>
+                          </div>
+
+                          <p className="text-xs text-slate-300 line-clamp-2">{g.description}</p>
+
+                          <div className="flex items-center gap-2 pt-1">
+                            <a
+                              href={`/groups/${g.id}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="flex-1 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-center rounded-xl text-xs font-black transition-colors flex items-center justify-center gap-1.5"
+                            >
+                              <ExternalLink size={14} /> Open Group Chat
+                            </a>
+
+                            <a
+                              href={`https://wa.me/?text=${encodeURIComponent(`Namaste Mentees! 👋\nMain ${activeMentor.name} (Aapka BEU Senior Mentor). Maine aap sabhi ke liye official BEU Study Group create kar diya hai:\n\n📌 Group Name: ${g.name}\n🔑 Join Code: ${g.code}\n🔗 Direct Join Link: ${window.location.origin}/groups?join=${g.code}\n\nAbhi join karke doubt discussion aur live study start karein!`)}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="py-2 px-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center gap-1.5"
+                              title="Share Join Link on WhatsApp"
+                            >
+                              <Share2 size={14} /> Share Link
+                            </a>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 {/* Toolbar */}
                 <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -2247,6 +2414,72 @@ export default function FreeMentorship() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Modal: Create Mentor Group */}
+      {showCreateGroupModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-5 shadow-2xl animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                <Users size={20} className="text-indigo-600" /> Create Mentee Study Group
+              </h3>
+              <button 
+                onClick={() => setShowCreateGroupModal(false)}
+                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateMentorGroup} className="space-y-4">
+              <div>
+                <label className="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1.5">Group Title</label>
+                <input 
+                  type="text" 
+                  required
+                  value={newGroupTitle}
+                  onChange={(e) => setNewGroupTitle(e.target.value)}
+                  placeholder="e.g. Subhash Kumar's BEU CSE Guidance Group"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-600"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-black uppercase tracking-wider text-slate-600 mb-1.5">Description / Note for Mentees</label>
+                <textarea 
+                  rows={3}
+                  value={newGroupDesc}
+                  onChange={(e) => setNewGroupDesc(e.target.value)}
+                  placeholder="e.g. Official study, discussion & guidance group for assigned BEU mentees."
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 focus:outline-none focus:border-indigo-600"
+                />
+              </div>
+
+              <div className="p-3 bg-indigo-50/70 border border-indigo-100 rounded-xl text-xs text-indigo-900 space-y-1">
+                <p className="font-bold">✨ Automatic Mentees Auto-Enrollment:</p>
+                <p className="text-slate-600">Aapke assigned mentees is group me automatically member link se access aur padhai kar sakenge.</p>
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowCreateGroupModal(false)}
+                  className="px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold hover:bg-slate-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={creatingMentorGroup}
+                  className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider shadow-md shadow-blue-500/20 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
+                >
+                  {creatingMentorGroup ? 'Creating Group...' : '🚀 Create Group Now'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
