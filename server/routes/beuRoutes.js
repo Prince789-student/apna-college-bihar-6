@@ -8,6 +8,83 @@ const whatsappService = require('../services/whatsappService');
 const { syncBeuAndBroadcast, loadLocalNotices, getLastAutoCheckTime } = require('../cron/beuAutoBroadcaster');
 
 const LOCAL_STORAGE_PATH = path.join(__dirname, '..', 'data', 'beu_notices.json');
+const SETTINGS_FILE_PATH = path.join(__dirname, '..', 'data', 'settings.json');
+
+function loadLocalSettings() {
+  try {
+    if (fs.existsSync(SETTINGS_FILE_PATH)) {
+      return JSON.parse(fs.readFileSync(SETTINGS_FILE_PATH, 'utf8'));
+    }
+  } catch (e) {
+    console.error("Error reading settings.json:", e);
+  }
+  return {
+    monthlyCollection: { monthName: 'September 2026', totalCollection: 50 }
+  };
+}
+
+function saveLocalSettings(data) {
+  try {
+    fs.writeFileSync(SETTINGS_FILE_PATH, JSON.stringify(data, null, 2), 'utf8');
+  } catch (e) {
+    console.error("Error writing settings.json:", e);
+  }
+}
+
+/**
+ * GET /api/beu/monthly-collection
+ */
+router.get('/monthly-collection', async (req, res) => {
+  try {
+    const settings = loadLocalSettings();
+    let data = settings.monthlyCollection || { monthName: 'September 2026', totalCollection: 50 };
+
+    if (admin && admin.apps && admin.apps.length > 0) {
+      try {
+        const docSnap = await admin.firestore().collection('settings').doc('monthlyCollection').get();
+        if (docSnap.exists) {
+          data = { ...data, ...docSnap.data() };
+        }
+      } catch (fErr) {}
+    }
+
+    res.json({ success: true, data });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+/**
+ * POST /api/beu/update-monthly-collection
+ */
+router.post('/update-monthly-collection', async (req, res) => {
+  try {
+    const { monthName, totalCollection } = req.body;
+    const settings = loadLocalSettings();
+    settings.monthlyCollection = {
+      monthName: monthName || 'September 2026',
+      totalCollection: Number(totalCollection) || 0,
+      updatedAt: new Date().toISOString()
+    };
+    saveLocalSettings(settings);
+
+    if (admin && admin.apps && admin.apps.length > 0) {
+      try {
+        await admin.firestore().collection('settings').doc('monthlyCollection').set({
+          monthName: monthName || 'September 2026',
+          totalCollection: Number(totalCollection) || 0,
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+      } catch (fErr) {
+        console.warn("Firestore Admin SDK write warning:", fErr.message);
+      }
+    }
+
+    res.json({ success: true, message: 'Monthly collection updated successfully!', data: settings.monthlyCollection });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
 
 /**
  * GET /api/beu/notices

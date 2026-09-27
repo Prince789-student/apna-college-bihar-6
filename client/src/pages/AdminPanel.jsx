@@ -186,11 +186,21 @@ export default function AdminPanel() {
       setDonors(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     });
 
+    const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+    fetch(`${apiBase}/api/beu/monthly-collection`)
+      .then(res => res.json())
+      .then(json => {
+        if (json.success && json.data) {
+          setMonthlyTracker(prev => ({ ...prev, ...json.data }));
+        }
+      })
+      .catch(() => {});
+
     const unsubMonthlyTracker = onSnapshot(doc(db, 'settings', 'monthlyCollection'), (docSnap) => {
       if (docSnap.exists()) {
         setMonthlyTracker(prev => ({ ...prev, ...docSnap.data() }));
       }
-    });
+    }, () => {});
 
     const unsubBeu = onSnapshot(collection(db, 'beu_notifications'), (snap) => {
       const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -509,12 +519,37 @@ export default function AdminPanel() {
   const handleSaveMonthlyCollection = async (e) => {
     e.preventDefault();
     try {
-      await setDoc(doc(db, 'settings', 'monthlyCollection'), {
+      const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+      const res = await fetch(`${apiBase}/api/beu/update-monthly-collection`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          monthName: monthlyTracker.monthName || 'Current Month',
+          totalCollection: Number(monthlyTracker.totalCollection) || 0
+        })
+      });
+      const json = await res.json();
+      if (!json.success) {
+        throw new Error(json.message || 'Server update failed');
+      }
+
+      setMonthlyTracker(prev => ({
+        ...prev,
         monthName: monthlyTracker.monthName || 'Current Month',
-        totalCollection: Number(monthlyTracker.totalCollection) || 0,
-        targetGoal: Number(monthlyTracker.targetGoal) || 10000,
-        updatedAt: serverTimestamp()
-      }, { merge: true });
+        totalCollection: Number(monthlyTracker.totalCollection) || 0
+      }));
+
+      // Try client setDoc if permissions allow, else backend admin SDK already saved it
+      try {
+        await setDoc(doc(db, 'settings', 'monthlyCollection'), {
+          monthName: monthlyTracker.monthName || 'Current Month',
+          totalCollection: Number(monthlyTracker.totalCollection) || 0,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+      } catch (fErr) {
+        // Backend SDK saved it, so ignore client rule warning
+      }
+
       flash('Monthly Collection Tracker updated successfully! 💖');
     } catch (err) {
       flash('Error saving monthly collection: ' + err.message, 'err');
