@@ -100,6 +100,7 @@ export default function FreeMentorship() {
   const [mentorBranchFilter, setMentorBranchFilter] = useState('ALL');
   const [mentorAssignmentFilter, setMentorAssignmentFilter] = useState('assigned'); // 'assigned'
   const [selectedMenteeLogs, setSelectedMenteeLogs] = useState(null);
+  const [menteeModalTab, setMenteeModalTab] = useState('overview'); // 'overview' | 'logs' | 'goals'
   const [activeChatMentee, setActiveChatMentee] = useState(null);
   const [mentorMeetInput, setMentorMeetInput] = useState('');
 
@@ -1907,6 +1908,7 @@ export default function FreeMentorship() {
       )}
 
       {/* ── Modal: Mentee Study Logs & Live Timer Records (Mentor View) ── */}
+      {/* ── Modal: Mentee's Full Study Tab & Logs View (Mentor Access) ── */}
       {selectedMenteeLogs && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 shadow-2xl animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
@@ -1914,119 +1916,224 @@ export default function FreeMentorship() {
             {/* Modal Header */}
             <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-2xl">
+                <div className="w-12 h-12 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-center justify-center text-2xl shrink-0">
                   {selectedMenteeLogs.branchCode === 'CSE' ? '💻' : selectedMenteeLogs.branchCode === 'ECE' ? '📡' : selectedMenteeLogs.branchCode === 'EEE' ? '🔋' : selectedMenteeLogs.branchCode === 'CE' ? '🏗️' : '⚙️'}
                 </div>
                 <div>
                   <h3 className="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
                     {selectedMenteeLogs.name}
                     <span className="text-[11px] font-mono font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md">
-                      {selectedMenteeLogs.roll}
+                      Roll: {selectedMenteeLogs.roll}
                     </span>
                   </h3>
                   <p className="text-xs text-slate-500 font-medium">
-                    {selectedMenteeLogs.college} · {selectedMenteeLogs.branch}
+                    🏛️ {selectedMenteeLogs.college} · {selectedMenteeLogs.branch}
                   </p>
                 </div>
               </div>
 
               <button 
                 onClick={() => setSelectedMenteeLogs(null)}
-                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200"
+                className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors"
               >
                 <X size={16} />
               </button>
             </div>
 
-            {/* Quick Stats of Mentee's Study */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-center">
-                <span className="block text-[10px] font-black uppercase text-slate-400">Total Hours</span>
-                <span className="text-base sm:text-lg font-black text-blue-600">
-                  {selectedMenteeLogs.logs && selectedMenteeLogs.logs.length > 0
-                    ? `${selectedMenteeLogs.logs.reduce((acc, curr) => acc + (parseFloat(curr.hours) || 0), 0).toFixed(1)} hrs`
-                    : '0.0 hrs'}
-                </span>
-              </div>
-              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-center">
-                <span className="block text-[10px] font-black uppercase text-slate-400">Topics Covered</span>
-                <span className="text-base sm:text-lg font-black text-emerald-600">
-                  {selectedMenteeLogs.logs?.length || 0}
-                </span>
-              </div>
-              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-center">
-                <span className="block text-[10px] font-black uppercase text-slate-400">Study Status</span>
-                <span className={`text-xs sm:text-sm font-black ${selectedMenteeLogs.logs && selectedMenteeLogs.logs.length > 0 ? 'text-indigo-600' : 'text-slate-400'}`}>
-                  {selectedMenteeLogs.logs && selectedMenteeLogs.logs.length > 0 ? 'Active 🔥' : 'No Logs Yet ⏳'}
-                </span>
-              </div>
-            </div>
+            {/* Modal Content Tabs */}
+            {(() => {
+              const logs = selectedMenteeLogs.logs || [];
+              const totalHours = logs.reduce((acc, curr) => acc + (parseFloat(curr.hours) || 0), 0);
+              
+              // Subject-wise stats map
+              const subjectMap = {};
+              logs.forEach(log => {
+                const sub = log.subject || 'General Study';
+                const hrs = parseFloat(log.hours) || 0;
+                if (!subjectMap[sub]) subjectMap[sub] = { hours: 0, count: 0 };
+                subjectMap[sub].hours += hrs;
+                subjectMap[sub].count += 1;
+              });
 
-            {/* Mentee Stated Goals & Expectations */}
-            <div className="p-4 bg-indigo-50/70 rounded-2xl border border-indigo-100 space-y-1.5 text-xs text-indigo-950">
-              <p>
-                <strong>🎯 Student Ke Goals:</strong> {selectedMenteeLogs.goals || 'Padhai me guidance (Achha CGPA kaise layein)'}
-              </p>
-              {selectedMenteeLogs.mentorExpectations && (
-                <p className="text-slate-600">
-                  <strong>💡 Mentor Se Expectations:</strong> "{selectedMenteeLogs.mentorExpectations}"
-                </p>
-              )}
-            </div>
-
-            {/* Study Logs & Timer History Table */}
-            <div className="space-y-3">
-              <h4 className="text-xs font-black uppercase tracking-widest text-slate-700 flex items-center justify-between">
-                <span>"Kya Padha, Kitna Padha" Record:</span>
-                <span className="text-[10px] text-slate-400 font-mono">Live Synced with Mentor</span>
-              </h4>
-
-              {(!selectedMenteeLogs.logs || selectedMenteeLogs.logs.length === 0) ? (
-                <div className="p-6 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-                  Is student ne abhi tak koi study log add nahi kiya hai.
-                </div>
-              ) : (
-                <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
-                  {selectedMenteeLogs.logs.map((log, idx) => (
-                    <div 
-                      key={log.id || idx}
-                      className="p-3.5 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-200 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+              return (
+                <>
+                  <div className="flex items-center gap-2 p-1.5 bg-slate-100 rounded-2xl">
+                    <button
+                      type="button"
+                      onClick={() => setMenteeModalTab('overview')}
+                      className={`flex-1 py-2 px-3 rounded-xl text-xs font-black transition-all ${menteeModalTab === 'overview' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
                     >
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs font-black text-slate-900">{log.subject}</span>
-                          {log.source && (
-                            <span className="px-2 py-0.5 rounded-md bg-purple-100 text-purple-700 font-black text-[9px] uppercase tracking-wider border border-purple-200 inline-flex items-center gap-1">
-                              <Sparkles size={10} /> {log.source}
-                            </span>
-                          )}
-                          <span className="text-[10px] font-bold text-slate-500 font-mono">
-                            · {log.date}
+                      📊 Study Breakdown
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setMenteeModalTab('logs')}
+                      className={`flex-1 py-2 px-3 rounded-xl text-xs font-black transition-all ${menteeModalTab === 'logs' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                    >
+                      📜 Study Logs ({logs.length})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setMenteeModalTab('goals')}
+                      className={`flex-1 py-2 px-3 rounded-xl text-xs font-black transition-all ${menteeModalTab === 'goals' ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                    >
+                      🎯 Goals & Expectations
+                    </button>
+                  </div>
+
+                  {/* Tab 1: Overview & Subject Breakdown */}
+                  {menteeModalTab === 'overview' && (
+                    <div className="space-y-5">
+                      {/* Quick Stats Grid */}
+                      <div className="grid grid-cols-3 gap-3">
+                        <div className="p-3.5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-blue-100 text-center">
+                          <span className="block text-[10px] font-black uppercase text-blue-600">Total Hours</span>
+                          <span className="text-lg sm:text-xl font-[1000] text-blue-900 mt-0.5 block">
+                            {totalHours.toFixed(1)} hrs
                           </span>
                         </div>
-                        <p className="text-xs text-slate-600 font-medium">
-                          {log.topic}
+                        <div className="p-3.5 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-2xl border border-emerald-100 text-center">
+                          <span className="block text-[10px] font-black uppercase text-emerald-600">Topics Covered</span>
+                          <span className="text-lg sm:text-xl font-[1000] text-emerald-900 mt-0.5 block">
+                            {logs.length}
+                          </span>
+                        </div>
+                        <div className="p-3.5 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl border border-purple-100 text-center">
+                          <span className="block text-[10px] font-black uppercase text-purple-600">Study Status</span>
+                          <span className={`text-xs sm:text-sm font-black mt-1 block ${logs.length > 0 ? 'text-purple-700' : 'text-slate-400'}`}>
+                            {logs.length > 0 ? 'Active 🔥' : 'No Logs Yet ⏳'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Subject-Wise Time Allocation */}
+                      <div className="space-y-2.5">
+                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-700 flex items-center justify-between">
+                          <span>📚 Subject-Wise Progress:</span>
+                          <span className="text-[10px] text-slate-400 font-medium">{Object.keys(subjectMap).length} Subjects</span>
+                        </h4>
+
+                        {Object.keys(subjectMap).length === 0 ? (
+                          <div className="p-4 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                            Is student ne abhi tak koi subject log add nahi kiya hai.
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            {Object.entries(subjectMap).map(([subject, data]) => (
+                              <div key={subject} className="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between">
+                                <div className="space-y-0.5">
+                                  <p className="text-xs font-black text-slate-900">{subject}</p>
+                                  <p className="text-[10px] text-slate-500 font-medium">{data.count} topic sessions</p>
+                                </div>
+                                <span className="px-2.5 py-1 bg-indigo-100 text-indigo-700 rounded-lg text-xs font-black">
+                                  {data.hours.toFixed(1)} hrs
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Stated Goals Summary */}
+                      <div className="p-4 bg-indigo-50/70 rounded-2xl border border-indigo-100 space-y-1 text-xs text-indigo-950">
+                        <p><strong>🎯 Student Goals:</strong> {selectedMenteeLogs.goals || 'Padhai me guidance (Achha CGPA kaise layein)'}</p>
+                        {selectedMenteeLogs.mentorExpectations && (
+                          <p className="text-slate-600"><strong>💡 Mentor Se Expectations:</strong> "{selectedMenteeLogs.mentorExpectations}"</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Tab 2: Detailed Logs History */}
+                  {menteeModalTab === 'logs' && (
+                    <div className="space-y-3">
+                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-700 flex items-center justify-between">
+                        <span>"Kya Padha, Kitna Padha" History:</span>
+                        <span className="text-[10px] text-slate-400 font-mono">Live Synced</span>
+                      </h4>
+
+                      {logs.length === 0 ? (
+                        <div className="p-8 text-center text-xs text-slate-400 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                          Is student ne abhi tak koi study log add nahi kiya hai.
+                        </div>
+                      ) : (
+                        <div className="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+                          {logs.map((log, idx) => (
+                            <div 
+                              key={log.id || idx}
+                              className="p-3.5 bg-slate-50 hover:bg-slate-100/80 rounded-2xl border border-slate-200 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                            >
+                              <div className="space-y-0.5">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="text-xs font-black text-slate-900">{log.subject}</span>
+                                  {log.source && (
+                                    <span className="px-2 py-0.5 rounded-md bg-purple-100 text-purple-700 font-black text-[9px] uppercase tracking-wider border border-purple-200 inline-flex items-center gap-1">
+                                      <Sparkles size={10} /> {log.source}
+                                    </span>
+                                  )}
+                                  <span className="text-[10px] font-bold text-slate-500 font-mono">
+                                    · {log.date}
+                                  </span>
+                                </div>
+                                <p className="text-xs text-slate-600 font-medium">
+                                  {log.topic}
+                                </p>
+                              </div>
+
+                              <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
+                                <span className="px-2.5 py-1 rounded-lg bg-blue-100/70 text-blue-700 font-black text-[11px]">
+                                  ⏱️ {log.hours} hrs {log.durationText ? `(${log.durationText})` : ''}
+                                </span>
+                                <span className="px-2.5 py-1 rounded-lg bg-emerald-100/70 text-emerald-700 font-black text-[10px]">
+                                  {log.status}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Tab 3: Goals & Guidance Expectations */}
+                  {menteeModalTab === 'goals' && (
+                    <div className="space-y-4 text-xs">
+                      <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
+                        <h4 className="font-black text-slate-900 text-sm flex items-center gap-2">
+                          <span>🎯 Student Goal & Vision</span>
+                        </h4>
+                        <p className="text-slate-700 font-medium leading-relaxed">
+                          {selectedMenteeLogs.goals || 'Padhai me guidance (Achha CGPA kaise layein, semester exam strategy)'}
                         </p>
                       </div>
 
-                      <div className="flex items-center gap-2 self-start sm:self-auto shrink-0">
-                        <span className="px-2.5 py-1 rounded-lg bg-blue-100/70 text-blue-700 font-black text-[11px]">
-                          ⏱️ {log.hours} hrs {log.durationText ? `(${log.durationText})` : ''}
-                        </span>
-                        <span className="px-2.5 py-1 rounded-lg bg-emerald-100/70 text-emerald-700 font-black text-[10px]">
-                          {log.status}
-                        </span>
+                      {selectedMenteeLogs.mentorExpectations && (
+                        <div className="p-4 bg-blue-50/60 rounded-2xl border border-blue-100 space-y-2">
+                          <h4 className="font-black text-blue-900 text-sm flex items-center gap-2">
+                            <span>💡 Expectations From Senior Mentor</span>
+                          </h4>
+                          <p className="text-blue-800 font-medium leading-relaxed">
+                            "{selectedMenteeLogs.mentorExpectations}"
+                          </p>
+                        </div>
+                      )}
+
+                      <div className="p-4 bg-amber-50/60 rounded-2xl border border-amber-200 space-y-1 text-amber-900">
+                        <p className="font-bold">📱 Mentee Contact Information:</p>
+                        <p className="text-slate-600">WhatsApp/Mobile: <strong>+91 {selectedMenteeLogs.whatsapp || 'N/A'}</strong></p>
+                        <p className="text-slate-600">College: <strong>{selectedMenteeLogs.college}</strong></p>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                  )}
+                </>
+              );
+            })()}
 
-            {/* Mentor Actions on Mentee */}
+            {/* Modal Footer Actions */}
             <div className="pt-2 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
                 <button
+                  type="button"
                   onClick={() => {
                     const student = selectedMenteeLogs;
                     setSelectedMenteeLogs(null);
@@ -2048,6 +2155,7 @@ export default function FreeMentorship() {
               </div>
 
               <button
+                type="button"
                 onClick={() => setSelectedMenteeLogs(null)}
                 className="w-full sm:w-auto px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all"
               >
