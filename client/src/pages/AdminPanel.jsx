@@ -1943,7 +1943,7 @@ if (!isAdmin) return (
             </div>
 
             <form onSubmit={handleSaveMonthlyCollection} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Month Name</label>
                   <input required value={monthlyTracker.monthName || ''} onChange={e => setMonthlyTracker({...monthlyTracker, monthName: e.target.value})} placeholder="e.g. September 2026" className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
@@ -1951,21 +1951,6 @@ if (!isAdmin) return (
                 <div>
                   <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Total Monthly Collection (₹)</label>
                   <input required type="number" value={monthlyTracker.totalCollection || ''} onChange={e => setMonthlyTracker({...monthlyTracker, totalCollection: e.target.value})} placeholder="e.g. 15400" className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
-                </div>
-                <div>
-                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Monthly Target Goal (₹)</label>
-                  <input required type="number" value={monthlyTracker.targetGoal || ''} onChange={e => setMonthlyTracker({...monthlyTracker, targetGoal: e.target.value})} placeholder="e.g. 20000" className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
-                </div>
-              </div>
-
-              {/* Live Collection Progress Preview */}
-              <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
-                <div className="flex items-center justify-between text-xs font-bold text-slate-700 mb-2">
-                  <span>Collection Progress: ₹{monthlyTracker.totalCollection || 0} / ₹{monthlyTracker.targetGoal || 10000}</span>
-                  <span className="text-indigo-600 font-mono font-black">{Math.min(100, Math.round(((Number(monthlyTracker.totalCollection) || 0) / (Number(monthlyTracker.targetGoal) || 1)) * 100))}% Achieved</span>
-                </div>
-                <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-emerald-500 to-indigo-600 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, Math.round(((Number(monthlyTracker.totalCollection) || 0) / (Number(monthlyTracker.targetGoal) || 1)) * 100))}%` }}></div>
                 </div>
               </div>
 
