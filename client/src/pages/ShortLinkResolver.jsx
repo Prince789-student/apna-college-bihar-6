@@ -10,6 +10,21 @@ export default function ShortLinkResolver() {
   useEffect(() => {
     async function resolveLink() {
       try {
+        // 1. Try server API first (bypasses Firestore client-side security rules)
+        try {
+          const res = await fetch(`/api/shortlinks/${shortId}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success && data.longUrl) {
+              window.location.replace(data.longUrl);
+              return;
+            }
+          }
+        } catch (apiErr) {
+          console.warn("API shortlink error, falling back to client firestore:", apiErr);
+        }
+
+        // 2. Fallback to client-side Firestore
         const docRef = doc(db, 'shortlinks', shortId);
         const docSnap = await getDoc(docRef);
 

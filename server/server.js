@@ -136,6 +136,43 @@ app.use('/api/', limiter);
 const publicPath = path.join(__dirname, 'public');
 app.use(express.static(publicPath));
 
+// SHORTLINK REDIRECT ROUTE (Direct & Fast 302 Redirect to YouTube / target)
+app.get('/p/:shortId', async (req, res, next) => {
+    try {
+        const { shortId } = req.params;
+        const adminSdk = require('./firebaseAdmin');
+        if (adminSdk && adminSdk.apps && adminSdk.apps.length) {
+            const db = adminSdk.firestore();
+            const docSnap = await db.collection('shortlinks').doc(shortId).get();
+            if (docSnap.exists && docSnap.data().longUrl) {
+                return res.redirect(302, docSnap.data().longUrl);
+            }
+        }
+    } catch (err) {
+        console.error('Error resolving shortlink redirect:', err.message);
+    }
+    next();
+});
+
+// SHORTLINK API LOOKUP (For Client SPA / fallback)
+app.get('/api/shortlinks/:shortId', async (req, res) => {
+    try {
+        const { shortId } = req.params;
+        const adminSdk = require('./firebaseAdmin');
+        if (!adminSdk || !adminSdk.apps || !adminSdk.apps.length) {
+            return res.status(500).json({ error: 'Firebase Admin not ready' });
+        }
+        const db = adminSdk.firestore();
+        const docSnap = await db.collection('shortlinks').doc(shortId).get();
+        if (docSnap.exists && docSnap.data().longUrl) {
+            return res.json({ success: true, longUrl: docSnap.data().longUrl });
+        }
+        return res.status(404).json({ success: false, message: 'Shortlink not found' });
+    } catch (err) {
+        return res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 // 4. API Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/documents', require('./routes/documentRoutes'));
