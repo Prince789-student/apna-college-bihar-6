@@ -97,12 +97,18 @@ export function AuthProvider({ children }) {
     try {
       const basePayload = {
         uid: u.uid,
-        name: u.displayName || 'Scholar',
         email: u.email || '',
         phone: u.phoneNumber || '',
-        role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT,
         lastLogin: serverTimestamp()
       };
+      // Only set founder super admin role; do NOT overwrite existing ADMIN or custom roles with STUDENT
+      if (isFounder) {
+        basePayload.role = ROLES.SUPER_ADMIN;
+      }
+      const cachedRaw = localStorage.getItem(USER_CACHE_KEY);
+      if (!cachedRaw) {
+        basePayload.name = u.displayName || 'Scholar';
+      }
       await setDoc(docRef, basePayload, { merge: true });
     } catch (writeErr) {
       console.warn("[AUTH] Base profile write warning:", writeErr?.code || writeErr?.message);
@@ -118,10 +124,29 @@ export function AuthProvider({ children }) {
            await setDoc(docRef, { role: ROLES.SUPER_ADMIN }, { merge: true });
            finalData = { ...u, ...userData, role: ROLES.SUPER_ADMIN };
         } else {
+           if (!userData.role) {
+             userData.role = ROLES.STUDENT;
+             await setDoc(docRef, { role: ROLES.STUDENT }, { merge: true });
+           }
            finalData = { ...u, ...userData };
         }
         setUser(finalData);
         localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ ...userData, uid: u.uid }));
+      } else {
+        // Complete brand new user document
+        const newUserData = {
+          uid: u.uid,
+          name: u.displayName || 'Scholar',
+          email: u.email || '',
+          phone: u.phoneNumber || '',
+          role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT,
+          createdAt: serverTimestamp(),
+          groupsCreatedToday: 0,
+          lastGroupCreateDate: null
+        };
+        await setDoc(docRef, newUserData, { merge: true });
+        setUser({ ...u, ...newUserData });
+        localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ ...newUserData, uid: u.uid }));
       }
     } catch (readErr) {
       console.warn("[AUTH] Firestore profile read failed (quota or offline):", readErr?.code || readErr?.message);
