@@ -20,6 +20,7 @@ export default function CollegeDirectory() {
         college.name.toLowerCase().includes(term) ||
         college.shortName.toLowerCase().includes(term) ||
         college.location.toLowerCase().includes(term) ||
+        (college.district && college.district.toLowerCase().includes(term)) ||
         slug.includes(term)
       );
     });

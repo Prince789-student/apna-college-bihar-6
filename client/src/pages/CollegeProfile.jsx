@@ -3,7 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { 
   Building2, MapPin, Calendar, CheckCircle, ExternalLink, Download, 
   ChevronRight, Users, BookOpen, Monitor, Home, Activity, Heart, Wifi,
-  Target, TrendingUp, Award, Clock, FileText, ArrowRight, Shield, Globe, Layers
+  Target, TrendingUp, Award, Clock, FileText, ArrowRight, Shield, Globe, Layers,
+  Phone, Mail, UserCheck, Quote, GraduationCap
 } from 'lucide-react';
 import { collegeData } from '../data/collegeData';
 import { colleges } from '../UgeacData';
@@ -317,6 +318,110 @@ export default function CollegeProfile() {
                   </div>
                 </section>
 
+                {/* PRINCIPAL'S DESK */}
+                {college.principal && college.principal.name && (
+                  <section className="bg-gradient-to-br from-slate-900 to-indigo-950 text-white p-6 md:p-8 rounded-3xl relative overflow-hidden shadow-xl">
+                    <div className="absolute top-4 right-6 text-white/10 pointer-events-none">
+                      <Quote size={80} />
+                    </div>
+                    <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-6">
+                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center text-white shrink-0 shadow-lg shadow-blue-500/20">
+                        <GraduationCap size={32} />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="px-2.5 py-0.5 bg-blue-500/20 text-blue-300 border border-blue-400/30 rounded-full text-[9px] font-black uppercase tracking-widest">
+                            From Principal's Desk
+                          </span>
+                        </div>
+                        <h3 className="text-xl md:text-2xl font-[1000] tracking-tight text-white mb-1">
+                          {college.principal.name}
+                        </h3>
+                        <p className="text-blue-300 text-xs font-bold uppercase tracking-wider mb-3">
+                          {college.principal.designation}
+                        </p>
+                        <p className="text-slate-300 text-sm leading-relaxed italic">
+                          "{college.principal.message}"
+                        </p>
+                      </div>
+                    </div>
+                  </section>
+                )}
+
+                {/* APPROVED SEAT MATRIX */}
+                {college.seatMatrix && college.seatMatrix.length > 0 && (
+                  <section className="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl">
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 className="text-xl font-[1000] text-slate-900 uppercase tracking-tighter">Approved Branch Seat Matrix</h2>
+                        <p className="text-xs text-slate-500 font-medium mt-1">Official intake approved by AICTE & Bihar Engineering University (BEU)</p>
+                      </div>
+                      <span className="px-3 py-1 bg-blue-50 text-blue-700 font-black text-xs rounded-xl border border-blue-200">
+                        Total {college.seatMatrix.reduce((acc, curr) => acc + (curr.seats || 0), 0)} Seats
+                      </span>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-sm whitespace-nowrap">
+                        <thead className="bg-slate-50 text-[10px] font-black uppercase tracking-widest text-slate-500 border-b border-slate-200">
+                          <tr>
+                            <th className="p-3.5">Branch / Discipline</th>
+                            <th className="p-3.5 text-right">Intake Capacity</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 font-semibold text-slate-700">
+                          {college.seatMatrix.map((item, idx) => (
+                            <tr key={idx} className="hover:bg-slate-50/80 transition-colors">
+                              <td className="p-3.5 text-slate-900 font-bold">{item.branch}</td>
+                              <td className="p-3.5 text-right font-mono font-black text-blue-600">{item.seats} Seats</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </section>
+                )}
+
+                {/* BIHAR GOVT SUBSIDIZED FEE STRUCTURE */}
+                {college.feeStructure && (
+                  <section className="bg-white border border-slate-200 p-6 md:p-8 rounded-3xl">
+                    <h2 className="text-xl font-[1000] text-slate-900 uppercase tracking-tighter mb-2">Government Subsidized Fee Structure</h2>
+                    <p className="text-xs text-slate-500 font-medium mb-6">Standard Bihar Government engineering fee schedule as per DSTTE Bihar & BEU Patna norms.</p>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                      <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-1">State Tuition Fee</span>
+                        <span className="text-base font-extrabold text-emerald-600">{college.feeStructure.tuitionFee}</span>
+                        <p className="text-[10px] text-slate-500 mt-1">₹10/mo - Highly subsidized by Bihar Govt</p>
+                      </div>
+                      <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-1">Admission Fee</span>
+                        <span className="text-base font-extrabold text-slate-900">{college.feeStructure.admissionFee}</span>
+                        <p className="text-[10px] text-slate-500 mt-1">One-time registration & college welfare</p>
+                      </div>
+                      <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-1">BEU Exam Fee</span>
+                        <span className="text-base font-extrabold text-slate-900">{college.feeStructure.examFee}</span>
+                        <p className="text-[10px] text-slate-500 mt-1">Paid per semester directly to BEU Patna</p>
+                      </div>
+                      <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-1">Hostel Room Rent</span>
+                        <span className="text-base font-extrabold text-slate-900">{college.feeStructure.hostelFee}</span>
+                        <p className="text-[10px] text-slate-500 mt-1">Govt hostel maintenance & electricity</p>
+                      </div>
+                      <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 block mb-1">Monthly Mess Charge</span>
+                        <span className="text-base font-extrabold text-slate-900">{college.feeStructure.messCharges}</span>
+                        <p className="text-[10px] text-slate-500 mt-1">Cooperative student-managed mess</p>
+                      </div>
+                      <div className="p-4 bg-blue-50/60 border border-blue-200 rounded-2xl">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-blue-600 block mb-1">Estimated Annual Total</span>
+                        <span className="text-base font-extrabold text-blue-700">{college.feeStructure.totalDayScholar}</span>
+                        <p className="text-[10px] text-blue-600/80 mt-1">{college.feeStructure.totalHosteller} (Hosteller)</p>
+                      </div>
+                    </div>
+                  </section>
+                )}
+
                 {/* 10. COLLEGE GALLERY (Preview) */}
                 {college.gallery && college.gallery.length > 0 && (
                   <section>
@@ -324,7 +429,7 @@ export default function CollegeProfile() {
                     <div className="grid grid-cols-2 gap-4">
                       {college.gallery.map((img, idx) => (
                         <div key={idx} className={`rounded-2xl overflow-hidden h-48 ${idx === 0 ? 'col-span-2' : ''}`}>
-                          <img src={img} alt="Campus" className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                          <img src={img} alt={`${college.shortName} Campus Photo ${idx+1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
                         </div>
                       ))}
                     </div>
@@ -601,6 +706,75 @@ export default function CollegeProfile() {
                 ))}
               </div>
             </div>
+
+            {/* OFFICIAL CONTACT DIRECTORY */}
+            {college.contact && (
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+                <h3 className="text-[11px] font-black uppercase tracking-widest text-slate-900 mb-4 flex items-center gap-2">
+                  <Phone size={14} className="text-blue-600"/> Official Contact Info
+                </h3>
+                <div className="space-y-4">
+                  {college.contact.address && (
+                    <div className="flex items-start gap-3">
+                      <MapPin size={16} className="text-slate-400 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Campus Address</p>
+                        <p className="text-xs font-semibold text-slate-700 leading-snug mt-0.5">{college.contact.address}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {college.contact.phones && college.contact.phones.length > 0 && (
+                    <div className="flex items-start gap-3">
+                      <Phone size={16} className="text-slate-400 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Helpline / Phone</p>
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          {college.contact.phones.map((ph, i) => (
+                            <a 
+                              key={i} 
+                              href={`tel:${ph.replace(/\s+/g, '')}`} 
+                              className="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-xs font-bold transition-colors"
+                            >
+                              {ph}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {college.contact.emails && college.contact.emails.length > 0 && (
+                    <div className="flex items-start gap-3">
+                      <Mail size={16} className="text-slate-400 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Official Email</p>
+                        <div className="flex flex-col gap-1 mt-1">
+                          {college.contact.emails.map((em, i) => (
+                            <a 
+                              key={i} 
+                              href={`mailto:${em}`} 
+                              className="text-xs font-bold text-blue-600 hover:underline break-all"
+                            >
+                              {em}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <a 
+                    href={college.website} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="w-full mt-2 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-900 hover:bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md"
+                  >
+                    <Globe size={14} /> Visit Official Portal
+                  </a>
+                </div>
+              </div>
+            )}
 
             {/* 12. LOCATION */}
             <div className="bg-white border border-slate-200 rounded-3xl p-6 overflow-hidden">
