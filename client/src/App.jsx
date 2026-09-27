@@ -91,6 +91,7 @@ function GlobalProfilePrompt() {
   const [admissionYear, setAdmissionYear] = useState('');
   const [dob, setDob] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -104,18 +105,26 @@ function GlobalProfilePrompt() {
     }
   }, [user]);
 
-  const needsProfileUpdate = user && (
+  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin' || user?.email === 'prince86944@gmail.com';
+  const isSkipped = dismissed || localStorage.getItem('profile_prompt_dismissed') === 'true';
+  const isCompleted = user?.profileCompleted === true || user?.profileCompleted === "true";
+
+  const needsProfileUpdate = user && !isAdmin && !isSkipped && !isCompleted && (
     (!user?.phone || user?.phone?.trim() === "" || user?.phone === "NOT LINKED") ||
     (!user?.name || user?.name?.trim() === "" || user?.name === "Scholar") ||
     (!user?.collegeName || user?.collegeName?.trim() === "") ||
     (!user?.district || user?.district?.trim() === "") ||
     (!user?.branch || user?.branch?.trim() === "") ||
     (!user?.admissionYear || user?.admissionYear?.trim() === "") ||
-    (!user?.dob || user?.dob?.trim() === "") ||
-    (user?.wantsCall === undefined)
+    (!user?.dob || user?.dob?.trim() === "")
   );
 
   if (!needsProfileUpdate) return null;
+
+  const handleDismiss = () => {
+    localStorage.setItem('profile_prompt_dismissed', 'true');
+    setDismissed(true);
+  };
 
   const handleNextStep = async (e) => {
     e.preventDefault();
@@ -136,7 +145,8 @@ function GlobalProfilePrompt() {
         phone: phoneNumber,
         branch: branch.trim(),
         admissionYear: admissionYear.trim(),
-        dob: dob.trim()
+        dob: dob.trim(),
+        profileCompleted: true
       });
       setStep(2);
     } catch (err) {
@@ -150,8 +160,11 @@ function GlobalProfilePrompt() {
     setIsSubmitting(true);
     try {
       await updateProfileData({
-        wantsCall: wantsCallValue
+        wantsCall: wantsCallValue,
+        profileCompleted: true
       });
+      localStorage.setItem('profile_prompt_dismissed', 'true');
+      setDismissed(true);
       toast.success("Profile setup completed successfully!");
     } catch (err) {
       toast.error("Failed to save preference. Try again.");
@@ -163,6 +176,13 @@ function GlobalProfilePrompt() {
   return (
     <div className="fixed inset-0 z-[99999] bg-[#0a0f1d]/95 backdrop-blur-md flex items-center justify-center p-4 font-['Inter'] animate-in fade-in duration-300">
       <div className="bg-white border border-slate-200/50 p-8 md:p-12 rounded-[2.5rem] shadow-2xl max-w-[450px] w-full relative overflow-hidden group">
+        <button
+          onClick={handleDismiss}
+          className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center bg-slate-100 rounded-full text-slate-400 hover:bg-slate-200 hover:text-slate-800 transition-colors z-20 font-black text-sm"
+          title="Close / Skip for now"
+        >
+          ✕
+        </button>
         <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 blur-[50px] rounded-full"></div>
         <div className="relative z-10 flex flex-col items-center">
           
@@ -212,6 +232,13 @@ function GlobalProfilePrompt() {
                   Save & Continue
                 </button>
               </form>
+
+              <button
+                onClick={handleDismiss}
+                className="mt-3 text-slate-400 hover:text-slate-600 text-[10px] font-black uppercase tracking-widest transition-colors"
+              >
+                Skip for now
+              </button>
             </>
           ) : (
             <>
