@@ -14,12 +14,14 @@ import toast from 'react-hot-toast';
 import { useStudy } from '../context/StudyContext';
 import { 
   findStudent, 
+  findInactiveStudent,
   getEnrolledStudents, 
   saveEnrolledStudents,
   getMentorsList,
   saveMentorsList,
   verifyStudentLogin,
-  verifyMentorLogin
+  verifyMentorLogin,
+  INITIAL_ENROLLED_STUDENTS
 } from '../data/mentorshipData';
 import { fetchCloudMentorshipData, subscribeMentorshipUpdates } from '../services/mentorshipSync';
 import MentorshipChat from '../components/MentorshipChat';
@@ -90,6 +92,7 @@ export default function FreeMentorship() {
   const [loginPassword, setLoginPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [removedStudentModal, setRemovedStudentModal] = useState(null);
 
   // Mentor Login Form State
   const [mentorEmail, setMentorEmail] = useState('');
@@ -265,7 +268,14 @@ export default function FreeMentorship() {
       const savedRoll = localStorage.getItem('beu_mentorship_active_roll');
       if (savedRoll) {
         const freshStu = findStudent(savedRoll);
-        if (freshStu) setLoggedInStudent(freshStu, mentorsListFresh || mentors);
+        if (freshStu) {
+          setLoggedInStudent(freshStu, mentorsListFresh || mentors);
+        } else if (findInactiveStudent(savedRoll)) {
+          localStorage.removeItem('beu_mentorship_active_roll');
+          localStorage.removeItem('beu_mentorship_active_student_name');
+          localStorage.removeItem('beu_mentorship_active_mentor_name');
+          setActiveStudent(null);
+        }
       }
     }).catch(() => {});
 
@@ -276,7 +286,14 @@ export default function FreeMentorship() {
         const savedRoll = localStorage.getItem('beu_mentorship_active_roll');
         if (savedRoll) {
           const freshStu = findStudent(savedRoll);
-          if (freshStu) setLoggedInStudent(freshStu, updatedMentors || mentors);
+          if (freshStu) {
+            setLoggedInStudent(freshStu, updatedMentors || mentors);
+          } else if (findInactiveStudent(savedRoll)) {
+            localStorage.removeItem('beu_mentorship_active_roll');
+            localStorage.removeItem('beu_mentorship_active_student_name');
+            localStorage.removeItem('beu_mentorship_active_mentor_name');
+            setActiveStudent(null);
+          }
         }
       }
       if (updatedMentors && updatedMentors.length > 0) {
@@ -290,6 +307,11 @@ export default function FreeMentorship() {
       const student = findStudent(savedRoll);
       if (student) {
         setLoggedInStudent(student, mentors);
+      } else if (findInactiveStudent(savedRoll)) {
+        localStorage.removeItem('beu_mentorship_active_roll');
+        localStorage.removeItem('beu_mentorship_active_student_name');
+        localStorage.removeItem('beu_mentorship_active_mentor_name');
+        setActiveStudent(null);
       }
     }
 
@@ -358,10 +380,18 @@ export default function FreeMentorship() {
     const mentorsPool = (mentors && mentors.length > 0) ? mentors : getMentorsList();
     let mentor = null;
 
-    if (stu.assignedMentorId && mentorsPool && mentorsPool.length > 0) {
-      const assignedLower = (stu.assignedMentorId || '').toLowerCase();
+    let assignedId = stu.assignedMentorId;
+    if (!assignedId) {
+      const match = INITIAL_ENROLLED_STUDENTS.find(s => s.id === stu.id || s.roll === stu.roll || s.studentId === stu.studentId);
+      if (match && match.assignedMentorId) {
+        assignedId = match.assignedMentorId;
+      }
+    }
+
+    if (assignedId && mentorsPool && mentorsPool.length > 0) {
+      const assignedLower = assignedId.toLowerCase();
       mentor = mentorsPool.find(m => {
-        if (m.id === stu.assignedMentorId) return true;
+        if (m.id === assignedId) return true;
         if (assignedLower.includes('deepak') && (m.name?.toLowerCase().includes('deepak') || m.id?.includes('deepak'))) return true;
         if (assignedLower.includes('subhash') && (m.name?.toLowerCase().includes('subhash') || m.id?.includes('subhash'))) return true;
         if (assignedLower.includes('shivam') && (m.name?.toLowerCase().includes('shivam') || m.id?.includes('shivam'))) return true;
@@ -369,8 +399,6 @@ export default function FreeMentorship() {
         return false;
       }) || null;
     }
-
-    // Strictly honor Admin Panel assignment. If stu.assignedMentorId is null, mentor remains null (Pending)
 
     const studentData = {
       ...stu,
@@ -485,7 +513,12 @@ export default function FreeMentorship() {
         setLoggedInStudent(result.student);
         toast.success(`Welcome ${result.student.name}! Dashboard khul gaya.`);
       } else {
-        toast.error(result.message || 'Login failed!');
+        if (result.isRemoved || result.isInactive) {
+          setRemovedStudentModal(result.student || { name: loginRoll.trim(), roll: loginRoll.trim() });
+          toast.error(result.message || 'You are removed from this mentorship.', { duration: 9000 });
+        } else {
+          toast.error(result.message || 'Login failed!');
+        }
       }
       setIsSubmitting(false);
     }, 400);
@@ -2480,6 +2513,61 @@ export default function FreeMentorship() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ── Removed / Inactive Student Notice Modal ── */}
+      {removedStudentModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="bg-slate-900 border border-red-500/40 rounded-3xl max-w-lg w-full p-6 sm:p-7 text-white shadow-2xl relative">
+            <button 
+              onClick={() => setRemovedStudentModal(null)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white text-xl p-1.5 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+            >
+              ✕
+            </button>
+            <div className="flex items-center gap-3.5 mb-4 text-red-400">
+              <div className="w-12 h-12 rounded-2xl bg-red-500/20 border border-red-500/30 flex items-center justify-center text-2xl shadow-inner shadow-red-500/10">
+                ⚠️
+              </div>
+              <div>
+                <h3 className="font-black text-lg text-white">Mentorship Access Suspended</h3>
+                <p className="text-xs font-semibold text-red-400">Account Status: Removed / Inactive</p>
+              </div>
+            </div>
+            
+            <div className="bg-slate-800/90 rounded-2xl p-4 sm:p-5 border border-slate-700/80 mb-5 text-sm text-slate-200 leading-relaxed space-y-3">
+              <div className="flex justify-between items-center text-xs text-slate-400 pb-2 border-b border-slate-700/60">
+                <span>Student: <strong className="text-white">{removedStudentModal.name || 'Student'}</strong></span>
+                <span>Roll: <strong className="text-white">{removedStudentModal.roll || loginRoll}</strong></span>
+              </div>
+              <p className="text-sm sm:text-base text-red-200 font-semibold leading-relaxed">
+                "You are removed from this mentorship. Send application on <strong className="text-amber-300 underline font-black">Prince86944@gmail.com</strong> for rejoin with valid reason why you want to join."
+              </p>
+              <p className="text-xs text-slate-400">
+                Agar aap dobara BEU mentorship me judna chahte hain, toh apna valid reason likhkar niche diye gaye button se official email bhejein.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <a 
+                href={`mailto:Prince86944@gmail.com?subject=Mentorship%20Rejoin%20Application%20-%20${encodeURIComponent(removedStudentModal.name || loginRoll)}&body=Respected%20Admin,%0D%0A%0D%0AMy%20Name:%20${encodeURIComponent(removedStudentModal.name || '')}%0D%0ARoll%20Number:%20${encodeURIComponent(removedStudentModal.roll || loginRoll)}%0D%0ACollege:%20${encodeURIComponent(removedStudentModal.college || '')}%0D%0A%0D%0AValid%20reason%20why%20I%20want%20to%20rejoin%20the%20mentorship:%0D%0A[Please write your genuine reason here]%0D%0A%0D%0AThank%20you.`}
+                className="flex-1 bg-gradient-to-r from-red-600 via-rose-600 to-red-500 hover:from-red-500 hover:to-rose-500 text-white font-bold py-3 px-4 rounded-xl text-center text-xs sm:text-sm transition-all shadow-lg shadow-red-600/30 flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
+              >
+                <span>📧</span> Send Application via Email
+              </a>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText('Prince86944@gmail.com');
+                  toast.success('Email copied: Prince86944@gmail.com');
+                }}
+                className="bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold py-3 px-4 rounded-xl text-xs sm:text-sm transition-all border border-slate-700 flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+              >
+                <span>📋</span> Copy Email
+              </button>
+            </div>
           </div>
         </div>
       )}

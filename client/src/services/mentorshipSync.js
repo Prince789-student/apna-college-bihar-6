@@ -101,11 +101,16 @@ export async function fetchCloudMentorshipData() {
     return !DUMMY_REMOVED_IDS.has(s.id) && !cleanRemovedMap.has(s.id);
   });
 
-  // Ensure all INITIAL_ENROLLED_STUDENTS are in strictlyActive
+  // Ensure all INITIAL_ENROLLED_STUDENTS are in strictlyActive and have assigned mentor preserved
   const activeIds = new Set(strictlyActive.map(s => s.id));
   INITIAL_ENROLLED_STUDENTS.forEach(init => {
     if (!activeIds.has(init.id) && !cleanRemovedMap.has(init.id)) {
       strictlyActive.push(init);
+    } else {
+      const idx = strictlyActive.findIndex(s => s.id === init.id);
+      if (idx !== -1 && !strictlyActive[idx].assignedMentorId && init.assignedMentorId) {
+        strictlyActive[idx] = { ...strictlyActive[idx], assignedMentorId: init.assignedMentorId };
+      }
     }
   });
 
