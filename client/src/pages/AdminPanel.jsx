@@ -209,28 +209,37 @@ export default function AdminPanel() {
     };
   }, [isAdmin, authLoading]);
 
-  // ── SILENT AUTOMATIC SYNC FOR BEU NOTIFICATIONS ──
+  // ── SERVER BACKGROUND SYNC MONITOR FOR BEU NOTIFICATIONS ──
   useEffect(() => {
     if (!isAdmin || (tab !== 'beu_notices' && tab !== 'beu')) return;
 
     let isMounted = true;
-    const runSilentAutoSync = async () => {
+    const checkServerCronStatus = async () => {
       try {
         setAutoChecking(true);
-        const url = window.location.hostname === 'localhost' ? 'http://localhost:5000/api/admin/sync-beu' : 'https://apna-college-bihar-6.onrender.com/api/admin/sync-beu';
-        await fetch(url, { method: 'POST' });
-        if (isMounted) {
-          setLastAutoCheck(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }));
+        const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+        const res = await fetch(`${apiBase}/api/beu/notices`);
+        const json = await res.json();
+        if (json.success && isMounted) {
+          if (json.lastAutoCheck) {
+            const d = new Date(json.lastAutoCheck);
+            setLastAutoCheck(d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }));
+          } else {
+            setLastAutoCheck(new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }));
+          }
+          if (Array.isArray(json.notices)) {
+            setBeuNotifications(json.notices.filter(n => n.id !== '_meta'));
+          }
         }
       } catch (e) {
-        // silent background check
+        // silent status update
       } finally {
         if (isMounted) setAutoChecking(false);
       }
     };
 
-    runSilentAutoSync();
-    const interval = setInterval(runSilentAutoSync, 2 * 60 * 1000);
+    checkServerCronStatus();
+    const interval = setInterval(checkServerCronStatus, 30 * 1000);
     return () => {
       isMounted = false;
       clearInterval(interval);
@@ -1642,20 +1651,20 @@ if (!isAdmin) return (
               <div className="flex flex-wrap items-center gap-2">
                 <span className="flex items-center gap-1.5 px-3 py-1 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider rounded-full shadow-sm">
                   <span className="w-2 h-2 rounded-full bg-emerald-200 animate-ping"></span>
-                  🟢 24/7 Auto-Sync Chalu Hai
+                  🟢 24/7 Server Background Cron Active
                 </span>
                 <span className="text-[10px] text-slate-600 font-bold bg-white/80 border border-slate-200 px-3 py-1 rounded-full">
                   Total in Database: <b>{beuNotifications.length} Notices</b>
                 </span>
                 {lastAutoCheck && (
                   <span className="text-[10px] text-emerald-800 font-bold bg-emerald-100/80 border border-emerald-200 px-3 py-0.5 rounded-full flex items-center gap-1">
-                    ✓ Last auto-check: {lastAutoCheck} {autoChecking && '🔄'}
+                    ✓ Server Last Check: {lastAutoCheck} {autoChecking && '🔄'}
                   </span>
                 )}
               </div>
               <h2 className="text-xl md:text-2xl font-[1000] text-slate-900 uppercase tracking-tight">BEU Notification Sync & Management</h2>
               <p className="text-xs text-slate-700 font-medium max-w-2xl leading-relaxed">
-                ⚡ <b className="text-emerald-700 font-bold">Aapko manually Sync karne ki bilkul zaroorat nahi hai!</b> Hamara system background me har 2 minute me official BEU website check karta hai. Jaise hi naya notice aayega, ye yahan, website, Android app aur WhatsApp Channel par <b>apne aap live publish</b> ho jayega.
+                ⚡ <b className="text-emerald-700 font-bold">Aapke soye rehne par bhi humara server background me 24/7 har 2 minute me BEU website check karta hai!</b> Aapko manually Sync karne ki zaroorat nahi hai. Jaise hi naya notice aayega, ye yahan, website, Android app aur WhatsApp Channel par <b>apne aap live publish</b> ho jayega.
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-3">

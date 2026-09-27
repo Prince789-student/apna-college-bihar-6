@@ -35,6 +35,17 @@ function saveLocalNotices(data) {
 }
 
 let isRunning = false;
+let lastServerAutoCheckTimestamp = new Date().toISOString();
+
+function getLastAutoCheckTime() {
+  try {
+    const localCache = loadLocalNotices();
+    if (localCache._meta && localCache._meta.lastServerAutoCheck) {
+      return localCache._meta.lastServerAutoCheck;
+    }
+  } catch (e) {}
+  return lastServerAutoCheckTimestamp;
+}
 
 /**
  * Syncs BEU Notifications, runs AI analysis via Gemini 2.5 Flash,
@@ -47,11 +58,19 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
   }
 
   isRunning = true;
+  lastServerAutoCheckTimestamp = new Date().toISOString();
   console.log('[BEU Broadcaster] Starting BEU notice sync & AI WhatsApp pipeline...');
 
   try {
     const response = await axios.get(BEU_API_URL, { timeout: 30000 });
     const notices = response.data;
+
+    const localCache = loadLocalNotices();
+    localCache._meta = {
+      ...(localCache._meta || {}),
+      lastServerAutoCheck: lastServerAutoCheckTimestamp
+    };
+    saveLocalNotices(localCache);
 
     if (!Array.isArray(notices) || notices.length === 0) {
       console.log('[BEU Broadcaster] No notices returned by BEU API.');
@@ -60,8 +79,6 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
     }
 
     console.log(`[BEU Broadcaster] Fetched ${notices.length} notices from BEU.`);
-
-    const localCache = loadLocalNotices();
     const recentNotices = notices.slice(0, 10);
     let newNoticesCount = 0;
     let aiProcessedCount = 0;
@@ -277,17 +294,18 @@ function initBeuBroadcaster() {
     syncBeuAndBroadcast().catch(err => console.error('[BEU Broadcaster Startup Error]:', err.message));
   }, 6000);
 
-  // Run every 10 minutes: '*/10 * * * *' to preserve Firestore read quotas
-  cron.schedule('*/10 * * * *', () => {
-    console.log('[BEU Cron] Periodic 10-min check for new notices...');
+  // Run every 2 minutes: '*/2 * * * *' for 24/7 background sync
+  cron.schedule('*/2 * * * *', () => {
+    console.log('[BEU Cron] Continuous 2-min 24/7 background check for new BEU notices...');
     syncBeuAndBroadcast();
   });
 
-  console.log('✅ BEU Auto-Broadcaster Scheduled (Every 10 mins - Optimized Quota Mode)');
+  console.log('✅ BEU Auto-Broadcaster Scheduled (Every 2 mins - 24/7 Server Background Sync)');
 }
 
 module.exports = {
   syncBeuAndBroadcast,
   initBeuBroadcaster,
-  loadLocalNotices
+  loadLocalNotices,
+  getLastAutoCheckTime
 };

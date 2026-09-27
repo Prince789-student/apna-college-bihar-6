@@ -5,7 +5,7 @@ const path = require('path');
 const admin = require('../firebaseAdmin');
 const { generateWhatsAppCaption, CHANNEL_URL } = require('../services/beuAiService');
 const whatsappService = require('../services/whatsappService');
-const { syncBeuAndBroadcast, loadLocalNotices } = require('../cron/beuAutoBroadcaster');
+const { syncBeuAndBroadcast, loadLocalNotices, getLastAutoCheckTime } = require('../cron/beuAutoBroadcaster');
 
 const LOCAL_STORAGE_PATH = path.join(__dirname, '..', 'data', 'beu_notices.json');
 
@@ -16,7 +16,9 @@ const LOCAL_STORAGE_PATH = path.join(__dirname, '..', 'data', 'beu_notices.json'
 router.get('/notices', async (req, res) => {
   try {
     const localNotices = loadLocalNotices();
-    let noticesList = Object.values(localNotices);
+    let noticesList = Object.entries(localNotices)
+      .filter(([key]) => key !== '_meta')
+      .map(([, val]) => val);
 
     // If Firestore is available, attempt to merge with a 2000ms timeout
     if (admin && admin.apps && admin.apps.length > 0) {
@@ -27,16 +29,20 @@ router.get('/notices', async (req, res) => {
         snap.forEach(doc => {
           const data = doc.data();
           const id = String(data.id || doc.id);
-          if (!localNotices[id]) {
-            localNotices[id] = { id, ...data };
-          } else {
-            // merge captions if present
-            if (data.whatsappCaption && !localNotices[id].whatsappCaption) {
-              localNotices[id].whatsappCaption = data.whatsappCaption;
+          if (id !== '_meta') {
+            if (!localNotices[id]) {
+              localNotices[id] = { id, ...data };
+            } else {
+              // merge captions if present
+              if (data.whatsappCaption && !localNotices[id].whatsappCaption) {
+                localNotices[id].whatsappCaption = data.whatsappCaption;
+              }
             }
           }
         });
-        noticesList = Object.values(localNotices);
+        noticesList = Object.entries(localNotices)
+          .filter(([key]) => key !== '_meta')
+          .map(([, val]) => val);
       } catch (fsErr) {
         // Fallback to local cache seamlessly without blocking
       }
@@ -53,6 +59,7 @@ router.get('/notices', async (req, res) => {
       success: true,
       count: noticesList.length,
       channelUrl: CHANNEL_URL,
+      lastAutoCheck: getLastAutoCheckTime(),
       notices: noticesList
     });
   } catch (error) {
