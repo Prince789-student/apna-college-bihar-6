@@ -25,7 +25,9 @@ export default function AdminPanel() {
   const [tab, setTab] = useState('overview');
   const [users, setUsers] = useState([]);
   const [donors, setDonors] = useState([]);
-  const [newDonor, setNewDonor] = useState({ name: '', college: '', amount: '' });
+  const [newDonor, setNewDonor] = useState({ name: '', college: '', amount: '99', isMonthly: true, monthlyPlan: '₹99/month' });
+  const [donorFilter, setDonorFilter] = useState('all');
+  const [monthlyTracker, setMonthlyTracker] = useState({ monthName: 'September 2026', totalCollection: 0, targetGoal: 10000 });
   const [userSearch, setUserSearch] = useState('');
   const [userSortOrder, setUserSortOrder] = useState('newest');
   const [groups, setGroups] = useState([]);
@@ -182,6 +184,12 @@ export default function AdminPanel() {
 
     const unsubDonors = onSnapshot(query(collection(db, 'donors'), orderBy('amount', 'desc')), (snap) => {
       setDonors(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    });
+
+    const unsubMonthlyTracker = onSnapshot(doc(db, 'settings', 'monthlyCollection'), (docSnap) => {
+      if (docSnap.exists()) {
+        setMonthlyTracker(prev => ({ ...prev, ...docSnap.data() }));
+      }
     });
 
     const unsubBeu = onSnapshot(collection(db, 'beu_notifications'), (snap) => {
@@ -479,10 +487,12 @@ export default function AdminPanel() {
       await addDoc(collection(db, 'donors'), {
         ...newDonor,
         amount: Number(newDonor.amount),
+        isMonthly: !!newDonor.isMonthly,
+        monthlyPlan: newDonor.isMonthly ? (newDonor.monthlyPlan || 'Monthly Supporter') : 'One-Time',
         createdAt: serverTimestamp()
       });
       flash('Donor added successfully! 💖');
-      setNewDonor({ name: '', college: '', amount: '' });
+      setNewDonor({ name: '', college: '', amount: '99', isMonthly: true, monthlyPlan: '₹99/month' });
     } catch (err) {
       flash('Error: ' + err.message, 'err');
     } finally {
@@ -494,6 +504,21 @@ export default function AdminPanel() {
     if (!window.confirm('Remove this donor?')) return;
     await deleteDoc(doc(db, 'donors', id));
     flash('Donor removed');
+  };
+
+  const handleSaveMonthlyCollection = async (e) => {
+    e.preventDefault();
+    try {
+      await setDoc(doc(db, 'settings', 'monthlyCollection'), {
+        monthName: monthlyTracker.monthName || 'Current Month',
+        totalCollection: Number(monthlyTracker.totalCollection) || 0,
+        targetGoal: Number(monthlyTracker.targetGoal) || 10000,
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+      flash('Monthly Collection Tracker updated successfully! 💖');
+    } catch (err) {
+      flash('Error saving monthly collection: ' + err.message, 'err');
+    }
   };
 
   const navigateTo = (folder) => {
@@ -1873,44 +1898,217 @@ if (!isAdmin) return (
       {/* ── DONORS TAB ── */}
       {tab === 'donors' && (
         <div className="space-y-6 animate-in fade-in zoom-in duration-500">
-          <div className="bg-white p-6 md:p-8 border border-slate-200/80 rounded-[2rem] shadow-xl">
-            <h2 className="text-[13px] font-[1000] uppercase text-slate-800 tracking-widest mb-6 flex items-center gap-2">
-              <Heart size={16} className="text-rose-500" />
-              Add New Top Supporter
-            </h2>
-            <form onSubmit={handleAddDonor} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <input required placeholder="Donor Name" value={newDonor.name} onChange={e => setNewDonor({...newDonor, name: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-[13px] font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
-                <input required placeholder="College (e.g. MIT Muzaffarpur)" value={newDonor.college} onChange={e => setNewDonor({...newDonor, college: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-[13px] font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
-                <input required type="number" placeholder="Amount (₹)" value={newDonor.amount} onChange={e => setNewDonor({...newDonor, amount: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-[13px] font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
+          
+          {/* Monthly Donation Summary Header Banner */}
+          <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900 p-6 md:p-8 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-rose-500/10 blur-[80px] rounded-full pointer-events-none"></div>
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div>
+                <span className="px-3 py-1 bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-black uppercase tracking-widest rounded-full mb-3 inline-block">
+                  💖 Monthly Donation Hub
+                </span>
+                <h2 className="text-xl md:text-3xl font-[1000] uppercase tracking-tight">
+                  Apna College Bihar Supporters
+                </h2>
+                <p className="text-xs text-indigo-200 font-medium max-w-xl mt-1">
+                  Manage Monthly Recurring Supporters & One-Time Donors. Monthly subscriptions keep 24/7 college notice scrapers and WhatsApp bots running free for all BEU students!
+                </p>
               </div>
-              <button disabled={uploading} type="submit" className="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-[11px] font-[1000] tracking-widest uppercase disabled:opacity-50 transition-colors">
-                {uploading ? 'Processing...' : 'Add Supporter'}
+              <div className="flex items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/10 shrink-0">
+                <div className="text-right">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-indigo-200">This Month Total Collection</p>
+                  <p className="text-2xl font-[1000] text-emerald-400">
+                    ₹{monthlyTracker.totalCollection || 0} <span className="text-xs text-slate-300 font-bold">({monthlyTracker.monthName || 'Current Month'})</span>
+                  </p>
+                </div>
+                <div className="w-12 h-12 bg-rose-500/20 rounded-2xl flex items-center justify-center text-rose-400 text-xl font-bold">
+                  💖
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── THIS MONTH TOTAL COLLECTION MANAGER ── */}
+          <div className="bg-white p-6 md:p-8 border border-slate-200/80 rounded-[2rem] shadow-xl">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+              <div>
+                <h3 className="text-sm font-[1000] uppercase text-slate-800 tracking-widest flex items-center gap-2">
+                  <Sparkles size={18} className="text-amber-500" />
+                  Total Monthly Collection Manager ({monthlyTracker.monthName || 'Current Month'})
+                </h3>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mt-0.5">
+                  Is month me jitna total collection aayega, yhan update karein. Ye website & app par live show hoga.
+                </p>
+              </div>
+            </div>
+
+            <form onSubmit={handleSaveMonthlyCollection} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Month Name</label>
+                  <input required value={monthlyTracker.monthName || ''} onChange={e => setMonthlyTracker({...monthlyTracker, monthName: e.target.value})} placeholder="e.g. September 2026" className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Total Monthly Collection (₹)</label>
+                  <input required type="number" value={monthlyTracker.totalCollection || ''} onChange={e => setMonthlyTracker({...monthlyTracker, totalCollection: e.target.value})} placeholder="e.g. 15400" className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Monthly Target Goal (₹)</label>
+                  <input required type="number" value={monthlyTracker.targetGoal || ''} onChange={e => setMonthlyTracker({...monthlyTracker, targetGoal: e.target.value})} placeholder="e.g. 20000" className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
+                </div>
+              </div>
+
+              {/* Live Collection Progress Preview */}
+              <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                <div className="flex items-center justify-between text-xs font-bold text-slate-700 mb-2">
+                  <span>Collection Progress: ₹{monthlyTracker.totalCollection || 0} / ₹{monthlyTracker.targetGoal || 10000}</span>
+                  <span className="text-indigo-600 font-mono font-black">{Math.min(100, Math.round(((Number(monthlyTracker.totalCollection) || 0) / (Number(monthlyTracker.targetGoal) || 1)) * 100))}% Achieved</span>
+                </div>
+                <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-emerald-500 to-indigo-600 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, Math.round(((Number(monthlyTracker.totalCollection) || 0) / (Number(monthlyTracker.targetGoal) || 1)) * 100))}%` }}></div>
+                </div>
+              </div>
+
+              <button type="submit" className="px-6 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-[1000] tracking-widest uppercase transition-all shadow-md shadow-emerald-600/20 active:scale-95 cursor-pointer">
+                💾 Save & Update Monthly Collection
               </button>
             </form>
           </div>
 
+          {/* Form to Add Supporter */}
+          <div className="bg-white p-6 md:p-8 border border-slate-200/80 rounded-[2rem] shadow-xl">
+            <h3 className="text-sm font-[1000] uppercase text-slate-800 tracking-widest mb-6 flex items-center gap-2">
+              <Heart size={18} className="text-rose-500 fill-rose-500" />
+              Add New Top Supporter / Monthly Member
+            </h3>
+            <form onSubmit={handleAddDonor} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Donor Name</label>
+                  <input required placeholder="Full Name" value={newDonor.name} onChange={e => setNewDonor({...newDonor, name: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">College</label>
+                  <input required placeholder="College (e.g. MIT Muzaffarpur)" value={newDonor.college} onChange={e => setNewDonor({...newDonor, college: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Amount (₹)</label>
+                  <input required type="number" placeholder="Amount in ₹" value={newDonor.amount} onChange={e => setNewDonor({...newDonor, amount: e.target.value})} className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-bold text-slate-900 outline-none focus:border-indigo-500 transition-colors" />
+                </div>
+              </div>
+
+              {/* Monthly Supporter Selection */}
+              <div className="p-4 bg-slate-50 border border-slate-200/80 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    id="isMonthlyCheck"
+                    checked={newDonor.isMonthly}
+                    onChange={e => setNewDonor({...newDonor, isMonthly: e.target.checked})}
+                    className="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 cursor-pointer"
+                  />
+                  <label htmlFor="isMonthlyCheck" className="cursor-pointer">
+                    <span className="text-xs font-black text-slate-900 uppercase tracking-wider block">💖 Mark as Monthly Recurring Supporter</span>
+                    <span className="text-[10px] font-bold text-slate-500 block">Featured on Wall of Fame with Monthly Badge</span>
+                  </label>
+                </div>
+
+                {newDonor.isMonthly && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Monthly Plan:</span>
+                    <select
+                      value={newDonor.monthlyPlan}
+                      onChange={e => {
+                        const val = e.target.value;
+                        let amt = newDonor.amount;
+                        if (val.includes('49')) amt = '49';
+                        else if (val.includes('99')) amt = '99';
+                        else if (val.includes('199')) amt = '199';
+                        else if (val.includes('499')) amt = '499';
+                        setNewDonor({...newDonor, monthlyPlan: val, amount: amt});
+                      }}
+                      className="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 outline-none focus:border-indigo-500"
+                    >
+                      <option value="₹49/month">₹49/month (Bronze Supporter)</option>
+                      <option value="₹99/month">₹99/month (Silver Supporter)</option>
+                      <option value="₹199/month">₹199/month (Gold Supporter)</option>
+                      <option value="₹499/month">₹499/month (Platinum Patron)</option>
+                      <option value="Custom Monthly">Custom Monthly Plan</option>
+                    </select>
+                  </div>
+                )}
+              </div>
+
+              <button disabled={uploading} type="submit" className="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-[1000] tracking-widest uppercase disabled:opacity-50 transition-all shadow-lg shadow-indigo-500/20 active:scale-95 cursor-pointer">
+                {uploading ? 'Adding Supporter...' : 'Add Supporter to Wall of Fame'}
+              </button>
+            </form>
+          </div>
+
+          {/* Supporter List */}
           <div className="bg-white border border-slate-200/80 rounded-[2rem] shadow-xl overflow-hidden">
-            <div className="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
-              <h3 className="text-[11px] font-[1000] text-slate-900 uppercase tracking-[0.2em]">Donor List ({donors.length})</h3>
+            <div className="px-6 py-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <h3 className="text-xs font-[1000] text-slate-900 uppercase tracking-[0.2em]">
+                Wall of Fame Supporters ({donors.length})
+              </h3>
+              <div className="flex items-center bg-slate-100 p-1 rounded-xl">
+                <button
+                  onClick={() => setDonorFilter('all')}
+                  className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${donorFilter === 'all' ? 'bg-white text-indigo-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                >
+                  All ({donors.length})
+                </button>
+                <button
+                  onClick={() => setDonorFilter('monthly')}
+                  className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${donorFilter === 'monthly' ? 'bg-white text-rose-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                >
+                  💖 Monthly ({donors.filter(d => d.isMonthly).length})
+                </button>
+                <button
+                  onClick={() => setDonorFilter('onetime')}
+                  className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-lg transition-all ${donorFilter === 'onetime' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                >
+                  ⭐ One-Time ({donors.filter(d => !d.isMonthly).length})
+                </button>
+              </div>
             </div>
+            
             <div className="divide-y divide-slate-100">
-              {donors.map(d => (
+              {donors
+                .filter(d => {
+                  if (donorFilter === 'monthly') return d.isMonthly;
+                  if (donorFilter === 'onetime') return !d.isMonthly;
+                  return true;
+                })
+                .map(d => (
                 <div key={d.id} className="flex items-center justify-between px-6 py-4 hover:bg-slate-50/50 transition-colors">
                   <div className="flex-1 min-w-0">
-                    <p className="text-[14px] font-bold text-slate-800">{d.name}</p>
-                    <p className="text-[11px] text-slate-500 font-medium">{d.college}</p>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <p className="text-sm font-bold text-slate-800">{d.name}</p>
+                      {d.isMonthly ? (
+                        <span className="px-2 py-0.5 bg-rose-50 text-rose-600 border border-rose-200 text-[9px] font-black uppercase tracking-widest rounded-full">
+                          💖 Monthly Member ({d.monthlyPlan || 'Monthly'})
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 bg-blue-50 text-blue-600 border border-blue-200 text-[9px] font-black uppercase tracking-widest rounded-full">
+                          ⭐ One-Time Supporter
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[11px] text-slate-500 font-medium">🏛️ {d.college}</p>
                   </div>
                   <div className="flex items-center gap-4 ml-4">
-                    <span className="px-3 py-1 bg-green-50 text-green-600 border border-green-200 rounded-lg text-sm font-[900]">₹{d.amount}</span>
-                    <button onClick={() => deleteDonor(d.id)} className="p-2 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-lg transition-all">
-                      <Trash2 size={13}/>
+                    <span className="px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl text-xs font-[1000]">
+                      ₹{d.amount} {d.isMonthly ? '/mo' : ''}
+                    </span>
+                    <button onClick={() => deleteDonor(d.id)} className="p-2 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all cursor-pointer">
+                      <Trash2 size={14}/>
                     </button>
                   </div>
                 </div>
               ))}
               {donors.length === 0 && (
-                <div className="text-center py-12 text-slate-400 text-sm font-medium">Koi donor add nahi kiya gaya hai</div>
+                <div className="text-center py-12 text-slate-400 text-xs font-bold uppercase tracking-widest">Koi donor add nahi kiya gaya hai</div>
               )}
             </div>
           </div>
