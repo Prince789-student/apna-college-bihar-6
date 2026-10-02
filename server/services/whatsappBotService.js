@@ -9,10 +9,18 @@ const CHANNEL_INVITE_CODE = '0029VbC6FsH3wtb5UEDvrW0a';
 
 function getExecutablePath() {
   const candidates = [
+    // Windows paths (local dev)
     'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
     'C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe',
     'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
-    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe'
+    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+    // Linux paths (Render.com / Ubuntu / Debian cloud servers)
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/google-chrome',
+    '/usr/bin/chromium-browser',
+    '/usr/bin/chromium',
+    '/usr/local/bin/chromium',
+    '/snap/bin/chromium'
   ];
   return candidates.find(p => fs.existsSync(p)) || null;
 }
@@ -45,9 +53,6 @@ class WhatsAppBotService {
 
     try {
       const execPath = getExecutablePath();
-      if (!execPath) {
-        throw new Error('System browser not found on host machine.');
-      }
 
       if (!fs.existsSync(SESSION_DIR)) {
         fs.mkdirSync(SESSION_DIR, { recursive: true });
@@ -55,8 +60,8 @@ class WhatsAppBotService {
 
       cleanStaleSessionLocks();
 
-      this.browser = await puppeteer.launch({
-        executablePath: execPath,
+      // Build launch options — use system browser if found, else puppeteer bundled Chromium
+      const launchOptions = {
         headless: 'new',
         userDataDir: SESSION_DIR,
         args: [
@@ -64,16 +69,29 @@ class WhatsAppBotService {
           '--disable-setuid-sandbox',
           '--disable-dev-shm-usage',
           '--disable-gpu',
-          '--window-size=1366,768'
+          '--disable-software-rasterizer',
+          '--window-size=1366,768',
+          '--disable-extensions',
+          '--single-process'
         ]
-      });
+      };
+
+      if (execPath) {
+        console.log(`[WhatsApp Bot] Using system browser: ${execPath}`);
+        launchOptions.executablePath = execPath;
+      } else {
+        console.log('[WhatsApp Bot] No system browser found. Using puppeteer bundled Chromium...');
+        // puppeteer (not puppeteer-core) bundles its own Chromium — works on Render/Linux
+      }
+
+      this.browser = await puppeteer.launch(launchOptions);
 
       this.page = await this.browser.newPage();
       await this.page.setViewport({ width: 1366, height: 768 });
       await this.page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
 
       console.log('[WhatsApp Bot] Loading WhatsApp Web...');
-      await this.page.goto('https://web.whatsapp.com', { waitUntil: 'load', timeout: 60000 });
+      await this.page.goto('https://web.whatsapp.com', { waitUntil: 'load', timeout: 90000 });
 
       this.monitorSession();
       this.isStarting = false;
