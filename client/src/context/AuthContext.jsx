@@ -211,19 +211,24 @@ export function AuthProvider({ children }) {
       }
     }
 
-    // Electron Desktop App — Google BLOCKS signInWithPopup in embedded browsers
-    // Use signInWithRedirect which navigates the main window, then getRedirectResult()
-    // handles the result when the app reloads after Google redirects back
+    // Electron Desktop App — Use secure Desktop Bridge loopback login (browser-assisted)
+    // with popup fallback so user is never blocked or left stranded in Chrome
     const isElectron = typeof window !== 'undefined' && window.desktopBridge?.isDesktop;
     if (isElectron) {
+      if (window.desktopBridge?.startGoogleLogin) {
+        try {
+          const res = await window.desktopBridge.startGoogleLogin();
+          return res;
+        } catch (bridgeErr) {
+          console.warn("[AUTH] Desktop bridge Google login error:", bridgeErr);
+        }
+      }
       try {
-        googleProvider.setCustomParameters({ prompt: 'select_account' });
-        // Save current path so we can restore it after redirect
-        localStorage.setItem('lastPath', window.location.pathname);
-        await signInWithRedirect(auth, googleProvider);
-        return; // Page will navigate away; result handled by getRedirectResult useEffect
+        const res = await signInWithPopup(auth, googleProvider);
+        await syncProfile(res.user);
+        return res.user;
       } catch (err) {
-        console.error("[AUTH] Electron redirect login failed:", err);
+        console.error("[AUTH] Electron popup login failed:", err);
         throw err;
       }
     }

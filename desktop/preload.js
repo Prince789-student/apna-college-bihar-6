@@ -12,6 +12,7 @@ contextBridge.exposeInMainWorld('desktopBridge', {
   minimize: () => ipcRenderer.send('window-minimize'),
   maximize: () => ipcRenderer.send('window-maximize'),
   close:    () => ipcRenderer.send('window-close'),
+  startGoogleLogin: () => ipcRenderer.invoke('start-desktop-google-login'),
 
   // ── Study Focus Blocker API ────────────────────────────────────────────────
 

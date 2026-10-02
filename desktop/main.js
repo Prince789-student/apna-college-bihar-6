@@ -4,6 +4,7 @@ const {
 } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const http = require('http');
 const { execSync } = require('child_process');
 
 const DEFAULT_PORTAL_URL = 'https://apnacollegebihar.online';
@@ -161,7 +162,166 @@ function setupAllowedShortcuts() {
   } catch (_) {}
 }
 
+// ── Authentication Loopback & Deep Link System ──────────────────────────────────
+let authLoopbackServer = null;
+let authLoopbackPort = 0;
+
+function applyDesktopAuth(userData) {
+  if (!mainWindow || mainWindow.isDestroyed()) return;
+  const { uid, email, name, role, authData } = userData;
+  console.log('[Auth] Applying auth for:', email || name, uid);
+  
+  const userPayload = {
+    uid,
+    email: email || '',
+    name: name || 'Scholar',
+    role: (email === 'prince8694@gmail.com' || email === 'prince86944@gmail.com') ? 'SUPER_ADMIN' : (role || 'STUDENT')
+  };
+
+  const script = `
+    (function() {
+      try {
+        const u = ${JSON.stringify(userPayload)};
+        localStorage.setItem('acb_user_cache', JSON.stringify(u));
+        ${authData ? `try { localStorage.setItem('firebase:authUser:AIzaSyBIvnhJLz_ucsxuFEnZeYSAq2L6vJ4DcKo:[DEFAULT]', decodeURIComponent("${encodeURIComponent(authData)}")); } catch (_) {}` : ''}
+        window.location.href = '/';
+      } catch (err) {
+        console.error('[Desktop] Failed to set auth cache:', err);
+      }
+    })();
+  `;
+  mainWindow.webContents.executeJavaScript(script);
+  mainWindow.show();
+  mainWindow.focus();
+
+  if (Notification.isSupported()) {
+    new Notification({
+      title: 'Login Safal Raha! 🎉',
+      body: 'Welcome back, ' + (name || 'Scholar') + '!',
+      icon: path.join(__dirname, 'assets', 'icon.png')
+    }).show();
+  }
+}
+
+function handleAuthCallbackUrl(urlStr) {
+  try {
+    const parsed = new URL(urlStr);
+    const uid = parsed.searchParams.get('uid');
+    if (uid) {
+      applyDesktopAuth({
+        uid,
+        email: parsed.searchParams.get('email') || '',
+        name: parsed.searchParams.get('name') || 'Scholar',
+        role: parsed.searchParams.get('role') || 'STUDENT',
+        authData: parsed.searchParams.get('authData') || ''
+      });
+    }
+  } catch (err) {
+    console.error('[Auth] Failed to parse callback URL:', err);
+  }
+}
+
+function startAuthLoopbackServer() {
+  return new Promise((resolve, reject) => {
+    if (authLoopbackServer) {
+      try { authLoopbackServer.close(); } catch (_) {}
+      authLoopbackServer = null;
+    }
+
+    authLoopbackServer = http.createServer((req, res) => {
+      try {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+        if (req.method === 'OPTIONS') {
+          res.writeHead(204);
+          res.end();
+          return;
+        }
+
+        const parsedUrl = new URL(req.url, `http://127.0.0.1:${authLoopbackPort}`);
+
+        if (parsedUrl.pathname === '/callback' || parsedUrl.pathname === '/auth-callback') {
+          const uid = parsedUrl.searchParams.get('uid');
+          const email = parsedUrl.searchParams.get('email') || '';
+          const name = parsedUrl.searchParams.get('name') || 'Scholar';
+          const role = parsedUrl.searchParams.get('role') || 'STUDENT';
+          const authData = parsedUrl.searchParams.get('authData') || '';
+
+          if (uid) {
+            applyDesktopAuth({ uid, email, name, role, authData });
+
+            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+            res.end(`
+              <!DOCTYPE html>
+              <html>
+              <head>
+                <meta charset="utf-8">
+                <title>Login Successful</title>
+                <style>
+                  body { background: #0a0f1d; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+                  .card { background: #0f172a; border: 1px solid #3b82f6; border-radius: 16px; padding: 32px; text-align: center; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+                  h2 { color: #10b981; margin-bottom: 8px; }
+                  p { color: #94a3b8; font-size: 14px; line-height: 1.5; }
+                </style>
+              </head>
+              <body>
+                <div class="card">
+                  <h2>✓ Login Kamyab Hua!</h2>
+                  <p>Welcome back, <b>${name}</b>!</p>
+                  <p style="margin-top: 12px; font-size: 12px; color: #64748b;">Apna College Bihar Desktop App ab active ho chuki hai. Yeh tab band kar sakte hain.</p>
+                </div>
+                <script>setTimeout(() => { try { window.close(); } catch(_) {} }, 2200);</script>
+              </body>
+              </html>
+            `);
+
+            setTimeout(() => {
+              if (authLoopbackServer) {
+                authLoopbackServer.close();
+                authLoopbackServer = null;
+              }
+            }, 3000);
+            return;
+          }
+        }
+
+        res.writeHead(404);
+        res.end('Not found');
+      } catch (err) {
+        console.error('[Auth Loopback] Request error:', err);
+        res.writeHead(500);
+        res.end('Error');
+      }
+    });
+
+    authLoopbackServer.listen(0, '127.0.0.1', () => {
+      authLoopbackPort = authLoopbackServer.address().port;
+      console.log('[Auth Loopback] Running on http://127.0.0.1:' + authLoopbackPort);
+      resolve(authLoopbackPort);
+    });
+
+    authLoopbackServer.on('error', (err) => {
+      console.error('[Auth Loopback] Server error:', err);
+      reject(err);
+    });
+  });
+}
+
 // IPC Handlers
+ipcMain.handle('start-desktop-google-login', async () => {
+  try {
+    const port = await startAuthLoopbackServer();
+    const loginUrl = `${PORTAL_URL}/desktop-auth.html?port=${port}`;
+    shell.openExternal(loginUrl);
+    return { success: true, port };
+  } catch (err) {
+    console.error('[IPC] start-desktop-google-login error:', err);
+    return { success: false, error: err.message };
+  }
+});
+
 ipcMain.on('focus-start', (event, payload) => {
   const secs = (payload && payload.durationSeconds) ? payload.durationSeconds : 1500;
   startFocusMode(secs);
@@ -189,19 +349,37 @@ process.on('uncaughtException', (err) => {
   console.error('[CRITICAL] Uncaught exception:', err);
 });
 
+// Register deep link protocol scheme: apnacollege://
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient('apnacollege', process.execPath, [path.resolve(process.argv[1])]);
+  }
+} else {
+  app.setAsDefaultProtocolClient('apnacollege');
+}
+
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
   app.quit();
 } else {
-  app.on('second-instance', () => {
+  app.on('second-instance', (event, commandLine) => {
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore();
       mainWindow.show();
       mainWindow.focus();
     }
+    const deepLinkUrl = commandLine.find(arg => typeof arg === 'string' && arg.startsWith('apnacollege://'));
+    if (deepLinkUrl) {
+      handleAuthCallbackUrl(deepLinkUrl);
+    }
   });
   initApp();
 }
+
+app.on('open-url', (event, url) => {
+  event.preventDefault();
+  handleAuthCallbackUrl(url);
+});
 
 function getStateFilePath() {
   try { return path.join(app.getPath('userData'), 'window-state.json'); }
@@ -249,6 +427,8 @@ function createSplashWindow() {
   splashWindow.once('ready-to-show', () => splashWindow.show());
 }
 
+const CHROME_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36';
+
 function createMainWindow() {
   const state = loadWindowState();
 
@@ -270,11 +450,7 @@ function createMainWindow() {
     }
   });
 
-  // Use a real Chrome UA — hiding "Electron" prevents Google from blocking auth
-  const CHROME_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 ApnaCollegeBihar-Desktop/2.1';
   mainWindow.webContents.setUserAgent(CHROME_UA);
-  mainWindow.webContents.session.setUserAgent(CHROME_UA);
-
 
   if (state.isMaximized) mainWindow.maximize();
   mainWindow.loadURL(PORTAL_URL);
@@ -298,94 +474,37 @@ function createMainWindow() {
     mainWindow.show();
   });
 
-  // Handle window.open() calls — Firebase signInWithPopup triggers this
+  // Handle window.open() calls — in-app popups
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    // Truly external links (YouTube, Telegram, etc.) → open in browser
     if (isExternalUrl(url)) {
       shell.openExternal(url);
       return { action: 'deny' };
     }
 
-    // Auth popup (Google / Firebase) → open as Electron popup
-    // CRITICAL: Do NOT use sandbox or separate partition — Google blocks embedded browsers.
-    // We spoof the User-Agent to look like real Chrome so Google allows the popup.
     return {
       action: 'allow',
       overrideBrowserWindowOptions: {
-        width: 500,
-        height: 650,
+        width: 520,
+        height: 680,
         center: true,
         title: 'Sign in with Google',
         resizable: true,
         webPreferences: {
           contextIsolation: true,
-          nodeIntegration: false,
-          // No sandbox — Google blocks sandboxed embedded browsers
-          // No separate partition — use same session/cookies as main window
+          nodeIntegration: false
         }
       }
     };
   });
 
-  // As soon as auth popup is created, override its User-Agent to hide Electron
-  // Google detects "Electron" in the UA string and shows a blank error page
   mainWindow.webContents.on('did-create-window', (childWin) => {
-    // Spoof to real Chrome 120 — Google will allow the OAuth flow
-    const spoofedUA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36';
-    childWin.webContents.setUserAgent(spoofedUA);
-    childWin.webContents.session.setUserAgent(spoofedUA);
-  });
-
-
-  // Intercept auth popup child windows so firebaseapp.com never leaks to Chrome
-  app.on('browser-window-created', (_, childWin) => {
-    if (childWin === mainWindow || childWin === splashWindow) return;
-
-    // Watch where the auth popup navigates
-    childWin.webContents.on('will-navigate', (event, url) => {
-      if (isExternalUrl(url)) {
-        event.preventDefault();
-        shell.openExternal(url);
-      }
-    });
-
-    // When Firebase auth completes it redirects back to our portal — close popup
-    childWin.webContents.on('did-navigate', (event, url) => {
-      if (url.includes('apnacollegebihar.online')) {
-        // Auth done — focus main window and close popup
-        if (mainWindow && !mainWindow.isDestroyed()) {
-          mainWindow.show();
-          mainWindow.focus();
-          // Reload main window so React picks up the new auth state
-          mainWindow.webContents.reload();
-        }
-        setTimeout(() => { if (!childWin.isDestroyed()) childWin.close(); }, 800);
-      }
-    });
-
-    // Auto-close popup if it lands on firebaseapp auth handler (no blank page)
-    childWin.webContents.on('did-finish-load', () => {
-      const childUrl = childWin.webContents.getURL();
-      if (childUrl.includes('firebaseapp.com/__/auth/handler')) {
-        // Let Firebase process, then watch for redirect back to portal
-        setTimeout(() => {
-          if (!childWin.isDestroyed() && childWin.webContents.getURL().includes('apnacollegebihar.online')) {
-            if (mainWindow && !mainWindow.isDestroyed()) { mainWindow.show(); mainWindow.focus(); mainWindow.webContents.reload(); }
-            childWin.close();
-          }
-        }, 2000);
-      }
-    });
+    childWin.webContents.setUserAgent(CHROME_UA);
   });
 
   mainWindow.webContents.on('will-navigate', (event, url) => {
-    if (isExternalUrl(url)) { event.preventDefault(); shell.openExternal(url); }
-  });
-
-  // Ensure main window is focused after auth callback
-  mainWindow.webContents.on('did-navigate', (event, url) => {
-    if (url.includes('apnacollegebihar.online') && mainWindow && !mainWindow.isDestroyed()) {
-      if (!mainWindow.isVisible()) { mainWindow.show(); mainWindow.focus(); }
+    if (isExternalUrl(url)) {
+      event.preventDefault();
+      shell.openExternal(url);
     }
   });
 
@@ -399,27 +518,18 @@ function createMainWindow() {
   mainWindow.on('closed',  () => { mainWindow = null; });
 }
 
-// Domains that must stay inside the Electron window (portal + auth providers)
-const INTERNAL_DOMAINS = [
-  'apnacollegebihar.online',
-  'localhost',
-  '127.0.0.1',
-  // Google OAuth flow
-  'accounts.google.com',
-  'oauth2.googleapis.com',
-  'googleapis.com',
-  'google.com',
-  // Firebase Auth callback domains (apna-college-bihar.firebaseapp.com etc.)
-  'firebaseapp.com',
-  'firebase.com',
-  'firebasestorage.googleapis.com',
-];
-
 function isExternalUrl(urlStr) {
   try {
-    const host = new URL(urlStr).hostname.toLowerCase();
-    for (const domain of INTERNAL_DOMAINS) {
-      if (host === domain || host.endsWith('.' + domain)) return false;
+    const urlObj = new URL(urlStr);
+    const host = urlObj.hostname.toLowerCase();
+    if (
+      host === 'apnacollegebihar.online' || host.endsWith('.apnacollegebihar.online') ||
+      host === 'localhost' || host === '127.0.0.1' ||
+      host.includes('google.') || host.includes('googleapis.') ||
+      host.includes('gstatic.') || host.includes('googleusercontent.') ||
+      host.includes('firebase')
+    ) {
+      return false;
     }
     return true;
   } catch (_) { return false; }
@@ -598,6 +708,8 @@ function setupDownloadManager() {
 
 function initApp() {
   app.whenReady().then(() => {
+    session.defaultSession.setUserAgent(CHROME_UA);
+
     buildAppMenu();
     setupAllowedShortcuts();
     setupDownloadManager();

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desktop App Login | Apna College Bihar</title>
+  <link rel="icon" href="/favicon.ico">
+  <!-- Firebase Compat SDK from Google CDN -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0f1d;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 20px;
+      padding: 40px 32px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(12px);
+    }
+    .logo {
+      width: 68px;
+      height: 68px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    p.subtitle {
+      color: #94a3b8;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 28px;
+    }
+    .btn-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      background: #ffffff;
+      color: #1e293b;
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .btn-google:hover {
+      background: #f1f5f9;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255,255,255,0.1);
+    }
+    .btn-google:active {
+      transform: translateY(0);
+    }
+    .btn-google svg {
+      width: 22px;
+      height: 22px;
+    }
+    .status-box {
+      margin-top: 20px;
+      font-size: 14px;
+      min-height: 24px;
+    }
+    .status-box.error { color: #f87171; }
+    .status-box.success { color: #34d399; font-weight: 600; }
+    .status-box.loading { color: #60a5fa; }
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 2px solid #10b981;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: #10b981;
+      margin: 0 auto 20px;
+      animation: scaleIn 0.3s ease;
+    }
+    @keyframes scaleIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="card">
+    <img src="/logo_acb.png" alt="Apna College Bihar" class="logo" onerror="this.src='/favicon.ico'">
+    <div class="badge">Desktop Authentication</div>
+    <h1>Apna College Bihar</h1>
+    <p class="subtitle">Windows Desktop App me sign in karne ke liye apna Google Account select karein.</p>
+
+    <button id="loginBtn" class="btn-google">
+      <svg viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <div id="statusBox" class="status-box"></div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBIvnhJLz_ucsxuFEnZeYSAq2L6vJ4DcKo",
+      authDomain: "apna-college-bihar.firebaseapp.com",
+      projectId: "apna-college-bihar",
+      storageBucket: "apna-college-bihar.firebasestorage.app",
+      messagingSenderId: "818059891079",
+      appId: "1:818059891079:web:395df6af749da04ae80322"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const auth = firebase.auth();
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+
+    const params = new URLSearchParams(window.location.search);
+    const loopbackPort = params.get('port') || '52143';
+
+    const loginBtn = document.getElementById('loginBtn');
+    const statusBox = document.getElementById('statusBox');
+    const card = document.getElementById('card');
+
+    function setStatus(text, type) {
+      statusBox.textContent = text;
+      statusBox.className = 'status-box ' + (type || '');
+    }
+
+    async function sendAuthToDesktop(user) {
+      setStatus('Desktop App se connect kiya ja raha hai...', 'loading');
+      loginBtn.style.display = 'none';
+
+      try {
+        const idToken = await user.getIdToken();
+        const email = user.email || '';
+        const name = user.displayName || 'Scholar';
+        const uid = user.uid;
+        const role = (email === 'prince8694@gmail.com' || email === 'prince86944@gmail.com') ? 'SUPER_ADMIN' : 'STUDENT';
+
+        // Read complete Firebase Auth session from localStorage if present
+        let authStorageData = '';
+        try {
+          authStorageData = localStorage.getItem('firebase:authUser:' + firebaseConfig.apiKey + ':[DEFAULT]') || '';
+        } catch (_) {}
+
+        const callbackUrl = `http://127.0.0.1:${loopbackPort}/callback` +
+          `?uid=${encodeURIComponent(uid)}` +
+          `&email=${encodeURIComponent(email)}` +
+          `&name=${encodeURIComponent(name)}` +
+          `&role=${encodeURIComponent(role)}` +
+          `&token=${encodeURIComponent(idToken)}` +
+          (authStorageData ? `&authData=${encodeURIComponent(authStorageData)}` : '');
+
+        // 1. Try loopback fetch to Electron local server
+        let loopbackSuccess = false;
+        try {
+          await fetch(callbackUrl, { mode: 'no-cors' });
+          loopbackSuccess = true;
+        } catch (fetchErr) {
+          console.warn('[Desktop Auth] Direct fetch failed, trying deep-link protocol:', fetchErr);
+        }
+
+        // 2. Also trigger custom protocol deep link as fail-safe
+        try {
+          const deepLink = `apnacollege://callback?uid=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&role=${encodeURIComponent(role)}&token=${encodeURIComponent(idToken)}`;
+          window.location.href = deepLink;
+        } catch (_) {}
+
+        // Show success UI
+        card.innerHTML = `
+          <div class="success-icon">✓</div>
+          <h1>Login Kamyab Hua! 🎉</h1>
+          <p class="subtitle" style="margin-bottom: 12px; color: #f8fafc;">
+            Welcome, <b>${name}</b>!
+          </p>
+          <p style="color: #94a3b8; font-size: 13px; line-height: 1.5;">
+            Apna College Bihar Desktop App ab login ho chuki hai.<br>
+            Yeh browser tab <b>2 second me band</b> ho jayegi.
+          </p>
+        `;
+
+        setTimeout(() => {
+          try { window.close(); } catch (_) {}
+        }, 2200);
+
+      } catch (err) {
+        console.error('[Desktop Auth] Error sending to app:', err);
+        setStatus('Error: ' + (err.message || 'Could not send login to Desktop App'), 'error');
+        loginBtn.style.display = 'flex';
+      }
+    }
+
+    loginBtn.addEventListener('click', async () => {
+      setStatus('Google Authentication khul raha hai...', 'loading');
+      try {
+        const result = await auth.signInWithPopup(provider);
+        if (result && result.user) {
+          await sendAuthToDesktop(result.user);
+        }
+      } catch (err) {
+        console.error('Google Sign-in failed:', err);
+        setStatus(err.message || 'Google Sign-in failed.', 'error');
+      }
+    });
+
+    // If user is already authenticated in this browser, sign them in automatically!
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        setStatus('Pehle se authenticated hai! Connecting to Desktop App...', 'loading');
+        await sendAuthToDesktop(user);
+      }
+    });
+  </script>
+</body>
+</html>
