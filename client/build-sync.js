@@ -96,7 +96,16 @@ function syncBuild() {
                 fs.mkdirSync(androidAssetsDir, { recursive: true });
             }
             copyRecursiveSync(srcDir, androidAssetsDir, (p, name) => !name.endsWith('.apk') && !name.endsWith('.zip') && !name.endsWith('.aab'));
-            console.log('Build assets synced to Android Capacitor assets successfully!');
+            
+            // Clean Android index.html so it NEVER has pre-rendered desktop website HTML in <div id="root">
+            const androidIndexHtmlPath = path.join(androidAssetsDir, 'index.html');
+            if (fs.existsSync(androidIndexHtmlPath)) {
+                let androidHtml = fs.readFileSync(androidIndexHtmlPath, 'utf8');
+                // Replace everything from <div id="root"> up to <noscript> with clean <div id="root"></div>
+                androidHtml = androidHtml.replace(/<div id="root">[\s\S]*?(?=\s*<noscript>)/i, '<div id="root"></div>\n\n');
+                fs.writeFileSync(androidIndexHtmlPath, androidHtml, 'utf8');
+            }
+            console.log('Build assets synced to Android Capacitor assets successfully (Clean Root)!');
         }
     } catch (err) {
         console.error('Error syncing build:', err);

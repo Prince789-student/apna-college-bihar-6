@@ -173,7 +173,108 @@ GUIDELINES:
   };
 }
 
+/**
+ * Explains a syllabus topic or provides BEU exam answers using Gemini
+ */
+async function explainSyllabusTopic({ topic, subject, unitName, branch, semester, mode = 'explain', customQuestion }) {
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  let taskPrompt = '';
+  if (customQuestion && customQuestion.trim()) {
+    taskPrompt = `The student has a specific question regarding this topic:
+"${customQuestion.trim()}"
+Provide a clear, detailed, technically accurate answer tailored for a B.Tech student.`;
+  } else if (mode === 'exam_qa') {
+    taskPrompt = `Generate a high-probability BEU (Bihar Engineering University) Semester Exam Question (7-Mark or 14-Mark question) on this topic with a model answer.
+Structure the answer exactly how students should write in their answer booklet to get maximum marks:
+1. Expected Exam Question (7 Marks)
+2. Definition & Core Principle (with neat bullet points)
+3. Step-by-Step Derivation / Process / Architecture
+4. ASCII Diagram or Flowchart layout (if applicable)
+5. Practical Application / Example
+6. Examiner Scoring Tips (what key terms BEU evaluators look for)`;
+  } else if (mode === 'formula') {
+    taskPrompt = `Generate a rapid revision cheat sheet for this topic:
+1. Key Definitions & Laws (1-2 sentences each)
+2. All Vital Formulas, Equations, and SI Units
+3. Important Constants & Values
+4. 3 Quick Flashcard Points for last-minute exam revision`;
+  } else {
+    taskPrompt = `Provide a comprehensive yet easy-to-understand explanation for an engineering student:
+1. High-Level Overview (What is it and why does it exist?)
+2. Core Working Principle / Theory
+3. Real-world Engineering Application
+4. Key Concepts & Terminology you must remember
+5. Quick Summary`;
+  }
+
+  const prompt = `You are the lead academic professor and AI Study Mentor at Apna College Bihar (ACB), assisting B.Tech engineering students affiliated with Bihar Engineering University (BEU), Patna.
+
+Subject: ${subject || 'Engineering Subject'}
+Module / Unit: ${unitName || 'Curriculum Module'}
+Target Topic: "${topic}"
+${branch ? `Branch: ${branch}` : ''}
+${semester ? `Semester: ${semester}` : ''}
+
+TASK:
+${taskPrompt}
+
+GUIDELINES:
+- Use clean, structured Markdown (headers ##, ###, bullet points, bold keywords, and code blocks if code/math is needed).
+- Tone: Encouraging, academic, authoritative yet student-friendly.
+- Write in English with occasional relatable Hindi/Hinglish pro-tips if helpful.
+- Keep formatting clean and readable on mobile screens.`;
+
+  if (apiKey) {
+    const payload = {
+      contents: [{ parts: [{ text: prompt }] }]
+    };
+
+    for (const model of CANDIDATE_MODELS) {
+      try {
+        console.log(`[BEU AI Tutor] Asking model ${model} for topic: "${topic}"`);
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+        const response = await axios.post(url, payload, { timeout: 35000 });
+        const candidate = response.data?.candidates?.[0];
+        const text = candidate?.content?.parts?.[0]?.text;
+        if (text && text.trim().length > 30) {
+          return {
+            success: true,
+            text: text.trim(),
+            model
+          };
+        }
+      } catch (err) {
+        console.warn(`[BEU AI Tutor] Model ${model} failed (${err.message}), trying next...`);
+      }
+    }
+  }
+
+  // Fallback response if Gemini API key is missing or models are busy
+  const fallback = `### 📘 ${topic} — Study Guide\n\n` +
+    `**Subject:** ${subject || 'Engineering Subject'}\n` +
+    `**Unit:** ${unitName || 'Core Module'}\n\n` +
+    `#### 📌 Key Conceptual Overview\n` +
+    `The topic **${topic}** is a foundational concept in the BEU syllabus. To master this topic for your examinations:\n\n` +
+    `- **Fundamental Concept:** Understand the governing principles and definitions underlying this topic.\n` +
+    `- **Exam Weightage:** In BEU End-Semester exams, questions on this topic are typically asked as 7-mark direct theoretical questions or numerical problems.\n` +
+    `- **Standard Answer Strategy:**\n` +
+    `  1. Always start your answer with an exact definition.\n` +
+    `  2. Draw a neat labelled diagram (BEU evaluators award 2-3 marks for diagrams).\n` +
+    `  3. Write step-by-step explanations or mathematical formulations.\n` +
+    `  4. Mention at least one engineering application.\n\n` +
+    `> 💡 *Pro Tip:* Check the Previous Year Questions (PYQs) section in Apna College Bihar app to see how BEU has framed questions on this topic over the last 5 years!`;
+
+  return {
+    success: true,
+    text: fallback,
+    model: 'offline_template'
+  };
+}
+
 module.exports = {
   generateWhatsAppCaption,
+  explainSyllabusTopic,
   CHANNEL_URL
 };
+

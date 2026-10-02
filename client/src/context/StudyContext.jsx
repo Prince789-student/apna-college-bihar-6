@@ -4,6 +4,7 @@ import { doc, updateDoc, addDoc, collection, getDoc } from 'firebase/firestore';
 import { useAuth } from './AuthContext';
 import { Preferences } from '@capacitor/preferences';
 import { Capacitor, registerPlugin } from '@capacitor/core';
+import { App as CapacitorApp } from '@capacitor/app';
 import { toast } from 'react-hot-toast';
 import { queueOfflineSession, flushOfflineQueue, getOfflineQueueCount } from '../utils/offlineQueue';
 
@@ -52,46 +53,111 @@ export function StudyProvider({ children }) {
     } catch (err) { console.error("Fetch Apps Error:", err); }
   };
 
+  const syncTimerFromWallClock = () => {
+    const isRunning = localStorage.getItem('timerActive') === 'true';
+    if (!isRunning) return;
+
+    const currentMode = localStorage.getItem('study_timer_mode') || timerMode;
+    const now = Date.now();
+
+    if (currentMode === 'COUNTDOWN') {
+      const targetEndStr = localStorage.getItem('study_timer_target_end');
+      if (targetEndStr) {
+        const targetEnd = Number(targetEndStr);
+        const remaining = Math.ceil((targetEnd - now) / 1000);
+
+        if (remaining <= 0) {
+          // Timer finished while phone screen was off or locked!
+          const overtimeSecs = Math.max(0, Math.floor((now - targetEnd) / 1000));
+          setTimerMode('STOPWATCH');
+          setOvertimeActive(true);
+          setTimerTime(overtimeSecs);
+          localStorage.setItem('study_timer_mode', 'STOPWATCH');
+          localStorage.setItem('study_timer_started_at', String(targetEnd));
+          localStorage.removeItem('study_timer_target_end');
+
+          if (AppBlocker && AppBlocker.stopBlocker) AppBlocker.stopBlocker().catch(() => {});
+          Preferences.set({ key: 'isBlockerActive', value: 'false' }).catch(() => {});
+          Preferences.set({ key: 'countdownEndTime', value: '0' }).catch(() => {});
+        } else {
+          setTimerTime(remaining);
+        }
+      }
+    } else {
+      // STOPWATCH mode
+      const startedAtStr = localStorage.getItem('study_timer_started_at');
+      if (startedAtStr) {
+        const startedAt = Number(startedAtStr);
+        const elapsed = Math.max(0, Math.floor((now - startedAt) / 1000));
+        setTimerTime(elapsed);
+      }
+    }
+  };
+
   useEffect(() => {
-    const initBlocker = async () => {
+    const initTimerAndBlocker = async () => {
       if (isNativeApp()) {
         await fetchApps();
-        
-        try {
+      }
+
+      try {
+        const isTimerRunning = localStorage.getItem('timerActive') === 'true';
+        const targetEndStr = localStorage.getItem('study_timer_target_end');
+        const startedAtStr = localStorage.getItem('study_timer_started_at');
+        const mode = localStorage.getItem('study_timer_mode') || 'COUNTDOWN';
+        const now = Date.now();
+
+        if (isTimerRunning) {
+          if (mode === 'COUNTDOWN' && targetEndStr) {
+            const targetEnd = Number(targetEndStr);
+            if (targetEnd > now) {
+              const remaining = Math.ceil((targetEnd - now) / 1000);
+              setTimerTime(remaining);
+              setTimerMode('COUNTDOWN');
+              _setTimerActive(true);
+            } else {
+              const overtimeSecs = Math.max(0, Math.floor((now - targetEnd) / 1000));
+              setTimerTime(overtimeSecs);
+              setTimerMode('STOPWATCH');
+              setOvertimeActive(true);
+              _setTimerActive(true);
+            }
+          } else if (mode === 'STOPWATCH' && startedAtStr) {
+            const startedAt = Number(startedAtStr);
+            const elapsed = Math.max(0, Math.floor((now - startedAt) / 1000));
+            setTimerTime(elapsed);
+            setTimerMode('STOPWATCH');
+            _setTimerActive(true);
+          }
+        }
+
+        if (isNativeApp()) {
           const getEnd = await Preferences.get({ key: 'countdownEndTime' });
           const endTime = Number(getEnd.value || 0);
-          
-          if (endTime > Date.now()) {
-            // Restore active countdown state
-            const remainingSecs = Math.ceil((endTime - Date.now()) / 1000);
+
+          if (endTime > now) {
+            const remainingSecs = Math.ceil((endTime - now) / 1000);
             setTimerTime(remainingSecs);
             _setTimerActive(true);
             setTimerMode('COUNTDOWN');
-            
-            // Restore allowed packages
+
             const getPrefsAllowed = await Preferences.get({ key: 'allowedPackages' });
             if (getPrefsAllowed.value) {
               _setAllowedPackages(getPrefsAllowed.value);
             }
-            
-            // console.log removed
-          } else {
-            // Clean up expired focus session
-            if (AppBlocker && AppBlocker.stopBlocker) await AppBlocker.stopBlocker();
+          } else if (endTime > 0 && endTime <= now) {
+            if (AppBlocker && AppBlocker.stopBlocker) await AppBlocker.stopBlocker().catch(() => {});
             await Preferences.set({ key: 'isBlockerActive', value: 'false' });
             await Preferences.set({ key: 'countdownEndTime', value: '0' });
-            localStorage.setItem('timerActive', 'false');
           }
-        } catch (e) {
-          console.error("Error restoring blocker state:", e);
         }
-      } else {
-        localStorage.setItem('timerActive', 'false');
+      } catch (e) {
+        console.error("Error restoring timer state:", e);
       }
       localStorage.setItem('focusBroken', 'false');
     };
-    
-    initBlocker();
+
+    initTimerAndBlocker();
   }, []);
 
   const setAllowedPackages = (val) => {
@@ -120,33 +186,46 @@ export function StudyProvider({ children }) {
   };
 
   const setTimerActive = (val) => {
+    const now = Date.now();
     if (!val) {
       setOvertimeActive(false);
       localStorage.removeItem('study_timer_started_at');
+      localStorage.removeItem('study_timer_target_end');
+      localStorage.removeItem('study_timer_total_duration');
+      localStorage.setItem('timerActive', 'false');
     } else {
-      localStorage.setItem('study_timer_started_at', String(Date.now()));
+      localStorage.setItem('timerActive', 'true');
+      localStorage.setItem('study_timer_started_at', String(now));
       localStorage.setItem('study_timer_mode', timerMode);
+
+      const currentDuration = timerTime > 0 ? timerTime : (customHours * 3600 + customMinutes * 60 + customSeconds);
+      if (timerMode === 'COUNTDOWN') {
+        const endTime = now + (currentDuration * 1000);
+        localStorage.setItem('study_timer_target_end', String(endTime));
+        localStorage.setItem('study_timer_total_duration', String(currentDuration));
+        Preferences.set({ key: 'countdownEndTime', value: String(endTime) }).catch(() => {});
+      } else {
+        localStorage.removeItem('study_timer_target_end');
+        Preferences.set({ key: 'countdownEndTime', value: '0' }).catch(() => {});
+      }
     }
     _setTimerActive(val);
-    localStorage.setItem('timerActive', JSON.stringify(val));
     window.dispatchEvent(new Event('study_timer_updated'));
-    
+
     if (isNativeApp()) {
       try {
         if (val) {
           if (AppBlocker && AppBlocker.setBlockerActive) {
             AppBlocker.setBlockerActive({ active: true });
           }
-          
+
           if (timerMode === 'COUNTDOWN') {
+            const currentDuration = timerTime > 0 ? timerTime : (customHours * 3600 + customMinutes * 60 + customSeconds);
             if (AppBlocker && AppBlocker.startCountdown) {
-              AppBlocker.startCountdown({ 
-                minutes: Math.ceil(timerTime / 60)
+              AppBlocker.startCountdown({
+                minutes: Math.ceil(currentDuration / 60)
               });
             }
-            
-            const endTime = Date.now() + (timerTime * 1000);
-            Preferences.set({ key: 'countdownEndTime', value: String(endTime) });
           }
 
           const pkgArray = (allowedPackages || '').split(',').filter(Boolean);
@@ -156,7 +235,7 @@ export function StudyProvider({ children }) {
           if (AppBlocker && AppBlocker.setAllowedPackages) {
             AppBlocker.setAllowedPackages({ packages: pkgArray });
           }
-          
+
           Preferences.set({ key: 'isBlockerActive', value: 'true' });
         } else {
           if (AppBlocker && AppBlocker.stopBlocker) AppBlocker.stopBlocker();
@@ -198,10 +277,11 @@ export function StudyProvider({ children }) {
     const activeMentorshipRoll = localStorage.getItem('beu_mentorship_active_roll');
     if (!user && !activeMentorshipRoll) return;
 
+    const initialDuration = Number(localStorage.getItem('study_timer_total_duration')) || (customHours * 3600 + customMinutes * 60 + customSeconds);
     const timeToSave = manualTime || (
       overtimeActive 
-        ? (customHours * 3600 + customMinutes * 60 + customSeconds + timerTime)
-        : (timerMode === 'STOPWATCH' ? timerTime : (customHours * 3600 + customMinutes * 60 - timerTime))
+        ? (initialDuration + timerTime)
+        : (timerMode === 'STOPWATCH' ? timerTime : Math.max(0, initialDuration - timerTime))
     );
     if (timeToSave < 5) { 
       setOvertimeActive(false);
@@ -393,25 +473,49 @@ export function StudyProvider({ children }) {
 
   useEffect(() => {
     if (timerActive) {
+      // Immediate sync on activate
+      syncTimerFromWallClock();
+
       timerRef.current = setInterval(() => {
-        if (timerMode === 'COUNTDOWN') {
-          setTimerTime(t => {
-            if (t <= 1) {
-              setTimerMode('STOPWATCH');
-              setOvertimeActive(true);
-              return 0;
-            }
-            return t - 1;
-          });
-        } else {
-          setTimerTime(t => t + 1);
-        }
+        syncTimerFromWallClock();
       }, 1000);
+
+      // Handle screen lock/unlock, backgrounding, tab switching
+      const handleVisibilityChange = () => {
+        if (document.visibilityState === 'visible') {
+          syncTimerFromWallClock();
+        }
+      };
+
+      const handleFocus = () => syncTimerFromWallClock();
+
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      window.addEventListener('focus', handleFocus);
+      window.addEventListener('pageshow', handleFocus);
+
+      let appStateListener = null;
+      let resumeListener = null;
+      if (typeof CapacitorApp !== 'undefined' && CapacitorApp.addListener) {
+        appStateListener = CapacitorApp.addListener('appStateChange', (state) => {
+          if (state && state.isActive) syncTimerFromWallClock();
+        });
+        resumeListener = CapacitorApp.addListener('resume', () => {
+          syncTimerFromWallClock();
+        });
+      }
+
+      return () => {
+        clearInterval(timerRef.current);
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+        window.removeEventListener('focus', handleFocus);
+        window.removeEventListener('pageshow', handleFocus);
+        if (appStateListener) appStateListener.then(l => l.remove()).catch(() => {});
+        if (resumeListener) resumeListener.then(l => l.remove()).catch(() => {});
+      };
     } else {
       clearInterval(timerRef.current);
     }
-    return () => clearInterval(timerRef.current);
-  }, [timerActive, timerMode, user, customHours, customMinutes, customSeconds, selectedTaskId]);
+  }, [timerActive, timerMode]);
 
   const value = {
     timerActive,

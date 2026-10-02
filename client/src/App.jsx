@@ -81,7 +81,7 @@ function LoadingScreen() {
 }
 
 function GlobalProfilePrompt() {
-  const { user, updateProfileData, logout } = useAuth();
+  const { user, loading, updateProfileData, logout } = useAuth();
   const [step, setStep] = useState(1);
   const [name, setName] = useState('');
   const [collegeName, setCollegeName] = useState('');
@@ -92,6 +92,7 @@ function GlobalProfilePrompt() {
   const [dob, setDob] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const [canShow, setCanShow] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -104,6 +105,20 @@ function GlobalProfilePrompt() {
       setDob(user.dob || '');
     }
   }, [user]);
+
+  // Grace period so Firestore profile has time to sync without any 0.1s UI flashing
+  useEffect(() => {
+    if (!user || loading) {
+      setCanShow(false);
+      return;
+    }
+    const timer = setTimeout(() => {
+      setCanShow(true);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [user, loading]);
+
+  if (loading || !user || !canShow) return null;
 
   const isAdmin = user?.role === 'admin' || user?.role === 'super_admin' || user?.email === 'prince86944@gmail.com';
   const isSkipped = dismissed || localStorage.getItem('profile_prompt_dismissed') === 'true';
@@ -381,8 +396,10 @@ function SplashUI() {
 
 function App() {
   const { user } = useAuth();
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const isNative = Capacitor.isNativePlatform() || !!window.Capacitor?.isNative || window.location.protocol === 'file:';
+  const isNative = Capacitor.isNativePlatform() 
+    || !!window.Capacitor?.isNative 
+    || window.location.protocol === 'file:' 
+    || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' && !window.location.port));
 
   useEffect(() => {
     if (isNative) {

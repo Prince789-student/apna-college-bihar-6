@@ -3,7 +3,7 @@ const router = express.Router();
 const fs = require('fs');
 const path = require('path');
 const admin = require('../firebaseAdmin');
-const { generateWhatsAppCaption, CHANNEL_URL } = require('../services/beuAiService');
+const { generateWhatsAppCaption, explainSyllabusTopic, CHANNEL_URL } = require('../services/beuAiService');
 const whatsappService = require('../services/whatsappService');
 const { syncBeuAndBroadcast, loadLocalNotices, getLastAutoCheckTime } = require('../cron/beuAutoBroadcaster');
 const { publicLimiter, authenticatedLimiter } = require('../middleware/rateLimiter');
@@ -336,4 +336,31 @@ router.get('/whatsapp-debug-screenshot', authenticatedLimiter, asyncHandler(asyn
   res.send(buf);
 }));
 
+/**
+ * POST /api/beu/ask-ai
+ * In-app AI Study Tutor for BEU Syllabus Topics
+ */
+router.post('/ask-ai', publicLimiter, asyncHandler(async (req, res) => {
+  const { topic, subject, unitName, branch, semester, mode, customQuestion } = req.body || {};
+  if (!topic && !customQuestion) {
+    return res.status(400).json({ success: false, message: 'Topic or question is required' });
+  }
+
+  const result = await explainSyllabusTopic({
+    topic: topic || 'Engineering Concept',
+    subject,
+    unitName,
+    branch,
+    semester,
+    mode: mode || 'explain',
+    customQuestion
+  });
+
+  res.json({
+    success: true,
+    ...result
+  });
+}));
+
 module.exports = router;
+

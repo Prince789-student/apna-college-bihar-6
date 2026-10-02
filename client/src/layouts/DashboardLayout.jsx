@@ -652,8 +652,8 @@ export default function DashboardLayout() {
                   
                   <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
                     <a 
-                      href="/apna-college-bihar-v55.apk"
-                      download="apna-college-bihar-v55.apk"
+                      href="/apna-college-bihar-v56.apk"
+                      download="apna-college-bihar-v56.apk"
                       className="h-9 px-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-blue-600 border border-slate-200 hover:border-blue-400 text-xs font-heading font-semibold transition-all shadow-xs active:scale-95 flex items-center gap-1.5 shrink-0"
                     >
                       <Smartphone size={14} className="text-slate-500" />
@@ -723,7 +723,7 @@ export default function DashboardLayout() {
                                 const shareData = {
                                   title: 'Apna College Bihar App - No More Distractions!',
                                   text: '📱 Padhai ke waqt Instagram/Reels se distract hote ho? Apna College Bihar App try karo! Isme "Strict Study Blocker" hai!\n\nSteps:\n1. App Download karke Dashboard me jao.\n2. Niche "Focus Mode" on karo.\n3. Timer set karo aur padhai shuru! (Baki saare apps block ho jayenge)\n\nSaare Notes aur PYQs bhi yahi milenge!\nDownload now: ',
-                                  url: 'https://www.apnacollegebihar.online/apna-college-bihar-v55.apk'
+                                  url: 'https://www.apnacollegebihar.online/apna-college-bihar-v56.apk'
                                 };
                                 try {
                                   if (navigator.share) {
@@ -765,8 +765,8 @@ export default function DashboardLayout() {
 
                   <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
                     <a 
-                      href="/apna-college-bihar-v55.apk"
-                      download="apna-college-bihar-v55.apk"
+                      href="/apna-college-bihar-v56.apk"
+                      download="apna-college-bihar-v56.apk"
                       className="h-9 px-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-blue-600 border border-slate-200 hover:border-blue-400 text-xs font-heading font-semibold transition-all shadow-xs active:scale-95 flex items-center gap-1.5 shrink-0"
                     >
                       <Smartphone size={14} className="text-slate-500" />
