@@ -188,9 +188,9 @@ export function AuthProvider({ children }) {
   }
 
   // 3. Google Login — Smart strategy:
-  //    Native Android App  → FirebaseAuthentication plugin (bottom sheet)
-  //    Web (Desktop/Tablet) → Try signInWithPopup first (keeps user in app)
-  //                         → If popup blocked, fallback to signInWithRedirect
+  //    Native Android App   → FirebaseAuthentication plugin (native bottom sheet)
+  //    Electron Desktop App → signInWithRedirect (Google blocks popup in Electron)
+  //    Web Browser          → signInWithPopup first, fallback to redirect if blocked
   async function googleLogin() {
     const isNative = Capacitor.isNativePlatform();
     
@@ -211,6 +211,23 @@ export function AuthProvider({ children }) {
       }
     }
 
+    // Electron Desktop App — Google BLOCKS signInWithPopup in embedded browsers
+    // Use signInWithRedirect which navigates the main window, then getRedirectResult()
+    // handles the result when the app reloads after Google redirects back
+    const isElectron = typeof window !== 'undefined' && window.desktopBridge?.isDesktop;
+    if (isElectron) {
+      try {
+        googleProvider.setCustomParameters({ prompt: 'select_account' });
+        // Save current path so we can restore it after redirect
+        localStorage.setItem('lastPath', window.location.pathname);
+        await signInWithRedirect(auth, googleProvider);
+        return; // Page will navigate away; result handled by getRedirectResult useEffect
+      } catch (err) {
+        console.error("[AUTH] Electron redirect login failed:", err);
+        throw err;
+      }
+    }
+
     // Web browser — try popup first (best UX, stays in app)
     try {
       const res = await signInWithPopup(auth, googleProvider);
@@ -226,6 +243,7 @@ export function AuthProvider({ children }) {
       throw err; // Re-throw other errors
     }
   }
+
 
   // 4. Phone OTP Setup
   function setupRecaptcha(number) {
