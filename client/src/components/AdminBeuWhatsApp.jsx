@@ -112,9 +112,9 @@ export default function AdminBeuWhatsApp({ flash, onSwitchToNotices }) {
     fetchNotices(true);
     fetchBotStatus();
     fetchBroadcastSettings();
-    // Live polling: updates list automatically without clicking Sync
-    const noticeInterval = setInterval(() => fetchNotices(false), 6000);
-    const botInterval = setInterval(fetchBotStatus, 4000);
+    // Polling: 30s for notices (local cache — no Firestore reads), 15s for bot status
+    const noticeInterval = setInterval(() => fetchNotices(false), 30000);
+    const botInterval = setInterval(fetchBotStatus, 15000);
     return () => {
       clearInterval(noticeInterval);
       clearInterval(botInterval);

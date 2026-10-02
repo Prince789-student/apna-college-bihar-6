@@ -99,36 +99,11 @@ router.post('/update-monthly-collection', authenticatedLimiter, validate({ body:
  * Fetch all notices with their AI WhatsApp captions
  */
 router.get('/notices', publicLimiter, asyncHandler(async (req, res) => {
+  // LOCAL CACHE ONLY — Firestore reads disabled to protect free-tier quota (50k reads/day limit)
   const localNotices = loadLocalNotices();
-  let noticesList = Object.entries(localNotices)
+  const noticesList = Object.entries(localNotices)
     .filter(([key]) => key !== '_meta')
     .map(([, val]) => val);
-
-  if (admin && admin.apps && admin.apps.length > 0) {
-    try {
-      const firestorePromise = admin.firestore().collection('beu_notifications').get();
-      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Firestore timeout')), 2000));
-      const snap = await Promise.race([firestorePromise, timeoutPromise]);
-      snap.forEach(doc => {
-        const data = doc.data();
-        const id = String(data.id || doc.id);
-        if (id !== '_meta') {
-          if (!localNotices[id]) {
-            localNotices[id] = { id, ...data };
-          } else {
-            if (data.whatsappCaption && !localNotices[id].whatsappCaption) {
-              localNotices[id].whatsappCaption = data.whatsappCaption;
-            }
-          }
-        }
-      });
-      noticesList = Object.entries(localNotices)
-        .filter(([key]) => key !== '_meta')
-        .map(([, val]) => val);
-    } catch (fsErr) {
-      // Fallback cleanly to local cache
-    }
-  }
 
   noticesList.sort((a, b) => {
     const timeA = new Date(a.date || a.noticedate || a.createdAt || 0).getTime() || 0;

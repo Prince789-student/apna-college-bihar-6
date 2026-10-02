@@ -137,7 +137,9 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
     let aiProcessedCount = 0;
     const processedResults = [];
 
-    // Optional Firestore DB handle
+    // NOTE: Firestore READS are disabled to stay within free-tier quota limits.
+    // All notice data is read from local JSON cache ONLY.
+    // Firestore WRITES only happen for new notices.
     let db = null;
     let beuRef = null;
     if (admin && admin.apps && admin.apps.length > 0) {
@@ -151,20 +153,8 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
 
     for (const notice of combinedNotices) {
       const noticeId = String(notice.id);
-      let existingData = localCache[noticeId];
-
-      // Check Firestore if local cache is empty for this notice (with 1500ms timeout)
-      if (!existingData && beuRef) {
-        try {
-          const docSnap = await Promise.race([
-            beuRef.doc(noticeId).get(),
-            new Promise((_, r) => setTimeout(() => r(new Error('timeout')), 1500))
-          ]);
-          if (docSnap && docSnap.exists) existingData = docSnap.data();
-        } catch (qErr) {
-          // Firestore quota, timeout or network error; proceed with local cache
-        }
-      }
+      // LOCAL CACHE ONLY — no Firestore reads to protect free quota
+      const existingData = localCache[noticeId];
 
       const isNew = !existingData;
       const needsAi = isNew || !existingData?.whatsappCaption || options.forceAll;
@@ -260,8 +250,8 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
         localCache[noticeId] = payload;
         saveLocalNotices(localCache);
 
-        // 4. Try syncing to Firestore (guarded against quota errors)
-        if (beuRef) {
+        // 4. Sync to Firestore ONLY for new notices (saves quota — no writes for updates)
+        if (isNew && beuRef) {
           try {
             await beuRef.doc(noticeId).set(payload, { merge: true });
           } catch (fsWriteErr) {
@@ -339,12 +329,7 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
           existingData.updatedAt = new Date().toISOString();
           localCache[noticeId] = existingData;
           saveLocalNotices(localCache);
-
-          if (beuRef) {
-            try {
-              await beuRef.doc(noticeId).set(existingData, { merge: true });
-            } catch (fsWriteErr) {}
-          }
+          // No Firestore write on retry — local cache is source of truth
 
           processedResults.push({
             id: noticeId,
