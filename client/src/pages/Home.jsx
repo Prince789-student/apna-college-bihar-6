@@ -260,8 +260,8 @@ export default function Home() {
               </a>
 
               <a
-                href="/apna-college-bihar-v54.apk"
-                download="apna-college-bihar-v54.apk"
+                href="/apna-college-bihar-v55.apk"
+                download="apna-college-bihar-v55.apk"
                 className="px-4 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 font-heading font-semibold text-xs sm:text-sm transition-all shadow-xs active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2"
               >
                 <Smartphone size={15} className="text-slate-500 shrink-0" />

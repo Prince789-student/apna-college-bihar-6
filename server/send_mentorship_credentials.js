@@ -5,34 +5,22 @@
 
 require('dotenv').config();
 const nodemailer = require('nodemailer');
+const fs = require('fs');
+const path = require('path');
 
-const STUDENTS = [
-  { name: 'Rohit kumar', email: 'shivamraj8002@gmail.com', phone: '6204640645', roll: '26/EEE/46', branch: 'EEE', password: '26EEEACB01', college: 'GCE Gaya', mentor: 'Deepak Kumar Mishra' },
-  { name: 'Nandani Preyashi', email: 'nandanipreyashi3@gmail.com', phone: '9241308744', roll: '26/EEE/10P', branch: 'EEE', password: '26EEEACB01', college: 'BCE Bakhtiyarpur', mentor: 'Senior BEU Academic Mentor' },
-  { name: 'KHUSHI ANAND', email: 'khushianand18102005@gmail.com', phone: '8905245805', roll: '26/EEE/50', branch: 'EEE', password: '26EEEACB01', college: 'GCE Gaya', mentor: 'Senior BEU Academic Mentor' },
-  { name: 'Aditya Bardhan', email: 'adityavardanraj8264@gmail.com', phone: '7631941681', roll: '26/EEE/44', branch: 'EEE', password: '26EEEACB01', college: 'GCE Gaya', mentor: 'Senior BEU Academic Mentor' },
-  { name: 'Deepak Kumar', email: 'mjpathak65@gmail.com', phone: '9046030836', roll: '26/ECE/21', branch: 'ECE', password: '26ECEACB01', college: 'GEC Sheikhpura', mentor: 'Senior BEU Academic Mentor' },
-  { name: 'Aryan Kumar', email: 'kumararyan22309@gmail.com', phone: '8368352020', roll: '26cse47', branch: 'CSE', password: '26CSEACB01', college: 'GEC Sheikhpura', mentor: 'Deepak Kumar Mishra' },
-  { name: 'Abhishek kumar', email: 'ak5976697@gmail.com', phone: '9798773944', roll: 'Cse07', branch: 'CSE', password: '26CSEACB01', college: 'GEC Sheikhpura', mentor: 'Deepak Kumar Mishra' },
-  { name: 'Sanjana Swaraj', email: 'sanjana.7251@gmail.com', phone: '8271901765', roll: '26cse04', branch: 'CSE', password: '26CSEACB01', college: 'GEC Sheikhpura', mentor: 'Deepak Kumar Mishra' },
-  { name: 'Akash Anand', email: 'akashanand1472@gmail.com', phone: '6287193645', roll: '26EEE11P', branch: 'EEE', password: '26EEEACB01', college: 'BCE Bakhtiyarpur', mentor: 'Senior BEU Academic Mentor' },
-  { name: 'Patel Ji', email: 'patelpriy199@gmail.com', phone: '8199512610', roll: '26-cse-05', branch: 'CSE', password: '26CSEACB01', college: 'GEC Gopalganj', mentor: 'Subhash Kumar' },
-  { name: 'Prince Raj', email: 'princeraj731@gmail.com', phone: '9534165430', roll: 'W26A33', branch: 'CSE', password: '26CSEACB01', college: 'GEC West Champaran', mentor: 'Deepak Kumar Mishra' },
-  { name: 'SANDHYA RANI', email: 'sandhyarani082008@gmail.com', phone: '9042367662', roll: '26ECE29', branch: 'ECE', password: '26ECEACB01', college: 'GEC Sheikhpura', mentor: 'Senior BEU Academic Mentor' },
-  { name: 'nandan kumar', email: 'nandankushwahaampur@gmail.com', phone: '9955560341', roll: '26Ece46', branch: 'ECE', password: '26ECEACB01', college: 'GEC Sheikhpura', mentor: 'Senior BEU Academic Mentor' },
-  { name: 'Anubhav kumar', email: 'anubhav143@gmail.com', phone: '8709322211', roll: '26ECE20', branch: 'ECE', password: '26ECEACB01', college: 'GEC Sheikhpura', mentor: 'Senior BEU Academic Mentor' },
-  { name: 'Golu Raj', email: 'golupratap491@gmail.com', phone: '8165722585', roll: '26Cse112', branch: 'CSE', password: '26CSEACB01', college: 'GEC Sheikhpura', mentor: 'Deepak Kumar Mishra' },
-  { name: 'Ayush kumar', email: 'ayushayush534@gmail.com', phone: '6201358686', roll: '26-CSE-DS-15', branch: 'CSE', password: '26CSEACB01', college: 'SEC Saharsa', mentor: 'Subhash Kumar' },
-  { name: 'Aniket Kumar', email: 'aak388177@gmail.com', phone: '9241369949', roll: '26eee14p', branch: 'EEE', password: '26EEEACB01', college: 'BCE Bakhtiyarpur', mentor: 'Senior BEU Academic Mentor' },
-  { name: 'Khushnuma parween', email: 'khushnumaparween587@gmail.com', phone: '6200613246', roll: '26ECE32', branch: 'ECE', password: '26ECEACB01', college: 'GEC Sheikhpura', mentor: 'Senior BEU Academic Mentor' },
-  { name: 'Saziya Khanam', email: 'saziyakhannum00@gmail.com', phone: '9521327432', roll: '2605001', branch: 'CSE', password: '26CSEACB01', college: 'GEC Sheikhpura', mentor: 'Subhash Kumar' },
-  { name: 'Krishna Raj', email: 'krishna72111@gmail.com', phone: '9955549052', roll: '26105110033', branch: 'CSE', password: '26CSEACB01', college: 'GCE Gaya', mentor: 'Subhash Kumar' },
-  { name: 'Raushan raj', email: 'pankajbsp100@gmail.com', phone: '9006321926', roll: '26CSE71', branch: 'CSE', password: '26CSEACB01', college: 'GEC Sheikhpura', mentor: 'Subhash Kumar' },
-  { name: 'Rohan kumar', email: 'kumarrohanraj321@gmail.com', phone: '6205399645', roll: '26E08', branch: 'ECE', password: '26ECEACB01', college: 'BCE Bhagalpur', mentor: 'Senior BEU Academic Mentor' },
-  { name: 'Ayush Singh', email: 'ayushsengarmit@gmail.com', phone: '8303001716', roll: '26ECE44', branch: 'ECE', password: '26ECEACB01', college: 'GEC Sheikhpura', mentor: 'Senior BEU Academic Mentor' },
-  { name: 'Rishav Raushan', email: 'rishavsinghmec123@gmail.com', phone: '6200631627', roll: '26ece11', branch: 'ECE', password: '26ECEACB01', college: 'GEC Sheikhpura', mentor: 'Senior BEU Academic Mentor' },
-  { name: 'Pankaj kumar singh', email: 'classmatepks75@gmail.com', phone: '7643916298', roll: '26-IOT-27', branch: 'CSE', password: '26CSEACB01', college: 'GEC Vaishali', mentor: 'Deepak Kumar Mishra / Subhash Kumar' }
-];
+// Load students from external private JSON file (if present) instead of hardcoding in source control
+const STUDENTS_FILE = process.env.CREDENTIALS_FILE || path.join(__dirname, 'private_students.json');
+let STUDENTS = [];
+
+if (fs.existsSync(STUDENTS_FILE)) {
+  try {
+    STUDENTS = JSON.parse(fs.readFileSync(STUDENTS_FILE, 'utf8'));
+  } catch (err) {
+    console.error('Failed to parse private students JSON:', err.message);
+  }
+} else {
+  console.log('ℹ️ No private_students.json found. Provide student records via JSON file or CREDENTIALS_FILE env.');
+}
 
 async function sendAllCredentials() {
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {

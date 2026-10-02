@@ -118,17 +118,22 @@
   "redirects": [
     {
       "source": "/api/download-apk",
-      "destination": "/apna-college-bihar-v54.apk",
+      "destination": "/apna-college-bihar-v55.apk",
       "permanent": false
     },
     {
+      "source": "/apna-college-bihar-v54.apk",
+      "destination": "/apna-college-bihar-v55.apk",
+      "permanent": true
+    },
+    {
       "source": "/ACB_v22_Final.apk",
-      "destination": "/apna-college-bihar-v54.apk",
+      "destination": "/apna-college-bihar-v55.apk",
       "permanent": true
     },
     {
       "source": "/ApnaCollegeBihar_v2.2_Pro.apk",
-      "destination": "/apna-college-bihar-v54.apk",
+      "destination": "/apna-college-bihar-v55.apk",
       "permanent": true
     },
     {

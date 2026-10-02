@@ -6,6 +6,15 @@ const admin = require('../firebaseAdmin');
 const { generateWhatsAppCaption, CHANNEL_URL } = require('../services/beuAiService');
 const whatsappService = require('../services/whatsappService');
 const { syncBeuAndBroadcast, loadLocalNotices, getLastAutoCheckTime } = require('../cron/beuAutoBroadcaster');
+const { publicLimiter, authenticatedLimiter } = require('../middleware/rateLimiter');
+const validate = require('../middleware/validate');
+const { asyncHandler } = require('../middleware/errorHandler');
+const {
+  updateMonthlyCollectionSchema,
+  generateCaptionSchema,
+  updateCaptionSchema,
+  dispatchWhatsAppSchema
+} = require('../schemas/beuSchemas');
 
 const LOCAL_STORAGE_PATH = path.join(__dirname, '..', 'data', 'beu_notices.json');
 const SETTINGS_FILE_PATH = path.join(__dirname, '..', 'data', 'settings.json');
@@ -34,273 +43,219 @@ function saveLocalSettings(data) {
 /**
  * GET /api/beu/monthly-collection
  */
-router.get('/monthly-collection', async (req, res) => {
-  try {
-    const settings = loadLocalSettings();
-    let data = settings.monthlyCollection || { monthName: 'September 2026', totalCollection: 50 };
+router.get('/monthly-collection', publicLimiter, asyncHandler(async (req, res) => {
+  const settings = loadLocalSettings();
+  let data = settings.monthlyCollection || { monthName: 'September 2026', totalCollection: 50 };
 
-    if (admin && admin.apps && admin.apps.length > 0) {
-      try {
-        const docSnap = await admin.firestore().collection('settings').doc('monthlyCollection').get();
-        if (docSnap.exists) {
-          data = { ...data, ...docSnap.data() };
-        }
-      } catch (fErr) {}
-    }
-
-    res.json({ success: true, data });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+  if (admin && admin.apps && admin.apps.length > 0) {
+    try {
+      const docSnap = await admin.firestore().collection('settings').doc('monthlyCollection').get();
+      if (docSnap.exists) {
+        data = { ...data, ...docSnap.data() };
+      }
+    } catch (fErr) {}
   }
-});
+
+  res.json({ success: true, data });
+}));
 
 /**
  * POST /api/beu/update-monthly-collection
  */
-router.post('/update-monthly-collection', async (req, res) => {
-  try {
-    const { monthName, totalCollection } = req.body;
-    const settings = loadLocalSettings();
-    settings.monthlyCollection = {
-      monthName: monthName || 'September 2026',
-      totalCollection: Number(totalCollection) || 0,
-      updatedAt: new Date().toISOString()
-    };
-    saveLocalSettings(settings);
+router.post('/update-monthly-collection', authenticatedLimiter, validate({ body: updateMonthlyCollectionSchema }), asyncHandler(async (req, res) => {
+  const { monthName, totalCollection } = req.body;
+  const settings = loadLocalSettings();
+  settings.monthlyCollection = {
+    monthName: monthName || 'September 2026',
+    totalCollection: Number(totalCollection) || 0,
+    updatedAt: new Date().toISOString()
+  };
+  saveLocalSettings(settings);
 
-    if (admin && admin.apps && admin.apps.length > 0) {
-      try {
-        await admin.firestore().collection('settings').doc('monthlyCollection').set({
-          monthName: monthName || 'September 2026',
-          totalCollection: Number(totalCollection) || 0,
-          updatedAt: admin.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-      } catch (fErr) {
-        console.warn("Firestore Admin SDK write warning:", fErr.message);
-      }
+  if (admin && admin.apps && admin.apps.length > 0) {
+    try {
+      await admin.firestore().collection('settings').doc('monthlyCollection').set({
+        monthName: monthName || 'September 2026',
+        totalCollection: Number(totalCollection) || 0,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      }, { merge: true });
+    } catch (fErr) {
+      console.warn("Firestore Admin SDK write warning:", fErr.message);
     }
-
-    res.json({ success: true, message: 'Monthly collection updated successfully!', data: settings.monthlyCollection });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
   }
-});
+
+  res.json({ success: true, message: 'Monthly collection updated successfully!', data: settings.monthlyCollection });
+}));
 
 /**
  * GET /api/beu/notices
- * Fetch all notices with their AI WhatsApp captions (merges local cache & Firestore)
+ * Fetch all notices with their AI WhatsApp captions
  */
-router.get('/notices', async (req, res) => {
-  try {
-    const localNotices = loadLocalNotices();
-    let noticesList = Object.entries(localNotices)
-      .filter(([key]) => key !== '_meta')
-      .map(([, val]) => val);
+router.get('/notices', publicLimiter, asyncHandler(async (req, res) => {
+  const localNotices = loadLocalNotices();
+  let noticesList = Object.entries(localNotices)
+    .filter(([key]) => key !== '_meta')
+    .map(([, val]) => val);
 
-    // If Firestore is available, attempt to merge with a 2000ms timeout
-    if (admin && admin.apps && admin.apps.length > 0) {
-      try {
-        const firestorePromise = admin.firestore().collection('beu_notifications').get();
-        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Firestore timeout')), 2000));
-        const snap = await Promise.race([firestorePromise, timeoutPromise]);
-        snap.forEach(doc => {
-          const data = doc.data();
-          const id = String(data.id || doc.id);
-          if (id !== '_meta') {
-            if (!localNotices[id]) {
-              localNotices[id] = { id, ...data };
-            } else {
-              // merge captions if present
-              if (data.whatsappCaption && !localNotices[id].whatsappCaption) {
-                localNotices[id].whatsappCaption = data.whatsappCaption;
-              }
+  if (admin && admin.apps && admin.apps.length > 0) {
+    try {
+      const firestorePromise = admin.firestore().collection('beu_notifications').get();
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Firestore timeout')), 2000));
+      const snap = await Promise.race([firestorePromise, timeoutPromise]);
+      snap.forEach(doc => {
+        const data = doc.data();
+        const id = String(data.id || doc.id);
+        if (id !== '_meta') {
+          if (!localNotices[id]) {
+            localNotices[id] = { id, ...data };
+          } else {
+            if (data.whatsappCaption && !localNotices[id].whatsappCaption) {
+              localNotices[id].whatsappCaption = data.whatsappCaption;
             }
           }
-        });
-        noticesList = Object.entries(localNotices)
-          .filter(([key]) => key !== '_meta')
-          .map(([, val]) => val);
-      } catch (fsErr) {
-        // Fallback to local cache seamlessly without blocking
-      }
+        }
+      });
+      noticesList = Object.entries(localNotices)
+        .filter(([key]) => key !== '_meta')
+        .map(([, val]) => val);
+    } catch (fsErr) {
+      // Fallback cleanly to local cache
     }
-
-    // Sort descending by date / timestamp
-    noticesList.sort((a, b) => {
-      const timeA = new Date(a.date || a.noticedate || a.createdAt || 0).getTime() || 0;
-      const timeB = new Date(b.date || b.noticedate || b.createdAt || 0).getTime() || 0;
-      if (timeB !== timeA) return timeB - timeA;
-      const numA = Number(String(a.id).replace(/\D/g, '')) || 0;
-      const numB = Number(String(b.id).replace(/\D/g, '')) || 0;
-      return numB - numA;
-    });
-
-    res.json({
-      success: true,
-      count: noticesList.length,
-      channelUrl: CHANNEL_URL,
-      lastAutoCheck: getLastAutoCheckTime(),
-      notices: noticesList
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
   }
-});
+
+  noticesList.sort((a, b) => {
+    const timeA = new Date(a.date || a.noticedate || a.createdAt || 0).getTime() || 0;
+    const timeB = new Date(b.date || b.noticedate || b.createdAt || 0).getTime() || 0;
+    if (timeB !== timeA) return timeB - timeA;
+    const numA = Number(String(a.id).replace(/\D/g, '')) || 0;
+    const numB = Number(String(b.id).replace(/\D/g, '')) || 0;
+    return numB - numA;
+  });
+
+  res.json({
+    success: true,
+    count: noticesList.length,
+    channelUrl: CHANNEL_URL,
+    lastAutoCheck: getLastAutoCheckTime(),
+    notices: noticesList
+  });
+}));
 
 /**
  * POST /api/beu/sync-and-broadcast
- * Trigger manual sync and AI auto-broadcast
  */
-router.post('/sync-and-broadcast', async (req, res) => {
-  try {
-    const forceAll = req.body.forceAll === true;
-    const result = await syncBeuAndBroadcast({ forceAll });
-    if (result.success) {
-      return res.json({
-        success: true,
-        message: `Sync successful! ${result.newCount} new notices found, ${result.aiCount} AI captions processed.`,
-        data: result
-      });
-    } else {
-      return res.status(500).json({ success: false, message: result.message || result.error });
-    }
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+router.post('/sync-and-broadcast', authenticatedLimiter, asyncHandler(async (req, res) => {
+  const forceAll = req.body?.forceAll === true;
+  const result = await syncBeuAndBroadcast({ forceAll });
+  if (result.success) {
+    return res.json({
+      success: true,
+      message: `Sync successful! ${result.newCount} new notices found, ${result.aiCount} AI captions processed.`,
+      data: result
+    });
+  } else {
+    return res.status(500).json({ success: false, message: 'Sync failed to complete.' });
   }
-});
+}));
 
 /**
  * POST /api/beu/generate-caption
- * Generate AI Caption for a specific notice on demand
  */
-router.post('/generate-caption', async (req, res) => {
+router.post('/generate-caption', authenticatedLimiter, validate({ body: generateCaptionSchema }), asyncHandler(async (req, res) => {
   const { noticeId, title, pdfUrl, date } = req.body;
-  if (!title) {
-    return res.status(400).json({ success: false, message: 'Notice title is required.' });
-  }
+  const aiResult = await generateWhatsAppCaption({ id: noticeId, title, pdfUrl, date });
 
-  try {
-    const aiResult = await generateWhatsAppCaption({ id: noticeId, title, pdfUrl, date });
-
-    // Update local cache
-    if (noticeId) {
-      const localNotices = loadLocalNotices();
-      const idStr = String(noticeId);
-      if (!localNotices[idStr]) {
-        localNotices[idStr] = { id: noticeId, title, pdfUrl, date };
-      }
-      localNotices[idStr].whatsappCaption = aiResult.caption;
-      localNotices[idStr].aiProcessed = true;
-      localNotices[idStr].updatedAt = new Date().toISOString();
-      fs.writeFileSync(LOCAL_STORAGE_PATH, JSON.stringify(localNotices, null, 2), 'utf8');
-
-      // Update Firestore if accessible
-      if (admin && admin.apps && admin.apps.length > 0) {
-        try {
-          await admin.firestore().collection('beu_notifications').doc(idStr).set({
-            whatsappCaption: aiResult.caption,
-            aiProcessed: true,
-            updatedAt: admin.firestore.FieldValue.serverTimestamp()
-          }, { merge: true });
-        } catch (fErr) {
-          // ignore quota
-        }
-      }
+  if (noticeId) {
+    const localNotices = loadLocalNotices();
+    const idStr = String(noticeId);
+    if (!localNotices[idStr]) {
+      localNotices[idStr] = { id: noticeId, title, pdfUrl, date };
     }
+    localNotices[idStr].whatsappCaption = aiResult.caption;
+    localNotices[idStr].aiProcessed = true;
+    localNotices[idStr].updatedAt = new Date().toISOString();
+    fs.writeFileSync(LOCAL_STORAGE_PATH, JSON.stringify(localNotices, null, 2), 'utf8');
 
-    res.json({
-      success: true,
-      caption: aiResult.caption,
-      model: aiResult.model
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    if (admin && admin.apps && admin.apps.length > 0) {
+      try {
+        await admin.firestore().collection('beu_notifications').doc(idStr).set({
+          whatsappCaption: aiResult.caption,
+          aiProcessed: true,
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+      } catch (fErr) {}
+    }
   }
-});
+
+  res.json({
+    success: true,
+    caption: aiResult.caption,
+    model: aiResult.model
+  });
+}));
 
 /**
  * PUT /api/beu/update-caption
- * Update / Edit caption manually by Admin
  */
-router.put('/update-caption', async (req, res) => {
+router.put('/update-caption', authenticatedLimiter, validate({ body: updateCaptionSchema }), asyncHandler(async (req, res) => {
   const { noticeId, caption } = req.body;
-  if (!noticeId || !caption) {
-    return res.status(400).json({ success: false, message: 'Notice ID and caption are required.' });
+  const localNotices = loadLocalNotices();
+  const idStr = String(noticeId);
+  if (localNotices[idStr]) {
+    localNotices[idStr].whatsappCaption = caption;
+    localNotices[idStr].updatedAt = new Date().toISOString();
+    fs.writeFileSync(LOCAL_STORAGE_PATH, JSON.stringify(localNotices, null, 2), 'utf8');
   }
 
-  try {
+  if (admin && admin.apps && admin.apps.length > 0) {
+    try {
+      await admin.firestore().collection('beu_notifications').doc(idStr).update({
+        whatsappCaption: caption,
+        updatedAt: admin.firestore.FieldValue.serverTimestamp()
+      });
+    } catch (fErr) {}
+  }
+
+  res.json({ success: true, message: 'Caption updated successfully!' });
+}));
+
+/**
+ * POST /api/beu/dispatch-whatsapp
+ */
+router.post('/dispatch-whatsapp', authenticatedLimiter, validate({ body: dispatchWhatsAppSchema }), asyncHandler(async (req, res) => {
+  const { noticeId, caption, pdfUrl, title } = req.body;
+  const result = await whatsappService.sendMessage({ caption, pdfUrl, title, noticeId });
+
+  if (noticeId) {
     const localNotices = loadLocalNotices();
     const idStr = String(noticeId);
     if (localNotices[idStr]) {
-      localNotices[idStr].whatsappCaption = caption;
-      localNotices[idStr].updatedAt = new Date().toISOString();
+      localNotices[idStr].whatsappDispatched = result.status === 'SENT';
+      localNotices[idStr].whatsappStatus = result.status;
+      localNotices[idStr].lastDispatchedAt = new Date().toISOString();
       fs.writeFileSync(LOCAL_STORAGE_PATH, JSON.stringify(localNotices, null, 2), 'utf8');
     }
 
     if (admin && admin.apps && admin.apps.length > 0) {
       try {
         await admin.firestore().collection('beu_notifications').doc(idStr).update({
-          whatsappCaption: caption,
-          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+          whatsappDispatched: result.status === 'SENT',
+          whatsappStatus: result.status,
+          lastDispatchedAt: admin.firestore.FieldValue.serverTimestamp()
         });
-      } catch (fErr) {
-        // ignore quota
-      }
+      } catch (fErr) {}
     }
-
-    res.json({ success: true, message: 'Caption updated successfully!' });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-/**
- * POST /api/beu/dispatch-whatsapp
- * Send / Share to WhatsApp via Webhook on demand
- */
-router.post('/dispatch-whatsapp', async (req, res) => {
-  const { noticeId, caption, pdfUrl, title } = req.body;
-  if (!caption) {
-    return res.status(400).json({ success: false, message: 'Caption is required to dispatch.' });
   }
 
-  try {
-    const result = await whatsappService.sendMessage({ caption, pdfUrl, title, noticeId });
-
-    if (noticeId) {
-      const localNotices = loadLocalNotices();
-      const idStr = String(noticeId);
-      if (localNotices[idStr]) {
-        localNotices[idStr].whatsappDispatched = result.status === 'SENT';
-        localNotices[idStr].whatsappStatus = result.status;
-        localNotices[idStr].lastDispatchedAt = new Date().toISOString();
-        fs.writeFileSync(LOCAL_STORAGE_PATH, JSON.stringify(localNotices, null, 2), 'utf8');
-      }
-
-      if (admin && admin.apps && admin.apps.length > 0) {
-        try {
-          await admin.firestore().collection('beu_notifications').doc(idStr).update({
-            whatsappDispatched: result.status === 'SENT',
-            whatsappStatus: result.status,
-            lastDispatchedAt: admin.firestore.FieldValue.serverTimestamp()
-          });
-        } catch (fErr) {}
-      }
-    }
-
-    res.json({ success: true, result });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
+  res.json({ success: true, result });
+}));
 
 const whatsappBotService = require('../services/whatsappBotService');
 
 /**
  * GET /api/beu/whatsapp-session
- * Returns current status of the WhatsApp Bot (CONNECTED, SCAN_QR_NEEDED, INITIALIZING, DISCONNECTED)
  */
-router.get('/whatsapp-session', (req, res) => {
+router.get('/whatsapp-session', publicLimiter, (req, res) => {
   const sessionInfo = whatsappBotService.getStatus();
   res.json({
     success: true,
@@ -310,65 +265,55 @@ router.get('/whatsapp-session', (req, res) => {
 
 /**
  * POST /api/beu/whatsapp-start
- * Starts the headless WhatsApp session to generate/refresh QR code
  */
-router.post('/whatsapp-start', async (req, res) => {
-  try {
-    whatsappBotService.start();
-    res.json({
-      success: true,
-      message: 'WhatsApp session initialization started.'
-    });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
+router.post('/whatsapp-start', authenticatedLimiter, asyncHandler(async (req, res) => {
+  whatsappBotService.start();
+  res.json({
+    success: true,
+    message: 'WhatsApp session initialization started.'
+  });
+}));
 
 /**
  * POST /api/beu/whatsapp-test-post
- * Posts a test update with official visual notice card to verify channel posting
  */
-router.post('/whatsapp-test-post', async (req, res) => {
-  try {
-    if (!whatsappBotService.isConnected()) {
-      return res.status(400).json({
-        success: false,
-        message: 'WhatsApp is not connected yet. Please scan the QR code first.'
-      });
-    }
-
-    const testTitle = 'B.Tech 8th Semester Exam Form Fill-Up & Project Viva Schedule 2026';
-    const testNoticeId = 'TEST_' + Date.now();
-    const testMessage = `🚨 *BEU PATNA: Official Academic Notification* 📢\n\n` +
-      `📌 *${testTitle}*\n` +
-      `🗓️ *Date:* ${new Date().toLocaleDateString('en-IN')}\n\n` +
-      `🌐 *Apna College Bihar Portal (All Notices & Study Material):*\n👉 https://apnacollegebihar.online/notifications\n\n` +
-      `📄 *Official Notice PDF Download:*\n👉 https://beu-bih.ac.in/notification\n\n` +
-      `📲 *Official WhatsApp Channel Join Karein (Daily Updates):*\n👉 ${CHANNEL_URL}\n\n` +
-      `📢 *Apne college batchmates aur WhatsApp groups ke saath share karein!*\n` +
-      `🚀 *Team Apna College Bihar* | https://apnacollegebihar.online\n` +
-      `#BEU #BiharEngineering #ApnaCollegeBihar #AcademicUpdate`;
-
-    const result = await whatsappService.sendMessage({
-      caption: testMessage,
-      title: testTitle,
-      noticeId: testNoticeId,
-      pdfUrl: 'https://beu-bih.ac.in/notification'
+router.post('/whatsapp-test-post', authenticatedLimiter, asyncHandler(async (req, res) => {
+  if (!whatsappBotService.isConnected()) {
+    return res.status(400).json({
+      success: false,
+      message: 'WhatsApp is not connected yet. Please scan the QR code first.'
     });
-
-    res.json({
-      success: result.status === 'SENT',
-      result
-    });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
   }
-});
+
+  const testTitle = 'B.Tech 8th Semester Exam Form Fill-Up & Project Viva Schedule 2026';
+  const testNoticeId = 'TEST_' + Date.now();
+  const testMessage = `🚨 *BEU PATNA: Official Academic Notification* 📢\n\n` +
+    `📌 *${testTitle}*\n` +
+    `🗓️ *Date:* ${new Date().toLocaleDateString('en-IN')}\n\n` +
+    `🌐 *Apna College Bihar Portal (All Notices & Study Material):*\n👉 https://apnacollegebihar.online/notifications\n\n` +
+    `📄 *Official Notice PDF Download:*\n👉 https://beu-bih.ac.in/notification\n\n` +
+    `📲 *Official WhatsApp Channel Join Karein (Daily Updates):*\n👉 ${CHANNEL_URL}\n\n` +
+    `📢 *Apne college batchmates aur WhatsApp groups ke saath share karein!*\n` +
+    `🚀 *Team Apna College Bihar* | https://apnacollegebihar.online\n` +
+    `#BEU #BiharEngineering #ApnaCollegeBihar #AcademicUpdate`;
+
+  const result = await whatsappService.sendMessage({
+    caption: testMessage,
+    title: testTitle,
+    noticeId: testNoticeId,
+    pdfUrl: 'https://beu-bih.ac.in/notification'
+  });
+
+  res.json({
+    success: result.status === 'SENT',
+    result
+  });
+}));
 
 /**
  * GET /api/beu/config-status
  */
-router.get('/config-status', (req, res) => {
+router.get('/config-status', publicLimiter, (req, res) => {
   res.json({
     whatsappConfigured: whatsappService.isConfigured(),
     botConnected: whatsappBotService.isConnected(),
@@ -381,19 +326,14 @@ router.get('/config-status', (req, res) => {
 
 /**
  * GET /api/beu/whatsapp-debug-screenshot
- * Returns a screenshot of the WhatsApp Web page for debugging
  */
-router.get('/whatsapp-debug-screenshot', async (req, res) => {
-  try {
-    if (!whatsappBotService.page) {
-      return res.status(400).send('No page open');
-    }
-    const buf = await whatsappBotService.page.screenshot();
-    res.setHeader('Content-Type', 'image/png');
-    res.send(buf);
-  } catch (e) {
-    res.status(500).send('Screenshot error: ' + e.message);
+router.get('/whatsapp-debug-screenshot', authenticatedLimiter, asyncHandler(async (req, res) => {
+  if (!whatsappBotService.page) {
+    return res.status(400).send('No page open');
   }
-});
+  const buf = await whatsappBotService.page.screenshot();
+  res.setHeader('Content-Type', 'image/png');
+  res.send(buf);
+}));
 
 module.exports = router;

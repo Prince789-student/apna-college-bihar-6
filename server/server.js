@@ -112,6 +112,10 @@ app.get('/robots.txt', (req, res) => {
     res.send("User-agent: *\nAllow: /\n\nUser-agent: Mediapartners-Google\nAllow: /\n\nUser-agent: Googlebot\nAllow: /\n\nSitemap: https://www.apnacollegebihar.online/sitemap.xml\n");
 });
 
+const { publicLimiter, authenticatedLimiter } = require('./middleware/rateLimiter');
+const { protect, adminOnly } = require('./middleware/authMiddleware');
+const { errorHandler, asyncHandler } = require('./middleware/errorHandler');
+
 // 2. Middleware
 app.use(helmet({
   crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" }
@@ -125,12 +129,8 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 1000,
-  message: "Too many requests, please try again later."
-});
-app.use('/api/', limiter);
+// Apply moderate public rate limiting by default on API endpoints
+app.use('/api/', publicLimiter);
 
 // 3. Static Files
 const publicPath = path.join(__dirname, 'public');
@@ -140,6 +140,9 @@ app.use(express.static(publicPath));
 app.get('/p/:shortId', async (req, res, next) => {
     try {
         const { shortId } = req.params;
+        if (!shortId || !/^[a-zA-Z0-9_\-]{1,64}$/.test(shortId)) {
+            return next();
+        }
         const adminSdk = require('./firebaseAdmin');
         if (adminSdk && adminSdk.apps && adminSdk.apps.length) {
             const db = adminSdk.firestore();
@@ -155,23 +158,22 @@ app.get('/p/:shortId', async (req, res, next) => {
 });
 
 // SHORTLINK API LOOKUP (For Client SPA / fallback)
-app.get('/api/shortlinks/:shortId', async (req, res) => {
-    try {
-        const { shortId } = req.params;
-        const adminSdk = require('./firebaseAdmin');
-        if (!adminSdk || !adminSdk.apps || !adminSdk.apps.length) {
-            return res.status(500).json({ error: 'Firebase Admin not ready' });
-        }
-        const db = adminSdk.firestore();
-        const docSnap = await db.collection('shortlinks').doc(shortId).get();
-        if (docSnap.exists && docSnap.data().longUrl) {
-            return res.json({ success: true, longUrl: docSnap.data().longUrl });
-        }
-        return res.status(404).json({ success: false, message: 'Shortlink not found' });
-    } catch (err) {
-        return res.status(500).json({ success: false, error: err.message });
+app.get('/api/shortlinks/:shortId', asyncHandler(async (req, res) => {
+    const { shortId } = req.params;
+    if (!shortId || !/^[a-zA-Z0-9_\-]{1,64}$/.test(shortId)) {
+        return res.status(400).json({ success: false, message: 'Invalid shortlink identifier format' });
     }
-});
+    const adminSdk = require('./firebaseAdmin');
+    if (!adminSdk || !adminSdk.apps || !adminSdk.apps.length) {
+        return res.status(503).json({ success: false, message: 'Service temporarily unavailable' });
+    }
+    const db = adminSdk.firestore();
+    const docSnap = await db.collection('shortlinks').doc(shortId).get();
+    if (docSnap.exists && docSnap.data().longUrl) {
+        return res.json({ success: true, longUrl: docSnap.data().longUrl });
+    }
+    return res.status(404).json({ success: false, message: 'Shortlink not found' });
+}));
 
 // 4. API Routes
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -180,27 +182,23 @@ app.use('/api/mentorship', require('./routes/mentorshipRoutes'));
 app.use('/api/beu', require('./routes/beuRoutes'));
 
 // Manual Sync Endpoint for BEU Scraper (with AI WhatsApp pipeline)
-app.post('/api/admin/sync-beu', async (req, res) => {
-    try {
-        const result = await syncBeuAndBroadcast();
-        if (result && result.success) {
-            res.json({ success: true, message: `Synced successfully! Found ${result.newCount} new notices, processed ${result.aiCount} AI captions.` });
-        } else {
-            res.status(500).json({ success: false, message: result?.error || result?.message || 'Sync failed.' });
-        }
-    } catch (err) {
-        res.status(500).json({ success: false, message: err.message });
+app.post('/api/admin/sync-beu', protect, adminOnly, authenticatedLimiter, asyncHandler(async (req, res) => {
+    const result = await syncBeuAndBroadcast();
+    if (result && result.success) {
+        res.json({ success: true, message: `Synced successfully! Found ${result.newCount} new notices, processed ${result.aiCount} AI captions.` });
+    } else {
+        res.status(500).json({ success: false, message: 'Sync failed to complete' });
     }
-});
+}));
 app.use('/api/tasks', require('./routes/taskRoutes'));
 
-
-// 5. Health Check & Debug
+// 5. Health Check & Debug (Without Information Leakage)
 app.get('/_health', (req, res) => res.json({ status: 'ok', serverTime: new Date() }));
 app.get('/_debug', (req, res) => {
     const downloadsExist = fs.existsSync(path.join(__dirname, 'downloads'));
     const apkExists = fs.existsSync(path.join(__dirname, 'downloads', 'ACB.apk'));
-    res.json({ downloadsExist, apkExists, dirname: __dirname });
+    // Never leak __dirname or internal paths
+    res.json({ downloadsExist, apkExists, status: 'operational' });
 });
 
 
@@ -275,87 +273,82 @@ app.get('/sitemap.xml', async (req, res) => {
     }
 });
 
-// 5.5 ADMIN USERS MANAGEMENT API (Bypasses client-side Firestore read limits)
-app.get('/api/admin/users', async (req, res) => {
-    try {
-        const adminSdk = require('./firebaseAdmin');
-        if (!adminSdk || !adminSdk.apps.length) {
-            return res.status(500).json({ error: 'Firebase Admin not initialized' });
-        }
-        
-        const authUsers = [];
-        let pageToken;
-        do {
-            const result = await adminSdk.auth().listUsers(1000, pageToken);
-            authUsers.push(...result.users);
-            pageToken = result.pageToken;
-        } while (pageToken);
+// 5.5 ADMIN USERS MANAGEMENT API (Protected - Admin Only)
+app.get('/api/admin/users', protect, adminOnly, authenticatedLimiter, asyncHandler(async (req, res) => {
+    const adminSdk = require('./firebaseAdmin');
+    if (!adminSdk || !adminSdk.apps.length) {
+        return res.status(503).json({ success: false, message: 'Authentication service temporarily unavailable' });
+    }
+    
+    const authUsers = [];
+    let pageToken;
+    do {
+        const result = await adminSdk.auth().listUsers(1000, pageToken);
+        authUsers.push(...result.users);
+        pageToken = result.pageToken;
+    } while (pageToken);
 
-        const usersList = authUsers.map(u => ({
-            id: u.uid,
+    const usersList = authUsers.map(u => ({
+        id: u.uid,
+        uid: u.uid,
+        email: u.email || '',
+        name: u.displayName || 'Scholar',
+        phone: u.phoneNumber || '',
+        role: (u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com') ? 'SUPER_ADMIN' : 'STUDENT',
+        createdAt: u.metadata.creationTime,
+        lastLogin: u.metadata.lastSignInTime
+    }));
+
+    res.json({ success: true, count: usersList.length, users: usersList });
+}));
+
+app.post('/api/admin/sync-users', protect, adminOnly, authenticatedLimiter, asyncHandler(async (req, res) => {
+    const adminSdk = require('./firebaseAdmin');
+    if (!adminSdk || !adminSdk.apps.length) {
+        return res.status(503).json({ success: false, message: 'Authentication service temporarily unavailable' });
+    }
+    const db = adminSdk.firestore();
+    const authUsers = [];
+    let pageToken;
+    do {
+        const result = await adminSdk.auth().listUsers(1000, pageToken);
+        authUsers.push(...result.users);
+        pageToken = result.pageToken;
+    } while (pageToken);
+
+    const batchSize = 400;
+    let batch = db.batch();
+    let count = 0;
+
+    for (const u of authUsers) {
+        const isFounder = u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com';
+        const userDocRef = db.collection('users').doc(u.uid);
+        const data = {
             uid: u.uid,
             email: u.email || '',
             name: u.displayName || 'Scholar',
             phone: u.phoneNumber || '',
-            role: (u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com') ? 'SUPER_ADMIN' : 'STUDENT',
-            createdAt: u.metadata.creationTime,
-            lastLogin: u.metadata.lastSignInTime
-        }));
-
-        res.json({ success: true, count: usersList.length, users: usersList });
-    } catch (err) {
-        console.error('Error fetching admin users:', err.message);
-        res.status(500).json({ error: err.message });
-    }
-});
-
-app.post('/api/admin/sync-users', async (req, res) => {
-    try {
-        const adminSdk = require('./firebaseAdmin');
-        if (!adminSdk || !adminSdk.apps.length) {
-            return res.status(500).json({ error: 'Firebase Admin not initialized' });
-        }
-        const db = adminSdk.firestore();
-        const authUsers = [];
-        let pageToken;
-        do {
-            const result = await adminSdk.auth().listUsers(1000, pageToken);
-            authUsers.push(...result.users);
-            pageToken = result.pageToken;
-        } while (pageToken);
-
-        const batchSize = 400;
-        let batch = db.batch();
-        let count = 0;
-
-        for (const u of authUsers) {
-            const isFounder = u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com';
-            const userDocRef = db.collection('users').doc(u.uid);
-            const data = {
-                uid: u.uid,
-                email: u.email || '',
-                name: u.displayName || 'Scholar',
-                phone: u.phoneNumber || '',
-                role: isFounder ? 'SUPER_ADMIN' : 'STUDENT',
-                createdAt: u.metadata.creationTime ? new Date(u.metadata.creationTime) : new Date(),
-                lastLogin: u.metadata.lastSignInTime ? new Date(u.metadata.lastSignInTime) : new Date()
-            };
-            batch.set(userDocRef, data, { merge: true });
-            count++;
-            if (count % batchSize === 0) {
-                await batch.commit();
-                batch = db.batch();
-            }
-        }
-        if (count % batchSize !== 0) {
+            role: isFounder ? 'SUPER_ADMIN' : 'STUDENT',
+            createdAt: u.metadata.creationTime ? new Date(u.metadata.creationTime) : new Date(),
+            lastLogin: u.metadata.lastSignInTime ? new Date(u.metadata.lastSignInTime) : new Date()
+        };
+        batch.set(userDocRef, data, { merge: true });
+        count++;
+        if (count % batchSize === 0) {
             await batch.commit();
+            batch = db.batch();
         }
-
-        res.json({ success: true, message: `Synced ${count} users successfully!`, count });
-    } catch (err) {
-        console.error('Error syncing users:', err.message);
-        res.status(500).json({ error: err.message });
     }
+    if (count % batchSize !== 0) {
+        await batch.commit();
+    }
+
+    res.json({ success: true, message: `Synced ${count} users successfully!`, count });
+}));
+
+// Unhandled API routes catch-all to prevent falling through to SPA HTML
+app.all('/api/*', (req, res) => {
+    res.status(404).json({ success: false, message: 'Requested API endpoint not found.' });
 });
 
 // 6. SPA Catch-all with Dynamic SEO
@@ -423,6 +416,9 @@ app.get('*', (req, res) => {
         res.status(404).send("Frontend assets missing.");
     }
 });
+
+// Centralized Error Handling Middleware (Catches all sync/async errors and prevents data leakage)
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => {
