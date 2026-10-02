@@ -117,6 +117,36 @@
   "cleanUrls": true,
   "redirects": [
     {
+      "source": "/privacy",
+      "destination": "/privacy-policy",
+      "permanent": true
+    },
+    {
+      "source": "/dashboard/notes",
+      "destination": "/notes",
+      "permanent": true
+    },
+    {
+      "source": "/dashboard/cgpa",
+      "destination": "/cgpa",
+      "permanent": true
+    },
+    {
+      "source": "/dashboard/ugeac-predictor",
+      "destination": "/ugeac-predictor",
+      "permanent": true
+    },
+    {
+      "source": "/dashboard/pyq",
+      "destination": "/pyq",
+      "permanent": true
+    },
+    {
+      "source": "/dashboard/syllabus",
+      "destination": "/syllabus",
+      "permanent": true
+    },
+    {
       "source": "/api/download-apk",
       "destination": "/apna-college-bihar-v56.apk",
       "permanent": false
@@ -468,8 +498,9 @@
     },
     {
       "source": "/:path*",
-      "destination": "/index"
+      "destination": "/index.html"
     }
   ],
+  "cleanUrls": true,
   "trailingSlash": false
 }

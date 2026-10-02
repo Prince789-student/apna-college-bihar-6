@@ -601,6 +601,9 @@ export default function DashboardLayout() {
                 <span>Mentorship</span>
                 <span className="px-1.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-[10px] font-bold text-blue-600">Free</span>
               </Link>
+              <Link to="/blog" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors">
+                Blog & Guides
+              </Link>
 
               {/* All Tools Dropdown */}
               <div className="relative ml-1">

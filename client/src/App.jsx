@@ -547,6 +547,10 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/privacy" element={<Navigate to="/privacy-policy" replace />} />
+            <Route path="/dashboard/notes" element={<Navigate to="/notes" replace />} />
+            <Route path="/dashboard/cgpa" element={<Navigate to="/cgpa" replace />} />
+            <Route path="/dashboard/ugeac-predictor" element={<Navigate to="/ugeac-predictor" replace />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/delete-account" element={<DeleteAccount />} />
             <Route path="/about" element={<About />} />
