@@ -4,7 +4,7 @@ import {
   ChevronLeft, Shield, Timer, X, LayoutDashboard, Library, BookOpen, Calendar, 
   Clock, FileText, GraduationCap, Calculator, User, LogOut, Menu, UserCheck, 
   Flame, Send, ChevronDown, Globe, Award, Link2, ArrowRight, UserX, Youtube,
-  Layers, Download, Sparkles, Building2, Smartphone
+  Layers, Download, Sparkles, Building2, Smartphone, Laptop
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStudy } from '../context/StudyContext';
@@ -96,6 +96,7 @@ export default function DashboardLayout() {
         { name: 'Scientific Calc', path: '/calculator', icon: <Calculator size={16} /> },
         { name: 'Study Resources', path: '/study-resources', icon: <Link2 size={16} /> },
         { name: 'Blog & Guidance', path: '/blog', icon: <FileText size={16} /> },
+        { name: 'Download Apps', path: '/download', icon: <Download size={16} /> },
         { name: 'Achievements', path: '/achievements', icon: <Award size={16} /> },
       ],
     }
@@ -537,6 +538,82 @@ export default function DashboardLayout() {
     );
   };
 
+  const AppDownloadMenu = () => {
+    const [open, setOpen] = useState(false);
+    return (
+      <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
+        <button 
+          onClick={() => setOpen(!open)}
+          className="h-9 px-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-blue-600 border border-slate-200 hover:border-blue-400 text-xs font-heading font-semibold transition-all shadow-xs active:scale-95 flex items-center gap-1.5 shrink-0"
+          title="Download Official Apps"
+        >
+          <Download size={14} className="text-blue-600" />
+          <span>Get Apps</span>
+          <ChevronDown size={12} className={`text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`} />
+        </button>
+
+        {open && (
+          <>
+            <div className="fixed inset-0 z-[1900]" onClick={() => setOpen(false)} />
+            <div className="absolute right-0 mt-2.5 w-72 bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-2xl shadow-2xl p-2 z-[2000] animate-in fade-in zoom-in-95 duration-150 origin-top-right">
+              <div className="px-3 py-2 border-b border-slate-100 mb-1 flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Official Downloads</span>
+                <span className="text-[9px] font-black px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-600 border border-emerald-200/50">100% Free</span>
+              </div>
+
+              <a 
+                href="/Apna-College-Bihar-Setup.exe"
+                download="Apna-College-Bihar-Setup.exe"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-blue-50 transition-colors group"
+              >
+                <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-xs">
+                  <Laptop size={18} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-slate-800">Windows PC / Laptop</span>
+                    <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-blue-100 text-blue-700">v2.1</span>
+                  </div>
+                  <p className="text-[10px] text-slate-500 font-medium">1-Click Setup Installer (.exe, 76MB)</p>
+                </div>
+              </a>
+
+              <a 
+                href="/apna-college-bihar-v56.apk"
+                download="apna-college-bihar-v56.apk"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50 transition-colors group"
+              >
+                <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-xs">
+                  <Smartphone size={18} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-slate-800">Android Mobile App</span>
+                    <span className="text-[9px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700">v56</span>
+                  </div>
+                  <p className="text-[10px] text-slate-500 font-medium">BEU Alerts & Tracker (.apk, 22MB)</p>
+                </div>
+              </a>
+
+              <div className="border-t border-slate-100 mt-1 pt-1">
+                <Link 
+                  to="/download"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-between p-2 text-[11px] font-bold text-blue-600 hover:text-blue-700 hover:bg-blue-50/50 rounded-lg transition-colors"
+                >
+                  <span>Installation Guide & Features</span>
+                  <ArrowRight size={12} />
+                </Link>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="flex flex-col h-screen bg-[#f8fafc] overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30 relative">
       <SEO 
@@ -653,16 +730,7 @@ export default function DashboardLayout() {
                 <div className="flex items-center gap-2 md:gap-3">
                   <HeaderTimer />
                   
-                  <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
-                    <a 
-                      href="/apna-college-bihar-v56.apk"
-                      download="apna-college-bihar-v56.apk"
-                      className="h-9 px-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-blue-600 border border-slate-200 hover:border-blue-400 text-xs font-heading font-semibold transition-all shadow-xs active:scale-95 flex items-center gap-1.5 shrink-0"
-                    >
-                      <Smartphone size={14} className="text-slate-500" />
-                      <span>Android App</span>
-                    </a>
-                  </div>
+                  <AppDownloadMenu />
                   
                   <div className="relative">
                     <button 
@@ -769,16 +837,7 @@ export default function DashboardLayout() {
                 <div className="flex items-center gap-2 sm:gap-3">
                   <HeaderTimer />
 
-                  <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
-                    <a 
-                      href="/apna-college-bihar-v56.apk"
-                      download="apna-college-bihar-v56.apk"
-                      className="h-9 px-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-blue-600 border border-slate-200 hover:border-blue-400 text-xs font-heading font-semibold transition-all shadow-xs active:scale-95 flex items-center gap-1.5 shrink-0"
-                    >
-                      <Smartphone size={14} className="text-slate-500" />
-                      <span>Android App</span>
-                    </a>
-                  </div>
+                  <AppDownloadMenu />
                   <Link to="/login" className="hidden sm:flex h-9 items-center px-3 text-slate-600 hover:text-slate-900 font-heading font-bold text-xs transition-colors">
                     Login
                   </Link>

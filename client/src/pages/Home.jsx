@@ -8,7 +8,7 @@ import {
   ShieldCheck, Calendar, Sparkles, FileText, Library,
   Star, ChevronRight, Search, MapPin, Target,
   RefreshCw, Heart, Building2, Award, Mail,
-  Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight, X, Radio, Bell, Smartphone
+  Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight, X, Radio, Bell, Smartphone, Monitor
 } from 'lucide-react';
 import { collection, onSnapshot, query, orderBy, limit, doc, getCountFromServer } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -259,14 +259,14 @@ export default function Home() {
                 <span className="truncate">Live Notices</span>
               </a>
 
-              <a
-                href="/apna-college-bihar-v56.apk"
-                download="apna-college-bihar-v56.apk"
-                className="px-4 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 font-heading font-semibold text-xs sm:text-sm transition-all shadow-xs active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2"
+              <Link
+                to="/download"
+                className="px-4 py-3 rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-200 hover:border-blue-300 font-heading font-bold text-xs sm:text-sm transition-all shadow-xs active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2 group"
               >
-                <Smartphone size={15} className="text-slate-500 shrink-0" />
-                <span className="truncate">Android App</span>
-              </a>
+                <Download size={15} className="text-blue-600 group-hover:scale-110 transition-transform shrink-0" />
+                <span className="truncate">Get Apps</span>
+                <span className="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider hidden sm:inline">PC & APK</span>
+              </Link>
             </div>
           </div>
 
@@ -546,6 +546,111 @@ export default function Home() {
             ))}
           </div>
 
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════ */}
+      {/* ── 5.5 OFFICIAL APPS (PC & MOBILE) ── */}
+      {/* ═══════════════════════════════════════════ */}
+      <section className="py-14 px-4 sm:px-6 md:px-12 relative z-10 bg-gradient-to-b from-transparent via-blue-50/40 to-transparent">
+        <div className="container mx-auto max-w-6xl">
+          <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950 rounded-3xl p-8 sm:p-12 text-white border border-slate-800 shadow-2xl relative overflow-hidden">
+            {/* Background Glow */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
+              <div className="max-w-xl text-center lg:text-left">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold mb-4 backdrop-blur-md">
+                  <Sparkles size={14} className="text-blue-400" />
+                  Official Native Applications
+                </div>
+                <h2 className="font-heading text-3xl sm:text-4xl font-black tracking-tight text-white mb-4">
+                  Study Faster on <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">PC Laptop</span> & <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Mobile</span>
+                </h2>
+                <p className="text-sm text-slate-300 leading-relaxed font-medium mb-6">
+                  Experience zero-distraction study sessions with our native Windows Desktop app featuring an App Blocker and Focus Stopwatch, or stay updated on the go with real-time BEU push notifications on Android.
+                </p>
+
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs text-slate-300 font-medium">
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle size={15} className="text-emerald-400" /> 100% Free Forever
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle size={15} className="text-emerald-400" /> VirusTotal Verified Safe
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle size={15} className="text-emerald-400" /> Offline Notes Cache
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:w-auto shrink-0">
+                {/* Windows Card */}
+                <div className="bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-blue-500/50 p-6 rounded-2xl transition-all shadow-lg flex flex-col justify-between group">
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
+                        <Monitor size={24} />
+                      </div>
+                      <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                        v2.1 Stable
+                      </span>
+                    </div>
+                    <h3 className="font-heading font-bold text-lg text-white mb-1">Windows PC App</h3>
+                    <p className="text-xs text-slate-400 mb-4">For Windows 10 & 11 (64-bit). Includes distraction blocker and focus timer.</p>
+                  </div>
+                  <div>
+                    <a
+                      href="/Apna-College-Bihar-Setup.exe"
+                      download="Apna-College-Bihar-Setup.exe"
+                      className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-heading font-bold text-xs transition-all shadow-md shadow-blue-600/30 active:scale-95 flex items-center justify-center gap-2 mb-2"
+                    >
+                      <Download size={15} /> Download for PC (76 MB)
+                    </a>
+                    <Link
+                      to="/download"
+                      className="text-[11px] text-slate-400 hover:text-blue-300 text-center block transition-colors font-medium"
+                    >
+                      View All Versions & Guide →
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Android Card */}
+                <div className="bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-500/50 p-6 rounded-2xl transition-all shadow-lg flex flex-col justify-between group">
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
+                        <Smartphone size={24} />
+                      </div>
+                      <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                        v56 APK
+                      </span>
+                    </div>
+                    <h3 className="font-heading font-bold text-lg text-white mb-1">Android APK</h3>
+                    <p className="text-xs text-slate-400 mb-4">Instant BEU notice push notifications, question bank, and CGPA calculator.</p>
+                  </div>
+                  <div>
+                    <a
+                      href="/apna-college-bihar-v56.apk"
+                      download="apna-college-bihar-v56.apk"
+                      className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-heading font-bold text-xs transition-all shadow-md shadow-emerald-600/30 active:scale-95 flex items-center justify-center gap-2 mb-2"
+                    >
+                      <Download size={15} /> Download APK (22 MB)
+                    </a>
+                    <Link
+                      to="/download"
+                      className="text-[11px] text-slate-400 hover:text-emerald-300 text-center block transition-colors font-medium"
+                    >
+                      View Mobile Guide →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

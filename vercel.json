@@ -31,6 +31,23 @@
       ]
     },
     {
+      "source": "/(.*)\\.exe",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/vnd.microsoft.portable-executable"
+        },
+        {
+          "key": "Content-Disposition",
+          "value": "attachment"
+        }
+      ]
+    },
+    {
       "source": "/(sw\\.js|manifest\\.json)",
       "headers": [
         {
@@ -173,7 +190,7 @@
     },
     {
       "source": "/api/download-windows",
-      "destination": "/Apna-College-Bihar-Windows.zip",
+      "destination": "/Apna-College-Bihar-Setup.exe",
       "permanent": false
     },
     {

@@ -70,6 +70,7 @@ const Blog = React.lazy(() => import('./pages/Blog'));
 const BlogPost = React.lazy(() => import('./pages/BlogPost'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
 const ShortLinkResolver = React.lazy(() => import('./pages/ShortLinkResolver'));
+const DownloadPage = React.lazy(() => import('./pages/DownloadPage'));
 
 function LoadingScreen() {
   return (
@@ -566,6 +567,10 @@ function App() {
             {isNative && <Route path="/" element={<AppHub />} />}
             <Route element={<DashboardLayout />}>
               {!isNative && <Route path="/" element={<Home />} />}
+              <Route path="/download" element={<DownloadPage />} />
+              <Route path="/apps" element={<Navigate to="/download" replace />} />
+              <Route path="/download-app" element={<Navigate to="/download" replace />} />
+              <Route path="/desktop" element={<Navigate to="/download" replace />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/notifications" element={<Notifications />} />
