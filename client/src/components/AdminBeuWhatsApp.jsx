@@ -29,6 +29,11 @@ export default function AdminBeuWhatsApp({ flash, onSwitchToNotices }) {
   const [showQrModal, setShowQrModal] = useState(false);
   const [testingPost, setTestingPost] = useState(false);
 
+  // Auto-Broadcast Configuration State (College Auto-Notification to WhatsApp is OFF by default)
+  const [autoDispatchCollege, setAutoDispatchCollege] = useState(false);
+  const [autoDispatchWhatsApp, setAutoDispatchWhatsApp] = useState(false);
+  const [updatingSettings, setUpdatingSettings] = useState(false);
+
   // New Notice Manual Form
   const [newNotice, setNewNotice] = useState({
     board: '',
@@ -64,9 +69,49 @@ export default function AdminBeuWhatsApp({ flash, onSwitchToNotices }) {
     } catch (e) {}
   };
 
+  const fetchBroadcastSettings = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/beu/broadcast-settings`);
+      const data = await res.json();
+      if (data.success) {
+        setAutoDispatchCollege(data.autoDispatchCollegeNotices === true);
+        setAutoDispatchWhatsApp(data.autoDispatchWhatsApp === true);
+      }
+    } catch (e) {}
+  };
+
+  const handleToggleBroadcastSetting = async (key, newValue) => {
+    setUpdatingSettings(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/beu/update-broadcast-settings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ [key]: newValue })
+      });
+      const data = await res.json();
+      if (data.success) {
+        if (key === 'autoDispatchCollegeNotices') {
+          setAutoDispatchCollege(newValue);
+          flash(`College notices WhatsApp auto-notification: ${newValue ? 'CHALU (ON)' : 'BAND (OFF)'} ✅`, 'ok');
+        }
+        if (key === 'autoDispatchWhatsApp') {
+          setAutoDispatchWhatsApp(newValue);
+          flash(`WhatsApp auto-dispatch: ${newValue ? 'CHALU (ON)' : 'BAND (OFF)'} ✅`, 'ok');
+        }
+      } else {
+        flash(data.message || 'Settings update failed.', 'err');
+      }
+    } catch (err) {
+      flash('Error: ' + err.message, 'err');
+    } finally {
+      setUpdatingSettings(false);
+    }
+  };
+
   useEffect(() => {
     fetchNotices(true);
     fetchBotStatus();
+    fetchBroadcastSettings();
     // Live polling: updates list automatically without clicking Sync
     const noticeInterval = setInterval(() => fetchNotices(false), 6000);
     const botInterval = setInterval(fetchBotStatus, 4000);
@@ -269,16 +314,46 @@ export default function AdminBeuWhatsApp({ flash, onSwitchToNotices }) {
             <div className="flex flex-wrap items-center gap-2.5">
               <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[9px] font-black tracking-widest uppercase flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                BEU AI Auto-Broadcaster
+                BEU AI Broadcaster
               </span>
               
+              {/* College WhatsApp Auto-Notification Status Badge & Toggle */}
+              <button
+                onClick={() => handleToggleBroadcastSetting('autoDispatchCollegeNotices', !autoDispatchCollege)}
+                disabled={updatingSettings}
+                className={`px-3 py-1 rounded-full text-[9px] font-black uppercase flex items-center gap-1.5 transition-all cursor-pointer border ${
+                  autoDispatchCollege 
+                    ? 'bg-amber-400 text-slate-950 border-amber-300' 
+                    : 'bg-rose-500/30 text-rose-200 border-rose-400/40 shadow-sm'
+                }`}
+                title="College Auto Notification to WhatsApp on/off karein"
+              >
+                <span>College WhatsApp Auto:</span>
+                <span>{autoDispatchCollege ? '🟢 ON' : '🛑 BAND (OFF)'}</span>
+              </button>
+
+              {/* General WhatsApp Auto-Dispatch Toggle */}
+              <button
+                onClick={() => handleToggleBroadcastSetting('autoDispatchWhatsApp', !autoDispatchWhatsApp)}
+                disabled={updatingSettings}
+                className={`px-3 py-1 rounded-full text-[9px] font-black uppercase flex items-center gap-1.5 transition-all cursor-pointer border ${
+                  autoDispatchWhatsApp 
+                    ? 'bg-emerald-400 text-slate-950 border-emerald-300' 
+                    : 'bg-white/15 text-emerald-100 border-white/20'
+                }`}
+                title="Central WhatsApp auto-dispatch toggle"
+              >
+                <span>BEU Auto-Post:</span>
+                <span>{autoDispatchWhatsApp ? '🟢 ON' : '🛑 OFF (1-Click Share)'}</span>
+              </button>
+
               {botStatus === 'CONNECTED' ? (
                 <span className="px-3 py-1 bg-emerald-400 text-slate-950 font-black rounded-full text-[9px] uppercase flex items-center gap-1 shadow-md">
-                  <CheckCircle2 size={12} /> Auto-Post Active
+                  <CheckCircle2 size={12} /> WhatsApp Linked
                 </span>
               ) : (
                 <span className="px-3 py-1 bg-amber-400/20 text-amber-200 border border-amber-300/30 rounded-full text-[9px] font-black uppercase flex items-center gap-1">
-                  <Smartphone size={12} /> Scan QR Once to Auto-Post
+                  <Smartphone size={12} /> Scan QR Once
                 </span>
               )}
 
@@ -288,10 +363,12 @@ export default function AdminBeuWhatsApp({ flash, onSwitchToNotices }) {
             </div>
             
             <h1 className="text-2xl md:text-3xl font-[1000] tracking-tight text-white uppercase">
-              BEU Notification ➔ WhatsApp Channel Auto-Pilot
+              BEU Notification ➔ WhatsApp Broadcast Portal
             </h1>
             <p className="text-xs md:text-sm text-emerald-100 font-medium max-w-2xl leading-relaxed">
-              BEU पर नया नोटिस आते ही AI पूरा PDF समझकर सीधे आपके WhatsApp Channel पर बिना किसी क्लिक के अपने आप पोस्ट कर देता है।
+              {autoDispatchCollege 
+                ? 'College aur BEU notices auto-dispatch mode me hain.' 
+                : '✅ College wala auto notification WhatsApp ke liye BAND hai. Notices yahan generate hoti hain aur aap 1-click me manually WhatsApp par share kar sakte hain.'}
             </p>
           </div>
 
@@ -547,6 +624,11 @@ export default function AdminBeuWhatsApp({ flash, onSwitchToNotices }) {
                       {notice.isimportant === 1 && (
                         <span className="px-2.5 py-0.5 bg-rose-100 text-rose-600 text-[9px] font-black rounded-md uppercase">
                           ⚡ Important
+                        </span>
+                      )}
+                      {notice.isCollegeNotice && (
+                        <span className="px-2.5 py-0.5 bg-amber-100 text-amber-800 text-[9px] font-black rounded-md uppercase border border-amber-300">
+                          🏛️ {notice.shortName || 'College Notice'} • Auto-Post: OFF 🛑
                         </span>
                       )}
                       <span className="text-[10px] text-slate-500 font-bold">

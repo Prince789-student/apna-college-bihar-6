@@ -22,13 +22,20 @@ const SETTINGS_FILE_PATH = path.join(__dirname, '..', 'data', 'settings.json');
 function loadLocalSettings() {
   try {
     if (fs.existsSync(SETTINGS_FILE_PATH)) {
-      return JSON.parse(fs.readFileSync(SETTINGS_FILE_PATH, 'utf8'));
+      const data = JSON.parse(fs.readFileSync(SETTINGS_FILE_PATH, 'utf8'));
+      return {
+        monthlyCollection: data.monthlyCollection || { monthName: 'September 2026', totalCollection: 50 },
+        autoDispatchWhatsApp: data.autoDispatchWhatsApp === true || process.env.AUTO_DISPATCH_WHATSAPP === 'true',
+        autoDispatchCollegeNotices: data.autoDispatchCollegeNotices === true || process.env.AUTO_DISPATCH_COLLEGE_NOTICES === 'true'
+      };
     }
   } catch (e) {
     console.error("Error reading settings.json:", e);
   }
   return {
-    monthlyCollection: { monthName: 'September 2026', totalCollection: 50 }
+    monthlyCollection: { monthName: 'September 2026', totalCollection: 50 },
+    autoDispatchWhatsApp: process.env.AUTO_DISPATCH_WHATSAPP === 'true',
+    autoDispatchCollegeNotices: process.env.AUTO_DISPATCH_COLLEGE_NOTICES === 'true'
   };
 }
 
@@ -314,15 +321,54 @@ router.post('/whatsapp-test-post', authenticatedLimiter, asyncHandler(async (req
  * GET /api/beu/config-status
  */
 router.get('/config-status', publicLimiter, (req, res) => {
+  const settings = loadLocalSettings();
   res.json({
     whatsappConfigured: whatsappService.isConfigured(),
     botConnected: whatsappBotService.isConnected(),
     botStatus: whatsappBotService.status,
     channelUrl: CHANNEL_URL,
     hasGeminiKey: !!process.env.GEMINI_API_KEY,
-    hasTelegram: !!(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID)
+    hasTelegram: !!(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID),
+    autoDispatchWhatsApp: settings.autoDispatchWhatsApp,
+    autoDispatchCollegeNotices: settings.autoDispatchCollegeNotices
   });
 });
+
+/**
+ * GET /api/beu/broadcast-settings
+ */
+router.get('/broadcast-settings', publicLimiter, (req, res) => {
+  const settings = loadLocalSettings();
+  res.json({
+    success: true,
+    autoDispatchWhatsApp: settings.autoDispatchWhatsApp,
+    autoDispatchCollegeNotices: settings.autoDispatchCollegeNotices
+  });
+});
+
+/**
+ * POST /api/beu/update-broadcast-settings
+ */
+router.post('/update-broadcast-settings', authenticatedLimiter, asyncHandler(async (req, res) => {
+  const { autoDispatchWhatsApp, autoDispatchCollegeNotices } = req.body || {};
+  const settings = loadLocalSettings();
+  if (typeof autoDispatchWhatsApp === 'boolean') {
+    settings.autoDispatchWhatsApp = autoDispatchWhatsApp;
+  }
+  if (typeof autoDispatchCollegeNotices === 'boolean') {
+    settings.autoDispatchCollegeNotices = autoDispatchCollegeNotices;
+  }
+  saveLocalSettings(settings);
+
+  res.json({
+    success: true,
+    message: 'Broadcast settings updated successfully!',
+    settings: {
+      autoDispatchWhatsApp: settings.autoDispatchWhatsApp,
+      autoDispatchCollegeNotices: settings.autoDispatchCollegeNotices
+    }
+  });
+}));
 
 /**
  * GET /api/beu/whatsapp-debug-screenshot
