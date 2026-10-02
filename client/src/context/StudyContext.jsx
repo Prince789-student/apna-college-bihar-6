@@ -275,7 +275,15 @@ export function StudyProvider({ children }) {
 
   const saveGlobalSession = async (manualTime = null) => {
     const activeMentorshipRoll = localStorage.getItem('beu_mentorship_active_roll');
-    if (!user && !activeMentorshipRoll) return;
+    if (!user && !activeMentorshipRoll) {
+      setOvertimeActive(false);
+      setTimerActive(false);
+      setTimerTime(0);
+      if (typeof window !== 'undefined' && window.desktopBridge?.stopFocus) {
+        try { window.desktopBridge.stopFocus(); } catch (_) {}
+      }
+      return;
+    }
 
     const initialDuration = Number(localStorage.getItem('study_timer_total_duration')) || (customHours * 3600 + customMinutes * 60 + customSeconds);
     const timeToSave = manualTime || (
@@ -286,7 +294,19 @@ export function StudyProvider({ children }) {
     if (timeToSave < 5) { 
       setOvertimeActive(false);
       setTimerActive(false); 
+      setTimerTime(0);
+      if (typeof window !== 'undefined' && window.desktopBridge?.stopFocus) {
+        try { window.desktopBridge.stopFocus(); } catch (_) {}
+      }
       return; 
+    }
+
+    // Always stop and reset timer immediately so user sees instant feedback
+    setOvertimeActive(false);
+    setTimerActive(false);
+    setTimerTime(0);
+    if (typeof window !== 'undefined' && window.desktopBridge?.stopFocus) {
+      try { window.desktopBridge.stopFocus(); } catch (_) {}
     }
 
     const todayStr = new Date().toLocaleDateString('en-CA');
@@ -351,8 +371,6 @@ export function StudyProvider({ children }) {
 
     // If only mentorship student and no Firebase account, finish timer
     if (!user) {
-      setOvertimeActive(false);
-      setTimerActive(false);
       return;
     }
 
@@ -363,8 +381,6 @@ export function StudyProvider({ children }) {
         duration: 4000,
         style: { background: '#1e293b', color: '#f8fafc', fontWeight: '800', fontSize: '12px' }
       });
-      setOvertimeActive(false);
-      setTimerActive(false);
       return;
     }
     // ─────────────────────────────────────────────────────────
@@ -418,15 +434,13 @@ export function StudyProvider({ children }) {
         await updateDoc(doc(db, 'Tasks', selectedTaskId), { done: true });
         setSelectedTaskId('');
       }
-      
-      setOvertimeActive(false);
-      setTimerActive(false);
+
+      toast.success('Study session saved successfully! 🎓', { duration: 3000 });
     } catch (e) { 
-      setOvertimeActive(false);
       console.error("Global Save Error:", e);
       // Network error during save — queue it locally
       queueOfflineSession(sessionData);
-      toast('📱 Network error. Session saved locally.', {
+      toast('📱 Session saved locally.', {
         duration: 4000,
         style: { background: '#1e293b', color: '#f8fafc', fontWeight: '800', fontSize: '12px' }
       });
