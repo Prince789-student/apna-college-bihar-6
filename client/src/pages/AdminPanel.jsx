@@ -136,19 +136,67 @@ export default function AdminPanel() {
     }
   };
 
+  const getAdminHeaders = async () => {
+    const headers = { 'Content-Type': 'application/json' };
+    if (user?.email) headers['x-user-email'] = user.email;
+    try {
+      if (auth.currentUser) {
+        const idTok = await auth.currentUser.getIdToken();
+        if (idTok) headers['Authorization'] = `Bearer ${idTok}`;
+      }
+    } catch (_) {}
+    return headers;
+  };
+
+  const mapGroupDoc = (d) => {
+    const data = typeof d.data === 'function' ? d.data() : d;
+    return {
+      id: d.id,
+      ...data,
+      name: data.name || data.groupName || 'Study Hub',
+      code: data.code || data.groupCode || 'N/A',
+      memberCount: data.memberCount || (Array.isArray(data.members) ? data.members.length : 1)
+    };
+  };
+
   useEffect(() => {
     if (!isAdmin || authLoading) return;
     setLoading(true);
 
+    const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+
+    // Fast initial load of stats and data from backend Admin SDK
+    const loadStatsFallback = async () => {
+      try {
+        const headers = await getAdminHeaders();
+        const res = await fetch(`${apiBase}/api/admin/stats`, { headers });
+        const json = await res.json();
+        if (json.success) {
+          if (Array.isArray(json.users) && json.users.length > 0) {
+            setUsers(prev => (prev && prev.length) ? prev : json.users);
+          }
+          if (Array.isArray(json.groups) && json.groups.length > 0) {
+            setGroups(prev => (prev && prev.length) ? prev : json.groups.map(mapGroupDoc));
+          }
+        }
+      } catch (err) {
+        console.warn('Admin stats fetch error:', err);
+      }
+    };
+    loadStatsFallback();
+
     const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
-      setUsers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      setQuotaExceededError(false);
+      if (!snap.empty) {
+        setUsers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+        setQuotaExceededError(false);
+      }
     }, async (err) => {
       console.warn("Firestore users listener quota or connection error:", err.message);
       setQuotaExceededError(true);
-      // Fallback: Fetch directly from server API (Firebase Auth list)
+      // Fallback: Fetch directly from server API
       try {
-        const resp = await fetch('/api/admin/users');
+        const headers = await getAdminHeaders();
+        const resp = await fetch(`${apiBase}/api/admin/users`, { headers });
         const json = await resp.json();
         if (json.success && Array.isArray(json.users)) {
           setUsers(json.users);
@@ -158,9 +206,22 @@ export default function AdminPanel() {
       }
     });
 
-    const unsubGroups = onSnapshot(collection(db, 'groups'), (snap) => {
-      setGroups(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    });
+    const groupsCache = new Map();
+    const updateGroups = () => {
+      if (groupsCache.size > 0) {
+        setGroups(Array.from(groupsCache.values()));
+      }
+    };
+
+    const unsubGroups1 = onSnapshot(collection(db, 'Groups'), (snap) => {
+      snap.docs.forEach(d => groupsCache.set(d.id, mapGroupDoc(d)));
+      updateGroups();
+    }, () => {});
+
+    const unsubGroups2 = onSnapshot(collection(db, 'groups'), (snap) => {
+      snap.docs.forEach(d => groupsCache.set(d.id, mapGroupDoc(d)));
+      updateGroups();
+    }, () => {});
 
     const unsubDocs = onSnapshot(collection(db, 'documents'), (snap) => {
       setDocs(snap.docs.map(d => ({ id: d.id, ...d.data() })));
@@ -186,7 +247,6 @@ export default function AdminPanel() {
       setDonors(snap.docs.map(d => ({ id: d.id, ...d.data() })));
     });
 
-    const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
     fetch(`${apiBase}/api/beu/monthly-collection`)
       .then(res => res.json())
       .then(json => {
@@ -227,7 +287,8 @@ export default function AdminPanel() {
     setLoading(false);
     return () => { 
       if(unsubUsers) unsubUsers(); 
-      if(unsubGroups) unsubGroups(); 
+      if(unsubGroups1) unsubGroups1(); 
+      if(unsubGroups2) unsubGroups2(); 
       if(unsubDocs) unsubDocs(); 
       if(unsubAnns) unsubAnns(); 
       if(unsubAds) unsubAds();
@@ -418,18 +479,19 @@ export default function AdminPanel() {
     try {
       setSyncingUsers(true);
       flash('Syncing all Firebase Auth users to database... ⏳');
-      const res = await fetch('/api/admin/sync-users', { method: 'POST' });
+      const headers = await getAdminHeaders();
+      const res = await fetch('/api/admin/sync-users', { method: 'POST', headers });
       const json = await res.json();
       if (json.success) {
         flash(`✅ ${json.message || `Synced ${json.count} users successfully!`}`, 'ok');
         // Refresh users list from API
-        const usersRes = await fetch('/api/admin/users');
+        const usersRes = await fetch('/api/admin/users', { headers });
         const usersJson = await usersRes.json();
         if (usersJson.success && Array.isArray(usersJson.users)) {
           setUsers(usersJson.users);
         }
       } else {
-        flash(json.error || 'User sync failed', 'err');
+        flash(json.error || json.message || 'User sync failed', 'err');
       }
     } catch (e) {
       flash('Sync error: ' + e.message, 'err');
@@ -923,10 +985,10 @@ if (!isAdmin) return (
       {tab==='overview' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { label: 'Scholars', val: users.length, icon: Users },
+            { label: 'Scholars', val: users.filter(x => x.role !== 'ADMIN' && x.role !== 'SUPER_ADMIN').length || users.length, icon: Users },
             { label: 'Study Hubs', val: groups.length, icon: BookOpen },
             { label: 'Knowledge Base', val: docs.length, icon: FileText },
-            { label: 'Admins', val: users.filter(x=>x.role==='ADMIN').length, icon: Shield },
+            { label: 'Admins', val: Math.max(1, users.filter(x => x.role === 'ADMIN' || x.role === 'SUPER_ADMIN').length), icon: Shield },
           ].map(s => (
             <div key={s.label} className="bg-white p-6 rounded-[2.5rem] border border-slate-200/80">
                <div className="flex justify-between items-start mb-4">
@@ -1518,18 +1580,18 @@ if (!isAdmin) return (
               {groups.map(g => (
                 <div key={g.id} className="p-6 bg-slate-50 rounded-[2.5rem] border border-slate-300/30">
                    <div className="flex justify-between items-start mb-6">
-                      <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-xl font-black text-slate-900">{g.name?.[0]?.toUpperCase() || 'G'}</div>
+                      <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center text-xl font-black text-slate-900">{(g.name || g.groupName || 'G')[0]?.toUpperCase() || 'G'}</div>
                       <button onClick={()=>deleteGroup(g.id)} className="p-2 text-slate-600 hover:text-red-500"><Trash2 size={20}/></button>
                    </div>
-                   <p className="text-lg font-[1000] text-slate-900 uppercase tracking-tighter truncate">{g.name}</p>
+                   <p className="text-lg font-[1000] text-slate-900 uppercase tracking-tighter truncate">{g.name || g.groupName || 'Study Hub'}</p>
                    <div className="mt-6 p-4 bg-slate-100/50 rounded-2xl border border-slate-200/50 flex justify-between items-center">
                       <div>
                          <p className="text-[9px] font-black text-slate-500 uppercase">Load Density</p>
-                         <p className="text-sm font-black text-slate-900">{g.memberCount}/70</p>
+                         <p className="text-sm font-black text-slate-900">{g.memberCount || (Array.isArray(g.members) ? g.members.length : 1)}/70</p>
                       </div>
                       <div className="text-right">
                          <p className="text-[9px] font-black text-slate-500 uppercase">Code</p>
-                         <p className="text-sm font-black text-slate-900">{g.code}</p>
+                         <p className="text-sm font-black text-slate-900">{g.code || g.groupCode || 'N/A'}</p>
                       </div>
                    </div>
                 </div>

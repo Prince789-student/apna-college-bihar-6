@@ -17,8 +17,11 @@ service cloud.firestore {
 
     // Users Collection
     match /users/{userId} {
-      allow read: if isAuthenticated(); // Needed for admin panel to see all users
+      allow read: if true; // Allows viewing scholar counts and profiles
       allow write: if (isAuthenticated() && request.auth.uid == userId) || isAdmin();
+    }
+    match /Users/{userId} {
+      allow read, write: if isAuthenticated();
     }
     
     // Main Documents (Notes & PYQs)
@@ -45,10 +48,14 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    // Groups
+    // Groups & Study Hubs
     match /groups/{docId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdmin();
+      allow read: if true;
+      allow write: if isAuthenticated() || isAdmin();
+    }
+    match /Groups/{docId} {
+      allow read: if true;
+      allow write: if isAuthenticated() || isAdmin();
     }
     
     // Study Dashboard specific collections

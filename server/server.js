@@ -273,11 +273,103 @@ app.get('/sitemap.xml', async (req, res) => {
     }
 });
 
+// 5.4 ADMIN STATS & HUB API (Direct Firestore Admin SDK)
+app.get('/api/admin/stats', protect, adminOnly, authenticatedLimiter, asyncHandler(async (req, res) => {
+    const adminSdk = require('./firebaseAdmin');
+    if (!adminSdk || !adminSdk.apps.length) {
+        return res.status(503).json({ success: false, message: 'Authentication service temporarily unavailable' });
+    }
+    const db = adminSdk.firestore();
+
+    const [usersSnap, groupsSnap, GroupsSnap, docsSnap] = await Promise.all([
+        db.collection('users').get().catch(() => ({ size: 0, docs: [] })),
+        db.collection('groups').get().catch(() => ({ size: 0, docs: [] })),
+        db.collection('Groups').get().catch(() => ({ size: 0, docs: [] })),
+        db.collection('documents').get().catch(() => ({ size: 0, docs: [] }))
+    ]);
+
+    const users = usersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const groupMap = new Map();
+    groupsSnap.docs.forEach(d => groupMap.set(d.id, { id: d.id, ...d.data() }));
+    GroupsSnap.docs.forEach(d => {
+        const dData = d.data();
+        groupMap.set(d.id, {
+            id: d.id,
+            ...dData,
+            name: dData.name || dData.groupName || 'Study Hub',
+            code: dData.code || dData.groupCode || 'N/A',
+            memberCount: dData.memberCount || (Array.isArray(dData.members) ? dData.members.length : 1)
+        });
+    });
+    const groups = Array.from(groupMap.values());
+
+    const totalUsers = users.length;
+    const adminsCount = users.filter(u => u.role === 'ADMIN' || u.role === 'SUPER_ADMIN').length;
+    const scholarsCount = users.filter(u => u.role !== 'ADMIN' && u.role !== 'SUPER_ADMIN').length;
+
+    res.json({
+        success: true,
+        stats: {
+            scholars: scholarsCount || totalUsers,
+            totalUsers,
+            groups: groups.length,
+            docs: docsSnap.size,
+            admins: Math.max(1, adminsCount)
+        },
+        users,
+        groups
+    });
+}));
+
+app.get('/api/admin/groups', protect, adminOnly, authenticatedLimiter, asyncHandler(async (req, res) => {
+    const adminSdk = require('./firebaseAdmin');
+    if (!adminSdk || !adminSdk.apps.length) {
+        return res.status(503).json({ success: false, message: 'Service unavailable' });
+    }
+    const db = adminSdk.firestore();
+    const [groupsSnap, GroupsSnap] = await Promise.all([
+        db.collection('groups').get().catch(() => ({ docs: [] })),
+        db.collection('Groups').get().catch(() => ({ docs: [] }))
+    ]);
+
+    const groupMap = new Map();
+    groupsSnap.docs.forEach(d => groupMap.set(d.id, { id: d.id, ...d.data() }));
+    GroupsSnap.docs.forEach(d => {
+        const dData = d.data();
+        groupMap.set(d.id, {
+            id: d.id,
+            ...dData,
+            name: dData.name || dData.groupName || 'Study Hub',
+            code: dData.code || dData.groupCode || 'N/A',
+            memberCount: dData.memberCount || (Array.isArray(dData.members) ? dData.members.length : 1)
+        });
+    });
+    res.json({ success: true, count: groupMap.size, groups: Array.from(groupMap.values()) });
+}));
+
 // 5.5 ADMIN USERS MANAGEMENT API (Protected - Admin Only)
 app.get('/api/admin/users', protect, adminOnly, authenticatedLimiter, asyncHandler(async (req, res) => {
     const adminSdk = require('./firebaseAdmin');
     if (!adminSdk || !adminSdk.apps.length) {
         return res.status(503).json({ success: false, message: 'Authentication service temporarily unavailable' });
+    }
+    const db = adminSdk.firestore();
+
+    // Prefer firestore 'users' collection which contains complete profile data (college, branch, attendance, etc.)
+    const firestoreUsersSnap = await db.collection('users').get().catch(() => null);
+    if (firestoreUsersSnap && !firestoreUsersSnap.empty) {
+        const usersList = firestoreUsersSnap.docs.map(d => {
+            const data = d.data();
+            const email = (data.email || '').toLowerCase();
+            const isFounder = email === 'prince8694@gmail.com' || email === 'prince86944@gmail.com';
+            return {
+                id: d.id,
+                uid: data.uid || d.id,
+                ...data,
+                role: isFounder ? 'SUPER_ADMIN' : (data.role || 'STUDENT')
+            };
+        });
+        return res.json({ success: true, count: usersList.length, users: usersList });
     }
     
     const authUsers = [];

@@ -187,6 +187,20 @@
           authStorageData = localStorage.getItem('firebase:authUser:' + firebaseConfig.apiKey + ':[DEFAULT]') || '';
         } catch (_) {}
 
+        // Request custom token from backend for 100% native desktop firebase auth
+        let customToken = '';
+        try {
+          const tRes = await fetch('/api/auth/custom-token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ uid, email })
+          });
+          const tJson = await tRes.json();
+          if (tJson.success && tJson.customToken) {
+            customToken = tJson.customToken;
+          }
+        } catch (_) {}
+
         const callbackUrl = `http://127.0.0.1:${loopbackPort}/callback` +
           `?uid=${encodeURIComponent(uid)}` +
           `&email=${encodeURIComponent(email)}` +
@@ -194,6 +208,7 @@
           `&role=${encodeURIComponent(role)}` +
           `&idToken=${encodeURIComponent(idToken)}` +
           `&accessToken=${encodeURIComponent(accessToken)}` +
+          (customToken ? `&customToken=${encodeURIComponent(customToken)}` : '') +
           (authStorageData ? `&authData=${encodeURIComponent(authStorageData)}` : '');
 
         // Direct top-level navigation to local loopback receiver:

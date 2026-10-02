@@ -168,7 +168,7 @@ let authLoopbackPort = 0;
 
 function applyDesktopAuth(userData) {
   if (!mainWindow || mainWindow.isDestroyed()) return;
-  const { uid, email, name, role, idToken, accessToken, authData } = userData;
+  const { uid, email, name, role, idToken, accessToken, customToken, authData } = userData;
   console.log('[Auth] Applying auth for:', email || name, uid);
   
   const userPayload = {
@@ -185,7 +185,7 @@ function applyDesktopAuth(userData) {
         localStorage.setItem('acb_user_cache', JSON.stringify(u));
         ${authData ? `try { localStorage.setItem('firebase:authUser:AIzaSyBIvnhJLz_ucsxuFEnZeYSAq2L6vJ4DcKo:[DEFAULT]', decodeURIComponent("${encodeURIComponent(authData)}")); } catch (_) {}` : ''}
         if (typeof window.__acb_login_with_credential === 'function') {
-          await window.__acb_login_with_credential(${JSON.stringify(idToken || '')}, ${JSON.stringify(accessToken || '')}, u);
+          await window.__acb_login_with_credential(${JSON.stringify(idToken || '')}, ${JSON.stringify(accessToken || '')}, u, ${JSON.stringify(customToken || '')});
         }
         window.location.href = '/';
       } catch (err) {
@@ -219,6 +219,7 @@ function handleAuthCallbackUrl(urlStr) {
         role: parsed.searchParams.get('role') || 'STUDENT',
         idToken: parsed.searchParams.get('idToken') || parsed.searchParams.get('token') || '',
         accessToken: parsed.searchParams.get('accessToken') || '',
+        customToken: parsed.searchParams.get('customToken') || '',
         authData: parsed.searchParams.get('authData') || ''
       });
     }
@@ -255,10 +256,11 @@ function startAuthLoopbackServer() {
           const role = parsedUrl.searchParams.get('role') || 'STUDENT';
           const idToken = parsedUrl.searchParams.get('idToken') || parsedUrl.searchParams.get('token') || '';
           const accessToken = parsedUrl.searchParams.get('accessToken') || '';
+          const customToken = parsedUrl.searchParams.get('customToken') || '';
           const authData = parsedUrl.searchParams.get('authData') || '';
 
           if (uid) {
-            applyDesktopAuth({ uid, email, name, role, idToken, accessToken, authData });
+            applyDesktopAuth({ uid, email, name, role, idToken, accessToken, customToken, authData });
 
             res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
             res.end(`

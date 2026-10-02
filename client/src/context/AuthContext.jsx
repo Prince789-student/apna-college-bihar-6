@@ -8,6 +8,7 @@ import {
   RecaptchaVerifier, 
   signInWithPhoneNumber,
   signInWithCredential,
+  signInWithCustomToken,
   GoogleAuthProvider,
   signInWithRedirect,
   getRedirectResult
@@ -279,14 +280,49 @@ export function AuthProvider({ children }) {
   }
 
   // 6. Logout — clears localStorage cache too
-  function logout() {
-    localStorage.removeItem(USER_CACHE_KEY);
-    return signOut(auth);
+  async function logout() {
+    try {
+      localStorage.removeItem(USER_CACHE_KEY);
+      setUser(null);
+      setLoading(false);
+      await signOut(auth);
+    } catch (err) {
+      console.warn("Logout error:", err);
+    } finally {
+      setUser(null);
+      setLoading(false);
+      try {
+        toast.success("Logged out successfully!", { duration: 2500 });
+      } catch (_) {}
+    }
   }
 
   useEffect(() => {
-    window.__acb_login_with_credential = async (idToken, accessToken, fallbackUser) => {
+    window.__acb_login_with_credential = async (idToken, accessToken, fallbackUser, customToken) => {
       try {
+        if (customToken) {
+          const res = await signInWithCustomToken(auth, customToken);
+          await syncProfile(res.user);
+          return res.user;
+        }
+        if (fallbackUser && fallbackUser.uid) {
+          try {
+            const apiBase = (typeof window !== 'undefined' && window.location.hostname === 'localhost') ? 'http://localhost:5000' : '';
+            const cRes = await fetch(`${apiBase}/api/auth/custom-token`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ uid: fallbackUser.uid, email: fallbackUser.email })
+            });
+            const cJson = await cRes.json();
+            if (cJson.success && cJson.customToken) {
+              const res = await signInWithCustomToken(auth, cJson.customToken);
+              await syncProfile(res.user);
+              return res.user;
+            }
+          } catch (cErr) {
+            console.warn('Custom token exchange skipped:', cErr);
+          }
+        }
         if (idToken) {
           const cred = GoogleAuthProvider.credential(idToken, accessToken || null);
           const res = await signInWithCredential(auth, cred);
@@ -322,6 +358,22 @@ export function AuthProvider({ children }) {
               if (cachedData && cachedData.uid) {
                 setUser(cachedData);
                 setLoading(false);
+                // Also authenticate Firebase client SDK in background via custom token
+                if (!auth.currentUser) {
+                  const apiBase = (typeof window !== 'undefined' && window.location.hostname === 'localhost') ? 'http://localhost:5000' : '';
+                  fetch(`${apiBase}/api/auth/custom-token`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid: cachedData.uid, email: cachedData.email })
+                  })
+                  .then(r => r.json())
+                  .then(async (res) => {
+                    if (res.success && res.customToken) {
+                      await signInWithCustomToken(auth, res.customToken);
+                    }
+                  })
+                  .catch(() => {});
+                }
                 return;
               }
             } catch (_) {}

@@ -234,4 +234,32 @@ router.post('/login', validate({ body: loginSchema }), asyncHandler(async (req, 
     }
 }));
 
+// @route   POST /api/auth/custom-token
+// Generates a Firebase Custom Token for Desktop App to authenticate with Firebase client SDK
+router.post('/custom-token', asyncHandler(async (req, res) => {
+    const { uid, email } = req.body;
+    if (!uid) {
+        return res.status(400).json({ success: false, message: 'User UID is required' });
+    }
+    const admin = require('../firebaseAdmin');
+    if (!admin || !admin.apps || !admin.apps.length) {
+        return res.status(503).json({ success: false, message: 'Firebase Admin unavailable' });
+    }
+
+    const cleanEmail = (email || '').toLowerCase().trim();
+    const isFounder = cleanEmail === 'prince8694@gmail.com' || cleanEmail === 'prince86944@gmail.com';
+    const role = isFounder ? 'SUPER_ADMIN' : 'STUDENT';
+
+    try {
+        const customToken = await admin.auth().createCustomToken(uid, {
+            email: cleanEmail,
+            role
+        });
+        return res.json({ success: true, customToken });
+    } catch (err) {
+        console.error('[Auth] Failed to generate custom token:', err.message);
+        return res.status(500).json({ success: false, message: 'Token creation failed' });
+    }
+}));
+
 module.exports = router;

@@ -748,8 +748,11 @@ export default function DashboardLayout() {
                             </button>
 
                             <button 
-                              onClick={() => logout()}
-                              className="flex items-center gap-3 w-full p-2.5 hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-xl transition-all group"
+                              onClick={async () => {
+                                setShowProfileMenu(false);
+                                await logout();
+                              }}
+                              className="flex items-center gap-3 w-full p-2.5 hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-xl transition-all group cursor-pointer"
                             >
                               <div className="p-2 bg-slate-100 group-hover:bg-red-600/10 rounded-lg transition-colors">
                                 <LogOut size={14} />
@@ -865,7 +868,7 @@ export default function DashboardLayout() {
         </div>
 
         <div className="p-4 border-t border-slate-100 bg-slate-50">
-          <button onClick={() => logout()} className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-xl transition-all font-bold text-xs shadow-sm border border-slate-200">
+          <button onClick={async () => { setMobileMenuOpen(false); await logout(); }} className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white hover:bg-red-50 text-slate-600 hover:text-red-600 rounded-xl transition-all font-bold text-xs shadow-sm border border-slate-200 cursor-pointer">
             <LogOut size={16} strokeWidth={2.5} /> Logout Session
           </button>
         </div>
