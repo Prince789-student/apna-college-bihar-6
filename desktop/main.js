@@ -5,7 +5,15 @@ const {
 const path = require('path');
 const fs = require('fs');
 const http = require('http');
-const { execSync } = require('child_process');
+const { exec } = require('child_process');
+
+// ── Hardware Acceleration & Blazing Performance Switches ────────────────────────
+app.commandLine.appendSwitch('enable-gpu-rasterization');
+app.commandLine.appendSwitch('enable-zero-copy');
+app.commandLine.appendSwitch('ignore-gpu-blocklist');
+app.commandLine.appendSwitch('enable-hardware-overlays');
+app.commandLine.appendSwitch('disable-background-timer-throttling');
+app.commandLine.appendSwitch('disable-renderer-backgrounding');
 
 const DEFAULT_PORTAL_URL = 'https://apnacollegebihar.online';
 const PORTAL_URL = process.env.PORTAL_URL ||
@@ -36,16 +44,13 @@ const BLOCKED_PROCESSES = [
   'Netflix.exe', 'HotstarApp.exe',
 ];
 
-function killProcess(processName) {
-  try {
-    execSync('taskkill /F /IM ' + processName + ' /T', { stdio: 'ignore', windowsHide: true });
-  } catch (_) {}
-}
-
 function killAllBlockedProcesses() {
-  for (const proc of BLOCKED_PROCESSES) {
-    killProcess(proc);
-  }
+  if (!BLOCKED_PROCESSES.length) return;
+  // Batch all process names into a single async command to prevent UI freezing
+  const imArgs = BLOCKED_PROCESSES.map(p => `/IM "${p}"`).join(' ');
+  try {
+    exec(`taskkill /F ${imArgs} /T`, { windowsHide: true }, () => {});
+  } catch (_) {}
 }
 
 function startFocusMode(durationSeconds) {
@@ -437,7 +442,7 @@ function createSplashWindow() {
   splashWindow.once('ready-to-show', () => splashWindow.show());
 }
 
-const CHROME_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36';
+const CHROME_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 ApnaCollegeBiharDesktop/2.1';
 
 function createMainWindow() {
   const state = loadWindowState();
@@ -447,18 +452,24 @@ function createMainWindow() {
     width:  state.width  || 1280,
     height: state.height || 820,
     minWidth: 960, minHeight: 600,
-    title: 'Apna College Bihar - Desktop Portal',
+    title: 'Apna College Bihar',
     icon: getAppIcon(),
     show: false,
+    autoHideMenuBar: true,
     backgroundColor: '#0a0f1d',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false,
-      spellcheck: true
+      spellcheck: false,
+      backgroundThrottling: false,
+      webgl: true
     }
   });
+
+  mainWindow.setMenuBarVisibility(false);
+  try { mainWindow.removeMenu(); } catch (_) {}
 
   mainWindow.webContents.setUserAgent(CHROME_UA);
 
@@ -545,116 +556,6 @@ function isExternalUrl(urlStr) {
   } catch (_) { return false; }
 }
 
-function buildAppMenu() {
-  const nav = (route) => {
-    if (mainWindow && !mainWindow.isDestroyed()) mainWindow.loadURL(DEFAULT_PORTAL_URL + route);
-  };
-
-  Menu.setApplicationMenu(Menu.buildFromTemplate([
-    {
-      label: 'Apna College Bihar',
-      submenu: [
-        {
-          label: 'About Apna College Bihar',
-          click: () => dialog.showMessageBox(mainWindow, {
-            type: 'info', title: 'Apna College Bihar Desktop',
-            message: 'Apna College Bihar Desktop Portal v2.1',
-            detail: 'BEU students ka premier desktop hub.\nStudy Focus Blocker included!',
-            buttons: ['OK']
-          })
-        },
-        { type: 'separator' },
-        {
-          label: 'Hide to System Tray', accelerator: 'CmdOrCtrl+H',
-          click: () => { if (mainWindow && !focusActive) mainWindow.hide(); }
-        },
-        { type: 'separator' },
-        {
-          label: 'Exit', accelerator: 'CmdOrCtrl+Q',
-          click: () => {
-            if (focusActive) {
-              dialog.showMessageBox(mainWindow, {
-                type: 'warning', title: 'Focus Mode Active!',
-                message: 'Study chal rahi hai! Pehle focus session complete karo.',
-                buttons: ['OK, Padhai Karta Hoon']
-              });
-              return;
-            }
-            isQuitting = true;
-            app.quit();
-          }
-        }
-      ]
-    },
-    {
-      label: 'Focus Mode',
-      submenu: [
-        { label: 'Start 25-min Focus', accelerator: 'CmdOrCtrl+Shift+F', click: () => { if (!focusActive) startFocusMode(1500); } },
-        { label: 'Start 45-min Focus', click: () => { if (!focusActive) startFocusMode(2700); } },
-        { label: 'Start 60-min Focus', click: () => { if (!focusActive) startFocusMode(3600); } },
-        { label: 'Start 90-min Focus', click: () => { if (!focusActive) startFocusMode(5400); } },
-        { type: 'separator' },
-        {
-          label: 'Stop Focus Mode', accelerator: 'CmdOrCtrl+Shift+S',
-          click: () => {
-            if (!focusActive) return;
-            dialog.showMessageBox(mainWindow, {
-              type: 'warning', title: 'Focus Mode Band Karo?',
-              message: 'Kya focus mode band karna chahte ho?',
-              detail: 'Sirf emergency me karo!',
-              buttons: ['Haan, Band Karo', 'Nahi, Padhai Jari Rakho'],
-              defaultId: 1
-            }).then(({ response }) => { if (response === 0) stopFocusMode('manual'); });
-          }
-        }
-      ]
-    },
-    {
-      label: 'Portal Hub',
-      submenu: [
-        { label: 'Home Overview',           accelerator: 'CmdOrCtrl+1', click: () => nav('/') },
-        { label: 'Notes Bank',              accelerator: 'CmdOrCtrl+2', click: () => nav('/notes') },
-        { label: 'Previous Year Questions', accelerator: 'CmdOrCtrl+3', click: () => nav('/pyq') },
-        { label: 'BEU Syllabus',            accelerator: 'CmdOrCtrl+4', click: () => nav('/syllabus') },
-        { label: 'UGEAC College Predictor', accelerator: 'CmdOrCtrl+5', click: () => nav('/ugeac-predictor') },
-        { label: 'Study Dashboard & Timer', accelerator: 'CmdOrCtrl+6', click: () => nav('/study') },
-        { label: 'CGPA to % Calculator',    accelerator: 'CmdOrCtrl+7', click: () => nav('/cgpa') },
-        { label: 'Live Hackathons',         accelerator: 'CmdOrCtrl+8', click: () => nav('/hackathons') },
-        { type: 'separator' },
-        { label: 'Back',    accelerator: 'Alt+Left',     click: () => { if (mainWindow && mainWindow.webContents.canGoBack())    mainWindow.webContents.goBack(); } },
-        { label: 'Forward', accelerator: 'Alt+Right',    click: () => { if (mainWindow && mainWindow.webContents.canGoForward()) mainWindow.webContents.goForward(); } },
-        { label: 'Reload',  accelerator: 'CmdOrCtrl+R', click: () => { if (mainWindow) mainWindow.reload(); } }
-      ]
-    },
-    {
-      label: 'View',
-      submenu: [
-        { role: 'reload', accelerator: 'F5' }, { role: 'forceReload' },
-        { type: 'separator' },
-        {
-          label: 'Toggle Fullscreen', accelerator: 'F11',
-          click: () => { if (mainWindow && !focusActive) mainWindow.setFullScreen(!mainWindow.isFullScreen()); }
-        },
-        { role: 'resetZoom' }, { role: 'zoomIn' }, { role: 'zoomOut' },
-        { type: 'separator' },
-        { role: 'toggleDevTools', accelerator: 'F12' }
-      ]
-    },
-    {
-      label: 'Window',
-      submenu: [{ role: 'minimize' }, { role: 'close' }]
-    },
-    {
-      label: 'Help & Community',
-      submenu: [
-        { label: 'Visit Official Website', click: () => shell.openExternal('https://apnacollegebihar.online') },
-        { label: 'Student Telegram Group', click: () => shell.openExternal('https://t.me/apnacollegebihar') },
-        { label: 'Contact Support',        click: () => nav('/contact') }
-      ]
-    }
-  ]));
-}
-
 function rebuildTrayMenu() {
   if (!tray) return;
   const items = focusActive
@@ -720,7 +621,9 @@ function initApp() {
   app.whenReady().then(() => {
     session.defaultSession.setUserAgent(CHROME_UA);
 
-    buildAppMenu();
+    // Completely remove application top menu bar
+    Menu.setApplicationMenu(null);
+
     setupAllowedShortcuts();
     setupDownloadManager();
     createSplashWindow();

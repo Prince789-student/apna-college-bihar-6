@@ -23,6 +23,13 @@ import { blogPosts } from '../data/blogPosts';
 import toast from 'react-hot-toast';
 
 export default function Home() {
+  const isNative = typeof window !== 'undefined' && Boolean(
+    window.__ACB_DESKTOP__ || 
+    window.isDesktopApp || 
+    window.desktopBridge?.isDesktop || 
+    window.Capacitor?.isNativePlatform?.() || 
+    (typeof navigator !== 'undefined' && navigator.userAgent.includes('ApnaCollegeBiharDesktop'))
+  );
   const { user } = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState({ users: 0, notes: 0, pyqs: 0, groups: 0 });
@@ -259,14 +266,24 @@ export default function Home() {
                 <span className="truncate">Live Notices</span>
               </a>
 
-              <Link
-                to="/download"
-                className="px-4 py-3 rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-200 hover:border-blue-300 font-heading font-bold text-xs sm:text-sm transition-all shadow-xs active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2 group"
-              >
-                <Download size={15} className="text-blue-600 group-hover:scale-110 transition-transform shrink-0" />
-                <span className="truncate">Get Apps</span>
-                <span className="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider hidden sm:inline">PC & APK</span>
-              </Link>
+              {isNative ? (
+                <Link
+                  to="/study"
+                  className="px-4 py-3 rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-200 hover:border-blue-300 font-heading font-bold text-xs sm:text-sm transition-all shadow-xs active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2 group"
+                >
+                  <Timer size={15} className="text-blue-600 group-hover:scale-110 transition-transform shrink-0" />
+                  <span className="truncate">Focus Timer</span>
+                </Link>
+              ) : (
+                <Link
+                  to="/download"
+                  className="px-4 py-3 rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-200 hover:border-blue-300 font-heading font-bold text-xs sm:text-sm transition-all shadow-xs active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2 group"
+                >
+                  <Download size={15} className="text-blue-600 group-hover:scale-110 transition-transform shrink-0" />
+                  <span className="truncate">Get Apps</span>
+                  <span className="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider hidden sm:inline">PC & APK</span>
+                </Link>
+              )}
             </div>
           </div>
 
@@ -552,7 +569,8 @@ export default function Home() {
       {/* ═══════════════════════════════════════════ */}
       {/* ── 5.5 OFFICIAL APPS (PC & MOBILE) ── */}
       {/* ═══════════════════════════════════════════ */}
-      <section className="py-14 px-4 sm:px-6 md:px-12 relative z-10 bg-gradient-to-b from-transparent via-blue-50/40 to-transparent">
+      {!isNative && (
+        <section className="py-14 px-4 sm:px-6 md:px-12 relative z-10 bg-gradient-to-b from-transparent via-blue-50/40 to-transparent">
         <div className="container mx-auto max-w-6xl">
           <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950 rounded-3xl p-8 sm:p-12 text-white border border-slate-800 shadow-2xl relative overflow-hidden">
             {/* Background Glow */}
@@ -653,6 +671,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      )}
 
       {/* ═══════════════════════════════════════════ */}
       {/* ── 6. WALL OF FAME (TOP DONORS) ── */}

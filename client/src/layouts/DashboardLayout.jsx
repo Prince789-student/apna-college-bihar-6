@@ -22,7 +22,13 @@ import Footer from '../components/Footer';
 import { toast } from 'react-hot-toast';
 
 export default function DashboardLayout() {
-  const isNative = Capacitor.isNativePlatform();
+  const isDesktop = typeof window !== 'undefined' && Boolean(
+    window.__ACB_DESKTOP__ || 
+    window.isDesktopApp || 
+    window.desktopBridge?.isDesktop || 
+    (typeof navigator !== 'undefined' && navigator.userAgent.includes('ApnaCollegeBiharDesktop'))
+  );
+  const isNative = Capacitor.isNativePlatform() || isDesktop;
   const location = useLocation();
   const navigate = useNavigate();
   const { user, updateProfileData, logout, loading } = useAuth();
@@ -96,7 +102,7 @@ export default function DashboardLayout() {
         { name: 'Scientific Calc', path: '/calculator', icon: <Calculator size={16} /> },
         { name: 'Study Resources', path: '/study-resources', icon: <Link2 size={16} /> },
         { name: 'Blog & Guidance', path: '/blog', icon: <FileText size={16} /> },
-        { name: 'Download Apps', path: '/download', icon: <Download size={16} /> },
+        ...(!isNative ? [{ name: 'Download Apps', path: '/download', icon: <Download size={16} /> }] : []),
         { name: 'Achievements', path: '/achievements', icon: <Award size={16} /> },
       ],
     }
@@ -540,8 +546,9 @@ export default function DashboardLayout() {
 
   const AppDownloadMenu = () => {
     const [open, setOpen] = useState(false);
+    if (isNative) return null;
     return (
-      <div className={`relative ${isNative ? 'hidden' : 'hidden lg:block'}`}>
+      <div className="relative hidden lg:block">
         <button 
           onClick={() => setOpen(!open)}
           className="h-9 px-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-blue-600 border border-slate-200 hover:border-blue-400 text-xs font-heading font-semibold transition-all shadow-xs active:scale-95 flex items-center gap-1.5 shrink-0"

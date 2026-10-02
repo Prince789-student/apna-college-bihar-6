@@ -1,5 +1,11 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+// Directly expose native desktop flags
+try {
+  contextBridge.exposeInMainWorld('__ACB_DESKTOP__', true);
+  contextBridge.exposeInMainWorld('isDesktopApp', true);
+} catch (_) {}
+
 // Expose safe desktop bridge API to portal window
 contextBridge.exposeInMainWorld('desktopBridge', {
   isDesktop: true,

@@ -32,7 +32,7 @@ export default function DownloadPage() {
     },
     {
       q: "Windows PC par kaise install karein?",
-      a: "1. 'Download for Windows' button par click karke ZIP file download karein.\n2. Downloaded zip file par right-click karke 'Extract All' karein.\n3. Folder ke andar 'Apna College Bihar.exe' file par double click karke turant app shuru karein. Aap desktop par shortcut bhi bana sakte hain!"
+      a: "1. 'Download Windows Setup' button par click karke Apna-College-Bihar-Setup.exe download karein.\n2. Downloaded file par double-click karein.\n3. App automatic install hokar open ho jayegi aur aapke Desktop par instant shortcut ban jayega!"
     },
     {
       q: "Study Focus Blocker feature kaise kaam karta hai?",
@@ -135,24 +135,14 @@ export default function DownloadPage() {
                 <span>Type: 1-Click Windows Setup (.exe)</span>
               </div>
 
-              <div className="space-y-2">
-                <a
-                  href="/Apna-College-Bihar-Setup.exe"
-                  download="Apna-College-Bihar-Setup.exe"
-                  className="w-full py-4 px-6 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg shadow-blue-600/25 active:scale-95 transition-all text-center"
-                >
-                  <Download size={18} />
-                  <span>Download Windows Setup (76 MB)</span>
-                </a>
-
-                <a
-                  href="/Apna-College-Bihar-Windows.zip"
-                  download="Apna-College-Bihar-Windows.zip"
-                  className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-2 active:scale-95 transition-all text-center"
-                >
-                  <span>Or Download Portable Zip (No Install, 105 MB)</span>
-                </a>
-              </div>
+              <a
+                href="/Apna-College-Bihar-Setup.exe"
+                download="Apna-College-Bihar-Setup.exe"
+                className="w-full py-4 px-6 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg shadow-blue-600/25 active:scale-95 transition-all text-center"
+              >
+                <Download size={18} />
+                <span>Download Windows Setup (76 MB)</span>
+              </a>
 
               <p className="text-[11px] text-slate-400 font-medium text-center mt-3">
                 Supported on Windows 10 & 11 (64-bit) · VirusTotal Verified Safe
@@ -245,15 +235,15 @@ export default function DownloadPage() {
               <ol className="space-y-4 text-xs font-semibold text-slate-600">
                 <li className="flex gap-3">
                   <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold">1</span>
-                  <span>Upar diye gaye <strong>Download for Windows</strong> button se ZIP file download karein.</span>
+                  <span>Upar diye gaye <strong>Download Windows Setup</strong> button se Setup file download karein.</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold">2</span>
-                  <span>Downloaded file par right-click karein aur <strong>Extract All</strong> select karein.</span>
+                  <span>Downloaded file <strong>Apna-College-Bihar-Setup.exe</strong> par double-click karke launch karein.</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold">3</span>
-                  <span>Extracted folder me <strong>Apna College Bihar.exe</strong> par double click karein aur padhai shuru karein!</span>
+                  <span>App automatically install hokar start ho jayegi aur Desktop par instant shortcut create ho jayega!</span>
                 </li>
               </ol>
             </div>
