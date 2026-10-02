@@ -285,6 +285,26 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
+    window.__acb_login_with_credential = async (idToken, accessToken, fallbackUser) => {
+      try {
+        if (idToken) {
+          const cred = GoogleAuthProvider.credential(idToken, accessToken || null);
+          const res = await signInWithCredential(auth, cred);
+          await syncProfile(res.user);
+          return res.user;
+        }
+      } catch (err) {
+        console.warn('Credential sign in failed, using fallback:', err);
+      }
+      if (fallbackUser && fallbackUser.uid) {
+        localStorage.setItem(USER_CACHE_KEY, JSON.stringify(fallbackUser));
+        setUser(fallbackUser);
+        setLoading(false);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (window.__PRERENDER_INJECTED && !window.Capacitor?.isNativePlatform?.()) {
       setLoading(false);
       return;
@@ -294,6 +314,18 @@ export function AuthProvider({ children }) {
         if (u) {
           await syncProfile(u);
         } else {
+          // If on Desktop or has valid cached profile, do NOT wipe it!
+          const cachedRaw = localStorage.getItem(USER_CACHE_KEY);
+          if (cachedRaw) {
+            try {
+              const cachedData = JSON.parse(cachedRaw);
+              if (cachedData && cachedData.uid) {
+                setUser(cachedData);
+                setLoading(false);
+                return;
+              }
+            } catch (_) {}
+          }
           // User is genuinely signed out — clear cache
           localStorage.removeItem(USER_CACHE_KEY);
           setUser(null);
@@ -301,8 +333,6 @@ export function AuthProvider({ children }) {
       } catch (err) {
         console.error("Auth sync error:", err);
       }
-      // Note: setLoading(false) is now handled inside syncProfile when user is present,
-      // but if user is null we still need to set it to false here.
       if (!u) {
         setLoading(false);
       }

@@ -169,12 +169,13 @@
       statusBox.className = 'status-box ' + (type || '');
     }
 
-    async function sendAuthToDesktop(user) {
+    async function sendAuthToDesktop(user, credential) {
       setStatus('Desktop App se connect kiya ja raha hai...', 'loading');
       loginBtn.style.display = 'none';
 
       try {
-        const idToken = await user.getIdToken();
+        const idToken = credential?.idToken || (await user.getIdToken()) || '';
+        const accessToken = credential?.accessToken || '';
         const email = user.email || '';
         const name = user.displayName || 'Scholar';
         const uid = user.uid;
@@ -191,40 +192,13 @@
           `&email=${encodeURIComponent(email)}` +
           `&name=${encodeURIComponent(name)}` +
           `&role=${encodeURIComponent(role)}` +
-          `&token=${encodeURIComponent(idToken)}` +
+          `&idToken=${encodeURIComponent(idToken)}` +
+          `&accessToken=${encodeURIComponent(accessToken)}` +
           (authStorageData ? `&authData=${encodeURIComponent(authStorageData)}` : '');
 
-        // 1. Try loopback fetch to Electron local server
-        let loopbackSuccess = false;
-        try {
-          await fetch(callbackUrl, { mode: 'no-cors' });
-          loopbackSuccess = true;
-        } catch (fetchErr) {
-          console.warn('[Desktop Auth] Direct fetch failed, trying deep-link protocol:', fetchErr);
-        }
-
-        // 2. Also trigger custom protocol deep link as fail-safe
-        try {
-          const deepLink = `apnacollege://callback?uid=${encodeURIComponent(uid)}&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&role=${encodeURIComponent(role)}&token=${encodeURIComponent(idToken)}`;
-          window.location.href = deepLink;
-        } catch (_) {}
-
-        // Show success UI
-        card.innerHTML = `
-          <div class="success-icon">✓</div>
-          <h1>Login Kamyab Hua! 🎉</h1>
-          <p class="subtitle" style="margin-bottom: 12px; color: #f8fafc;">
-            Welcome, <b>${name}</b>!
-          </p>
-          <p style="color: #94a3b8; font-size: 13px; line-height: 1.5;">
-            Apna College Bihar Desktop App ab login ho chuki hai.<br>
-            Yeh browser tab <b>2 second me band</b> ho jayegi.
-          </p>
-        `;
-
-        setTimeout(() => {
-          try { window.close(); } catch (_) {}
-        }, 2200);
+        // Direct top-level navigation to local loopback receiver:
+        // Navigating to http://127.0.0.1 is 100% permitted by Chrome (bypasses all Mixed Content / CORS limits)
+        window.location.href = callbackUrl;
 
       } catch (err) {
         console.error('[Desktop Auth] Error sending to app:', err);
@@ -238,7 +212,7 @@
       try {
         const result = await auth.signInWithPopup(provider);
         if (result && result.user) {
-          await sendAuthToDesktop(result.user);
+          await sendAuthToDesktop(result.user, result.credential);
         }
       } catch (err) {
         console.error('Google Sign-in failed:', err);
@@ -250,7 +224,7 @@
     auth.onAuthStateChanged(async (user) => {
       if (user) {
         setStatus('Pehle se authenticated hai! Connecting to Desktop App...', 'loading');
-        await sendAuthToDesktop(user);
+        await sendAuthToDesktop(user, null);
       }
     });
   </script>

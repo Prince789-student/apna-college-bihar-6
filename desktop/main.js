@@ -168,7 +168,7 @@ let authLoopbackPort = 0;
 
 function applyDesktopAuth(userData) {
   if (!mainWindow || mainWindow.isDestroyed()) return;
-  const { uid, email, name, role, authData } = userData;
+  const { uid, email, name, role, idToken, accessToken, authData } = userData;
   console.log('[Auth] Applying auth for:', email || name, uid);
   
   const userPayload = {
@@ -179,14 +179,18 @@ function applyDesktopAuth(userData) {
   };
 
   const script = `
-    (function() {
+    (async function() {
       try {
         const u = ${JSON.stringify(userPayload)};
         localStorage.setItem('acb_user_cache', JSON.stringify(u));
         ${authData ? `try { localStorage.setItem('firebase:authUser:AIzaSyBIvnhJLz_ucsxuFEnZeYSAq2L6vJ4DcKo:[DEFAULT]', decodeURIComponent("${encodeURIComponent(authData)}")); } catch (_) {}` : ''}
+        if (typeof window.__acb_login_with_credential === 'function') {
+          await window.__acb_login_with_credential(${JSON.stringify(idToken || '')}, ${JSON.stringify(accessToken || '')}, u);
+        }
         window.location.href = '/';
       } catch (err) {
         console.error('[Desktop] Failed to set auth cache:', err);
+        window.location.href = '/';
       }
     })();
   `;
@@ -213,6 +217,8 @@ function handleAuthCallbackUrl(urlStr) {
         email: parsed.searchParams.get('email') || '',
         name: parsed.searchParams.get('name') || 'Scholar',
         role: parsed.searchParams.get('role') || 'STUDENT',
+        idToken: parsed.searchParams.get('idToken') || parsed.searchParams.get('token') || '',
+        accessToken: parsed.searchParams.get('accessToken') || '',
         authData: parsed.searchParams.get('authData') || ''
       });
     }
@@ -247,10 +253,12 @@ function startAuthLoopbackServer() {
           const email = parsedUrl.searchParams.get('email') || '';
           const name = parsedUrl.searchParams.get('name') || 'Scholar';
           const role = parsedUrl.searchParams.get('role') || 'STUDENT';
+          const idToken = parsedUrl.searchParams.get('idToken') || parsedUrl.searchParams.get('token') || '';
+          const accessToken = parsedUrl.searchParams.get('accessToken') || '';
           const authData = parsedUrl.searchParams.get('authData') || '';
 
           if (uid) {
-            applyDesktopAuth({ uid, email, name, role, authData });
+            applyDesktopAuth({ uid, email, name, role, idToken, accessToken, authData });
 
             res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
             res.end(`
