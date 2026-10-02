@@ -25,7 +25,7 @@ function loadLocalSettings() {
       const data = JSON.parse(fs.readFileSync(SETTINGS_FILE_PATH, 'utf8'));
       return {
         monthlyCollection: data.monthlyCollection || { monthName: 'September 2026', totalCollection: 50 },
-        autoDispatchWhatsApp: data.autoDispatchWhatsApp === true || process.env.AUTO_DISPATCH_WHATSAPP === 'true',
+        autoDispatchWhatsApp: data.autoDispatchWhatsApp !== false && process.env.AUTO_DISPATCH_WHATSAPP !== 'false',
         autoDispatchCollegeNotices: data.autoDispatchCollegeNotices === true || process.env.AUTO_DISPATCH_COLLEGE_NOTICES === 'true'
       };
     }
@@ -34,7 +34,7 @@ function loadLocalSettings() {
   }
   return {
     monthlyCollection: { monthName: 'September 2026', totalCollection: 50 },
-    autoDispatchWhatsApp: process.env.AUTO_DISPATCH_WHATSAPP === 'true',
+    autoDispatchWhatsApp: process.env.AUTO_DISPATCH_WHATSAPP !== 'false',
     autoDispatchCollegeNotices: process.env.AUTO_DISPATCH_COLLEGE_NOTICES === 'true'
   };
 }

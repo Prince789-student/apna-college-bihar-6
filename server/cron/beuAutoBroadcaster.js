@@ -37,16 +37,15 @@ function saveLocalNotices(data) {
 
 /**
  * Load Auto-Broadcast Configuration.
- * By default:
- * - autoDispatchCollegeNotices is FALSE (college notices are NEVER auto-dispatched to WhatsApp).
- * - autoDispatchWhatsApp is FALSE (auto-dispatch to WhatsApp is OFF unless explicitly enabled).
+ * - BEU Central notices: default TRUE (automatically dispatched to WhatsApp Channel).
+ * - College notices (38 Colleges): default FALSE (STRICTLY DISABLED from auto-dispatching to WhatsApp).
  */
 function loadBroadcastSettings() {
   try {
     if (fs.existsSync(SETTINGS_FILE_PATH)) {
       const data = JSON.parse(fs.readFileSync(SETTINGS_FILE_PATH, 'utf8'));
       return {
-        autoDispatchWhatsApp: data.autoDispatchWhatsApp === true || process.env.AUTO_DISPATCH_WHATSAPP === 'true',
+        autoDispatchWhatsApp: data.autoDispatchWhatsApp !== false && process.env.AUTO_DISPATCH_WHATSAPP !== 'false',
         autoDispatchCollegeNotices: data.autoDispatchCollegeNotices === true || process.env.AUTO_DISPATCH_COLLEGE_NOTICES === 'true'
       };
     }
@@ -54,7 +53,7 @@ function loadBroadcastSettings() {
     console.warn('[BEU Broadcaster] Error reading settings.json:', e.message);
   }
   return {
-    autoDispatchWhatsApp: process.env.AUTO_DISPATCH_WHATSAPP === 'true',
+    autoDispatchWhatsApp: process.env.AUTO_DISPATCH_WHATSAPP !== 'false',
     autoDispatchCollegeNotices: process.env.AUTO_DISPATCH_COLLEGE_NOTICES === 'true'
   };
 }
@@ -195,10 +194,10 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
 
         // 2. Dispatch to WhatsApp Channel (AUTO-NOTIFICATION CHECK)
         // - College notices: DISABLED by default (band kiya gaya hai - user request).
-        // - Main BEU notices: DISABLED by default unless AUTO_DISPATCH_WHATSAPP is enabled.
+        // - Main BEU notices: ENABLED by default (auto-dispatched to WhatsApp Channel).
         const shouldAutoDispatch = isCollege
           ? (broadcastSettings.autoDispatchCollegeNotices === true)
-          : (broadcastSettings.autoDispatchWhatsApp === true);
+          : (broadcastSettings.autoDispatchWhatsApp !== false);
 
         let dispatchResult = {
           status: 'READY_TO_SHARE',
@@ -319,7 +318,7 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
         const isCollege = !!(existingData.isCollegeNotice || String(noticeId).startsWith('col_') || existingData.collegeId);
         const shouldAutoRetry = isCollege
           ? (broadcastSettings.autoDispatchCollegeNotices === true)
-          : (broadcastSettings.autoDispatchWhatsApp === true);
+          : (broadcastSettings.autoDispatchWhatsApp !== false);
 
         if (!shouldAutoRetry) {
           // Auto-dispatch is disabled; do not auto-send pending notices to WhatsApp!
@@ -383,15 +382,15 @@ async function syncBeuAndBroadcast(options = { forceAll: false }) {
  */
 function initBeuBroadcaster() {
   const whatsappBotService = require('../services/whatsappBotService');
-  // Auto-start WhatsApp Bot session ONLY if explicitly enabled in environment
-  if (process.env.ENABLE_WHATSAPP_BOT === 'true') {
+  // Auto-start WhatsApp Bot session if saved session exists (and not explicitly disabled)
+  if (process.env.ENABLE_WHATSAPP_BOT !== 'false') {
     setTimeout(() => {
       whatsappBotService.start().catch(err => {
         console.warn('[WhatsApp Bot Auto-Start]:', err.message);
       });
     }, 1000);
   } else {
-    console.log('[BEU Broadcaster] WhatsApp Bot auto-start is disabled (ENABLE_WHATSAPP_BOT !== "true").');
+    console.log('[BEU Broadcaster] WhatsApp Bot auto-start is disabled via ENABLE_WHATSAPP_BOT=false.');
   }
 
   // Run initial sync after 6s to allow WhatsApp session to initialize

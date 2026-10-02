@@ -367,8 +367,8 @@ export default function AdminBeuWhatsApp({ flash, onSwitchToNotices }) {
             </h1>
             <p className="text-xs md:text-sm text-emerald-100 font-medium max-w-2xl leading-relaxed">
               {autoDispatchCollege 
-                ? 'College aur BEU notices auto-dispatch mode me hain.' 
-                : '✅ College wala auto notification WhatsApp ke liye BAND hai. Notices yahan generate hoti hain aur aap 1-click me manually WhatsApp par share kar sakte hain.'}
+                ? 'College aur BEU notices dono WhatsApp par auto-post honge.' 
+                : '✅ BEU official central notices automatically WhatsApp Channel par jaate hain. Bihar ke 38 colleges ke notices ka auto-dispatch BAND hai.'}
             </p>
           </div>
 
