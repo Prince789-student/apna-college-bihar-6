@@ -1,15 +1,34 @@
 {
   "name": "apna-college-bihar-desktop",
-  "version": "2.0.0",
+  "productName": "Apna College Bihar",
+  "version": "2.1.0",
   "description": "Apna College Bihar - Official Laptop & Desktop Application",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "dev": "electron . --dev",
-    "pack": "node build-app.js"
+    "pack": "node build-app.js",
+    "build:installer": "npx electron-builder --win nsis --x64"
   },
   "author": "Apna College Bihar",
   "license": "MIT",
+  "build": {
+    "appId": "com.apnacollegebihar.desktop",
+    "productName": "Apna College Bihar",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "installerIcon": "assets/icon.ico",
+      "uninstallerIcon": "assets/icon.ico",
+      "artifactName": "Apna-College-Bihar-Setup.exe"
+    }
+  },
   "dependencies": {},
   "devDependencies": {
     "electron": "^33.0.0"

@@ -12,8 +12,8 @@ const ICON_PATH = fs.existsSync(path.join(DESKTOP_DIR, 'assets', 'icon.ico'))
   ? path.join(DESKTOP_DIR, 'assets', 'icon.ico')
   : path.join(DESKTOP_DIR, 'assets', 'icon.png');
 
-console.log('[1/2] Running Electron Packager for Windows x64...');
-const command = `npx -y electron-packager . "Apna College Bihar" --platform=win32 --arch=x64 --out=dist --overwrite`;
+console.log('[1/2] Running Electron Packager for Windows x64 with Official Icon...');
+const command = `npx -y electron-packager . "Apna College Bihar" --platform=win32 --arch=x64 --out=dist --overwrite --icon="${ICON_PATH}"`;
 
 try {
   execSync(command, { cwd: DESKTOP_DIR, stdio: 'inherit' });

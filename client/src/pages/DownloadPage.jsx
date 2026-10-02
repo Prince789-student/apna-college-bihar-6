@@ -95,12 +95,12 @@ export default function DownloadPage() {
 
             <div>
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/30 shrink-0">
-                  <Laptop size={28} />
+                <div className="w-14 h-14 rounded-2xl bg-white border border-blue-200/80 p-1.5 flex items-center justify-center shadow-lg shadow-blue-600/15 shrink-0 overflow-hidden">
+                  <img src="/logo-192.png" alt="Apna College Bihar Logo" className="w-full h-full object-contain" />
                 </div>
                 <div>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Windows Desktop App</h2>
-                  <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">Version 2.1 · 64-bit Windows</p>
+                  <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mt-0.5">Version 2.1 · 64-bit Windows</p>
                 </div>
               </div>
 
@@ -143,6 +143,17 @@ export default function DownloadPage() {
                 <Download size={18} />
                 <span>Download Windows Setup (76 MB)</span>
               </a>
+
+              {/* Microsoft Defender / SmartScreen Helper Card */}
+              <div className="mt-4 p-3.5 bg-blue-50/70 border border-blue-200/80 rounded-2xl text-left">
+                <div className="flex items-center gap-2 text-blue-900 font-bold text-xs mb-1.5">
+                  <ShieldCheck size={16} className="text-blue-600 shrink-0" />
+                  <span>Microsoft Defender / SmartScreen Guide:</span>
+                </div>
+                <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
+                  Agar download ya open karte waqt Windows <strong>"Windows protected your PC"</strong> dikhaye, toh <strong>"More info"</strong> par click karke <strong>"Run anyway"</strong> select karein. Ye app 100% Virus-Free aur verified safe hai!
+                </p>
+              </div>
 
               <p className="text-[11px] text-slate-400 font-medium text-center mt-3">
                 Supported on Windows 10 & 11 (64-bit) · VirusTotal Verified Safe
