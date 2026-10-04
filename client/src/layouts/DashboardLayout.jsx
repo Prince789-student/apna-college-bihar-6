@@ -655,6 +655,17 @@ export default function DashboardLayout() {
 
             {/* User Profile & Actions */}
             <div className="flex items-center gap-2.5 sm:gap-3">
+              {!isNative && (
+                <Link 
+                  to="/download" 
+                  className="hidden md:flex h-9 items-center gap-1.5 px-3 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/80 rounded-xl font-heading font-bold text-xs transition-all shadow-xs active:scale-95 shrink-0"
+                  title="Download Official PC & Android Apps"
+                >
+                  <Download size={14} className="text-blue-600 animate-bounce" />
+                  <span>Download App</span>
+                </Link>
+              )}
+
               {loading ? (
                 <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
               ) : user ? (
@@ -834,20 +845,34 @@ export default function DashboardLayout() {
           ))}
 
           {!isNative && (
-            <div className="px-3 pt-4 border-t border-slate-100">
+            <div className="px-3 pt-4 border-t border-slate-100 space-y-2">
+               <Link 
+                 to="/download"
+                 onClick={() => setMobileMenuOpen(false)}
+                 className="flex items-center gap-3 w-full p-3 hover:bg-emerald-50 text-emerald-700 rounded-xl transition-all group border border-emerald-200 bg-emerald-50/60 shadow-xs"
+               >
+                  <div className="p-2 bg-white rounded-xl shadow-xs text-emerald-600">
+                    <Download size={16} />
+                  </div>
+                  <div className="text-left">
+                    <span className="text-xs font-bold block text-emerald-800">Download Android App</span>
+                    <span className="text-[10px] text-emerald-600 font-medium">BEU Alerts & Fast Notes (v57)</span>
+                  </div>
+               </Link>
+
                <button 
                  onClick={() => {
                    setMobileMenuOpen(false);
                    setShowSupportModal(true);
                  }}
-                 className="flex items-center gap-3 w-full p-3 hover:bg-indigo-50 text-indigo-600 rounded-xl transition-all group border border-indigo-100 bg-indigo-50/50"
+                 className="flex items-center gap-3 w-full p-3 hover:bg-rose-50 text-rose-600 rounded-xl transition-all group border border-rose-100 bg-rose-50/50"
                >
-                  <div className="p-2 bg-white rounded-xl shadow-sm">
-                    <Award size={16} className="text-indigo-600" />
+                  <div className="p-2 bg-white rounded-xl shadow-xs">
+                    <Award size={16} className="text-rose-600" />
                   </div>
                   <div className="text-left">
-                    <span className="text-xs font-bold block text-indigo-700">Support Us</span>
-                    <span className="text-xs text-indigo-500 font-medium">Help maintain server cost</span>
+                    <span className="text-xs font-bold block text-rose-700">Dil Se Support (₹10 - ₹20)</span>
+                    <span className="text-[10px] text-rose-500 font-medium">Keep 38 GECs Education Free</span>
                   </div>
                </button>
             </div>

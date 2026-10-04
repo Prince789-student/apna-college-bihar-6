@@ -605,8 +605,8 @@ export default function Home() {
 
               {/* Action Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:w-auto shrink-0">
-                {/* Windows Card */}
-                <div className="bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-blue-500/50 p-6 rounded-2xl transition-all shadow-lg flex flex-col justify-between group">
+                {/* Windows Card (Shown on Laptop/PC only; hidden on mobile phone) */}
+                <div className="hidden md:flex bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-blue-500/50 p-6 rounded-2xl transition-all shadow-lg flex-col justify-between group">
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <div className="w-12 h-12 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">

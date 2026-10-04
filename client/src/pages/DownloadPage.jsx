@@ -87,10 +87,10 @@ export default function DownloadPage() {
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
-          {/* 1. WINDOWS PC / LAPTOP CARD */}
-          <div className="bg-white rounded-3xl border-2 border-blue-500/40 p-6 sm:p-8 shadow-xl shadow-blue-500/5 hover:border-blue-500 transition-all flex flex-col justify-between relative overflow-hidden group">
+          {/* 1. WINDOWS PC / LAPTOP CARD (Shown on Laptop/PC only; hidden on mobile phone) */}
+          <div className="hidden md:flex bg-white rounded-3xl border-2 border-blue-500/40 p-6 sm:p-8 shadow-xl shadow-blue-500/5 hover:border-blue-500 transition-all flex-col justify-between relative overflow-hidden group">
             <div className="absolute top-0 right-0 bg-gradient-to-l from-blue-600 to-indigo-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
-              ★ Recommended for PC
+              ★ Recommended for PC / Laptop
             </div>
 
             <div>
@@ -237,8 +237,8 @@ export default function DownloadPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-100">
             
-            {/* Windows Steps */}
-            <div className="space-y-6 pt-4 md:pt-0">
+            {/* Windows Steps (Visible on Laptop / PC only) */}
+            <div className="hidden md:block space-y-6 pt-4 md:pt-0">
               <div className="flex items-center gap-3">
                 <Laptop size={20} className="text-blue-600" />
                 <h3 className="font-bold text-sm text-slate-900 uppercase tracking-wider">Windows Laptop / PC Guide</h3>

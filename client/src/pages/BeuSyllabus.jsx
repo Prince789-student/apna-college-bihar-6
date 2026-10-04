@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Download, Bot, Copy, X, MessageSquare, Send, Sparkles, ExternalLink, Check, RefreshCw } from 'lucide-react';
+import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Download, Copy, X, MessageSquare, Send, Sparkles, ExternalLink, Check, RefreshCw } from 'lucide-react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import jsPDF from 'jspdf';
@@ -504,8 +504,9 @@ function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
   });
 }
 
-// ─── AI Study Mentor Modal Component ─────────────────────────────────────────────
-function AiPromptModal({ topicText, subjectName, unitName, branchName, semName, onClose }) {
+// ─── AI Study Mentor Modal Component (Removed) ─────────────────────────────────────────────
+function AiPromptModal() { return null; }
+function _unused_AiPromptModal({ topicText, subjectName, unitName, branchName, semName, onClose }) {
   const [activeTab, setActiveTab] = React.useState('explain');
   const [loading, setLoading] = React.useState(false);
   const [response, setResponse] = React.useState('');
@@ -767,7 +768,6 @@ function TopicRow({ topic, doneKey, subjectName, unitName, branchName, semName, 
   const [done, setDone] = React.useState(() => {
     try { return JSON.parse(localStorage.getItem(doneKey) || 'false'); } catch { return false; }
   });
-  const [showAiModal, setShowAiModal] = React.useState(false);
 
   const toggleDone = () => {
     const next = !done;
@@ -801,12 +801,6 @@ function TopicRow({ topic, doneKey, subjectName, unitName, branchName, semName, 
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-1.5 pl-8 md:pl-0 flex-shrink-0 opacity-90 md:opacity-60 md:group-hover:opacity-100 transition-opacity">
-          <button
-            onClick={() => setShowAiModal(true)}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 md:px-2 md:py-1 bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm"
-          >
-            <Bot size={12} /> Ask AI
-          </button>
           <a
             href={`https://www.youtube.com/results?search_query=${ytQuery}`}
             target="_blank"
@@ -824,16 +818,6 @@ function TopicRow({ topic, doneKey, subjectName, unitName, branchName, semName, 
           </button>
         </div>
       </div>
-      {showAiModal && (
-        <AiPromptModal
-          topicText={topic.text}
-          subjectName={subjectName}
-          unitName={unitName}
-          branchName={branchName}
-          semName={semName}
-          onClose={() => setShowAiModal(false)}
-        />
-      )}
     </div>
   );
 }
