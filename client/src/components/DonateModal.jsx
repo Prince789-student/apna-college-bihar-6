@@ -51,31 +51,31 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
             <span className="text-xl">❤️</span>
           </div>
           <h3 className="font-heading font-black text-white text-lg tracking-wide uppercase">
-            Apna College Bihar Parivar
+            Apna College Bihar Family
           </h3>
           <p className="text-[10px] font-bold text-rose-100 tracking-wider mt-0.5">
-            हम छात्रों ने मिलकर बनाया है — आपके प्यार और साथ से ही ज़िंदा है!
+            Built By Students, Powered By Community 🚀
           </p>
         </div>
 
         {/* Body */}
         <div className="p-4 md:p-5 flex flex-col items-center overflow-y-auto scrollbar-hide">
-          {/* Deeply Emotional Appeal Box */}
+          {/* Deeply Dignified Community Appeal Box */}
           <div className="w-full bg-gradient-to-b from-rose-50/80 via-blue-50/60 to-amber-50/50 border border-rose-200/80 rounded-2xl p-4 text-center mb-3 shadow-xs">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-600 text-white text-[10px] font-black uppercase tracking-wider mb-2.5 shadow-sm shadow-rose-500/30">
-              ❤️ एक छोटी सी मदद, दिल से...
+              🚀 Student Community Fund
             </div>
             
             <p className="text-xs font-bold text-slate-800 leading-snug mb-2">
-              "हम भी आपकी तरह BEU के छात्र हैं... 🫂"
+              "Hum bhi aapki tarah BEU ke Students hain 🤝"
             </p>
             
             <p className="text-[11px] text-slate-600 font-medium leading-relaxed mb-2">
-              बिहार के सभी <strong>38 सरकारी इंजीनियरिंग कॉलेजों</strong> के हजारों भाई-बहनों के लिए हमने दिन-रात मेहनत करके यह पूरा पोर्टल <strong>100% फ्री</strong> रखा है ताकि किसी को नोट्स या PYQ के पैसे न देने पड़ें।
+              Bihar ke sabhi <strong>38 Govt Engineering Colleges</strong> ke brothers & sisters ke liye humne din-raat mehnat karke yeh platform <strong>100% FREE</strong> rakha hai taaki kisi ko Notes ya PYQ ke paise na dene paden.
             </p>
 
             <div className="p-2.5 bg-white/80 rounded-xl border border-rose-100/80 text-[11px] text-slate-700 leading-relaxed font-semibold">
-              ✨ हर महीने सर्वर, डेटाबेस और वेबसाइट चलाने का खर्च आता है। अगर आप बस <strong className="text-rose-600 underline">एक चाय की कीमत (₹10 या ₹20)</strong> भी दिल से दे देंगे, तो यह वेबसाइट हमेशा फ्री और ज़िंदा रहेगी।
+              ✨ Cloud server aur database ko 24x7 fast rakhne ke liye monthly infrastructure cost aata hai. Aapka chhota sa voluntary support <strong className="text-rose-600 underline">(₹10, ₹20 ya jitna aap chahein)</strong> is platform ko hamesha free aur strong rakhega!
             </div>
           </div>
 
@@ -96,7 +96,7 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
             </div>
           </div>
           <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider text-center mt-2">
-            💡 UPI Remark में अपना <strong className="text-slate-800">Name & College</strong> लिखें — हम आपका नाम Wall of Fame में जोड़ेंगे!
+            💡 UPI Remark mein apna <strong className="text-slate-800">Name & College</strong> likhein — Hum aapko Wall of Fame mein Add karenge!
           </p>
         </div>
 
@@ -111,14 +111,14 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
               }}
               className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-[11px] font-[1000] uppercase tracking-widest transition-all shadow-lg shadow-blue-600/25 active:scale-[0.98] flex items-center justify-center gap-2"
             >
-              <span>❤️ Download Karein & Chhoti Si Madad Karein</span>
+              <span>❤️ Download File & Support Community</span>
             </button>
           ) : (
             <button 
               onClick={handleSaveAndContinue}
               className="w-full py-3.5 bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-700 hover:to-indigo-700 text-white rounded-xl text-[11px] font-[1000] uppercase tracking-widest transition-all shadow-lg shadow-rose-600/25 active:scale-[0.98] flex items-center justify-center gap-2"
             >
-              <span>❤️ Save Scanner QR (Dil Se Madad Karein)</span>
+              <span>❤️ Save Scanner QR & Support Community</span>
             </button>
           )}
         </div>
