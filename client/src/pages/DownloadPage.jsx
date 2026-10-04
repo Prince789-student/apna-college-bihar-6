@@ -100,7 +100,7 @@ export default function DownloadPage() {
                 </div>
                 <div>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Windows Desktop App</h2>
-                  <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mt-0.5">Version 2.1 · 64-bit Windows</p>
+                  <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mt-0.5">Version 2.2 · 64-bit Windows</p>
                 </div>
               </div>
 

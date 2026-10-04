@@ -613,7 +613,7 @@ export default function Home() {
                         <Monitor size={24} />
                       </div>
                       <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                        v2.1 Stable
+                        v2.2 Stable
                       </span>
                     </div>
                     <h3 className="font-heading font-bold text-lg text-white mb-1">Windows PC App</h3>

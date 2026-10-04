@@ -1,7 +1,7 @@
 {
   "name": "apna-college-bihar-desktop",
   "productName": "Apna College Bihar",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Apna College Bihar - Official Laptop & Desktop Application",
   "main": "main.js",
   "scripts": {
