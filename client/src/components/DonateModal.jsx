@@ -71,7 +71,7 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
             </p>
             
             <p className="text-[11px] text-slate-600 font-medium leading-relaxed mb-2">
-              Bihar ke sabhi <strong>38 Govt Engineering Colleges</strong> ke brothers & sisters ke liye humne din-raat mehnat karke yeh platform <strong>100% FREE</strong> rakha hai taaki kisi ko Notes ya PYQ ke paise na dene paden.
+              Bihar ke sabhi <strong>38 Govt Engineering Colleges</strong> ki <strong>Dear Family</strong> ke liye humne din-raat mehnat karke yeh platform <strong>100% FREE</strong> rakha hai taaki kisi ko Notes ya PYQ ke paise na dene paden.
             </p>
 
             <div className="p-2.5 bg-white/80 rounded-xl border border-rose-100/80 text-[11px] text-slate-700 leading-relaxed font-semibold">

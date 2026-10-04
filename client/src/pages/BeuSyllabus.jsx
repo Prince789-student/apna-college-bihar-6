@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Download, Copy, X, MessageSquare, Send, Sparkles, ExternalLink, Check, RefreshCw } from 'lucide-react';
+import { BookOpen, Search, ChevronDown, ChevronUp, Loader2, Download, Copy, X, MessageSquare, Send, Sparkles, ExternalLink, Check, RefreshCw, Bot } from 'lucide-react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import jsPDF from 'jspdf';
@@ -504,9 +504,8 @@ function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
   });
 }
 
-// ─── AI Study Mentor Modal Component (Removed) ─────────────────────────────────────────────
-function AiPromptModal() { return null; }
-function _unused_AiPromptModal({ topicText, subjectName, unitName, branchName, semName, onClose }) {
+// ─── AI Study Mentor Modal Component ─────────────────────────────────────────────
+function AiPromptModal({ topicText, subjectName, unitName, branchName, semName, onClose }) {
   const [activeTab, setActiveTab] = React.useState('explain');
   const [loading, setLoading] = React.useState(false);
   const [response, setResponse] = React.useState('');
@@ -764,7 +763,7 @@ function _unused_AiPromptModal({ topicText, subjectName, unitName, branchName, s
 }
 
 // ─── Single Topic Row Component ───────────────────────────────────────────────
-function TopicRow({ topic, doneKey, subjectName, unitName, branchName, semName, onToggle }) {
+function TopicRow({ topic, doneKey, subjectName, unitName, branchName, semName, onToggle, onAskAi }) {
   const [done, setDone] = React.useState(() => {
     try { return JSON.parse(localStorage.getItem(doneKey) || 'false'); } catch { return false; }
   });
@@ -801,6 +800,13 @@ function TopicRow({ topic, doneKey, subjectName, unitName, branchName, semName, 
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-1.5 pl-8 md:pl-0 flex-shrink-0 opacity-90 md:opacity-60 md:group-hover:opacity-100 transition-opacity">
+          <button
+            onClick={() => onAskAi && onAskAi(topic.text, unitName)}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 md:px-2 md:py-1 bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white rounded-xl md:rounded-lg text-[10px] md:text-[9px] font-black uppercase tracking-wide transition-all active:scale-95 shadow-sm"
+          >
+            <Sparkles size={11} />
+            Ask AI
+          </button>
           <a
             href={`https://www.youtube.com/results?search_query=${ytQuery}`}
             target="_blank"
@@ -822,7 +828,7 @@ function TopicRow({ topic, doneKey, subjectName, unitName, branchName, semName, 
   );
 }
 
-function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, branchName, semName, onToggle }) {
+function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, branchName, semName, onToggle, onAskAi }) {
   const [open, setOpen] = React.useState(unitIndex === 0);
   const [tick, setTick] = React.useState(0);
 
@@ -880,6 +886,7 @@ function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, branchName,
               branchName={branchName}
               semName={semName}
               onToggle={handleToggle}
+              onAskAi={onAskAi}
             />
           ))}
         </div>
@@ -920,6 +927,7 @@ export default function BeuSyllabus() {
   const [selectedBranch, setSelectedBranch] = useState(branchId ? branchId.toLowerCase() : '');
   const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(null);
   const [progressTicker, setProgressTicker] = useState(0);
+  const [aiTopicData, setAiTopicData] = useState(null);
 
   useEffect(() => {
     const baseUrl = Capacitor.isNativePlatform() ? 'https://apnacollegebihar.online' : '';
@@ -1367,6 +1375,7 @@ export default function BeuSyllabus() {
                           branchName={selectedBranch}
                           semName={selectedSem}
                           onToggle={() => setProgressTicker(p => p + 1)}
+                          onAskAi={(topicText, unitName) => setAiTopicData({ topicText, subjectName: subjects[selectedSubjectIndex].title, unitName })}
                         />
                       ))}
                     </div>
@@ -1453,6 +1462,17 @@ export default function BeuSyllabus() {
           </div>
         </div>
       </div>
+
+      {aiTopicData && (
+        <AiPromptModal
+          topicText={aiTopicData.topicText}
+          subjectName={aiTopicData.subjectName}
+          unitName={aiTopicData.unitName}
+          branchName={selectedBranch}
+          semName={selectedSem}
+          onClose={() => setAiTopicData(null)}
+        />
+      )}
 
     </div>
   );
