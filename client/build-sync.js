@@ -90,12 +90,17 @@ function syncBuild() {
         copyRecursiveSync(srcDir, destDir);
         console.log('Build assets synced to server/public successfully!');
 
-        // 2. Also sync to android/app/src/main/assets/public if present (excluding apk/zip)
+        // 2. Also sync to android/app/src/main/assets/public if present (excluding apk/zip/exe/aab)
         if (fs.existsSync(path.dirname(androidAssetsDir))) {
+            const androidAssetsSubdir = path.join(androidAssetsDir, 'assets');
+            if (fs.existsSync(androidAssetsSubdir)) {
+                fs.rmSync(androidAssetsSubdir, { recursive: true, force: true });
+                console.log('Cleaned old asset bundles from android/app/src/main/assets/public/assets');
+            }
             if (!fs.existsSync(androidAssetsDir)) {
                 fs.mkdirSync(androidAssetsDir, { recursive: true });
             }
-            copyRecursiveSync(srcDir, androidAssetsDir, (p, name) => !name.endsWith('.apk') && !name.endsWith('.zip') && !name.endsWith('.aab'));
+            copyRecursiveSync(srcDir, androidAssetsDir, (p, name) => !name.endsWith('.apk') && !name.endsWith('.zip') && !name.endsWith('.aab') && !name.endsWith('.exe'));
             
             // Clean Android index.html so it NEVER has pre-rendered desktop website HTML in <div id="root">
             const androidIndexHtmlPath = path.join(androidAssetsDir, 'index.html');

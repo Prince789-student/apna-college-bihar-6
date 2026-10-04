@@ -644,7 +644,7 @@ export default function Home() {
                         <Smartphone size={24} />
                       </div>
                       <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                        v56 APK
+                        v57 APK
                       </span>
                     </div>
                     <h3 className="font-heading font-bold text-lg text-white mb-1">Android APK</h3>
@@ -652,8 +652,8 @@ export default function Home() {
                   </div>
                   <div>
                     <a
-                      href="/apna-college-bihar-v56.apk"
-                      download="apna-college-bihar-v56.apk"
+                      href="/apna-college-bihar-v57.apk"
+                      download="apna-college-bihar-v57.apk"
                       className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-heading font-bold text-xs transition-all shadow-md shadow-emerald-600/30 active:scale-95 flex items-center justify-center gap-2 mb-2"
                     >
                       <Download size={15} /> Download APK (22 MB)

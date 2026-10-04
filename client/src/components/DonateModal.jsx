@@ -4,7 +4,6 @@ import toast from 'react-hot-toast';
 
 export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onContinueWithoutDonating, pendingUrl }) {
   const [copied, setCopied] = useState(false);
-  const [donateType, setDonateType] = useState('MONTHLY'); // 'MONTHLY' or 'ONETIME'
 
   if (!isOpen) return null;
 
@@ -57,55 +56,16 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
           </p>
         </div>
 
-        {/* Support Type Toggle */}
-        <div className="p-3 bg-slate-50 border-b border-slate-100 flex items-center gap-2">
-          <button
-            onClick={() => setDonateType('MONTHLY')}
-            className={`flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 ${donateType === 'MONTHLY' ? 'bg-rose-500 text-white shadow-md shadow-rose-500/20' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'}`}
-          >
-            💖 Become Monthly Supporter
-          </button>
-          <button
-            onClick={() => setDonateType('ONETIME')}
-            className={`flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 ${donateType === 'ONETIME' ? 'bg-blue-600 text-white shadow-md shadow-blue-600/20' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'}`}
-          >
-            ⭐ One-Time Support
-          </button>
-        </div>
-        
         {/* Body */}
         <div className="p-4 md:p-5 flex flex-col items-center overflow-y-auto scrollbar-hide">
-          {donateType === 'MONTHLY' ? (
-            <div className="w-full space-y-3 mb-4">
-              <div className="bg-rose-50/80 border border-rose-200/80 rounded-2xl p-3 text-center">
-                <p className="text-xs font-black text-rose-700 uppercase tracking-wider mb-0.5">💖 Monthly Supporter Membership</p>
-                <p className="text-[10px] text-slate-600 font-medium leading-relaxed">
-                  Monthly contributions cover server hosting, Gemini AI notice summarizer & WhatsApp channel automation for all 38 BEU Engineering Colleges!
-                </p>
-              </div>
-
-              {/* Monthly Tiers */}
-              <div className="grid grid-cols-3 gap-2">
-                <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-center hover:border-rose-400 transition-colors">
-                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Student</p>
-                  <p className="text-base font-[1000] text-slate-900">₹49<span className="text-[9px] text-slate-400 font-bold">/mo</span></p>
-                </div>
-                <div className="p-2.5 bg-rose-50/50 border-2 border-rose-400 rounded-xl text-center relative shadow-sm">
-                  <span className="absolute -top-2 left-1/2 -translate-x-1/2 px-1.5 py-0.2 bg-rose-500 text-white text-[7px] font-black uppercase tracking-widest rounded-full">POPULAR</span>
-                  <p className="text-[9px] font-black text-rose-600 uppercase tracking-widest">Silver</p>
-                  <p className="text-base font-[1000] text-rose-700">₹99<span className="text-[9px] text-rose-400 font-bold">/mo</span></p>
-                </div>
-                <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-center hover:border-rose-400 transition-colors">
-                  <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Gold</p>
-                  <p className="text-base font-[1000] text-slate-900">₹199<span className="text-[9px] text-slate-400 font-bold">/mo</span></p>
-                </div>
-              </div>
+          <div className="w-full bg-blue-50/70 border border-blue-200/80 rounded-2xl p-3.5 text-center mb-3.5">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-600 text-white text-[10px] font-black uppercase tracking-wider mb-2 shadow-sm shadow-blue-500/20">
+              ⭐ One-Time Support
             </div>
-          ) : (
-            <p className="text-[11px] font-medium text-slate-500 text-center leading-relaxed mb-3">
+            <p className="text-[11px] font-medium text-slate-600 leading-relaxed">
               Usually, premium BEU PYQs & Notes cost <strong className="text-slate-800">₹15/paper</strong>. We provide them 100% free! Consider donating the price of a cup of tea to support our team.
             </p>
-          )}
+          </div>
 
           <div className="w-36 h-36 sm:w-40 sm:h-40 bg-white rounded-3xl p-2 border-2 border-dashed border-blue-200 flex items-center justify-center overflow-hidden mb-3 shadow-sm flex-shrink-0">
             <img src="/scanner-qr.jpg" alt="UPI Scanner" className="w-full h-full object-contain rounded-xl" />
