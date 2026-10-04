@@ -517,41 +517,78 @@ function AiPromptModal({ topicText, subjectName, unitName, onClose }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleOpenAi = (platform) => {
+    handleCopy();
+    if (Capacitor.isNativePlatform()) {
+      window.open(platform.url, '_system');
+    } else {
+      window.open(platform.url, '_blank');
+    }
+  };
+
   const aiPlatforms = [
     {
       name: 'ChatGPT',
       url: `https://chatgpt.com/?q=${encodeURIComponent(promptText)}`,
       icon: '🤖',
       desc: 'OpenAI ChatGPT',
-      bg: 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-emerald-200'
+      bg: 'bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border-emerald-200'
     },
     {
       name: 'Perplexity',
       url: `https://www.perplexity.ai/search?q=${encodeURIComponent(promptText)}`,
       icon: '🔍',
-      desc: 'Web search & sources',
-      bg: 'bg-teal-50 hover:bg-teal-100 text-teal-800 border-teal-200'
+      desc: 'Web Search AI',
+      bg: 'bg-teal-50 hover:bg-teal-100 text-teal-900 border-teal-200'
+    },
+    {
+      name: 'DeepSeek',
+      url: `https://chat.deepseek.com/`,
+      icon: '🐋',
+      desc: 'DeepSeek AI',
+      bg: 'bg-blue-50 hover:bg-blue-100 text-blue-900 border-blue-200'
+    },
+    {
+      name: 'Copilot',
+      url: `https://copilot.microsoft.com/`,
+      icon: '🚀',
+      desc: 'MS Copilot',
+      bg: 'bg-cyan-50 hover:bg-cyan-100 text-cyan-900 border-cyan-200'
     },
     {
       name: 'Claude',
       url: `https://claude.ai/new`,
       icon: '🧠',
-      desc: 'Anthropic Claude AI',
-      bg: 'bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200'
+      desc: 'Anthropic Claude',
+      bg: 'bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-200'
     },
     {
       name: 'Gemini',
       url: `https://gemini.google.com/app`,
       icon: '✨',
-      desc: 'Google AI Assistant',
-      bg: 'bg-blue-50 hover:bg-blue-100 text-blue-800 border-blue-200'
+      desc: 'Google Gemini',
+      bg: 'bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border-indigo-200'
+    },
+    {
+      name: 'Grok AI',
+      url: `https://grok.com/`,
+      icon: '⚡',
+      desc: 'xAI Grok',
+      bg: 'bg-slate-100 hover:bg-slate-200 text-slate-900 border-slate-300'
+    },
+    {
+      name: 'Poe AI',
+      url: `https://poe.com/`,
+      icon: '🔮',
+      desc: 'Poe Multi-AI',
+      bg: 'bg-purple-50 hover:bg-purple-100 text-purple-900 border-purple-200'
     }
   ];
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-150" onClick={onClose}>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-150" onClick={onClose}>
       <div 
-        className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-150 border border-slate-100"
+        className="w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-150 border border-slate-100"
         onClick={e => e.stopPropagation()}
       >
         {/* Top Header */}
@@ -577,8 +614,11 @@ function AiPromptModal({ topicText, subjectName, unitName, onClose }) {
         <div className="p-4 sm:p-5 space-y-4 bg-slate-50/50">
           {/* Prompt Preview Box */}
           <div className="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs">
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Selected Topic Prompt</p>
-            <p className="text-xs font-semibold text-slate-700 leading-relaxed italic line-clamp-3">
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Selected Topic Prompt</p>
+              <span className="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Auto-Copied on Click</span>
+            </div>
+            <p className="text-xs font-semibold text-slate-700 leading-relaxed italic line-clamp-2">
               "{promptText}"
             </p>
             <button
@@ -591,25 +631,20 @@ function AiPromptModal({ topicText, subjectName, unitName, onClose }) {
           </div>
 
           <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">
-            Open in your favorite AI engine:
+            Open in Installed App or Browser:
           </p>
 
           {/* AI Engines List */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {aiPlatforms.map((platform) => (
               <button
                 key={platform.name}
-                onClick={() => {
-                  handleCopy();
-                  window.open(platform.url, '_blank');
-                }}
-                className={`p-3 rounded-2xl border flex items-center gap-3 transition-all active:scale-[0.97] text-left shadow-2xs ${platform.bg}`}
+                onClick={() => handleOpenAi(platform)}
+                className={`p-2.5 rounded-2xl border flex flex-col items-center justify-center text-center transition-all active:scale-[0.96] shadow-2xs ${platform.bg}`}
               >
-                <span className="text-2xl flex-shrink-0">{platform.icon}</span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs font-black uppercase tracking-wide leading-tight">{platform.name}</p>
-                  <p className="text-[10px] font-medium opacity-80 truncate">{platform.desc}</p>
-                </div>
+                <span className="text-2xl mb-1">{platform.icon}</span>
+                <p className="text-xs font-black uppercase tracking-wide leading-tight truncate w-full">{platform.name}</p>
+                <p className="text-[9px] font-medium opacity-75 truncate w-full mt-0.5">{platform.desc}</p>
               </button>
             ))}
           </div>
