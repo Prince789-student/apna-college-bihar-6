@@ -505,258 +505,115 @@ function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
 }
 
 // ─── AI Study Mentor Modal Component ─────────────────────────────────────────────
-function AiPromptModal({ topicText, subjectName, unitName, branchName, semName, onClose }) {
-  const [activeTab, setActiveTab] = React.useState('explain');
-  const [loading, setLoading] = React.useState(false);
-  const [response, setResponse] = React.useState('');
-  const [customQuestion, setCustomQuestion] = React.useState('');
+function AiPromptModal({ topicText, subjectName, unitName, onClose }) {
   const [copied, setCopied] = React.useState(false);
-  const [cache, setCache] = React.useState({});
-  const [showExternal, setShowExternal] = React.useState(false);
 
-  const promptText = `Explain this in detail: ${topicText} from the chapter '${unitName}' in the subject '${subjectName}' (BEU B.Tech Syllabus)`;
-
-  const fetchAiExplanation = React.useCallback(async (mode, question = '') => {
-    const key = question ? `q_${question}` : mode;
-    if (cache[key]) {
-      setResponse(cache[key]);
-      return;
-    }
-    setLoading(true);
-    setResponse('');
-    try {
-      const baseUrl = Capacitor.isNativePlatform() ? 'https://apnacollegebihar.online' : '';
-      const res = await fetch(`${baseUrl}/api/beu/ask-ai`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          topic: topicText,
-          subject: subjectName,
-          unitName: unitName,
-          branch: branchName,
-          semester: semName,
-          mode: mode,
-          customQuestion: question
-        })
-      });
-      const data = await res.json();
-      if (data && data.text) {
-        setResponse(data.text);
-        setCache(prev => ({ ...prev, [key]: data.text }));
-      } else {
-        throw new Error('No AI response received');
-      }
-    } catch (err) {
-      let fb = '';
-      if (mode === 'exam_qa') {
-        fb = `### 🎯 Expected BEU 7-Mark Question & Model Answer\n\n` +
-          `**Question:** Explain the fundamental principle, working mechanism, and practical engineering significance of **${topicText}** with a neat schematic diagram.\n\n` +
-          `#### 1. Core Definition (1.5 Marks)\n` +
-          `- **${topicText}** is defined as the core principle in ${subjectName} governing systematic analysis and operational design.\n\n` +
-          `#### 2. Working Mechanism & Step-by-Step Points (2.5 Marks)\n` +
-          `- Step 1: Fundamental physical or logical conditions.\n` +
-          `- Step 2: System response and operational parameters.\n` +
-          `- Step 3: Performance evaluation under engineering constraints.\n\n` +
-          `#### 3. Diagrammatic Representation (1.5 Marks)\n` +
-          `- Draw neat labelled block diagram in answer booklet showing input, processing, and output.\n\n` +
-          `#### 4. Real-world Engineering Application (1.5 Marks)\n` +
-          `- Applied in modern infrastructure and engineering workflows in ${subjectName}.\n\n` +
-          `> 💡 *BEU Scoring Strategy:* Always present your answer with headings and points rather than a continuous paragraph. Evaluators award maximum marks for neat diagrams!`;
-      } else if (mode === 'formula') {
-        fb = `### ⚡ Rapid Revision & Key Formulas: ${topicText}\n\n` +
-          `**Subject:** ${subjectName} • **Unit:** ${unitName}\n\n` +
-          `#### 📌 Key Points for Rapid Recall:\n` +
-          `- **Essential Concept:** Master the underlying definitions and SI units for **${topicText}**.\n` +
-          `- **Standard Assumptions:** Review boundary conditions and limitations.\n` +
-          `- **Recurring Exam Pattern:** In BEU examinations, this topic frequently carries numerical problems and 7-mark theoretical proofs.\n\n` +
-          `> 💡 *Pro Tip:* Check the PYQs tab in Apna College Bihar app for previous year solved questions on this unit!`;
-      } else {
-        fb = `### 📘 Concept Overview: ${topicText}\n\n` +
-          `**Subject:** ${subjectName} • **Module:** ${unitName}\n\n` +
-          `#### 💡 What is ${topicText}?\n` +
-          `**${topicText}** is an essential syllabus component in ${subjectName}. It provides the necessary theoretical grounding required to solve complex engineering problems.\n\n` +
-          `#### 🚀 How to Master it for Exams:\n` +
-          `1. **Understand Intuition:** Grasp why this concept was developed and how it functions.\n` +
-          `2. **Formula & Units:** Remember the standard equations and their SI units.\n` +
-          `3. **Exam Practice:** Practice writing definitions and drawing neat diagrams.\n\n` +
-          `> 💡 *ACB Study Tip:* Combine this study guide with official BEU lecture videos on YouTube using the red YouTube button beside the topic!`;
-      }
-      setResponse(fb);
-      setCache(prev => ({ ...prev, [key]: fb }));
-    } finally {
-      setLoading(false);
-    }
-  }, [topicText, subjectName, unitName, branchName, semName, cache]);
-
-  React.useEffect(() => {
-    fetchAiExplanation(activeTab);
-  }, [activeTab, fetchAiExplanation]);
-
-  const handleCustomSubmit = (e) => {
-    e.preventDefault();
-    if (!customQuestion.trim()) return;
-    fetchAiExplanation('custom', customQuestion);
-  };
+  const promptText = `Explain this in detail: ${topicText} from chapter '${unitName}' in subject '${subjectName}' (BEU B.Tech Syllabus)`;
 
   const handleCopy = () => {
-    const textToCopy = response || promptText;
-    navigator.clipboard.writeText(textToCopy);
+    navigator.clipboard.writeText(promptText);
     setCopied(true);
-    import('react-hot-toast').then(m => m.toast.success("Copied to clipboard!"));
+    import('react-hot-toast').then(m => m.toast.success("Prompt copied to clipboard!"));
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const externalPlatforms = [
-    { name: 'ChatGPT', url: `https://chatgpt.com/?q=${encodeURIComponent(promptText)}`, icon: '🤖', color: 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border-emerald-200' },
-    { name: 'Perplexity', url: `https://www.perplexity.ai/search?q=${encodeURIComponent(promptText)}`, icon: '🔍', color: 'bg-teal-50 text-teal-700 hover:bg-teal-100 border-teal-200' },
-    { name: 'Claude', url: `https://claude.ai/new`, icon: '🧠', color: 'bg-amber-50 text-amber-700 hover:bg-amber-100 border-amber-200' },
-    { name: 'Gemini', url: `https://gemini.google.com/app`, icon: '✨', color: 'bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200' },
+  const aiPlatforms = [
+    {
+      name: 'ChatGPT',
+      url: `https://chatgpt.com/?q=${encodeURIComponent(promptText)}`,
+      icon: '🤖',
+      desc: 'OpenAI ChatGPT',
+      bg: 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border-emerald-200'
+    },
+    {
+      name: 'Perplexity',
+      url: `https://www.perplexity.ai/search?q=${encodeURIComponent(promptText)}`,
+      icon: '🔍',
+      desc: 'Web search & sources',
+      bg: 'bg-teal-50 hover:bg-teal-100 text-teal-800 border-teal-200'
+    },
+    {
+      name: 'Claude',
+      url: `https://claude.ai/new`,
+      icon: '🧠',
+      desc: 'Anthropic Claude AI',
+      bg: 'bg-amber-50 hover:bg-amber-100 text-amber-800 border-amber-200'
+    },
+    {
+      name: 'Gemini',
+      url: `https://gemini.google.com/app`,
+      icon: '✨',
+      desc: 'Google AI Assistant',
+      bg: 'bg-blue-50 hover:bg-blue-100 text-blue-800 border-blue-200'
+    }
   ];
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-xl max-h-[92vh] bg-white rounded-[2rem] shadow-2xl relative overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 border border-slate-200">
-        
-        {/* Header */}
-        <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-indigo-50 via-white to-purple-50">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-md flex-shrink-0">
-              <Bot size={22} />
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-150" onClick={onClose}>
+      <div 
+        className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-150 border border-slate-100"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Top Header */}
+        <div className="p-4 sm:p-5 bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 text-white flex items-center justify-between relative">
+          <div className="flex items-center gap-2.5 min-w-0 pr-6">
+            <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg flex-shrink-0">
+              ✨
             </div>
             <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <h3 className="text-base sm:text-lg font-black text-slate-900 uppercase tracking-tight truncate">
-                  AI Study Tutor
-                </h3>
-                <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-indigo-100 text-indigo-700 flex items-center gap-1">
-                  <Sparkles size={10} /> BEU AI
-                </span>
-              </div>
-              <p className="text-[11px] font-semibold text-slate-500 truncate max-w-xs sm:max-w-md">
-                {topicText}
-              </p>
+              <h3 className="text-sm font-black uppercase tracking-wider text-white">Ask AI Assistant</h3>
+              <p className="text-[11px] text-indigo-100 font-semibold truncate mt-0.5">{topicText}</p>
             </div>
           </div>
           <button 
             onClick={onClose} 
-            className="p-2 text-slate-400 hover:text-slate-800 bg-white rounded-xl shadow-sm border border-slate-200 transition-colors flex-shrink-0"
+            className="p-1.5 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors"
           >
-            <X size={18} strokeWidth={2.5} />
+            <X size={16} />
           </button>
         </div>
 
-        {/* Tab Pills */}
-        <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-          <button
-            onClick={() => setActiveTab('explain')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 flex-shrink-0 ${
-              activeTab === 'explain'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
-          >
-            💡 Concept
-          </button>
-          <button
-            onClick={() => setActiveTab('exam_qa')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 flex-shrink-0 ${
-              activeTab === 'exam_qa'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
-          >
-            🎯 BEU 7-Mark Q&A
-          </button>
-          <button
-            onClick={() => setActiveTab('formula')}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 flex-shrink-0 ${
-              activeTab === 'formula'
-                ? 'bg-indigo-600 text-white shadow-sm'
-                : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
-            }`}
-          >
-            ⚡ Revision & Formulas
-          </button>
-        </div>
-
-        {/* Body Content */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1 space-y-4 text-slate-800 text-sm leading-relaxed">
-          {loading ? (
-            <div className="flex flex-col items-center justify-center py-12 space-y-3">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center animate-spin">
-                <Loader2 size={24} />
-              </div>
-              <p className="text-xs font-bold text-slate-500 uppercase tracking-widest animate-pulse">
-                AI Study Mentor is preparing your notes...
-              </p>
-            </div>
-          ) : (
-            <div className="prose prose-sm max-w-none prose-headings:font-bold prose-headings:text-slate-900 prose-p:text-slate-700 prose-li:text-slate-700 prose-strong:text-indigo-900 prose-pre:bg-slate-900 prose-pre:text-slate-100 prose-blockquote:border-indigo-500 prose-blockquote:bg-indigo-50/50 prose-blockquote:p-3 prose-blockquote:rounded-r-xl">
-              <ReactMarkdown>{response}</ReactMarkdown>
-            </div>
-          )}
-        </div>
-
-        {/* Bottom Actions & Input */}
-        <div className="p-3 sm:p-4 bg-slate-50 border-t border-slate-100 space-y-3">
-          {/* Ask Follow-up Input */}
-          <form onSubmit={handleCustomSubmit} className="flex items-center gap-2">
-            <input
-              type="text"
-              placeholder="Ask AI a specific doubt about this topic..."
-              value={customQuestion}
-              onChange={(e) => setCustomQuestion(e.target.value)}
-              className="flex-1 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            <button
-              type="submit"
-              disabled={loading || !customQuestion.trim()}
-              className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all active:scale-95 shadow-sm"
-            >
-              <Send size={13} />
-              Ask
-            </button>
-          </form>
-
-          {/* Action Row */}
-          <div className="flex items-center justify-between gap-2 pt-1">
+        {/* Modal Content */}
+        <div className="p-4 sm:p-5 space-y-4 bg-slate-50/50">
+          {/* Prompt Preview Box */}
+          <div className="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs">
+            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Selected Topic Prompt</p>
+            <p className="text-xs font-semibold text-slate-700 leading-relaxed italic line-clamp-3">
+              "{promptText}"
+            </p>
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold transition-all shadow-sm active:scale-95"
+              className="mt-2.5 w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1.5 transition-colors"
             >
-              {copied ? <Check size={14} className="text-emerald-600" /> : <Copy size={14} />}
-              {copied ? 'Copied!' : 'Copy Notes'}
-            </button>
-
-            <button
-              onClick={() => setShowExternal(!showExternal)}
-              className="flex items-center gap-1 text-[11px] font-bold text-indigo-600 hover:text-indigo-800 transition-colors"
-            >
-              <ExternalLink size={12} />
-              {showExternal ? 'Hide External AI' : 'Open in ChatGPT / Gemini'}
+              {copied ? <Check size={13} className="text-emerald-600" /> : <Copy size={13} />}
+              {copied ? 'Prompt Copied!' : 'Copy Prompt Text'}
             </button>
           </div>
 
-          {/* External Platform Links (Clean Web URLs, no broken intent schemes) */}
-          {showExternal && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 animate-in fade-in duration-150">
-              {externalPlatforms.map((p) => (
-                <button
-                  key={p.name}
-                  onClick={() => {
-                    handleCopy();
-                    window.open(p.url, '_blank');
-                  }}
-                  className={`flex items-center justify-center gap-1.5 p-2 rounded-xl border text-[11px] font-bold transition-all active:scale-95 ${p.color}`}
-                >
-                  <span>{p.icon}</span>
-                  <span>{p.name}</span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+          <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider text-center">
+            Open in your favorite AI engine:
+          </p>
 
+          {/* AI Engines List */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            {aiPlatforms.map((platform) => (
+              <button
+                key={platform.name}
+                onClick={() => {
+                  handleCopy();
+                  window.open(platform.url, '_blank');
+                }}
+                className={`p-3 rounded-2xl border flex items-center gap-3 transition-all active:scale-[0.97] text-left shadow-2xs ${platform.bg}`}
+              >
+                <span className="text-2xl flex-shrink-0">{platform.icon}</span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-black uppercase tracking-wide leading-tight">{platform.name}</p>
+                  <p className="text-[10px] font-medium opacity-80 truncate">{platform.desc}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
