@@ -154,12 +154,19 @@ export function AuthProvider({ children }) {
       const cachedRaw = localStorage.getItem(USER_CACHE_KEY);
       const hasCacheForUser = cachedRaw && JSON.parse(cachedRaw).uid === u.uid;
       if (!hasCacheForUser) {
-        setUser({
+        const fallbackUserData = {
           uid: u.uid,
-          email: u.email,
+          email: u.email || '',
           name: u.displayName || 'Scholar',
-          role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT
-        });
+          phone: u.phoneNumber || '',
+          role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT,
+          createdAt: new Date().toISOString()
+        };
+        setUser({ ...u, ...fallbackUserData });
+        localStorage.setItem(USER_CACHE_KEY, JSON.stringify(fallbackUserData));
+      } else {
+        const cachedUser = JSON.parse(cachedRaw);
+        setUser({ ...u, ...cachedUser });
       }
     } finally {
       isSyncing.current = false;
@@ -171,15 +178,24 @@ export function AuthProvider({ children }) {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const data = {
       uid: res.user.uid,
-      name,
-      email,
-      phone,
-      createdAt: serverTimestamp(),
+      name: name || 'Scholar',
+      email: email || '',
+      phone: phone || '',
       role: ROLES.STUDENT,
       groupsCreatedToday: 0,
-      lastGroupCreateDate: null
+      lastGroupCreateDate: null,
+      createdAt: new Date().toISOString()
     };
-    await setDoc(doc(db, "users", res.user.uid), data);
+    try {
+      await setDoc(doc(db, "users", res.user.uid), {
+        ...data,
+        createdAt: serverTimestamp()
+      });
+    } catch (fsErr) {
+      console.warn("[AUTH] Signup setDoc warning (quota or offline):", fsErr?.message);
+    }
+    localStorage.setItem(USER_CACHE_KEY, JSON.stringify(data));
+    setUser({ ...res.user, ...data });
     return res.user;
   }
 

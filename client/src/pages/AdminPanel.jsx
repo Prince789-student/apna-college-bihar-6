@@ -185,7 +185,7 @@ export default function AdminPanel() {
     };
     loadStatsFallback();
 
-    const unsubUsers = onSnapshot(collection(db, 'users'), (snap) => {
+    const unsubUsers = onSnapshot(query(collection(db, 'users'), limit(300)), (snap) => {
       if (!snap.empty) {
         setUsers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
         setQuotaExceededError(false);
@@ -193,7 +193,6 @@ export default function AdminPanel() {
     }, async (err) => {
       console.warn("Firestore users listener quota or connection error:", err.message);
       setQuotaExceededError(true);
-      // Fallback: Fetch directly from server API
       try {
         const headers = await getAdminHeaders();
         const resp = await fetch(`${apiBase}/api/admin/users`, { headers });
@@ -213,39 +212,39 @@ export default function AdminPanel() {
       }
     };
 
-    const unsubGroups1 = onSnapshot(collection(db, 'Groups'), (snap) => {
+    const unsubGroups1 = onSnapshot(query(collection(db, 'Groups'), limit(100)), (snap) => {
       snap.docs.forEach(d => groupsCache.set(d.id, mapGroupDoc(d)));
       updateGroups();
-    }, () => {});
+    }, (err) => { setQuotaExceededError(true); });
 
-    const unsubGroups2 = onSnapshot(collection(db, 'groups'), (snap) => {
+    const unsubGroups2 = onSnapshot(query(collection(db, 'groups'), limit(100)), (snap) => {
       snap.docs.forEach(d => groupsCache.set(d.id, mapGroupDoc(d)));
       updateGroups();
-    }, () => {});
+    }, (err) => { setQuotaExceededError(true); });
 
-    const unsubDocs = onSnapshot(collection(db, 'documents'), (snap) => {
+    const unsubDocs = onSnapshot(query(collection(db, 'documents'), limit(200)), (snap) => {
       setDocs(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    });
+    }, (err) => { setQuotaExceededError(true); });
 
-    const unsubAnns = onSnapshot(query(collection(db, 'announcements'), orderBy('createdAt', 'desc')), (snap) => {
+    const unsubAnns = onSnapshot(query(collection(db, 'announcements'), orderBy('createdAt', 'desc'), limit(50)), (snap) => {
       setAnns(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    });
+    }, (err) => { setQuotaExceededError(true); });
 
-    const unsubAds = onSnapshot(collection(db, 'ads'), (snap) => {
+    const unsubAds = onSnapshot(query(collection(db, 'ads'), limit(50)), (snap) => {
       setAds(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    });
+    }, (err) => { setQuotaExceededError(true); });
 
-    const unsubResources = onSnapshot(collection(db, 'studyResources'), (snap) => {
+    const unsubResources = onSnapshot(query(collection(db, 'studyResources'), limit(50)), (snap) => {
       setStudyResources(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    });
+    }, (err) => { setQuotaExceededError(true); });
 
-    const unsubShortlinks = onSnapshot(collection(db, 'shortlinks'), (snap) => {
+    const unsubShortlinks = onSnapshot(query(collection(db, 'shortlinks'), limit(50)), (snap) => {
       setShortlinks(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    });
+    }, (err) => { setQuotaExceededError(true); });
 
-    const unsubDonors = onSnapshot(query(collection(db, 'donors'), orderBy('amount', 'desc')), (snap) => {
+    const unsubDonors = onSnapshot(query(collection(db, 'donors'), orderBy('amount', 'desc'), limit(50)), (snap) => {
       setDonors(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    });
+    }, (err) => { setQuotaExceededError(true); });
 
     fetch(`${apiBase}/api/beu/monthly-collection`)
       .then(res => res.json())
@@ -260,9 +259,9 @@ export default function AdminPanel() {
       if (docSnap.exists()) {
         setMonthlyTracker(prev => ({ ...prev, ...docSnap.data() }));
       }
-    }, () => {});
+    }, (err) => {});
 
-    const unsubBeu = onSnapshot(collection(db, 'beu_notifications'), (snap) => {
+    const unsubBeu = onSnapshot(query(collection(db, 'beu_notifications'), limit(100)), (snap) => {
       const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       const parseDate = (d) => {
         if (!d) return 0;
@@ -282,7 +281,7 @@ export default function AdminPanel() {
         return tB - tA;
       });
       setBeuNotifications(data);
-    });
+    }, (err) => { setQuotaExceededError(true); });
 
     setLoading(false);
     return () => { 
@@ -480,12 +479,13 @@ export default function AdminPanel() {
       setSyncingUsers(true);
       flash('Syncing all Firebase Auth users to database... ⏳');
       const headers = await getAdminHeaders();
-      const res = await fetch('/api/admin/sync-users', { method: 'POST', headers });
+      const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+      const res = await fetch(`${apiBase}/api/admin/sync-users`, { method: 'POST', headers });
       const json = await res.json();
       if (json.success) {
         flash(`✅ ${json.message || `Synced ${json.count} users successfully!`}`, 'ok');
         // Refresh users list from API
-        const usersRes = await fetch('/api/admin/users', { headers });
+        const usersRes = await fetch(`${apiBase}/api/admin/users`, { headers });
         const usersJson = await usersRes.json();
         if (usersJson.success && Array.isArray(usersJson.users)) {
           setUsers(usersJson.users);
