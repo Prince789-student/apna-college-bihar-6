@@ -583,9 +583,6 @@ export default function DashboardLayout() {
                 <span className="font-heading font-black text-sm sm:text-base md:text-lg tracking-tight uppercase text-slate-900 leading-none block">
                   Apna College <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Bihar</span>
                 </span>
-                <span className="text-xs text-blue-600 font-bold tracking-wider block mt-0.5">
-                  Academic Portal
-                </span>
               </div>
             </div>
 
@@ -872,7 +869,7 @@ export default function DashboardLayout() {
                     <Award size={16} className="text-rose-600" />
                   </div>
                   <div className="text-left">
-                    <span className="text-xs font-bold block text-rose-700">Dil Se Support (₹10 - ₹20)</span>
+                    <span className="text-xs font-bold block text-rose-700">Dil Se Support</span>
                     <span className="text-[10px] text-rose-500 font-medium">Keep 38 GECs Education Free</span>
                   </div>
                </button>

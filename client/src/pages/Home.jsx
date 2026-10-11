@@ -147,60 +147,76 @@ export default function Home() {
     }
   ];
 
-  // ── Firestore Data Fetching ──
+  // ── High Performance Cached Data Fetching (0 Firestore reads per visitor) ──
   useEffect(() => {
-    const unsubDonors = onSnapshot(query(collection(db, 'donors'), orderBy('amount', 'desc'), limit(4)), (snap) => {
-      setTopDonors(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    });
+    // 1. Instant display from local cache if available (0ms)
+    try {
+      const cached = localStorage.getItem('acb_home_stats_cache');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed.stats) setStats(parsed.stats);
+        if (parsed.donors) setTopDonors(parsed.donors);
+        if (parsed.notices) setBeuNotices(parsed.notices);
+      }
+    } catch (_) {}
 
-    const qNotices = query(collection(db, 'beu_notifications'), limit(50));
-    const unsubNotices = onSnapshot(qNotices, (snap) => {
-      const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      const parseDate = (d) => {
-        if (!d) return 0;
-        if (d.includes('-')) return new Date(d).getTime();
+    // 2. Fetch server-cached home data (cached on Node.js server for 10 min -> 0 client Firestore reads)
+    const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+    const parseDate = (d) => {
+      if (!d) return 0;
+      if (typeof d === 'string' && d.includes('-')) return new Date(d).getTime() || 0;
+      if (typeof d === 'string') {
         const p = d.split('/');
-        if (p.length === 3) return new Date(`${p[2]}-${p[1]}-${p[0]}`).getTime();
-        return new Date(d).getTime();
-      };
-      data.sort((a, b) => {
-        const tA = parseDate(a.date || a.noticedate);
-        const tB = parseDate(b.date || b.noticedate);
-        if (tA === tB) {
-          return (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0);
-        }
-        return tB - tA;
-      });
-      setBeuNotices(data.slice(0, 3));
-    });
-
-    const unsubDocs = onSnapshot(doc(db, 'documents', 'unique_counts_metadata'), (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        setStats(s => ({
-          ...s,
-          notes: data.uniqueNotesCount || 0,
-          pyqs: data.uniquePyqsCount || 0
-        }));
+        if (p.length === 3) return new Date(`${p[2]}-${p[1]}-${p[0]}`).getTime() || 0;
       }
-    });
-
-    const fetchCounts = async () => {
-      try {
-        const usersSnap = await getCountFromServer(collection(db, 'users'));
-        const groupsSnap = await getCountFromServer(collection(db, 'groups'));
-        setStats(s => ({
-          ...s,
-          users: usersSnap.data().count || 0,
-          groups: groupsSnap.data().count || 0
-        }));
-      } catch (error) {
-        console.error("Error fetching homepage stats:", error);
-      }
+      return new Date(d).getTime() || 0;
     };
 
-    fetchCounts();
-    return () => { unsubNotices(); unsubDocs(); unsubDonors(); };
+    fetch(`${apiBase}/api/public/home-stats`)
+      .then(res => res.json())
+      .then(json => {
+        if (json.success) {
+          if (json.stats) setStats(json.stats);
+          if (json.donors) setTopDonors(json.donors);
+          if (json.notices && Array.isArray(json.notices) && json.notices.length > 0) {
+            const data = [...json.notices];
+            data.sort((a, b) => {
+              const tA = parseDate(a.date || a.noticedate);
+              const tB = parseDate(b.date || b.noticedate);
+              return tB - tA;
+            });
+            setBeuNotices(data.slice(0, 3));
+          } else {
+            // Direct fallback to /api/beu/notices
+            fetch(`${apiBase}/api/beu/notices`)
+              .then(r => r.json())
+              .then(beuRes => {
+                if (beuRes.success && Array.isArray(beuRes.notices) && beuRes.notices.length > 0) {
+                  setBeuNotices(beuRes.notices.slice(0, 3));
+                }
+              })
+              .catch(() => {});
+          }
+          try {
+            localStorage.setItem('acb_home_stats_cache', JSON.stringify({
+              stats: json.stats,
+              donors: json.donors,
+              notices: (json.notices || []).slice(0, 3)
+            }));
+          } catch (_) {}
+        }
+      })
+      .catch(err => {
+        console.warn('Home cached stats fetch skipped, falling back to direct notices:', err);
+        fetch(`${apiBase}/api/beu/notices`)
+          .then(r => r.json())
+          .then(beuRes => {
+            if (beuRes.success && Array.isArray(beuRes.notices) && beuRes.notices.length > 0) {
+              setBeuNotices(beuRes.notices.slice(0, 3));
+            }
+          })
+          .catch(() => {});
+      });
   }, []);
 
   return (
@@ -566,112 +582,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════ */}
-      {/* ── 5.5 OFFICIAL APPS (PC & MOBILE) ── */}
-      {/* ═══════════════════════════════════════════ */}
-      {!isNative && (
-        <section className="py-14 px-4 sm:px-6 md:px-12 relative z-10 bg-gradient-to-b from-transparent via-blue-50/40 to-transparent">
-        <div className="container mx-auto max-w-6xl">
-          <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950 rounded-3xl p-8 sm:p-12 text-white border border-slate-800 shadow-2xl relative overflow-hidden">
-            {/* Background Glow */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-10">
-              <div className="max-w-xl text-center lg:text-left">
-                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-xs font-bold mb-4 backdrop-blur-md">
-                  <Sparkles size={14} className="text-blue-400" />
-                  Official Native Applications
-                </div>
-                <h2 className="font-heading text-3xl sm:text-4xl font-black tracking-tight text-white mb-4">
-                  Study Faster on <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">PC Laptop</span> & <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Mobile</span>
-                </h2>
-                <p className="text-sm text-slate-300 leading-relaxed font-medium mb-6">
-                  Experience zero-distraction study sessions with our native Windows Desktop app featuring an App Blocker and Focus Stopwatch, or stay updated on the go with real-time BEU push notifications on Android.
-                </p>
-
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs text-slate-300 font-medium">
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle size={15} className="text-emerald-400" /> 100% Free Forever
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle size={15} className="text-emerald-400" /> VirusTotal Verified Safe
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle size={15} className="text-emerald-400" /> Offline Notes Cache
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full lg:w-auto shrink-0">
-                {/* Windows Card (Shown on Laptop/PC only; hidden on mobile phone) */}
-                <div className="hidden md:flex bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-blue-500/50 p-6 rounded-2xl transition-all shadow-lg flex-col justify-between group">
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
-                        <Monitor size={24} />
-                      </div>
-                      <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                        v2.2 Stable
-                      </span>
-                    </div>
-                    <h3 className="font-heading font-bold text-lg text-white mb-1">Windows PC App</h3>
-                    <p className="text-xs text-slate-400 mb-4">For Windows 10 & 11 (64-bit). Includes distraction blocker and focus timer.</p>
-                  </div>
-                  <div>
-                    <a
-                      href="/Apna-College-Bihar-Setup.exe"
-                      download="Apna-College-Bihar-Setup.exe"
-                      className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-heading font-bold text-xs transition-all shadow-md shadow-blue-600/30 active:scale-95 flex items-center justify-center gap-2 mb-2"
-                    >
-                      <Download size={15} /> Download for PC (76 MB)
-                    </a>
-                    <Link
-                      to="/download"
-                      className="text-[11px] text-slate-400 hover:text-blue-300 text-center block transition-colors font-medium"
-                    >
-                      View All Versions & Guide →
-                    </Link>
-                  </div>
-                </div>
-
-                {/* Android Card */}
-                <div className="bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-500/50 p-6 rounded-2xl transition-all shadow-lg flex flex-col justify-between group">
-                  <div>
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="w-12 h-12 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
-                        <Smartphone size={24} />
-                      </div>
-                      <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                        v57 APK
-                      </span>
-                    </div>
-                    <h3 className="font-heading font-bold text-lg text-white mb-1">Android APK</h3>
-                    <p className="text-xs text-slate-400 mb-4">Instant BEU notice push notifications, question bank, and CGPA calculator.</p>
-                  </div>
-                  <div>
-                    <a
-                      href="/apna-college-bihar-v57.apk"
-                      download="apna-college-bihar-v57.apk"
-                      className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-heading font-bold text-xs transition-all shadow-md shadow-emerald-600/30 active:scale-95 flex items-center justify-center gap-2 mb-2"
-                    >
-                      <Download size={15} /> Download APK (22 MB)
-                    </a>
-                    <Link
-                      to="/download"
-                      className="text-[11px] text-slate-400 hover:text-emerald-300 text-center block transition-colors font-medium"
-                    >
-                      View Mobile Guide →
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      )}
 
       {/* ═══════════════════════════════════════════ */}
       {/* ── 6. WALL OF FAME (TOP DONORS) ── */}

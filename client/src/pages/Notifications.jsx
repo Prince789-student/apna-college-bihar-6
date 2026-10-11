@@ -12,35 +12,72 @@ export default function Notifications() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    const qNotices = query(collection(db, 'beu_notifications'));
-    const unsub = onSnapshot(qNotices, (snap) => {
-      const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      // Sort client-side by date descending
-      const parseDate = (d) => {
-        if (!d) return 0;
-        if (d.includes('-')) return new Date(d).getTime();
+    let isMounted = true;
+    const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+
+    const parseDate = (d) => {
+      if (!d) return 0;
+      if (typeof d === 'string' && d.includes('-')) return new Date(d).getTime() || 0;
+      if (typeof d === 'string') {
         const p = d.split('/');
-        if (p.length === 3) return new Date(`${p[2]}-${p[1]}-${p[0]}`).getTime();
-        return new Date(d).getTime();
-      };
-      data.sort((a, b) => {
-        const tA = parseDate(a.date || a.noticedate);
-        const tB = parseDate(b.date || b.noticedate);
+        if (p.length === 3) return new Date(`${p[2]}-${p[1]}-${p[0]}`).getTime() || 0;
+      }
+      return new Date(d).getTime() || 0;
+    };
+
+    const sortNotices = (data) => {
+      return [...data].sort((a, b) => {
+        const tA = parseDate(a.date || a.noticedate || a.createdAt);
+        const tB = parseDate(b.date || b.noticedate || b.createdAt);
         if (tA === tB) {
-            const tsA = a.timestamp?.seconds || 0;
-            const tsB = b.timestamp?.seconds || 0;
-            return tsB - tsA;
+          const tsA = a.timestamp?.seconds || Number(String(a.id).replace(/\D/g, '')) || 0;
+          const tsB = b.timestamp?.seconds || Number(String(b.id).replace(/\D/g, '')) || 0;
+          return tsB - tsA;
         }
         return tB - tA;
       });
-      setNotices(data);
+    };
+
+    // 1. Fetch from server backend API (matches Admin Panel data 100%)
+    fetch(`${apiBase}/api/beu/notices`)
+      .then(res => res.json())
+      .then(data => {
+        if (!isMounted) return;
+        if (data.success && Array.isArray(data.notices) && data.notices.length > 0) {
+          setNotices(sortNotices(data.notices));
+          setLoading(false);
+        }
+      })
+      .catch(err => {
+        console.warn('Backend notices fetch fallback to Firestore:', err);
+      });
+
+    // 2. Also subscribe / fallback to Firestore
+    const qNotices = query(collection(db, 'beu_notifications'));
+    const unsub = onSnapshot(qNotices, (snap) => {
+      if (!isMounted) return;
+      if (!snap.empty) {
+        const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setNotices(prev => {
+          if (prev.length > 0) {
+            const map = new Map();
+            prev.forEach(n => map.set(String(n.id), n));
+            data.forEach(n => map.set(String(n.id), { ...map.get(String(n.id)), ...n }));
+            return sortNotices(Array.from(map.values()));
+          }
+          return sortNotices(data);
+        });
+      }
       setLoading(false);
     }, (error) => {
-      console.error('Firestore error:', error);
-      setLoading(false);
+      console.warn('Firestore notices error:', error);
+      if (isMounted) setLoading(false);
     });
 
-    return () => unsub();
+    return () => {
+      isMounted = false;
+      unsub();
+    };
   }, []);
 
   const handleEditNotice = async (notice, e) => {

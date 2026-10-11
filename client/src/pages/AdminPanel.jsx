@@ -206,125 +206,142 @@ export default function AdminPanel() {
     };
     loadStatsFallback();
 
-    const unsubUsers = onSnapshot(query(collection(db, 'users'), limit(1000)), (snap) => {
-      if (snap && snap.docs) {
-        const firestoreUsers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        setUsers(prev => {
-          if (!prev || prev.length === 0) return firestoreUsers;
-          const map = new Map();
-          prev.forEach(u => map.set(u.uid || u.id, u));
-          firestoreUsers.forEach(u => map.set(u.uid || u.id, { ...map.get(u.uid || u.id), ...u }));
-          return Array.from(map.values());
-        });
-        setQuotaExceededError(false);
-      }
-    }, async (err) => {
-      console.warn("Firestore users listener quota or connection error:", err.message);
-      setQuotaExceededError(true);
-      try {
-        const headers = await getAdminHeaders();
-        const resp = await fetch(`${apiBase}/api/admin/users`, { headers });
-        const json = await resp.json();
-        if (json.success && Array.isArray(json.users)) {
-          setUsers(json.users);
+    const unsubs = [];
+
+    // On-Demand Listener: ONLY listen to users when on 'users' tab
+    if (tab === 'users') {
+      const unsubUsers = onSnapshot(query(collection(db, 'users'), limit(1000)), (snap) => {
+        if (snap && snap.docs) {
+          const firestoreUsers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          setUsers(prev => {
+            if (!prev || prev.length === 0) return firestoreUsers;
+            const map = new Map();
+            prev.forEach(u => map.set(u.uid || u.id, u));
+            firestoreUsers.forEach(u => map.set(u.uid || u.id, { ...map.get(u.uid || u.id), ...u }));
+            return Array.from(map.values());
+          });
+          setQuotaExceededError(false);
         }
-      } catch (fetchErr) {
-        console.error("Failed to fetch admin users from fallback API:", fetchErr);
-      }
-    });
-
-    const groupsCache = new Map();
-    const updateGroups = () => {
-      if (groupsCache.size > 0) {
-        setGroups(Array.from(groupsCache.values()));
-      }
-    };
-
-    const unsubGroups1 = onSnapshot(query(collection(db, 'Groups'), limit(100)), (snap) => {
-      snap.docs.forEach(d => groupsCache.set(d.id, mapGroupDoc(d)));
-      updateGroups();
-    }, (err) => { setQuotaExceededError(true); });
-
-    const unsubGroups2 = onSnapshot(query(collection(db, 'groups'), limit(100)), (snap) => {
-      snap.docs.forEach(d => groupsCache.set(d.id, mapGroupDoc(d)));
-      updateGroups();
-    }, (err) => { setQuotaExceededError(true); });
-
-    const unsubDocs = onSnapshot(query(collection(db, 'documents'), limit(200)), (snap) => {
-      setDocs(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    }, (err) => { setQuotaExceededError(true); });
-
-    const unsubAnns = onSnapshot(query(collection(db, 'announcements'), orderBy('createdAt', 'desc'), limit(50)), (snap) => {
-      setAnns(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    }, (err) => { setQuotaExceededError(true); });
-
-    const unsubAds = onSnapshot(query(collection(db, 'ads'), limit(50)), (snap) => {
-      setAds(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    }, (err) => { setQuotaExceededError(true); });
-
-    const unsubResources = onSnapshot(query(collection(db, 'studyResources'), limit(50)), (snap) => {
-      setStudyResources(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    }, (err) => { setQuotaExceededError(true); });
-
-    const unsubShortlinks = onSnapshot(query(collection(db, 'shortlinks'), limit(50)), (snap) => {
-      setShortlinks(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    }, (err) => { setQuotaExceededError(true); });
-
-    const unsubDonors = onSnapshot(query(collection(db, 'donors'), orderBy('amount', 'desc'), limit(50)), (snap) => {
-      setDonors(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-    }, (err) => { setQuotaExceededError(true); });
-
-    fetch(`${apiBase}/api/beu/monthly-collection`)
-      .then(res => res.json())
-      .then(json => {
-        if (json.success && json.data) {
-          setMonthlyTracker(prev => ({ ...prev, ...json.data }));
+      }, async (err) => {
+        console.warn("Firestore users listener quota or connection error:", err.message);
+        setQuotaExceededError(true);
+        try {
+          const headers = await getAdminHeaders();
+          const resp = await fetch(`${apiBase}/api/admin/users`, { headers });
+          const json = await resp.json();
+          if (json.success && Array.isArray(json.users)) {
+            setUsers(json.users);
+          }
+        } catch (fetchErr) {
+          console.error("Failed to fetch admin users from fallback API:", fetchErr);
         }
-      })
-      .catch(() => {});
-
-    const unsubMonthlyTracker = onSnapshot(doc(db, 'settings', 'monthlyCollection'), (docSnap) => {
-      if (docSnap.exists()) {
-        setMonthlyTracker(prev => ({ ...prev, ...docSnap.data() }));
-      }
-    }, (err) => {});
-
-    const unsubBeu = onSnapshot(query(collection(db, 'beu_notifications'), limit(100)), (snap) => {
-      const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      const parseDate = (d) => {
-        if (!d) return 0;
-        if (d.includes('-')) return new Date(d).getTime();
-        const p = d.split('/');
-        if (p.length === 3) return new Date(`${p[2]}-${p[1]}-${p[0]}`).getTime();
-        return new Date(d).getTime();
-      };
-      data.sort((a, b) => {
-        const tA = parseDate(a.date || a.noticedate);
-        const tB = parseDate(b.date || b.noticedate);
-        if (tA === tB) {
-            const tsA = a.timestamp?.seconds || 0;
-            const tsB = b.timestamp?.seconds || 0;
-            return tsB - tsA;
-        }
-        return tB - tA;
       });
-      setBeuNotifications(data);
-    }, (err) => { setQuotaExceededError(true); });
+      unsubs.push(unsubUsers);
+    }
+
+    // On-Demand Listener: ONLY listen to groups when on 'groups' tab
+    if (tab === 'groups') {
+      const groupsCache = new Map();
+      const updateGroups = () => {
+        if (groupsCache.size > 0) {
+          setGroups(Array.from(groupsCache.values()));
+        }
+      };
+
+      const unsubGroups1 = onSnapshot(query(collection(db, 'Groups'), limit(100)), (snap) => {
+        snap.docs.forEach(d => groupsCache.set(d.id, mapGroupDoc(d)));
+        updateGroups();
+      }, (err) => { setQuotaExceededError(true); });
+
+      const unsubGroups2 = onSnapshot(query(collection(db, 'groups'), limit(100)), (snap) => {
+        snap.docs.forEach(d => groupsCache.set(d.id, mapGroupDoc(d)));
+        updateGroups();
+      }, (err) => { setQuotaExceededError(true); });
+
+      unsubs.push(unsubGroups1, unsubGroups2);
+    }
+
+    // On-Demand Listener: ONLY listen to documents when on 'notes' tab
+    if (tab === 'notes') {
+      const unsubDocs = onSnapshot(query(collection(db, 'documents'), limit(200)), (snap) => {
+        setDocs(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      }, (err) => { setQuotaExceededError(true); });
+      unsubs.push(unsubDocs);
+    }
+
+    // On-Demand Listener: ONLY listen to announcements when on 'broadcasts' tab
+    if (tab === 'broadcasts') {
+      const unsubAnns = onSnapshot(query(collection(db, 'announcements'), orderBy('createdAt', 'desc'), limit(50)), (snap) => {
+        setAnns(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      }, (err) => { setQuotaExceededError(true); });
+      unsubs.push(unsubAnns);
+    }
+
+    // On-Demand Listener: ONLY listen to ads when on 'ads' tab
+    if (tab === 'ads') {
+      const unsubAds = onSnapshot(query(collection(db, 'ads'), limit(50)), (snap) => {
+        setAds(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      }, (err) => { setQuotaExceededError(true); });
+      unsubs.push(unsubAds);
+    }
+
+    // On-Demand Listener: ONLY listen to resources when on 'resources' tab
+    if (tab === 'resources') {
+      const unsubResources = onSnapshot(query(collection(db, 'studyResources'), limit(50)), (snap) => {
+        setStudyResources(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      }, (err) => { setQuotaExceededError(true); });
+      unsubs.push(unsubResources);
+    }
+
+    // On-Demand Listener: ONLY listen to shortlinks when on 'shortlinks' tab
+    if (tab === 'shortlinks') {
+      const unsubShortlinks = onSnapshot(query(collection(db, 'shortlinks'), limit(50)), (snap) => {
+        setShortlinks(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      }, (err) => { setQuotaExceededError(true); });
+      unsubs.push(unsubShortlinks);
+    }
+
+    // On-Demand Listener: ONLY listen to donors when on 'donors' tab
+    if (tab === 'donors') {
+      const unsubDonors = onSnapshot(query(collection(db, 'donors'), orderBy('amount', 'desc'), limit(50)), (snap) => {
+        setDonors(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      }, (err) => { setQuotaExceededError(true); });
+      unsubs.push(unsubDonors);
+    }
+
+    // On-Demand Listener: ONLY listen to BEU notifications when on 'beu' or 'beu_notices' tab
+    if (tab === 'beu' || tab === 'beu_notices') {
+      const unsubBeu = onSnapshot(query(collection(db, 'beu_notifications'), limit(100)), (snap) => {
+        const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        const parseDate = (d) => {
+          if (!d) return 0;
+          if (d.includes('-')) return new Date(d).getTime();
+          const p = d.split('/');
+          if (p.length === 3) return new Date(`${p[2]}-${p[1]}-${p[0]}`).getTime();
+          return new Date(d).getTime();
+        };
+        data.sort((a, b) => {
+          const tA = parseDate(a.date || a.noticedate);
+          const tB = parseDate(b.date || b.noticedate);
+          if (tA === tB) {
+              const tsA = a.timestamp?.seconds || 0;
+              const tsB = b.timestamp?.seconds || 0;
+              return tsB - tsA;
+          }
+          return tB - tA;
+        });
+        setBeuNotifications(data);
+      }, (err) => { setQuotaExceededError(true); });
+      unsubs.push(unsubBeu);
+    }
 
     setLoading(false);
     return () => { 
-      if(unsubUsers) unsubUsers(); 
-      if(unsubGroups1) unsubGroups1(); 
-      if(unsubGroups2) unsubGroups2(); 
-      if(unsubDocs) unsubDocs(); 
-      if(unsubAnns) unsubAnns(); 
-      if(unsubAds) unsubAds();
-      if(unsubResources) unsubResources();
-      if(unsubBeu) unsubBeu();
-      if(unsubDonors) unsubDonors();
-      if(unsubShortlinks) unsubShortlinks();
+      unsubs.forEach(fn => {
+        try { if (typeof fn === 'function') fn(); } catch (_) {}
+      });
     };
-  }, [isAdmin, authLoading]);
+  }, [tab, isAdmin, authLoading]);
 
   // ── SERVER BACKGROUND SYNC MONITOR FOR BEU NOTIFICATIONS ──
   useEffect(() => {

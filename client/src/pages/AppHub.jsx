@@ -19,29 +19,57 @@ export default function AppHub() {
   const [beuNotices, setBeuNotices] = useState([]);
 
   React.useEffect(() => {
-    const qNotices = query(collection(db, 'beu_notifications'), limit(50));
-    const unsubNotices = onSnapshot(qNotices, (snap) => {
-      const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      const parseDate = (d) => {
-        if (!d) return 0;
-        if (d.includes('-')) return new Date(d).getTime();
+    let isMounted = true;
+    const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+
+    const parseDate = (d) => {
+      if (!d) return 0;
+      if (typeof d === 'string' && d.includes('-')) return new Date(d).getTime() || 0;
+      if (typeof d === 'string') {
         const p = d.split('/');
-        if (p.length === 3) return new Date(`${p[2]}-${p[1]}-${p[0]}`).getTime();
-        return new Date(d).getTime();
-      };
-      data.sort((a, b) => {
+        if (p.length === 3) return new Date(`${p[2]}-${p[1]}-${p[0]}`).getTime() || 0;
+      }
+      return new Date(d).getTime() || 0;
+    };
+
+    const sortNotices = (data) => {
+      return [...data].sort((a, b) => {
         const tA = parseDate(a.date || a.noticedate);
         const tB = parseDate(b.date || b.noticedate);
         if (tA === tB) {
-            const tsA = a.timestamp?.seconds || 0;
-            const tsB = b.timestamp?.seconds || 0;
-            return tsB - tsA;
+          const tsA = a.timestamp?.seconds || 0;
+          const tsB = b.timestamp?.seconds || 0;
+          return tsB - tsA;
         }
         return tB - tA;
       });
-      setBeuNotices(data.slice(0, 3));
-    });
-    return () => { unsubNotices(); };
+    };
+
+    // 1. Fetch from server backend API
+    fetch(`${apiBase}/api/beu/notices`)
+      .then(res => res.json())
+      .then(data => {
+        if (!isMounted) return;
+        if (data.success && Array.isArray(data.notices) && data.notices.length > 0) {
+          setBeuNotices(sortNotices(data.notices).slice(0, 3));
+        }
+      })
+      .catch(() => {});
+
+    // 2. Also listen / fallback to Firestore
+    const qNotices = query(collection(db, 'beu_notifications'), limit(50));
+    const unsubNotices = onSnapshot(qNotices, (snap) => {
+      if (!isMounted) return;
+      if (!snap.empty) {
+        const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setBeuNotices(sortNotices(data).slice(0, 3));
+      }
+    }, () => {});
+
+    return () => {
+      isMounted = false;
+      unsubNotices();
+    };
   }, []);
 
   const handleLogout = async () => {

@@ -75,7 +75,7 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
             </p>
 
             <div className="p-2.5 bg-white/80 rounded-xl border border-rose-100/80 text-[11px] text-slate-700 leading-relaxed font-semibold">
-              ✨ Cloud server aur database ko 24x7 fast rakhne ke liye monthly infrastructure cost aata hai. Aapka chhota sa voluntary support <strong className="text-rose-600 underline">(₹10, ₹20 ya jitna aap chahein)</strong> is platform ko hamesha free aur strong rakhega!
+              ✨ Cloud server aur database ko 24x7 fast rakhne ke liye monthly infrastructure cost aata hai. Aapka chhota sa voluntary support <strong className="text-rose-600 underline">(jitna aap chahein)</strong> is platform ko hamesha free aur strong rakhega!
             </div>
           </div>
 
