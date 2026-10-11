@@ -102,20 +102,35 @@ export default function AdminPanel() {
     setTimeout(() => setMsg(null), 4000);
   };
 
+  const getUserTimestamp = (u) => {
+    const val = u?.createdAt || u?.lastLogin || u?.updatedAt || u?.metadata?.creationTime;
+    if (!val) return 0;
+    try {
+      if (typeof val?.toDate === 'function') return val.toDate().getTime();
+      if (val?.seconds) return val.seconds * 1000;
+      const parsed = new Date(val).getTime();
+      return isNaN(parsed) ? 0 : parsed;
+    } catch (_) {
+      return 0;
+    }
+  };
+
   const getJoinDate = (u) => {
-    if (!u?.createdAt) return 'Legacy Member';
+    const val = u?.createdAt || u?.lastLogin || u?.updatedAt || u?.metadata?.creationTime;
+    if (!val) return 'Recent Scholar';
     try {
       let dateObj;
-      if (u.createdAt?.toDate) {
-        dateObj = u.createdAt.toDate();
-      } else if (u.createdAt?.seconds) {
-        dateObj = new Date(u.createdAt.seconds * 1000);
+      if (val?.toDate) {
+        dateObj = val.toDate();
+      } else if (val?.seconds) {
+        dateObj = new Date(val.seconds * 1000);
       } else {
-        dateObj = new Date(u.createdAt);
+        dateObj = new Date(val);
       }
+      if (isNaN(dateObj.getTime()) || dateObj.getTime() === 0) return 'Recent Scholar';
       return dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
     } catch(e) {
-      return 'Legacy Member';
+      return 'Recent Scholar';
     }
   };
 
@@ -173,7 +188,13 @@ export default function AdminPanel() {
         const json = await res.json();
         if (json.success) {
           if (Array.isArray(json.users) && json.users.length > 0) {
-            setUsers(prev => (prev && prev.length) ? prev : json.users);
+            setUsers(prev => {
+              if (!prev || prev.length === 0) return json.users;
+              const map = new Map();
+              json.users.forEach(u => map.set(u.uid || u.id, u));
+              prev.forEach(u => map.set(u.uid || u.id, { ...map.get(u.uid || u.id), ...u }));
+              return Array.from(map.values());
+            });
           }
           if (Array.isArray(json.groups) && json.groups.length > 0) {
             setGroups(prev => (prev && prev.length) ? prev : json.groups.map(mapGroupDoc));
@@ -185,9 +206,16 @@ export default function AdminPanel() {
     };
     loadStatsFallback();
 
-    const unsubUsers = onSnapshot(query(collection(db, 'users'), limit(300)), (snap) => {
-      if (!snap.empty) {
-        setUsers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+    const unsubUsers = onSnapshot(query(collection(db, 'users'), limit(1000)), (snap) => {
+      if (snap && snap.docs) {
+        const firestoreUsers = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        setUsers(prev => {
+          if (!prev || prev.length === 0) return firestoreUsers;
+          const map = new Map();
+          prev.forEach(u => map.set(u.uid || u.id, u));
+          firestoreUsers.forEach(u => map.set(u.uid || u.id, { ...map.get(u.uid || u.id), ...u }));
+          return Array.from(map.values());
+        });
         setQuotaExceededError(false);
       }
     }, async (err) => {
@@ -1073,7 +1101,12 @@ if (!isAdmin) return (
 
           <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] border border-slate-200/80 overflow-hidden shadow-2xl animate-in fade-in duration-500">
             <div className="p-4 md:p-8 border-b border-slate-200/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest">Scholar Directory</h2>
+              <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest flex items-center gap-2">
+                <span>Scholar Directory</span>
+                <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-black tracking-normal">
+                  {users.length} Registered
+                </span>
+              </h2>
               <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
                 <button
                    onClick={handleSyncUsers}
@@ -1103,7 +1136,117 @@ if (!isAdmin) return (
                 </select>
               </div>
            </div>
-           <div className="overflow-x-auto">
+           {/* MOBILE CARDS VIEW (md:hidden) */}
+           <div className="block md:hidden divide-y divide-slate-100 p-3 space-y-3">
+             {users.filter(u => {
+               const query = userSearch.toLowerCase();
+               return (
+                 u.id?.toLowerCase().includes(query) ||
+                 u.uid?.toLowerCase().includes(query) ||
+                 u.name?.toLowerCase().includes(query) ||
+                 u.email?.toLowerCase().includes(query) ||
+                 u.phone?.toLowerCase().includes(query) ||
+                 u.role?.toLowerCase().includes(query) ||
+                 u.homeDistrict?.toLowerCase().includes(query) ||
+                 u.district?.toLowerCase().includes(query) ||
+                 u.home_district?.toLowerCase().includes(query) ||
+                 u.collegeName?.toLowerCase().includes(query) ||
+                 u.college?.toLowerCase().includes(query) ||
+                 u.college_name?.toLowerCase().includes(query) ||
+                 u.branch?.toLowerCase().includes(query) ||
+                 u.deviceId?.toLowerCase().includes(query) ||
+                 u.device_id?.toLowerCase().includes(query)
+               );
+             }).sort((a, b) => {
+                const dateA = getUserTimestamp(a);
+                const dateB = getUserTimestamp(b);
+                if (dateA === dateB) {
+                  return (b.id || '').localeCompare(a.id || '');
+                }
+                return userSortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+             }).map(u => (
+               <div key={u.id} className="bg-slate-50/80 border border-slate-200/90 rounded-2xl p-4 space-y-3 shadow-xs">
+                 <div className="flex items-start justify-between gap-3">
+                   <div className="flex items-center gap-3 min-w-0">
+                     <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-black text-white text-xs shrink-0 shadow-xs">
+                       {u.name?.charAt(0).toUpperCase() || 'S'}
+                     </div>
+                     <div className="min-w-0">
+                       <p className="text-xs font-black text-slate-900 uppercase truncate">{u.name || 'Scholar'}</p>
+                       <p className="text-[11px] font-semibold text-slate-600 truncate">{u.email || 'No email'}</p>
+                       <p className="text-[9px] font-mono text-slate-400 truncate mt-0.5 select-all">UID: {u.id || u.uid}</p>
+                     </div>
+                   </div>
+                   <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0 ${
+                     u.role === ROLES.SUPER_ADMIN ? 'bg-amber-100 text-amber-700 border border-amber-200' :
+                     u.role === ROLES.ADMIN ? 'bg-indigo-100 text-indigo-700 border border-indigo-200' :
+                     'bg-slate-100 text-slate-600 border border-slate-200'
+                   }`}>
+                     {u.role || 'STUDENT'}
+                   </span>
+                 </div>
+
+                 <div className="grid grid-cols-2 gap-2 text-[10px] bg-white p-2.5 rounded-xl border border-slate-100 font-medium">
+                   <div>
+                     <span className="text-slate-400 block text-[9px] font-bold uppercase">Phone:</span>
+                     <span className="font-bold text-slate-700">{u.phone || 'N/A'}</span>
+                   </div>
+                   <div>
+                     <span className="text-slate-400 block text-[9px] font-bold uppercase">College:</span>
+                     <span className="font-bold text-slate-700 truncate block" title={u.collegeName || u.college}>{u.collegeName || u.college || 'N/A'}</span>
+                   </div>
+                   <div>
+                     <span className="text-slate-400 block text-[9px] font-bold uppercase">District / Branch:</span>
+                     <span className="font-bold text-slate-700">{u.district || u.homeDistrict || 'N/A'} {u.branch ? `• ${u.branch}` : ''}</span>
+                   </div>
+                   <div>
+                     <span className="text-slate-400 block text-[9px] font-bold uppercase">Joined Date:</span>
+                     <span className="font-bold text-slate-700">{getJoinDate(u)}</span>
+                   </div>
+                 </div>
+
+                 {/* Operations Row */}
+                 <div className="flex items-center justify-between pt-1 border-t border-slate-200/60">
+                   <span className={`text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-tight ${u.banned ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-700'}`}>
+                     {u.banned ? 'BANNED' : u.status || 'ACTIVE'}
+                   </span>
+
+                   <div className="flex items-center gap-1.5">
+                     {u.role !== ROLES.SUPER_ADMIN && (
+                       <button 
+                         onClick={() => toggleBan(u.id, u.banned)} 
+                         className={`px-2.5 py-1.5 rounded-xl text-[10px] font-bold transition-all flex items-center gap-1 ${u.banned ? 'bg-emerald-600 text-white' : 'bg-red-50 text-red-600 border border-red-200'}`}
+                       >
+                         {u.banned ? <UserCheck size={12}/> : <Ban size={12}/>}
+                         <span>{u.banned ? 'Unban' : 'Ban'}</span>
+                       </button>
+                     )}
+                     {isSuper && u.role !== ROLES.SUPER_ADMIN && (
+                       <button 
+                         onClick={() => changeRole(u.id, u.role === 'STUDENT' ? 'ADMIN' : 'STUDENT')} 
+                         className="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl text-[10px] font-bold flex items-center gap-1"
+                       >
+                         {u.role === 'STUDENT' ? <UserPlus size={12}/> : <UserMinus size={12}/>}
+                         <span>{u.role === 'STUDENT' ? 'Make Admin' : 'Demote'}</span>
+                       </button>
+                     )}
+                     {u.role !== ROLES.SUPER_ADMIN && (
+                       <button 
+                         onClick={() => deleteUser(u.id)} 
+                         className="p-1.5 bg-slate-100 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-xl transition-colors"
+                         title="Delete User"
+                       >
+                         <Trash2 size={13}/>
+                       </button>
+                     )}
+                   </div>
+                 </div>
+               </div>
+             ))}
+           </div>
+
+           {/* DESKTOP TABLE VIEW (hidden md:block) */}
+           <div className="hidden md:block overflow-x-auto">
              <table className="w-full text-left">
                <thead>
                  <tr className="bg-slate-100/40 text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 border-b border-slate-200/50">
@@ -1131,12 +1274,16 @@ if (!isAdmin) return (
                      u.collegeName?.toLowerCase().includes(query) ||
                      u.college?.toLowerCase().includes(query) ||
                      u.college_name?.toLowerCase().includes(query) ||
+                     u.branch?.toLowerCase().includes(query) ||
                      u.deviceId?.toLowerCase().includes(query) ||
                      u.device_id?.toLowerCase().includes(query)
                    );
                  }).sort((a, b) => {
-                    const dateA = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : (a.createdAt?.seconds ? a.createdAt.seconds * 1000 : new Date(a.createdAt || 0).getTime());
-                    const dateB = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : (b.createdAt?.seconds ? b.createdAt.seconds * 1000 : new Date(b.createdAt || 0).getTime());
+                    const dateA = getUserTimestamp(a);
+                    const dateB = getUserTimestamp(b);
+                    if (dateA === dateB) {
+                      return (b.id || '').localeCompare(a.id || '');
+                    }
                     return userSortOrder === 'newest' ? dateB - dateA : dateA - dateB;
                   }).map(u => (
                    <tr key={u.id} className="hover:bg-slate-100/20 transition-all group">

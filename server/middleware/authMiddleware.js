@@ -24,11 +24,23 @@ const protect = async (req, res, next) => {
                 const firebaseUser = await admin.auth().verifyIdToken(rawToken);
                 const email = (firebaseUser.email || '').toLowerCase();
                 const isFounder = email === 'prince8694@gmail.com' || email === 'prince86944@gmail.com';
+                let role = isFounder ? 'SUPER_ADMIN' : (firebaseUser.role || 'STUDENT');
+
+                // If not founder and role is not yet admin, check Firestore users collection
+                if (!isFounder && role !== 'ADMIN' && role !== 'SUPER_ADMIN') {
+                    try {
+                        const userDoc = await admin.firestore().collection('users').doc(firebaseUser.uid).get();
+                        if (userDoc.exists && (userDoc.data().role === 'ADMIN' || userDoc.data().role === 'SUPER_ADMIN')) {
+                            role = userDoc.data().role;
+                        }
+                    } catch (_) {}
+                }
+
                 req.user = {
                     id: firebaseUser.uid,
                     uid: firebaseUser.uid,
                     email: firebaseUser.email,
-                    role: isFounder ? 'SUPER_ADMIN' : (firebaseUser.role || 'STUDENT')
+                    role
                 };
                 return next();
             } catch (_) {}

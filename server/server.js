@@ -355,42 +355,91 @@ app.get('/api/admin/users', protect, adminOnly, authenticatedLimiter, asyncHandl
     }
     const db = adminSdk.firestore();
 
-    // Prefer firestore 'users' collection which contains complete profile data (college, branch, attendance, etc.)
+    const userMap = new Map();
+
+    // 1. Fetch Firestore user documents
     const firestoreUsersSnap = await db.collection('users').get().catch(() => null);
     if (firestoreUsersSnap && !firestoreUsersSnap.empty) {
-        const usersList = firestoreUsersSnap.docs.map(d => {
+        firestoreUsersSnap.docs.forEach(d => {
             const data = d.data();
             const email = (data.email || '').toLowerCase();
             const isFounder = email === 'prince8694@gmail.com' || email === 'prince86944@gmail.com';
-            return {
+            const userObj = {
                 id: d.id,
                 uid: data.uid || d.id,
                 ...data,
                 role: isFounder ? 'SUPER_ADMIN' : (data.role || 'STUDENT')
             };
+            userMap.set(d.id, userObj);
+            if (data.uid) userMap.set(data.uid, userObj);
+            if (email) userMap.set(email, userObj);
         });
-        return res.json({ success: true, count: usersList.length, users: usersList });
     }
-    
-    const authUsers = [];
-    let pageToken;
-    do {
-        const result = await adminSdk.auth().listUsers(1000, pageToken);
-        authUsers.push(...result.users);
-        pageToken = result.pageToken;
-    } while (pageToken);
 
-    const usersList = authUsers.map(u => ({
-        id: u.uid,
-        uid: u.uid,
-        email: u.email || '',
-        name: u.displayName || 'Scholar',
-        phone: u.phoneNumber || '',
-        role: (u.email === 'prince8694@gmail.com' || u.email === 'prince86944@gmail.com') ? 'SUPER_ADMIN' : 'STUDENT',
-        createdAt: u.metadata.creationTime,
-        lastLogin: u.metadata.lastSignInTime
-    }));
+    // 2. Fetch Firebase Auth users to catch any new user whose document wasn't created yet
+    try {
+        const authUsers = [];
+        let pageToken;
+        do {
+            const result = await adminSdk.auth().listUsers(1000, pageToken);
+            authUsers.push(...result.users);
+            pageToken = result.pageToken;
+        } while (pageToken);
 
+        const missingInFirestore = [];
+        for (const u of authUsers) {
+            const email = (u.email || '').toLowerCase();
+            const existing = userMap.get(u.uid) || (email ? userMap.get(email) : null);
+            const isFounder = email === 'prince8694@gmail.com' || email === 'prince86944@gmail.com';
+
+            if (!existing) {
+                const newUserObj = {
+                    id: u.uid,
+                    uid: u.uid,
+                    email: u.email || '',
+                    name: u.displayName || (u.email ? u.email.split('@')[0] : 'Scholar'),
+                    phone: u.phoneNumber || '',
+                    role: isFounder ? 'SUPER_ADMIN' : 'STUDENT',
+                    createdAt: u.metadata?.creationTime ? new Date(u.metadata.creationTime) : new Date(),
+                    lastLogin: u.metadata?.lastSignInTime ? new Date(u.metadata.lastSignInTime) : new Date()
+                };
+                userMap.set(u.uid, newUserObj);
+                missingInFirestore.push(newUserObj);
+            } else {
+                if (!existing.createdAt && u.metadata?.creationTime) {
+                    existing.createdAt = new Date(u.metadata.creationTime);
+                }
+                if (!existing.lastLogin && u.metadata?.lastSignInTime) {
+                    existing.lastLogin = new Date(u.metadata.lastSignInTime);
+                }
+            }
+        }
+
+        // Auto-persist missing users to Firestore in background
+        if (missingInFirestore.length > 0) {
+            (async () => {
+                try {
+                    const batch = db.batch();
+                    missingInFirestore.slice(0, 450).forEach(u => {
+                        batch.set(db.collection('users').doc(u.uid), u, { merge: true });
+                    });
+                    await batch.commit();
+                } catch (bErr) {
+                    console.warn('[Auto-Sync Missing Users Warning]:', bErr.message);
+                }
+            })();
+        }
+    } catch (authErr) {
+        console.warn('[Admin SDK listUsers error]:', authErr.message);
+    }
+
+    // Deduplicate by UID
+    const finalMap = new Map();
+    userMap.forEach((u) => {
+        finalMap.set(u.uid || u.id, u);
+    });
+
+    const usersList = Array.from(finalMap.values());
     res.json({ success: true, count: usersList.length, users: usersList });
 }));
 

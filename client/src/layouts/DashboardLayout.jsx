@@ -19,6 +19,7 @@ import { doc, updateDoc, collection, query, where, onSnapshot, getDocs } from 'f
 import { messaging, VAPID_KEY, db } from '../firebase';
 import SEO from '../components/SEO';
 import Footer from '../components/Footer';
+import MobileBottomNav from '../components/MobileBottomNav';
 import { toast } from 'react-hot-toast';
 
 export default function DashboardLayout() {
@@ -801,7 +802,7 @@ export default function DashboardLayout() {
 
       {/* Main Content Area */}
       <main id="main-scroll-container" className="flex-1 overflow-y-auto custom-scrollbar relative z-10 bg-[#f8fafc] flex flex-col">
-        <div className={`w-full grow shrink-0 pb-24 lg:pb-8 min-h-[80vh] ${location.pathname === '/' ? '' : 'p-4 md:p-6 lg:p-8 max-w-7xl mx-auto'}`}>
+        <div className={`w-full grow shrink-0 pb-28 md:pb-8 min-h-[80vh] ${location.pathname === '/' ? '' : 'p-4 md:p-6 lg:p-8 max-w-7xl mx-auto'}`}>
           <React.Suspense fallback={
             <div className="flex flex-col items-center justify-center w-full h-[60vh]">
               <div className="w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
@@ -885,6 +886,9 @@ export default function DashboardLayout() {
           </button>
         </div>
       </aside>
+      
+      {/* Native App-Style Mobile Bottom Navigation Bar */}
+      <MobileBottomNav onOpenMenu={() => setMobileMenuOpen(true)} />
       
       {/* Verification Modal */}
       {isPhoneModalOpen && isOnline && <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-slate-50/80 backdrop-blur-xl"><div className="w-full max-w-md bg-white border border-slate-200 rounded-2xl p-8 text-center space-y-6 shadow-2xl relative overflow-hidden"><div className="inline-flex p-4 bg-blue-600/20 text-blue-500 rounded-2xl"><Shield size={32} /></div><h2 className="text-2xl font-bold text-slate-900 tracking-tight">Security Update</h2><p className="text-slate-500 text-sm">Please link your active mobile number to secure your college portal access.</p><form onSubmit={handlePhoneSubmit} className="space-y-4"><div className="flex gap-2"><div className="bg-slate-100 px-4 py-3 rounded-xl text-xs font-bold flex items-center">+91</div><input type="tel" maxLength={10} value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} placeholder="10-digit mobile number" className="flex-1 bg-slate-100 rounded-xl p-3 text-sm font-semibold outline-none" /></div><button type="submit" className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-all shadow-md">Save & Continue</button></form></div></div>}

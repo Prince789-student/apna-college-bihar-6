@@ -115,24 +115,41 @@ export function AuthProvider({ children }) {
       console.warn("[AUTH] Base profile write warning:", writeErr?.code || writeErr?.message);
     }
 
-    // Step 2B: Try reading full user profile if read quota is available
+    // Step 2B: Read full user profile & ensure complete profile data in Firestore
     try {
       const userDoc = await getDoc(docRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
-        let finalData;
-        if (isFounder && userData.role !== ROLES.SUPER_ADMIN) {
-           await setDoc(docRef, { role: ROLES.SUPER_ADMIN }, { merge: true });
-           finalData = { ...u, ...userData, role: ROLES.SUPER_ADMIN };
-        } else {
-           if (!userData.role) {
-             userData.role = ROLES.STUDENT;
-             await setDoc(docRef, { role: ROLES.STUDENT }, { merge: true });
-           }
-           finalData = { ...u, ...userData };
+        const patch = {
+          lastLogin: serverTimestamp(),
+          updatedAt: serverTimestamp()
+        };
+        
+        // CRITICAL FIX: Ensure createdAt is ALWAYS present for every user!
+        if (!userData.createdAt) {
+          patch.createdAt = serverTimestamp();
+          userData.createdAt = new Date().toISOString();
         }
+        if (!userData.name && (u.displayName || 'Scholar')) {
+          patch.name = u.displayName || 'Scholar';
+          userData.name = patch.name;
+        }
+        if (!userData.email && u.email) {
+          patch.email = u.email;
+          userData.email = u.email;
+        }
+        if (isFounder && userData.role !== ROLES.SUPER_ADMIN) {
+          patch.role = ROLES.SUPER_ADMIN;
+          userData.role = ROLES.SUPER_ADMIN;
+        } else if (!userData.role) {
+          patch.role = ROLES.STUDENT;
+          userData.role = ROLES.STUDENT;
+        }
+
+        await setDoc(docRef, patch, { merge: true });
+        const finalData = { ...u, ...userData, ...patch };
         setUser(finalData);
-        localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ ...userData, uid: u.uid }));
+        localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ ...finalData, uid: u.uid }));
       } else {
         // Complete brand new user document
         const newUserData = {
@@ -142,6 +159,8 @@ export function AuthProvider({ children }) {
           phone: u.phoneNumber || '',
           role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT,
           createdAt: serverTimestamp(),
+          lastLogin: serverTimestamp(),
+          updatedAt: serverTimestamp(),
           groupsCreatedToday: 0,
           lastGroupCreateDate: null
         };
@@ -151,6 +170,19 @@ export function AuthProvider({ children }) {
       }
     } catch (readErr) {
       console.warn("[AUTH] Firestore profile read failed (quota or offline):", readErr?.code || readErr?.message);
+      // Fallback: guaranteed base write without reading
+      try {
+        await setDoc(docRef, {
+          uid: u.uid,
+          email: u.email || '',
+          name: u.displayName || 'Scholar',
+          phone: u.phoneNumber || '',
+          role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT,
+          lastLogin: serverTimestamp(),
+          createdAt: serverTimestamp()
+        }, { merge: true });
+      } catch (_) {}
+
       const cachedRaw = localStorage.getItem(USER_CACHE_KEY);
       const hasCacheForUser = cachedRaw && JSON.parse(cachedRaw).uid === u.uid;
       if (!hasCacheForUser) {
