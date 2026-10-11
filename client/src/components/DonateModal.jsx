@@ -16,26 +16,13 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSaveAndContinue = () => {
-    // 1. Download the scanner image
-    const link = document.createElement('a');
-    link.href = '/scanner-qr.jpg';
-    link.download = 'ApnaCollegeBihar_QR.jpg';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    // 2. If there's a pending file to download, open it after a tiny delay
-    if (pendingUrl) {
-      setTimeout(() => {
-        window.open(pendingUrl, '_blank');
-      }, 300);
+  const handleProceed = () => {
+    if (onContinueWithoutDonating) {
+      onContinueWithoutDonating();
+    } else if (pendingUrl) {
+      window.open(pendingUrl, '_blank');
     }
-
-    // 3. Close the modal
-    setTimeout(() => {
-      onClose();
-    }, 600);
+    onClose();
   };
 
   return (
@@ -104,21 +91,17 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
         <div className="p-4 bg-white border-t border-slate-100 flex-shrink-0">
           {mode === 'DOWNLOAD' ? (
             <button 
-              onClick={() => {
-                if (onContinueWithoutDonating) onContinueWithoutDonating();
-                else if (pendingUrl) window.open(pendingUrl, '_blank');
-                onClose();
-              }}
-              className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-[11px] font-[1000] uppercase tracking-widest transition-all shadow-lg shadow-blue-600/25 active:scale-[0.98] flex items-center justify-center gap-2"
+              onClick={handleProceed}
+              className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-[11px] font-[1000] uppercase tracking-widest transition-all shadow-lg shadow-blue-600/25 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>❤️ Download File & Support Community</span>
             </button>
           ) : (
             <button 
-              onClick={handleSaveAndContinue}
-              className="w-full py-3.5 bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-700 hover:to-indigo-700 text-white rounded-xl text-[11px] font-[1000] uppercase tracking-widest transition-all shadow-lg shadow-rose-600/25 active:scale-[0.98] flex items-center justify-center gap-2"
+              onClick={onClose}
+              className="w-full py-3.5 bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-700 hover:to-indigo-700 text-white rounded-xl text-[11px] font-[1000] uppercase tracking-widest transition-all shadow-lg shadow-rose-600/25 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>❤️ Save Scanner QR & Support Community</span>
+              <span>Close & Continue</span>
             </button>
           )}
         </div>
