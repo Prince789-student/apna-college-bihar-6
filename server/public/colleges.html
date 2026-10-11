@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="color-scheme" content="light only" />
+   <base href="/" />
+   <!-- Preconnect + DNS Prefetch for all external services -->
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+   <link rel="preconnect" href="https://www.googletagmanager.com" />
+   <link rel="preconnect" href="https://firestore.googleapis.com" />
+   <link rel="preconnect" href="https://firebase.googleapis.com" />
+   <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+   <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+
+   <!-- Preload Google Fonts stylesheet for Ultra Modern Typography -->
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+   <!-- Apple / PWA Icons -->
+   <link rel="apple-touch-icon" sizes="180x180" href="/logo-acb.png" />
+   <link rel="apple-touch-icon" sizes="152x152" href="/logo-acb.png" />
+
+   <script>
+      // ── Service Worker Registration ─────────────────────────────
+      if ('serviceWorker' in navigator) {
+         const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+         if (isNative) {
+            document.documentElement.classList.add('native-app');
+         } else {
+            window.addEventListener('load', () => {
+               navigator.serviceWorker.register('/sw.js').catch(err => console.warn('[SW] Registration failed:', err));
+            });
+         }
+      }
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+         e.preventDefault();
+         window.deferredPrompt = e;
+         window.dispatchEvent(new Event('pwa-ready'));
+      });
+   </script>
+
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+   <meta name="mobile-web-app-capable" content="yes" />
+   <meta name="apple-mobile-web-app-capable" content="yes" />
+   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+   <meta name="theme-color" content="#2563eb" />
+   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+   <meta name="google-site-verification" content="RYqt3qpPlTqKuw2uXw9hLSZNDCLA3iGIzzv_JLOQEVs" />
+   <meta name="google" content="notranslate" />
+   <meta name="author" content="Apna College Bihar" />
+   <meta name="language" content="Hindi, English" />
+   <meta name="geo.region" content="IN-BR" />
+   <meta name="geo.placename" content="Bihar, India" />
+
+   <title>Top 38 Government Engineering Colleges in Bihar (GEC Directory) | Apna College Bihar</title>
+   <meta name="description" content="Complete directory of 38 Government Engineering Colleges (GECs) in Bihar under BEU. Cutoff ranks, placement statistics, branches, and fee details." />
+   <link rel="canonical" href="https://www.apnacollegebihar.online/colleges" />
+
+   <!-- Open Graph / Facebook -->
+   <meta property="og:type" content="website" />
+   <meta property="og:url" content="https://www.apnacollegebihar.online/colleges" />
+   <meta property="og:title" content="Top 38 Government Engineering Colleges in Bihar (GEC Directory) | Apna College Bihar" />
+   <meta property="og:description" content="Complete directory of 38 Government Engineering Colleges (GECs) in Bihar under BEU. Cutoff ranks, placement statistics, branches, and fee details." />
+   <meta property="og:site_name" content="Apna College Bihar" />
+   <meta property="og:image" content="https://www.apnacollegebihar.online/logo-acb.png" />
+   <meta property="og:image:width" content="512" />
+   <meta property="og:image:height" content="512" />
+   <meta property="og:image:alt" content="Apna College Bihar Logo" />
+   <meta property="og:locale" content="en_IN" />
+
+   <!-- Twitter Card -->
+   <meta name="twitter:card" content="summary_large_image" />
+   <meta name="twitter:title" content="Top 38 Government Engineering Colleges in Bihar (GEC Directory) | Apna College Bihar" />
+   <meta name="twitter:description" content="Complete directory of 38 Government Engineering Colleges (GECs) in Bihar under BEU. Cutoff ranks, placement statistics, branches, and fee details." />
+   <meta name="twitter:image" content="https://www.apnacollegebihar.online/logo-acb.png" />
+
+   <!-- Schema.org JSON-LD Structured Data: WebSite & EducationalOrganization -->
+   <script type="application/ld+json">
+   {
+      "@context": "https://schema.org",
+      "@graph": [
+         {
+            "@type": "WebSite",
+            "@id": "https://www.apnacollegebihar.online/#website",
+            "url": "https://www.apnacollegebihar.online/",
+            "name": "Apna College Bihar",
+            "alternateName": "ACB",
+            "description": "Official hub for Bihar engineering students. Free BEU Notes, PYQs, Syllabus, UGEAC Predictor, CGPA Calculator and counselling guidance.",
+            "potentialAction": {
+               "@type": "SearchAction",
+               "target": {
+                  "@type": "EntryPoint",
+                  "urlTemplate": "https://www.apnacollegebihar.online/notes?search={search_term_string}"
+               },
+               "query-input": "required name=search_term_string"
+            }
+         },
+         {
+            "@type": "EducationalOrganization",
+            "@id": "https://www.apnacollegebihar.online/#organization",
+            "name": "Apna College Bihar",
+            "url": "https://www.apnacollegebihar.online/",
+            "logo": {
+               "@type": "ImageObject",
+               "url": "https://www.apnacollegebihar.online/logo-acb.png",
+               "width": 512,
+               "height": 512
+            },
+            "sameAs": [
+               "https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a",
+               "https://youtube.com/@apnacollegebihar"
+            ],
+            "description": "Bihar's leading academic platform and study portal for Bihar Engineering University (BEU) students across 38 government engineering colleges.",
+            "address": {
+               "@type": "PostalAddress",
+               "addressLocality": "Patna",
+               "addressRegion": "Bihar",
+               "postalCode": "800001",
+               "addressCountry": "IN"
+            },
+            "contactPoint": {
+               "@type": "ContactPoint",
+               "contactType": "Customer Support",
+               "email": "prince86944@gmail.com",
+               "availableLanguage": ["English", "Hindi"]
+            }
+         }
+      ]
+   }
+   </script>
+
+   <!-- Google AdSense Official Verification & Publisher Script -->
+   <meta name="google-adsense-account" content="ca-pub-4005389118070865" />
+   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4005389118070865"
+      crossorigin="anonymous"></script>
+
+
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BXF7KW1XQS"></script>
+   <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-BXF7KW1XQS');
+   </script>
+
+   <link rel="manifest" href="/manifest.json" />
+   <link rel="icon" type="image/png" href="/logo-acb.png?v=99" />
+   <link rel="shortcut icon" href="/logo-acb.png?v=99" />
+
+   <!-- Tailwind CSS is now built locally -->
+
+   <style>
+      html,
+      body,
+      #root {
+         font-family: 'Inter', sans-serif;
+         scroll-behavior: smooth;
+         margin: 0 !important;
+         padding: 0 !important;
+         height: 100% !important;
+         min-height: 100% !important;
+         width: 100% !important;
+         max-width: 100vw !important;
+         overflow-x: hidden !important;
+         overflow-y: auto !important;
+      }
+
+      html.native-app,
+      html.native-app body,
+      html.native-app #root {
+         -webkit-user-select: none;
+         -moz-user-select: none;
+              user-select: none;
+         -webkit-touch-callout: none;
+      }
+
+      input,
+      textarea {
+         -webkit-user-select: auto;
+         -moz-user-select: auto;
+              user-select: auto;
+      }
+
+      .adsbygoogle[data-ad-status="unfilled"] {
+         display: none !important;
+         height: 0 !important;
+         width: 0 !important;
+      }
+   </style>
+  <script type="module" crossorigin src="/assets/index.01d522ab.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/dependencies.6d106b37.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor.fb38ee09.js">
+  <link rel="modulepreload" crossorigin href="/assets/firebase.0fc53875.js">
+  <link rel="stylesheet" href="/assets/index.ee117bf0.css">
+</head>
+
+<body class="bg-slate-50 font-sans antialiased text-slate-900">
+   <div id="root">
+
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2.5">
+      <img src="/logo-acb.png" alt="Apna College Bihar" class="w-8 h-8 rounded-lg" />
+      <span class="font-black text-base md:text-lg text-slate-900 uppercase tracking-tight">Apna College <span class="text-blue-600">Bihar</span></span>
+    </a>
+    <nav class="hidden md:flex items-center gap-6 text-xs font-bold uppercase tracking-wider text-slate-600">
+      <a href="/" class="hover:text-blue-600 transition-colors">Home</a>
+      <a href="/notes" class="hover:text-blue-600 transition-colors">BEU Notes</a>
+      <a href="/pyq" class="hover:text-blue-600 transition-colors">PYQ Papers</a>
+      <a href="/syllabus" class="hover:text-blue-600 transition-colors">Syllabus</a>
+      <a href="/ugeac-predictor" class="hover:text-blue-600 transition-colors">UGEAC Predictor</a>
+      <a href="/blog" class="text-blue-600 font-black">Blog</a>
+      <a href="/about" class="hover:text-blue-600 transition-colors">About Us</a>
+      <a href="/contact" class="hover:text-blue-600 transition-colors">Contact</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="/apna-college-bihar-v54.apk" download class="px-3.5 py-2 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Get App</a>
+    </div>
+  </div>
+</header>
+
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Official Directory</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">38 Government Engineering Colleges in Bihar</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Full verified profiles, UGEAC closing cutoff ranks, course branches, and placement reports for all 38 government colleges under Bihar Engineering University.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Muzaffarpur Institute of Technology</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">MIT Muzaffarpur • Estd. 1954</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Brahmpura, Muzaffarpur, Bihar – 842003</p>
+      <a href="/college/mit-muzaffarpur" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Bhagalpur College of Engineering</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">BCE Bhagalpur • Estd. 1960</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Sabour, Bhagalpur, Bihar – 813210</p>
+      <a href="/college/bce-bhagalpur" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Gaya College of Engineering</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GCE Gaya • Estd. 2008</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Shrikrishnapuram, Nagra, Gaya, Bihar – 823003</p>
+      <a href="/college/gce-gaya" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Nalanda College of Engineering</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">NCE Chandi • Estd. 2008</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Chandi, Nalanda, Bihar – 803108</p>
+      <a href="/college/nce-chandi" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Darbhanga College of Engineering</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">DCE Darbhanga • Estd. 2008</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Mabbi, Post Lal Sahab, Darbhanga, Bihar – 846005</p>
+      <a href="/college/dce-darbhanga" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Motihari College of Engineering</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">MCE Motihari • Estd. 2008</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Fursatpur, Bairiya, Motihari, East Champaran, Bihar – 845401</p>
+      <a href="/college/mce-motihari" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Lok Nayak Jai Prakash Institute of Technology</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">LNJPIT Chapra • Estd. 2012</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Inai, Saran, Chapra, Bihar – 841301</p>
+      <a href="/college/lnjpit-chapra" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Bakhtiyarpur College of Engineering</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">BCE Bakhtiyarpur • Estd. 2016</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Champapur, Dedaur, Bakhtiyarpur, Patna, Bihar – 803212</p>
+      <a href="/college/bce-bakhtiyarpur" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Sitamarhi Institute of Technology</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">SIT Sitamarhi • Estd. 2016</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Dumra, Sitamarhi, Bihar – 843302</p>
+      <a href="/college/sit-sitamarhi" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Rashtrakavi Ramdhari Singh Dinkar College of Engineering</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">RRSDCE Begusarai • Estd. 2016</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Uchauliya, Post- Panhas, Begusarai, Bihar – 851134</p>
+      <a href="/college/rrsdce-begusarai" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Purnea College of Engineering</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">PCE Purnea • Estd. 2017</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Subhash Nagar, Near Ranipatra, Purnea, Bihar – 854301</p>
+      <a href="/college/pce-purnea" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Katihar Engineering College</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">KEC Katihar • Estd. 2016</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Hafaniya, Katihar, Bihar – 854109</p>
+      <a href="/college/kec-katihar" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Saharsa College of Engineering</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">SCE Saharsa • Estd. 2017</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Baijnathpur, Saharsa, Bihar – 852221</p>
+      <a href="/college/sce-saharsa" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Shershah College of Engineering</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">SPCE Sasaram • Estd. 2016</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Sasaram, Rohtas, Bihar – 821115</p>
+      <a href="/college/spce-sasaram" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">B. P. Mandal College of Engineering</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">BPMCE Madhepura • Estd. 2016</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Singheshwar Road, Madhepura, Bihar – 852113</p>
+      <a href="/college/bpmce-madhepura" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Vaishali</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Vaishali • Estd. 2018</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Near ITI, Goraul, Vaishali, Bihar – 844118</p>
+      <a href="/college/gec-vaishali" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Jamui</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Jamui • Estd. 2018</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Amrath, Jamui Sadar, Jamui, Bihar – 811307</p>
+      <a href="/college/gec-jamui" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Banka</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Banka • Estd. 2018</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Lakrikola, Manjira, Banka, Bihar – 813102</p>
+      <a href="/college/gec-banka" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Nawada</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Nawada • Estd. 2018</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Budhaul, Nawada Sadar, Nawada, Bihar – 805111</p>
+      <a href="/college/gec-nawada" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Kishanganj</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Kishanganj • Estd. 2018</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Kishanganj, Bihar – 855107</p>
+      <a href="/college/gec-kishanganj" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Arwal</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Arwal • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Kaler, Arwal, Bihar – 804428</p>
+      <a href="/college/gec-arwal" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Aurangabad</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Aurangabad • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Barun, Aurangabad, Bihar – 824112</p>
+      <a href="/college/gec-aurangabad" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Buxar</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Buxar • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Itarhi, Buxar, Bihar – 802123</p>
+      <a href="/college/gec-buxar" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Bhojpur</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Bhojpur • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Jagdishpur, Bhojpur (Ara), Bihar – 802158</p>
+      <a href="/college/gec-bhojpur" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Sheikhpura</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Sheikhpura • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Bajidpur, Near Police Line, Sheikhpura, Bihar – 811105</p>
+      <a href="/college/gec-sheikhpura" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Munger</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Munger • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Naya Ramnagar, Munger, Bihar – 811202</p>
+      <a href="/college/gec-munger" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Lakhisarai</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Lakhisarai • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Shivsona, Lakhisarai, Bihar – 811311</p>
+      <a href="/college/gec-lakhisarai" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Khagaria</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Khagaria • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Rampur, Khagaria, Bihar – 851204</p>
+      <a href="/college/gec-khagaria" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Samastipur</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Samastipur • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Kishanpur, Samastipur, Bihar – 848101</p>
+      <a href="/college/gec-samastipur" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Gopalganj</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Gopalganj • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Baikunthpur, Gopalganj, Bihar – 841409</p>
+      <a href="/college/gec-gopalganj" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Madhubani</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Madhubani • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Arer, Madhubani, Bihar – 847222</p>
+      <a href="/college/gec-madhubani" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Siwan</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Siwan • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Pachrukhi, Siwan, Bihar – 841241</p>
+      <a href="/college/gec-siwan" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Jehanabad</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Jehanabad • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Jehanabad Sadar, Jehanabad, Bihar – 804408</p>
+      <a href="/college/gec-jehanabad" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Shri Phanishwar Nath Renu Engineering College, Araria</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Araria • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Rampur Kodarkatti, Araria, Bihar – 854311</p>
+      <a href="/college/gec-araria" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, West Champaran</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC West Champaran • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Kumarbagh, Bettiah, West Champaran, Bihar – 845450</p>
+      <a href="/college/gec-west-champaran" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Kaimur</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Kaimur • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Mohania, Kaimur (Bhabua), Bihar – 821109</p>
+      <a href="/college/gec-kaimur" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Government Engineering College, Sheohar</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">GEC Sheohar • Estd. 2019</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">Sheohar Sadar, Sheohar, Bihar – 843329</p>
+      <a href="/college/gec-sheohar" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">Women's Institute of Technology, Darbhanga</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">WIT Darbhanga • Estd. 2005</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">LNMU Campus, Kameshwaranagar, Darbhanga, Bihar – 846004</p>
+      <a href="/college/wmit-darbhanga" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  
+    </div>
+  </main>
+
+  
+<footer class="bg-slate-900 text-white pt-16 pb-12 border-t border-slate-800">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-slate-800 text-xs">
+      <div class="space-y-3 md:col-span-1">
+        <div class="flex items-center gap-2">
+          <img src="/logo-acb.png" alt="ACB Logo" class="w-7 h-7 rounded" />
+          <span class="font-black text-sm uppercase tracking-wider">Apna College <span class="text-blue-400">Bihar</span></span>
+        </div>
+        <p class="text-slate-400 leading-relaxed">
+          The premier digital study engine and guidance platform for Bihar Engineering University (BEU) scholars across 38 government colleges.
+        </p>
+        <p class="text-slate-500 font-bold">Patna, Bihar 800001, India</p>
+        <p class="text-slate-500">Contact: <a href="mailto:prince86944@gmail.com" class="text-blue-400 hover:underline">prince86944@gmail.com</a></p>
+      </div>
+      <div>
+        <h4 class="font-black uppercase tracking-widest text-slate-300 mb-3">Academic Tools</h4>
+        <ul class="space-y-2 text-slate-400 font-medium">
+          <li><a href="/notes" class="hover:text-white transition-colors">BEU Semester Notes</a></li>
+          <li><a href="/pyq" class="hover:text-white transition-colors">Previous Year Questions</a></li>
+          <li><a href="/syllabus" class="hover:text-white transition-colors">Official B.Tech Syllabus</a></li>
+          <li><a href="/cgpa" class="hover:text-white transition-colors">BEU CGPA Calculator</a></li>
+          <li><a href="/ugeac-predictor" class="hover:text-white transition-colors">UGEAC College Predictor</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-black uppercase tracking-widest text-slate-300 mb-3">Quick Navigation</h4>
+        <ul class="space-y-2 text-slate-400 font-medium">
+          <li><a href="/blog" class="hover:text-white transition-colors">Engineering Blog & Guides</a></li>
+          <li><a href="/colleges" class="hover:text-white transition-colors">Bihar GEC Directory</a></li>
+          <li><a href="/hackathons" class="hover:text-white transition-colors">Hackathon Hub</a></li>
+          <li><a href="/lecture-finder" class="hover:text-white transition-colors">YouTube Lecture Finder</a></li>
+          <li><a href="/directory" class="hover:text-white transition-colors">Sitemap Directory</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-black uppercase tracking-widest text-slate-300 mb-3">Institutional & Legal</h4>
+        <ul class="space-y-2 text-slate-400 font-medium">
+          <li><a href="/about" class="hover:text-white transition-colors">About Our Platform</a></li>
+          <li><a href="/contact" class="hover:text-white transition-colors">Contact Support Center</a></li>
+          <li><a href="/privacy-policy" class="hover:text-white transition-colors">Privacy Policy</a></li>
+          <li><a href="/terms" class="hover:text-white transition-colors">Terms of Service</a></li>
+          <li><a href="/disclaimer" class="hover:text-white transition-colors">Disclaimer</a></li>
+          <li><a href="/dmca" class="hover:text-white transition-colors">DMCA Notice</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <p>&copy; 2026 Apna College Bihar. All rights reserved. Built with dedication for Bihar Engineering Scholars.</p>
+      <div class="flex items-center gap-4">
+        <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition-colors">WhatsApp Channel</a>
+        <a href="https://youtube.com/@apnacollegebihar" target="_blank" rel="noopener noreferrer" class="hover:text-red-400 transition-colors">YouTube</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+</div>
+
+   <noscript>
+      <div
+         style="padding: 20px; font-family: sans-serif; text-align: center; max-width: 800px; margin: 0 auto; color: #333;">
+         <h1>Apna College Bihar - The Ultimate Engineering Study Hub</h1>
+         <p>Please enable JavaScript to access the official BEU study resources, PYQs, and tools.</p>
+         <p>Welcome to <strong>Apna College Bihar</strong>, the premier digital learning platform dedicated specifically
+            to students of <strong>Bihar Engineering University (BEU)</strong>. Whether you are pursuing Computer
+            Science (CSE), Civil Engineering, Mechanical Engineering, or Electrical Engineering, finding structured,
+            high-quality study materials can be challenging. Our mission is to bridge this gap by providing
+            comprehensive, easy-to-understand resources that align perfectly with the official BEU B.Tech syllabus.</p>
+         <h2>Comprehensive BEU Notes and Study Materials</h2>
+         <p>One of the biggest hurdles engineering students face is the lack of concise and accurate study notes. At
+            Apna College Bihar, we offer meticulously crafted <strong>BEU Notes</strong> that cover every unit of your
+            semester. These notes are designed by top-performing students and subject matter experts to ensure that you
+            grasp complex engineering concepts quickly.</p>
+         <h2>Mastering Exams with BEU Previous Year Questions (PYQs)</h2>
+         <p>It is a well-known fact that analyzing <strong>BEU Previous Year Question Papers (PYQs)</strong> is the most
+            effective strategy for exam preparation. The university exam patterns often repeat crucial concepts and
+            question formats. Our platform provides a vast, organized repository of BEU PYQs for all branches and
+            semesters.</p>
+         <h2>Advanced Tools: CGPA Calculator, Syllabus, and Timetable</h2>
+         <p>Beyond study materials, Apna College Bihar equips you with powerful digital tools to manage your academic
+            life. Our <strong>BEU CGPA Calculator</strong> allows you to accurately track your academic performance. We
+            also provide an easily navigable version of the <strong>BEU B.Tech Syllabus</strong> so you never miss a
+            topic.</p>
+         <a href="/directory">View Sitemap Directory</a>
+      </div>
+   </noscript>
+
+   <script>
+      (function () {
+         document.addEventListener('click', function (e) {
+            try {
+               const a = e.target.closest && e.target.closest('a');
+               if (!a) return;
+               const href = a.getAttribute && a.getAttribute('href');
+               if (!href) return;
+               if (href.startsWith('/') && !a.hasAttribute('download') && a.target !== '_blank' && !href.startsWith('//')) {
+                  if (href.startsWith('#')) return;
+                  e.preventDefault();
+                  if (window.location.pathname + window.location.search !== href) {
+                     history.pushState({}, '', href);
+                  }
+                  window.dispatchEvent(new PopStateEvent('popstate'));
+               }
+            } catch (err) { }
+         }, false);
+      })();
+   </script>
+   
+</body>
+
+</html>

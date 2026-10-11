@@ -386,12 +386,17 @@
   ],
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "https://apna-college-bihar-6.onrender.com/api/:path*"
+    },
+    {
       "source": "/p/:path*",
       "destination": "https://apna-college-bihar-6.onrender.com/p/:path*"
     },
     {
-      "source": "/(.*)",
-      "destination": "/index"
+      "source": "/:path*",
+      "destination": "/index.html"
     }
-  ]
+  ],
+  "trailingSlash": false
 }

@@ -6,6 +6,14 @@
 # Standard Search Crawlers
 User-agent: Googlebot
 Allow: /
+Disallow: /p/
+Disallow: /dashboard/
+Disallow: /admin
+Disallow: /backend/
+Disallow: /uploads/
+Disallow: /api/
+Disallow: /search/
+Disallow: /*?*
 
 User-agent: Googlebot-Image
 Allow: /
@@ -18,6 +26,11 @@ Allow: /
 
 User-agent: Bingbot
 Allow: /
+Disallow: /p/
+Disallow: /dashboard/
+Disallow: /api/
+Disallow: /search/
+Disallow: /*?*
 
 User-agent: DuckDuckBot
 Allow: /
@@ -28,12 +41,18 @@ Allow: /
 # Generative AI & Citability Crawlers (GEO Optimization)
 User-agent: GPTBot
 Allow: /
+Disallow: /p/
+Disallow: /dashboard/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /p/
+Disallow: /dashboard/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /p/
+Disallow: /dashboard/
 
 User-agent: CCBot
 Allow: /
@@ -44,13 +63,14 @@ Allow: /
 # Default Rules
 User-agent: *
 Allow: /
-
-# Block private / admin areas only
-Disallow: /dashboard/admin
+Disallow: /p/
+Disallow: /dashboard/
 Disallow: /admin
 Disallow: /backend/
 Disallow: /uploads/
 Disallow: /api/
+Disallow: /search/
+Disallow: /*?*
 
 # Official Sitemap location
 Sitemap: https://www.apnacollegebihar.online/sitemap.xml

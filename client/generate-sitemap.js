@@ -21,6 +21,9 @@ const staticRoutes = [
   '/calculator',
   '/study-resources',
   '/ugeac-predictor',
+  '/colleges',
+  '/mentorship',
+  '/hackathons',
   '/blog',
   '/directory',
   '/about',
@@ -33,6 +36,11 @@ const staticRoutes = [
 
 const urls = new Set(staticRoutes);
 
+// Add all 5 Branch Hub Pages
+['cse', 'civil', 'me', 'ee', 'ece'].forEach(b => {
+  urls.add(`/branch/${b}`);
+});
+
 // Add all Blog Posts
 if (Array.isArray(blogPosts)) {
   blogPosts.forEach(post => {
@@ -42,12 +50,10 @@ if (Array.isArray(blogPosts)) {
   });
 }
 
-// Add all College Pages
-if (Array.isArray(collegeData)) {
-  collegeData.forEach(college => {
-    if (college.slug) {
-      urls.add(`/college/${college.slug}`);
-    }
+// Add all 38 College Pages from collegeData object
+if (collegeData && typeof collegeData === 'object') {
+  Object.keys(collegeData).forEach(slug => {
+    urls.add(`/college/${slug}`);
   });
 }
 

@@ -17,6 +17,24 @@ const COLLEGE_SLUGS = [
   'gec-begusarai'
 ];
 
+const COLLEGE_ALIAS_MAP = {
+  'sce-sasaram': 'spce-sasaram',
+  'gec-rohtas': 'spce-sasaram',
+  'kmc-katihar': 'kec-katihar',
+  'mwec-madhepura': 'bpmce-madhepura',
+  'sm-muzaffarpur': 'mit-muzaffarpur',
+  'bce-buxar': 'gec-buxar',
+  'gwc-buxar': 'gec-buxar',
+  'jmit-jamui': 'gec-jamui',
+  'mita-aurangabad': 'gec-aurangabad',
+  'spce-siwan': 'gec-siwan',
+  'gec-supaul': 'sce-saharsa',
+  'gec-saharsa': 'sce-saharsa',
+  'rce-saharsa': 'sce-saharsa',
+  'gec-begusarai': 'rrsdce-begusarai',
+  'sgp-patna': 'gce-gaya'
+};
+
 // Sort by longest first so "bce-bakhtiyarpur" matches before "bce-b"
 const SORTED_SLUGS = [...COLLEGE_SLUGS].sort((a, b) => b.length - a.length);
 
@@ -27,49 +45,15 @@ export default function SmartRedirect() {
   useEffect(() => {
     const path = location.pathname;
 
-    // Pattern: /college-slug-branch-cutoff-rank-year.html
-    if (path.endsWith('.html') && path.includes('cutoff-rank')) {
-      const cleanPath = path.replace(/^\//, '').replace(/\.html$/, '');
-      
-      // Try to find matching college slug
-      for (const slug of SORTED_SLUGS) {
-        if (cleanPath.startsWith(slug)) {
-          navigate(`/college/${slug}/cutoff`, { replace: true });
-          return;
-        }
-      }
-    }
-
-    // Pattern: /college-slug-fees-year.html or /college-slug-placement.html etc.
+    // Pattern: /college-slug-branch-cutoff-rank-year.html or other old HTML patterns
     if (path.endsWith('.html')) {
       const cleanPath = path.replace(/^\//, '').replace(/\.html$/, '');
       
-      for (const slug of SORTED_SLUGS) {
-        if (cleanPath.startsWith(slug)) {
-          // Try to detect section from remaining path
-          const rest = cleanPath.slice(slug.length + 1); // +1 for the dash
-          if (rest.includes('fees') || rest.includes('fee')) {
-            navigate(`/college/${slug}/fees`, { replace: true });
-            return;
-          }
-          if (rest.includes('placement')) {
-            navigate(`/college/${slug}/placement`, { replace: true });
-            return;
-          }
-          if (rest.includes('hostel')) {
-            navigate(`/college/${slug}/hostel`, { replace: true });
-            return;
-          }
-          if (rest.includes('review')) {
-            navigate(`/college/${slug}/review`, { replace: true });
-            return;
-          }
-          if (rest.includes('cutoff') || rest.includes('cut-off')) {
-            navigate(`/college/${slug}/cutoff`, { replace: true });
-            return;
-          }
-          // Default: go to college main page
-          navigate(`/college/${slug}`, { replace: true });
+      // Try to find matching college slug
+      for (const rawSlug of SORTED_SLUGS) {
+        if (cleanPath.startsWith(rawSlug)) {
+          const canonicalSlug = COLLEGE_ALIAS_MAP[rawSlug] || rawSlug;
+          navigate(`/college/${canonicalSlug}`, { replace: true });
           return;
         }
       }

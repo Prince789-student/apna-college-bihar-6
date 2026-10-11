@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { blogPosts } from './src/data/blogPosts.js';
+import { collegeData } from './src/data/collegeData.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.join(__dirname, 'dist');
@@ -27,7 +28,12 @@ function injectIntoRoot(template, bodyContent) {
 
 
 // Clean up any conflicting directories so Vercel cleanUrls maps cleanly to flat .html files without directory collision
-const conflictingDirs = ['about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca', 'notes', 'pyq', 'syllabus', 'ugeac-predictor', 'cgpa'];
+const conflictingDirs = [
+  'about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca',
+  'notes', 'pyq', 'syllabus', 'ugeac-predictor', 'cgpa',
+  'attendance', 'timetable', 'beu-result', 'lecture-finder', 'calculator',
+  'study-resources', 'directory', 'colleges', 'mentorship'
+];
 conflictingDirs.forEach(dir => {
   const p = path.join(distDir, dir);
   if (fs.existsSync(p)) fs.rmSync(p, { recursive: true, force: true });
@@ -1432,7 +1438,462 @@ cgpaHtml = injectHeadMetadata(cgpaHtml, {
 writeStaticHtml('cgpa', cgpaHtml);
 
 // ─────────────────────────────────────────────────────────────
-// 14. ENRICH HOMEPAGE (client/dist/index.html)
+// 14. GENERATE ATTENDANCE TRACKER PAGE (/attendance)
+// ─────────────────────────────────────────────────────────────
+const attendanceBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Academic Compliance</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Attendance Tracker & 75% Rule Calculator</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Track your branch and semester attendance according to official Bihar Engineering University regulations. Calculate classes required to attain the mandatory 75% examination eligibility criteria.
+      </p>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <h2 class="text-xl font-black text-slate-900 uppercase">Understanding the BEU 75% Attendance Regulation</h2>
+      <p>
+        As per the academic ordinance of Bihar Engineering University (BEU Patna), students must maintain a minimum of <strong>75% attendance</strong> across all theory lectures and laboratory sessions in order to appear for university end-semester examinations. Shortfalls below 75% without authorized medical condonation lead to debarment from exam admit cards.
+      </p>
+      <div class="pt-4 flex flex-wrap gap-4">
+        <a href="/attendance" class="px-5 py-3 bg-emerald-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors">Launch Attendance Calculator</a>
+        <a href="/notes" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Browse Semester Notes</a>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+let attendanceHtml = injectIntoRoot(baseTemplate, attendanceBody);
+attendanceHtml = injectHeadMetadata(attendanceHtml, {
+  title: 'BEU Attendance Calculator & 75% Rule Tracker | Apna College Bihar',
+  description: 'Calculate your attendance percentage for Bihar Engineering University (BEU). Check 75% mandatory attendance shortfall, classes required, and semester compliance.',
+  canonical: 'https://www.apnacollegebihar.online/attendance'
+});
+writeStaticHtml('attendance', attendanceHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 15. GENERATE CLASS TIMETABLE PAGE (/timetable)
+// ─────────────────────────────────────────────────────────────
+const timetableBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-violet-100 text-violet-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Class Schedule</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Class Timetable & Routine 2026</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Manage and view your semester-wise class timetable, laboratory sessions, and exam routines across all B.Tech branches in Bihar Engineering colleges.
+      </p>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <h2 class="text-xl font-black text-slate-900 uppercase">Organize Your Engineering Academic Routine</h2>
+      <p>
+        Stay organized through weekly lecture schedules, laboratory batches, and teacher assignments. Never miss a mandatory practical class or midterm examination date.
+      </p>
+      <div class="pt-4 flex flex-wrap gap-4">
+        <a href="/timetable" class="px-5 py-3 bg-violet-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-violet-700 transition-colors">View Interactive Timetable</a>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+let timetableHtml = injectIntoRoot(baseTemplate, timetableBody);
+timetableHtml = injectHeadMetadata(timetableHtml, {
+  title: 'BEU Timetable & Class Schedule 2026 | Apna College Bihar',
+  description: 'View and customize your Bihar Engineering University (BEU) class timetable, exam schedule, and semester routine for all engineering branches.',
+  canonical: 'https://www.apnacollegebihar.online/timetable'
+});
+writeStaticHtml('timetable', timetableHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 16. GENERATE BEU RESULT PORTAL PAGE (/beu-result)
+// ─────────────────────────────────────────────────────────────
+const beuResultBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">University Results</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Exam Results & Marksheet Portal</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Check semester exam results, grade points, SGPA/CGPA evaluation, and official marksheet links published by Bihar Engineering University (BEU Patna).
+      </p>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <h2 class="text-xl font-black text-slate-900 uppercase">Official University Result Updates</h2>
+      <p>
+        Bihar Engineering University conducts end-semester examinations for B.Tech semesters 1 through 8. Marks, grade conversions, and pass/carry-over statuses are officially verified per university evaluation rules.
+      </p>
+      <div class="pt-4 flex flex-wrap gap-4">
+        <a href="/beu-result" class="px-5 py-3 bg-amber-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-amber-700 transition-colors">Access Result Portal</a>
+        <a href="/cgpa" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Calculate SGPA / CGPA</a>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+let beuResultHtml = injectIntoRoot(baseTemplate, beuResultBody);
+beuResultHtml = injectHeadMetadata(beuResultHtml, {
+  title: 'BEU Exam Result 2026 | Bihar Engineering University Semester Results',
+  description: 'Check official Bihar Engineering University (BEU Patna) B.Tech semester exam results, marksheets, and carry-over examination scores.',
+  canonical: 'https://www.apnacollegebihar.online/beu-result'
+});
+writeStaticHtml('beu-result', beuResultHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 17. GENERATE YOUTUBE LECTURE FINDER PAGE (/lecture-finder)
+// ─────────────────────────────────────────────────────────────
+const lectureFinderBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-red-100 text-red-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Video Lectures</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU YouTube Lecture Finder</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Find curated, high-yield YouTube lecture playlists strictly aligned with each unit of the Bihar Engineering University (BEU) syllabus.
+      </p>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <h2 class="text-xl font-black text-slate-900 uppercase">Unit-by-Unit Video Compilations</h2>
+      <p>
+        No more searching aimlessly across YouTube. Our mentors have mapped top educator video series directly to each subject module in Mathematics, PPS, DSA, Networks, and Core branches.
+      </p>
+      <div class="pt-4 flex flex-wrap gap-4">
+        <a href="/lecture-finder" class="px-5 py-3 bg-red-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-red-700 transition-colors">Open Lecture Finder</a>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+let lectureFinderHtml = injectIntoRoot(baseTemplate, lectureFinderBody);
+lectureFinderHtml = injectHeadMetadata(lectureFinderHtml, {
+  title: 'BEU YouTube Lecture Finder | Unit-wise Video Classes for B.Tech',
+  description: 'Curated YouTube lecture finder for Bihar Engineering University (BEU) syllabus. Unit-wise video playlists for CSE, Civil, Mechanical, EEE, ECE.',
+  canonical: 'https://www.apnacollegebihar.online/lecture-finder'
+});
+writeStaticHtml('lecture-finder', lectureFinderHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 18. GENERATE SCIENTIFIC CALCULATOR PAGE (/calculator)
+// ─────────────────────────────────────────────────────────────
+const calculatorBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Math Tool</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">Scientific Calculator for Engineering Students</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Fast, browser-based scientific calculator with trigonometric, logarithmic, matrix, and exponential capabilities for engineering calculations.
+      </p>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <h2 class="text-xl font-black text-slate-900 uppercase">Interactive Calculator Suite</h2>
+      <p>
+        Perform quick trigonometric, exponential, power, and algebraic evaluations directly in your browser without needing a physical Casio calculator.
+      </p>
+      <div class="pt-4 flex flex-wrap gap-4">
+        <a href="/calculator" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors">Launch Scientific Calculator</a>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+let calculatorHtml = injectIntoRoot(baseTemplate, calculatorBody);
+calculatorHtml = injectHeadMetadata(calculatorHtml, {
+  title: 'Scientific Calculator Online | Engineering Mathematics Calculator',
+  description: 'Free scientific calculator online for engineering calculations, trigonometry, logarithms, powers, and mathematics coursework.',
+  canonical: 'https://www.apnacollegebihar.online/calculator'
+});
+writeStaticHtml('calculator', calculatorHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 19. GENERATE STUDY RESOURCES PAGE (/study-resources)
+// ─────────────────────────────────────────────────────────────
+const studyResourcesBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Resource Hub</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">Free Engineering Study Resources & Books</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Access free standard reference textbooks, cheat sheets, coding roadmaps, and laboratory manuals for Bihar Engineering scholars.
+      </p>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <h2 class="text-xl font-black text-slate-900 uppercase">Standard Academic Materials</h2>
+      <p>
+        Compiled reference materials for GATE preparation, semester exams, and technical interviews curated by BEU toppers and alumni mentors.
+      </p>
+      <div class="pt-4 flex flex-wrap gap-4">
+        <a href="/study-resources" class="px-5 py-3 bg-emerald-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors">Browse Resources</a>
+        <a href="/notes" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Download Semester Notes</a>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+let studyResourcesHtml = injectIntoRoot(baseTemplate, studyResourcesBody);
+studyResourcesHtml = injectHeadMetadata(studyResourcesHtml, {
+  title: 'BEU Engineering Study Resources & Reference Books | Apna College Bihar',
+  description: 'Free engineering reference books, cheat sheets, lab manuals, and study materials for Bihar Engineering University students.',
+  canonical: 'https://www.apnacollegebihar.online/study-resources'
+});
+writeStaticHtml('study-resources', studyResourcesHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 20. GENERATE WEB DIRECTORY & SITEMAP PAGE (/directory)
+// ─────────────────────────────────────────────────────────────
+const directoryBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Directory Index</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">Official Academic Directory & Sitemap</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Comprehensive index of all 38 Government Engineering Colleges in Bihar, BEU semester notes, PYQs, syllabus documents, and tools.
+      </p>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <h2 class="text-xl font-black text-slate-900 uppercase">Explore Platform Sections</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 not-prose">
+        <a href="/notes" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📚 BEU Notes</a>
+        <a href="/pyq" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📝 PYQ Question Papers</a>
+        <a href="/syllabus" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📋 B.Tech Syllabus</a>
+        <a href="/cgpa" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">🧮 CGPA Calculator</a>
+        <a href="/ugeac-predictor" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">🎯 UGEAC Predictor</a>
+        <a href="/colleges" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">🏛️ 38 Bihar Colleges</a>
+        <a href="/blog" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📰 Engineering Blog</a>
+        <a href="/about" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">ℹ️ About Platform</a>
+        <a href="/contact" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📧 Contact Support</a>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+let directoryHtml = injectIntoRoot(baseTemplate, directoryBody);
+directoryHtml = injectHeadMetadata(directoryHtml, {
+  title: 'Web Directory & Sitemap | Apna College Bihar',
+  description: 'Comprehensive directory of all 38 Bihar Government Engineering Colleges, BEU B.Tech Notes, PYQs, Syllabus, CGPA Calculator, and academic tools.',
+  canonical: 'https://www.apnacollegebihar.online/directory'
+});
+writeStaticHtml('directory', directoryHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 21. GENERATE COLLEGES DIRECTORY PAGE (/colleges)
+// ─────────────────────────────────────────────────────────────
+const collegesListHtml = Object.keys(collegeData).map(slug => {
+  const c = collegeData[slug];
+  return `
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
+      <h3 class="font-black text-slate-900 text-base mb-1">${c.name}</h3>
+      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">${c.shortName} • Estd. ${c.established}</p>
+      <p class="text-xs text-slate-500 line-clamp-2 mb-4">${c.location}</p>
+      <a href="/college/${slug}" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    </div>
+  `;
+}).join('');
+
+const collegesBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Official Directory</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">38 Government Engineering Colleges in Bihar</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Full verified profiles, UGEAC closing cutoff ranks, course branches, and placement reports for all 38 government colleges under Bihar Engineering University.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      ${collegesListHtml}
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+let collegesHtml = injectIntoRoot(baseTemplate, collegesBody);
+collegesHtml = injectHeadMetadata(collegesHtml, {
+  title: 'Top 38 Government Engineering Colleges in Bihar (GEC Directory) | Apna College Bihar',
+  description: 'Complete directory of 38 Government Engineering Colleges (GECs) in Bihar under BEU. Cutoff ranks, placement statistics, branches, and fee details.',
+  canonical: 'https://www.apnacollegebihar.online/colleges'
+});
+writeStaticHtml('colleges', collegesHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 22. GENERATE SENIOR MENTORSHIP PAGE (/mentorship)
+// ─────────────────────────────────────────────────────────────
+const mentorshipBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 py-12">
+    <div class="text-center mb-12">
+      <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Student Community</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">Free Senior Mentorship Program</h1>
+      <p class="text-slate-600 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+        Connect directly with BEU alumni mentors, university toppers, and senior engineers for guidance on semester exams, placements, coding, and UGEAC counselling.
+      </p>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <h2 class="text-xl font-black text-slate-900 uppercase">Mentorship by BEU Alumni for Bihar Scholars</h2>
+      <p>
+        Navigating B.Tech without senior guidance can be stressful. Our mentorship initiative offers free peer advice on cracking semester examinations, securing 8.5+ SGPA, learning Full Stack & AI development, and preparing for off-campus recruitments.
+      </p>
+      <div class="pt-4 flex flex-wrap gap-4">
+        <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noopener noreferrer" class="px-5 py-3 bg-emerald-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors">Join WhatsApp Mentorship Channel</a>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+let mentorshipHtml = injectIntoRoot(baseTemplate, mentorshipBody);
+mentorshipHtml = injectHeadMetadata(mentorshipHtml, {
+  title: 'Free Senior Mentorship for BEU Engineering Students | Apna College Bihar',
+  description: 'Join the free senior mentorship community for Bihar Engineering University students. Get exam advice, coding roadmaps, and career placement mentorship.',
+  canonical: 'https://www.apnacollegebihar.online/mentorship'
+});
+writeStaticHtml('mentorship', mentorshipHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 23. GENERATE ALL 38 INDIVIDUAL COLLEGE PAGES (/college/:slug)
+// ─────────────────────────────────────────────────────────────
+console.log(`[SSG] Starting static page generation for ${Object.keys(collegeData).length} colleges...`);
+Object.keys(collegeData).forEach(slug => {
+  const c = collegeData[slug];
+  const canonicalCollegeUrl = `https://www.apnacollegebihar.online/college/${slug}`;
+
+  const collegeDetailBody = `
+  <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+    ${navHeaderHtml}
+
+    <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 py-12">
+      <!-- Breadcrumb -->
+      <div class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+        <a href="/" class="hover:text-blue-600">Home</a>
+        <span>/</span>
+        <a href="/colleges" class="hover:text-blue-600">Colleges</a>
+        <span>/</span>
+        <span class="text-slate-800 font-semibold">${c.shortName}</span>
+      </div>
+
+      <!-- College Header -->
+      <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-10 shadow-sm mb-8">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 pb-6 border-b border-slate-100">
+          <img src="${c.logo}" alt="${c.shortName} Logo" class="w-20 h-20 rounded-2xl object-contain border border-slate-100 p-2 shadow-xs" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(c.shortName)}&background=0D8ABC&color=fff&size=200';" />
+          <div>
+            <span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-black uppercase tracking-wider rounded-md inline-block mb-2">${c.type} • Estd. ${c.established}</span>
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-[1000] text-slate-900 tracking-tight leading-tight">${c.name}</h1>
+            <p class="text-xs text-slate-500 mt-1 font-medium">📍 ${c.location}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 text-center text-xs">
+          <div class="p-3 bg-slate-50 rounded-2xl">
+            <span class="text-slate-400 block text-[10px] font-bold uppercase">Affiliation</span>
+            <span class="font-black text-slate-900">BEU Patna</span>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-2xl">
+            <span class="text-slate-400 block text-[10px] font-bold uppercase">Approval</span>
+            <span class="font-black text-slate-900">AICTE</span>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-2xl">
+            <span class="text-slate-400 block text-[10px] font-bold uppercase">Admission Exam</span>
+            <span class="font-black text-slate-900">JEE Main / UGEAC</span>
+          </div>
+          <div class="p-3 bg-slate-50 rounded-2xl">
+            <span class="text-slate-400 block text-[10px] font-bold uppercase">District</span>
+            <span class="font-black text-slate-900">${c.district}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overview Content -->
+      <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-10 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+        <h2 class="text-xl font-black text-slate-900 uppercase">About ${c.name}</h2>
+        <p>${c.description}</p>
+
+        <h3 class="text-base font-bold text-slate-900">Admission & Counselling Process</h3>
+        <p>
+          Admissions to B.Tech courses at ${c.shortName} are conducted centrally through the <strong>BCECEB UGEAC (Under Graduate Engineering Admission Counselling)</strong> based on JEE Main scores. Eligible candidates must register for counselling, complete document verification, and fill choice preferences.
+        </p>
+
+        <div class="pt-4 flex flex-wrap gap-4 not-prose">
+          <a href="/notes" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Download Semester Notes</a>
+          <a href="/pyq" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Download PYQ Papers</a>
+          <a href="/ugeac-predictor" class="px-5 py-3 bg-purple-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-purple-700 transition-colors shadow-sm">Check UGEAC Cutoffs</a>
+        </div>
+      </div>
+    </main>
+
+    ${footerHtml}
+  </div>
+  `;
+
+  let collegeHtml = injectIntoRoot(baseTemplate, collegeDetailBody);
+  collegeHtml = injectHeadMetadata(collegeHtml, {
+    title: `${c.name} (${c.shortName}) - Cutoff, Admission & Details | Apna College Bihar`,
+    description: `Official details, UGEAC closing cutoffs, B.Tech courses, admission rules, and contact details for ${c.name} (${c.shortName}) under Bihar Engineering University.`,
+    canonical: canonicalCollegeUrl,
+    schemaJson: {
+      "@context": "https://schema.org",
+      "@type": "CollegeOrUniversity",
+      "name": c.name,
+      "url": canonicalCollegeUrl,
+      "logo": c.logo,
+      "description": c.description,
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": c.district,
+        "addressRegion": "Bihar",
+        "addressCountry": "IN"
+      }
+    }
+  });
+
+  writeStaticHtml(`college/${slug}`, collegeHtml);
+});
+
+// ─────────────────────────────────────────────────────────────
+// 24. ENRICH HOMEPAGE (client/dist/index.html)
 // ─────────────────────────────────────────────────────────────
 console.log('[SSG] Enriching Homepage root with comprehensive semantic content...');
 

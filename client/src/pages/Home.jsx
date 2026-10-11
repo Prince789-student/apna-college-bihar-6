@@ -124,7 +124,7 @@ export default function Home() {
       "url": "https://www.apnacollegebihar.online/",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "https://www.apnacollegebihar.online/search/{search_term_string}",
+        "target": "https://www.apnacollegebihar.online/notes?search={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     },

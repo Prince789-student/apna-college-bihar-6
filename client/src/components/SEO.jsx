@@ -7,14 +7,35 @@ export default function SEO({
   description = "Bihar Engineering Counselling 2026 - UGEAC College Predictor, Cutoff Ranks, B.Tech Notes, PYQ Papers & CGPA Calculator. Official resource for Bihar Engineering students.",
   keywords = "UGEAC 2026, Bihar Engineering Counselling, BCECE counselling 2026, Bihar college predictor, B.Tech Notes PDF, Engineering Study Material Bihar",
   image = "https://www.apnacollegebihar.online/acb_brand_final.png",
+  canonical = null,
   schema = null,
   noindex = false
 }) {
   const location = useLocation();
   const fullTitle = title.includes("Apna College Bihar") ? title : `${title} | Apna College Bihar`;
   
-  const cleanPath = location.pathname === '/' ? '/' : location.pathname.replace(/\/$/, '');
-  const canonicalUrl = `https://www.apnacollegebihar.online${cleanPath}`;
+  let canonicalUrl = canonical;
+  if (!canonicalUrl) {
+    let cleanPath = location.pathname === '/' ? '/' : location.pathname.replace(/\/$/, '');
+    
+    // Canonicalize /college/:slug/:section -> /college/:slug
+    if (/^\/college\/[^\/]+\/[^\/]+$/.test(cleanPath)) {
+      cleanPath = cleanPath.replace(/^(\/college\/[^\/]+)\/.*$/, '$1');
+    }
+    // Canonicalize /branch/:branchId/:section -> /branch/:branchId
+    if (/^\/branch\/[^\/]+\/[^\/]+$/.test(cleanPath)) {
+      cleanPath = cleanPath.replace(/^(\/branch\/[^\/]+)\/.*$/, '$1');
+    }
+    // Canonicalize /beu/:tool/:keyword -> /beu/:tool
+    if (/^\/beu\/[^\/]+\/[^\/]+$/.test(cleanPath)) {
+      cleanPath = cleanPath.replace(/^(\/beu\/[^\/]+)\/.*$/, '$1');
+    }
+    // Canonicalize /feature/:feature/:keyword -> /feature/:feature
+    if (/^\/feature\/[^\/]+\/[^\/]+$/.test(cleanPath)) {
+      cleanPath = cleanPath.replace(/^(\/feature\/[^\/]+)\/.*$/, '$1');
+    }
+    canonicalUrl = `https://www.apnacollegebihar.online${cleanPath}`;
+  }
 
   return (
     <Helmet>

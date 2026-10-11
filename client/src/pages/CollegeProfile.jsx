@@ -61,8 +61,27 @@ const normalizedMap = {
   "G.E.C. SAMASTIPUR": "Government Engineering College, Samastipur"
 };
 
+const COLLEGE_ALIAS_MAP = {
+  'sce-sasaram': 'spce-sasaram',
+  'gec-rohtas': 'spce-sasaram',
+  'kmc-katihar': 'kec-katihar',
+  'mwec-madhepura': 'bpmce-madhepura',
+  'sm-muzaffarpur': 'mit-muzaffarpur',
+  'bce-buxar': 'gec-buxar',
+  'gwc-buxar': 'gec-buxar',
+  'jmit-jamui': 'gec-jamui',
+  'mita-aurangabad': 'gec-aurangabad',
+  'spce-siwan': 'gec-siwan',
+  'gec-supaul': 'sce-saharsa',
+  'gec-saharsa': 'sce-saharsa',
+  'rce-saharsa': 'sce-saharsa',
+  'gec-begusarai': 'rrsdce-begusarai',
+  'sgp-patna': 'gce-gaya'
+};
+
 export default function CollegeProfile() {
   const { collegeSlug } = useParams();
+  const canonicalSlug = COLLEGE_ALIAS_MAP[collegeSlug] || collegeSlug;
   const [college, setCollege] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -76,10 +95,13 @@ export default function CollegeProfile() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (collegeData[collegeSlug]) {
-      setCollege(collegeData[collegeSlug]);
+    const resolved = collegeData[canonicalSlug];
+    if (resolved) {
+      setCollege(resolved);
+    } else {
+      setCollege(null);
     }
-  }, [collegeSlug]);
+  }, [canonicalSlug]);
 
   useEffect(() => {
     if (!college) return;
@@ -132,6 +154,11 @@ export default function CollegeProfile() {
   if (!college) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#f8fafc]">
+        <SEO 
+          title="College Not Found | Apna College Bihar"
+          description="The requested college profile does not exist on Apna College Bihar."
+          noindex={true}
+        />
         <div className="text-center">
           <Building2 size={48} className="text-slate-300 mx-auto mb-4" />
           <h2 className="text-2xl font-[1000] text-slate-900 uppercase tracking-tighter">College Not Found</h2>
@@ -148,7 +175,7 @@ export default function CollegeProfile() {
     "@context": "https://schema.org",
     "@type": "CollegeOrUniversity",
     "name": college.name,
-    "url": `https://www.apnacollegebihar.online/college/${collegeSlug}`,
+    "url": `https://www.apnacollegebihar.online/college/${canonicalSlug}`,
     "logo": college.logo,
     "description": college.description,
     "address": {
@@ -179,7 +206,7 @@ export default function CollegeProfile() {
         "@type": "ListItem",
         "position": 3,
         "name": college.name,
-        "item": `https://www.apnacollegebihar.online/college/${collegeSlug}`
+        "item": `https://www.apnacollegebihar.online/college/${canonicalSlug}`
       }
     ]
   };
@@ -198,6 +225,7 @@ export default function CollegeProfile() {
         title={`${college.name} - Admission, Cutoff, Fees & Placement | Apna College Bihar`}
         description={college.description}
         keywords={`${college.shortName}, ${college.name}, Bihar engineering college, BEU, UGEAC cutoff, B.Tech admission Bihar`}
+        canonical={`https://www.apnacollegebihar.online/college/${canonicalSlug}`}
         schema={[seoSchema, breadcrumbSchema]}
       />
 

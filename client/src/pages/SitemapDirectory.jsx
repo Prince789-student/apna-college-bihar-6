@@ -1,140 +1,58 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { colleges } from '../UgeacData';
-import { Building2, Cpu, Grid, Hammer, Info, Link2, BookOpen, ArrowRight } from 'lucide-react';
+import { Building2, Cpu, Grid, Hammer, Link2, BookOpen, ArrowRight, ShieldCheck, Calculator, GraduationCap } from 'lucide-react';
 import SEO from '../components/SEO';
 
 const branches = [
-  { id: 'cse', name: 'Computer Science & Engineering' },
-  { id: 'civil', name: 'Civil Engineering' },
-  { id: 'me', name: 'Mechanical Engineering' },
-  { id: 'ee', name: 'Electrical Engineering' },
-  { id: 'ece', name: 'Electronics & Communication Engineering' }
+  { id: 'cse', name: 'Computer Science & Engineering', icon: '💻' },
+  { id: 'civil', name: 'Civil Engineering', icon: '🏗️' },
+  { id: 'me', name: 'Mechanical Engineering', icon: '⚙️' },
+  { id: 'ee', name: 'Electrical Engineering', icon: '⚡' },
+  { id: 'ece', name: 'Electronics & Communication Engineering', icon: '📡' }
 ];
 
-const branchSections = ['overview', 'skills', 'careers', 'salary', 'placements', 'internships'];
-
-const tools = [
-  { id: 'attendance', name: 'BEU Attendance Calculator' },
-  { id: 'timetable', name: 'BEU Timetable' },
-  { id: 'cgpa', name: 'BEU SGPA/CGPA Calculator' },
-  { id: 'result', name: 'BEU Exam Result' }
+const academicTools = [
+  { name: 'BEU Semester Notes', path: '/notes', desc: 'Unit-wise notes for all 8 semesters', icon: '📚' },
+  { name: 'Previous Year Questions (PYQ)', path: '/pyq', desc: '5+ years of verified BEU exam papers', icon: '📝' },
+  { name: 'BEU Official Syllabus', path: '/syllabus', desc: 'Revised AICTE model curriculum & credits', icon: '📋' },
+  { name: 'BEU CGPA Calculator', path: '/cgpa', desc: 'Convert semester grades into SGPA & %', icon: '🧮' },
+  { name: 'UGEAC College Predictor', path: '/ugeac-predictor', desc: 'Forecast Bihar colleges by JEE rank', icon: '🎯' },
+  { name: 'BEU Attendance Tracker', path: '/attendance', desc: '75% attendance rule & shortfall helper', icon: '⏱️' },
+  { name: 'Class Timetable', path: '/timetable', desc: 'Semester-wise branch routine', icon: '🗓️' },
+  { name: 'BEU Result Portal', path: '/beu-result', desc: 'Check marksheet & semester results', icon: '🎓' },
+  { name: 'YouTube Lecture Finder', path: '/lecture-finder', desc: 'Curated playlists for university syllabus', icon: '▶️' },
+  { name: 'Scientific Calculator', path: '/calculator', desc: 'Engineering math, matrices & trig', icon: '🔢' },
+  { name: 'Free Study Resources', path: '/study-resources', desc: 'Engineering reference books & links', icon: '📖' },
+  { name: 'Senior Mentorship Hub', path: '/mentorship', desc: 'Connect with BEU alumni mentors', icon: '👨‍🏫' }
 ];
 
-const toolKeywords = {
-  attendance: [
-    'beu-attendance-calculator',
-    'attendance-percentage-calculator',
-    'bihar-engineering-attendance',
-    '75-percent-attendance-calculator',
-    'attendance-shortfall-calculator',
-    'cse-attendance-calculator',
-    'civil-attendance-calculator',
-    'mechanical-attendance-calculator',
-    'electrical-attendance-calculator',
-    'ece-attendance-calculator'
-  ],
-  timetable: [
-    'beu-timetable-2025',
-    'beu-exam-schedule-2025',
-    'beu-class-timetable',
-    'cse-timetable-beu',
-    'civil-timetable-beu',
-    'mechanical-timetable-beu',
-    'beu-semester-schedule'
-  ],
-  cgpa: [
-    'beu-cgpa-calculator',
-    'beu-sgpa-calculator',
-    'sgpa-to-cgpa-converter',
-    'beu-grade-calculator',
-    'beu-marks-to-cgpa',
-    'bihar-engineering-cgpa',
-    'cse-cgpa-calculator-beu',
-    'civil-cgpa-calculator-beu'
-  ],
-  result: [
-    'beu-result-2025',
-    'bihar-engineering-result',
-    'beu-exam-result',
-    'beu-result-marksheet',
-    'beu-result-sem1',
-    'beu-result-sem2',
-    'beu-result-sem3',
-    'beu-result-sem4',
-    'beu-result-sem5',
-    'beu-result-sem6'
-  ]
+const COLLEGE_SLUG_MAP = {
+  'sce-sasaram': 'spce-sasaram',
+  'gec-rohtas': 'spce-sasaram',
+  'kmc-katihar': 'kec-katihar',
+  'mwec-madhepura': 'bpmce-madhepura',
+  'sm-muzaffarpur': 'mit-muzaffarpur',
+  'bce-buxar': 'gec-buxar',
+  'gwc-buxar': 'gec-buxar',
+  'jmit-jamui': 'gec-jamui',
+  'mita-aurangabad': 'gec-aurangabad',
+  'spce-siwan': 'gec-siwan',
+  'gec-supaul': 'sce-saharsa',
+  'gec-saharsa': 'sce-saharsa',
+  'rce-saharsa': 'sce-saharsa',
+  'gec-begusarai': 'rrsdce-begusarai',
+  'sgp-patna': 'gce-gaya'
 };
-
-const features = [
-  { id: 'focus-timer', name: 'Focus Mode & Study Timer' },
-  { id: 'study-groups', name: 'Online Study Groups' },
-  { id: 'study-resources', name: 'Free Study Resources' },
-  { id: 'calculator', name: 'Scientific Calculator' },
-  { id: 'personal-manager', name: 'Personal Study Manager' }
-];
-
-const featureKeywords = {
-  'focus-timer': [
-    'pomodoro-timer-for-students',
-    'study-timer-online',
-    'focus-mode-for-students',
-    '25-minute-study-timer',
-    'engineering-student-study-timer',
-    'study-streak-tracker',
-    'daily-study-goal-tracker',
-    'deep-work-timer-students',
-    'beu-focus-mode',
-    'study-session-tracker',
-    'app-blocker-for-students',
-    'study-app-blocker-android',
-    'distraction-blocker-students',
-    'block-social-media-studying',
-    'android-app-blocker-engineering',
-    'apna-college-bihar-app',
-    'apna-college-bihar-apk-download'
-  ],
-  'study-groups': [
-    'online-study-group-engineers',
-    'beu-student-study-group',
-    'engineering-study-network-bihar',
-    'study-discussion-group-bihar',
-    'online-study-partner-beu',
-    'study-community-engineering',
-    'group-study-app-students'
-  ],
-  'calculator': [
-    'scientific-calculator-engineering',
-    'matrix-calculator-online',
-    'trigonometry-calculator-engineering',
-    'engineering-mathematics-calculator',
-    'free-scientific-calculator-online'
-  ],
-  'personal-manager': [
-    'study-planner-engineering',
-    'semester-study-plan-beu',
-    'engineering-study-schedule',
-    'beu-student-planner',
-    'exam-preparation-planner'
-  ],
-  'study-resources': [
-    'free-beu-study-material',
-    'engineering-notes-free-download',
-    'beu-youtube-resources',
-    'free-engineering-pdf-notes'
-  ]
-};
-
-const collegeSections = ['overview', 'branches', 'fees', 'placement', 'hostel', 'cutoff', 'review'];
 
 export default function SitemapDirectory() {
   return (
     <div className="min-h-screen bg-[#070b14] text-slate-100 font-['Inter'] relative overflow-hidden">
       <SEO 
-        title="Sitemap & Directory | Apna College Bihar"
-        description="Comprehensive index directory of Bihar Engineering Colleges, BEU Syllabus, SGPA CGPA Calculator, Notes, Cutoff details, and academic resources."
-        keywords="Bihar engineering colleges, BEU notes, UGEAC cutoff, sitemap apna college bihar, academic hub directory"
+        title="Web Directory & Sitemap | Apna College Bihar"
+        description="Comprehensive directory of all 38 Bihar Government Engineering Colleges, BEU B.Tech Notes, PYQs, Syllabus, CGPA Calculator, and academic tools."
+        keywords="Bihar engineering colleges directory, BEU notes sitemap, UGEAC colleges list, academic directory apna college bihar"
+        canonical="https://www.apnacollegebihar.online/directory"
       />
 
       {/* Decorative background vectors */}
@@ -148,194 +66,127 @@ export default function SitemapDirectory() {
             <Grid size={32} />
           </div>
           <h1 className="text-3xl md:text-5xl font-[1000] tracking-tighter text-white uppercase leading-none">
-            Web Directory & Sitemap
+            Official Academic Directory & Sitemap
           </h1>
           <p className="text-slate-400 text-xs md:text-sm font-bold uppercase tracking-widest max-w-2xl mx-auto">
-            Quick links to all Bihar Engineering resources, colleges, syllabi, calculators, and study pages.
+            Direct canonical links to all 38 Bihar Engineering Colleges, verified BEU study materials, and academic tools.
           </p>
         </div>
 
-        {/* Section 1: Colleges */}
-        <section className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
+        {/* Section 1: Academic Tools & Resources */}
+        <section className="bg-[#0f172a]/40 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
           <h2 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2.5">
-            <Building2 className="text-blue-500" size={24} /> Bihar Government Engineering Colleges
+            <Hammer className="text-blue-500" size={24} /> Essential BEU Academic Tools
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {academicTools.map((tool) => (
+              <Link 
+                key={tool.path}
+                to={tool.path}
+                className="p-5 bg-slate-900/60 hover:bg-slate-800 border border-white/5 hover:border-blue-500/30 rounded-2xl transition-all group block"
+              >
+                <div className="text-2xl mb-2">{tool.icon}</div>
+                <h3 className="font-bold text-white text-sm group-hover:text-blue-400 transition-colors uppercase tracking-tight mb-1">
+                  {tool.name}
+                </h3>
+                <p className="text-xs text-slate-400">{tool.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Section 2: 38 Bihar Engineering Colleges */}
+        <section className="bg-[#0f172a]/40 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2.5">
+                <Building2 className="text-blue-500" size={24} /> 38 Bihar Government Engineering Colleges
+              </h2>
+              <p className="text-xs text-slate-400 mt-1">Official profile, admission cutoffs, branches, and placement overview for each institution.</p>
+            </div>
+            <Link to="/colleges" className="text-xs font-black uppercase tracking-wider text-blue-400 hover:text-blue-300">
+              View College Directory &rarr;
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {colleges.map((college) => {
-              const slug = college.short.toLowerCase().replace(/[\s\.]+/g, '-');
+              const rawSlug = college.short.toLowerCase().replace(/[\s\.]+/g, '-');
+              const slug = COLLEGE_SLUG_MAP[rawSlug] || rawSlug;
               return (
-                <div key={college.id} className="p-5 bg-slate-900/40 border border-white/5 rounded-2xl space-y-3">
-                  <h3 className="font-black text-white uppercase text-xs tracking-tight">{college.name}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    <Link 
-                      to={`/college/${slug}`} 
-                      className="px-2.5 py-1.5 bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white rounded-lg text-[9px] font-black uppercase tracking-wider border border-blue-500/20 transition-all"
-                    >
-                      Home
-                    </Link>
-                    {collegeSections.map((sec) => (
-                      <Link 
-                        key={sec}
-                        to={`/college/${slug}/${sec}`} 
-                        className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-[9px] font-black uppercase tracking-wider border border-white/5 transition-all"
-                      >
-                        {sec}
-                      </Link>
-                    ))}
+                <Link
+                  key={college.id}
+                  to={`/college/${slug}`}
+                  className="p-4 bg-slate-900/60 hover:bg-slate-800 border border-white/5 hover:border-blue-500/30 rounded-2xl transition-all group flex items-center justify-between"
+                >
+                  <div className="min-w-0 pr-3">
+                    <h3 className="font-bold text-white text-xs group-hover:text-blue-400 transition-colors uppercase truncate">
+                      {college.name}
+                    </h3>
+                    <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-0.5">{college.short}</p>
                   </div>
-                </div>
+                  <ArrowRight size={14} className="text-slate-500 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all shrink-0" />
+                </Link>
               );
             })}
           </div>
         </section>
 
-        {/* Section 2: Branches */}
-        <section className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
+        {/* Section 3: Engineering Branches */}
+        <section className="bg-[#0f172a]/40 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
           <h2 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2.5">
             <Cpu className="text-blue-500" size={24} /> Engineering Branch Hubs
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {branches.map((b) => (
-              <div key={b.id} className="p-5 bg-slate-900/40 border border-white/5 rounded-2xl space-y-3">
-                <h3 className="font-black text-white uppercase text-xs tracking-tight">{b.name}</h3>
-                <div className="flex flex-wrap gap-2">
-                  <Link 
-                    to={`/branch/${b.id}`} 
-                    className="px-2.5 py-1.5 bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white rounded-lg text-[9px] font-black uppercase tracking-wider border border-blue-500/20 transition-all"
-                  >
-                    Home
-                  </Link>
-                  {branchSections.map((sec) => (
-                    <Link 
-                      key={sec}
-                      to={`/branch/${b.id}/${sec}`} 
-                      className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-[9px] font-black uppercase tracking-wider border border-white/5 transition-all"
-                    >
-                      {sec}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Section 3: BEU Tools */}
-          <section className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
-            <h2 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2.5">
-              <Hammer className="text-blue-500" size={24} /> Academic Tools & Keyword Search
-            </h2>
-            <div className="space-y-6">
-              {tools.map((t) => (
-                <div key={t.id} className="space-y-2.5">
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-black text-white uppercase text-xs tracking-tight">{t.name}</h3>
-                    <Link 
-                      to={`/beu/${t.id}`} 
-                      className="px-2.5 py-1 bg-blue-600/15 text-blue-400 rounded-lg text-[9px] font-black uppercase tracking-wider border border-blue-500/10 hover:bg-blue-600 hover:text-white transition-all"
-                    >
-                      View Tool
-                    </Link>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {toolKeywords[t.id]?.map((kw) => (
-                      <Link 
-                        key={kw}
-                        to={`/beu/${t.id}/${kw}`} 
-                        className="px-2 py-1 bg-slate-900/60 hover:bg-slate-800 text-slate-400 hover:text-slate-300 rounded text-[9px] font-bold tracking-tight transition-all border border-white/5"
-                      >
-                        {kw.replace(/-/g, ' ')}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Section 4: Study Features */}
-          <section className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
-            <h2 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2.5">
-              <BookOpen className="text-blue-500" size={24} /> Core Study Features & Keywords
-            </h2>
-            <div className="space-y-6">
-              {features.map((f) => (
-                <div key={f.id} className="space-y-2.5">
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-black text-white uppercase text-xs tracking-tight">{f.name}</h3>
-                    <Link 
-                      to={`/feature/${f.id}`} 
-                      className="px-2.5 py-1 bg-blue-600/15 text-blue-400 rounded-lg text-[9px] font-black uppercase tracking-wider border border-blue-500/10 hover:bg-blue-600 hover:text-white transition-all"
-                    >
-                      View Feature
-                    </Link>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {featureKeywords[f.id]?.map((kw) => (
-                      <Link 
-                        key={kw}
-                        to={`/feature/${f.id}/${kw}`} 
-                        className="px-2 py-1 bg-slate-900/60 hover:bg-slate-800 text-slate-400 hover:text-slate-300 rounded text-[9px] font-bold tracking-tight transition-all border border-white/5"
-                      >
-                        {kw.replace(/-/g, ' ')}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-
-        {/* Section 5: Static Guides */}
-        <section className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-4 text-center">
-          <h2 className="text-sm font-black text-slate-400 uppercase tracking-widest">
-            Looking for Master Admissions Guides?
-          </h2>
-          <div className="flex flex-wrap gap-3 justify-center">
-            <Link to="/ugeac-2025-bihar-engineering-admission.html" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">UGEAC Guide</Link>
-            <Link to="/bihar-engineering-counselling-2025.html" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Counselling Guide</Link>
-            <Link to="/ugeac-2025-choice-filling.html" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Choice Filling Strategy</Link>
-            <Link to="/beu-syllabus-download-bihar-engineering.html" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Syllabus PDF Hub</Link>
-          </div>
-        </section>
-
-        {/* Section 6: College Comparisons */}
-        <section className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
-          <h2 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2.5">
-            <Link2 className="text-blue-500" size={24} /> Head-to-Head College Comparisons
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <Link to="/compare/mit-muzaffarpur-vs-bce-bhagalpur.html" className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300">MIT Muzaffarpur vs BCE Bhagalpur</Link>
-            <Link to="/compare/mit-muzaffarpur-vs-bce-bakhtiyarpur.html" className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300">MIT Muzaffarpur vs BCE Bakhtiyarpur</Link>
-            <Link to="/compare/mit-muzaffarpur-vs-gce-gaya.html" className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300">MIT Muzaffarpur vs GCE Gaya</Link>
-            <Link to="/compare/bce-bhagalpur-vs-gce-gaya.html" className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300">BCE Bhagalpur vs GCE Gaya</Link>
-            <Link to="/compare/nce-chandi-vs-lnjpit-chapra.html" className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300">NCE Chandi vs LNJPIT Chapra</Link>
-            <Link to="/compare/mce-motihari-vs-dce-darbhanga.html" className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300">MCE Motihari vs DCE Darbhanga</Link>
-          </div>
-          <div className="text-center pt-2">
-            <Link to="/compare" className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white rounded-xl text-[10px] font-black uppercase tracking-widest border border-blue-500/20 transition-all">
-              Interactive Comparison Tool <ArrowRight size={12} />
-            </Link>
-          </div>
-        </section>
-
-        {/* Section 7: Colleges by JEE Main Percentile */}
-        <section className="bg-[#0f172a]/30 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
-          <h2 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2.5">
-            <Building2 className="text-blue-500" size={24} /> Colleges by JEE Main Percentile
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
-              {[95, 90, 85, 80, 75, 70, 65, 60, 55, 50].map(p => (
-              <Link 
-                key={p} 
-                to={`/colleges-at-${p}-percentile-in-bihar.html`} 
-                className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 rounded-xl text-[10px] font-bold text-center block text-slate-300 hover:text-white transition-all"
+              <Link
+                key={b.id}
+                to={`/branch/${b.id}`}
+                className="p-5 bg-slate-900/60 hover:bg-slate-800 border border-white/5 hover:border-blue-500/30 rounded-2xl transition-all group flex items-center justify-between"
               >
-                Colleges at {p} Percentile
+                <div>
+                  <div className="text-2xl mb-2">{b.icon}</div>
+                  <h3 className="font-bold text-white text-sm group-hover:text-blue-400 transition-colors uppercase tracking-tight">
+                    {b.name}
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1">Syllabus, Career Scope, Placements & Notes</p>
+                </div>
+                <ArrowRight size={16} className="text-slate-500 group-hover:text-blue-400 group-hover:translate-x-0.5 transition-all" />
               </Link>
             ))}
+          </div>
+        </section>
+
+        {/* Section 4: Admissions & Percentile Guides */}
+        <section className="bg-[#0f172a]/40 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-6">
+          <h2 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2.5">
+            <GraduationCap className="text-blue-500" size={24} /> UGEAC Counselling & Percentile Guides
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+            {[95, 90, 85, 80, 75, 70, 65, 60, 55, 50].map(p => (
+              <Link 
+                key={p} 
+                to={`/colleges-at-${p}-percentile-in-bihar`} 
+                className="p-3 bg-slate-900/60 hover:bg-slate-800 border border-white/5 hover:border-blue-500/30 rounded-xl text-[11px] font-bold text-center block text-slate-300 hover:text-white transition-all"
+              >
+                Colleges at {p}%ile
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Section 5: Institutional & Legal Trust Pages */}
+        <section className="bg-[#0f172a]/40 border border-white/5 p-6 md:p-8 rounded-[2rem] shadow-xl space-y-4">
+          <h2 className="text-xs font-black text-slate-400 uppercase tracking-widest">
+            Institutional, Editorial & Legal Pages
+          </h2>
+          <div className="flex flex-wrap gap-3">
+            <Link to="/about" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-xs font-bold transition-all">About Us</Link>
+            <Link to="/contact" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-xs font-bold transition-all">Contact Us</Link>
+            <Link to="/blog" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-xs font-bold transition-all">Engineering Blog</Link>
+            <Link to="/privacy-policy" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-xs font-bold transition-all">Privacy Policy</Link>
+            <Link to="/terms" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-xs font-bold transition-all">Terms of Service</Link>
+            <Link to="/disclaimer" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-xs font-bold transition-all">Disclaimer</Link>
+            <Link to="/dmca" className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/5 rounded-xl text-xs font-bold transition-all">DMCA Policy</Link>
           </div>
         </section>
       </div>

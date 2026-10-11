@@ -109,7 +109,7 @@ app.get('/robots.txt', (req, res) => {
         return res.sendFile(robotsPath);
     }
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.send("User-agent: *\nAllow: /\n\nUser-agent: Mediapartners-Google\nAllow: /\n\nUser-agent: Googlebot\nAllow: /\n\nSitemap: https://www.apnacollegebihar.online/sitemap.xml\n");
+    res.send("User-agent: *\nAllow: /\nDisallow: /p/\nDisallow: /dashboard/\nDisallow: /admin\nDisallow: /api/\nDisallow: /search/\nDisallow: /*?*\n\nUser-agent: Googlebot\nAllow: /\nDisallow: /p/\nDisallow: /dashboard/\nDisallow: /api/\nDisallow: /search/\nDisallow: /*?*\n\nUser-agent: Mediapartners-Google\nAllow: /\n\nSitemap: https://www.apnacollegebihar.online/sitemap.xml\n");
 });
 
 const { publicLimiter, authenticatedLimiter } = require('./middleware/rateLimiter');

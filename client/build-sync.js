@@ -58,7 +58,12 @@ function syncBuild() {
 
 
         // 1. Clean conflicting directories in server/public so Vercel cleanUrls maps cleanly to flat .html files without directory collision
-        const conflictingDirs = ['about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca', 'notes', 'pyq', 'syllabus', 'ugeac-predictor', 'cgpa'];
+        const conflictingDirs = [
+            'about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca',
+            'notes', 'pyq', 'syllabus', 'ugeac-predictor', 'cgpa',
+            'attendance', 'timetable', 'beu-result', 'lecture-finder', 'calculator',
+            'study-resources', 'directory', 'colleges', 'mentorship'
+        ];
         conflictingDirs.forEach(dir => {
             const p = path.join(destDir, dir);
             if (fs.existsSync(p)) fs.rmSync(p, { recursive: true, force: true });
