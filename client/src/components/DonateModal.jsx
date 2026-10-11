@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Award, ExternalLink } from 'lucide-react';
+import { X, Award, Copy, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onContinueWithoutDonating, pendingUrl }) {
@@ -11,7 +11,7 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
 
   const handleCopy = () => {
     navigator.clipboard.writeText(upiId);
-    toast.success('UPI ID Copied to clipboard!');
+    toast.success('UPI ID Copied to clipboard! ✅');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -70,17 +70,43 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
             <img src="/scanner-qr.jpg" alt="UPI Scanner" className="w-full h-full object-contain rounded-xl" />
           </div>
           
-          {/* UPI ID Box */}
-          <div className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors"
+          {/* UPI ID Box with Clear Copy Option */}
+          <div 
+            className="w-full bg-slate-50 border border-slate-200 hover:border-rose-300 rounded-2xl p-3.5 flex items-center justify-between group cursor-pointer hover:bg-rose-50/30 transition-all shadow-xs"
             onClick={handleCopy}
           >
-            <div>
-              <p className="text-[9px] font-bold text-rose-500 uppercase tracking-widest mb-0.5">UPI ID (Tap to Copy)</p>
-              <p className="text-sm font-[900] text-slate-900">{upiId}</p>
+            <div className="text-left">
+              <p className="text-[9px] font-bold text-rose-600 uppercase tracking-widest mb-0.5">
+                Official UPI ID (Tap to Copy)
+              </p>
+              <p className="text-sm sm:text-base font-[900] text-slate-900 font-mono tracking-tight select-all">
+                {upiId}
+              </p>
             </div>
-            <div className="w-8 h-8 bg-rose-100 rounded-lg flex items-center justify-center text-rose-600 group-hover:scale-105 transition-transform">
-              <ExternalLink size={14} />
-            </div>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCopy();
+              }}
+              className={`px-3.5 py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-sm cursor-pointer ${
+                copied 
+                  ? 'bg-emerald-600 text-white shadow-emerald-500/25 scale-105' 
+                  : 'bg-rose-600 hover:bg-rose-700 text-white shadow-rose-500/25 group-hover:scale-105'
+              }`}
+            >
+              {copied ? (
+                <>
+                  <Check size={14} strokeWidth={3} />
+                  <span>Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy size={14} strokeWidth={2.5} />
+                  <span>Copy</span>
+                </>
+              )}
+            </button>
           </div>
           <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider text-center mt-2">
             💡 UPI Remark mein apna <strong className="text-slate-800">Name & College</strong> likhein — Hum aapko Wall of Fame mein Add karenge!

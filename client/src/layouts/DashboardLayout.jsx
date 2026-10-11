@@ -4,7 +4,7 @@ import {
   ChevronLeft, Shield, Timer, X, LayoutDashboard, Library, BookOpen, Calendar, 
   Clock, FileText, GraduationCap, Calculator, User, LogOut, Menu, UserCheck, 
   Flame, Send, ChevronDown, Globe, Award, Link2, ArrowRight, UserX, Youtube,
-  Layers, Download, Sparkles, Building2, Smartphone, Laptop
+  Layers, Download, Sparkles, Building2, Smartphone, Laptop, Copy
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStudy } from '../context/StudyContext';
@@ -932,17 +932,23 @@ export default function DashboardLayout() {
                 </div>
               </div>
 
-              <div className="bg-indigo-50 px-4 py-3 rounded-xl w-full flex items-center justify-between group cursor-copy" onClick={() => {
-                navigator.clipboard.writeText("apnacollegebihar@slc");
-                toast.success("UPI ID Copied!");
-              }}>
-                <div>
-                  <p className="text-xs font-bold text-indigo-600 mb-0.5">UPI ID (Tap to Copy)</p>
-                  <p className="text-sm font-bold text-slate-900">apnacollegebihar@slc</p>
+              <div 
+                className="bg-indigo-50/70 hover:bg-indigo-100/60 border border-indigo-200/80 px-4 py-3 rounded-2xl w-full flex items-center justify-between group cursor-pointer transition-all shadow-xs" 
+                onClick={() => {
+                  navigator.clipboard.writeText("apnacollegebihar@slc");
+                  toast.success("UPI ID Copied! ✅");
+                }}
+              >
+                <div className="text-left">
+                  <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider mb-0.5">UPI ID (Tap to Copy)</p>
+                  <p className="text-sm font-[900] text-slate-900 font-mono">apnacollegebihar@slc</p>
                 </div>
-                <div className="p-2 bg-indigo-100 text-indigo-600 rounded-lg group-hover:scale-110 transition-transform">
-                  <Link2 size={16} />
-                </div>
+                <button
+                  type="button"
+                  className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-1.5 transition-all shadow-sm group-hover:scale-105 cursor-pointer"
+                >
+                  <Copy size={13} strokeWidth={2.5} /> Copy
+                </button>
               </div>
             </div>
           </div>
