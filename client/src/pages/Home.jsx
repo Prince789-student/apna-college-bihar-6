@@ -148,20 +148,8 @@ export default function Home() {
   ];
 
   // ── High Performance Cached Data Fetching (0 Firestore reads per visitor) ──
+  // ── Real-Time Live BEU Notices (Matching Admin Panel 100%) ──
   useEffect(() => {
-    // 1. Instant display from local cache if available (0ms)
-    try {
-      const cached = localStorage.getItem('acb_home_stats_cache');
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        if (parsed.stats) setStats(parsed.stats);
-        if (parsed.donors) setTopDonors(parsed.donors);
-        if (parsed.notices) setBeuNotices(parsed.notices);
-      }
-    } catch (_) {}
-
-    // 2. Fetch server-cached home data (cached on Node.js server for 10 min -> 0 client Firestore reads)
-    const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
     const parseDate = (d) => {
       if (!d) return 0;
       if (typeof d === 'string' && d.includes('-')) return new Date(d).getTime() || 0;
@@ -172,51 +160,72 @@ export default function Home() {
       return new Date(d).getTime() || 0;
     };
 
+    const sortNotices = (list) => {
+      return [...list].sort((a, b) => {
+        const tA = parseDate(a.date || a.noticedate || a.createdAt);
+        const tB = parseDate(b.date || b.noticedate || b.createdAt);
+        if (tA === tB) {
+          const numA = Number(String(a.id).replace(/\D/g, '')) || 0;
+          const numB = Number(String(b.id).replace(/\D/g, '')) || 0;
+          if (numA !== numB) return numB - numA;
+          return (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0);
+        }
+        return tB - tA;
+      });
+    };
+
+    // 1. Live real-time Firestore listener (same as Admin Panel)
+    const qNotices = query(collection(db, 'beu_notifications'), limit(100));
+    const unsubNotices = onSnapshot(qNotices, (snap) => {
+      if (!snap.empty) {
+        const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const sorted = sortNotices(data);
+        setBeuNotices(sorted.slice(0, 3));
+      }
+    }, (err) => {
+      console.warn('Firestore notices listener fallback to API:', err);
+    });
+
+    // 2. Backup fetch from backend /api/beu/notices if Firestore is restricted
+    const apiBase = window.location.hostname === 'localhost' 
+      ? 'http://localhost:5000' 
+      : 'https://apna-college-bihar-6.onrender.com';
+
+    fetch(`${apiBase}/api/beu/notices`)
+      .then(res => res.json())
+      .then(json => {
+        if (json.success && Array.isArray(json.notices) && json.notices.length > 0) {
+          setBeuNotices(prev => {
+            if (prev.length === 0) return sortNotices(json.notices).slice(0, 3);
+            // Merge with existing
+            const map = new Map();
+            json.notices.forEach(n => map.set(String(n.id), n));
+            prev.forEach(n => map.set(String(n.id), { ...map.get(String(n.id)), ...n }));
+            return sortNotices(Array.from(map.values())).slice(0, 3);
+          });
+        }
+      })
+      .catch(() => {});
+
+    // 3. Fetch community stats
     fetch(`${apiBase}/api/public/home-stats`)
       .then(res => res.json())
       .then(json => {
-        if (json.success) {
-          if (json.stats) setStats(json.stats);
-          if (json.donors) setTopDonors(json.donors);
-          if (json.notices && Array.isArray(json.notices) && json.notices.length > 0) {
-            const data = [...json.notices];
-            data.sort((a, b) => {
-              const tA = parseDate(a.date || a.noticedate);
-              const tB = parseDate(b.date || b.noticedate);
-              return tB - tA;
-            });
-            setBeuNotices(data.slice(0, 3));
-          } else {
-            // Direct fallback to /api/beu/notices
-            fetch(`${apiBase}/api/beu/notices`)
-              .then(r => r.json())
-              .then(beuRes => {
-                if (beuRes.success && Array.isArray(beuRes.notices) && beuRes.notices.length > 0) {
-                  setBeuNotices(beuRes.notices.slice(0, 3));
-                }
-              })
-              .catch(() => {});
-          }
-          try {
-            localStorage.setItem('acb_home_stats_cache', JSON.stringify({
-              stats: json.stats,
-              donors: json.donors,
-              notices: (json.notices || []).slice(0, 3)
-            }));
-          } catch (_) {}
-        }
+        if (json.success && json.stats) setStats(json.stats);
       })
-      .catch(err => {
-        console.warn('Home cached stats fetch skipped, falling back to direct notices:', err);
-        fetch(`${apiBase}/api/beu/notices`)
-          .then(r => r.json())
-          .then(beuRes => {
-            if (beuRes.success && Array.isArray(beuRes.notices) && beuRes.notices.length > 0) {
-              setBeuNotices(beuRes.notices.slice(0, 3));
-            }
-          })
-          .catch(() => {});
-      });
+      .catch(() => {});
+
+    // 4. Live donors
+    const unsubDonors = onSnapshot(query(collection(db, 'donors'), orderBy('amount', 'desc'), limit(4)), (snap) => {
+      if (!snap.empty) {
+        setTopDonors(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      }
+    }, () => {});
+
+    return () => {
+      unsubNotices();
+      unsubDonors();
+    };
   }, []);
 
   return (
