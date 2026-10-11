@@ -111,12 +111,28 @@ function syncBuild() {
             const androidIndexHtmlPath = path.join(androidAssetsDir, 'index.html');
             if (fs.existsSync(androidIndexHtmlPath)) {
                 let androidHtml = fs.readFileSync(androidIndexHtmlPath, 'utf8');
-                // Replace everything from <div id="root"> up to <noscript> with clean <div id="root"></div>
                 androidHtml = androidHtml.replace(/<div id="root">[\s\S]*?(?=\s*<noscript>)/i, '<div id="root"></div>\n\n');
                 fs.writeFileSync(androidIndexHtmlPath, androidHtml, 'utf8');
             }
             console.log('Build assets synced to Android Capacitor assets successfully (Clean Root)!');
         }
+
+        // 3. Sync generated SEO static HTML pages to client/public so they are tracked in git and deployed to Vercel
+        const clientPublicDir = path.join(__dirname, 'public');
+        const publicBlogDir = path.join(clientPublicDir, 'blog');
+        if (!fs.existsSync(publicBlogDir)) fs.mkdirSync(publicBlogDir, { recursive: true });
+        copyRecursiveSync(path.join(srcDir, 'blog'), publicBlogDir);
+
+        const publicCollegeDir = path.join(clientPublicDir, 'college');
+        if (!fs.existsSync(publicCollegeDir)) fs.mkdirSync(publicCollegeDir, { recursive: true });
+        copyRecursiveSync(path.join(srcDir, 'college'), publicCollegeDir);
+
+        fs.readdirSync(srcDir).forEach(file => {
+            if (file.endsWith('.html') && file !== 'index.html') {
+                fs.copyFileSync(path.join(srcDir, file), path.join(clientPublicDir, file));
+            }
+        });
+        console.log('Build static HTML assets synced to client/public successfully!');
     } catch (err) {
         console.error('Error syncing build:', err);
         process.exit(1);

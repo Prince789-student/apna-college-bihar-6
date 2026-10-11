@@ -519,8 +519,8 @@
       "destination": "https://apna-college-bihar-6.onrender.com/p/:path*"
     },
     {
-      "source": "/:path*",
-      "destination": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index"
     }
   ],
   "cleanUrls": true,
