@@ -98,13 +98,42 @@ export default function AppHub() {
     ? new Date(user.metadata.creationTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
     : 'Recently';
 
+  const [attendanceStats, setAttendanceStats] = useState(null);
+
+  React.useEffect(() => {
+    if (!user) {
+      setAttendanceStats(null);
+      return;
+    }
+    const unsub = onSnapshot(doc(db, 'users', user.uid), (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (Array.isArray(data.attendance) && data.attendance.length > 0) {
+          const totalPresent = data.attendance.reduce((sum, s) => sum + (Number(s.present) || 0), 0);
+          const totalClasses = data.attendance.reduce((sum, s) => sum + (Number(s.total) || 0), 0);
+          const pct = totalClasses > 0 ? Math.round((totalPresent / totalClasses) * 100) : 0;
+          setAttendanceStats({
+            percentage: pct,
+            present: totalPresent,
+            total: totalClasses,
+            subjectsCount: data.attendance.length,
+            isSafe: pct >= 75
+          });
+        } else {
+          setAttendanceStats(null);
+        }
+      }
+    }, () => {});
+    return () => unsub();
+  }, [user]);
+
   const categories = [
     {
       title: "🎓 BEU",
       items: [
+        { name: 'Attendance', icon: <UserCheck size={24} />, path: '/attendance?standalone=true', color: 'text-emerald-600' },
         { name: 'BEU Result', icon: <Globe size={24} />, path: '/beu-result?standalone=true', color: 'text-blue-600' },
         { name: 'Free Mentorship', icon: <GraduationCap size={24} />, path: '/mentorship?standalone=true', color: 'text-emerald-600' },
-        { name: 'Attendance', icon: <UserCheck size={24} />, path: '/attendance?standalone=true', color: 'text-emerald-600' },
         { name: 'Timetable', icon: <Calendar size={24} />, path: '/timetable?standalone=true', color: 'text-amber-600' },
         { name: 'Notes', icon: <BookOpen size={24} />, path: '/notes?standalone=true', color: 'text-indigo-600' },
         { name: 'PYQ', icon: <FileText size={24} />, path: '/pyq?standalone=true', color: 'text-purple-600' },
@@ -227,58 +256,103 @@ export default function AppHub() {
 
       <div className="w-full max-w-2xl space-y-6 mb-6">
         
-        {/* Latest BEU Notifications */}
-        {beuNotices.length > 0 && (
-          <div className="bg-white border border-slate-200 rounded-[2.5rem] shadow-sm p-6 overflow-hidden relative">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
-            <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-red-50 text-red-600 rounded-xl flex items-center justify-center border border-red-100 shadow-sm">
-                  <span className="text-xl">🔥</span>
-                </div>
-                <div>
-                  <h2 className="text-sm font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Latest BEU Notices</h2>
-                  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest mt-1">Official Updates</p>
-                </div>
-              </div>
-              <Link to="/notifications" className="flex items-center gap-1.5 px-3 py-2 bg-slate-50 hover:bg-slate-100 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">
-                View All <ArrowRight size={12} />
-              </Link>
-            </div>
-            
-            <div className="space-y-3">
-              {beuNotices.map((notice) => (
+        {/* Single Compact Latest BEU Notice Bar (Only 1 latest notice) */}
+        {beuNotices.length > 0 && (() => {
+          const notice = beuNotices[0];
+          const noticeUrl = notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`);
+          const dateStr = notice.date || notice.noticedate 
+            ? (notice.date?.includes('/') ? notice.date : new Date(notice.date || notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }))
+            : 'Recent';
+
+          return (
+            <div className="bg-white border border-slate-200/90 hover:border-blue-300 rounded-2xl p-3 sm:p-3.5 shadow-sm transition-all relative overflow-hidden group">
+              <div className="flex items-center justify-between gap-3">
                 <a
-                  key={notice.id}
-                  href={notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`)}
+                  href={noticeUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="relative flex flex-col p-4 bg-slate-50 border border-slate-100 hover:border-blue-200 rounded-2xl transition-all group"
+                  className="flex items-center gap-2.5 min-w-0 flex-1"
                 >
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="px-2 py-1 bg-red-600 text-white text-[8px] font-black uppercase tracking-widest rounded-md animate-pulse">NEW</span>
-                    <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-1">
-                      <Calendar size={10} /> {notice.date || notice.noticedate ? (notice.date?.includes('/') ? notice.date : new Date(notice.date || notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })) : 'Unknown Date'}
-                    </span>
-                  </div>
-                  <h3 className="text-xs font-bold text-slate-800 group-hover:text-blue-600 transition-colors line-clamp-2 pr-10">
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-red-600 text-white text-[8px] font-black uppercase tracking-wider shrink-0 shadow-xs">
+                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                    LATEST NOTICE
+                  </span>
+                  <span className="text-[9px] font-bold text-slate-400 shrink-0 hidden xs:inline">
+                    {dateStr}
+                  </span>
+                  <h3 className="text-xs font-bold text-slate-800 group-hover:text-blue-600 transition-colors truncate">
                     {notice.title || notice.board}
                   </h3>
-                  
-                  {/* Admin Delete Action */}
+                </a>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <Link
+                    to="/notifications"
+                    className="flex items-center gap-1 px-2.5 py-1.5 bg-slate-100 hover:bg-blue-50 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-wider transition-colors whitespace-nowrap"
+                  >
+                    <span>View All</span>
+                    <ArrowRight size={11} />
+                  </Link>
+
                   {(user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN') && (
                     <button 
                       onClick={(e) => handleDeleteNotice(notice, e)} 
-                      className="absolute top-4 right-4 p-1.5 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-all z-20"
+                      className="p-1 text-slate-400 hover:text-red-500 rounded-lg transition-colors"
+                      title="Delete notice"
                     >
                       <Trash2 size={12} />
                     </button>
                   )}
-                </a>
-              ))}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* Dedicated Attendance Safe Guard Card (Placed prominently above tools) */}
+        <div className="bg-white border border-slate-200/90 rounded-[2rem] p-4.5 sm:p-5 shadow-sm hover:border-emerald-300 transition-all relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-28 h-28 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none" />
+          <div className="flex items-start justify-between gap-3 relative z-10">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-2xl flex items-center justify-center shrink-0 shadow-xs">
+                <UserCheck size={22} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-xs sm:text-sm font-[1000] text-slate-900 tracking-tight uppercase leading-none">
+                    75% Attendance Safe Guard
+                  </h3>
+                  <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 text-[8px] font-black uppercase tracking-wider">
+                    BEU Mandatory
+                  </span>
+                </div>
+                <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium mt-1">
+                  {attendanceStats && attendanceStats.total > 0 ? (
+                    <span>
+                      Overall: <strong className={attendanceStats.isSafe ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}>{attendanceStats.percentage}%</strong> ({attendanceStats.present}/{attendanceStats.total} lectures) • {attendanceStats.isSafe ? 'Eligible for BEU Exams ✅' : 'Shortfall Warning ⚠️'}
+                    </span>
+                  ) : (
+                    'Track daily lecture punch-ins & calculate shortfall to avoid exam debarment'
+                  )}
+                </p>
+              </div>
             </div>
           </div>
-        )}
+
+          <div className="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between gap-3 relative z-10">
+            <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" />
+              <span>Auto-synced with timetable</span>
+            </div>
+            <Link
+              to="/attendance?standalone=true"
+              className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black uppercase tracking-wider transition-all shadow-sm shadow-emerald-600/20 active:scale-95 flex items-center gap-1.5"
+            >
+              <span>Mark Attendance</span>
+              <ArrowRight size={12} />
+            </Link>
+          </div>
+        </div>
         {categories.map((cat, idx) => (
           <div key={idx} className="bg-white border border-slate-200 rounded-[2.5rem] shadow-sm p-6">
             <h3 className="text-xs font-[1000] text-slate-800 uppercase tracking-[0.2em] mb-4 text-center">
