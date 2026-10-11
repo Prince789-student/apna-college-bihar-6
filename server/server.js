@@ -50,14 +50,16 @@ if (process.env.ENABLE_WHATSAPP_BOT === 'true') {
 // 1. ABSOLUTE PRIORITY: APK DOWNLOAD ROUTE
 // This must be BEFORE any other middleware to avoid SPA interception
 app.get('/api/download-apk', (req, res) => {
-    const apkPath = path.join(__dirname, 'public', 'ApnaCollegeBihar_Stable.apk');
+    const v58Path = path.join(__dirname, 'public', 'apna-college-bihar-v58.apk');
+    const stablePath = path.join(__dirname, 'public', 'ApnaCollegeBihar_Stable.apk');
+    const apkPath = fs.existsSync(v58Path) ? v58Path : (fs.existsSync(stablePath) ? stablePath : null);
     
-    if (fs.existsSync(apkPath)) {
+    if (apkPath) {
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');
         res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-        res.setHeader('Content-Disposition', 'attachment; filename="ApnaCollegeBihar_Stable.apk"');
+        res.setHeader('Content-Disposition', 'attachment; filename="apna-college-bihar-v58.apk"');
         return res.sendFile(apkPath);
     } else {
         res.status(404).send("APK file not found on server.");

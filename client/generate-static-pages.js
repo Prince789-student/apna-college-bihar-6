@@ -227,7 +227,7 @@ const navHeaderHtml = `
       <a href="/contact" class="hover:text-blue-600 transition-colors">Contact</a>
     </nav>
     <div class="flex items-center gap-2">
-      <a href="/apna-college-bihar-v54.apk" download class="px-3.5 py-2 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Get App</a>
+      <a href="/apna-college-bihar-v58.apk" download class="px-3.5 py-2 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Get App</a>
     </div>
   </div>
 </header>

@@ -174,7 +174,7 @@ export default function DownloadPage() {
                 </div>
                 <div>
                   <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Android Mobile App</h2>
-                  <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">Version 56 · Android 7.0+</p>
+                  <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">Version 58 · Android 7.0+</p>
                 </div>
               </div>
 
@@ -205,17 +205,17 @@ export default function DownloadPage() {
 
             <div>
               <div className="flex items-center justify-between text-xs text-slate-500 font-bold mb-3 px-1">
-                <span>File Size: ~22 MB</span>
+                <span>File Size: ~21 MB</span>
                 <span>Format: Android .APK Package</span>
               </div>
 
               <a
-                href="/apna-college-bihar-v57.apk"
-                download="apna-college-bihar-v57.apk"
+                href="/apna-college-bihar-v58.apk"
+                download="apna-college-bihar-v58.apk"
                 className="w-full py-4 px-6 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg shadow-slate-900/20 active:scale-95 transition-all text-center"
               >
                 <Download size={18} />
-                <span>Download Android APK (v57)</span>
+                <span>Download Android APK (v58)</span>
               </a>
 
               <p className="text-[11px] text-slate-400 font-medium text-center mt-3">

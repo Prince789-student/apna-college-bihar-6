@@ -102,7 +102,13 @@ function syncBuild() {
                 fs.rmSync(androidAssetsSubdir, { recursive: true, force: true });
                 console.log('Cleaned old asset bundles from android/app/src/main/assets/public/assets');
             }
-            if (!fs.existsSync(androidAssetsDir)) {
+            if (fs.existsSync(androidAssetsDir)) {
+                fs.readdirSync(androidAssetsDir).forEach(f => {
+                    if (f.endsWith('.apk') || f.endsWith('.exe') || f.endsWith('.zip') || f.endsWith('.aab')) {
+                        fs.unlinkSync(path.join(androidAssetsDir, f));
+                    }
+                });
+            } else {
                 fs.mkdirSync(androidAssetsDir, { recursive: true });
             }
             copyRecursiveSync(srcDir, androidAssetsDir, (p, name) => !name.endsWith('.apk') && !name.endsWith('.zip') && !name.endsWith('.aab') && !name.endsWith('.exe'));
