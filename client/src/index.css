@@ -149,5 +149,134 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  /* Jitter-Style Motion Design Keyframes & Utilities */
+  @keyframes jitter-float-1 {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-9px) rotate(0.8deg);
+    }
+  }
+
+  @keyframes jitter-float-2 {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-11px) rotate(-0.9deg);
+    }
+  }
+
+  @keyframes jitter-float-3 {
+    0%, 100% {
+      transform: translateY(0px) scale(1);
+    }
+    50% {
+      transform: translateY(-7px) scale(1.02);
+    }
+  }
+
+  @keyframes jitter-fade-scale {
+    from {
+      opacity: 0;
+      transform: scale(0.975) translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .animate-jitter-float-1 {
+    animation: jitter-float-1 5s ease-in-out infinite;
+  }
+  .animate-jitter-float-2 {
+    animation: jitter-float-2 5.8s ease-in-out infinite;
+    animation-delay: 0.9s;
+  }
+  .animate-jitter-float-3 {
+    animation: jitter-float-3 5.2s ease-in-out infinite;
+    animation-delay: 1.5s;
+  }
+  .animate-jitter-fade {
+    animation: jitter-fade-scale 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  /* 3D Isometric & Cursor Motion Physics for Hero Showcase */
+  .perspective-stage {
+    perspective: 1200px;
+    perspective-origin: center top;
+  }
+  .stage-3d-card {
+    transform: rotateX(7deg) rotateY(-3deg) rotateZ(0.5deg);
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+  }
+  .stage-3d-card:hover {
+    transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateY(-4px);
+  }
+
+  @keyframes cursor-glide {
+    0% {
+      top: 65%;
+      left: 18%;
+      transform: scale(1);
+    }
+    18% {
+      top: 30%;
+      left: 45%;
+      transform: scale(0.9);
+    }
+    22% {
+      top: 30%;
+      left: 45%;
+      transform: scale(1);
+    }
+    45% {
+      top: 72%;
+      left: 80%;
+      transform: scale(0.9);
+    }
+    50% {
+      top: 72%;
+      left: 80%;
+      transform: scale(1);
+    }
+    72% {
+      top: 32%;
+      left: 22%;
+      transform: scale(0.9);
+    }
+    76% {
+      top: 32%;
+      left: 22%;
+      transform: scale(1);
+    }
+    100% {
+      top: 65%;
+      left: 18%;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes pulse-ring {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.9;
+    }
+    100% {
+      transform: scale(2.4);
+      opacity: 0;
+    }
+  }
+
+  .animate-cursor-glide {
+    animation: cursor-glide 12s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+  }
+  .animate-pulse-ring {
+    animation: pulse-ring 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+  }
 }
 
