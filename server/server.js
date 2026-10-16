@@ -50,16 +50,17 @@ if (process.env.ENABLE_WHATSAPP_BOT === 'true') {
 // 1. ABSOLUTE PRIORITY: APK DOWNLOAD ROUTE
 // This must be BEFORE any other middleware to avoid SPA interception
 app.get('/api/download-apk', (req, res) => {
+    const v59Path = path.join(__dirname, 'public', 'apna-college-bihar-v59.apk');
     const v58Path = path.join(__dirname, 'public', 'apna-college-bihar-v58.apk');
     const stablePath = path.join(__dirname, 'public', 'ApnaCollegeBihar_Stable.apk');
-    const apkPath = fs.existsSync(v58Path) ? v58Path : (fs.existsSync(stablePath) ? stablePath : null);
+    const apkPath = fs.existsSync(v59Path) ? v59Path : (fs.existsSync(v58Path) ? v58Path : (fs.existsSync(stablePath) ? stablePath : null));
     
     if (apkPath) {
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');
         res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-        res.setHeader('Content-Disposition', 'attachment; filename="apna-college-bihar-v58.apk"');
+        res.setHeader('Content-Disposition', 'attachment; filename="apna-college-bihar-v59.apk"');
         return res.sendFile(apkPath);
     } else {
         res.status(404).send("APK file not found on server.");
@@ -211,6 +212,10 @@ let sitemapCacheTime = 0;
 
 app.get('/sitemap.xml', async (req, res) => {
     res.header('Content-Type', 'application/xml');
+    const staticSitemapPath = path.join(__dirname, 'public', 'sitemap.xml');
+    if (fs.existsSync(staticSitemapPath)) {
+        return res.sendFile(staticSitemapPath);
+    }
     
     // Serve from cache if it is less than 12 hours old
     if (cachedSitemap && (Date.now() - sitemapCacheTime < 12 * 60 * 60 * 1000)) {
@@ -227,7 +232,12 @@ app.get('/sitemap.xml', async (req, res) => {
   <url><loc>https://apnacollegebihar.online/syllabus</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://apnacollegebihar.online/cgpa</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://apnacollegebihar.online/ugeac-predictor</loc><changefreq>yearly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://apnacollegebihar.online/hackathons</loc><changefreq>daily</changefreq><priority>0.9</priority></url>`;
+  <url><loc>https://apnacollegebihar.online/blog</loc><changefreq>daily</changefreq><priority>0.95</priority></url>
+  <url><loc>https://apnacollegebihar.online/about</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://apnacollegebihar.online/contact</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://apnacollegebihar.online/privacy-policy</loc><changefreq>monthly</changefreq><priority>0.85</priority></url>
+  <url><loc>https://apnacollegebihar.online/terms</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>
+  <url><loc>https://apnacollegebihar.online/disclaimer</loc><changefreq>monthly</changefreq><priority>0.75</priority></url>`;
 
         // Fetch dynamic routes from Firestore
         if (admin && admin.firestore) {

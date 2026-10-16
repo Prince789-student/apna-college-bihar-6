@@ -732,7 +732,7 @@ export default function DashboardLayout() {
                                 const shareData = {
                                   title: 'Apna College Bihar App - No More Distractions!',
                                   text: '📱 Padhai ke waqt Instagram/Reels se distract hote ho? Apna College Bihar App try karo! Isme "Strict Study Blocker" hai!\n\nSteps:\n1. App Download karke Dashboard me jao.\n2. Niche "Focus Mode" on karo.\n3. Timer set karo aur padhai shuru! (Baki saare apps block ho jayenge)\n\nSaare Notes aur PYQs bhi yahi milenge!\nDownload now: ',
-                                  url: 'https://www.apnacollegebihar.online/apna-college-bihar-v58.apk'
+                                  url: 'https://www.apnacollegebihar.online/apna-college-bihar-v59.apk'
                                 };
                                 try {
                                   if (navigator.share) {
@@ -854,7 +854,7 @@ export default function DashboardLayout() {
                   </div>
                   <div className="text-left">
                     <span className="text-xs font-bold block text-emerald-800">Download Android App</span>
-                    <span className="text-[10px] text-emerald-600 font-medium">BEU Alerts & Fast Notes (v57)</span>
+                    <span className="text-[10px] text-emerald-600 font-medium">BEU Alerts & Fast Notes (v59)</span>
                   </div>
                </Link>
 

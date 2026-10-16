@@ -57,8 +57,8 @@ if (collegeData && typeof collegeData === 'object') {
   });
 }
 
-// Add static HTML pages from public/ (e.g. cutoff rank pages, percentile guides)
-// Strip .html extension — Vercel cleanUrls serves them without extension
+// Add curated static HTML pages from public/, explicitly EXCLUDING programmatic doorway pages (cutoff-rank, colleges-at-*)
+// This ensures Google AdSense audits only high-value, unique editorial and tool pages.
 const publicDir = path.join(__dirname, 'public');
 if (fs.existsSync(publicDir)) {
   const publicFiles = fs.readdirSync(publicDir);
@@ -67,24 +67,15 @@ if (fs.existsSync(publicDir)) {
       file.endsWith('.html') &&
       !file.startsWith('google') &&
       file !== 'index.html' &&
-      file !== 'offline.html'
+      file !== 'offline.html' &&
+      !file.includes('-cutoff-rank-') &&
+      !file.startsWith('colleges-at-') &&
+      !file.includes('cutoff')
     ) {
-      // Remove .html so URL matches cleanUrls canonical
       const slug = file.replace(/\.html$/, '');
       urls.add(`/${slug}`);
     }
   });
-
-  // Also add blog subdirectory pages
-  const blogSubDir = path.join(publicDir, '..', '..', 'server', 'public', 'blog');
-  if (fs.existsSync(blogSubDir)) {
-    fs.readdirSync(blogSubDir).forEach(file => {
-      if (file.endsWith('.html') && file !== 'index.html') {
-        const slug = file.replace(/\.html$/, '');
-        urls.add(`/blog/${slug}`);
-      }
-    });
-  }
 }
 
 
