@@ -99,9 +99,11 @@ export function AuthProvider({ children }) {
       const basePayload = {
         uid: u.uid,
         email: u.email || '',
-        phone: u.phoneNumber || '',
         lastLogin: serverTimestamp()
       };
+      if (u.phoneNumber) {
+        basePayload.phone = u.phoneNumber;
+      }
       // Only set founder super admin role; do NOT overwrite existing ADMIN or custom roles with STUDENT
       if (isFounder) {
         basePayload.role = ROLES.SUPER_ADMIN;
@@ -156,7 +158,6 @@ export function AuthProvider({ children }) {
           uid: u.uid,
           name: u.displayName || 'Scholar',
           email: u.email || '',
-          phone: u.phoneNumber || '',
           role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT,
           createdAt: serverTimestamp(),
           lastLogin: serverTimestamp(),
@@ -164,6 +165,9 @@ export function AuthProvider({ children }) {
           groupsCreatedToday: 0,
           lastGroupCreateDate: null
         };
+        if (u.phoneNumber) {
+          newUserData.phone = u.phoneNumber;
+        }
         await setDoc(docRef, newUserData, { merge: true });
         setUser({ ...u, ...newUserData });
         localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ ...newUserData, uid: u.uid }));
@@ -172,15 +176,18 @@ export function AuthProvider({ children }) {
       console.warn("[AUTH] Firestore profile read failed (quota or offline):", readErr?.code || readErr?.message);
       // Fallback: guaranteed base write without reading
       try {
-        await setDoc(docRef, {
+        const fallbackWrite = {
           uid: u.uid,
           email: u.email || '',
           name: u.displayName || 'Scholar',
-          phone: u.phoneNumber || '',
           role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT,
           lastLogin: serverTimestamp(),
           createdAt: serverTimestamp()
-        }, { merge: true });
+        };
+        if (u.phoneNumber) {
+          fallbackWrite.phone = u.phoneNumber;
+        }
+        await setDoc(docRef, fallbackWrite, { merge: true });
       } catch (_) {}
 
       const cachedRaw = localStorage.getItem(USER_CACHE_KEY);
@@ -190,10 +197,12 @@ export function AuthProvider({ children }) {
           uid: u.uid,
           email: u.email || '',
           name: u.displayName || 'Scholar',
-          phone: u.phoneNumber || '',
           role: isFounder ? ROLES.SUPER_ADMIN : ROLES.STUDENT,
           createdAt: new Date().toISOString()
         };
+        if (u.phoneNumber) {
+          fallbackUserData.phone = u.phoneNumber;
+        }
         setUser({ ...u, ...fallbackUserData });
         localStorage.setItem(USER_CACHE_KEY, JSON.stringify(fallbackUserData));
       } else {

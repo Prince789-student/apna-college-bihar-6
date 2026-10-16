@@ -4,7 +4,7 @@ import {
   Shield, Users, FileText, Bell, 
   Trash2, Ban, UserCheck, UploadCloud, 
   Search, RefreshCw, BarChart3, 
-  ChevronRight, AlertCircle, Loader2,
+  ChevronRight, ChevronLeft, Phone, Smartphone, AlertCircle, Loader2,
   FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye, Calendar, Heart,
   Sparkles
 } from 'lucide-react';
@@ -30,6 +30,8 @@ export default function AdminPanel() {
   const [monthlyTracker, setMonthlyTracker] = useState({ monthName: 'September 2026', totalCollection: 0, targetGoal: 10000 });
   const [userSearch, setUserSearch] = useState('');
   const [userSortOrder, setUserSortOrder] = useState('newest');
+  const [userPage, setUserPage] = useState(1);
+  const USERS_PER_PAGE = 20;
   const [groups, setGroups] = useState([]);
   const [docs, setDocs] = useState([]);
   const [anns, setAnns] = useState([]);
@@ -150,6 +152,48 @@ export default function AdminPanel() {
       return String(val);
     }
   };
+
+  const filteredAndSortedUsers = React.useMemo(() => {
+    const query = userSearch.toLowerCase().trim();
+    return users.filter(u => {
+      if (!query) return true;
+      const phoneVal = String(u.phone || u.phoneNumber || u.mobile || u.whatsapp || '');
+      return (
+        (u.id || '').toLowerCase().includes(query) ||
+        (u.uid || '').toLowerCase().includes(query) ||
+        (u.name || '').toLowerCase().includes(query) ||
+        (u.email || '').toLowerCase().includes(query) ||
+        phoneVal.toLowerCase().includes(query) ||
+        (u.role || '').toLowerCase().includes(query) ||
+        (u.homeDistrict || '').toLowerCase().includes(query) ||
+        (u.district || '').toLowerCase().includes(query) ||
+        (u.home_district || '').toLowerCase().includes(query) ||
+        (u.collegeName || '').toLowerCase().includes(query) ||
+        (u.college || '').toLowerCase().includes(query) ||
+        (u.college_name || '').toLowerCase().includes(query) ||
+        (u.branch || '').toLowerCase().includes(query) ||
+        (u.deviceId || '').toLowerCase().includes(query) ||
+        (u.device_id || '').toLowerCase().includes(query)
+      );
+    }).sort((a, b) => {
+      const dateA = getUserTimestamp(a);
+      const dateB = getUserTimestamp(b);
+      if (dateA === dateB) {
+        return (b.id || '').localeCompare(a.id || '');
+      }
+      return userSortOrder === 'newest' ? dateB - dateA : dateA - dateB;
+    });
+  }, [users, userSearch, userSortOrder]);
+
+  const totalUserPages = Math.max(1, Math.ceil(filteredAndSortedUsers.length / USERS_PER_PAGE));
+  const paginatedUsers = React.useMemo(() => {
+    const start = (userPage - 1) * USERS_PER_PAGE;
+    return filteredAndSortedUsers.slice(start, start + USERS_PER_PAGE);
+  }, [filteredAndSortedUsers, userPage]);
+
+  useEffect(() => {
+    setUserPage(1);
+  }, [userSearch, userSortOrder]);
 
   const getAdminHeaders = async () => {
     const headers = { 'Content-Type': 'application/json' };
@@ -1116,301 +1160,310 @@ if (!isAdmin) return (
             </div>
           )}
 
-          <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] border border-slate-200/80 overflow-hidden shadow-2xl animate-in fade-in duration-500">
-            <div className="p-4 md:p-8 border-b border-slate-200/50 flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <h2 className="text-sm font-black uppercase text-slate-500 tracking-widest flex items-center gap-2">
-                <span>Scholar Directory</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-black tracking-normal">
-                  {users.length} Registered
+          <div className="bg-white rounded-2xl md:rounded-3xl border border-slate-200/90 shadow-xl overflow-hidden animate-in fade-in duration-500">
+            <div className="p-4 md:p-6 border-b border-slate-200/70 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50/50">
+              <div className="flex items-center gap-3">
+                <h2 className="text-sm font-black uppercase text-slate-700 tracking-wider flex items-center gap-2">
+                  <span>Scholar Directory</span>
+                </h2>
+                <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700 text-[10px] font-black">
+                  {users.length} Total
                 </span>
-              </h2>
-              <div className="flex flex-col md:flex-row items-center gap-3 w-full md:w-auto">
+                {filteredAndSortedUsers.length !== users.length && (
+                  <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">
+                    {filteredAndSortedUsers.length} Found
+                  </span>
+                )}
+              </div>
+              <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
                 <button
                    onClick={handleSyncUsers}
                    disabled={syncingUsers}
-                   className="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-50 text-blue-600 hover:bg-blue-100 active:scale-95 rounded-2xl text-[11px] font-black uppercase tracking-wider transition-all disabled:opacity-50 border border-blue-200/60 shadow-sm"
+                   className="w-full sm:w-auto flex items-center justify-center gap-2 px-3.5 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 active:scale-95 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all disabled:opacity-50 border border-blue-200/60 shadow-xs cursor-pointer"
                    title="Sync all registered Firebase Auth users into the database"
                 >
                    <RefreshCw size={13} className={syncingUsers ? "animate-spin" : ""} />
                    <span>{syncingUsers ? "Syncing..." : "Sync Auth Users"}</span>
                 </button>
-                <div className="relative group w-full md:w-72">
-                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500" size={16} />
+                <div className="relative group w-full sm:w-64">
+                   <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500" size={14} />
                    <input 
                      value={userSearch}
                      onChange={(e) => setUserSearch(e.target.value)}
-                     placeholder="Search UID/Name/District/College..." 
-                     className="w-full bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-2.5 pl-12 text-slate-900 text-[12px] font-bold outline-none" 
+                     placeholder="Search Name/Phone/College/UID..." 
+                     className="w-full bg-white border border-slate-200 focus:border-blue-500 rounded-xl py-2 pl-9 pr-3 text-slate-900 text-xs font-semibold outline-none transition-colors" 
                    />
                 </div>
                 <select 
                    value={userSortOrder} 
                    onChange={e => setUserSortOrder(e.target.value)}
-                   className="w-full md:w-auto bg-slate-100 border-2 border-transparent focus:border-blue-500/50 rounded-2xl p-2.5 text-slate-900 text-[12px] font-bold outline-none cursor-pointer appearance-none text-center"
+                   className="w-full sm:w-auto bg-white border border-slate-200 focus:border-blue-500 rounded-xl py-2 px-3 text-slate-700 text-xs font-bold outline-none cursor-pointer"
                 >
                    <option value="newest">Newest Joined</option>
                    <option value="oldest">Oldest Joined</option>
                 </select>
               </div>
            </div>
+
            {/* MOBILE CARDS VIEW (md:hidden) */}
            <div className="block md:hidden divide-y divide-slate-100 p-3 space-y-3">
-             {users.filter(u => {
-               const query = userSearch.toLowerCase();
+             {paginatedUsers.map(u => {
+               const phone = u.phone || u.phoneNumber || u.mobile || u.whatsapp || '';
                return (
-                 u.id?.toLowerCase().includes(query) ||
-                 u.uid?.toLowerCase().includes(query) ||
-                 u.name?.toLowerCase().includes(query) ||
-                 u.email?.toLowerCase().includes(query) ||
-                 u.phone?.toLowerCase().includes(query) ||
-                 u.role?.toLowerCase().includes(query) ||
-                 u.homeDistrict?.toLowerCase().includes(query) ||
-                 u.district?.toLowerCase().includes(query) ||
-                 u.home_district?.toLowerCase().includes(query) ||
-                 u.collegeName?.toLowerCase().includes(query) ||
-                 u.college?.toLowerCase().includes(query) ||
-                 u.college_name?.toLowerCase().includes(query) ||
-                 u.branch?.toLowerCase().includes(query) ||
-                 u.deviceId?.toLowerCase().includes(query) ||
-                 u.device_id?.toLowerCase().includes(query)
+                 <div key={u.id} className="bg-slate-50/70 border border-slate-200/90 rounded-2xl p-4 space-y-3 shadow-xs">
+                   <div className="flex items-start justify-between gap-3">
+                     <div className="flex items-center gap-3 min-w-0">
+                       <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center font-black text-white text-xs shrink-0 shadow-xs">
+                         {u.name?.charAt(0).toUpperCase() || 'S'}
+                       </div>
+                       <div className="min-w-0">
+                         <p className="text-xs font-black text-slate-900 uppercase truncate">{u.name || 'Scholar'}</p>
+                         <p className="text-[11px] font-semibold text-slate-600 truncate">{u.email || 'No email'}</p>
+                         <p className="text-[9px] font-mono text-slate-400 truncate mt-0.5 select-all">UID: {u.id || u.uid}</p>
+                       </div>
+                     </div>
+                     <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0 ${
+                       u.role === ROLES.SUPER_ADMIN ? 'bg-amber-100 text-amber-700 border border-amber-200' :
+                       u.role === ROLES.ADMIN ? 'bg-indigo-100 text-indigo-700 border border-indigo-200' :
+                       'bg-slate-100 text-slate-600 border border-slate-200'
+                     }`}>
+                       {u.role || 'STUDENT'}
+                     </span>
+                   </div>
+
+                   <div className="grid grid-cols-2 gap-2 text-[10px] bg-white p-2.5 rounded-xl border border-slate-100 font-medium">
+                     <div>
+                       <span className="text-slate-400 block text-[9px] font-bold uppercase">Phone:</span>
+                       {phone ? (
+                         <a href={`tel:${phone}`} className="font-mono font-bold text-emerald-700 flex items-center gap-1 hover:underline">
+                           <Phone size={10} className="text-emerald-600" />
+                           {phone}
+                         </a>
+                       ) : (
+                         <span className="text-slate-400 italic">Not linked</span>
+                       )}
+                     </div>
+                     <div>
+                       <span className="text-slate-400 block text-[9px] font-bold uppercase">College:</span>
+                       <span className="font-bold text-slate-700 truncate block" title={u.collegeName || u.college}>{u.collegeName || u.college || 'N/A'}</span>
+                     </div>
+                     <div>
+                       <span className="text-slate-400 block text-[9px] font-bold uppercase">District / Branch:</span>
+                       <span className="font-bold text-slate-700">{u.district || u.homeDistrict || 'N/A'} {u.branch ? `• ${u.branch}` : ''}</span>
+                     </div>
+                     <div>
+                       <span className="text-slate-400 block text-[9px] font-bold uppercase">Joined Date:</span>
+                       <span className="font-bold text-slate-700">{getJoinDate(u)}</span>
+                     </div>
+                   </div>
+
+                   {/* Operations Row */}
+                   <div className="flex items-center justify-between pt-1 border-t border-slate-200/60">
+                     <span className={`text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-tight ${u.banned ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-700'}`}>
+                       {u.banned ? 'BANNED' : u.status || 'ACTIVE'}
+                     </span>
+
+                     <div className="flex items-center gap-1.5">
+                       {u.role !== ROLES.SUPER_ADMIN && (
+                         <button 
+                           onClick={() => toggleBan(u.id, u.banned)} 
+                           className={`px-2.5 py-1.5 rounded-xl text-[10px] font-bold transition-all flex items-center gap-1 ${u.banned ? 'bg-emerald-600 text-white' : 'bg-red-50 text-red-600 border border-red-200'}`}
+                         >
+                           {u.banned ? <UserCheck size={12}/> : <Ban size={12}/>}
+                           <span>{u.banned ? 'Unban' : 'Ban'}</span>
+                         </button>
+                       )}
+                       {isSuper && u.role !== ROLES.SUPER_ADMIN && (
+                         <button 
+                           onClick={() => changeRole(u.id, u.role === 'STUDENT' ? 'ADMIN' : 'STUDENT')} 
+                           className="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl text-[10px] font-bold flex items-center gap-1"
+                         >
+                           {u.role === 'STUDENT' ? <UserPlus size={12}/> : <UserMinus size={12}/>}
+                           <span>{u.role === 'STUDENT' ? 'Make Admin' : 'Demote'}</span>
+                         </button>
+                       )}
+                       {u.role !== ROLES.SUPER_ADMIN && (
+                         <button 
+                           onClick={() => deleteUser(u.id)} 
+                           className="p-1.5 bg-slate-100 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-xl transition-colors"
+                           title="Delete User"
+                         >
+                           <Trash2 size={13}/>
+                         </button>
+                       )}
+                     </div>
+                   </div>
+                 </div>
                );
-             }).sort((a, b) => {
-                const dateA = getUserTimestamp(a);
-                const dateB = getUserTimestamp(b);
-                if (dateA === dateB) {
-                  return (b.id || '').localeCompare(a.id || '');
-                }
-                return userSortOrder === 'newest' ? dateB - dateA : dateA - dateB;
-             }).map(u => (
-               <div key={u.id} className="bg-slate-50/80 border border-slate-200/90 rounded-2xl p-4 space-y-3 shadow-xs">
-                 <div className="flex items-start justify-between gap-3">
-                   <div className="flex items-center gap-3 min-w-0">
-                     <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-black text-white text-xs shrink-0 shadow-xs">
-                       {u.name?.charAt(0).toUpperCase() || 'S'}
-                     </div>
-                     <div className="min-w-0">
-                       <p className="text-xs font-black text-slate-900 uppercase truncate">{u.name || 'Scholar'}</p>
-                       <p className="text-[11px] font-semibold text-slate-600 truncate">{u.email || 'No email'}</p>
-                       <p className="text-[9px] font-mono text-slate-400 truncate mt-0.5 select-all">UID: {u.id || u.uid}</p>
-                     </div>
-                   </div>
-                   <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider shrink-0 ${
-                     u.role === ROLES.SUPER_ADMIN ? 'bg-amber-100 text-amber-700 border border-amber-200' :
-                     u.role === ROLES.ADMIN ? 'bg-indigo-100 text-indigo-700 border border-indigo-200' :
-                     'bg-slate-100 text-slate-600 border border-slate-200'
-                   }`}>
-                     {u.role || 'STUDENT'}
-                   </span>
-                 </div>
-
-                 <div className="grid grid-cols-2 gap-2 text-[10px] bg-white p-2.5 rounded-xl border border-slate-100 font-medium">
-                   <div>
-                     <span className="text-slate-400 block text-[9px] font-bold uppercase">Phone:</span>
-                     <span className="font-bold text-slate-700">{u.phone || 'N/A'}</span>
-                   </div>
-                   <div>
-                     <span className="text-slate-400 block text-[9px] font-bold uppercase">College:</span>
-                     <span className="font-bold text-slate-700 truncate block" title={u.collegeName || u.college}>{u.collegeName || u.college || 'N/A'}</span>
-                   </div>
-                   <div>
-                     <span className="text-slate-400 block text-[9px] font-bold uppercase">District / Branch:</span>
-                     <span className="font-bold text-slate-700">{u.district || u.homeDistrict || 'N/A'} {u.branch ? `• ${u.branch}` : ''}</span>
-                   </div>
-                   <div>
-                     <span className="text-slate-400 block text-[9px] font-bold uppercase">Joined Date:</span>
-                     <span className="font-bold text-slate-700">{getJoinDate(u)}</span>
-                   </div>
-                 </div>
-
-                 {/* Operations Row */}
-                 <div className="flex items-center justify-between pt-1 border-t border-slate-200/60">
-                   <span className={`text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-tight ${u.banned ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-700'}`}>
-                     {u.banned ? 'BANNED' : u.status || 'ACTIVE'}
-                   </span>
-
-                   <div className="flex items-center gap-1.5">
-                     {u.role !== ROLES.SUPER_ADMIN && (
-                       <button 
-                         onClick={() => toggleBan(u.id, u.banned)} 
-                         className={`px-2.5 py-1.5 rounded-xl text-[10px] font-bold transition-all flex items-center gap-1 ${u.banned ? 'bg-emerald-600 text-white' : 'bg-red-50 text-red-600 border border-red-200'}`}
-                       >
-                         {u.banned ? <UserCheck size={12}/> : <Ban size={12}/>}
-                         <span>{u.banned ? 'Unban' : 'Ban'}</span>
-                       </button>
-                     )}
-                     {isSuper && u.role !== ROLES.SUPER_ADMIN && (
-                       <button 
-                         onClick={() => changeRole(u.id, u.role === 'STUDENT' ? 'ADMIN' : 'STUDENT')} 
-                         className="px-2.5 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-xl text-[10px] font-bold flex items-center gap-1"
-                       >
-                         {u.role === 'STUDENT' ? <UserPlus size={12}/> : <UserMinus size={12}/>}
-                         <span>{u.role === 'STUDENT' ? 'Make Admin' : 'Demote'}</span>
-                       </button>
-                     )}
-                     {u.role !== ROLES.SUPER_ADMIN && (
-                       <button 
-                         onClick={() => deleteUser(u.id)} 
-                         className="p-1.5 bg-slate-100 hover:bg-red-50 text-slate-400 hover:text-red-600 rounded-xl transition-colors"
-                         title="Delete User"
-                       >
-                         <Trash2 size={13}/>
-                       </button>
-                     )}
-                   </div>
-                 </div>
+             })}
+             {paginatedUsers.length === 0 && (
+               <div className="text-center py-10 text-slate-400 text-xs font-bold uppercase tracking-wider">
+                 No scholars found matching your search.
                </div>
-             ))}
+             )}
            </div>
 
            {/* DESKTOP TABLE VIEW (hidden md:block) */}
            <div className="hidden md:block overflow-x-auto">
              <table className="w-full text-left">
                <thead>
-                 <tr className="bg-slate-100/40 text-[9px] font-black uppercase tracking-[0.2em] text-slate-500 border-b border-slate-200/50">
-                   <th className="py-5 px-8">Identity & UID</th>
-                   <th className="py-5 px-8">Contact & Device</th>
-                   <th className="py-5 px-8">Academics</th>
-                   <th className="py-5 px-8">Rank & Verification</th>
-                   <th className="py-5 px-8">Activity Timeline</th>
-                   <th className="py-5 px-8 text-right">Operations</th>
+                 <tr className="bg-slate-100/70 text-[10px] font-black uppercase tracking-wider text-slate-500 border-b border-slate-200/80">
+                   <th className="py-3 px-5">Identity & UID</th>
+                   <th className="py-3 px-5">Contact</th>
+                   <th className="py-3 px-5">Academics</th>
+                   <th className="py-3 px-5">Rank & Status</th>
+                   <th className="py-3 px-5">Timeline</th>
+                   <th className="py-3 px-5 text-right">Operations</th>
                  </tr>
                </thead>
-               <tbody className="divide-y divide-slate-800/30">
-                 {users.filter(u => {
-                   const query = userSearch.toLowerCase();
+               <tbody className="divide-y divide-slate-100">
+                 {paginatedUsers.map(u => {
+                   const phone = u.phone || u.phoneNumber || u.mobile || u.whatsapp || '';
                    return (
-                     u.id?.toLowerCase().includes(query) ||
-                     u.uid?.toLowerCase().includes(query) ||
-                     u.name?.toLowerCase().includes(query) ||
-                     u.email?.toLowerCase().includes(query) ||
-                     u.phone?.toLowerCase().includes(query) ||
-                     u.role?.toLowerCase().includes(query) ||
-                     u.homeDistrict?.toLowerCase().includes(query) ||
-                     u.district?.toLowerCase().includes(query) ||
-                     u.home_district?.toLowerCase().includes(query) ||
-                     u.collegeName?.toLowerCase().includes(query) ||
-                     u.college?.toLowerCase().includes(query) ||
-                     u.college_name?.toLowerCase().includes(query) ||
-                     u.branch?.toLowerCase().includes(query) ||
-                     u.deviceId?.toLowerCase().includes(query) ||
-                     u.device_id?.toLowerCase().includes(query)
-                   );
-                 }).sort((a, b) => {
-                    const dateA = getUserTimestamp(a);
-                    const dateB = getUserTimestamp(b);
-                    if (dateA === dateB) {
-                      return (b.id || '').localeCompare(a.id || '');
-                    }
-                    return userSortOrder === 'newest' ? dateB - dateA : dateA - dateB;
-                  }).map(u => (
-                   <tr key={u.id} className="hover:bg-slate-100/20 transition-all group">
-                     {/* Identity & UID */}
-                     <td className="py-6 px-8">
-                        <div className="flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-black text-white text-[11px] group-hover:scale-110 transition-transform">
-                              {u.name?.charAt(0).toUpperCase() || 'S'}
-                            </div>
-                           <div>
-                              <p className="text-[13px] font-black text-slate-900 uppercase tracking-tight">{u.name}</p>
-                              <p className="text-[10px] font-bold text-slate-600 truncate max-w-[180px]">{u.email}</p>
-                              <p className="text-[9px] font-mono text-slate-400 truncate max-w-[180px] mt-1 select-all" title={u.id || u.uid}>ID: {u.id || u.uid}</p>
-                           </div>
-                        </div>
-                     </td>
-
-                     {/* Contact & Device */}
-                     <td className="py-6 px-8">
-                        <div className="space-y-1">
-                          <div className="flex gap-2 items-center">
-                            <div className="inline-block px-2.5 py-1 bg-slate-100/50 border border-slate-200/80 rounded-lg">
-                              <span className="text-[10px] font-black text-slate-600 tracking-wider">
-                                {u.phone || 'NO PHONE'}
-                              </span>
-                            </div>
-                            {u.wantsCall !== undefined && (
-                              <span title={u.wantsCall ? "User wants calls from ACB team" : "User does not want calls"} className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter inline-block ${u.wantsCall ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20' : 'bg-red-500/10 text-red-500 border border-red-500/20'}`}>
-                                {u.wantsCall ? 'CALL OK' : 'NO CALL'}
-                              </span>
-                            )}
+                     <tr key={u.id} className="hover:bg-slate-50/80 transition-colors group">
+                       {/* Identity & UID */}
+                       <td className="py-3 px-5">
+                          <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center font-black text-white text-[11px] group-hover:scale-105 transition-transform shrink-0">
+                                {u.name?.charAt(0).toUpperCase() || 'S'}
+                              </div>
+                             <div className="min-w-0">
+                                <p className="text-xs font-black text-slate-900 uppercase tracking-tight truncate max-w-[170px]">{u.name || 'Scholar'}</p>
+                                <p className="text-[11px] font-medium text-slate-500 truncate max-w-[170px]">{u.email || 'No email'}</p>
+                                <p className="text-[9px] font-mono text-slate-400 truncate max-w-[170px] select-all" title={u.id || u.uid}>ID: {u.id || u.uid}</p>
+                             </div>
                           </div>
-                          <p className="text-[9px] font-mono text-slate-500 truncate max-w-[150px] select-all" title={u.deviceId || u.device_id}>
-                            Device: {u.deviceId || u.device_id || 'N/A'}
-                          </p>
-                          <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter inline-block ${u.banned?'bg-red-500/10 text-red-400 border border-red-500/20':'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}`}>
-                            {u.banned ? 'BANNED' : u.status || 'ACTIVE'}
-                          </span>
-                        </div>
-                     </td>
+                       </td>
 
-                     {/* Academics */}
-                     <td className="py-6 px-8">
-                        <div>
-                           <p className="text-[12px] font-black text-slate-800 uppercase tracking-tight leading-tight max-w-[200px] truncate" title={u.collegeName || u.college || u.college_name}>
-                             {u.collegeName || u.college || u.college_name || 'N/A'}
-                           </p>
-                           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-1">
-                             District: <span className="text-indigo-600">{u.homeDistrict || u.district || u.home_district || 'N/A'}</span>
-                           </p>
-                           {u.branch && (
-                             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
-                               Branch: <span className="text-indigo-600">{u.branch}</span> {u.admissionYear && `(${u.admissionYear})`}
-                             </p>
-                           )}
-                           {u.dob && (
-                             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">
-                               DOB: <span className="text-indigo-600">{new Date(u.dob).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
-                             </p>
-                           )}
-                        </div>
-                     </td>
-
-                     {/* Rank & Verification */}
-                     <td className="py-6 px-8">
-                        <div className="space-y-1">
-                           <div className="flex items-center gap-1.5">
-                              <Shield size={12} className={u.role===ROLES.SUPER_ADMIN?'text-amber-500':u.role===ROLES.ADMIN?'text-blue-500':'text-slate-600'} />
-                              <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">{u.role}</span>
-                           </div>
-                           <div>
-                              <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider ${u.is_verified || u.isVerified || u.emailVerified ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-slate-50 text-slate-400 border border-slate-100'}`}>
-                                {u.is_verified || u.isVerified || u.emailVerified ? 'EMAIL VERIFIED' : 'UNVERIFIED EMAIL'}
+                       {/* Contact */}
+                       <td className="py-3 px-5">
+                          <div className="space-y-1">
+                            {phone ? (
+                              <a 
+                                href={`tel:${phone}`} 
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/80 rounded-lg text-[11px] font-mono font-bold transition-colors"
+                                title="Click to call"
+                              >
+                                <Phone size={11} className="text-emerald-600 shrink-0" />
+                                <span>{phone}</span>
+                              </a>
+                            ) : (
+                              <span className="text-[11px] text-slate-400 font-medium italic">No phone linked</span>
+                            )}
+                            <div className="flex items-center gap-1.5">
+                              {u.wantsCall !== undefined && (
+                                <span title={u.wantsCall ? "User wants calls from ACB team" : "User does not want calls"} className={`text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-tight ${u.wantsCall ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>
+                                  {u.wantsCall ? 'Call OK' : 'No Call'}
+                                </span>
+                              )}
+                              <span className={`text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-tight ${u.banned ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-700'}`}>
+                                {u.banned ? 'BANNED' : u.status || 'ACTIVE'}
                               </span>
-                           </div>
-                        </div>
-                     </td>
+                            </div>
+                          </div>
+                       </td>
 
-                     {/* Activity Timeline */}
-                     <td className="py-6 px-8">
-                        <div className="space-y-1">
-                           <p className="text-[10px] font-bold text-slate-700">
-                             Joined: <span className="text-slate-900">{getJoinDate(u)}</span>
-                           </p>
-                           <p className="text-[9px] font-bold text-slate-500">
-                             Active: <span className="text-slate-700">{getFormattedDate(u.lastLogin || u.last_login)}</span>
-                           </p>
-                        </div>
-                     </td>
+                       {/* Academics */}
+                       <td className="py-3 px-5">
+                          <div className="max-w-[200px]">
+                             <p className="text-xs font-bold text-slate-800 uppercase tracking-tight truncate" title={u.collegeName || u.college || u.college_name}>
+                               {u.collegeName || u.college || u.college_name || 'N/A'}
+                             </p>
+                             <p className="text-[10px] font-semibold text-slate-500 uppercase truncate mt-0.5">
+                               Dist: <span className="text-indigo-600 font-bold">{u.homeDistrict || u.district || u.home_district || 'N/A'}</span>
+                               {u.branch ? ` • ${u.branch}` : ''}
+                             </p>
+                             {u.dob && (
+                               <p className="text-[9px] text-slate-400 truncate mt-0.5">
+                                 DOB: {new Date(u.dob).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
+                               </p>
+                             )}
+                          </div>
+                       </td>
 
-                     {/* Operations */}
-                     <td className="py-6 px-8 text-right space-x-2 whitespace-nowrap">
-                        {u.role !== ROLES.SUPER_ADMIN && (
-                          <button onClick={()=>toggleBan(u.id, u.banned)} className={`p-2 rounded-xl transition-all ${u.banned?'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-slate-900':'bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-slate-900'}`} title={u.banned ? 'Unban User' : 'Ban User'}>
-                             {u.banned ? <UserCheck size={16}/> : <Ban size={16}/>}
-                          </button>
-                        )}
-                        {isSuper && u.role !== ROLES.SUPER_ADMIN && (
-                          <button onClick={()=>changeRole(u.id, u.role==='STUDENT'?'ADMIN':'STUDENT')} className="p-2 bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-slate-900 rounded-xl" title="Change Role">
-                            {u.role==='STUDENT'?<UserPlus size={16}/>:<UserMinus size={16}/>}
-                          </button>
-                        )}
-                        {u.role!==ROLES.SUPER_ADMIN && (
-                          <button onClick={()=>deleteUser(u.id)} className="p-2 bg-slate-800 text-slate-500 hover:text-red-500 rounded-xl" title="Delete User"><Trash2 size={16}/></button>
-                        )}
+                       {/* Rank & Status */}
+                       <td className="py-3 px-5">
+                          <div className="space-y-1">
+                             <div className="flex items-center gap-1.5">
+                                <Shield size={12} className={u.role===ROLES.SUPER_ADMIN?'text-amber-500':u.role===ROLES.ADMIN?'text-blue-500':'text-slate-500'} />
+                                <span className="text-[10px] font-black text-slate-700 uppercase tracking-wider">{u.role || 'STUDENT'}</span>
+                             </div>
+                             <div>
+                                <span className={`text-[8px] font-black px-1.5 py-0.5 rounded-full uppercase tracking-tight ${u.is_verified || u.isVerified || u.emailVerified ? 'bg-blue-50 text-blue-600 border border-blue-100' : 'bg-slate-100 text-slate-400'}`}>
+                                  {u.is_verified || u.isVerified || u.emailVerified ? 'Verified' : 'Unverified'}
+                                </span>
+                             </div>
+                          </div>
+                       </td>
+
+                       {/* Activity Timeline */}
+                       <td className="py-3 px-5">
+                          <div className="space-y-0.5 text-[10px]">
+                             <p className="text-slate-600 font-medium">
+                               Joined: <strong className="text-slate-900">{getJoinDate(u)}</strong>
+                             </p>
+                             <p className="text-slate-400 text-[9px]">
+                               Active: {getFormattedDate(u.lastLogin || u.last_login)}
+                             </p>
+                          </div>
+                       </td>
+
+                       {/* Operations */}
+                       <td className="py-3 px-5 text-right space-x-1.5 whitespace-nowrap">
+                          {u.role !== ROLES.SUPER_ADMIN && (
+                            <button onClick={()=>toggleBan(u.id, u.banned)} className={`p-1.5 rounded-xl transition-all ${u.banned?'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200':'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200'}`} title={u.banned ? 'Unban User' : 'Ban User'}>
+                               {u.banned ? <UserCheck size={14}/> : <Ban size={14}/>}
+                            </button>
+                          )}
+                          {isSuper && u.role !== ROLES.SUPER_ADMIN && (
+                            <button onClick={()=>changeRole(u.id, u.role==='STUDENT'?'ADMIN':'STUDENT')} className="p-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 border border-indigo-200 rounded-xl" title={u.role === 'STUDENT' ? 'Promote to Admin' : 'Demote to Student'}>
+                              {u.role==='STUDENT'?<UserPlus size={14}/>:<UserMinus size={14}/>}
+                            </button>
+                          )}
+                          {u.role!==ROLES.SUPER_ADMIN && (
+                            <button onClick={()=>deleteUser(u.id)} className="p-1.5 bg-slate-100 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors" title="Delete User"><Trash2 size={14}/></button>
+                          )}
+                       </td>
+                     </tr>
+                   );
+                 })}
+                 {paginatedUsers.length === 0 && (
+                   <tr>
+                     <td colSpan={6} className="py-12 text-center text-slate-400 text-xs font-bold uppercase tracking-wider">
+                       No scholars found matching your search.
                      </td>
                    </tr>
-                 ))}
+                 )}
                </tbody>
              </table>
+           </div>
+
+           {/* PAGINATION FOOTER */}
+           <div className="p-3.5 sm:p-4 bg-slate-50 border-t border-slate-200/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+             <span className="text-slate-500 font-medium">
+               Showing <strong className="text-slate-800">{filteredAndSortedUsers.length === 0 ? 0 : (userPage - 1) * USERS_PER_PAGE + 1}</strong> to <strong className="text-slate-800">{Math.min(userPage * USERS_PER_PAGE, filteredAndSortedUsers.length)}</strong> of <strong className="text-slate-800">{filteredAndSortedUsers.length}</strong> scholars
+             </span>
+             <div className="flex items-center gap-2">
+               <button
+                 onClick={() => setUserPage(p => Math.max(p - 1, 1))}
+                 disabled={userPage <= 1}
+                 className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-1 shadow-xs cursor-pointer"
+               >
+                 <ChevronLeft size={14} />
+                 <span>Prev</span>
+               </button>
+               <span className="px-3 py-1 text-slate-600 font-bold text-xs bg-white border border-slate-200 rounded-xl">
+                 Page {userPage} of {totalUserPages}
+               </span>
+               <button
+                 onClick={() => setUserPage(p => Math.min(p + 1, totalUserPages))}
+                 disabled={userPage >= totalUserPages}
+                 className="px-3 py-1.5 bg-white border border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center gap-1 shadow-xs cursor-pointer"
+               >
+                 <span>Next</span>
+                 <ChevronRight size={14} />
+               </button>
+             </div>
            </div>
         </div>
       </div>

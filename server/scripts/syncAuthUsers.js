@@ -33,11 +33,15 @@ async function syncAuthUsers() {
       uid: u.uid,
       email: u.email || '',
       name: u.displayName || 'Scholar',
-      phone: u.phoneNumber || '',
       role: isFounder ? 'SUPER_ADMIN' : 'STUDENT',
       createdAt: u.metadata.creationTime ? new Date(u.metadata.creationTime) : new Date(),
       lastLogin: u.metadata.lastSignInTime ? new Date(u.metadata.lastSignInTime) : new Date()
     };
+    // Only set phone if Firebase Auth actually has a phone number,
+    // otherwise preserve the phone number the user entered in their profile
+    if (u.phoneNumber) {
+      data.phone = u.phoneNumber;
+    }
 
     batch.set(userDocRef, data, { merge: true });
     count++;
