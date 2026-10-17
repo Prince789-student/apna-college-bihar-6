@@ -148,6 +148,23 @@ export function AuthProvider({ children }) {
           userData.role = ROLES.STUDENT;
         }
 
+        // Auto-heal phone number if present in student's local device cache
+        let cachedPhone = null;
+        try {
+          const cachedRaw = localStorage.getItem(USER_CACHE_KEY);
+          if (cachedRaw) {
+            const cachedParsed = JSON.parse(cachedRaw);
+            if (cachedParsed?.phone && cachedParsed.phone.trim() !== '' && cachedParsed.phone !== 'NOT LINKED') {
+              cachedPhone = cachedParsed.phone.trim();
+            }
+          }
+        } catch (_) {}
+
+        if ((!userData.phone || userData.phone.trim() === '' || userData.phone === 'NOT LINKED') && cachedPhone) {
+          patch.phone = cachedPhone;
+          userData.phone = cachedPhone;
+        }
+
         await setDoc(docRef, patch, { merge: true });
         const finalData = { ...u, ...userData, ...patch };
         setUser(finalData);
