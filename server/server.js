@@ -504,11 +504,13 @@ app.get('/api/admin/users', protect, adminOnly, authenticatedLimiter, asyncHandl
                     uid: u.uid,
                     email: u.email || '',
                     name: u.displayName || (u.email ? u.email.split('@')[0] : 'Scholar'),
-                    phone: u.phoneNumber || '',
                     role: isFounder ? 'SUPER_ADMIN' : 'STUDENT',
                     createdAt: u.metadata?.creationTime ? new Date(u.metadata.creationTime) : new Date(),
                     lastLogin: u.metadata?.lastSignInTime ? new Date(u.metadata.lastSignInTime) : new Date()
                 };
+                if (u.phoneNumber) {
+                    newUserObj.phone = u.phoneNumber;
+                }
                 userMap.set(u.uid, newUserObj);
                 missingInFirestore.push(newUserObj);
             } else {

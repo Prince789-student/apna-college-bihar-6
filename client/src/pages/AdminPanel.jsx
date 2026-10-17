@@ -6,7 +6,7 @@ import {
   Search, RefreshCw, BarChart3, 
   ChevronRight, ChevronLeft, Phone, Smartphone, AlertCircle, Loader2,
   FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye, Calendar, Heart,
-  Sparkles
+  Sparkles, Edit2
 } from 'lucide-react';
 import { db, storage } from '../firebase';
 import { 
@@ -157,7 +157,7 @@ export default function AdminPanel() {
     const query = userSearch.toLowerCase().trim();
     return users.filter(u => {
       if (!query) return true;
-      const phoneVal = String(u.phone || u.phoneNumber || u.mobile || u.whatsapp || '');
+      const phoneVal = String(u.phone || u.phoneNumber || u.mobile || u.whatsapp || u.contact || u.phone_number || '');
       return (
         (u.id || '').toLowerCase().includes(query) ||
         (u.uid || '').toLowerCase().includes(query) ||
@@ -526,6 +526,25 @@ export default function AdminPanel() {
     if (!window.confirm('Delete this user permanently?')) return;
     await deleteDoc(doc(db, 'users', uid));
     flash('User deleted');
+  };
+
+  const handleEditPhone = async (userObj) => {
+    const currentPhone = userObj.phone || userObj.phoneNumber || userObj.mobile || userObj.whatsapp || userObj.contact || userObj.phone_number || '';
+    const input = window.prompt(`Scholar "${userObj.name || 'Student'}" (${userObj.email || userObj.id}) ke liye 10-digit Phone Number daalein:`, currentPhone);
+    if (input === null) return;
+    const cleanPhone = input.replace(/\D/g, '').trim();
+    if (input.trim() !== '' && cleanPhone.length < 10) {
+      alert("Kripya valid 10-digit phone number daalein!");
+      return;
+    }
+    try {
+      const userDocRef = doc(db, 'users', userObj.id || userObj.uid);
+      await setDoc(userDocRef, { phone: cleanPhone }, { merge: true });
+      setUsers(prev => prev.map(u => (u.id === userObj.id || u.uid === userObj.uid) ? { ...u, phone: cleanPhone } : u));
+      flash(`Phone number successfully update ho gaya! 📱✅`, 'ok');
+    } catch (err) {
+      alert("Phone update failed: " + err.message);
+    }
   };
 
   const handleAddOrPromoteAdmin = async (e) => {
@@ -1208,7 +1227,7 @@ if (!isAdmin) return (
            {/* MOBILE CARDS VIEW (md:hidden) */}
            <div className="block md:hidden divide-y divide-slate-100 p-3 space-y-3">
              {paginatedUsers.map(u => {
-               const phone = u.phone || u.phoneNumber || u.mobile || u.whatsapp || '';
+               const phone = u.phone || u.phoneNumber || u.mobile || u.whatsapp || u.contact || u.phone_number || '';
                return (
                  <div key={u.id} className="bg-slate-50/70 border border-slate-200/90 rounded-2xl p-4 space-y-3 shadow-xs">
                    <div className="flex items-start justify-between gap-3">
@@ -1235,12 +1254,22 @@ if (!isAdmin) return (
                      <div>
                        <span className="text-slate-400 block text-[9px] font-bold uppercase">Phone:</span>
                        {phone ? (
-                         <a href={`tel:${phone}`} className="font-mono font-bold text-emerald-700 flex items-center gap-1 hover:underline">
-                           <Phone size={10} className="text-emerald-600" />
-                           {phone}
-                         </a>
+                         <div className="flex items-center gap-1.5 flex-wrap">
+                           <a href={`tel:${phone}`} className="font-mono font-bold text-emerald-700 flex items-center gap-1 hover:underline">
+                             <Phone size={10} className="text-emerald-600" />
+                             {phone}
+                           </a>
+                           <button type="button" onClick={() => handleEditPhone(u)} className="p-0.5 text-slate-400 hover:text-blue-600 rounded" title="Edit phone">
+                             <Edit2 size={10} />
+                           </button>
+                         </div>
                        ) : (
-                         <span className="text-slate-400 italic">Not linked</span>
+                         <div className="flex items-center gap-1.5">
+                           <span className="text-slate-400 italic text-[10px]">Not linked</span>
+                           <button type="button" onClick={() => handleEditPhone(u)} className="text-[9px] text-blue-600 font-bold underline hover:text-blue-800">
+                             + Add
+                           </button>
+                         </div>
                        )}
                      </div>
                      <div>
@@ -1318,7 +1347,7 @@ if (!isAdmin) return (
                </thead>
                <tbody className="divide-y divide-slate-100">
                  {paginatedUsers.map(u => {
-                   const phone = u.phone || u.phoneNumber || u.mobile || u.whatsapp || '';
+                   const phone = u.phone || u.phoneNumber || u.mobile || u.whatsapp || u.contact || u.phone_number || '';
                    return (
                      <tr key={u.id} className="hover:bg-slate-50/80 transition-colors group">
                        {/* Identity & UID */}
@@ -1339,16 +1368,36 @@ if (!isAdmin) return (
                        <td className="py-3 px-5">
                           <div className="space-y-1">
                             {phone ? (
-                              <a 
-                                href={`tel:${phone}`} 
-                                className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/80 rounded-lg text-[11px] font-mono font-bold transition-colors"
-                                title="Click to call"
-                              >
-                                <Phone size={11} className="text-emerald-600 shrink-0" />
-                                <span>{phone}</span>
-                              </a>
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <a 
+                                  href={`tel:${phone}`} 
+                                  className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/80 rounded-lg text-[11px] font-mono font-bold transition-colors"
+                                  title="Click to call"
+                                >
+                                  <Phone size={11} className="text-emerald-600 shrink-0" />
+                                  <span>{phone}</span>
+                                </a>
+                                <button
+                                  type="button"
+                                  onClick={() => handleEditPhone(u)}
+                                  className="p-1 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                  title="Edit phone number"
+                                >
+                                  <Edit2 size={11} />
+                                </button>
+                              </div>
                             ) : (
-                              <span className="text-[11px] text-slate-400 font-medium italic">No phone linked</span>
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-[11px] text-slate-400 font-medium italic">No phone linked</span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleEditPhone(u)}
+                                  className="px-2 py-0.5 text-[10px] font-bold text-blue-600 hover:text-white hover:bg-blue-600 bg-blue-50 border border-blue-200 rounded-md transition-all shadow-xs"
+                                  title="Link Phone Number"
+                                >
+                                  + Add Phone
+                                </button>
+                              </div>
                             )}
                             <div className="flex items-center gap-1.5">
                               {u.wantsCall !== undefined && (

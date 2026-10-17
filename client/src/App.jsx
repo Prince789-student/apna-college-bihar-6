@@ -104,6 +104,9 @@ function GlobalProfilePrompt() {
       setBranch(user.branch || '');
       setAdmissionYear(user.admissionYear || '');
       setDob(user.dob || '');
+      if (!user.phone || user.phone.trim() === '' || user.phone === 'NOT LINKED') {
+        localStorage.removeItem('profile_prompt_dismissed');
+      }
     }
   }, [user]);
 
@@ -124,9 +127,11 @@ function GlobalProfilePrompt() {
   const isAdmin = user?.role === 'admin' || user?.role === 'super_admin' || user?.email === 'prince86944@gmail.com';
   const isSkipped = dismissed || localStorage.getItem('profile_prompt_dismissed') === 'true';
   const isCompleted = user?.profileCompleted === true || user?.profileCompleted === "true";
+  const hasPhone = Boolean(user?.phone && user.phone.trim() !== "" && user.phone !== "NOT LINKED");
 
-  const needsProfileUpdate = user && !isAdmin && !isSkipped && !isCompleted && (
-    (!user?.phone || user?.phone?.trim() === "" || user?.phone === "NOT LINKED") ||
+  const needsProfileUpdate = user && !isAdmin && !isSkipped && (
+    !hasPhone ||
+    !isCompleted ||
     (!user?.name || user?.name?.trim() === "" || user?.name === "Scholar") ||
     (!user?.collegeName || user?.collegeName?.trim() === "") ||
     (!user?.district || user?.district?.trim() === "") ||
