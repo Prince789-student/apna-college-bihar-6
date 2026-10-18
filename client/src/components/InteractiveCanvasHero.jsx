@@ -336,38 +336,12 @@ export default function InteractiveCanvasHero({ isNative }) {
         <div className="absolute top-[40px] right-[10%] w-[420px] h-[420px] rounded-full bg-violet-400/15 blur-3xl animate-jitter-float-2" />
       </div>
 
-      <div className="container mx-auto max-w-5xl flex flex-col items-center text-center relative z-10">
+      <div className="container mx-auto max-w-5xl flex flex-col items-center text-center relative z-10 pt-2 sm:pt-4">
         
-        {/* ── Top Executive Brand Title: APNA COLLEGE BIHAR ── */}
-        <div className="flex flex-col items-center justify-center text-center mb-6 pt-1">
-          {/* Animated Official BEU Portal Pill */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/90 border border-blue-200/80 text-xs font-bold text-blue-700 shadow-xs mb-3 backdrop-blur-md hover:scale-105 transition-transform">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
-            </span>
-            <span className="font-heading tracking-wide uppercase text-[11px] font-black text-blue-800">
-              Official Academic Platform
-            </span>
-            <span className="text-slate-300">•</span>
-            <span className="text-slate-600 font-semibold text-[11px]">38+ Bihar Engineering Colleges</span>
-          </div>
-
-          {/* Grand Apna College Bihar Typography with Luminous Flowing Gradient */}
-          <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-[1000] tracking-tight leading-[1.05] text-slate-900 mb-2 uppercase">
-            APNA COLLEGE <span className="bg-gradient-to-r from-blue-600 via-indigo-600 via-violet-600 to-blue-600 bg-clip-text text-transparent animate-gradient-flow inline-block">BIHAR</span>
-          </h1>
-
-          {/* Clean Subtitle Slogan */}
-          <p className="text-slate-600 text-xs sm:text-sm md:text-base font-medium max-w-2xl leading-relaxed">
-            Free Semester Notes, 5+ Yrs Solved PYQs, Real-Time BEU Exam Radar & 1-on-1 Senior Mentorship
-          </p>
-        </div>
-
         {/* ══════════════════════════════════════════════════════════════════════════ */}
         {/* ── 3D INTERACTIVE CANVAS-UI STAGE MOCKUP (Full Jitter Motion) ── */}
         {/* ══════════════════════════════════════════════════════════════════════════ */}
-        <div className="relative w-full max-w-4xl mx-auto perspective-stage">
+        <div className="relative w-full max-w-4xl mx-auto perspective-stage pt-4 sm:pt-6">
           {/* Floating Badges */}
           <div className="hidden lg:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white/95 border border-indigo-200 shadow-xl shadow-indigo-500/15 backdrop-blur-xl absolute -top-5 -left-6 z-30 animate-jitter-float-1 pointer-events-none">
             <div className="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs">
