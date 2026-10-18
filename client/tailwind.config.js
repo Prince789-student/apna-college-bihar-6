@@ -37,6 +37,8 @@ export default {
         neon: '#06b6d4',
       },
       boxShadow: {
+        '2xs': '0 1px 2px 0 rgba(0, 0, 0, 0.03)',
+        'xs': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
         'glow-sm': '0 0 15px rgba(56, 189, 248, 0.25)',
         'glow-md': '0 0 30px rgba(56, 189, 248, 0.35)',
         'glow-lg': '0 0 50px rgba(99, 102, 241, 0.3)',

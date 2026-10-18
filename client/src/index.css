@@ -54,7 +54,7 @@
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center font-heading font-bold text-xs sm:text-sm py-2 px-3.5 rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-200 hover:border-blue-300 shadow-2xs transition-colors duration-200 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center font-heading font-bold text-xs sm:text-sm py-2 px-3.5 rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-200 hover:border-blue-300 shadow-sm transition-colors duration-200 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
   }
 
   .btn-dark {
