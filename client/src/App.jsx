@@ -131,15 +131,14 @@ function GlobalProfilePrompt() {
   if (loading || !user || !canShow) return null;
 
   const isAdmin = user?.role === 'admin' || user?.role === 'super_admin' || user?.email === 'prince86944@gmail.com';
-  const isSkipped = dismissed || localStorage.getItem('profile_prompt_dismissed') === 'true';
 
   const hasPhone = Boolean(user?.phone && user.phone.trim() !== '' && user.phone !== 'NOT LINKED');
   const hasCollege = Boolean(user?.collegeName && user.collegeName.trim() !== '');
   const isCompleted = Boolean(user?.profileCompleted === true || user?.profileCompleted === "true");
   const hasCallPref = user?.wantsCall !== undefined;
 
-  // Show prompt if user is logged in, not admin, not dismissed, and needs either profile details or call choice
-  const needsProfileUpdate = user && !isAdmin && !isSkipped && (
+  // Show prompt if user is logged in, not admin, not locally dismissed, and needs either profile details or call choice
+  const needsProfileUpdate = user && !isAdmin && !dismissed && (
     !isCompleted || !hasPhone || !hasCollege || !hasCallPref
   );
 
@@ -212,15 +211,6 @@ function GlobalProfilePrompt() {
   return (
     <div className="fixed inset-0 z-[99999] bg-[#0a0f1d]/90 backdrop-blur-md flex items-center justify-center p-4 font-['Inter'] animate-in fade-in duration-300">
       <div className="bg-white border border-slate-200/60 p-6 md:p-9 rounded-[2.5rem] shadow-2xl max-w-[460px] w-full relative overflow-hidden group">
-        {/* Close / Dismiss */}
-        <button
-          onClick={handleDismiss}
-          className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center bg-slate-100 rounded-full text-slate-400 hover:bg-slate-200 hover:text-slate-800 transition-colors z-20 font-black text-sm cursor-pointer"
-          title="Close / Skip for now"
-        >
-          ✕
-        </button>
-
         <div className="absolute -top-10 -right-10 w-36 h-36 bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
         <div className="absolute -bottom-10 -left-10 w-36 h-36 bg-emerald-500/10 blur-[50px] rounded-full pointer-events-none" />
 
@@ -344,13 +334,6 @@ function GlobalProfilePrompt() {
                   {isSubmitting ? "Saving details..." : "Save & Continue ➔"}
                 </button>
               </form>
-
-              <button
-                onClick={handleDismiss}
-                className="mt-3 text-slate-400 hover:text-slate-600 text-[10px] font-black uppercase tracking-widest transition-colors cursor-pointer"
-              >
-                Skip for now
-              </button>
             </>
           )}
 
