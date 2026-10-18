@@ -2,8 +2,9 @@ import React, { useEffect, useRef } from 'react';
 
 /**
  * InteractiveCanvasBackground - Canvas-UI inspired particle constellation engine
- * Renders an interactive 60fps connected particle graph across the whole page.
- * Tracks global mouse movements, magnetic particle repulsion, and click impulse waves.
+ * Renders a high-performance 60fps connected particle graph across the entire website.
+ * Tracks global mouse/touch movements, magnetic particle repulsion, click impulse waves,
+ * and ambient orbital breathing dynamics.
  */
 export default function InteractiveCanvasBackground() {
   const canvasRef = useRef(null);
@@ -14,111 +15,149 @@ export default function InteractiveCanvasBackground() {
 
     const ctx = canvas.getContext('2d', { alpha: true });
     let animationFrameId;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-    // Global mouse state
-    const mouse = {
+    const resize = () => {
+      if (!canvas) return;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Global cursor & interaction state
+    const interaction = {
       x: -1000,
       y: -1000,
-      radius: 150,
+      radius: 140,
+      active: false,
       clickWave: 0,
       clickX: 0,
       clickY: 0
     };
 
-    const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    // Responsive particle count (80-100 particles for rich look without lagging)
-    const particleCount = Math.min(Math.floor((width * height) / 11000), 90);
+    // Responsive particle count (balanced for 60fps across phones & 4K screens)
+    const particleCount = Math.min(Math.max(Math.floor((width * height) / 14000), 45), 95);
     const particles = [];
-    const colors = [
-      'rgba(37, 99, 235, ',   // Brand Blue
-      'rgba(99, 102, 241, ',  // Indigo
-      'rgba(124, 58, 237, ',  // Violet
-      'rgba(16, 185, 129, '   // Emerald
+    const colorPalette = [
+      'rgba(37, 99, 235, ',   // Brand Blue (#2563eb)
+      'rgba(99, 102, 241, ',  // Indigo (#6366f1)
+      'rgba(16, 185, 129, ',  // Emerald (#10b981)
+      'rgba(14, 165, 233, '   // Sky Blue (#0ea5e9)
     ];
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.7,
-        vy: (Math.random() - 0.5) * 0.7,
-        baseRadius: Math.random() * 2 + 1.2,
-        radius: Math.random() * 2 + 1.2,
-        colorPrefix: colors[Math.floor(Math.random() * colors.length)],
-        alpha: Math.random() * 0.45 + 0.35
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6,
+        baseRadius: Math.random() * 1.8 + 1.2,
+        radius: Math.random() * 1.8 + 1.2,
+        colorPrefix: colorPalette[Math.floor(Math.random() * colorPalette.length)],
+        alpha: Math.random() * 0.35 + 0.3
       });
     }
 
-    // Global mouse tracking across the entire website
+    // Mouse listeners (global, non-blocking)
     const onMouseMove = (e) => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
+      interaction.x = e.clientX;
+      interaction.y = e.clientY;
+      interaction.active = true;
     };
 
     const onMouseLeave = () => {
-      mouse.x = -1000;
-      mouse.y = -1000;
+      interaction.active = false;
+      interaction.x = -1000;
+      interaction.y = -1000;
     };
 
     const onClick = (e) => {
-      mouse.clickX = e.clientX;
-      mouse.clickY = e.clientY;
-      mouse.clickWave = 0.05;
+      interaction.clickX = e.clientX;
+      interaction.clickY = e.clientY;
+      interaction.clickWave = 0.05;
+    };
+
+    // Touch support for mobile devices
+    const onTouchMove = (e) => {
+      if (e.touches && e.touches[0]) {
+        interaction.x = e.touches[0].clientX;
+        interaction.y = e.touches[0].clientY;
+        interaction.active = true;
+      }
+    };
+
+    const onTouchEnd = () => {
+      interaction.active = false;
+      interaction.x = -1000;
+      interaction.y = -1000;
     };
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
     window.addEventListener('mouseleave', onMouseLeave);
     window.addEventListener('click', onClick, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
+
+    let tick = 0;
 
     // 60FPS Render Loop
     const render = () => {
       ctx.clearRect(0, 0, width, height);
+      tick += 0.015;
 
       // Render Expanding Click Impulse Wave
-      if (mouse.clickWave > 0) {
+      if (interaction.clickWave > 0) {
         ctx.beginPath();
-        ctx.arc(mouse.clickX, mouse.clickY, mouse.clickWave * 160, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(59, 130, 246, ${Math.max(0, 1 - mouse.clickWave)})`;
-        ctx.lineWidth = 2.5;
+        ctx.arc(interaction.clickX, interaction.clickY, interaction.clickWave * 180, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(37, 99, 235, ${Math.max(0, 0.7 - interaction.clickWave * 0.7)})`;
+        ctx.lineWidth = 2.2;
         ctx.stroke();
-        mouse.clickWave += 0.035;
-        if (mouse.clickWave > 1) mouse.clickWave = 0;
+        interaction.clickWave += 0.035;
+        if (interaction.clickWave > 1) interaction.clickWave = 0;
       }
 
       // Update & Draw Particles
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
-        // Position update
+        // Velocity motion
         p.x += p.vx;
         p.y += p.vy;
 
-        // Wrap around screen boundaries smoothly
-        if (p.x < -10) p.x = width + 10;
-        else if (p.x > width + 10) p.x = -10;
+        // Subtle ambient orbital drift
+        p.x += Math.sin(tick + i) * 0.15;
+        p.y += Math.cos(tick + i) * 0.15;
 
-        if (p.y < -10) p.y = height + 10;
-        else if (p.y > height + 10) p.y = -10;
+        // Screen boundary wrapping
+        if (p.x < -20) p.x = width + 20;
+        else if (p.x > width + 20) p.x = -20;
 
-        // Interactive Mouse Magnetic Repulsion
-        const dx = mouse.x - p.x;
-        const dy = mouse.y - p.y;
-        const dist = Math.hypot(dx, dy);
+        if (p.y < -20) p.y = height + 20;
+        else if (p.y > height + 20) p.y = -20;
 
-        if (dist < mouse.radius && dist > 0) {
-          const force = (1 - dist / mouse.radius) * 3.5;
-          p.x -= (dx / dist) * force;
-          p.y -= (dy / dist) * force;
-          p.radius = p.baseRadius * 1.6;
+        // Cursor / Touch Magnetic Repulsion
+        if (interaction.active) {
+          const dx = interaction.x - p.x;
+          const dy = interaction.y - p.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < interaction.radius && dist > 0) {
+            const force = (1 - dist / interaction.radius) * 3.2;
+            p.x -= (dx / dist) * force;
+            p.y -= (dy / dist) * force;
+            p.radius = p.baseRadius * 1.5;
+          } else {
+            p.radius = p.baseRadius;
+          }
         } else {
           p.radius = p.baseRadius;
         }
@@ -129,18 +168,18 @@ export default function InteractiveCanvasBackground() {
         ctx.fillStyle = `${p.colorPrefix}${p.alpha})`;
         ctx.fill();
 
-        // Connect nearby nodes with delicate glowing constellation lines
+        // Connect nearby nodes with delicate constellation lines
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dist2 = Math.hypot(p.x - p2.x, p.y - p2.y);
 
-          if (dist2 < 115) {
+          if (dist2 < 120) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            const lineAlpha = (1 - dist2 / 115) * 0.22;
+            const lineAlpha = (1 - dist2 / 120) * 0.18;
             ctx.strokeStyle = `rgba(99, 102, 241, ${lineAlpha})`;
-            ctx.lineWidth = 0.9;
+            ctx.lineWidth = 0.85;
             ctx.stroke();
           }
         }
@@ -152,10 +191,12 @@ export default function InteractiveCanvasBackground() {
     render();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('mouseleave', onMouseLeave);
       window.removeEventListener('click', onClick);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);
@@ -163,8 +204,8 @@ export default function InteractiveCanvasBackground() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-screen h-screen pointer-events-none z-0"
-      style={{ opacity: 0.88 }}
+      className="fixed inset-0 w-full h-full pointer-events-none z-[1]"
+      style={{ opacity: 0.8 }}
       aria-hidden="true"
     />
   );

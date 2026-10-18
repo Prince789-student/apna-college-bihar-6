@@ -278,5 +278,99 @@
   .animate-pulse-ring {
     animation: pulse-ring 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
   }
+
+  /* WhatsApp Animated Modal & Beacon FX */
+  @keyframes wa-pop-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.82) translateY(24px);
+    }
+    60% {
+      opacity: 1;
+      transform: scale(1.02) translateY(-4px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes wa-float {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-8px) rotate(2deg);
+    }
+  }
+
+  @keyframes wa-float-reverse {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(6px) rotate(-2deg);
+    }
+  }
+
+  @keyframes wa-radar-wave {
+    0% {
+      transform: scale(0.7);
+      opacity: 0.85;
+    }
+    50% {
+      opacity: 0.45;
+    }
+    100% {
+      transform: scale(2.2);
+      opacity: 0;
+    }
+  }
+
+  @keyframes wa-btn-glow {
+    0%, 100% {
+      box-shadow: 0 10px 25px -3px rgba(37, 211, 102, 0.45), 0 4px 6px -4px rgba(37, 211, 102, 0.3);
+    }
+    50% {
+      box-shadow: 0 16px 36px 0px rgba(37, 211, 102, 0.7), 0 0 20px 4px rgba(37, 211, 102, 0.4);
+    }
+  }
+
+  @keyframes wa-light-sweep {
+    0% {
+      transform: translateX(-150%) skewX(-20deg);
+    }
+    35%, 100% {
+      transform: translateX(250%) skewX(-20deg);
+    }
+  }
+
+  .animate-wa-pop {
+    animation: wa-pop-in 0.42s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .animate-wa-float {
+    animation: wa-float 3.6s ease-in-out infinite;
+  }
+  .animate-wa-float-rev {
+    animation: wa-float-reverse 4.2s ease-in-out infinite;
+  }
+  .animate-wa-radar-1 {
+    animation: wa-radar-wave 2.4s cubic-bezier(0.1, 0.7, 0.1, 1) infinite;
+  }
+  .animate-wa-radar-2 {
+    animation: wa-radar-wave 2.4s cubic-bezier(0.1, 0.7, 0.1, 1) infinite;
+    animation-delay: 0.8s;
+  }
+  .animate-wa-radar-3 {
+    animation: wa-radar-wave 2.4s cubic-bezier(0.1, 0.7, 0.1, 1) infinite;
+    animation-delay: 1.6s;
+  }
+  .animate-wa-btn-glow {
+    animation: wa-btn-glow 2.2s ease-in-out infinite;
+  }
+  .animate-wa-sweep {
+    animation: wa-light-sweep 2.8s ease-in-out infinite;
+  }
 }
+
 

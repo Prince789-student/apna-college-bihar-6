@@ -18,6 +18,7 @@ import SmartRedirect from './components/SmartRedirect';
 import CookieBanner from './components/CookieBanner';
 import WhatsAppPopup from './components/WhatsAppPopup';
 import ScrollToTop from './components/ScrollToTop';
+import InteractiveCanvasBackground from './components/InteractiveCanvasBackground';
 
 import Home from './pages/Home';
 import HomeOverview from './pages/HomeOverview';
@@ -546,6 +547,7 @@ function App() {
         <CookieBanner />
         <WhatsAppPopup />
         <ScrollToTop />
+        <InteractiveCanvasBackground />
         <React.Suspense fallback={<LoadingScreen />}>
           <Routes>
             {/* Public Routes */}
