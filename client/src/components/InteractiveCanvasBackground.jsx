@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 
 /**
- * InteractiveCanvasBackground - Canvas-UI inspired particle constellation engine
- * Renders a high-performance 60fps connected particle graph across the entire website.
- * Tracks global mouse/touch movements, magnetic particle repulsion, click impulse waves,
- * and ambient orbital breathing dynamics.
+ * InteractiveCanvasBackground - Full Motion Aurora & Constellation Engine
+ * Combines flowing harmonic liquid ribbons, glowing energetic constellation nodes,
+ * pulse synapsing along connecting filaments, interactive magnetic cursor waves,
+ * and glowing stardust trails for maximum visual WOW factor across all pages.
  */
 export default function InteractiveCanvasBackground() {
   const canvasRef = useRef(null);
@@ -37,43 +37,77 @@ export default function InteractiveCanvasBackground() {
     const interaction = {
       x: -1000,
       y: -1000,
-      radius: 140,
+      prevX: -1000,
+      prevY: -1000,
+      speed: 0,
+      radius: 170,
       active: false,
-      clickWave: 0,
-      clickX: 0,
-      clickY: 0
+      ripples: []
     };
 
-    // Responsive particle count (balanced for 60fps across phones & 4K screens)
-    const particleCount = Math.min(Math.max(Math.floor((width * height) / 14000), 45), 95);
+    // Stardust trail particles spawned on mouse movement
+    const trailParticles = [];
+
+    // Constellation particle nodes
+    const particleCount = Math.min(Math.max(Math.floor((width * height) / 12000), 55), 105);
     const particles = [];
-    const colorPalette = [
-      'rgba(37, 99, 235, ',   // Brand Blue (#2563eb)
-      'rgba(99, 102, 241, ',  // Indigo (#6366f1)
-      'rgba(16, 185, 129, ',  // Emerald (#10b981)
-      'rgba(14, 165, 233, '   // Sky Blue (#0ea5e9)
+    const colors = [
+      { r: 37, g: 99, b: 235 },   // Royal Blue #2563eb
+      { r: 99, g: 102, b: 241 },  // Electric Indigo #6366f1
+      { r: 16, g: 185, b: 129 },  // Emerald #10b981
+      { r: 14, g: 165, b: 233 },  // Sky Cyan #0ea5e9
+      { r: 139, g: 92, b: 246 }   // Violet #8b5cf6
     ];
 
     for (let i = 0; i < particleCount; i++) {
+      const col = colors[i % colors.length];
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.6,
-        vy: (Math.random() - 0.5) * 0.6,
-        baseRadius: Math.random() * 1.8 + 1.2,
-        radius: Math.random() * 1.8 + 1.2,
-        colorPrefix: colorPalette[Math.floor(Math.random() * colorPalette.length)],
-        alpha: Math.random() * 0.35 + 0.3
+        vx: (Math.random() - 0.5) * 0.95,
+        vy: (Math.random() - 0.5) * 0.95,
+        baseRadius: Math.random() * 2.2 + 1.8,
+        radius: Math.random() * 2.2 + 1.8,
+        color: col,
+        pulseOffset: Math.random() * Math.PI * 2,
+        pulseSpeed: 0.03 + Math.random() * 0.02
       });
     }
 
-    // Mouse listeners (global, non-blocking)
-    const onMouseMove = (e) => {
-      interaction.x = e.clientX;
-      interaction.y = e.clientY;
+    // Dynamic wave parameters for flowing aurora ribbons
+    const waves = [
+      { amp: 42, freq: 0.0022, speed: 0.018, yOffset: 0.28, color1: 'rgba(99, 102, 241, 0.16)', color2: 'rgba(14, 165, 233, 0.02)' },
+      { amp: 55, freq: 0.0018, speed: 0.014, yOffset: 0.52, color1: 'rgba(37, 99, 235, 0.14)', color2: 'rgba(16, 185, 129, 0.02)' },
+      { amp: 48, freq: 0.0026, speed: 0.022, yOffset: 0.76, color1: 'rgba(139, 92, 246, 0.13)', color2: 'rgba(99, 102, 241, 0.02)' }
+    ];
+
+    // Mouse & Touch tracking
+    const updatePointer = (clientX, clientY) => {
+      const dx = clientX - interaction.x;
+      const dy = clientY - interaction.y;
+      interaction.speed = Math.min(Math.hypot(dx, dy), 50);
+      interaction.prevX = interaction.x;
+      interaction.prevY = interaction.y;
+      interaction.x = clientX;
+      interaction.y = clientY;
       interaction.active = true;
+
+      // Spawn stardust particles along path
+      if (Math.random() < 0.6 && trailParticles.length < 40) {
+        const c = colors[Math.floor(Math.random() * colors.length)];
+        trailParticles.push({
+          x: clientX + (Math.random() - 0.5) * 14,
+          y: clientY + (Math.random() - 0.5) * 14,
+          vx: (Math.random() - 0.5) * 1.2,
+          vy: (Math.random() - 0.5) * 1.2 - 0.4,
+          radius: Math.random() * 2.8 + 1.5,
+          alpha: 0.85,
+          color: c
+        });
+      }
     };
 
+    const onMouseMove = (e) => updatePointer(e.clientX, e.clientY);
     const onMouseLeave = () => {
       interaction.active = false;
       interaction.x = -1000;
@@ -81,17 +115,19 @@ export default function InteractiveCanvasBackground() {
     };
 
     const onClick = (e) => {
-      interaction.clickX = e.clientX;
-      interaction.clickY = e.clientY;
-      interaction.clickWave = 0.05;
+      interaction.ripples.push({
+        x: e.clientX,
+        y: e.clientY,
+        radius: 5,
+        maxRadius: Math.max(width, height) * 0.45,
+        alpha: 0.65,
+        speed: 7
+      });
     };
 
-    // Touch support for mobile devices
     const onTouchMove = (e) => {
       if (e.touches && e.touches[0]) {
-        interaction.x = e.touches[0].clientX;
-        interaction.y = e.touches[0].clientY;
-        interaction.active = true;
+        updatePointer(e.touches[0].clientX, e.touches[0].clientY);
       }
     };
 
@@ -109,23 +145,86 @@ export default function InteractiveCanvasBackground() {
 
     let tick = 0;
 
-    // 60FPS Render Loop
+    // High performance 60FPS Full-Motion Render Loop
     const render = () => {
       ctx.clearRect(0, 0, width, height);
-      tick += 0.015;
+      tick += 1;
 
-      // Render Expanding Click Impulse Wave
-      if (interaction.clickWave > 0) {
+      // ── 1. RENDER FLOWING LIQUID AURORA RIBBONS ──
+      for (let w = 0; w < waves.length; w++) {
+        const wave = waves[w];
+        const baseY = height * wave.yOffset;
+        const phase = tick * wave.speed;
+
         ctx.beginPath();
-        ctx.arc(interaction.clickX, interaction.clickY, interaction.clickWave * 180, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(37, 99, 235, ${Math.max(0, 0.7 - interaction.clickWave * 0.7)})`;
-        ctx.lineWidth = 2.2;
-        ctx.stroke();
-        interaction.clickWave += 0.035;
-        if (interaction.clickWave > 1) interaction.clickWave = 0;
+        ctx.moveTo(0, height);
+        ctx.lineTo(0, baseY);
+
+        // Calculate smooth flowing bezier curve across width
+        for (let x = 0; x <= width; x += 30) {
+          // Double sine harmonic oscillation for natural liquid look
+          let y = baseY + 
+            Math.sin(x * wave.freq + phase) * wave.amp + 
+            Math.cos(x * wave.freq * 0.6 - phase * 0.8) * (wave.amp * 0.4);
+
+          // Interaction bulge if pointer is near wave
+          if (interaction.active) {
+            const distXP = Math.abs(x - interaction.x);
+            if (distXP < 180) {
+              const influence = (1 - distXP / 180) * 28;
+              y += (interaction.y > baseY ? influence : -influence);
+            }
+          }
+
+          ctx.lineTo(x, y);
+        }
+
+        ctx.lineTo(width, height);
+        ctx.closePath();
+
+        const grad = ctx.createLinearGradient(0, baseY - wave.amp, 0, baseY + wave.amp * 2);
+        grad.addColorStop(0, wave.color1);
+        grad.addColorStop(1, wave.color2);
+        ctx.fillStyle = grad;
+        ctx.fill();
       }
 
-      // Update & Draw Particles
+      // ── 2. RENDER INTERACTIVE SHOCKWAVE RIPPLES ──
+      for (let r = interaction.ripples.length - 1; r >= 0; r--) {
+        const rip = interaction.ripples[r];
+        rip.radius += rip.speed;
+        rip.alpha *= 0.965;
+
+        ctx.beginPath();
+        ctx.arc(rip.x, rip.y, rip.radius, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(37, 99, 235, ${rip.alpha})`;
+        ctx.lineWidth = Math.max(1, (1 - rip.radius / rip.maxRadius) * 3);
+        ctx.stroke();
+
+        if (rip.alpha < 0.02 || rip.radius >= rip.maxRadius) {
+          interaction.ripples.splice(r, 1);
+        }
+      }
+
+      // ── 3. RENDER STARDUST TRAIL PARTICLES ──
+      for (let t = trailParticles.length - 1; t >= 0; t--) {
+        const tp = trailParticles[t];
+        tp.x += tp.vx;
+        tp.y += tp.vy;
+        tp.alpha *= 0.94;
+        tp.radius *= 0.97;
+
+        ctx.beginPath();
+        ctx.arc(tp.x, tp.y, Math.max(0.6, tp.radius), 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${tp.color.r}, ${tp.color.g}, ${tp.color.b}, ${tp.alpha})`;
+        ctx.fill();
+
+        if (tp.alpha < 0.05 || tp.radius < 0.5) {
+          trailParticles.splice(t, 1);
+        }
+      }
+
+      // ── 4. UPDATE & DRAW CONSTELLATION GRAPH ──
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
@@ -133,28 +232,28 @@ export default function InteractiveCanvasBackground() {
         p.x += p.vx;
         p.y += p.vy;
 
-        // Subtle ambient orbital drift
-        p.x += Math.sin(tick + i) * 0.15;
-        p.y += Math.cos(tick + i) * 0.15;
+        // Dynamic harmonic drift wobble
+        p.x += Math.sin(tick * 0.02 + p.pulseOffset) * 0.35;
+        p.y += Math.cos(tick * 0.02 + p.pulseOffset) * 0.35;
 
-        // Screen boundary wrapping
-        if (p.x < -20) p.x = width + 20;
-        else if (p.x > width + 20) p.x = -20;
+        // Wrap around viewport boundaries seamlessly
+        if (p.x < -30) p.x = width + 30;
+        else if (p.x > width + 30) p.x = -30;
 
-        if (p.y < -20) p.y = height + 20;
-        else if (p.y > height + 20) p.y = -20;
+        if (p.y < -30) p.y = height + 30;
+        else if (p.y > height + 30) p.y = -30;
 
-        // Cursor / Touch Magnetic Repulsion
+        // Mouse Magnetic Repulsion & Swirl
         if (interaction.active) {
           const dx = interaction.x - p.x;
           const dy = interaction.y - p.y;
           const dist = Math.hypot(dx, dy);
 
           if (dist < interaction.radius && dist > 0) {
-            const force = (1 - dist / interaction.radius) * 3.2;
+            const force = (1 - dist / interaction.radius) * 4.8;
             p.x -= (dx / dist) * force;
             p.y -= (dy / dist) * force;
-            p.radius = p.baseRadius * 1.5;
+            p.radius = p.baseRadius * 1.8;
           } else {
             p.radius = p.baseRadius;
           }
@@ -162,25 +261,43 @@ export default function InteractiveCanvasBackground() {
           p.radius = p.baseRadius;
         }
 
-        // Draw particle node
+        // Particle Breathing Pulse
+        const breathingAlpha = 0.45 + Math.sin(tick * p.pulseSpeed + p.pulseOffset) * 0.3;
+
+        // Draw particle node with soft glowing halo
+        ctx.save();
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, 0.7)`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `${p.colorPrefix}${p.alpha})`;
+        ctx.fillStyle = `rgba(${p.color.r}, ${p.color.g}, ${p.color.b}, ${breathingAlpha})`;
         ctx.fill();
+        ctx.restore();
 
-        // Connect nearby nodes with delicate constellation lines
+        // Connect nearby nodes with glowing energy filaments
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dist2 = Math.hypot(p.x - p2.x, p.y - p2.y);
 
-          if (dist2 < 120) {
+          if (dist2 < 135) {
+            const filamentAlpha = (1 - dist2 / 135) * 0.32;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            const lineAlpha = (1 - dist2 / 120) * 0.18;
-            ctx.strokeStyle = `rgba(99, 102, 241, ${lineAlpha})`;
-            ctx.lineWidth = 0.85;
+            ctx.strokeStyle = `rgba(99, 102, 241, ${filamentAlpha})`;
+            ctx.lineWidth = filamentAlpha * 1.6;
             ctx.stroke();
+
+            // Light pulse energy travelling along filament periodically
+            if ((i + j + Math.floor(tick * 0.08)) % 28 === 0) {
+              const progress = ((tick * 0.04) % 1);
+              const px = p.x + (p2.x - p.x) * progress;
+              const py = p.y + (p2.y - p.y) * progress;
+              ctx.beginPath();
+              ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+              ctx.fillStyle = `rgba(56, 189, 248, ${filamentAlpha * 1.8})`;
+              ctx.fill();
+            }
           }
         }
       }
@@ -205,7 +322,7 @@ export default function InteractiveCanvasBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 w-full h-full pointer-events-none z-[12]"
-      style={{ opacity: 0.85 }}
+      style={{ opacity: 0.95 }}
       aria-hidden="true"
     />
   );
