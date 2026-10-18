@@ -5,7 +5,8 @@ import {
   Sparkles, CheckCircle2, ArrowRight, Radio,
   Award, Download, Play, Pause, ChevronRight,
   GraduationCap, Building2, Bell, Zap,
-  Check, Star, ShieldCheck, Flame, Search
+  Check, Star, ShieldCheck, Flame, Search,
+  Youtube, Volume2, VolumeX, RotateCcw, ExternalLink
 } from 'lucide-react';
 import GlobalSearch from './GlobalSearch';
 
@@ -21,6 +22,13 @@ export default function InteractiveCanvasHero({ isNative }) {
   // Interactive Live Simulators State
   const [sgpaTheoryGrade, setSgpaTheoryGrade] = useState(10); // 10 = O, 9 = A+, 8 = A
   const [simPercentile, setSimPercentile] = useState(89.4);
+
+  // Video Player & Motion Branding State
+  const [videoPlaying, setVideoPlaying] = useState(true);
+  const [videoChapter, setVideoChapter] = useState(0);
+  const [videoTime, setVideoTime] = useState(14); // seconds counter
+  const [videoMuted, setVideoMuted] = useState(false);
+  const [videoMode, setVideoMode] = useState('motion'); // 'motion' | 'youtube'
 
   // 4 Interactive Stages
   const stages = [
@@ -52,20 +60,92 @@ export default function InteractiveCanvasHero({ isNative }) {
       link: '/ugeac-predictor'
     },
     {
-      id: 'radar',
-      title: 'Live BEU Radar',
-      subtitle: 'Instant WhatsApp Exam Alerts',
-      icon: Radio,
-      accent: '#ea580c',
-      themeClass: 'from-amber-500 to-orange-600',
-      link: '#beu-radar'
+      id: 'why_us_video',
+      title: 'Why Apna College Bihar?',
+      subtitle: 'Full Motion Brand Film',
+      icon: Play,
+      accent: '#2563eb',
+      themeClass: 'from-blue-600 via-indigo-600 to-violet-600',
+      link: '#why-us'
     }
   ];
 
-  // ── Continuous Auto-Cycle Interval with Progress Bar (Always ON) ──
+  // 4 Core Reasons / Video Motion Scenes
+  const videoScenes = [
+    {
+      id: 0,
+      tag: 'REASON 01 • ZERO PAYWALL',
+      title: '100% Free Verified BEU Notes & Solved PYQs',
+      tagline: 'Direct 1-Click PDF Download • Complete Unit 1 to 5',
+      description: 'Handwritten, high-yield semester notes and 5+ years university solved papers curated strictly for 38+ Bihar Government Engineering Colleges. Zero subscription, zero paywalls.',
+      badge: '500+ Verified PDFs',
+      highlight: 'Top 1% BEU Ranker Curated',
+      icon: BookOpen,
+      accentBg: 'from-blue-600/20 via-blue-900/40 to-slate-950',
+      accentColor: 'text-blue-400',
+      bulletPoints: ['Direct 1-Click Offline Download', 'Strictly Aligned with BEU Syllabus', 'Numerical Step-by-Step Solutions']
+    },
+    {
+      id: 1,
+      tag: 'REASON 02 • ZERO SPAM',
+      title: 'Real-Time University Notice & Exam Radar',
+      tagline: 'Instant Broadcast Within 60 Seconds • WhatsApp Sync',
+      description: 'Never miss examination schedules, form fillup dates, or back-paper circulars. Automated crawler scans the official university portal 24/7 and delivers authentic notices directly without rumors.',
+      badge: '<60s Alert Speed',
+      highlight: 'Zero Rumors / Direct Circulars',
+      icon: Bell,
+      accentBg: 'from-amber-600/20 via-orange-900/40 to-slate-950',
+      accentColor: 'text-amber-400',
+      bulletPoints: ['Official University PDF Attachments', 'Exam Schedule & Admit Card Alerts', 'Live Result Direct Roll No Lookup']
+    },
+    {
+      id: 2,
+      tag: 'REASON 03 • CUTOFF ACCURACY',
+      title: 'BCECEB UGEAC 2026 Cutoff & College Matcher',
+      tagline: 'Multi-Year Cutoff Predictor for 38+ Govt Engineering Colleges',
+      description: 'Know your exact government college allotment before counselling. Input your JEE Main percentile & category (Gen, EWS, OBC, EBC, SC, ST) to find colleges like MIT, BCE, NCE, and GEC.',
+      badge: '99.2% Accuracy',
+      highlight: 'Category-Wise Rank Engine',
+      icon: Target,
+      accentBg: 'from-emerald-600/20 via-teal-900/40 to-slate-950',
+      accentColor: 'text-emerald-400',
+      bulletPoints: ['Accurate Closing Rank Thresholds', 'Branch-Wise Seat Distribution Matrix', 'District & College Comparison']
+    },
+    {
+      id: 3,
+      tag: 'REASON 04 • COMMUNITY POWER',
+      title: 'Free 1-on-1 Senior Mentorship & Tech Roadmaps',
+      tagline: 'Direct Mentorship from 3rd & 4th Year Toppers and Alumni',
+      description: 'Connect with seniors studying across top engineering campuses in Bihar. Get actionable advice on BPSC AE, GATE preparation, software development careers, internships, and semester labs.',
+      badge: '10,400+ Active Students',
+      highlight: '100% Free Senior Guidance',
+      icon: GraduationCap,
+      accentBg: 'from-purple-600/20 via-violet-900/40 to-slate-950',
+      accentColor: 'text-purple-400',
+      bulletPoints: ['BPSC AE & GATE Roadmaps', 'Software & DSA Interview Guidance', 'Free Project & Lab Assistance']
+    }
+  ];
+
+  // Auto-cycle video scenes and time counter
   useEffect(() => {
+    if (activeTab !== 3 || !videoPlaying || videoMode !== 'motion') return;
+    const timeTimer = setInterval(() => {
+      setVideoTime((prev) => (prev >= 160 ? 0 : prev + 1));
+    }, 1000);
+    const sceneTimer = setInterval(() => {
+      setVideoChapter((curr) => (curr + 1) % videoScenes.length);
+    }, 4500);
+    return () => {
+      clearInterval(timeTimer);
+      clearInterval(sceneTimer);
+    };
+  }, [activeTab, videoPlaying, videoMode, videoScenes.length]);
+
+  // Stage Cycle Interval with Progress Bar
+  useEffect(() => {
+    if (isPaused) return;
     const intervalTime = 40;
-    const totalDuration = 4200; // 4.2s per stage
+    const totalDuration = 4800; // 4.8s per stage
     const step = (intervalTime / totalDuration) * 100;
 
     const timer = setInterval(() => {
@@ -79,7 +159,7 @@ export default function InteractiveCanvasHero({ isNative }) {
     }, intervalTime);
 
     return () => clearInterval(timer);
-  }, [stages.length]);
+  }, [isPaused, stages.length]);
 
   // Calculated Real-Time SGPA Formula (Official BEU 10-Point Scale)
   const calcSimSgpa = () => {
@@ -95,6 +175,12 @@ export default function InteractiveCanvasHero({ isNative }) {
     return Math.max(120, rank);
   };
 
+  const formatVideoTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
   return (
     <section ref={heroRef} className="relative pt-6 pb-16 md:pt-12 md:pb-24 px-4 sm:px-6 md:px-12 overflow-hidden z-10 select-none">
 
@@ -106,17 +192,6 @@ export default function InteractiveCanvasHero({ isNative }) {
 
       <div className="container mx-auto max-w-5xl flex flex-col items-center text-center relative z-10">
         
-        {/* Animated Radar Pill Badge */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/95 border border-blue-200 text-xs font-semibold text-blue-700 shadow-sm shadow-blue-500/10 mb-6 backdrop-blur-md hover:scale-105 transition-transform cursor-pointer">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-          </span>
-          <span className="font-heading tracking-wide text-xs font-bold text-blue-700">2026 Academic Radar</span>
-          <span className="text-slate-300">•</span>
-          <span className="text-slate-600 font-medium">Live Canvas UI Interactive Engine</span>
-        </div>
-
         {/* Main Headline */}
         <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.12] mb-6 text-slate-900">
           Bihar's <span className="text-gradient-hero">#1 Next-Gen</span> Academic Ecosystem
@@ -137,13 +212,16 @@ export default function InteractiveCanvasHero({ isNative }) {
           </Link>
 
           <div className="grid grid-cols-2 sm:flex sm:items-center gap-2.5 w-full sm:w-auto">
-            <a
-              href="#beu-radar"
-              className="px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-heading font-semibold text-xs sm:text-sm transition-all active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2"
+            <button
+              type="button"
+              onClick={() => {
+                setActiveTab(3);
+              }}
+              className="px-4 py-3 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-800 font-heading font-semibold text-xs sm:text-sm transition-all active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer"
             >
-              <Radio size={15} className="text-emerald-600 animate-pulse shrink-0" />
-              <span className="truncate">Live Notices</span>
-            </a>
+              <Play size={14} className="text-blue-600 fill-blue-600 shrink-0" />
+              <span className="truncate">Why Choose Us?</span>
+            </button>
 
             {isNative ? (
               <Link
@@ -209,14 +287,16 @@ export default function InteractiveCanvasHero({ isNative }) {
             </div>
           </div>
 
-          <div className="hidden lg:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white/95 border border-amber-200 shadow-xl shadow-amber-500/15 backdrop-blur-xl absolute -top-6 -right-6 z-30 animate-jitter-float-2 pointer-events-none">
-            <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-            </span>
+          <div
+            onClick={() => setActiveTab(3)}
+            className="hidden lg:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white/95 border border-blue-200 shadow-xl shadow-blue-500/15 backdrop-blur-xl absolute -top-6 -right-6 z-30 animate-jitter-float-2 cursor-pointer hover:scale-105 transition-transform"
+          >
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-sm">
+              <Play size={14} className="fill-white translate-x-0.5" />
+            </div>
             <div>
-              <span className="font-heading text-xs font-black text-slate-900">BEU Radar Live</span>
-              <p className="text-[10px] text-slate-500 font-medium">Auto WhatsApp Broadcast</p>
+              <span className="font-heading text-xs font-black text-slate-900">Why Apna College Bihar?</span>
+              <p className="text-[10px] text-slate-500 font-medium">Official Brand Motion Film</p>
             </div>
           </div>
 
@@ -522,80 +602,254 @@ export default function InteractiveCanvasHero({ isNative }) {
                 </div>
               )}
 
-              {/* SCREEN 4: BEU LIVE RADAR */}
+              {/* SCREEN 4: WHY CHOOSE APNA COLLEGE BIHAR (Full Motion Video Branding Player) */}
               {activeTab === 3 && (
                 <div className="w-full animate-jitter-fade">
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center text-left">
-                    <div className="md:col-span-7 bg-slate-50/90 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3">
-                      <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch text-left">
+                    
+                    {/* LEFT COLUMN: 16:9 Cinematic Full Motion Video Player */}
+                    <div className="md:col-span-7 lg:col-span-8 flex flex-col justify-between bg-slate-950 text-white rounded-2xl p-4 sm:p-5 border border-blue-500/30 shadow-xl shadow-blue-900/20 relative overflow-hidden group">
+                      
+                      {/* Ambient Mesh Glow inside player */}
+                      <div className="absolute inset-0 bg-radial from-blue-600/15 via-indigo-900/20 to-transparent pointer-events-none" />
+
+                      {/* Video Player Header Bar */}
+                      <div className="flex items-center justify-between pb-3 border-b border-slate-800/90 relative z-10">
                         <div className="flex items-center gap-2">
                           <span className="relative flex h-2.5 w-2.5">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600"></span>
                           </span>
-                          <span className="text-xs font-bold text-slate-900">Official Circular Stream</span>
+                          <span className="text-[11px] font-black uppercase tracking-wider text-slate-200">
+                            {videoMode === 'youtube' ? 'YouTube Player' : 'Live Brand Film'}
+                          </span>
+                          <span className="hidden sm:inline text-slate-600">•</span>
+                          <span className="hidden sm:inline text-[10px] text-slate-400 font-mono">1080p 60FPS</span>
                         </div>
-                        <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-                          Auto-Synced
-                        </span>
+
+                        {/* Mode Switcher & Equalizer Visualizer */}
+                        <div className="flex items-center gap-2">
+                          {/* Animated Soundwave Equalizer (5 bouncing bars) */}
+                          {videoPlaying && videoMode === 'motion' && (
+                            <div className="hidden sm:flex items-end gap-0.5 h-3.5 px-1.5" title="Audio Waveform Active">
+                              <span className="w-0.5 bg-blue-400 rounded-full animate-pulse h-3"></span>
+                              <span className="w-0.5 bg-indigo-400 rounded-full animate-pulse h-1.5" style={{ animationDelay: '150ms' }}></span>
+                              <span className="w-0.5 bg-purple-400 rounded-full animate-pulse h-3.5" style={{ animationDelay: '300ms' }}></span>
+                              <span className="w-0.5 bg-blue-400 rounded-full animate-pulse h-2" style={{ animationDelay: '450ms' }}></span>
+                              <span className="w-0.5 bg-cyan-400 rounded-full animate-pulse h-2.5" style={{ animationDelay: '200ms' }}></span>
+                            </div>
+                          )}
+
+                          <button
+                            type="button"
+                            onClick={() => setVideoMode(videoMode === 'motion' ? 'youtube' : 'motion')}
+                            className="px-2 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[10px] font-bold text-slate-300 border border-slate-700 transition-colors flex items-center gap-1 cursor-pointer"
+                          >
+                            {videoMode === 'motion' ? (
+                              <>
+                                <Youtube size={12} className="text-red-500" />
+                                <span>Switch to YouTube</span>
+                              </>
+                            ) : (
+                              <>
+                                <Play size={10} className="text-blue-400" />
+                                <span>Motion Mode</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
                       </div>
 
-                      <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 mt-0.5">
-                          <Bell size={16} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-1 mb-1">
-                            <span className="text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.2 rounded border border-amber-200">
-                              Notice #BEU-EXAM-2026
-                            </span>
-                            <span className="text-[10px] text-slate-400">Today</span>
+                      {/* Video Center Viewport / Canvas Area */}
+                      <div className="py-4 relative z-10 min-h-[210px] sm:min-h-[230px] flex flex-col justify-center">
+                        {videoMode === 'youtube' ? (
+                          <div className="w-full h-full min-h-[210px] rounded-xl overflow-hidden bg-black flex flex-col items-center justify-center p-3 text-center border border-slate-800">
+                            <Youtube size={36} className="text-red-600 mb-2 animate-bounce" />
+                            <h4 className="text-sm font-bold text-white mb-1">Apna College Bihar Official Channel</h4>
+                            <p className="text-xs text-slate-400 max-w-sm mb-3">
+                              Watch complete video tutorials, semester strategy guides, and campus walk-throughs on our official channel.
+                            </p>
+                            <a
+                              href="https://youtube.com/@apnacollegebihar"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition-transform active:scale-95 shadow-md"
+                            >
+                              <Play size={13} className="fill-white" /> Open @ApnaCollegeBihar on YouTube
+                            </a>
                           </div>
-                          <p className="text-xs font-bold text-slate-900 line-clamp-1">
-                            B.Tech Even Semester Examination Schedule 2026 Officially Released
-                          </p>
+                        ) : (
+                          /* Motion Video Scene Frame */
+                          <div
+                            onClick={() => setVideoPlaying(!videoPlaying)}
+                            className="relative cursor-pointer select-none group/screen"
+                          >
+                            {/* Scene Header Pill */}
+                            <div className="flex items-center justify-between gap-2 mb-2">
+                              <span className="text-[10px] font-mono tracking-widest font-black text-blue-400 bg-blue-950/80 px-2 py-0.5 rounded-md border border-blue-800/60 uppercase">
+                                {videoScenes[videoChapter].tag}
+                              </span>
+                              <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-800/60 flex items-center gap-1">
+                                <CheckCircle2 size={11} /> {videoScenes[videoChapter].badge}
+                              </span>
+                            </div>
+
+                            {/* Scene Headline */}
+                            <h3 className="font-heading text-lg sm:text-xl font-black text-white leading-tight mb-1 group-hover/screen:text-blue-300 transition-colors">
+                              {videoScenes[videoChapter].title}
+                            </h3>
+
+                            {/* Tagline */}
+                            <p className="text-xs font-semibold text-blue-300/90 mb-3">
+                              {videoScenes[videoChapter].tagline}
+                            </p>
+
+                            {/* Description */}
+                            <p className="text-xs text-slate-300 leading-relaxed mb-4 line-clamp-2 sm:line-clamp-3">
+                              {videoScenes[videoChapter].description}
+                            </p>
+
+                            {/* Bullet Features Matrix */}
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-800/80">
+                              {videoScenes[videoChapter].bulletPoints.map((pt, pIdx) => (
+                                <div key={pIdx} className="flex items-center gap-1.5 text-[11px] font-medium text-slate-300 bg-slate-900/60 px-2 py-1 rounded-lg border border-slate-800">
+                                  <Check size={12} className="text-emerald-400 shrink-0" />
+                                  <span className="truncate">{pt}</span>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Center Floating Play/Pause Hint */}
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/screen:opacity-100 transition-opacity pointer-events-none">
+                              <div className="w-12 h-12 rounded-full bg-blue-600/90 text-white flex items-center justify-center shadow-lg backdrop-blur-md">
+                                {videoPlaying ? <Pause size={20} /> : <Play size={20} className="fill-white translate-x-0.5" />}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Video Player Scrubber & Controls */}
+                      <div className="pt-3 border-t border-slate-800/90 relative z-10 space-y-2.5">
+                        
+                        {/* Interactive Scrubber Line with Chapter Markers */}
+                        <div className="relative w-full h-1.5 bg-slate-800 rounded-full overflow-hidden cursor-pointer">
+                          <div
+                            className="h-full bg-gradient-to-r from-blue-500 via-indigo-500 to-cyan-400 transition-all duration-300"
+                            style={{ width: `${((videoChapter + 1) / videoScenes.length) * 100}%` }}
+                          />
+                        </div>
+
+                        {/* Controls Bottom Row */}
+                        <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              onClick={() => setVideoPlaying(!videoPlaying)}
+                              className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center transition-transform active:scale-95 cursor-pointer"
+                              title={videoPlaying ? 'Pause video' : 'Play video'}
+                            >
+                              {videoPlaying ? <Pause size={13} /> : <Play size={13} className="fill-white translate-x-0.5" />}
+                            </button>
+                            <span className="text-[11px] font-mono text-slate-400 font-semibold">
+                              {formatVideoTime(videoTime)} / 02:40
+                            </span>
+                          </div>
+
+                          {/* 4 Clickable Chapter Selectors */}
+                          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5">
+                            {videoScenes.map((sc, scIdx) => (
+                              <button
+                                key={sc.id}
+                                type="button"
+                                onClick={() => {
+                                  setVideoChapter(scIdx);
+                                  setVideoPlaying(true);
+                                }}
+                                className={`px-2 py-0.5 rounded-md text-[10px] font-bold transition-all cursor-pointer whitespace-nowrap ${
+                                  videoChapter === scIdx
+                                    ? 'bg-blue-600 text-white shadow-xs'
+                                    : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
+                                }`}
+                              >
+                                #{scIdx + 1} {scIdx === 0 ? 'Free Notes' : scIdx === 1 ? 'Exam Radar' : scIdx === 2 ? 'Predictor' : 'Mentorship'}
+                              </button>
+                            ))}
+                          </div>
+
+                          {/* External YouTube link */}
+                          <a
+                            href="https://youtube.com/@apnacollegebihar"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-[11px] font-bold text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors"
+                          >
+                            <Youtube size={13} />
+                            <span className="hidden sm:inline">YouTube</span>
+                            <ExternalLink size={10} />
+                          </a>
                         </div>
                       </div>
 
-                      <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">
-                          <Zap size={16} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-1 mb-1">
-                            <span className="text-[10px] font-bold text-blue-800 bg-blue-50 px-2 py-0.2 rounded border border-blue-200">
-                              Result Portal
-                            </span>
-                            <span className="text-[10px] text-slate-400">Yesterday</span>
-                          </div>
-                          <p className="text-xs font-bold text-slate-900 line-clamp-1">
-                            BEU 7th Semester B.Tech Result Announced - Check by Roll No
-                          </p>
-                        </div>
-                      </div>
                     </div>
 
-                    <div className="md:col-span-5 bg-gradient-to-br from-amber-50 to-orange-50 p-5 rounded-2xl border border-amber-200 flex flex-col justify-between h-full">
+                    {/* RIGHT COLUMN: Why Choose Us Value Proposition Card */}
+                    <div className="md:col-span-5 lg:col-span-4 bg-gradient-to-br from-blue-50/90 via-indigo-50/70 to-white p-5 rounded-2xl border border-blue-200 flex flex-col justify-between h-full">
                       <div>
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-600 text-white text-[11px] font-bold mb-3">
-                          <Radio size={12} className="animate-pulse" /> Instant WhatsApp Bot
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-600 text-white text-[11px] font-bold mb-3">
+                          <Play size={11} className="fill-white" /> Bihar's #1 Academic Hub
                         </div>
+                        
                         <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
-                          Never Miss University Updates
+                          Kyun Use Karein Apna College Bihar?
                         </h3>
+                        
                         <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                          Automated crawler broadcasts exam circulars directly to student WhatsApp groups in real time.
+                          State engineering students ke sabhi zarooraton ka single, verified aur 100% free solution.
                         </p>
+
+                        <div className="space-y-2.5 mb-5">
+                          {[
+                            { title: '100% Free Forever', desc: 'No subscriptions or locked PDFs' },
+                            { title: 'Strictly BEU Aligned', desc: 'Updated for 38+ Govt Colleges' },
+                            { title: 'Zero Spam / Verified', desc: 'Authentic circulars within 60s' },
+                            { title: '10,400+ Active Students', desc: 'Bihar largest B.Tech community' },
+                          ].map((feat, fIdx) => (
+                            <div key={fIdx} className="flex items-start gap-2 text-left">
+                              <div className="w-4 h-4 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">
+                                <Check size={11} className="stroke-[3]" />
+                              </div>
+                              <div>
+                                <span className="text-xs font-bold text-slate-900 block leading-tight">{feat.title}</span>
+                                <span className="text-[11px] text-slate-500 leading-tight">{feat.desc}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
                       </div>
 
-                      <a
-                        href="#beu-radar"
-                        className="w-full py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:gap-3"
-                      >
-                        <span>View Live Notice Feed</span>
-                        <ArrowRight size={14} />
-                      </a>
+                      <div className="space-y-2">
+                        <a
+                          href="https://youtube.com/@apnacollegebihar"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-full py-2.5 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:scale-102 active:scale-95 cursor-pointer"
+                        >
+                          <Youtube size={15} />
+                          <span>Watch Brand Film on YouTube</span>
+                        </a>
+
+                        <Link
+                          to="/notes"
+                          className="w-full py-2 px-4 rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-200 font-heading font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                        >
+                          <span>Explore Free Notes & PYQs</span>
+                          <ArrowRight size={13} />
+                        </Link>
+                      </div>
+
                     </div>
+
                   </div>
                 </div>
               )}
