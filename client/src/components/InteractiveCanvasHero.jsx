@@ -8,7 +8,6 @@ import {
   Check, Star, ShieldCheck, Flame, Search,
   Youtube, Volume2, VolumeX, RotateCcw, ExternalLink
 } from 'lucide-react';
-import GlobalSearch from './GlobalSearch';
 
 export default function InteractiveCanvasHero({ isNative }) {
   const canvasRef = useRef(null);
@@ -30,8 +29,17 @@ export default function InteractiveCanvasHero({ isNative }) {
   const [videoMuted, setVideoMuted] = useState(false);
   const [videoMode, setVideoMode] = useState('motion'); // 'motion' | 'youtube'
 
-  // 4 Interactive Stages
+  // 4 Interactive Stages (Brand Film as Lead Stage 0)
   const stages = [
+    {
+      id: 'why_us_video',
+      title: 'Why Apna College Bihar? 🎬',
+      subtitle: 'Official Brand Film',
+      icon: Play,
+      accent: '#2563eb',
+      themeClass: 'from-blue-600 via-indigo-600 to-violet-600',
+      link: '#why-us'
+    },
     {
       id: 'notes',
       title: 'Notes & PYQ Vault',
@@ -58,15 +66,6 @@ export default function InteractiveCanvasHero({ isNative }) {
       accent: '#059669',
       themeClass: 'from-emerald-600 to-teal-600',
       link: '/ugeac-predictor'
-    },
-    {
-      id: 'why_us_video',
-      title: 'Why Apna College Bihar?',
-      subtitle: 'Full Motion Brand Film',
-      icon: Play,
-      accent: '#2563eb',
-      themeClass: 'from-blue-600 via-indigo-600 to-violet-600',
-      link: '#why-us'
     }
   ];
 
@@ -128,7 +127,7 @@ export default function InteractiveCanvasHero({ isNative }) {
 
   // Auto-cycle video scenes and time counter
   useEffect(() => {
-    if (activeTab !== 3 || !videoPlaying || videoMode !== 'motion') return;
+    if (activeTab !== 0 || !videoPlaying || videoMode !== 'motion') return;
     const timeTimer = setInterval(() => {
       setVideoTime((prev) => (prev >= 160 ? 0 : prev + 1));
     }, 1000);
@@ -192,81 +191,30 @@ export default function InteractiveCanvasHero({ isNative }) {
 
       <div className="container mx-auto max-w-5xl flex flex-col items-center text-center relative z-10">
         
-        {/* Main Headline */}
-        <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.12] mb-6 text-slate-900">
-          Bihar's <span className="text-gradient-hero">#1 Next-Gen</span> Academic Ecosystem
-        </h1>
-
-        {/* Subtitle */}
-        <p className="text-slate-600 text-sm sm:text-base md:text-xl font-normal leading-relaxed max-w-3xl mb-8">
-          Engineered exclusively for <strong className="text-slate-900 font-bold">38+ Bihar Government Engineering Colleges</strong> & BEU students. Access unit-wise notes, 5+ years verified PYQs, accurate CGPA calculators, and instant exam notifications.
-        </p>
-
-        {/* Action Buttons Row */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3.5 w-full max-w-xl mb-8">
-          <Link
-            to="/mentorship"
-            className="btn-shimmer w-full sm:w-auto px-6 py-3.5 sm:py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-heading font-bold text-sm transition-all shadow-md shadow-blue-500/20 active:scale-95 flex items-center justify-center gap-2"
-          >
-            <GraduationCap size={18} /> Free Senior Mentorship
-          </Link>
-
-          <div className="grid grid-cols-2 sm:flex sm:items-center gap-2.5 w-full sm:w-auto">
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab(3);
-              }}
-              className="px-4 py-3 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-800 font-heading font-semibold text-xs sm:text-sm transition-all active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2 cursor-pointer"
-            >
-              <Play size={14} className="text-blue-600 fill-blue-600 shrink-0" />
-              <span className="truncate">Why Choose Us?</span>
-            </button>
-
-            {isNative ? (
-              <Link
-                to="/study"
-                className="px-4 py-3 rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-200 hover:border-blue-300 font-heading font-bold text-xs sm:text-sm transition-all shadow-xs active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2 group"
-              >
-                <Zap size={15} className="text-blue-600 group-hover:scale-110 transition-transform shrink-0" />
-                <span className="truncate">Focus Timer</span>
-              </Link>
-            ) : (
-              <Link
-                to="/download"
-                className="px-4 py-3 rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-200 hover:border-blue-300 font-heading font-bold text-xs sm:text-sm transition-all shadow-xs active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2 group"
-              >
-                <Download size={15} className="text-blue-600 group-hover:scale-110 transition-transform shrink-0" />
-                <span className="truncate">Get Apps</span>
-                <span className="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider hidden sm:inline">PC & APK</span>
-              </Link>
-            )}
+        {/* ── Top Executive Brand Title: APNA COLLEGE BIHAR ── */}
+        <div className="flex flex-col items-center justify-center text-center mb-6 pt-1">
+          {/* Animated Official BEU Portal Pill */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50/90 border border-blue-200/80 text-xs font-bold text-blue-700 shadow-xs mb-3 backdrop-blur-md hover:scale-105 transition-transform">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+            </span>
+            <span className="font-heading tracking-wide uppercase text-[11px] font-black text-blue-800">
+              Official Academic Platform
+            </span>
+            <span className="text-slate-300">•</span>
+            <span className="text-slate-600 font-semibold text-[11px]">38+ Bihar Engineering Colleges</span>
           </div>
-        </div>
 
-        {/* Elevated Quick Search Command HUD */}
-        <div className="w-full max-w-2xl bg-white/95 border border-slate-200/90 p-3 sm:p-4 rounded-2xl shadow-lg shadow-slate-200/50 backdrop-blur-xl mb-8">
-          <GlobalSearch placeholder="Search 500+ Notes, BEU PYQs, Syllabus, Colleges..." />
-          <div className="flex items-center gap-1.5 pt-3 px-1 text-xs text-slate-500 overflow-x-auto no-scrollbar sm:overflow-x-visible pb-1 sm:pb-0 sm:flex-wrap sm:justify-center">
-            <span className="font-semibold text-slate-400 mr-0.5 shrink-0 hidden xs:inline">Quick:</span>
-            {[
-              { name: 'BEU Notes', path: '/notes' },
-              { name: 'PYQ Papers', path: '/pyq' },
-              { name: 'BEU Syllabus', path: '/syllabus' },
-              { name: 'CGPA Calc', path: '/cgpa' },
-              { name: 'UGEAC 2026', path: '/ugeac-predictor' },
-              { name: 'BEU Result', path: '/beu-result' },
-            ].map((chip, idx) => (
-              <Link
-                key={idx}
-                to={chip.path}
-                className="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-blue-50 border border-slate-200 hover:border-blue-400 text-slate-700 hover:text-blue-600 font-semibold text-xs shadow-xs transition-all hover:scale-105 active:scale-95 inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" aria-hidden="true" />
-                {chip.name}
-              </Link>
-            ))}
-          </div>
+          {/* Grand Apna College Bihar Typography */}
+          <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-[1000] tracking-tight leading-[1.05] text-slate-900 mb-2 uppercase">
+            APNA COLLEGE <span className="text-gradient-hero">BIHAR</span>
+          </h1>
+
+          {/* Clean Subtitle Slogan */}
+          <p className="text-slate-600 text-xs sm:text-sm md:text-base font-medium max-w-2xl leading-relaxed">
+            Free Semester Notes, 5+ Yrs Solved PYQs, Real-Time BEU Exam Radar & 1-on-1 Senior Mentorship
+          </p>
         </div>
 
         {/* ══════════════════════════════════════════════════════════════════════════ */}
@@ -288,7 +236,7 @@ export default function InteractiveCanvasHero({ isNative }) {
           </div>
 
           <div
-            onClick={() => setActiveTab(3)}
+            onClick={() => setActiveTab(0)}
             className="hidden lg:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white/95 border border-blue-200 shadow-xl shadow-blue-500/15 backdrop-blur-xl absolute -top-6 -right-6 z-30 animate-jitter-float-2 cursor-pointer hover:scale-105 transition-transform"
           >
             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-sm">
@@ -296,7 +244,7 @@ export default function InteractiveCanvasHero({ isNative }) {
             </div>
             <div>
               <span className="font-heading text-xs font-black text-slate-900">Why Apna College Bihar?</span>
-              <p className="text-[10px] text-slate-500 font-medium">Official Brand Motion Film</p>
+              <p className="text-[10px] text-slate-500 font-medium">Watch Full Motion Film</p>
             </div>
           </div>
 
@@ -363,247 +311,8 @@ export default function InteractiveCanvasHero({ isNative }) {
             {/* ── Interactive Stage Screens ── */}
             <div className="p-4 sm:p-6 md:p-8 min-h-[340px] flex items-center justify-center bg-radial from-slate-50/50 via-white to-white">
               
-              {/* SCREEN 1: NOTES & PYQ VAULT */}
+              {/* SCREEN 0: WHY CHOOSE APNA COLLEGE BIHAR (Full Motion Video Branding Player & Film) */}
               {activeTab === 0 && (
-                <div className="w-full animate-jitter-fade">
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center text-left">
-                    <div className="md:col-span-7 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="px-2.5 py-1 rounded-lg bg-blue-100 text-blue-800 font-bold text-xs uppercase tracking-wide">
-                          CSE / IT / ECE / ME / Civil
-                        </span>
-                        <span className="text-xs font-bold text-emerald-600 flex items-center gap-1 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                          <CheckCircle2 size={13} /> 1-Click Offline PDF
-                        </span>
-                      </div>
-
-                      <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-50/80 to-white border border-blue-200 flex items-center justify-between group hover:border-blue-400 transition-all">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm shrink-0">
-                            <FileText size={20} />
-                          </div>
-                          <div>
-                            <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
-                              Operating Systems & System Architecture
-                            </h4>
-                            <p className="text-[11px] text-slate-500">Unit 1 to 5 Hand-Written Notes • BEU Updated</p>
-                          </div>
-                        </div>
-                        <span className="px-2.5 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-bold flex items-center gap-1 shadow-xs group-hover:scale-105 transition-transform">
-                          <Download size={13} /> PDF
-                        </span>
-                      </div>
-
-                      <div className="p-3.5 rounded-2xl bg-gradient-to-r from-indigo-50/80 to-white border border-indigo-200 flex items-center justify-between group hover:border-indigo-400 transition-all">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm shrink-0">
-                            <BookOpen size={20} />
-                          </div>
-                          <div>
-                            <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
-                              Design & Analysis of Algorithms (DAA)
-                            </h4>
-                            <p className="text-[11px] text-slate-500">5+ Years Solved PYQ Papers & Numerical Key</p>
-                          </div>
-                        </div>
-                        <span className="px-2.5 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold flex items-center gap-1 shadow-xs group-hover:scale-105 transition-transform">
-                          <Download size={13} /> PYQ
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="md:col-span-5 bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-2xl border border-blue-200 flex flex-col justify-between h-full">
-                      <div>
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-600 text-white text-[11px] font-bold mb-3">
-                          <Sparkles size={12} /> Unit-Wise Organization
-                        </div>
-                        <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
-                          100% Exam-Targeted Material
-                        </h3>
-                        <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                          Direct 1-click downloads with zero paywalls. Tailored specifically for BEU exams.
-                        </p>
-                      </div>
-
-                      <Link
-                        to="/notes"
-                        className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:gap-3"
-                      >
-                        <span>Browse 500+ Notes & PYQs</span>
-                        <ArrowRight size={14} />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* SCREEN 2: BEU SGPA ENGINE (Interactive Slider!) */}
-              {activeTab === 1 && (
-                <div className="w-full animate-jitter-fade">
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center text-left">
-                    <div className="md:col-span-7 bg-slate-50/90 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3.5">
-                      <div className="flex items-center justify-between border-b border-slate-200 pb-2">
-                        <span className="text-xs font-bold text-slate-800">
-                          Interactive 5th Sem Grade Simulator
-                        </span>
-                        <span className="text-xs font-bold text-purple-700 bg-purple-100 px-2 py-0.5 rounded">
-                          Drag Slider Below
-                        </span>
-                      </div>
-
-                      {/* Interactive Grade Slider */}
-                      <div className="bg-white p-3 rounded-xl border border-slate-200">
-                        <div className="flex items-center justify-between text-xs mb-1.5 font-bold">
-                          <span className="text-slate-600">Theory Paper 1 Grade:</span>
-                          <span className="text-purple-600 font-black">
-                            {sgpaTheoryGrade === 10 ? 'O (10 Points)' : sgpaTheoryGrade === 9 ? 'A+ (9 Points)' : sgpaTheoryGrade === 8 ? 'A (8 Points)' : 'B+ (7 Points)'}
-                          </span>
-                        </div>
-                        <input
-                          type="range"
-                          min="7"
-                          max="10"
-                          step="1"
-                          value={sgpaTheoryGrade}
-                          onChange={(e) => setSgpaTheoryGrade(Number(e.target.value))}
-                          className="w-full h-2 bg-purple-100 rounded-lg appearance-none cursor-pointer accent-purple-600"
-                        />
-                        <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-semibold">
-                          <span>B+ (7)</span>
-                          <span>A (8)</span>
-                          <span>A+ (9)</span>
-                          <span>O (10)</span>
-                        </div>
-                      </div>
-
-                      {/* Real-Time Calculated Result */}
-                      <div className="p-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex items-center justify-between shadow-md shadow-purple-500/20">
-                        <div>
-                          <span className="text-[10px] text-purple-200 uppercase tracking-wider block font-semibold">Live Calculated SGPA</span>
-                          <span className="font-heading text-2xl font-black">{calcSimSgpa()} / 10.00</span>
-                        </div>
-                        <div className="text-right">
-                          <span className="px-2 py-0.5 rounded-md bg-white/20 text-xs font-bold block mb-0.5">
-                            {calcSimSgpa() >= 9.0 ? 'Outstanding (O)' : 'Excellent (A+)'}
-                          </span>
-                          <span className="text-[10px] text-purple-200">BEU Official Formula</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="md:col-span-5 bg-gradient-to-br from-purple-50 to-indigo-50 p-5 rounded-2xl border border-purple-200 flex flex-col justify-between h-full">
-                      <div>
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-600 text-white text-[11px] font-bold mb-3">
-                          <Calculator size={12} /> Official BEU 10-Pt Formula
-                        </div>
-                        <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
-                          Accurate Credit Calculations
-                        </h3>
-                        <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                          Avoid manual calculation errors with official credit weighting for theory, lab, and MOOCs.
-                        </p>
-                      </div>
-
-                      <Link
-                        to="/cgpa"
-                        className="w-full py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:gap-3"
-                      >
-                        <span>Open CGPA Calculator</span>
-                        <ArrowRight size={14} />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* SCREEN 3: UGEAC 2026 PREDICTOR (Interactive Percentile Slider!) */}
-              {activeTab === 2 && (
-                <div className="w-full animate-jitter-fade">
-                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center text-left">
-                    <div className="md:col-span-7 bg-slate-50/90 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3">
-                      
-                      {/* Interactive Percentile Slider */}
-                      <div className="bg-white p-3 rounded-xl border border-slate-200">
-                        <div className="flex items-center justify-between text-xs mb-1 font-bold">
-                          <span className="text-slate-600">JEE Main Percentile:</span>
-                          <span className="text-emerald-600 font-black">{simPercentile}%ile</span>
-                        </div>
-                        <input
-                          type="range"
-                          min="70"
-                          max="99"
-                          step="0.5"
-                          value={simPercentile}
-                          onChange={(e) => setSimPercentile(Number(e.target.value))}
-                          className="w-full h-2 bg-emerald-100 rounded-lg appearance-none cursor-pointer accent-emerald-600"
-                        />
-                        <div className="flex justify-between items-center text-[11px] font-bold text-slate-700 mt-1.5 pt-1 border-t border-slate-100">
-                          <span>Est. Bihar State Rank:</span>
-                          <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-black">
-                            ~{calcSimRank().toLocaleString()}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* College Match Cards */}
-                      <div className="p-3 rounded-xl bg-white border border-emerald-300 shadow-xs flex items-center justify-between">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
-                            MIT
-                          </div>
-                          <div>
-                            <h4 className="text-xs font-bold text-slate-900">MIT Muzaffarpur • CSE / IT</h4>
-                            <p className="text-[10px] text-slate-500">Closing Rank: 2,120</p>
-                          </div>
-                        </div>
-                        <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-xs">
-                          {simPercentile >= 88 ? '98.4% Match' : '75.2% Match'}
-                        </span>
-                      </div>
-
-                      <div className="p-3 rounded-xl bg-white border border-blue-300 shadow-xs flex items-center justify-between">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
-                            BCE
-                          </div>
-                          <div>
-                            <h4 className="text-xs font-bold text-slate-900">BCE Bhagalpur • ECE / EE</h4>
-                            <p className="text-[10px] text-slate-500">Closing Rank: 2,450</p>
-                          </div>
-                        </div>
-                        <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200 font-bold text-xs">
-                          {simPercentile >= 85 ? '96.2% Match' : '82.0% Match'}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="md:col-span-5 bg-gradient-to-br from-emerald-50 to-teal-50 p-5 rounded-2xl border border-emerald-200 flex flex-col justify-between h-full">
-                      <div>
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[11px] font-bold mb-3">
-                          <Target size={12} /> BCECEB Multi-Year Data
-                        </div>
-                        <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
-                          38+ Govt Engineering Colleges
-                        </h3>
-                        <p className="text-xs text-slate-600 leading-relaxed mb-4">
-                          Predict realistic seat allotment for General, EWS, OBC, EBC, SC, and ST categories.
-                        </p>
-                      </div>
-
-                      <Link
-                        to="/ugeac-predictor"
-                        className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:gap-3"
-                      >
-                        <span>Check UGEAC Predictor</span>
-                        <ArrowRight size={14} />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* SCREEN 4: WHY CHOOSE APNA COLLEGE BIHAR (Full Motion Video Branding Player) */}
-              {activeTab === 3 && (
                 <div className="w-full animate-jitter-fade">
                   <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-stretch text-left">
                     
@@ -665,17 +374,17 @@ export default function InteractiveCanvasHero({ isNative }) {
                         {videoMode === 'youtube' ? (
                           <div className="w-full h-full min-h-[210px] rounded-xl overflow-hidden bg-black flex flex-col items-center justify-center p-3 text-center border border-slate-800">
                             <Youtube size={36} className="text-red-600 mb-2 animate-bounce" />
-                            <h4 className="text-sm font-bold text-white mb-1">Apna College Bihar Official Channel</h4>
+                            <h4 className="text-sm font-bold text-white mb-1">Apna College BEU Bihar Official Channel</h4>
                             <p className="text-xs text-slate-400 max-w-sm mb-3">
-                              Watch complete video tutorials, semester strategy guides, and campus walk-throughs on our official channel.
+                              Watch complete video tutorials, semester strategy guides, and university updates on our official channel.
                             </p>
                             <a
-                              href="https://youtube.com/@apnacollegebihar"
+                              href="https://www.youtube.com/@ApnaCollegeBEUbihar"
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition-transform active:scale-95 shadow-md"
                             >
-                              <Play size={13} className="fill-white" /> Open @ApnaCollegeBihar on YouTube
+                              <Play size={13} className="fill-white" /> Open @ApnaCollegeBEUbihar on YouTube
                             </a>
                           </div>
                         ) : (
@@ -779,7 +488,7 @@ export default function InteractiveCanvasHero({ isNative }) {
 
                           {/* External YouTube link */}
                           <a
-                            href="https://youtube.com/@apnacollegebihar"
+                            href="https://www.youtube.com/@ApnaCollegeBEUbihar"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-[11px] font-bold text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors"
@@ -830,7 +539,7 @@ export default function InteractiveCanvasHero({ isNative }) {
 
                       <div className="space-y-2">
                         <a
-                          href="https://youtube.com/@apnacollegebihar"
+                          href="https://www.youtube.com/@ApnaCollegeBEUbihar"
                           target="_blank"
                           rel="noopener noreferrer"
                           className="w-full py-2.5 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:scale-102 active:scale-95 cursor-pointer"
@@ -850,6 +559,245 @@ export default function InteractiveCanvasHero({ isNative }) {
 
                     </div>
 
+                  </div>
+                </div>
+              )}
+
+              {/* SCREEN 1: NOTES & PYQ VAULT */}
+              {activeTab === 1 && (
+                <div className="w-full animate-jitter-fade">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center text-left">
+                    <div className="md:col-span-7 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span className="px-2.5 py-1 rounded-lg bg-blue-100 text-blue-800 font-bold text-xs uppercase tracking-wide">
+                          CSE / IT / ECE / ME / Civil
+                        </span>
+                        <span className="text-xs font-bold text-emerald-600 flex items-center gap-1 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                          <CheckCircle2 size={13} /> 1-Click Offline PDF
+                        </span>
+                      </div>
+
+                      <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-50/80 to-white border border-blue-200 flex items-center justify-between group hover:border-blue-400 transition-all">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm shrink-0">
+                            <FileText size={20} />
+                          </div>
+                          <div>
+                            <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                              Operating Systems & System Architecture
+                            </h4>
+                            <p className="text-[11px] text-slate-500">Unit 1 to 5 Hand-Written Notes • BEU Updated</p>
+                          </div>
+                        </div>
+                        <span className="px-2.5 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-bold flex items-center gap-1 shadow-xs group-hover:scale-105 transition-transform">
+                          <Download size={13} /> PDF
+                        </span>
+                      </div>
+
+                      <div className="p-3.5 rounded-2xl bg-gradient-to-r from-indigo-50/80 to-white border border-indigo-200 flex items-center justify-between group hover:border-indigo-400 transition-all">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-sm shrink-0">
+                            <BookOpen size={20} />
+                          </div>
+                          <div>
+                            <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                              Design & Analysis of Algorithms (DAA)
+                            </h4>
+                            <p className="text-[11px] text-slate-500">5+ Years Solved PYQ Papers & Numerical Key</p>
+                          </div>
+                        </div>
+                        <span className="px-2.5 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold flex items-center gap-1 shadow-xs group-hover:scale-105 transition-transform">
+                          <Download size={13} /> PYQ
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="md:col-span-5 bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-2xl border border-blue-200 flex flex-col justify-between h-full">
+                      <div>
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-600 text-white text-[11px] font-bold mb-3">
+                          <Sparkles size={12} /> Unit-Wise Organization
+                        </div>
+                        <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
+                          100% Exam-Targeted Material
+                        </h3>
+                        <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                          Direct 1-click downloads with zero paywalls. Tailored specifically for BEU exams.
+                        </p>
+                      </div>
+
+                      <Link
+                        to="/notes"
+                        className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:gap-3"
+                      >
+                        <span>Browse 500+ Notes & PYQs</span>
+                        <ArrowRight size={14} />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SCREEN 2: BEU SGPA ENGINE (Interactive Slider!) */}
+              {activeTab === 2 && (
+                <div className="w-full animate-jitter-fade">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center text-left">
+                    <div className="md:col-span-7 bg-slate-50/90 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3.5">
+                      <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+                        <span className="text-xs font-bold text-slate-800">
+                          Interactive 5th Sem Grade Simulator
+                        </span>
+                        <span className="text-xs font-bold text-purple-700 bg-purple-100 px-2 py-0.5 rounded">
+                          Drag Slider Below
+                        </span>
+                      </div>
+
+                      {/* Interactive Grade Slider */}
+                      <div className="bg-white p-3 rounded-xl border border-slate-200">
+                        <div className="flex items-center justify-between text-xs mb-1.5 font-bold">
+                          <span className="text-slate-600">Theory Paper 1 Grade:</span>
+                          <span className="text-purple-600 font-black">
+                            {sgpaTheoryGrade === 10 ? 'O (10 Points)' : sgpaTheoryGrade === 9 ? 'A+ (9 Points)' : sgpaTheoryGrade === 8 ? 'A (8 Points)' : 'B+ (7 Points)'}
+                          </span>
+                        </div>
+                        <input
+                          type="range"
+                          min="7"
+                          max="10"
+                          step="1"
+                          value={sgpaTheoryGrade}
+                          onChange={(e) => setSgpaTheoryGrade(Number(e.target.value))}
+                          className="w-full h-2 bg-purple-100 rounded-lg appearance-none cursor-pointer accent-purple-600"
+                        />
+                        <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-semibold">
+                          <span>B+ (7)</span>
+                          <span>A (8)</span>
+                          <span>A+ (9)</span>
+                          <span>O (10)</span>
+                        </div>
+                      </div>
+
+                      {/* Real-Time Calculated Result */}
+                      <div className="p-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex items-center justify-between shadow-md shadow-purple-500/20">
+                        <div>
+                          <span className="text-[10px] text-purple-200 uppercase tracking-wider block font-semibold">Live Calculated SGPA</span>
+                          <span className="font-heading text-2xl font-black">{calcSimSgpa()} / 10.00</span>
+                        </div>
+                        <div className="text-right">
+                          <span className="px-2 py-0.5 rounded-md bg-white/20 text-xs font-bold block mb-0.5">
+                            {calcSimSgpa() >= 9.0 ? 'Outstanding (O)' : 'Excellent (A+)'}
+                          </span>
+                          <span className="text-[10px] text-purple-200">BEU Official Formula</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="md:col-span-5 bg-gradient-to-br from-purple-50 to-indigo-50 p-5 rounded-2xl border border-purple-200 flex flex-col justify-between h-full">
+                      <div>
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-600 text-white text-[11px] font-bold mb-3">
+                          <Calculator size={12} /> Official BEU 10-Pt Formula
+                        </div>
+                        <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
+                          Accurate Credit Calculations
+                        </h3>
+                        <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                          Avoid manual calculation errors with official credit weighting for theory, lab, and MOOCs.
+                        </p>
+                      </div>
+
+                      <Link
+                        to="/cgpa"
+                        className="w-full py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:gap-3"
+                      >
+                        <span>Open CGPA Calculator</span>
+                        <ArrowRight size={14} />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* SCREEN 3: UGEAC 2026 PREDICTOR (Interactive Percentile Slider!) */}
+              {activeTab === 3 && (
+                <div className="w-full animate-jitter-fade">
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center text-left">
+                    <div className="md:col-span-7 bg-slate-50/90 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-3">
+                      
+                      {/* Interactive Percentile Slider */}
+                      <div className="bg-white p-3 rounded-xl border border-slate-200">
+                        <div className="flex items-center justify-between text-xs mb-1 font-bold">
+                          <span className="text-slate-600">JEE Main Percentile:</span>
+                          <span className="text-emerald-600 font-black">{simPercentile}%ile</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="70"
+                          max="99"
+                          step="0.5"
+                          value={simPercentile}
+                          onChange={(e) => setSimPercentile(Number(e.target.value))}
+                          className="w-full h-2 bg-emerald-100 rounded-lg appearance-none cursor-pointer accent-emerald-600"
+                        />
+                        <div className="flex justify-between items-center text-[11px] font-bold text-slate-700 mt-1.5 pt-1 border-t border-slate-100">
+                          <span>Est. Bihar State Rank:</span>
+                          <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-black">
+                            ~{calcSimRank().toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* College Match Cards */}
+                      <div className="p-3 rounded-xl bg-white border border-emerald-300 shadow-xs flex items-center justify-between">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
+                            MIT
+                          </div>
+                          <div>
+                            <h4 className="text-xs font-bold text-slate-900">MIT Muzaffarpur • CSE / IT</h4>
+                            <p className="text-[10px] text-slate-500">Closing Rank: 2,120</p>
+                          </div>
+                        </div>
+                        <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-xs">
+                          {simPercentile >= 88 ? '98.4% Match' : '75.2% Match'}
+                        </span>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-white border border-blue-300 shadow-xs flex items-center justify-between">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
+                            BCE
+                          </div>
+                          <div>
+                            <h4 className="text-xs font-bold text-slate-900">BCE Bhagalpur • ECE / EE</h4>
+                            <p className="text-[10px] text-slate-500">Closing Rank: 2,450</p>
+                          </div>
+                        </div>
+                        <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200 font-bold text-xs">
+                          {simPercentile >= 85 ? '96.2% Match' : '82.0% Match'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="md:col-span-5 bg-gradient-to-br from-emerald-50 to-teal-50 p-5 rounded-2xl border border-emerald-200 flex flex-col justify-between h-full">
+                      <div>
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[11px] font-bold mb-3">
+                          <Target size={12} /> BCECEB Multi-Year Data
+                        </div>
+                        <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
+                          38+ Govt Engineering Colleges
+                        </h3>
+                        <p className="text-xs text-slate-600 leading-relaxed mb-4">
+                          Predict realistic seat allotment for General, EWS, OBC, EBC, SC, and ST categories.
+                        </p>
+                      </div>
+
+                      <Link
+                        to="/ugeac-predictor"
+                        className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:gap-3"
+                      >
+                        <span>Check UGEAC Predictor</span>
+                        <ArrowRight size={14} />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               )}
