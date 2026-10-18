@@ -537,10 +537,24 @@ export default function AdminPanel() {
       alert("Kripya valid 10-digit phone number daalein!");
       return;
     }
+    const targetUid = userObj.id || userObj.uid;
     try {
-      const userDocRef = doc(db, 'users', userObj.id || userObj.uid);
+      // 1. Client SDK direct update
+      const userDocRef = doc(db, 'users', targetUid);
       await setDoc(userDocRef, { phone: cleanPhone }, { merge: true });
-      setUsers(prev => prev.map(u => (u.id === userObj.id || u.uid === userObj.uid) ? { ...u, phone: cleanPhone } : u));
+      
+      // 2. Server API fallback using Admin SDK (bypasses rules/quotas)
+      try {
+        const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+        const headers = await getAdminHeaders();
+        await fetch(`${apiBase}/api/admin/update-user-phone`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ uid: targetUid, phone: cleanPhone })
+        });
+      } catch (_) {}
+
+      setUsers(prev => prev.map(u => (u.id === targetUid || u.uid === targetUid) ? { ...u, phone: cleanPhone } : u));
       flash(`Phone number successfully update ho gaya! 📱✅`, 'ok');
     } catch (err) {
       alert("Phone update failed: " + err.message);

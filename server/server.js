@@ -599,6 +599,25 @@ app.post('/api/admin/sync-users', protect, adminOnly, authenticatedLimiter, asyn
     res.json({ success: true, message: `Synced ${count} users successfully!`, count });
 }));
 
+// 5.6 Admin Direct Phone Update (Bypasses any client Firestore permissions/quota)
+app.post('/api/admin/update-user-phone', protect, adminOnly, authenticatedLimiter, asyncHandler(async (req, res) => {
+    const { uid, phone } = req.body;
+    if (!uid) {
+        return res.status(400).json({ success: false, message: 'UID is required' });
+    }
+    const adminSdk = require('./firebaseAdmin');
+    if (!adminSdk || !adminSdk.apps.length) {
+        return res.status(503).json({ success: false, message: 'Firebase Admin SDK unavailable' });
+    }
+    const cleanPhone = String(phone || '').replace(/\D/g, '').trim();
+    await adminSdk.firestore().collection('users').doc(uid).set({
+        phone: cleanPhone,
+        updatedAt: new Date()
+    }, { merge: true });
+
+    res.json({ success: true, message: 'Phone updated successfully', phone: cleanPhone });
+}));
+
 // Unhandled API routes catch-all to prevent falling through to SPA HTML
 app.all('/api/*', (req, res) => {
     res.status(404).json({ success: false, message: 'Requested API endpoint not found.' });

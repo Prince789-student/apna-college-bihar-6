@@ -239,9 +239,6 @@ export default function Home() {
         schema={combinedSchema}
       />
 
-      {/* Global Interactive Canvas-UI Background across the Entire Page */}
-      <InteractiveCanvasBackground />
-
       {/* Floating Animated Gradient Orbs in Background */}
       <div className="absolute top-12 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[650px] pointer-events-none z-0 overflow-hidden">
         <div className="absolute top-[-50px] left-[5%] w-[480px] h-[480px] rounded-full bg-gradient-to-tr from-blue-300/30 to-indigo-400/20 blur-3xl animate-float" />

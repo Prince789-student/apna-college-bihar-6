@@ -84,7 +84,7 @@ function LoadingScreen() {
 
 function GlobalProfilePrompt() {
   const { user, loading, updateProfileData, logout } = useAuth();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState('phone'); // 'phone' | 'college' | 'whatsapp'
   const [name, setName] = useState('');
   const [collegeName, setCollegeName] = useState('');
   const [district, setDistrict] = useState('');
@@ -96,6 +96,8 @@ function GlobalProfilePrompt() {
   const [dismissed, setDismissed] = useState(false);
   const [canShow, setCanShow] = useState(false);
 
+  const hasPhone = Boolean(user?.phone && user.phone.trim() !== '' && user.phone !== 'NOT LINKED');
+
   useEffect(() => {
     if (user) {
       setName(user.name && user.name !== 'Scholar' ? user.name : '');
@@ -105,13 +107,18 @@ function GlobalProfilePrompt() {
       setBranch(user.branch || '');
       setAdmissionYear(user.admissionYear || '');
       setDob(user.dob || '');
+
+      // Set initial step based on what's missing
       if (!user.phone || user.phone.trim() === '' || user.phone === 'NOT LINKED') {
+        setStep('phone');
         localStorage.removeItem('profile_prompt_dismissed');
+      } else {
+        setStep('college');
       }
     }
   }, [user]);
 
-  // Grace period so Firestore profile has time to sync without any 0.1s UI flashing
+  // Grace period so profile has time to sync
   useEffect(() => {
     if (!user || loading) {
       setCanShow(false);
@@ -119,60 +126,73 @@ function GlobalProfilePrompt() {
     }
     const timer = setTimeout(() => {
       setCanShow(true);
-    }, 1500);
+    }, 1200);
     return () => clearTimeout(timer);
   }, [user, loading]);
 
   if (loading || !user || !canShow) return null;
 
   const isAdmin = user?.role === 'admin' || user?.role === 'super_admin' || user?.email === 'prince86944@gmail.com';
-  const isSkipped = dismissed || localStorage.getItem('profile_prompt_dismissed') === 'true';
+  const isSkipped = dismissed || (hasPhone && localStorage.getItem('profile_prompt_dismissed') === 'true');
   const isCompleted = user?.profileCompleted === true || user?.profileCompleted === "true";
-  const hasPhone = Boolean(user?.phone && user.phone.trim() !== "" && user.phone !== "NOT LINKED");
 
+  // If user has NO phone, we ALWAYS require phone prompt regardless of skip
   const needsProfileUpdate = user && !isAdmin && !isSkipped && (
     !hasPhone ||
     !isCompleted ||
-    (!user?.name || user?.name?.trim() === "" || user?.name === "Scholar") ||
-    (!user?.collegeName || user?.collegeName?.trim() === "") ||
-    (!user?.district || user?.district?.trim() === "") ||
-    (!user?.branch || user?.branch?.trim() === "") ||
-    (!user?.admissionYear || user?.admissionYear?.trim() === "") ||
-    (!user?.dob || user?.dob?.trim() === "")
+    (!user?.collegeName || user?.collegeName?.trim() === '') ||
+    (!user?.branch || user?.branch?.trim() === '')
   );
 
   if (!needsProfileUpdate) return null;
 
   const handleDismiss = () => {
-    localStorage.setItem('profile_prompt_dismissed', 'true');
+    if (hasPhone) {
+      localStorage.setItem('profile_prompt_dismissed', 'true');
+    }
     setDismissed(true);
   };
 
-  const handleNextStep = async (e) => {
+  // Immediate Save for Phone Number
+  const handleSavePhone = async (e) => {
     e.preventDefault();
-    if (!name.trim()) return toast.error("Please enter your name!");
-    if (!collegeName.trim()) return toast.error("Please enter your college name!");
-    if (!district.trim()) return toast.error("Please enter your district name!");
-    if (!branch.trim()) return toast.error("Please enter your branch!");
-    if (!admissionYear.trim()) return toast.error("Please enter your admission year!");
-    if (!dob.trim()) return toast.error("Please select your date of birth!");
-    if (phoneNumber.length < 10) return toast.error("Enter a valid 10-digit mobile number!");
-    
+    const clean = phoneNumber.replace(/\D/g, '').trim();
+    if (clean.length < 10) {
+      return toast.error("Kripya valid 10-digit mobile number daalein!");
+    }
+
     setIsSubmitting(true);
     try {
       await updateProfileData({
-        name: name.trim(),
+        phone: clean,
+        name: name.trim() || user?.name || 'Scholar'
+      });
+      toast.success("Mobile number successfully link ho gaya! 📱✅");
+      setStep('college');
+    } catch (err) {
+      toast.error("Failed to save mobile number. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Step 2: College & Academic Details
+  const handleSaveCollege = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await updateProfileData({
+        name: name.trim() || user?.name || 'Scholar',
         collegeName: collegeName.trim(),
         district: district.trim(),
-        phone: phoneNumber,
         branch: branch.trim(),
         admissionYear: admissionYear.trim(),
         dob: dob.trim(),
         profileCompleted: true
       });
-      setStep(2);
+      setStep('whatsapp');
     } catch (err) {
-      toast.error("Failed to save details. Try again.");
+      toast.error("Failed to save college details. Try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -196,8 +216,8 @@ function GlobalProfilePrompt() {
   };
 
   return (
-    <div className="fixed inset-0 z-[99999] bg-[#0a0f1d]/95 backdrop-blur-md flex items-center justify-center p-4 font-['Inter'] animate-in fade-in duration-300">
-      <div className="bg-white border border-slate-200/50 p-8 md:p-12 rounded-[2.5rem] shadow-2xl max-w-[450px] w-full relative overflow-hidden group">
+    <div className="fixed inset-0 z-[99999] bg-[#0a0f1d]/90 backdrop-blur-md flex items-center justify-center p-4 font-['Inter'] animate-in fade-in duration-300">
+      <div className="bg-white border border-slate-200/60 p-7 md:p-10 rounded-[2.5rem] shadow-2xl max-w-[440px] w-full relative overflow-hidden group">
         <button
           onClick={handleDismiss}
           className="absolute top-5 right-5 w-8 h-8 flex items-center justify-center bg-slate-100 rounded-full text-slate-400 hover:bg-slate-200 hover:text-slate-800 transition-colors z-20 font-black text-sm"
@@ -205,89 +225,158 @@ function GlobalProfilePrompt() {
         >
           ✕
         </button>
-        <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 blur-[50px] rounded-full"></div>
+
+        <div className="absolute -top-10 -right-10 w-36 h-36 bg-emerald-500/10 blur-[50px] rounded-full pointer-events-none" />
+        <div className="absolute -bottom-10 -left-10 w-36 h-36 bg-blue-500/10 blur-[50px] rounded-full pointer-events-none" />
+
         <div className="relative z-10 flex flex-col items-center">
           
-          {step === 1 ? (
+          {/* STEP 1: Mandatory / Priority Mobile Number Verification */}
+          {step === 'phone' && (
             <>
-              <div className="p-4 bg-blue-600/10 rounded-full border border-blue-500/20 mb-6">
-                <ShieldCheck className="text-blue-500 w-10 h-10" />
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30 mb-5 animate-bounce">
+                <Phone size={30} />
               </div>
-              <h2 className="text-2xl md:text-3xl font-[900] text-center text-slate-900 uppercase tracking-tighter mb-2">Profile Setup</h2>
-              <p className="text-slate-500 text-xs font-bold text-center mb-6">Please complete your details to unlock and secure your college portal access.</p>
 
-              <form onSubmit={handleNextStep} className="w-full space-y-4 max-h-[50vh] overflow-y-auto px-1 scrollbar-hide pb-4">
+              <h2 className="text-xl md:text-2xl font-[1000] text-center text-slate-900 uppercase tracking-tight mb-1.5">
+                Link Mobile Number
+              </h2>
+              <p className="text-slate-500 text-xs font-medium text-center mb-6 leading-relaxed">
+                Apna 10-digit mobile number jodein taaki aapka student portal, notes sync aur exam notices secure rahein.
+              </p>
+
+              <form onSubmit={handleSavePhone} className="w-full space-y-4">
                 <div>
-                  <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Full Name</label>
-                  <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="YOUR FULL NAME" className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">
+                    Full Name
+                  </label>
+                  <input 
+                    type="text" 
+                    value={name} 
+                    onChange={(e) => setName(e.target.value)} 
+                    placeholder="Aapka Poora Naam" 
+                    className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-2xl p-3.5 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" 
+                    required 
+                  />
                 </div>
+
                 <div>
-                  <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">College Name</label>
-                  <input type="text" value={collegeName} onChange={(e) => setCollegeName(e.target.value)} placeholder="YOUR COLLEGE NAME" className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
-                </div>
-                <div>
-                  <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">District</label>
-                  <input type="text" value={district} onChange={(e) => setDistrict(e.target.value)} placeholder="YOUR DISTRICT NAME" className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
-                </div>
-                <div className="flex gap-4">
-                  <div className="flex-1">
-                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Branch</label>
-                    <input type="text" value={branch} onChange={(e) => setBranch(e.target.value)} placeholder="e.g. CSE" className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
+                  <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">
+                    WhatsApp / Mobile Number
+                  </label>
+                  <div className="relative flex items-center">
+                    <span className="absolute left-3.5 text-xs font-black text-slate-400 select-none">
+                      🇮🇳 +91
+                    </span>
+                    <input 
+                      type="tel" 
+                      value={phoneNumber} 
+                      onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))} 
+                      placeholder="9876543210" 
+                      autoFocus
+                      className="w-full bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-2xl p-3.5 pl-16 text-slate-900 text-sm font-extrabold outline-none tracking-widest transition-all placeholder:text-slate-400 placeholder:tracking-normal" 
+                      required 
+                    />
                   </div>
-                  <div className="flex-1">
-                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Admission Year</label>
-                    <input type="text" value={admissionYear} onChange={(e) => setAdmissionYear(e.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="e.g. 2024" className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
-                  </div>
+                  <span className="text-[10px] text-slate-400 font-medium block mt-1">10-digit mobile number bina 0 ya country code ke.</span>
                 </div>
-                <div className="flex gap-4">
-                  <div className="flex-1">
-                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Date of Birth</label>
-                    <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
-                  </div>
-                  <div className="flex-1">
-                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Mobile Number</label>
-                    <input type="tel" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="10-DIGIT MOBILE NO." className="w-full bg-slate-100 border border-slate-200 focus:border-blue-500/50 rounded-[1.2rem] p-4 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
-                  </div>
-                </div>
-                
-                <button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 text-white font-[1000] py-4.5 rounded-[1.5rem] shadow-[0_10px_40px_rgba(37,99,235,0.4)] transition-all active:scale-95 text-xs tracking-widest uppercase mt-4">
-                  Save & Continue
+
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting || phoneNumber.replace(/\D/g, '').length < 10}
+                  className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-[1000] py-4 rounded-2xl shadow-lg shadow-emerald-600/30 transition-all active:scale-95 text-xs tracking-widest uppercase mt-4 disabled:opacity-50 cursor-pointer"
+                >
+                  {isSubmitting ? "Linking Number..." : "Save Mobile Number 📱"}
                 </button>
               </form>
 
               <button
                 onClick={handleDismiss}
-                className="mt-3 text-slate-400 hover:text-slate-600 text-[10px] font-black uppercase tracking-widest transition-colors"
+                className="mt-4 text-slate-400 hover:text-slate-600 text-[10px] font-black uppercase tracking-widest transition-colors cursor-pointer"
               >
                 Skip for now
               </button>
             </>
-          ) : (
+          )}
+
+          {/* STEP 2: College & Academic Details */}
+          {step === 'college' && (
             <>
-              <div className="p-4 bg-emerald-500/10 rounded-full border border-emerald-500/20 mb-6">
-                <MessageCircle className="text-emerald-500 w-10 h-10" />
+              <div className="p-3.5 bg-blue-600/10 rounded-2xl border border-blue-500/20 mb-5 text-blue-600">
+                <ShieldCheck size={28} />
               </div>
-              <h2 className="text-2xl md:text-3xl font-[900] text-center text-slate-900 uppercase tracking-tighter mb-2">WhatsApp Alerts!</h2>
-              <p className="text-slate-500 text-xs font-bold text-center mb-8">Apna College Bihar ke sabhi important BEU updates, notes aur free counselling sidhe apne WhatsApp par paayein.</p>
+              <h2 className="text-xl md:text-2xl font-[1000] text-center text-slate-900 uppercase tracking-tight mb-1.5">
+                College Details
+              </h2>
+              <p className="text-slate-500 text-xs font-medium text-center mb-5">
+                Apna college aur branch select karein taaki accurate syllabus mil sake.
+              </p>
+
+              <form onSubmit={handleSaveCollege} className="w-full space-y-3.5 max-h-[50vh] overflow-y-auto px-1 scrollbar-hide pb-2">
+                <div>
+                  <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">College Name</label>
+                  <input type="text" value={collegeName} onChange={(e) => setCollegeName(e.target.value)} placeholder="e.g. GEC Vaishali / MIT" className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl p-3 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
+                </div>
+                <div>
+                  <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Home District</label>
+                  <input type="text" value={district} onChange={(e) => setDistrict(e.target.value)} placeholder="e.g. Patna / Gaya" className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl p-3 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
+                </div>
+                <div className="flex gap-3">
+                  <div className="flex-1">
+                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Branch</label>
+                    <input type="text" value={branch} onChange={(e) => setBranch(e.target.value)} placeholder="e.g. CSE / CIVIL" className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl p-3 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
+                  </div>
+                  <div className="flex-1">
+                    <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Batch / Year</label>
+                    <input type="text" value={admissionYear} onChange={(e) => setAdmissionYear(e.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="2026" className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl p-3 text-slate-900 text-xs font-bold outline-none transition-all placeholder:text-slate-400" required />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Date of Birth</label>
+                  <input type="date" value={dob} onChange={(e) => setDob(e.target.value)} className="w-full bg-slate-50 border border-slate-200 focus:border-blue-500 focus:bg-white rounded-xl p-3 text-slate-900 text-xs font-bold outline-none transition-all" required />
+                </div>
+                
+                <button type="submit" disabled={isSubmitting} className="w-full bg-blue-600 hover:bg-blue-500 text-white font-[1000] py-3.5 rounded-xl shadow-md transition-all active:scale-95 text-xs tracking-widest uppercase mt-3">
+                  {isSubmitting ? "Saving..." : "Save College Profile"}
+                </button>
+              </form>
+
+              <button
+                onClick={handleDismiss}
+                className="mt-3 text-slate-400 hover:text-slate-600 text-[10px] font-black uppercase tracking-widest transition-colors cursor-pointer"
+              >
+                Skip for now
+              </button>
+            </>
+          )}
+
+          {/* STEP 3: WhatsApp Alerts */}
+          {step === 'whatsapp' && (
+            <>
+              <div className="p-3.5 bg-emerald-500/10 rounded-2xl border border-emerald-500/20 mb-5 text-emerald-600 animate-pulse">
+                <MessageCircle size={28} />
+              </div>
+              <h2 className="text-xl md:text-2xl font-[1000] text-center text-slate-900 uppercase tracking-tight mb-2">WhatsApp Channel</h2>
+              <p className="text-slate-500 text-xs font-medium text-center mb-6">Apna College Bihar ke sabhi important BEU updates aur notes sidhe WhatsApp par paayein.</p>
               
-              <div className="flex gap-4 w-full mb-6">
-                <button onClick={() => submitFinal(false)} disabled={isSubmitting} className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-[1000] py-4.5 rounded-[1.5rem] transition-all active:scale-95 text-[10px] tracking-widest uppercase">
+              <div className="flex gap-3 w-full mb-5">
+                <button onClick={() => submitFinal(false)} disabled={isSubmitting} className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-[1000] py-3.5 rounded-xl transition-all active:scale-95 text-[10px] tracking-widest uppercase">
                   No Thanks
                 </button>
-                <button onClick={() => submitFinal(true)} disabled={isSubmitting} className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-[1000] py-4.5 rounded-[1.5rem] shadow-[0_10px_40px_rgba(16,185,129,0.4)] transition-all active:scale-95 text-[10px] tracking-widest uppercase">
-                  {isSubmitting ? "Saving..." : "Yes, Please"}
+                <button onClick={() => submitFinal(true)} disabled={isSubmitting} className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-[1000] py-3.5 rounded-xl shadow-md transition-all active:scale-95 text-[10px] tracking-widest uppercase">
+                  {isSubmitting ? "Saving..." : "Join Now"}
                 </button>
               </div>
               
-              <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 text-emerald-600 text-[10px] font-black uppercase tracking-widest hover:underline">
-                📲 Join our WhatsApp Channel
+              <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noopener noreferrer" className="text-emerald-600 text-[10px] font-black uppercase tracking-widest hover:underline">
+                📲 Open WhatsApp Channel
               </a>
             </>
           )}
 
           <button
             onClick={() => logout()}
-            className="mt-6 text-red-400 hover:text-red-500 text-[9px] font-black uppercase tracking-widest transition-colors"
+            className="mt-5 text-red-400 hover:text-red-500 text-[9px] font-black uppercase tracking-widest transition-colors cursor-pointer"
           >
             Sign out from this account
           </button>

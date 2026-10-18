@@ -547,7 +547,7 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#f8fafc] overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30 relative">
+    <div className="flex flex-col h-screen bg-[#f8fafc] bg-mesh-light overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30 relative">
       <SEO 
         title={pageTitle} 
         url={window.location.href} 
@@ -798,7 +798,7 @@ export default function DashboardLayout() {
       )}
 
       {/* Main Content Area */}
-      <main id="main-scroll-container" className="flex-1 overflow-y-auto custom-scrollbar relative z-10 bg-[#f8fafc] flex flex-col">
+      <main id="main-scroll-container" className="flex-1 overflow-y-auto custom-scrollbar relative z-10 bg-transparent flex flex-col">
         <div className={`w-full grow shrink-0 pb-28 md:pb-8 min-h-[80vh] ${location.pathname === '/' ? '' : 'p-4 md:p-6 lg:p-8 max-w-7xl mx-auto'}`}>
           <React.Suspense fallback={
             <div className="flex flex-col items-center justify-center w-full h-[60vh]">

@@ -297,15 +297,24 @@ export default function Notes() {
   const branchColor = branch ? BRANCH_COLORS[branch.color] : BRANCH_COLORS.indigo;
 
   return (
-    <div className="max-w-5xl mx-auto px-3 md:px-4 pb-24 space-y-4 md:space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      
+    <div className="max-w-5xl mx-auto px-3 md:px-4 pb-24 space-y-4 md:space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 relative">
+      {/* Dynamic Animated Ambient Orbs */}
+      <div className="absolute -top-10 left-1/4 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl animate-float pointer-events-none" />
+      <div className="absolute top-40 right-10 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '2.5s' }} />
+
       {/* Header */}
-      <div className="bg-white p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] border border-slate-200/80 shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-indigo-600/8 rounded-full blur-[80px] pointer-events-none"></div>
+      <div className="bg-white/95 backdrop-blur-xl p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] border border-slate-200/80 shadow-xl relative overflow-hidden group">
+        <div className="absolute -top-12 -right-12 w-64 h-64 bg-gradient-to-br from-indigo-500/15 via-blue-500/10 to-transparent rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
         <div className="relative z-10">
+          {/* Top Live Badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 rounded-full text-blue-700 text-[10px] font-black uppercase tracking-wider mb-4 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-blue-600 animate-ping" />
+            <span>BEU Syllabus Vault • 100% Free Verified Notes</span>
+          </div>
+
           <div className="flex items-center justify-between gap-3 md:gap-4 mb-4 md:mb-6">
             <div className="flex items-center gap-3 md:gap-4">
-              <div className="p-2.5 md:p-3.5 bg-indigo-600/15 text-indigo-500 rounded-xl md:rounded-2xl">
+              <div className="p-2.5 md:p-3.5 bg-gradient-to-br from-indigo-600 to-blue-600 text-white rounded-xl md:rounded-2xl shadow-md shadow-indigo-600/20 group-hover:scale-105 transition-transform duration-300">
                 <BookOpen size={22} className="md:hidden" />
                 <BookOpen size={30} className="hidden md:block" />
               </div>
@@ -326,9 +335,9 @@ export default function Notes() {
               onClick={() => fetchNotes(true)}
               disabled={isRefreshing}
               title="Sync latest notes"
-              className="p-2.5 md:p-3 rounded-xl bg-slate-100 hover:bg-indigo-50 text-slate-500 hover:text-indigo-600 transition-all border border-slate-200/60 active:scale-95 shrink-0 flex items-center gap-1.5"
+              className="p-2.5 md:p-3 rounded-xl bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 transition-all border border-slate-200/60 active:scale-95 shrink-0 flex items-center gap-1.5 shadow-2xs hover:shadow-sm"
             >
-              <RefreshCw size={14} className={isRefreshing ? 'animate-spin text-indigo-600' : ''} />
+              <RefreshCw size={14} className={isRefreshing ? 'animate-spin text-indigo-600' : 'group-hover:rotate-180 transition-transform duration-500'} />
               <span className="hidden sm:inline text-[9px] font-black uppercase tracking-wider">Sync</span>
             </button>
           </div>
@@ -407,14 +416,14 @@ export default function Notes() {
                 const c = BRANCH_COLORS[b.color] || BRANCH_COLORS.indigo;
                 return (
                   <button key={b.id} onClick={() => { setBranch(b); setSem(null); setFolder(null); }}
-                    className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:scale-[1.02] active:scale-[0.98] transition-all text-left shadow-sm hover:shadow-md`}>
-                    <span className="text-xl md:text-2xl">{b.emoji}</span>
+                    className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:-translate-y-1.5 hover:shadow-xl active:scale-95 transition-all duration-300 text-left shadow-xs group cursor-pointer relative overflow-hidden`}>
+                    <span className="text-xl md:text-2xl group-hover:scale-125 transition-transform duration-300 inline-block">{b.emoji}</span>
                     <div>
                       <p className={`text-sm md:text-base font-[900] tracking-tight ${c.text}`}>{b.short}</p>
                       <p className="text-[8px] md:text-[9px] font-bold text-slate-500 mt-0.5 leading-tight">{b.label}</p>
                     </div>
                     <div className={`mt-auto flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${c.text}`}>
-                      Select <ArrowRight size={10} />
+                      Select <ArrowRight size={10} className="group-hover:translate-x-1.5 transition-transform" />
                     </div>
                   </button>
                 );
@@ -433,14 +442,14 @@ export default function Notes() {
                 const c = BRANCH_COLORS[b.color] || BRANCH_COLORS.indigo;
                 return (
                   <button key={b.id} onClick={() => { setBranch(b); setSem(null); setFolder(null); }}
-                    className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:scale-[1.02] active:scale-[0.98] transition-all text-left shadow-sm hover:shadow-md`}>
-                    <span className="text-xl md:text-2xl">{b.emoji}</span>
+                    className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:-translate-y-1.5 hover:shadow-xl active:scale-95 transition-all duration-300 text-left shadow-xs group cursor-pointer relative overflow-hidden`}>
+                    <span className="text-xl md:text-2xl group-hover:scale-125 transition-transform duration-300 inline-block">{b.emoji}</span>
                     <div>
                       <p className={`text-sm md:text-base font-[900] tracking-tight ${c.text}`}>{b.short}</p>
                       <p className="text-[8px] md:text-[9px] font-bold text-slate-500 mt-0.5 leading-tight">{b.label}</p>
                     </div>
                     <div className={`mt-auto flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${c.text}`}>
-                      Select <ArrowRight size={10} />
+                      Select <ArrowRight size={10} className="group-hover:translate-x-1.5 transition-transform" />
                     </div>
                   </button>
                 );
