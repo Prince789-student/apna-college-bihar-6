@@ -1,6 +1,24 @@
 {
   "headers": [
     {
+      "source": "/(.*cutoff.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/colleges-at-(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
       "source": "/(.*)\\.apk",
       "headers": [
         {

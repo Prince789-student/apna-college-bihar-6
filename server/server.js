@@ -604,6 +604,26 @@ app.all('/api/*', (req, res) => {
     res.status(404).json({ success: false, message: 'Requested API endpoint not found.' });
 });
 
+// 5.9 Permanently Purge Legacy Cutoff / Doorway Pages (HTTP 410 Gone Signals Google to Drop Them Immediately)
+app.use((req, res, next) => {
+    const p = req.path.toLowerCase();
+    if (
+        p.includes('cutoff') ||
+        p.startsWith('/colleges-at-') ||
+        p.startsWith('/bihar-engineering-college-list') ||
+        p.startsWith('/bihar-engineering-counselling') ||
+        p.startsWith('/beu-patna-syllabus') ||
+        p.startsWith('/beu-notes-download') ||
+        p.startsWith('/beu-sgpa-cgpa-calculator')
+    ) {
+        return res.status(410).set({
+            'Content-Type': 'text/html; charset=utf-8',
+            'X-Robots-Tag': 'noindex, nofollow'
+        }).send(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>410 Gone - Page Permanently Removed</title><meta name="robots" content="noindex, nofollow" /></head><body style="font-family:sans-serif;text-align:center;padding:50px;"><h1>410 Gone</h1><p>This legacy doorway page has been permanently removed.</p><p><a href="/">Return to Apna College Bihar Homepage</a></p></body></html>`);
+    }
+    next();
+});
+
 // 6. SPA Catch-all with Dynamic SEO
 let cachedHtml = null;
 app.get('*', (req, res) => {
