@@ -12,6 +12,8 @@ import {
 export default function InteractiveCanvasHero({ isNative }) {
   const canvasRef = useRef(null);
   const heroRef = useRef(null);
+  const stageCardRef = useRef(null);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   // Interactive Stage State
   const [activeTab, setActiveTab] = useState(0);
@@ -116,7 +118,7 @@ export default function InteractiveCanvasHero({ isNative }) {
       title: 'Free 1-on-1 Senior Mentorship & Tech Roadmaps',
       tagline: 'Direct Mentorship from 3rd & 4th Year Toppers and Alumni',
       description: 'Connect with seniors studying across top engineering campuses in Bihar. Get actionable advice on BPSC AE, GATE preparation, software development careers, internships, and semester labs.',
-      badge: '10,400+ Active Students',
+      badge: '38+ Colleges Connected',
       highlight: '100% Free Senior Guidance',
       icon: GraduationCap,
       accentBg: 'from-purple-600/20 via-violet-900/40 to-slate-950',
@@ -180,6 +182,151 @@ export default function InteractiveCanvasHero({ isNative }) {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
+  const handleStageMouseMove = (e) => {
+    if (!stageCardRef.current) return;
+    const rect = stageCardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -4.5;
+    const rotateY = ((x - centerX) / centerX) * 4.5;
+    setTilt({ x: rotateX, y: rotateY });
+  };
+
+  const handleStageMouseLeave = () => {
+    setTilt({ x: 0, y: 0 });
+  };
+
+  const renderChapterVisual = (chapter) => {
+    switch (chapter) {
+      case 0:
+        return (
+          <div className="relative w-full h-full min-h-[160px] flex items-center justify-center">
+            <div className="absolute inset-0 bg-blue-600/10 rounded-xl blur-md pointer-events-none" />
+            <div className="absolute top-1 left-1 right-5 p-2 rounded-lg bg-slate-950/90 border border-blue-500/40 shadow-md animate-float-slow backdrop-blur-sm z-10">
+              <div className="flex items-center justify-between gap-1.5">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <div className="w-5 h-5 rounded-md bg-blue-600/30 text-blue-400 flex items-center justify-center shrink-0">
+                    <BookOpen size={11} />
+                  </div>
+                  <div className="min-w-0 truncate">
+                    <span className="text-[9.5px] font-bold text-white block truncate">Engg. Math-I Notes</span>
+                    <span className="text-[8px] text-blue-300 block">All 5 Units • BEU 2026</span>
+                  </div>
+                </div>
+                <span className="text-[7.5px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">Free PDF</span>
+              </div>
+            </div>
+            <div className="absolute bottom-1 left-5 right-1 p-2 rounded-lg bg-slate-950/95 border border-indigo-500/40 shadow-lg animate-float-rev-slow backdrop-blur-sm z-10">
+              <div className="flex items-center justify-between gap-1.5">
+                <div className="flex items-center gap-1.5 min-w-0">
+                  <div className="w-5 h-5 rounded-md bg-indigo-600/30 text-indigo-400 flex items-center justify-center shrink-0">
+                    <Award size={11} />
+                  </div>
+                  <div className="min-w-0 truncate">
+                    <span className="text-[9.5px] font-bold text-white block truncate">Data Structures PYQs</span>
+                    <span className="text-[8px] text-indigo-300 block">5 Yrs Step Solutions</span>
+                  </div>
+                </div>
+                <span className="text-[7.5px] font-black uppercase px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30 shrink-0">Solved</span>
+              </div>
+            </div>
+            <div className="relative z-20 px-2.5 py-1 rounded-full bg-blue-600/90 text-white text-[9px] font-black uppercase tracking-wider shadow-lg border border-white/20 flex items-center gap-1 animate-pulse">
+              <Star size={10} className="text-amber-300 fill-amber-300" /> 9.48 SGPA Topper Verified
+            </div>
+          </div>
+        );
+
+      case 1:
+        return (
+          <div className="relative w-full h-full min-h-[160px] flex items-center justify-center overflow-hidden">
+            <div className="absolute w-32 h-32 rounded-full border border-amber-500/25" />
+            <div className="absolute w-20 h-20 rounded-full border border-amber-500/35" />
+            <div className="absolute w-10 h-10 rounded-full border border-amber-500/45" />
+            <div className="absolute w-32 h-32 rounded-full overflow-hidden animate-radar-scanner pointer-events-none">
+              <div
+                className="w-16 h-16 bg-gradient-to-br from-amber-400/50 via-amber-500/10 to-transparent"
+                style={{ clipPath: 'polygon(100% 100%, 0 0, 100% 0)' }}
+              />
+            </div>
+            <div className="absolute top-2 left-2 flex items-center gap-1 bg-slate-950/90 px-1.5 py-0.5 rounded border border-amber-500/30 text-[7.5px] font-mono text-amber-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> MIT Muzaffarpur
+            </div>
+            <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-slate-950/90 px-1.5 py-0.5 rounded border border-amber-500/30 text-[7.5px] font-mono text-amber-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> BCE Bhagalpur
+            </div>
+            <div className="absolute top-2 right-2 flex items-center gap-1 bg-slate-950/90 px-1.5 py-0.5 rounded border border-amber-500/30 text-[7.5px] font-mono text-amber-300">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> NCE Chandi
+            </div>
+            <div className="relative z-10 w-8 h-8 rounded-full bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.5)]">
+              <Radio size={14} className="animate-pulse" />
+            </div>
+          </div>
+        );
+
+      case 2:
+        return (
+          <div className="w-full h-full min-h-[160px] flex flex-col justify-center space-y-1.5 p-1">
+            <div className="flex items-center justify-between bg-slate-950/90 p-1.5 px-2 rounded-lg border border-emerald-500/30">
+              <span className="text-[9px] font-mono text-slate-400">JEE CRL: #42,850</span>
+              <span className="text-[8.5px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">89.4%ile</span>
+            </div>
+            <div className="bg-gradient-to-r from-emerald-950/90 to-teal-950/90 p-1.5 px-2 rounded-lg border border-emerald-500/40 flex items-center justify-between">
+              <span className="text-[8.5px] font-bold text-slate-300">UGEAC Rank</span>
+              <span className="text-xs font-black font-mono text-emerald-300">#1,420 (BC)</span>
+            </div>
+            <div className="space-y-1">
+              <div>
+                <div className="flex items-center justify-between text-[7.5px] font-mono mb-0.5">
+                  <span className="text-slate-300 truncate">MIT Muzaffarpur (ECE)</span>
+                  <span className="text-emerald-400 font-bold">96% High</span>
+                </div>
+                <div className="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full w-[94%]" />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between text-[7.5px] font-mono mb-0.5">
+                  <span className="text-slate-300 truncate">BCE Bhagalpur (CSE)</span>
+                  <span className="text-cyan-400 font-bold">88% Chance</span>
+                </div>
+                <div className="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full w-[88%]" />
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 3:
+        return (
+          <div className="relative w-full h-full min-h-[160px] flex items-center justify-center p-1">
+            <div className="absolute top-1 left-1 p-1.5 rounded-lg bg-slate-950/90 border border-purple-500/40 text-[8px] shadow-sm animate-float-slow">
+              <span className="text-purple-300 font-bold block">TCS Digital</span>
+              <span className="text-slate-400 text-[7px]">MIT Alum</span>
+            </div>
+            <div className="absolute bottom-1 right-1 p-1.5 rounded-lg bg-slate-950/90 border border-purple-500/40 text-[8px] shadow-sm animate-float-rev-slow">
+              <span className="text-purple-300 font-bold block">GATE AIR 314</span>
+              <span className="text-slate-400 text-[7px]">BCE Alum</span>
+            </div>
+            <div className="absolute top-1 right-1 p-1.5 rounded-lg bg-slate-950/90 border border-violet-500/40 text-[8px] shadow-sm animate-float-rev-slow">
+              <span className="text-violet-300 font-bold block">BPSC AE</span>
+              <span className="text-slate-400 text-[7px]">NCE Ranker</span>
+            </div>
+            <div className="relative z-10 p-2.5 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white text-center shadow-lg border border-white/20">
+              <GraduationCap size={16} className="mx-auto mb-0.5 text-white animate-bounce" />
+              <span className="text-[9px] font-black uppercase tracking-wider block">1-on-1 Senior Help</span>
+              <span className="text-[7.5px] text-purple-200 block">WhatsApp Guidance</span>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   return (
     <section ref={heroRef} className="relative pt-6 pb-16 md:pt-12 md:pb-24 px-4 sm:px-6 md:px-12 overflow-hidden z-10 select-none">
 
@@ -206,9 +353,9 @@ export default function InteractiveCanvasHero({ isNative }) {
             <span className="text-slate-600 font-semibold text-[11px]">38+ Bihar Engineering Colleges</span>
           </div>
 
-          {/* Grand Apna College Bihar Typography */}
+          {/* Grand Apna College Bihar Typography with Luminous Flowing Gradient */}
           <h1 className="font-heading text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-[1000] tracking-tight leading-[1.05] text-slate-900 mb-2 uppercase">
-            APNA COLLEGE <span className="text-gradient-hero">BIHAR</span>
+            APNA COLLEGE <span className="bg-gradient-to-r from-blue-600 via-indigo-600 via-violet-600 to-blue-600 bg-clip-text text-transparent animate-gradient-flow inline-block">BIHAR</span>
           </h1>
 
           {/* Clean Subtitle Slogan */}
@@ -248,8 +395,17 @@ export default function InteractiveCanvasHero({ isNative }) {
             </div>
           </div>
 
-          {/* Main 3D Card Stage */}
-          <div className="stage-3d-card rounded-3xl bg-white/95 border border-slate-200/90 shadow-2xl shadow-blue-900/10 backdrop-blur-2xl overflow-hidden transition-all duration-500">
+          {/* Main 3D Card Stage with dynamic perspective tilt */}
+          <div
+            ref={stageCardRef}
+            onMouseMove={handleStageMouseMove}
+            onMouseLeave={handleStageMouseLeave}
+            style={{
+              transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+              transition: tilt.x === 0 && tilt.y === 0 ? 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)' : 'transform 0.08s ease-out'
+            }}
+            className="stage-3d-card rounded-3xl bg-white/95 border border-slate-200/90 shadow-2xl shadow-blue-900/10 backdrop-blur-2xl overflow-hidden will-change-transform"
+          >
             
             {/* Header with Navigation Pills */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 bg-slate-50/90 px-4 py-3 gap-3">
@@ -338,14 +494,15 @@ export default function InteractiveCanvasHero({ isNative }) {
 
                         {/* Mode Switcher & Equalizer Visualizer */}
                         <div className="flex items-center gap-2">
-                          {/* Animated Soundwave Equalizer (5 bouncing bars) */}
+                          {/* Animated Soundwave Equalizer (6 bouncing bars) */}
                           {videoPlaying && videoMode === 'motion' && (
-                            <div className="hidden sm:flex items-end gap-0.5 h-3.5 px-1.5" title="Audio Waveform Active">
-                              <span className="w-0.5 bg-blue-400 rounded-full animate-pulse h-3"></span>
-                              <span className="w-0.5 bg-indigo-400 rounded-full animate-pulse h-1.5" style={{ animationDelay: '150ms' }}></span>
-                              <span className="w-0.5 bg-purple-400 rounded-full animate-pulse h-3.5" style={{ animationDelay: '300ms' }}></span>
-                              <span className="w-0.5 bg-blue-400 rounded-full animate-pulse h-2" style={{ animationDelay: '450ms' }}></span>
-                              <span className="w-0.5 bg-cyan-400 rounded-full animate-pulse h-2.5" style={{ animationDelay: '200ms' }}></span>
+                            <div className="hidden sm:flex items-end gap-1 h-4 px-2 py-0.5 bg-slate-900/90 rounded-md border border-slate-800" title="Narrator Audio Waveform Active">
+                              <span className="w-1 bg-cyan-400 rounded-full animate-eq-1"></span>
+                              <span className="w-1 bg-blue-400 rounded-full animate-eq-2"></span>
+                              <span className="w-1 bg-indigo-400 rounded-full animate-eq-3"></span>
+                              <span className="w-1 bg-purple-400 rounded-full animate-eq-4"></span>
+                              <span className="w-1 bg-pink-400 rounded-full animate-eq-5"></span>
+                              <span className="w-1 bg-emerald-400 rounded-full animate-eq-6"></span>
                             </div>
                           )}
 
@@ -393,39 +550,49 @@ export default function InteractiveCanvasHero({ isNative }) {
                             onClick={() => setVideoPlaying(!videoPlaying)}
                             className="relative cursor-pointer select-none group/screen"
                           >
-                            {/* Scene Header Pill */}
-                            <div className="flex items-center justify-between gap-2 mb-2">
-                              <span className="text-[10px] font-mono tracking-widest font-black text-blue-400 bg-blue-950/80 px-2 py-0.5 rounded-md border border-blue-800/60 uppercase">
-                                {videoScenes[videoChapter].tag}
-                              </span>
-                              <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-800/60 flex items-center gap-1">
-                                <CheckCircle2 size={11} /> {videoScenes[videoChapter].badge}
-                              </span>
-                            </div>
-
-                            {/* Scene Headline */}
-                            <h3 className="font-heading text-lg sm:text-xl font-black text-white leading-tight mb-1 group-hover/screen:text-blue-300 transition-colors">
-                              {videoScenes[videoChapter].title}
-                            </h3>
-
-                            {/* Tagline */}
-                            <p className="text-xs font-semibold text-blue-300/90 mb-3">
-                              {videoScenes[videoChapter].tagline}
-                            </p>
-
-                            {/* Description */}
-                            <p className="text-xs text-slate-300 leading-relaxed mb-4 line-clamp-2 sm:line-clamp-3">
-                              {videoScenes[videoChapter].description}
-                            </p>
-
-                            {/* Bullet Features Matrix */}
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-800/80">
-                              {videoScenes[videoChapter].bulletPoints.map((pt, pIdx) => (
-                                <div key={pIdx} className="flex items-center gap-1.5 text-[11px] font-medium text-slate-300 bg-slate-900/60 px-2 py-1 rounded-lg border border-slate-800">
-                                  <Check size={12} className="text-emerald-400 shrink-0" />
-                                  <span className="truncate">{pt}</span>
+                            <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-center">
+                              {/* Left Text Narrative */}
+                              <div className="md:col-span-7 space-y-1.5">
+                                {/* Scene Header Pill */}
+                                <div className="flex items-center justify-between gap-2 mb-1.5">
+                                  <span className="text-[10px] font-mono tracking-widest font-black text-blue-400 bg-blue-950/80 px-2 py-0.5 rounded-md border border-blue-800/60 uppercase">
+                                    {videoScenes[videoChapter].tag}
+                                  </span>
+                                  <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-800/60 flex items-center gap-1">
+                                    <CheckCircle2 size={11} /> {videoScenes[videoChapter].badge}
+                                  </span>
                                 </div>
-                              ))}
+
+                                {/* Scene Headline */}
+                                <h3 className="font-heading text-base sm:text-lg font-black text-white leading-tight group-hover/screen:text-blue-300 transition-colors">
+                                  {videoScenes[videoChapter].title}
+                                </h3>
+
+                                {/* Tagline */}
+                                <p className="text-xs font-semibold text-blue-300/90">
+                                  {videoScenes[videoChapter].tagline}
+                                </p>
+
+                                {/* Description */}
+                                <p className="text-xs text-slate-300 leading-relaxed line-clamp-2">
+                                  {videoScenes[videoChapter].description}
+                                </p>
+
+                                {/* Bullet Features Matrix */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-2 border-t border-slate-800/80">
+                                  {videoScenes[videoChapter].bulletPoints.slice(0, 2).map((pt, pIdx) => (
+                                    <div key={pIdx} className="flex items-center gap-1.5 text-[10.5px] font-medium text-slate-300 bg-slate-900/60 px-2 py-1 rounded-lg border border-slate-800">
+                                      <Check size={12} className="text-emerald-400 shrink-0" />
+                                      <span className="truncate">{pt}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Right Interactive Animated Motion Graphic Canvas */}
+                              <div className="md:col-span-5 bg-slate-900/80 rounded-xl border border-slate-800/90 p-2 min-h-[170px] relative overflow-hidden flex items-center justify-center">
+                                {renderChapterVisual(videoChapter)}
+                              </div>
                             </div>
 
                             {/* Center Floating Play/Pause Hint */}
@@ -522,7 +689,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                             { title: '100% Free Forever', desc: 'No subscriptions or locked PDFs' },
                             { title: 'Strictly BEU Aligned', desc: 'Updated for 38+ Govt Colleges' },
                             { title: 'Zero Spam / Verified', desc: 'Authentic circulars within 60s' },
-                            { title: '10,400+ Active Students', desc: 'Bihar largest B.Tech community' },
+                            { title: '38+ Colleges Network', desc: 'Statewide BEU community across Bihar' },
                           ].map((feat, fIdx) => (
                             <div key={fIdx} className="flex items-start gap-2 text-left">
                               <div className="w-4 h-4 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">

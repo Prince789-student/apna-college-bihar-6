@@ -172,9 +172,9 @@ export default function WhatsAppPopup() {
                 <Sparkles size={12} className="text-amber-300" /> WhatsApp Channel
               </div>
 
-              <p className="text-[11.5px] font-medium text-emerald-100/90 mt-2 flex items-center justify-center gap-1.5">
-                <Users size={13} className="text-emerald-200" />
-                10,400+ Bihar Engineering Students Active
+              <p className="text-[11.5px] font-semibold text-emerald-100/95 mt-2 flex items-center justify-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-300 animate-ping inline-block" />
+                Bihar Engineering (BEU) Students Ka Official Hub
               </p>
             </div>
             
