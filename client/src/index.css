@@ -45,8 +45,24 @@
     background: #cbd5e1;
     border-radius: 9999px;
   }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #3b82f6;
+}
+
+@layer components {
+  /* Unified Accessible Button System (Consolidates 23+ ad-hoc styles into 4 cohesive tiers) */
+  .btn-primary {
+    @apply inline-flex items-center justify-center font-heading font-bold text-xs sm:text-sm py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-md transition-all duration-200 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center font-heading font-bold text-xs sm:text-sm py-2 px-3.5 rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-200 hover:border-blue-300 shadow-2xs transition-colors duration-200 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+  }
+
+  .btn-dark {
+    @apply inline-flex items-center justify-center font-bold text-xs py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors duration-200 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-900;
+  }
+
+  .btn-icon {
+    @apply inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white transition-all duration-200 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-900;
   }
 }
 
@@ -114,6 +130,91 @@
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid rgba(226, 232, 240, 0.9);
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+  }
+
+  /* Unified 4-tier Button System (Resolves Usability Heuristic Issue 1) */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    border-radius: 0.75rem;
+    background-color: #2563eb;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.025em;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-primary:hover {
+    background-color: #1d4ed8;
+  }
+  .btn-primary:active {
+    transform: scale(0.97);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0.5rem 0.875rem;
+    border-radius: 0.75rem;
+    background-color: #ffffff;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+    font-weight: 600;
+    font-size: 0.75rem;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .btn-secondary:hover {
+    background-color: #f8fafc;
+    color: #0f172a;
+    border-color: #cbd5e1;
+  }
+  .btn-secondary:active {
+    transform: scale(0.97);
+  }
+
+  .btn-dark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.625rem;
+    border-radius: 0.5rem;
+    background-color: #1e293b;
+    color: #f1f5f9;
+    border: 1px solid #334155;
+    font-weight: 600;
+    font-size: 0.75rem;
+    transition: all 0.2s ease;
+  }
+  .btn-dark:hover {
+    background-color: #334155;
+    color: #ffffff;
+  }
+  .btn-dark:active {
+    transform: scale(0.97);
+  }
+
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    background-color: #1e293b;
+    color: #ffffff;
+    transition: all 0.2s ease;
+  }
+  .btn-icon:hover {
+    background-color: #334155;
+  }
+  .btn-icon:active {
+    transform: scale(0.95);
   }
 
   /* Animated Shimmer on Button */

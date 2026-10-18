@@ -204,36 +204,36 @@ export default function InteractiveCanvasHero({ isNative }) {
         return (
           <div className="relative w-full h-full min-h-[160px] flex items-center justify-center">
             <div className="absolute inset-0 bg-blue-600/10 rounded-xl blur-md pointer-events-none" />
-            <div className="absolute top-1 left-1 right-5 p-2 rounded-lg bg-slate-950/90 border border-blue-500/40 shadow-md animate-float-slow backdrop-blur-sm z-10">
-              <div className="flex items-center justify-between gap-1.5">
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <div className="w-5 h-5 rounded-md bg-blue-600/30 text-blue-400 flex items-center justify-center shrink-0">
-                    <BookOpen size={11} />
+            <div className="absolute top-1 left-1 right-5 p-2.5 rounded-xl bg-slate-950/90 border border-blue-500/40 shadow-md animate-float-slow backdrop-blur-sm z-10">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-6 h-6 rounded-lg bg-blue-600/30 text-blue-400 flex items-center justify-center shrink-0">
+                    <BookOpen size={13} />
                   </div>
-                  <div className="min-w-0 truncate">
-                    <span className="text-[9.5px] font-bold text-white block truncate">Engg. Math-I Notes</span>
-                    <span className="text-[8px] text-blue-300 block">All 5 Units • BEU 2026</span>
-                  </div>
-                </div>
-                <span className="text-[7.5px] font-black uppercase px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">Free PDF</span>
-              </div>
-            </div>
-            <div className="absolute bottom-1 left-5 right-1 p-2 rounded-lg bg-slate-950/95 border border-indigo-500/40 shadow-lg animate-float-rev-slow backdrop-blur-sm z-10">
-              <div className="flex items-center justify-between gap-1.5">
-                <div className="flex items-center gap-1.5 min-w-0">
-                  <div className="w-5 h-5 rounded-md bg-indigo-600/30 text-indigo-400 flex items-center justify-center shrink-0">
-                    <Award size={11} />
-                  </div>
-                  <div className="min-w-0 truncate">
-                    <span className="text-[9.5px] font-bold text-white block truncate">Data Structures PYQs</span>
-                    <span className="text-[8px] text-indigo-300 block">5 Yrs Step Solutions</span>
+                  <div className="min-w-0">
+                    <span className="text-xs font-bold text-white block leading-tight">Engg. Math-I Notes</span>
+                    <span className="text-xs text-blue-300/90 block leading-tight mt-0.5">All 5 Units • BEU 2026</span>
                   </div>
                 </div>
-                <span className="text-[7.5px] font-black uppercase px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30 shrink-0">Solved</span>
+                <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">Free PDF</span>
               </div>
             </div>
-            <div className="relative z-20 px-2.5 py-1 rounded-full bg-blue-600/90 text-white text-[9px] font-black uppercase tracking-wider shadow-lg border border-white/20 flex items-center gap-1 animate-pulse">
-              <Star size={10} className="text-amber-300 fill-amber-300" /> 9.48 SGPA Topper Verified
+            <div className="absolute bottom-1 left-5 right-1 p-2.5 rounded-xl bg-slate-950/95 border border-indigo-500/40 shadow-lg animate-float-rev-slow backdrop-blur-sm z-10">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-6 h-6 rounded-lg bg-indigo-600/30 text-indigo-400 flex items-center justify-center shrink-0">
+                    <Award size={13} />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-xs font-bold text-white block leading-tight">Data Structures PYQs</span>
+                    <span className="text-xs text-indigo-300/90 block leading-tight mt-0.5">5 Yrs Step Solutions</span>
+                  </div>
+                </div>
+                <span className="text-xs font-bold uppercase px-2 py-0.5 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-500/30 shrink-0">Solved</span>
+              </div>
+            </div>
+            <div className="relative z-20 px-3 py-1 rounded-full bg-blue-600/90 text-white text-xs font-bold uppercase tracking-wide shadow-lg border border-white/20 flex items-center gap-1.5 animate-pulse">
+              <Star size={12} className="text-amber-300 fill-amber-300" /> 9.48 SGPA Topper Verified
             </div>
           </div>
         );
@@ -250,17 +250,17 @@ export default function InteractiveCanvasHero({ isNative }) {
                 style={{ clipPath: 'polygon(100% 100%, 0 0, 100% 0)' }}
               />
             </div>
-            <div className="absolute top-2 left-2 flex items-center gap-1 bg-slate-950/90 px-1.5 py-0.5 rounded border border-amber-500/30 text-[7.5px] font-mono text-amber-300">
+            <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-slate-950/90 px-2 py-1 rounded-lg border border-amber-500/30 text-xs font-mono text-amber-300">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> MIT Muzaffarpur
             </div>
-            <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-slate-950/90 px-1.5 py-0.5 rounded border border-amber-500/30 text-[7.5px] font-mono text-amber-300">
+            <div className="absolute bottom-2 right-2 flex items-center gap-1.5 bg-slate-950/90 px-2 py-1 rounded-lg border border-amber-500/30 text-xs font-mono text-amber-300">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> BCE Bhagalpur
             </div>
-            <div className="absolute top-2 right-2 flex items-center gap-1 bg-slate-950/90 px-1.5 py-0.5 rounded border border-amber-500/30 text-[7.5px] font-mono text-amber-300">
+            <div className="absolute top-2 right-2 flex items-center gap-1.5 bg-slate-950/90 px-2 py-1 rounded-lg border border-amber-500/30 text-xs font-mono text-amber-300">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> NCE Chandi
             </div>
-            <div className="relative z-10 w-8 h-8 rounded-full bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.5)]">
-              <Radio size={14} className="animate-pulse" />
+            <div className="relative z-10 w-9 h-9 rounded-full bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.5)]">
+              <Radio size={16} className="animate-pulse" />
             </div>
           </div>
         );
@@ -268,31 +268,31 @@ export default function InteractiveCanvasHero({ isNative }) {
       case 2:
         return (
           <div className="w-full h-full min-h-[160px] flex flex-col justify-center space-y-1.5 p-1">
-            <div className="flex items-center justify-between bg-slate-950/90 p-1.5 px-2 rounded-lg border border-emerald-500/30">
-              <span className="text-[9px] font-mono text-slate-400">JEE CRL: #42,850</span>
-              <span className="text-[8.5px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">89.4%ile</span>
+            <div className="flex items-center justify-between bg-slate-950/90 p-2 rounded-xl border border-emerald-500/30">
+              <span className="text-xs font-mono text-slate-400">JEE CRL: #42,850</span>
+              <span className="text-xs font-bold px-2 py-0.5 rounded-lg bg-emerald-500/20 text-emerald-300">89.4%ile</span>
             </div>
-            <div className="bg-gradient-to-r from-emerald-950/90 to-teal-950/90 p-1.5 px-2 rounded-lg border border-emerald-500/40 flex items-center justify-between">
-              <span className="text-[8.5px] font-bold text-slate-300">UGEAC Rank</span>
+            <div className="bg-gradient-to-r from-emerald-950/90 to-teal-950/90 p-2 rounded-xl border border-emerald-500/40 flex items-center justify-between">
+              <span className="text-xs font-bold text-slate-300">UGEAC Rank</span>
               <span className="text-xs font-black font-mono text-emerald-300">#1,420 (BC)</span>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <div>
-                <div className="flex items-center justify-between text-[7.5px] font-mono mb-0.5">
-                  <span className="text-slate-300 truncate">MIT Muzaffarpur (ECE)</span>
+                <div className="flex items-center justify-between text-xs font-mono mb-1">
+                  <span className="text-slate-300">MIT Muzaffarpur (ECE)</span>
                   <span className="text-emerald-400 font-bold">96% High</span>
                 </div>
-                <div className="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full w-[94%]" />
                 </div>
               </div>
               <div>
-                <div className="flex items-center justify-between text-[7.5px] font-mono mb-0.5">
-                  <span className="text-slate-300 truncate">BCE Bhagalpur (CSE)</span>
-                  <span className="text-cyan-400 font-bold">88% Chance</span>
+                <div className="flex items-center justify-between text-xs font-mono mb-1">
+                  <span className="text-slate-300">BCE Bhagalpur (CSE)</span>
+                  <span className="text-blue-400 font-bold">88% Chance</span>
                 </div>
-                <div className="w-full h-1 bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full w-[88%]" />
+                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-blue-500 to-teal-400 rounded-full w-[88%]" />
                 </div>
               </div>
             </div>
@@ -302,22 +302,22 @@ export default function InteractiveCanvasHero({ isNative }) {
       case 3:
         return (
           <div className="relative w-full h-full min-h-[160px] flex items-center justify-center p-1">
-            <div className="absolute top-1 left-1 p-1.5 rounded-lg bg-slate-950/90 border border-purple-500/40 text-[8px] shadow-sm animate-float-slow">
-              <span className="text-purple-300 font-bold block">TCS Digital</span>
-              <span className="text-slate-400 text-[7px]">MIT Alum</span>
+            <div className="absolute top-1.5 left-1.5 p-2 rounded-xl bg-slate-950/90 border border-blue-500/40 text-xs shadow-sm animate-float-slow">
+              <span className="text-blue-300 font-bold block">TCS Digital</span>
+              <span className="text-slate-400 text-xs">MIT Alum</span>
             </div>
-            <div className="absolute bottom-1 right-1 p-1.5 rounded-lg bg-slate-950/90 border border-purple-500/40 text-[8px] shadow-sm animate-float-rev-slow">
-              <span className="text-purple-300 font-bold block">GATE AIR 314</span>
-              <span className="text-slate-400 text-[7px]">BCE Alum</span>
+            <div className="absolute bottom-1.5 right-1.5 p-2 rounded-xl bg-slate-950/90 border border-blue-500/40 text-xs shadow-sm animate-float-rev-slow">
+              <span className="text-blue-300 font-bold block">GATE AIR 314</span>
+              <span className="text-slate-400 text-xs">BCE Alum</span>
             </div>
-            <div className="absolute top-1 right-1 p-1.5 rounded-lg bg-slate-950/90 border border-violet-500/40 text-[8px] shadow-sm animate-float-rev-slow">
-              <span className="text-violet-300 font-bold block">BPSC AE</span>
-              <span className="text-slate-400 text-[7px]">NCE Ranker</span>
+            <div className="absolute top-1.5 right-1.5 p-2 rounded-xl bg-slate-950/90 border border-blue-500/40 text-xs shadow-sm animate-float-rev-slow">
+              <span className="text-blue-300 font-bold block">BPSC AE</span>
+              <span className="text-slate-400 text-xs">NCE Ranker</span>
             </div>
-            <div className="relative z-10 p-2.5 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-600 text-white text-center shadow-lg border border-white/20">
-              <GraduationCap size={16} className="mx-auto mb-0.5 text-white animate-bounce" />
-              <span className="text-[9px] font-black uppercase tracking-wider block">1-on-1 Senior Help</span>
-              <span className="text-[7.5px] text-purple-200 block">WhatsApp Guidance</span>
+            <div className="relative z-10 p-3 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white text-center shadow-lg border border-white/20">
+              <GraduationCap size={18} className="mx-auto mb-1 text-white animate-bounce" />
+              <span className="text-xs font-bold uppercase tracking-wide block">1-on-1 Senior Help</span>
+              <span className="text-xs text-blue-200 block">WhatsApp Guidance</span>
             </div>
           </div>
         );
@@ -337,7 +337,9 @@ export default function InteractiveCanvasHero({ isNative }) {
       </div>
 
       <div className="container mx-auto max-w-5xl flex flex-col items-center text-center relative z-10 pt-2 sm:pt-4">
-        
+        {/* Semantic Level 1 Heading for Document Accessibility (Issue 3) */}
+        <h1 className="sr-only">Apna College Bihar | #1 Academic Platform for BEU &amp; Bihar Engineering Students</h1>
+
         {/* ══════════════════════════════════════════════════════════════════════════ */}
         {/* ── 3D INTERACTIVE CANVAS-UI STAGE MOCKUP (Full Jitter Motion) ── */}
         {/* ══════════════════════════════════════════════════════════════════════════ */}
@@ -350,9 +352,9 @@ export default function InteractiveCanvasHero({ isNative }) {
             <div>
               <div className="flex items-center gap-1">
                 <span className="font-heading text-xs font-black text-slate-900">9.48 SGPA</span>
-                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1 rounded">Top 1% BEU</span>
+                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded-lg">Top 1% BEU</span>
               </div>
-              <p className="text-[10px] text-slate-500 font-medium">10-Point Credit Scale</p>
+              <p className="text-xs text-slate-500 font-medium">10-Point Credit Scale</p>
             </div>
           </div>
 
@@ -365,7 +367,7 @@ export default function InteractiveCanvasHero({ isNative }) {
             </div>
             <div>
               <span className="font-heading text-xs font-black text-slate-900">Why Apna College Bihar?</span>
-              <p className="text-[10px] text-slate-500 font-medium">Watch Full Motion Film</p>
+              <p className="text-xs text-slate-500 font-medium">Watch Full Motion Film</p>
             </div>
           </div>
 
@@ -378,7 +380,7 @@ export default function InteractiveCanvasHero({ isNative }) {
               transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
               transition: tilt.x === 0 && tilt.y === 0 ? 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)' : 'transform 0.08s ease-out'
             }}
-            className="stage-3d-card rounded-3xl bg-white/95 border border-slate-200/90 shadow-2xl shadow-blue-900/10 backdrop-blur-2xl overflow-hidden will-change-transform"
+            className="stage-3d-card rounded-2xl bg-white/95 border border-slate-200/90 shadow-2xl shadow-blue-900/10 backdrop-blur-2xl overflow-hidden will-change-transform"
           >
             
             {/* Header with Navigation Pills */}
@@ -389,9 +391,9 @@ export default function InteractiveCanvasHero({ isNative }) {
                   <span className="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
                   <span className="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span>
                 </div>
-                <span className="text-xs font-black text-slate-800 tracking-wider flex items-center gap-1.5 ml-1">
+                <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5 ml-1">
                   <Sparkles size={13} className="text-blue-600" />
-                  CANVAS INTERACTIVE LAB
+                  Interactive Canvas Lab
                 </span>
               </div>
 
@@ -420,13 +422,13 @@ export default function InteractiveCanvasHero({ isNative }) {
                 })}
               </div>
 
-              {/* Play/Pause */}
+              {/* Play/Pause Button */}
               <button
                 onClick={() => setIsPaused(!isPaused)}
-                className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white hover:bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold cursor-pointer shrink-0"
+                className="btn-secondary hidden sm:inline-flex"
               >
                 {isPaused ? <Play size={11} className="text-emerald-600" /> : <Pause size={11} className="text-amber-600" />}
-                <span className="text-[11px]">{isPaused ? 'Resume' : 'Auto'}</span>
+                <span>{isPaused ? 'Resume' : 'Auto'}</span>
               </button>
             </div>
 
@@ -459,11 +461,11 @@ export default function InteractiveCanvasHero({ isNative }) {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-600"></span>
                           </span>
-                          <span className="text-[11px] font-black uppercase tracking-wider text-slate-200">
+                          <span className="text-xs font-black uppercase tracking-wider text-slate-200">
                             {videoMode === 'youtube' ? 'YouTube Player' : 'Live Brand Film'}
                           </span>
                           <span className="hidden sm:inline text-slate-600">•</span>
-                          <span className="hidden sm:inline text-[10px] text-slate-400 font-mono">1080p 60FPS</span>
+                          <span className="hidden sm:inline text-xs text-slate-400 font-mono">1080p 60FPS</span>
                         </div>
 
                         {/* Mode Switcher & Equalizer Visualizer */}
@@ -483,7 +485,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                           <button
                             type="button"
                             onClick={() => setVideoMode(videoMode === 'motion' ? 'youtube' : 'motion')}
-                            className="px-2 py-0.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-[10px] font-bold text-slate-300 border border-slate-700 transition-colors flex items-center gap-1 cursor-pointer"
+                            className="btn-dark text-xs flex items-center gap-1.5"
                           >
                             {videoMode === 'motion' ? (
                               <>
@@ -513,7 +515,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                               href="https://www.youtube.com/@ApnaCollegeBEUbihar"
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs transition-transform active:scale-95 shadow-md"
+                              className="btn-primary text-xs inline-flex items-center gap-2 bg-red-600 hover:bg-red-700"
                             >
                               <Play size={13} className="fill-white" /> Open @ApnaCollegeBEUbihar on YouTube
                             </a>
@@ -529,10 +531,10 @@ export default function InteractiveCanvasHero({ isNative }) {
                               <div className="md:col-span-7 space-y-1.5">
                                 {/* Scene Header Pill */}
                                 <div className="flex items-center justify-between gap-2 mb-1.5">
-                                  <span className="text-[10px] font-mono tracking-widest font-black text-blue-400 bg-blue-950/80 px-2 py-0.5 rounded-md border border-blue-800/60 uppercase">
+                                  <span className="text-xs font-mono tracking-widest font-black text-blue-400 bg-blue-950/80 px-2 py-0.5 rounded-md border border-blue-800/60 uppercase">
                                     {videoScenes[videoChapter].tag}
                                   </span>
-                                  <span className="text-[10px] font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-800/60 flex items-center gap-1">
+                                  <span className="text-xs font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-800/60 flex items-center gap-1">
                                     <CheckCircle2 size={11} /> {videoScenes[videoChapter].badge}
                                   </span>
                                 </div>
@@ -555,9 +557,9 @@ export default function InteractiveCanvasHero({ isNative }) {
                                 {/* Bullet Features Matrix */}
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pt-2 border-t border-slate-800/80">
                                   {videoScenes[videoChapter].bulletPoints.slice(0, 2).map((pt, pIdx) => (
-                                    <div key={pIdx} className="flex items-center gap-1.5 text-[10.5px] font-medium text-slate-300 bg-slate-900/60 px-2 py-1 rounded-lg border border-slate-800">
+                                    <div key={pIdx} className="flex items-center gap-1.5 text-xs font-medium text-slate-300 bg-slate-900/60 px-2 py-1 rounded-lg border border-slate-800">
                                       <Check size={12} className="text-emerald-400 shrink-0" />
-                                      <span className="truncate">{pt}</span>
+                                      <span className="leading-snug">{pt}</span>
                                     </div>
                                   ))}
                                 </div>
@@ -596,12 +598,12 @@ export default function InteractiveCanvasHero({ isNative }) {
                             <button
                               type="button"
                               onClick={() => setVideoPlaying(!videoPlaying)}
-                              className="w-7 h-7 rounded-lg bg-slate-800 hover:bg-slate-700 text-white flex items-center justify-center transition-transform active:scale-95 cursor-pointer"
+                              className="btn-icon"
                               title={videoPlaying ? 'Pause video' : 'Play video'}
                             >
                               {videoPlaying ? <Pause size={13} /> : <Play size={13} className="fill-white translate-x-0.5" />}
                             </button>
-                            <span className="text-[11px] font-mono text-slate-400 font-semibold">
+                            <span className="text-xs font-mono text-slate-400 font-semibold">
                               {formatVideoTime(videoTime)} / 02:40
                             </span>
                           </div>
@@ -616,7 +618,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                                   setVideoChapter(scIdx);
                                   setVideoPlaying(true);
                                 }}
-                                className={`px-2 py-0.5 rounded-md text-[10px] font-bold transition-all cursor-pointer whitespace-nowrap ${
+                                className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap ${
                                   videoChapter === scIdx
                                     ? 'bg-blue-600 text-white shadow-xs'
                                     : 'bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800'
@@ -632,7 +634,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                             href="https://www.youtube.com/@ApnaCollegeBEUbihar"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[11px] font-bold text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors"
+                            className="text-xs font-bold text-red-400 hover:text-red-300 flex items-center gap-1 transition-colors"
                           >
                             <Youtube size={13} />
                             <span className="hidden sm:inline">YouTube</span>
@@ -646,7 +648,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                     {/* RIGHT COLUMN: Why Choose Us Value Proposition Card */}
                     <div className="md:col-span-5 lg:col-span-4 bg-gradient-to-br from-blue-50/90 via-indigo-50/70 to-white p-5 rounded-2xl border border-blue-200 flex flex-col justify-between h-full">
                       <div>
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-600 text-white text-[11px] font-bold mb-3">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-600 text-white text-xs font-bold mb-3">
                           <Play size={11} className="fill-white" /> Bihar's #1 Academic Hub
                         </div>
                         
@@ -671,7 +673,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                               </div>
                               <div>
                                 <span className="text-xs font-bold text-slate-900 block leading-tight">{feat.title}</span>
-                                <span className="text-[11px] text-slate-500 leading-tight">{feat.desc}</span>
+                                <span className="text-xs text-slate-500 leading-tight">{feat.desc}</span>
                               </div>
                             </div>
                           ))}
@@ -683,7 +685,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                           href="https://www.youtube.com/@ApnaCollegeBEUbihar"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="w-full py-2.5 px-4 rounded-xl bg-red-600 hover:bg-red-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:scale-102 active:scale-95 cursor-pointer"
+                          className="btn-primary w-full bg-red-600 hover:bg-red-700 text-xs flex items-center justify-center gap-2 shadow-sm"
                         >
                           <Youtube size={15} />
                           <span>Watch Brand Film on YouTube</span>
@@ -691,7 +693,7 @@ export default function InteractiveCanvasHero({ isNative }) {
 
                         <Link
                           to="/notes"
-                          className="w-full py-2 px-4 rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-200 font-heading font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                          className="btn-secondary w-full text-xs flex items-center justify-center gap-1.5"
                         >
                           <span>Explore Free Notes & PYQs</span>
                           <ArrowRight size={13} />
@@ -727,7 +729,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                             <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                               Operating Systems & System Architecture
                             </h4>
-                            <p className="text-[11px] text-slate-500">Unit 1 to 5 Hand-Written Notes • BEU Updated</p>
+                            <p className="text-xs text-slate-500">Unit 1 to 5 Hand-Written Notes • BEU Updated</p>
                           </div>
                         </div>
                         <span className="px-2.5 py-1.5 rounded-xl bg-blue-600 text-white text-xs font-bold flex items-center gap-1 shadow-xs group-hover:scale-105 transition-transform">
@@ -744,7 +746,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                             <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
                               Design & Analysis of Algorithms (DAA)
                             </h4>
-                            <p className="text-[11px] text-slate-500">5+ Years Solved PYQ Papers & Numerical Key</p>
+                            <p className="text-xs text-slate-500">5+ Years Solved PYQ Papers & Numerical Key</p>
                           </div>
                         </div>
                         <span className="px-2.5 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold flex items-center gap-1 shadow-xs group-hover:scale-105 transition-transform">
@@ -755,7 +757,7 @@ export default function InteractiveCanvasHero({ isNative }) {
 
                     <div className="md:col-span-5 bg-gradient-to-br from-blue-50 to-indigo-50 p-5 rounded-2xl border border-blue-200 flex flex-col justify-between h-full">
                       <div>
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-600 text-white text-[11px] font-bold mb-3">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-600 text-white text-xs font-bold mb-3">
                           <Sparkles size={12} /> Unit-Wise Organization
                         </div>
                         <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
@@ -768,7 +770,7 @@ export default function InteractiveCanvasHero({ isNative }) {
 
                       <Link
                         to="/notes"
-                        className="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:gap-3"
+                        className="btn-primary w-full text-xs flex items-center justify-center gap-2"
                       >
                         <span>Browse 500+ Notes & PYQs</span>
                         <ArrowRight size={14} />
@@ -809,7 +811,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                           onChange={(e) => setSgpaTheoryGrade(Number(e.target.value))}
                           className="w-full h-2 bg-purple-100 rounded-lg appearance-none cursor-pointer accent-purple-600"
                         />
-                        <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-semibold">
+                        <div className="flex justify-between text-xs text-slate-400 mt-1 font-semibold">
                           <span>B+ (7)</span>
                           <span>A (8)</span>
                           <span>A+ (9)</span>
@@ -820,21 +822,21 @@ export default function InteractiveCanvasHero({ isNative }) {
                       {/* Real-Time Calculated Result */}
                       <div className="p-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white flex items-center justify-between shadow-md shadow-purple-500/20">
                         <div>
-                          <span className="text-[10px] text-purple-200 uppercase tracking-wider block font-semibold">Live Calculated SGPA</span>
+                          <span className="text-xs text-purple-200 uppercase tracking-wider block font-semibold">Live Calculated SGPA</span>
                           <span className="font-heading text-2xl font-black">{calcSimSgpa()} / 10.00</span>
                         </div>
                         <div className="text-right">
                           <span className="px-2 py-0.5 rounded-md bg-white/20 text-xs font-bold block mb-0.5">
                             {calcSimSgpa() >= 9.0 ? 'Outstanding (O)' : 'Excellent (A+)'}
                           </span>
-                          <span className="text-[10px] text-purple-200">BEU Official Formula</span>
+                          <span className="text-xs text-purple-200">BEU Official Formula</span>
                         </div>
                       </div>
                     </div>
 
                     <div className="md:col-span-5 bg-gradient-to-br from-purple-50 to-indigo-50 p-5 rounded-2xl border border-purple-200 flex flex-col justify-between h-full">
                       <div>
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-600 text-white text-[11px] font-bold mb-3">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-600 text-white text-xs font-bold mb-3">
                           <Calculator size={12} /> Official BEU 10-Pt Formula
                         </div>
                         <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
@@ -847,7 +849,7 @@ export default function InteractiveCanvasHero({ isNative }) {
 
                       <Link
                         to="/cgpa"
-                        className="w-full py-2.5 px-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:gap-3"
+                        className="btn-primary w-full bg-purple-600 hover:bg-purple-700 text-xs flex items-center justify-center gap-2"
                       >
                         <span>Open CGPA Calculator</span>
                         <ArrowRight size={14} />
@@ -878,7 +880,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                           onChange={(e) => setSimPercentile(Number(e.target.value))}
                           className="w-full h-2 bg-emerald-100 rounded-lg appearance-none cursor-pointer accent-emerald-600"
                         />
-                        <div className="flex justify-between items-center text-[11px] font-bold text-slate-700 mt-1.5 pt-1 border-t border-slate-100">
+                        <div className="flex justify-between items-center text-xs font-bold text-slate-700 mt-1.5 pt-1 border-t border-slate-100">
                           <span>Est. Bihar State Rank:</span>
                           <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-black">
                             ~{calcSimRank().toLocaleString()}
@@ -894,7 +896,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                           </div>
                           <div>
                             <h4 className="text-xs font-bold text-slate-900">MIT Muzaffarpur • CSE / IT</h4>
-                            <p className="text-[10px] text-slate-500">Closing Rank: 2,120</p>
+                            <p className="text-xs text-slate-500">Closing Rank: 2,120</p>
                           </div>
                         </div>
                         <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-xs">
@@ -909,7 +911,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                           </div>
                           <div>
                             <h4 className="text-xs font-bold text-slate-900">BCE Bhagalpur • ECE / EE</h4>
-                            <p className="text-[10px] text-slate-500">Closing Rank: 2,450</p>
+                            <p className="text-xs text-slate-500">Closing Rank: 2,450</p>
                           </div>
                         </div>
                         <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200 font-bold text-xs">
@@ -920,7 +922,7 @@ export default function InteractiveCanvasHero({ isNative }) {
 
                     <div className="md:col-span-5 bg-gradient-to-br from-emerald-50 to-teal-50 p-5 rounded-2xl border border-emerald-200 flex flex-col justify-between h-full">
                       <div>
-                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-600 text-white text-[11px] font-bold mb-3">
+                        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold mb-3">
                           <Target size={12} /> BCECEB Multi-Year Data
                         </div>
                         <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
@@ -933,7 +935,7 @@ export default function InteractiveCanvasHero({ isNative }) {
 
                       <Link
                         to="/ugeac-predictor"
-                        className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-heading font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all hover:gap-3"
+                        className="btn-primary w-full bg-emerald-600 hover:bg-emerald-700 text-xs flex items-center justify-center gap-2"
                       >
                         <span>Check UGEAC Predictor</span>
                         <ArrowRight size={14} />
@@ -951,7 +953,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span className="font-semibold text-slate-700">100% Free & Open Academic Platform for Bihar Students</span>
               </div>
-              <div className="text-[11px] font-medium text-slate-400">
+              <div className="text-xs font-medium text-slate-400">
                 Move mouse to interact with particles • Hover to pause
               </div>
             </div>
