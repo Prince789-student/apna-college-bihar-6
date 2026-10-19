@@ -44,6 +44,28 @@ if (!rootEl) {
     // The splash screen inside #root is not SSR content.
     const root = ReactDOM.createRoot(rootEl);
     root.render(appContent);
+
+    // Smoothly dismiss initial branded loader overlay once React mounts
+    const dismissInitLoader = () => {
+      const loader = document.getElementById('app-init-loader');
+      if (loader) {
+        loader.style.opacity = '0';
+        loader.style.pointerEvents = 'none';
+        setTimeout(() => {
+          try {
+            loader.remove();
+          } catch (e) {}
+        }, 300);
+      }
+    };
+
+    if (typeof window !== 'undefined') {
+      requestAnimationFrame(() => {
+        setTimeout(dismissInitLoader, 80);
+      });
+      // Safety fallback in case animation frame is throttled
+      setTimeout(dismissInitLoader, 2500);
+    }
   } catch (err) {
     console.error("[CRITICAL] React Render Error:", err);
   }
