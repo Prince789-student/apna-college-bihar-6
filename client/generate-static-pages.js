@@ -20,10 +20,10 @@ const baseTemplate = rawTemplate
   .replace(/<div id="acb-splash-screen"[\s\S]*?<\/div>\s*<\/div>/gi, '');
 
 function injectIntoRoot(template, bodyContent) {
-  if (/<div id="root">[\s\S]*?<\/div>/i.test(template)) {
-    return template.replace(/<div id="root">[\s\S]*?<\/div>/i, `<div id="root">\n${bodyContent}\n</div>`);
+  if (template.includes('<div id="root"></div>')) {
+    return template.replace('<div id="root"></div>', `<div id="root">\n${bodyContent}\n</div>`);
   }
-  return template.replace('<div id="root">', `<div id="root">\n${bodyContent}\n</div>`);
+  return template.replace(/<div id="root">[\s\S]*?<\/div>\s*(?=(?:<noscript|<script|<\/body))/i, `<div id="root">\n${bodyContent}\n</div>`);
 }
 
 
@@ -3758,14 +3758,5 @@ enrichedHomeHtml = injectHeadMetadata(enrichedHomeHtml, {
 
 fs.writeFileSync(templatePath, enrichedHomeHtml, 'utf8');
 console.log('[SSG] Successfully enriched dist/index.html with static homepage content!');
-
-// Also write enriched static homepage into client/index.html so that source template always has full semantic content!
-const clientIndexSrcPath = path.join(__dirname, 'index.html');
-if (fs.existsSync(clientIndexSrcPath)) {
-  let clientSrcHtml = fs.readFileSync(clientIndexSrcPath, 'utf8');
-  clientSrcHtml = injectIntoRoot(clientSrcHtml, homeStaticBody);
-  fs.writeFileSync(clientIndexSrcPath, clientSrcHtml, 'utf8');
-  console.log('[SSG] Successfully enriched client/index.html source template!');
-}
 
 console.log('[SSG] All static pages generated successfully!');
