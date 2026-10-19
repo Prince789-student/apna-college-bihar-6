@@ -637,6 +637,42 @@ export const INITIAL_ENROLLED_STUDENTS = [
     "roll": "26CSE(IOT)43",
     "password": "26ACBCSIOT02",
     "email": "er.amankumar@zohomail.in"
+  },
+  {
+    "id": "W26615",
+    "studentId": "W26615",
+    "roll": "W26615",
+    "name": "Rahul Kumar",
+    "email": "rp481276@gmail.com",
+    "whatsapp": "7563026204",
+    "college": "Government Engineering College, West Champaran (Bettiah)",
+    "branch": "Computer Science & Engineering",
+    "branchCode": "CSE",
+    "timestamp": "28/09/2026 11:29:26",
+    "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna (C, C++, Java, Python, etc.)",
+    "codingExperience": "Haan, mujhe thodi basic knowledge hai.",
+    "mentorExpectations": "Is traditional coding is still worthit",
+    "assignedMentorId": "mentor-cse-subhash",
+    "password": "26ACBCSE11",
+    "status": "Active"
+  },
+  {
+    "id": "26CSE51",
+    "studentId": "26CSE51",
+    "roll": "26cse51",
+    "name": "Akash Kumar",
+    "email": "aka8092ku@gmail.com",
+    "whatsapp": "8092029412",
+    "college": "Government Engineering College, Sheikhpura",
+    "branch": "Computer Science & Engineering",
+    "branchCode": "CSE",
+    "timestamp": "28/09/2026 19:19:49",
+    "goals": "Padhai me guidance (Achha CGPA kaise layein)",
+    "codingExperience": "Nahi, main bilkul beginner hoon.",
+    "mentorExpectations": "Sabhi chijo me",
+    "assignedMentorId": "mentor-cse-deepak",
+    "password": "26ACBCSE12",
+    "status": "Active"
   }
 ];
 
@@ -755,13 +791,13 @@ export const INITIAL_REMOVED_STUDENTS = [
 // Helper to get strictly Enrolled Students (localStorage persistent)
 export function getEnrolledStudents() {
   try {
-    // Purge old keys once to clear mixed state (never purge the active v17 key!)
+    // Purge old keys once to clear mixed state (never purge the active v18 key!)
     if (typeof window !== 'undefined' && window.localStorage) {
-      ['beu_enrolled_students', 'beu_enrolled_students_v2', 'beu_enrolled_students_v3', 'beu_enrolled_students_v4', 'beu_enrolled_students_v5', 'beu_enrolled_students_v6', 'beu_enrolled_students_v7', 'beu_enrolled_students_v8', 'beu_enrolled_students_v9', 'beu_enrolled_students_v10', 'beu_enrolled_students_v11', 'beu_enrolled_students_v12', 'beu_enrolled_students_v13', 'beu_enrolled_students_v14', 'beu_enrolled_students_v15', 'beu_enrolled_students_v16'].forEach(k => {
+      ['beu_enrolled_students', 'beu_enrolled_students_v2', 'beu_enrolled_students_v3', 'beu_enrolled_students_v4', 'beu_enrolled_students_v5', 'beu_enrolled_students_v6', 'beu_enrolled_students_v7', 'beu_enrolled_students_v8', 'beu_enrolled_students_v9', 'beu_enrolled_students_v10', 'beu_enrolled_students_v11', 'beu_enrolled_students_v12', 'beu_enrolled_students_v13', 'beu_enrolled_students_v14', 'beu_enrolled_students_v15', 'beu_enrolled_students_v16', 'beu_enrolled_students_v17'].forEach(k => {
         try { localStorage.removeItem(k); } catch(e) {}
       });
     }
-    const saved = localStorage.getItem('beu_enrolled_students_v17');
+    const saved = localStorage.getItem('beu_enrolled_students_v18');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -803,7 +839,7 @@ export function getEnrolledStudents() {
 export function saveEnrolledStudents(students) {
   try {
     const cleanActive = (students || []).filter(s => s.status !== 'Removed' && s.status !== 'Inactive' && !s.removed && !s.id.includes('_REMOVED'));
-    localStorage.setItem('beu_enrolled_students_v17', JSON.stringify(cleanActive));
+    localStorage.setItem('beu_enrolled_students_v18', JSON.stringify(cleanActive));
   } catch (e) {
     console.error('Error saving enrolled students:', e);
   }
@@ -813,11 +849,11 @@ export function saveEnrolledStudents(students) {
 export function getRemovedStudents() {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
-      ['beu_removed_students', 'beu_removed_students_v12', 'beu_removed_students_v13', 'beu_removed_students_v14', 'beu_removed_students_v15', 'beu_removed_students_v16'].forEach(k => {
+      ['beu_removed_students', 'beu_removed_students_v12', 'beu_removed_students_v13', 'beu_removed_students_v14', 'beu_removed_students_v15', 'beu_removed_students_v16', 'beu_removed_students_v17'].forEach(k => {
         try { localStorage.removeItem(k); } catch(e) {}
       });
     }
-    const saved = localStorage.getItem('beu_removed_students_v17');
+    const saved = localStorage.getItem('beu_removed_students_v18');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -835,7 +871,7 @@ export function getRemovedStudents() {
 export function saveRemovedStudents(removed) {
   try {
     const cleanInactive = (removed || []).map(s => ({ ...s, status: 'Inactive' }));
-    localStorage.setItem('beu_removed_students_v17', JSON.stringify(cleanInactive));
+    localStorage.setItem('beu_removed_students_v18', JSON.stringify(cleanInactive));
   } catch (e) {
     console.error('Error saving removed/inactive students:', e);
   }

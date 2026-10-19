@@ -485,6 +485,42 @@
       "roll": "26CSE(IOT)43",
       "password": "26ACBCSIOT02",
       "email": "er.amankumar@zohomail.in"
+    },
+    {
+      "id": "W26615",
+      "studentId": "W26615",
+      "roll": "W26615",
+      "name": "Rahul Kumar",
+      "email": "rp481276@gmail.com",
+      "whatsapp": "7563026204",
+      "college": "Government Engineering College, West Champaran (Bettiah)",
+      "branch": "Computer Science & Engineering",
+      "branchCode": "CSE",
+      "timestamp": "28/09/2026 11:29:26",
+      "goals": "Padhai me guidance (Achha CGPA kaise layein), Coding/Programming seekhna (C, C++, Java, Python, etc.)",
+      "codingExperience": "Haan, mujhe thodi basic knowledge hai.",
+      "mentorExpectations": "Is traditional coding is still worthit",
+      "assignedMentorId": "mentor-cse-subhash",
+      "password": "26ACBCSE11",
+      "status": "Active"
+    },
+    {
+      "id": "26CSE51",
+      "studentId": "26CSE51",
+      "roll": "26cse51",
+      "name": "Akash Kumar",
+      "email": "aka8092ku@gmail.com",
+      "whatsapp": "8092029412",
+      "college": "Government Engineering College, Sheikhpura",
+      "branch": "Computer Science & Engineering",
+      "branchCode": "CSE",
+      "timestamp": "28/09/2026 19:19:49",
+      "goals": "Padhai me guidance (Achha CGPA kaise layein)",
+      "codingExperience": "Nahi, main bilkul beginner hoon.",
+      "mentorExpectations": "Sabhi chijo me",
+      "assignedMentorId": "mentor-cse-deepak",
+      "password": "26ACBCSE12",
+      "status": "Active"
     }
   ],
   "removedStudents": [
@@ -697,5 +733,5 @@
       "name": "PIYUSH"
     }
   ],
-  "updatedAt": "2026-09-27T06:49:07.879Z"
+  "updatedAt": "2026-10-19T14:35:00.000Z"
 }

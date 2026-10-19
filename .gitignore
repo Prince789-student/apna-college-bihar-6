@@ -34,6 +34,10 @@ firebase-debug.log*
 *.vcf
 *.bak
 *.log
+!acb mentorship/*.csv
+!acb mentorship/*.vcf
+!acb mentorship/*.html
+!acb mentorship/*.py
 
 # Build output directories
 dist/
