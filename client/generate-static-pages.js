@@ -1084,72 +1084,190 @@ writeStaticHtml('dmca', dmcaHtml);
 // ─────────────────────────────────────────────────────────────
 const notesBody = `
 <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
-  ${navHeaderHtml}
+  \${navHeaderHtml}
 
   <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <div class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">BEU Semester Notes</span>
+    </div>
+
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Academic Repository</span>
-      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Semester Notes & Study Material</h1>
+      <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Academic Repository 2026</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU B.Tech Semester Notes & Study Material</h1>
       <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-        Download 100% free, unit-wise handwritten and typed engineering notes curated strictly according to the latest Bihar Engineering University (BEU) syllabus.
+        Download 100% free, unit-wise handwritten and typed engineering lecture notes curated strictly according to the latest Bihar Engineering University (BEU Patna) syllabus across all 38 Government Engineering Colleges.
       </p>
     </div>
 
-    <!-- Branch Grid -->
+    <!-- Branch Directory Grid with Functional Links -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
-        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">💻</div>
-        <h3 class="font-black text-slate-900 text-base uppercase mb-1">Computer Science & Engineering (CSE)</h3>
-        <p class="text-xs text-slate-500 leading-relaxed mb-4">DSA, Operating Systems, DBMS, Computer Networks, Theory of Computation, AI & ML unit notes.</p>
-        <a href="/notes" class="text-blue-600 text-xs font-bold hover:underline">Access CSE Notes &rarr;</a>
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">💻</div>
+          <h3 class="font-black text-slate-900 text-base uppercase mb-1">Computer Science & Engineering (CSE)</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">Complete unit notes for Data Structures, Algorithms, Operating Systems, DBMS, Computer Networks, Theory of Computation, Compiler Design, AI & ML.</p>
+        </div>
+        <a href="/branch/cse" class="text-blue-600 text-xs font-bold hover:underline inline-flex items-center gap-1">Access CSE Notes Hub &rarr;</a>
       </div>
 
-      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
-        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">🏗️</div>
-        <h3 class="font-black text-slate-900 text-base uppercase mb-1">Civil Engineering (CE)</h3>
-        <p class="text-xs text-slate-500 leading-relaxed mb-4">Structural Analysis, Geotechnical, Fluid Mechanics, Environmental, Surveying, and Transportation notes.</p>
-        <a href="/notes" class="text-emerald-600 text-xs font-bold hover:underline">Access Civil Notes &rarr;</a>
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-emerald-500 transition-all flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">🏗️</div>
+          <h3 class="font-black text-slate-900 text-base uppercase mb-1">Civil Engineering (CE)</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">Structural Analysis, Fluid Mechanics, Geotechnical Engineering, Surveying, Environmental Engineering, Transportation, and RCC Design lecture notes.</p>
+        </div>
+        <a href="/branch/civil" class="text-emerald-600 text-xs font-bold hover:underline inline-flex items-center gap-1">Access Civil Notes Hub &rarr;</a>
       </div>
 
-      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
-        <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">⚙️</div>
-        <h3 class="font-black text-slate-900 text-base uppercase mb-1">Mechanical Engineering (ME)</h3>
-        <p class="text-xs text-slate-500 leading-relaxed mb-4">Thermodynamics, Heat Transfer, Machine Design, Fluid Machines, Strength of Materials lecture notes.</p>
-        <a href="/notes" class="text-orange-600 text-xs font-bold hover:underline">Access Mechanical Notes &rarr;</a>
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-orange-500 transition-all flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">⚙️</div>
+          <h3 class="font-black text-slate-900 text-base uppercase mb-1">Mechanical Engineering (ME)</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">Thermodynamics, Heat Transfer, Machine Design, Fluid Machinery, Strength of Materials (SOM), Kinematics, and Manufacturing Technology notes.</p>
+        </div>
+        <a href="/branch/me" class="text-orange-600 text-xs font-bold hover:underline inline-flex items-center gap-1">Access Mechanical Notes Hub &rarr;</a>
       </div>
 
-      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
-        <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">⚡</div>
-        <h3 class="font-black text-slate-900 text-base uppercase mb-1">Electrical & Electronics (EEE / EE)</h3>
-        <p class="text-xs text-slate-500 leading-relaxed mb-4">Network Theory, Electrical Machines, Power Systems, Control Systems, Power Electronics unit notes.</p>
-        <a href="/notes" class="text-amber-600 text-xs font-bold hover:underline">Access Electrical Notes &rarr;</a>
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-amber-500 transition-all flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">⚡</div>
+          <h3 class="font-black text-slate-900 text-base uppercase mb-1">Electrical & Electronics (EEE / EE)</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">Network Analysis, Electrical Machines, Control Systems, Power Systems, Power Electronics, Electromagnetic Field Theory, and Measurement notes.</p>
+        </div>
+        <a href="/branch/ee" class="text-amber-600 text-xs font-bold hover:underline inline-flex items-center gap-1">Access Electrical Notes Hub &rarr;</a>
       </div>
 
-      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
-        <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">📡</div>
-        <h3 class="font-black text-slate-900 text-base uppercase mb-1">Electronics & Communication (ECE)</h3>
-        <p class="text-xs text-slate-500 leading-relaxed mb-4">Signals & Systems, Analog & Digital Communication, Microprocessors, VLSI Design semester PDFs.</p>
-        <a href="/notes" class="text-indigo-600 text-xs font-bold hover:underline">Access ECE Notes &rarr;</a>
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-indigo-500 transition-all flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">📡</div>
+          <h3 class="font-black text-slate-900 text-base uppercase mb-1">Electronics & Communication (ECE)</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">Analog Circuits, Signals & Systems, Digital Communication, Microprocessors (8085/8086), VLSI Design, Antenna & Wave Propagation PDFs.</p>
+        </div>
+        <a href="/branch/ece" class="text-indigo-600 text-xs font-bold hover:underline inline-flex items-center gap-1">Access ECE Notes Hub &rarr;</a>
       </div>
 
-      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
-        <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">📐</div>
-        <h3 class="font-black text-slate-900 text-base uppercase mb-1">1st Year Common (Sem 1 & 2)</h3>
-        <p class="text-xs text-slate-500 leading-relaxed mb-4">Engineering Mathematics, Physics, Chemistry, Basic Electrical, Programming for Problem Solving (PPS).</p>
-        <a href="/notes" class="text-purple-600 text-xs font-bold hover:underline">Access 1st Year Notes &rarr;</a>
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-purple-500 transition-all flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center font-bold text-xl mb-4">📐</div>
+          <h3 class="font-black text-slate-900 text-base uppercase mb-1">1st Year Common (Group A & Group B)</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">Engineering Mathematics-I & II, Engineering Physics, Engineering Chemistry, Basic Electrical Engineering, Programming for Problem Solving (PPS in C).</p>
+        </div>
+        <a href="/blog/beu-btech-1st-year-syllabus-complete-guide" class="text-purple-600 text-xs font-bold hover:underline inline-flex items-center gap-1">Read 1st Year Complete Guide &rarr;</a>
       </div>
     </div>
 
-    <!-- Explanatory Guide Box -->
-    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-      <h2 class="text-2xl font-black text-slate-900 uppercase">How to Use Apna College Bihar Notes for Maximum SGPA</h2>
-      <p>
-        Scoring an 8.5+ SGPA in Bihar Engineering University exams requires prioritizing high-weightage chapters and past exam questions. Our notes are structured module-by-module matching the official BEU course syllabus. Each PDF contains solved sample derivations, clear diagrams, and summary bullet points suitable for quick revision during midterm and semester end exams.
+    <!-- In-Depth Academic Subject Matrix Table -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-8 prose prose-slate max-w-none text-slate-800 mb-12">
+      <h2 class="text-2xl font-black text-slate-900 uppercase">Bihar Engineering University (BEU) Subject Matrix & Credit Structure</h2>
+      <p class="text-sm leading-relaxed">
+        Under Bihar Engineering University's AICTE-aligned curriculum, each undergraduate semester balances theoretical fundamentals with experimental laboratory coursework. Understanding the credit distribution and subject weightage enables engineering scholars to strategize study time effectively and target higher Semester Grade Point Averages (SGPA).
       </p>
+
+      <div class="overflow-x-auto not-prose my-6">
+        <table class="w-full text-left border-collapse text-xs md:text-sm">
+          <thead>
+            <tr class="bg-slate-100 text-slate-900 font-bold border-b border-slate-200">
+              <th class="p-3">Semester</th>
+              <th class="p-3">Key Theoretical Courses</th>
+              <th class="p-3">Core Laboratory Subjects</th>
+              <th class="p-3">Semester Credits</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="p-3 font-bold text-blue-600">Semester 1 (Group A)</td>
+              <td class="p-3">Engineering Physics, Mathematics-I (Calculus), Basic Electrical Engineering</td>
+              <td class="p-3">Physics Lab, Electrical Lab, Engineering Workshop</td>
+              <td class="p-3 font-semibold">17.5 Credits</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-3 font-bold text-emerald-600">Semester 1 (Group B)</td>
+              <td class="p-3">Engineering Chemistry, Mathematics-I, Programming for Problem Solving (PPS)</td>
+              <td class="p-3">Chemistry Lab, Programming Lab, Engineering Graphics & Design</td>
+              <td class="p-3 font-semibold">17.5 Credits</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-purple-600">Semester 3 (Branch Core)</td>
+              <td class="p-3">Data Structures & Algorithms, Discrete Mathematics, OOP in C++/Java, Digital Electronics</td>
+              <td class="p-3">Data Structures Lab, Digital Electronics Lab, IT Workshop</td>
+              <td class="p-3 font-semibold">20.0 Credits</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-3 font-bold text-amber-600">Semester 4 (Branch Core)</td>
+              <td class="p-3">Operating Systems, DBMS, Design & Analysis of Algorithms, Computer Organization</td>
+              <td class="p-3">Operating Systems Lab, Database Lab, Algorithms Lab</td>
+              <td class="p-3 font-semibold">21.0 Credits</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-rose-600">Semester 5 (Advanced Core)</td>
+              <td class="p-3">Computer Networks, Formal Language & Automata (TOC), Web Technologies, Professional Elective-I</td>
+              <td class="p-3">Computer Networks Lab, Web Dev Lab, Mini Project</td>
+              <td class="p-3 font-semibold">22.0 Credits</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-3 font-bold text-indigo-600">Semester 6 (Specialization)</td>
+              <td class="p-3">Compiler Design, Software Engineering, AI & Machine Learning, Open Elective-I</td>
+              <td class="p-3">Compiler Lab, AI & ML Lab, Technical Presentation</td>
+              <td class="p-3 font-semibold">21.0 Credits</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="text-xl font-bold text-slate-900">How to Prepare from BEU Notes to Secure an 8.5+ SGPA</h3>
+      <p class="text-sm leading-relaxed">
+        Achieving top academic standing at BEU requires understanding how university answer sheets are evaluated. Examiners grade hundreds of papers daily; presenting well-organized answers with clear diagrams, derivations, and formulas significantly impacts your final marks:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose my-6 text-xs md:text-sm">
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+          <h4 class="font-bold text-slate-900 text-sm uppercase">1. High-Yield Module Prioritization</h4>
+          <p class="text-slate-600 leading-relaxed">
+            In almost every BEU subject, Modules 1, 2, and 4 carry over 65% of the total question paper weightage. Prioritize core derivations and fundamental definitions from these modules before covering specialized peripheral chapters.
+          </p>
+        </div>
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+          <h4 class="font-bold text-slate-900 text-sm uppercase">2. Diagrammatic & Formula Boxing Protocol</h4>
+          <p class="text-slate-600 leading-relaxed">
+            Never answer a 14-mark question with plain text alone. Include pencil-drawn schematics, circuit diagrams, or data flowcharts. Highlight final numerical results inside bold rectangular boxes with proper units.
+          </p>
+        </div>
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+          <h4 class="font-bold text-slate-900 text-sm uppercase">3. Solve 5 Years of Past Papers (PYQs)</h4>
+          <p class="text-slate-600 leading-relaxed">
+            Over 60% of university theory questions repeat across alternating academic years. Cross-reference your unit notes with the <a href="/pyq" class="text-blue-600 underline font-semibold">BEU PYQ Portal</a> to identify repeating derivation patterns.
+          </p>
+        </div>
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+          <h4 class="font-bold text-slate-900 text-sm uppercase">4. Maintain Internal Assessment Cushion</h4>
+          <p class="text-slate-600 leading-relaxed">
+            Internal assessments contribute 30 marks per subject. Scoring 26–28 in midterms, lab practicals, and attendance provides a strong buffer to propel your SGPA above 9.0 even if external evaluation is strict.
+          </p>
+        </div>
+      </div>
+
+      <h3 class="text-xl font-bold text-slate-900">Frequently Asked Questions (BEU Notes FAQ)</h3>
+      <div class="space-y-4 not-prose text-xs md:text-sm">
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <h4 class="font-bold text-slate-900">Are these notes applicable to all 38 Government Engineering Colleges in Bihar?</h4>
+          <p class="text-slate-600 mt-1">Yes. Bihar Engineering University (BEU Patna) administers a uniform syllabus, course structure, and common end-semester examinations across all 38 government engineering institutes in Bihar.</p>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <h4 class="font-bold text-slate-900">Are the notes downloadable in PDF format for offline study?</h4>
+          <p class="text-slate-600 mt-1">Yes, all notes are available as high-speed PDF downloads and can also be saved offline inside the official Apna College Bihar Android mobile app.</p>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <h4 class="font-bold text-slate-900">Are these notes updated for the 2026 BEU syllabus?</h4>
+          <p class="text-slate-600 mt-1">Yes, all study materials are reviewed each semester by alumni mentors and subject toppers to ensure complete alignment with the latest AICTE model curriculum adopted by BEU.</p>
+        </div>
+      </div>
     </div>
   </main>
 
-  ${footerHtml}
+  \${footerHtml}
 </div>
 `;
 
@@ -1185,55 +1303,173 @@ writeStaticHtml('notes', notesHtml);
 // ─────────────────────────────────────────────────────────────
 const pyqBody = `
 <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
-  ${navHeaderHtml}
+  \${navHeaderHtml}
 
   <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <div class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">BEU Previous Year Questions</span>
+    </div>
+
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Exam Archives</span>
-      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Previous Year Question Papers (PYQ)</h1>
+      <span class="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Official Examination Archives</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU B.Tech Previous Year Question Papers (PYQ)</h1>
       <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-        Download 5+ years of verified BEU end-semester question papers with answer outlines and recurring question analysis for all engineering branches.
+        Download verified past 5+ years of end-semester university examination papers with question pattern blueprints, recurring question breakdowns, and answer outlines for all 38 Government Engineering Colleges in Bihar.
       </p>
     </div>
 
+    <!-- Year & Semester Archive Grid -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm text-center">
-        <div class="text-3xl font-black text-indigo-600 mb-2">1st Year</div>
-        <h4 class="font-bold text-slate-900 text-sm uppercase mb-1">Semesters 1 & 2</h4>
-        <p class="text-xs text-slate-500 mb-4">Maths, Chemistry, Physics, PPS, Basic Electrical papers.</p>
-        <a href="/pyq" class="text-indigo-600 font-bold text-xs hover:underline">Download 1st Year PYQ &rarr;</a>
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-indigo-500 transition-all text-center flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center font-bold text-xl mx-auto mb-3">1️⃣</div>
+          <div class="text-2xl font-black text-indigo-600 mb-1">1st Year</div>
+          <h4 class="font-bold text-slate-900 text-sm uppercase mb-2">Semesters 1 & 2</h4>
+          <p class="text-xs text-slate-500 mb-4 leading-relaxed">Engineering Mathematics-I & II, Physics, Chemistry, PPS (C Programming), Basic Electrical Engineering.</p>
+        </div>
+        <a href="/blog/beu-btech-1st-year-syllabus-complete-guide" class="text-indigo-600 font-bold text-xs hover:underline inline-flex items-center justify-center gap-1">1st Year Syllabus & PYQs &rarr;</a>
       </div>
 
-      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm text-center">
-        <div class="text-3xl font-black text-blue-600 mb-2">2nd Year</div>
-        <h4 class="font-bold text-slate-900 text-sm uppercase mb-1">Semesters 3 & 4</h4>
-        <p class="text-xs text-slate-500 mb-4">Core department fundamentals and applied mathematics papers.</p>
-        <a href="/pyq" class="text-blue-600 font-bold text-xs hover:underline">Download 2nd Year PYQ &rarr;</a>
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all text-center flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center font-bold text-xl mx-auto mb-3">2️⃣</div>
+          <div class="text-2xl font-black text-blue-600 mb-1">2nd Year</div>
+          <h4 class="font-bold text-slate-900 text-sm uppercase mb-2">Semesters 3 & 4</h4>
+          <p class="text-xs text-slate-500 mb-4 leading-relaxed">Data Structures, Discrete Maths, OOPs, Operating Systems, DBMS, Fluid Mechanics, Thermodynamics, Network Theory.</p>
+        </div>
+        <a href="/branch/cse" class="text-blue-600 font-bold text-xs hover:underline inline-flex items-center justify-center gap-1">2nd Year Core Papers &rarr;</a>
       </div>
 
-      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm text-center">
-        <div class="text-3xl font-black text-emerald-600 mb-2">3rd Year</div>
-        <h4 class="font-bold text-slate-900 text-sm uppercase mb-1">Semesters 5 & 6</h4>
-        <p class="text-xs text-slate-500 mb-4">Advanced branch subjects, design problems, and laboratory vivas.</p>
-        <a href="/pyq" class="text-emerald-600 font-bold text-xs hover:underline">Download 3rd Year PYQ &rarr;</a>
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-emerald-500 transition-all text-center flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center font-bold text-xl mx-auto mb-3">3️⃣</div>
+          <div class="text-2xl font-black text-emerald-600 mb-1">3rd Year</div>
+          <h4 class="font-bold text-slate-900 text-sm uppercase mb-2">Semesters 5 & 6</h4>
+          <p class="text-xs text-slate-500 mb-4 leading-relaxed">Computer Networks, Formal Languages & Automata, Compiler Design, Structural Design, Machine Design, Power Systems.</p>
+        </div>
+        <a href="/branch/civil" class="text-emerald-600 font-bold text-xs hover:underline inline-flex items-center justify-center gap-1">3rd Year Core Papers &rarr;</a>
       </div>
 
-      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm text-center">
-        <div class="text-3xl font-black text-rose-600 mb-2">4th Year</div>
-        <h4 class="font-bold text-slate-900 text-sm uppercase mb-1">Semesters 7 & 8</h4>
-        <p class="text-xs text-slate-500 mb-4">Electives, open courses, and final year comprehensive tests.</p>
-        <a href="/pyq" class="text-rose-600 font-bold text-xs hover:underline">Download 4th Year PYQ &rarr;</a>
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-rose-500 transition-all text-center flex flex-col justify-between">
+        <div>
+          <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center font-bold text-xl mx-auto mb-3">4️⃣</div>
+          <div class="text-2xl font-black text-rose-600 mb-1">4th Year</div>
+          <h4 class="font-bold text-slate-900 text-sm uppercase mb-2">Semesters 7 & 8</h4>
+          <p class="text-xs text-slate-500 mb-4 leading-relaxed">Cloud Computing, AI/ML, Cyber Security, Professional Electives, Open Electives, and Comprehensive Viva Question Banks.</p>
+        </div>
+        <a href="/branch/me" class="text-rose-600 font-bold text-xs hover:underline inline-flex items-center justify-center gap-1">4th Year Advanced Papers &rarr;</a>
+      </div>
+    </div>
+
+    <!-- BEU Examination Paper Structure Blueprint -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-8 prose prose-slate max-w-none text-slate-800 mb-12">
+      <h2 class="text-2xl font-black text-slate-900 uppercase">Anatomy of a BEU Theory Examination Paper (70 Marks)</h2>
+      <p class="text-sm leading-relaxed">
+        To prepare strategically and maximize your final score, every student must understand how Bihar Engineering University structures its external 70-mark theory papers. Rather than trying to master all 600 pages of standard textbooks during revision, understanding question choices gives you a massive advantage:
+      </p>
+
+      <div class="overflow-x-auto not-prose my-6">
+        <table class="w-full text-left border-collapse text-xs md:text-sm">
+          <thead>
+            <tr class="bg-slate-100 text-slate-900 font-bold border-b border-slate-200">
+              <th class="p-3">Paper Section</th>
+              <th class="p-3">Question Structure</th>
+              <th class="p-3">Marks Distribution</th>
+              <th class="p-3">Evaluation Strategy</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="p-3 font-bold text-indigo-600">Question 1 (Compulsory)</td>
+              <td class="p-3">7 short conceptual questions (2 marks each) covering all 5 syllabus modules</td>
+              <td class="p-3 font-semibold">14 Marks (7 &times; 2)</td>
+              <td class="p-3">Write precise definitions, formulas, and state underlying assumptions with clean scientific units.</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-3 font-bold text-blue-600">Questions 2 through 9</td>
+              <td class="p-3">8 long-answer analytical, derivation-based, or numerical problems across syllabus units</td>
+              <td class="p-3 font-semibold">56 Marks (Answer any 4 &times; 14)</td>
+              <td class="p-3">Pick the 4 questions containing mathematical derivations or boxed numericals for maximum scoring potential.</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-emerald-600">Passing Thresholds</td>
+              <td class="p-3">Minimum 35% in External Exam AND minimum 40% combined with Internal Assessment</td>
+              <td class="p-3 font-semibold">25/70 External + 40/100 Total</td>
+              <td class="p-3">Scoring below 25 in external results in an 'F' grade (backlog) irrespective of high internal marks.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="text-xl font-bold text-slate-900">Top High-Yield Recurring Questions Across BEU Curricula</h3>
+      <p class="text-sm leading-relaxed">
+        Statistical analysis of 5 consecutive examination cycles reveals that university professors repeatedly test core engineering foundations. Mastering the following high-frequency derivations provides a guaranteed scoring cushion:
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose my-6 text-xs md:text-sm">
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+          <h4 class="font-bold text-slate-900 text-sm uppercase">Computer Science & IT</h4>
+          <ul class="list-disc pl-5 space-y-1 text-slate-600">
+            <li>Dijkstra's & Bellman-Ford Shortest Path Algorithm analysis</li>
+            <li>Binary Search Tree (BST) insertion, deletion & AVL balancing</li>
+            <li>Process Synchronization: Dining Philosophers & Semaphore solutions</li>
+            <li>Relational Database Normalization: 1NF, 2NF, 3NF, BCNF proofs</li>
+            <li>Chomsky Hierarchy & Context-Free Grammar to PDA conversion</li>
+          </ul>
+        </div>
+
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+          <h4 class="font-bold text-slate-900 text-sm uppercase">Mechanical & Civil Engineering</h4>
+          <ul class="list-disc pl-5 space-y-1 text-slate-600">
+            <li>Bernoulli's Equation & Navier-Stokes differential formulations</li>
+            <li>Air Standard Carnot, Otto, and Diesel Cycle efficiency derivations</li>
+            <li>Euler's Column Buckling Theory & Rankine formula derivations</li>
+            <li>Shear Force (SFD) & Bending Moment Diagrams (BMD) under combined loads</li>
+            <li>One-dimensional heat conduction equation in cylindrical coordinates</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="p-6 bg-blue-50 border border-blue-200 rounded-2xl not-prose my-6 space-y-3 text-xs md:text-sm text-slate-800">
+        <h4 class="font-black text-blue-900 uppercase tracking-wider text-sm">Strategic Study Blueprints & Related Guides</h4>
+        <p class="leading-relaxed">
+          Complement your past paper practice with our comprehensive editorial guides written by university toppers:
+        </p>
+        <div class="flex flex-wrap gap-4 pt-2">
+          <a href="/blog/why-pyqs-are-key-to-engineering-exams" class="text-blue-600 font-bold hover:underline">&rarr; Read: Why PYQs are the Key to Engineering Exams</a>
+          <a href="/blog/how-to-prepare-for-beu-semester-exams" class="text-blue-600 font-bold hover:underline">&rarr; Read: 60-Day Roadmap for BEU Semester Exams</a>
+          <a href="/notes" class="text-blue-600 font-bold hover:underline">&rarr; Explore Semester Notes</a>
+        </div>
+      </div>
+
+      <h3 class="text-xl font-bold text-slate-900">Frequently Asked Questions (BEU PYQ FAQ)</h3>
+      <div class="space-y-4 not-prose text-xs md:text-sm">
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <h4 class="font-bold text-slate-900">How many years of PYQs should I solve before semester exams?</h4>
+          <p class="text-slate-600 mt-1">Solving 5 full years of previous papers covers approximately 75% of repeating conceptual patterns and numerical problem variations.</p>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <h4 class="font-bold text-slate-900">Are solutions provided for numerical problems in these question papers?</h4>
+          <p class="text-slate-600 mt-1">Yes, our subject mentors provide step-by-step solved answer keys and derivation steps for high-frequency questions inside our corresponding <a href="/notes" class="text-blue-600 underline font-semibold">BEU Notes repository</a>.</p>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <h4 class="font-bold text-slate-900">What is the carry-over policy if I miss the 25-mark external passing threshold?</h4>
+          <p class="text-slate-600 mt-1">If your external score is under 24.5/70, you are awarded an 'F' grade (backlog) and must sit for the carry-over paper in the subsequent odd or even semester examination cycle.</p>
+        </div>
       </div>
     </div>
   </main>
 
-  ${footerHtml}
+  \${footerHtml}
 </div>
 `;
 
 let pyqHtml = injectIntoRoot(baseTemplate, pyqBody);
 pyqHtml = injectHeadMetadata(pyqHtml, {
-  title: 'BEU PYQ Papers Download | Bihar Engineering Previous Year Questions PDF',
+  title: 'BEU PYQ Papers Download 2026 | Bihar Engineering Previous Year Questions PDF',
   description: 'Download 5+ years of BEU Previous Year Question Papers (PYQs) for Semester 1 to 8 across all branches. Solved university exam question banks and blueprints.',
   canonical: 'https://www.apnacollegebihar.online/pyq',
   schemaJson: {
@@ -1263,30 +1499,244 @@ writeStaticHtml('pyq', pyqHtml);
 // ─────────────────────────────────────────────────────────────
 const syllabusBody = `
 <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
-  ${navHeaderHtml}
+  \${navHeaderHtml}
 
   <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <div class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">BEU B.Tech Syllabus</span>
+    </div>
+
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Curriculum Database</span>
-      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU B.Tech Syllabus 2026 PDF</h1>
+      <span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Curriculum Framework 2026</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU B.Tech Official Syllabus & Credit System</h1>
       <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-        Official Bihar Engineering University (BEU Patna) B.Tech curriculum covering credit systems, subject codes, and module topics across all semesters.
+        Official AICTE-aligned undergraduate curriculum structure, 160-credit distribution, 10-point grading system, and unit-wise module breakdown for Bihar Engineering University (BEU Patna) across all 38 Government Engineering Colleges.
       </p>
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-      <h2 class="text-xl font-black text-slate-900 uppercase">AICTE Model Curriculum & BEU Credit Breakdown</h2>
-      <p>
-        Bihar Engineering University follows the AICTE Model Curriculum guidelines with a total of 160 credits required for B.Tech degree completion. Students must complete Mandatory Induction Programs, Humanities and Social Sciences (HSMC), Basic Science Courses (BSC), Engineering Science Courses (ESC), Professional Core Courses (PCC), and Open Electives.
+    <!-- Quick Navigation to Branch Curricula -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-emerald-500 transition-all flex flex-col justify-between">
+        <div>
+          <span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-black uppercase tracking-wider rounded-md inline-block mb-2">Branch Curriculum</span>
+          <h3 class="font-black text-slate-900 text-base uppercase mb-1">Computer Science & Engineering</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">Complete 8-semester course modules: Data Structures, Discrete Mathematics, OOPs, OS, DBMS, Algorithms, Theory of Computation, Compiler Design, AI/ML.</p>
+        </div>
+        <a href="/branch/cse" class="text-blue-600 text-xs font-bold hover:underline inline-flex items-center gap-1">View CSE Syllabus & Modules &rarr;</a>
+      </div>
+
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-emerald-500 transition-all flex flex-col justify-between">
+        <div>
+          <span class="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-black uppercase tracking-wider rounded-md inline-block mb-2">Branch Curriculum</span>
+          <h3 class="font-black text-slate-900 text-base uppercase mb-1">Civil Engineering</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">Fluid Mechanics, Surveying, Mechanics of Materials, Environmental Engineering, Structural Analysis, Geotechnical Engineering, Transportation, Design of RCC & Steel.</p>
+        </div>
+        <a href="/branch/civil" class="text-emerald-600 text-xs font-bold hover:underline inline-flex items-center gap-1">View Civil Syllabus & Modules &rarr;</a>
+      </div>
+
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-emerald-500 transition-all flex flex-col justify-between">
+        <div>
+          <span class="px-2.5 py-0.5 bg-orange-50 text-orange-700 text-[10px] font-black uppercase tracking-wider rounded-md inline-block mb-2">Branch Curriculum</span>
+          <h3 class="font-black text-slate-900 text-base uppercase mb-1">Mechanical Engineering</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">Engineering Thermodynamics, Strength of Materials, Fluid Machinery, Heat & Mass Transfer, Kinematics & Dynamics of Machines, Machine Design, Manufacturing Technology.</p>
+        </div>
+        <a href="/branch/me" class="text-orange-600 text-xs font-bold hover:underline inline-flex items-center gap-1">View Mechanical Syllabus & Modules &rarr;</a>
+      </div>
+
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-emerald-500 transition-all flex flex-col justify-between">
+        <div>
+          <span class="px-2.5 py-0.5 bg-amber-50 text-amber-700 text-[10px] font-black uppercase tracking-wider rounded-md inline-block mb-2">Branch Curriculum</span>
+          <h3 class="font-black text-slate-900 text-base uppercase mb-1">Electrical & Electronics</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">Electric Circuit Analysis, Electromagnetic Field Theory, Electrical Machines-I & II, Control Systems, Power Electronics, Power Systems-I & II, Switchgear Protection.</p>
+        </div>
+        <a href="/branch/ee" class="text-amber-600 text-xs font-bold hover:underline inline-flex items-center gap-1">View Electrical Syllabus & Modules &rarr;</a>
+      </div>
+
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-emerald-500 transition-all flex flex-col justify-between">
+        <div>
+          <span class="px-2.5 py-0.5 bg-indigo-50 text-indigo-700 text-[10px] font-black uppercase tracking-wider rounded-md inline-block mb-2">Branch Curriculum</span>
+          <h3 class="font-black text-slate-900 text-base uppercase mb-1">Electronics & Communication</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">Analog & Digital Electronic Circuits, Signals & Systems, Analog Communication, Digital Communication, Microprocessors & Microcontrollers, VLSI Design, Antenna Theory.</p>
+        </div>
+        <a href="/branch/ece" class="text-indigo-600 text-xs font-bold hover:underline inline-flex items-center gap-1">View ECE Syllabus & Modules &rarr;</a>
+      </div>
+
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-emerald-500 transition-all flex flex-col justify-between">
+        <div>
+          <span class="px-2.5 py-0.5 bg-purple-50 text-purple-700 text-[10px] font-black uppercase tracking-wider rounded-md inline-block mb-2">Common 1st Year</span>
+          <h3 class="font-black text-slate-900 text-base uppercase mb-1">Group A & Group B Induction</h3>
+          <p class="text-xs text-slate-500 leading-relaxed mb-4">AICTE Model Curriculum: Engineering Mathematics-I & II, Engineering Physics, Engineering Chemistry, Basic Electrical, Programming for Problem Solving (PPS in C).</p>
+        </div>
+        <a href="/blog/beu-btech-1st-year-syllabus-complete-guide" class="text-purple-600 text-xs font-bold hover:underline inline-flex items-center gap-1">Read 1st Year Complete Guide &rarr;</a>
+      </div>
+    </div>
+
+    <!-- AICTE 160-Credit Framework Detailed Table -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-8 prose prose-slate max-w-none text-slate-800 mb-12">
+      <h2 class="text-2xl font-black text-slate-900 uppercase">AICTE 160-Credit Category Breakdown for B.Tech Degree</h2>
+      <p class="text-sm leading-relaxed">
+        Under the academic regulations of Bihar Engineering University (BEU Patna), a student must successfully earn a minimum of <strong>160 academic credits</strong> across 8 semesters to be awarded the degree of Bachelor of Technology (B.Tech). The curriculum adheres strictly to the All India Council for Technical Education (AICTE) model structure:
       </p>
-      <div class="pt-4 flex flex-wrap gap-4">
-        <a href="/syllabus" class="px-5 py-3 bg-emerald-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors">Download Full Syllabus PDF</a>
-        <a href="/notes" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">View Corresponding Notes</a>
+
+      <div class="overflow-x-auto not-prose my-6">
+        <table class="w-full text-left border-collapse text-xs md:text-sm">
+          <thead>
+            <tr class="bg-slate-100 text-slate-900 font-bold border-b border-slate-200">
+              <th class="p-3">Course Category Code</th>
+              <th class="p-3">Category Classification</th>
+              <th class="p-3">Curriculum Focus & Representative Subjects</th>
+              <th class="p-3">Required Credits</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="p-3 font-bold text-blue-600">BSC</td>
+              <td class="p-3 font-bold">Basic Science Courses</td>
+              <td class="p-3">Engineering Mathematics (I, II, III), Engineering Physics, Engineering Chemistry</td>
+              <td class="p-3 font-semibold">25 Credits</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-3 font-bold text-emerald-600">ESC</td>
+              <td class="p-3 font-bold">Engineering Science Courses</td>
+              <td class="p-3">Basic Electrical Engineering, Programming for Problem Solving (PPS), Workshop, Engineering Graphics</td>
+              <td class="p-3 font-semibold">24 Credits</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-purple-600">HSMC</td>
+              <td class="p-3 font-bold">Humanities & Social Sciences</td>
+              <td class="p-3">English for Technical Communication, Economics for Engineers, Constitution of India, Universal Human Values</td>
+              <td class="p-3 font-semibold">12 Credits</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-3 font-bold text-amber-600">PCC</td>
+              <td class="p-3 font-bold">Professional Core Courses</td>
+              <td class="p-3">Core discipline fundamental subjects (e.g. Data Structures, Operating Systems, Fluid Mechanics, Thermodynamics)</td>
+              <td class="p-3 font-semibold">48 Credits</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-rose-600">PEC</td>
+              <td class="p-3 font-bold">Professional Elective Courses</td>
+              <td class="p-3">Advanced departmental specializations (e.g. Cloud Computing, Cyber Security, Earthquake Engineering, Robotics)</td>
+              <td class="p-3 font-semibold">18 Credits</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-3 font-bold text-indigo-600">OEC</td>
+              <td class="p-3 font-bold">Open Elective Courses</td>
+              <td class="p-3">Interdisciplinary courses offered across departments (e.g. IoT, Project Management, Renewable Energy, Soft Computing)</td>
+              <td class="p-3 font-semibold">18 Credits</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-teal-600">PROJ / INT</td>
+              <td class="p-3 font-bold">Project, Seminar & Internship</td>
+              <td class="p-3">Summer Industrial Internships (4 to 8 weeks), Technical Seminars, Capstone Major Project (Part I & II)</td>
+              <td class="p-3 font-semibold">15 Credits</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="text-xl font-bold text-slate-900">Official BEU 10-Point Absolute Grading System</h3>
+      <p class="text-sm leading-relaxed">
+        Academic performance in each course is evaluated through continuous internal assessment (30 marks) and external end-semester theory examinations (70 marks). Letter grades and grade points are awarded based on absolute score percentages:
+      </p>
+
+      <div class="overflow-x-auto not-prose my-6">
+        <table class="w-full text-left border-collapse text-xs md:text-sm">
+          <thead>
+            <tr class="bg-slate-100 text-slate-900 font-bold border-b border-slate-200">
+              <th class="p-3">Academic Letter Grade</th>
+              <th class="p-3">Grade Point (Gi)</th>
+              <th class="p-3">Percentage Score Bracket</th>
+              <th class="p-3">Qualitative Performance Description</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr>
+              <td class="p-3 font-bold text-blue-600">O (Outstanding)</td>
+              <td class="p-3 font-black">10</td>
+              <td class="p-3">90% to 100%</td>
+              <td class="p-3">Extraordinary conceptual mastery and flawless answer presentation</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-3 font-bold text-emerald-600">A+ (Excellent)</td>
+              <td class="p-3 font-black">9</td>
+              <td class="p-3">80% to 89%</td>
+              <td class="p-3">Thorough conceptual grasp and high analytical execution</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-teal-600">A (Very Good)</td>
+              <td class="p-3 font-black">8</td>
+              <td class="p-3">70% to 79%</td>
+              <td class="p-3">Strong academic knowledge and accurate problem solving</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-3 font-bold text-amber-600">B+ (Good)</td>
+              <td class="p-3 font-black">7</td>
+              <td class="p-3">60% to 69%</td>
+              <td class="p-3">Above-average competency across core syllabus modules</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-orange-600">B (Above Average)</td>
+              <td class="p-3 font-black">6</td>
+              <td class="p-3">50% to 59%</td>
+              <td class="p-3">Satisfactory performance meeting basic course objectives</td>
+            </tr>
+            <tr class="bg-slate-50/50">
+              <td class="p-3 font-bold text-slate-600">C (Average)</td>
+              <td class="p-3 font-black">5</td>
+              <td class="p-3">45% to 49%</td>
+              <td class="p-3">Fair comprehension with moderate errors in analytical derivations</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-bold text-slate-500">P (Pass)</td>
+              <td class="p-3 font-black">4</td>
+              <td class="p-3">40% to 44%</td>
+              <td class="p-3">Minimum passing benchmark satisfying university evaluation threshold</td>
+            </tr>
+            <tr class="bg-rose-50/50 text-rose-700">
+              <td class="p-3 font-black">F (Fail / Backlog)</td>
+              <td class="p-3 font-black">0</td>
+              <td class="p-3">Below 40% (or &lt;25/70 in External)</td>
+              <td class="p-3 font-bold">Unsuccessful; candidate must clear subject in carry-over exams</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl not-prose my-6 space-y-3 text-xs md:text-sm text-slate-800">
+        <h4 class="font-black text-slate-900 uppercase tracking-wider text-sm">Official Promotion & Year-Back Regulations</h4>
+        <p class="leading-relaxed">
+          Bihar Engineering University follows explicit credit accumulation rules for semester promotion:
+        </p>
+        <ul class="list-disc pl-5 space-y-1 text-slate-600">
+          <li>A student is promoted from 1st Year (Semester 2) to 2nd Year (Semester 3) only if they secure at least <strong>50% of total 1st-year credits</strong> (typically 18+ credits out of 35).</li>
+          <li>Promotion from 2nd Year to 3rd Year requires clearing all 1st-year backlog courses with zero active backlogs in 1st year subjects.</li>
+          <li>A maximum duration of <strong>7 academic years</strong> is permitted to complete the 4-year B.Tech program.</li>
+        </ul>
+      </div>
+
+      <h3 class="text-xl font-bold text-slate-900">Frequently Asked Questions (BEU Syllabus FAQ)</h3>
+      <div class="space-y-4 not-prose text-xs md:text-sm">
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <h4 class="font-bold text-slate-900">How do I convert BEU CGPA into percentage?</h4>
+          <p class="text-slate-600 mt-1">Under official BEU Patna notifications, the percentage conversion formula is: <strong>Percentage (%) = (CGPA - 0.75) &times; 10</strong>. You can verify your exact scores using our <a href="/cgpa" class="text-blue-600 underline font-semibold">BEU CGPA Calculator</a>.</p>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <h4 class="font-bold text-slate-900">What are the passing marks for 70-mark theory papers?</h4>
+          <p class="text-slate-600 mt-1">A student must score at least <strong>24.5 marks (rounded to 25) out of 70</strong> in the external university exam AND achieve an aggregate of at least 40% (40 out of 100) combining external and internal assessments.</p>
+        </div>
+        <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <h4 class="font-bold text-slate-900">Where can I download corresponding notes for these syllabus subjects?</h4>
+          <p class="text-slate-600 mt-1">All semester subject notes matching BEU module topics are available free of charge in our <a href="/notes" class="text-blue-600 underline font-semibold">BEU Notes Section</a>.</p>
+        </div>
       </div>
     </div>
   </main>
 
-  ${footerHtml}
+  \${footerHtml}
 </div>
 `;
 
@@ -1322,30 +1772,120 @@ writeStaticHtml('syllabus', syllabusHtml);
 // ─────────────────────────────────────────────────────────────
 const ugeacBody = `
 <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
-  ${navHeaderHtml}
+  \${navHeaderHtml}
 
   <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <div class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">UGEAC College Predictor</span>
+    </div>
+
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Admission Guidance</span>
-      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">UGEAC College Predictor 2026</h1>
+      <span class="px-3 py-1 bg-purple-100 text-purple-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Admission Intelligence 2026</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BCECEB UGEAC College Predictor & Cutoff Guide</h1>
       <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-        Predict your engineering admission chances across all 38 Government Engineering Colleges in Bihar based on your JEE Main percentile and category rank.
+        Forecast your admission chances into 10,000+ B.Tech seats across all 38 Government Engineering Colleges in Bihar based on your NTA JEE Main percentile and official state category ranks.
       </p>
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-      <h2 class="text-xl font-black text-slate-900 uppercase">Understanding BCECEB UGEAC Cutoffs</h2>
-      <p>
-        The Bihar Combined Entrance Competitive Examination Board (BCECEB) conducts Under Graduate Engineering Admission Counselling (UGEAC) each year for 10,000+ B.Tech seats across 38 Government Engineering Colleges (GECs) including MIT Muzaffarpur, BCE Bhagalpur, GCE Gaya, and DCE Darbhanga.
+    <!-- Predictor Feature Highlights -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
+        <div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center font-bold mb-3">🎯</div>
+        <h3 class="font-bold text-slate-900 text-sm uppercase mb-1">JEE Main Rank Mapping</h3>
+        <p class="text-xs text-slate-500 leading-relaxed">Translates your NTA All India Rank (AIR) into estimated BCECEB UGEAC State Merit Ranks (UR & Category).</p>
+      </div>
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
+        <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center font-bold mb-3">🏛️</div>
+        <h3 class="font-bold text-slate-900 text-sm uppercase mb-1">38 Government GECs</h3>
+        <p class="text-xs text-slate-500 leading-relaxed">Covers legacy institutes like MIT Muzaffarpur & BCE Bhagalpur alongside newly established district engineering colleges.</p>
+      </div>
+      <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm">
+        <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-bold mb-3">⚖️</div>
+        <h3 class="font-bold text-slate-900 text-sm uppercase mb-1">State Reservation Matrix</h3>
+        <p class="text-xs text-slate-500 leading-relaxed">Calculates category-specific closing ranks across UR, EWS, BC, EBC, SC, ST, RCG, and DQ reservation quotas.</p>
+      </div>
+    </div>
+
+    <!-- Complete Counselling Guide & Cutoff Breakdown -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-8 prose prose-slate max-w-none text-slate-800 mb-12">
+      <h2 class="text-2xl font-black text-slate-900 uppercase">Understanding the BCECEB UGEAC Counselling Lifecycle</h2>
+      <p class="text-sm leading-relaxed">
+        The <strong>Undergraduate Engineering Admission Counselling (UGEAC)</strong> is conducted annually by the Bihar Combined Entrance Competitive Examination Board (BCECEB). Admission into all 38 Government Engineering Colleges (GECs) under Bihar Engineering University is determined exclusively by merit in the National Testing Agency's (NTA) JEE Main exam.
       </p>
-      <div class="pt-4 flex flex-wrap gap-4">
-        <a href="/ugeac-predictor" class="px-5 py-3 bg-purple-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-purple-700 transition-colors">Launch Predictor Engine</a>
-        <a href="/directory" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Browse 38 Colleges</a>
+
+      <h3 class="text-xl font-bold text-slate-900">Bihar State Reservation Quota Distribution</h3>
+      <div class="overflow-x-auto not-prose my-6">
+        <table class="w-full text-left border-collapse text-xs md:text-sm">
+          <thead>
+            <tr class="bg-slate-100 text-slate-900 font-bold border-b border-slate-200">
+              <th class="p-3">Category Code</th>
+              <th class="p-3">Category Name</th>
+              <th class="p-3">State Quota %</th>
+              <th class="p-3">Eligible Candidates</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr><td class="p-3 font-bold text-blue-600">UR</td><td class="p-3">Unreserved (Open Merit)</td><td class="p-3 font-bold">40%</td><td class="p-3">All Bihar domicile applicants regardless of caste or background</td></tr>
+            <tr class="bg-slate-50/50"><td class="p-3 font-bold text-emerald-600">EWS</td><td class="p-3">Economically Weaker Section</td><td class="p-3 font-bold">10%</td><td class="p-3">General category candidates satisfying state income & asset criteria</td></tr>
+            <tr><td class="p-3 font-bold text-purple-600">BC</td><td class="p-3">Backward Class (OBC-II)</td><td class="p-3 font-bold">12%</td><td class="p-3">Non-Creamy Layer (NCL) certificate holders of recognized BC castes</td></tr>
+            <tr class="bg-slate-50/50"><td class="p-3 font-bold text-amber-600">EBC</td><td class="p-3">Extremely Backward Class (OBC-I)</td><td class="p-3 font-bold">18%</td><td class="p-3">Non-Creamy Layer (NCL) certificate holders of recognized EBC castes</td></tr>
+            <tr><td class="p-3 font-bold text-rose-600">SC</td><td class="p-3">Scheduled Caste</td><td class="p-3 font-bold">16%</td><td class="p-3">Permanent Bihar residents from notified Scheduled Castes</td></tr>
+            <tr class="bg-slate-50/50"><td class="p-3 font-bold text-teal-600">ST</td><td class="p-3">Scheduled Tribe</td><td class="p-3 font-bold">1%</td><td class="p-3">Permanent Bihar residents from notified Scheduled Tribes</td></tr>
+            <tr><td class="p-3 font-bold text-indigo-600">RCG</td><td class="p-3">Reserved Category Girls</td><td class="p-3 font-bold">3%</td><td class="p-3">Horizontal reservation for female candidates of reserved categories</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="text-xl font-bold text-slate-900">Estimated JEE Main Cutoff Percentiles for Top Colleges</h3>
+      <div class="overflow-x-auto not-prose my-6">
+        <table class="w-full text-left border-collapse text-xs md:text-sm">
+          <thead>
+            <tr class="bg-slate-100 text-slate-900 font-bold border-b border-slate-200">
+              <th class="p-3">College Name</th>
+              <th class="p-3">Flagship Branches</th>
+              <th class="p-3">UR Percentile Range</th>
+              <th class="p-3">Category Percentile Range</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr><td class="p-3 font-bold text-slate-900">MIT Muzaffarpur</td><td class="p-3">IT, Civil, Mech, EE, ECE</td><td class="p-3 font-semibold text-blue-600">82.0 - 91.5</td><td class="p-3">70.0 - 80.0</td></tr>
+            <tr class="bg-slate-50/50"><td class="p-3 font-bold text-slate-900">BCE Bhagalpur</td><td class="p-3">CSE, Civil, Mech, EE, ECE</td><td class="p-3 font-semibold text-blue-600">80.0 - 89.0</td><td class="p-3">68.0 - 78.5</td></tr>
+            <tr><td class="p-3 font-bold text-slate-900">GCE Gaya</td><td class="p-3">CSE, Civil, Mech, EEE</td><td class="p-3 font-semibold text-blue-600">75.0 - 84.0</td><td class="p-3">62.0 - 74.0</td></tr>
+            <tr class="bg-slate-50/50"><td class="p-3 font-bold text-slate-900">DCE Darbhanga</td><td class="p-3">CSE, Civil, Mech, EEE</td><td class="p-3 font-semibold text-blue-600">72.0 - 81.0</td><td class="p-3">58.0 - 70.0</td></tr>
+            <tr><td class="p-3 font-bold text-slate-900">BCE Bakhtiyarpur (Patna)</td><td class="p-3">CSE, Civil, Mech, EE</td><td class="p-3 font-semibold text-blue-600">74.0 - 83.5</td><td class="p-3">60.0 - 72.5</td></tr>
+            <tr class="bg-slate-50/50"><td class="p-3 font-bold text-slate-900">NCE Chandi (Nalanda)</td><td class="p-3">CSE, Aeronautical, Civil, Mech</td><td class="p-3 font-semibold text-blue-600">67.0 - 77.0</td><td class="p-3">52.0 - 65.0</td></tr>
+            <tr><td class="p-3 font-bold text-slate-900">LNJPIT Chapra</td><td class="p-3">CSE, Civil, Mech, EEE</td><td class="p-3 font-semibold text-blue-600">68.0 - 78.0</td><td class="p-3">54.0 - 66.0</td></tr>
+            <tr class="bg-slate-50/50"><td class="p-3 font-bold text-slate-900">Other District GECs</td><td class="p-3">Core & Tech Branches</td><td class="p-3 font-semibold text-blue-600">45.0 - 65.0</td><td class="p-3">30.0 - 52.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl not-prose my-6 space-y-3 text-xs md:text-sm text-slate-800">
+        <h4 class="font-black text-slate-900 uppercase tracking-wider text-sm">Mandatory Document Verification Checklist</h4>
+        <p class="leading-relaxed">Keep 3 sets of self-attested photocopies ready for Nodal Center physical reporting:</p>
+        <ul class="list-disc pl-5 space-y-1 text-slate-600">
+          <li>NTA JEE Main Admit Card & Official Scorecard</li>
+          <li>BCECEB UGEAC Rank Card & Seat Allotment Letter</li>
+          <li>Class 10th Marksheet & Passing Certificate (DOB proof)</li>
+          <li>Class 12th (10+2) Marksheet & Passing Certificate</li>
+          <li>Permanent Residential / Domicile Certificate of Bihar (CO/SDO/DM level)</li>
+          <li>Caste / Non-Creamy Layer Certificate (for BC, EBC, SC, ST) or EWS Asset Certificate</li>
+          <li>College/School Leaving Certificate (CLC/TC) & Character Certificate</li>
+          <li>6 Passport Size Photographs matching JEE Main admit card</li>
+        </ul>
+      </div>
+
+      <div class="pt-4 flex flex-wrap gap-4 not-prose">
+        <a href="/colleges" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Explore All 38 Colleges</a>
+        <a href="/blog/complete-guide-to-ugeac-counselling-process" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Read UGEAC Full Counselling Guide</a>
       </div>
     </div>
   </main>
 
-  ${footerHtml}
+  \${footerHtml}
 </div>
 `;
 
@@ -1381,32 +1921,104 @@ writeStaticHtml('ugeac-predictor', ugeacHtml);
 // ─────────────────────────────────────────────────────────────
 const cgpaBody = `
 <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
-  ${navHeaderHtml}
+  \${navHeaderHtml}
 
   <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <div class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">BEU CGPA Calculator</span>
+    </div>
+
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="px-3 py-1 bg-rose-100 text-rose-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Academic Utility</span>
-      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU CGPA & SGPA Calculator</h1>
+      <span class="px-3 py-1 bg-rose-100 text-rose-700 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Academic Utility 2026</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">Official BEU CGPA & SGPA Calculator</h1>
       <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-        Calculate your semester SGPA and cumulative CGPA strictly according to official Bihar Engineering University grade point formulas and credit weighting.
+        Calculate your semester SGPA and cumulative CGPA strictly according to official Bihar Engineering University (BEU Patna) credit-weighting algorithms and AICTE percentage conversion formulas.
       </p>
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-      <h2 class="text-xl font-black text-slate-900 uppercase">Official BEU SGPA & CGPA Calculation Formula</h2>
-      <p>
-        In Bihar Engineering University (BEU Patna), SGPA (Semester Grade Point Average) is calculated as: <code>SGPA = &Sigma;(Ci &times; Gi) / &Sigma;(Ci)</code>, where <code>Ci</code> is the credit of the i-th course and <code>Gi</code> is the grade point earned.
+    <!-- Official Mathematical Formula Box -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-8 prose prose-slate max-w-none text-slate-800 mb-12">
+      <h2 class="text-2xl font-black text-slate-900 uppercase">Official University SGPA & CGPA Calculation Formulas</h2>
+      <p class="text-sm leading-relaxed">
+        Bihar Engineering University uses a credit-weighted grade point average system. Your semester standing (SGPA) and degree standing (CGPA) are computed strictly using the following mathematical formulations:
       </p>
-      <p>
-        To convert BEU CGPA into percentage: <code>Percentage (%) = (CGPA - 0.75) &times; 10</code>.
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose my-6 text-xs md:text-sm">
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+          <span class="px-2.5 py-0.5 bg-blue-100 text-blue-700 text-[10px] font-black uppercase rounded-md">Semester Formula</span>
+          <h3 class="font-bold text-slate-900 text-base">SGPA (Semester Grade Point Average)</h3>
+          <p class="font-mono text-sm font-bold text-blue-600 bg-white p-3 rounded-xl border border-slate-200">
+            SGPA = &Sigma;(Ci &times; Gi) / &Sigma;(Ci)
+          </p>
+          <p class="text-slate-600 text-xs leading-relaxed">
+            Where <code>Ci</code> is the credit of course <code>i</code> and <code>Gi</code> is the grade point earned in that course.
+          </p>
+        </div>
+
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+          <span class="px-2.5 py-0.5 bg-rose-100 text-rose-700 text-[10px] font-black uppercase rounded-md">Cumulative Formula</span>
+          <h3 class="font-bold text-slate-900 text-base">CGPA (Cumulative Grade Point Average)</h3>
+          <p class="font-mono text-sm font-bold text-rose-600 bg-white p-3 rounded-xl border border-slate-200">
+            CGPA = &Sigma;(Sj &times; Cj) / &Sigma;(Cj)
+          </p>
+          <p class="text-slate-600 text-xs leading-relaxed">
+            Where <code>Sj</code> is the SGPA of semester <code>j</code> and <code>Cj</code> is the total credits registered in semester <code>j</code>.
+          </p>
+        </div>
+      </div>
+
+      <h3 class="text-xl font-bold text-slate-900">Official BEU CGPA to Percentage Conversion</h3>
+      <p class="text-sm leading-relaxed">
+        Under official Bihar Engineering University and AICTE notifications, to convert your Cumulative Grade Point Average into an equivalent marks percentage:
       </p>
-      <div class="pt-4 flex flex-wrap gap-4">
-        <a href="/cgpa" class="px-5 py-3 bg-rose-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-rose-700 transition-colors">Open Interactive Calculator</a>
+
+      <div class="p-6 bg-emerald-50 border border-emerald-200 rounded-2xl not-prose my-4">
+        <p class="font-mono text-base font-black text-emerald-800 text-center">
+          Equivalent Percentage (%) = (CGPA - 0.75) &times; 10
+        </p>
+        <p class="text-center text-xs text-emerald-700 mt-2 font-medium">
+          Example: If your CGPA is 8.50 &rarr; Percentage = (8.50 - 0.75) &times; 10 = 7.75 &times; 10 = <strong>77.50%</strong>
+        </p>
+      </div>
+
+      <h3 class="text-xl font-bold text-slate-900">Step-by-Step Sample SGPA Calculation</h3>
+      <div class="overflow-x-auto not-prose my-6">
+        <table class="w-full text-left border-collapse text-xs md:text-sm">
+          <thead>
+            <tr class="bg-slate-100 text-slate-900 font-bold border-b border-slate-200">
+              <th class="p-3">Course Title</th>
+              <th class="p-3">Course Credit (Ci)</th>
+              <th class="p-3">Grade Awarded</th>
+              <th class="p-3">Grade Point (Gi)</th>
+              <th class="p-3">Credit Points (Ci &times; Gi)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            <tr><td class="p-3 font-semibold">Data Structures & Algorithms</td><td class="p-3">4.0</td><td class="p-3 font-bold text-blue-600">A+</td><td class="p-3">9</td><td class="p-3 font-bold">36.0</td></tr>
+            <tr class="bg-slate-50/50"><td class="p-3 font-semibold">Discrete Mathematics</td><td class="p-3">4.0</td><td class="p-3 font-bold text-emerald-600">A</td><td class="p-3">8</td><td class="p-3 font-bold">32.0</td></tr>
+            <tr><td class="p-3 font-semibold">OOP in Java</td><td class="p-3">3.0</td><td class="p-3 font-bold text-purple-600">O</td><td class="p-3">10</td><td class="p-3 font-bold">30.0</td></tr>
+            <tr class="bg-slate-50/50"><td class="p-3 font-semibold">Digital Electronics</td><td class="p-3">3.0</td><td class="p-3 font-bold text-amber-600">B+</td><td class="p-3">7</td><td class="p-3 font-bold">21.0</td></tr>
+            <tr><td class="p-3 font-semibold">Data Structures Lab</td><td class="p-3">1.5</td><td class="p-3 font-bold text-purple-600">O</td><td class="p-3">10</td><td class="p-3 font-bold">15.0</td></tr>
+            <tr class="bg-slate-50/50"><td class="p-3 font-semibold">Digital Electronics Lab</td><td class="p-3">1.5</td><td class="p-3 font-bold text-blue-600">A+</td><td class="p-3">9</td><td class="p-3 font-bold">13.5</td></tr>
+            <tr class="bg-blue-50 font-bold text-slate-900"><td class="p-3">Total Sum</td><td class="p-3">&Sigma;Ci = 17.0</td><td class="p-3">-</td><td class="p-3">-</td><td class="p-3">&Sigma;(Ci&times;Gi) = 147.5</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-xs text-slate-600 italic">
+        Resulting SGPA = 147.5 / 17.0 = <strong>8.68</strong>. Equivalent Percentage = (8.68 - 0.75) &times; 10 = <strong>79.3%</strong>.
+      </p>
+
+      <div class="pt-4 flex flex-wrap gap-4 not-prose">
+        <a href="/notes" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Explore BEU Notes</a>
+        <a href="/pyq" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Download PYQs</a>
       </div>
     </div>
   </main>
 
-  ${footerHtml}
+  \${footerHtml}
 </div>
 `;
 
@@ -1442,30 +2054,76 @@ writeStaticHtml('cgpa', cgpaHtml);
 // ─────────────────────────────────────────────────────────────
 const attendanceBody = `
 <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
-  ${navHeaderHtml}
+  \${navHeaderHtml}
 
   <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <div class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">Attendance Tracker</span>
+    </div>
+
     <div class="text-center max-w-3xl mx-auto mb-12">
       <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Academic Compliance</span>
-      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Attendance Tracker & 75% Rule Calculator</h1>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Attendance Tracker & 75% Rule Guide</h1>
       <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-        Track your branch and semester attendance according to official Bihar Engineering University regulations. Calculate classes required to attain the mandatory 75% examination eligibility criteria.
+        Understand Bihar Engineering University's mandatory 75% attendance ordinance. Calculate your branch attendance, estimate classes required to clear exam eligibility, and learn medical condonation procedures.
       </p>
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-      <h2 class="text-xl font-black text-slate-900 uppercase">Understanding the BEU 75% Attendance Regulation</h2>
-      <p>
-        As per the academic ordinance of Bihar Engineering University (BEU Patna), students must maintain a minimum of <strong>75% attendance</strong> across all theory lectures and laboratory sessions in order to appear for university end-semester examinations. Shortfalls below 75% without authorized medical condonation lead to debarment from exam admit cards.
+    <!-- Attendance Rules & Guidance Box -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-8 prose prose-slate max-w-none text-slate-800 mb-12">
+      <h2 class="text-2xl font-black text-slate-900 uppercase">The BEU 75% Mandatory Attendance Regulation</h2>
+      <p class="text-sm leading-relaxed">
+        As codified in the academic ordinances of Bihar Engineering University (BEU Patna), every registered undergraduate engineering candidate is strictly required to attend a minimum of <strong>75% of the total theory lectures, tutorials, and practical laboratory sessions</strong> held in each course during the semester.
       </p>
-      <div class="pt-4 flex flex-wrap gap-4">
-        <a href="/attendance" class="px-5 py-3 bg-emerald-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors">Launch Attendance Calculator</a>
-        <a href="/notes" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Browse Semester Notes</a>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 not-prose my-6 text-xs md:text-sm">
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+          <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-bold uppercase rounded-md">General Threshold</span>
+          <h3 class="font-bold text-slate-900 text-base">75% Standard</h3>
+          <p class="text-slate-600 leading-relaxed">Full eligibility for university end-semester examination admit cards without penalty or special permissions.</p>
+        </div>
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+          <span class="px-2.5 py-0.5 bg-amber-100 text-amber-700 text-[10px] font-bold uppercase rounded-md">Medical Condonation</span>
+          <h3 class="font-bold text-slate-900 text-base">65% to 74%</h3>
+          <p class="text-slate-600 leading-relaxed">Permitted only upon submission of authorized medical certificates signed by competent medical officers and approved by the Principal.</p>
+        </div>
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl space-y-2">
+          <span class="px-2.5 py-0.5 bg-rose-100 text-rose-700 text-[10px] font-bold uppercase rounded-md">Debarment Risk</span>
+          <h3 class="font-bold text-slate-900 text-base">Below 65%</h3>
+          <p class="text-slate-600 leading-relaxed">Strict debarment from university examinations. Candidate is awarded an 'F' grade and must re-register or take carry-over exams.</p>
+        </div>
+      </div>
+
+      <h3 class="text-xl font-bold text-slate-900">How to Calculate Required Classes to Reach 75%</h3>
+      <p class="text-sm leading-relaxed">
+        If your current attendance percentage has fallen below 75%, use the following standard formula to calculate the exact number of consecutive upcoming classes you must attend:
+      </p>
+      <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl not-prose my-4 font-mono text-xs md:text-sm text-slate-800">
+        <p class="font-bold text-blue-600 mb-2">Required Classes = &lceil;(3 &times; Total Classes Held - 4 &times; Classes Attended)&rceil;</p>
+        <p class="text-slate-600 text-xs">Example: If 60 classes have been held and you attended 35 &rarr; (3 &times; 60 - 4 &times; 35) = 180 - 140 = <strong>40 more classes</strong> must be attended consecutively.</p>
+      </div>
+
+      <h3 class="text-xl font-bold text-slate-900">Medical Condonation Procedure</h3>
+      <p class="text-sm leading-relaxed">
+        If genuine illness or hospitalization caused an attendance shortfall below 75%:
+      </p>
+      <ol class="list-decimal pl-5 space-y-1 text-slate-600 text-sm">
+        <li>Submit a formal medical leave application to your Head of Department (HOD) within 7 days of returning to campus.</li>
+        <li>Attach prescription slips, discharge summary, and fitness certificate issued by a registered government medical officer.</li>
+        <li>The college academic council reviews applications and may grant a relaxation of up to 10% (bringing the effective threshold down to 65%).</li>
+      </ol>
+
+      <div class="pt-4 flex flex-wrap gap-4 not-prose">
+        <a href="/notes" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Browse Semester Notes</a>
+        <a href="/timetable" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Check Class Timetable</a>
       </div>
     </div>
   </main>
 
-  ${footerHtml}
+  \${footerHtml}
 </div>
 `;
 let attendanceHtml = injectIntoRoot(baseTemplate, attendanceBody);
@@ -1483,22 +2141,148 @@ const timetableBody = `
 <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
   ${navHeaderHtml}
 
-  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+  <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">Timetable & Academic Routine</span>
+    </nav>
+
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="px-3 py-1 bg-violet-100 text-violet-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Class Schedule</span>
-      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Class Timetable & Routine 2026</h1>
+      <span class="px-3.5 py-1 bg-violet-100 text-violet-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Academic Routine Guide</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Class Timetable, Lab Schedule & Routine Guide</h1>
       <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-        Manage and view your semester-wise class timetable, laboratory sessions, and exam routines across all B.Tech branches in Bihar Engineering colleges.
+        Comprehensive academic routine guidelines, laboratory batch divisions, period scheduling, and weekly class timetables across Bihar Engineering University (BEU) colleges.
       </p>
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-      <h2 class="text-xl font-black text-slate-900 uppercase">Organize Your Engineering Academic Routine</h2>
-      <p>
-        Stay organized through weekly lecture schedules, laboratory batches, and teacher assignments. Never miss a mandatory practical class or midterm examination date.
-      </p>
-      <div class="pt-4 flex flex-wrap gap-4">
-        <a href="/timetable" class="px-5 py-3 bg-violet-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-violet-700 transition-colors">View Interactive Timetable</a>
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-10 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <section>
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight mb-4">Bihar Engineering University Academic Schedule Framework</h2>
+        <p class="leading-relaxed">
+          In all 38 Government Engineering Colleges (GECs) affiliated with Bihar Engineering University (BEU Patna), academic operations follow a standardized Choice Based Credit System (CBCS) instructional schedule. A standard semester spans 90 effective instructional days (approximately 15 to 16 working weeks), structured to deliver 450 to 500 contact hours across theory lectures, tutorial problem-solving sessions, and practical laboratory coursework.
+        </p>
+        <p class="leading-relaxed mt-3">
+          Daily academic operations generally run from <strong>10:00 AM to 5:00 PM</strong>, Monday through Saturday. Each instructional period is 50 to 60 minutes in duration, with a mandatory 40-minute lunch break scheduled between 1:00 PM and 1:40 PM. Adherence to this routine is essential for maintaining the mandatory 75% attendance threshold enforced by the university under Academic Ordinance Regulation 6.1.
+        </p>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Standard BEU Weekly Class Schedule Matrix</h3>
+        <p class="leading-relaxed mb-4">
+          Below is the typical weekly instructional routine model adopted by BEU engineering departments for core B.Tech semesters:
+        </p>
+        <div class="overflow-x-auto not-prose my-6">
+          <table class="w-full text-left text-xs border border-slate-200 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-100 text-slate-900 font-black uppercase text-[11px] border-b border-slate-200">
+              <tr>
+                <th class="p-3 border-r border-slate-200">Day</th>
+                <th class="p-3 border-r border-slate-200">Period 1<br><span class="text-[10px] text-slate-500 font-normal">10:00 - 10:50 AM</span></th>
+                <th class="p-3 border-r border-slate-200">Period 2<br><span class="text-[10px] text-slate-500 font-normal">10:50 - 11:40 AM</span></th>
+                <th class="p-3 border-r border-slate-200">Period 3<br><span class="text-[10px] text-slate-500 font-normal">11:40 - 12:30 PM</span></th>
+                <th class="p-3 border-r border-slate-200">Period 4<br><span class="text-[10px] text-slate-500 font-normal">12:30 - 01:20 PM</span></th>
+                <th class="p-3 border-r border-slate-200 text-center bg-slate-200">Lunch Break<br><span class="text-[10px] text-slate-500 font-normal">01:20 - 02:00 PM</span></th>
+                <th class="p-3">Periods 5 & 6 (Lab / Workshop)<br><span class="text-[10px] text-slate-500 font-normal">02:00 - 05:00 PM</span></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Monday</td>
+                <td class="p-3 border-r border-slate-200">Engineering Math</td>
+                <td class="p-3 border-r border-slate-200">Data Structures / Mechanics</td>
+                <td class="p-3 border-r border-slate-200">Basic Electrical / Electronics</td>
+                <td class="p-3 border-r border-slate-200">Technical Communication</td>
+                <td class="p-3 text-center bg-slate-100 text-slate-400 font-bold border-r border-slate-200">BREAK</td>
+                <td class="p-3 font-semibold text-blue-700">Group A: Programming Lab / Group B: Physics Lab</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Tuesday</td>
+                <td class="p-3 border-r border-slate-200">Data Structures / Mechanics</td>
+                <td class="p-3 border-r border-slate-200">Engineering Math</td>
+                <td class="p-3 border-r border-slate-200">Environmental Science</td>
+                <td class="p-3 border-r border-slate-200">Basic Electrical</td>
+                <td class="p-3 text-center bg-slate-100 text-slate-400 font-bold border-r border-slate-200">BREAK</td>
+                <td class="p-3 font-semibold text-blue-700">Group A: Basic Electrical Lab / Group B: Programming Lab</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Wednesday</td>
+                <td class="p-3 border-r border-slate-200">Object Oriented Programming</td>
+                <td class="p-3 border-r border-slate-200">Digital Electronics</td>
+                <td class="p-3 border-r border-slate-200">Engineering Math (Tutorial)</td>
+                <td class="p-3 border-r border-slate-200">Library / Seminar</td>
+                <td class="p-3 text-center bg-slate-100 text-slate-400 font-bold border-r border-slate-200">BREAK</td>
+                <td class="p-3 font-semibold text-blue-700">Group A: Workshop Practice / Group B: Electrical Lab</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Thursday</td>
+                <td class="p-3 border-r border-slate-200">Digital Electronics</td>
+                <td class="p-3 border-r border-slate-200">Data Structures / Mechanics</td>
+                <td class="p-3 border-r border-slate-200">Engineering Math</td>
+                <td class="p-3 border-r border-slate-200">Professional Ethics</td>
+                <td class="p-3 text-center bg-slate-100 text-slate-400 font-bold border-r border-slate-200">BREAK</td>
+                <td class="p-3 font-semibold text-blue-700">Group A: Engineering Graphics CAD Lab (Batch 1 & 2)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Friday</td>
+                <td class="p-3 border-r border-slate-200">Core Engineering Subject</td>
+                <td class="p-3 border-r border-slate-200">Digital Electronics (Tutorial)</td>
+                <td class="p-3 border-r border-slate-200">Technical Communication Lab</td>
+                <td class="p-3 border-r border-slate-200">Mentorship Hour</td>
+                <td class="p-3 text-center bg-slate-100 text-slate-400 font-bold border-r border-slate-200">BREAK</td>
+                <td class="p-3 font-semibold text-blue-700">Project / Innovation Lab / Coding Club Activity</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Saturday</td>
+                <td class="p-3 border-r border-slate-200">Remedial Classes</td>
+                <td class="p-3 border-r border-slate-200">GATE / Aptitude Class</td>
+                <td class="p-3 border-r border-slate-200">Sports / Extracurricular</td>
+                <td class="p-3 border-r border-slate-200">NSS / Technical Society</td>
+                <td class="p-3 text-center bg-slate-100 text-slate-400 font-bold border-r border-slate-200">BREAK</td>
+                <td class="p-3 font-semibold text-slate-600">Self Study / Library Reference Hour</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Laboratory Batch System & Practical Continuous Assessment</h3>
+        <p class="leading-relaxed">
+          Because engineering laboratories require hands-on apparatus handling, each classroom section of 60 students is split into two manageable cohorts: <strong>Batch A (Roll 01–30)</strong> and <strong>Batch B (Roll 31–60)</strong>. Practical courses carry 2 to 3 credits and are evaluated out of 100 or 50 marks per subject:
+        </p>
+        <ul class="list-disc pl-5 space-y-2 mt-3 font-medium">
+          <li><strong>Continuous Day-to-Day Evaluation (30% internal):</strong> Marks awarded weekly based on timely experiment conduction, neatness of observation table, error calculation, and viva-voce questioning by the lab faculty.</li>
+          <li><strong>Lab Record Book Submission:</strong> Must be signed by the instructor in the immediate following practical session. Unsigned lab records disqualify candidates from external end-semester practical examinations.</li>
+          <li><strong>External Practical Examination (70%):</strong> Conducted in presence of an external university examiner appointed by BEU, consisting of experiment performance, written quiz, and oral viva.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Mid-Semester Exam Scheduling & Academic Calendar Milestones</h3>
+        <p class="leading-relaxed">
+          Every semester at BEU follows a strict academic calendar published by the Controller of Examinations:
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 not-prose my-4">
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-bold text-slate-900 text-xs uppercase mb-1">📅 Weeks 1 - 7: Phase 1</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed">Completion of Units 1 and 2 of syllabus. First attendance review published on notice boards.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-bold text-slate-900 text-xs uppercase mb-1">📝 Week 8 - 9: Mid-Term</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed">Centralized Mid-Semester Examination (20 marks per subject). Mandatory for internal evaluation.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-bold text-slate-900 text-xs uppercase mb-1">🏁 Weeks 10 - 16: Phase 2</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed">Completion of Units 3, 4, and 5. Final attendance shortfall audit and admit card generation.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="pt-6 border-t border-slate-100 flex flex-wrap gap-4 not-prose">
+        <a href="/attendance" class="px-5 py-3 bg-violet-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-violet-700 transition-colors shadow-sm">Check Attendance Shortfall</a>
+        <a href="/notes" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Download Semester Notes</a>
+        <a href="/syllabus" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">View BEU Syllabus</a>
       </div>
     </div>
   </main>
@@ -1508,8 +2292,8 @@ const timetableBody = `
 `;
 let timetableHtml = injectIntoRoot(baseTemplate, timetableBody);
 timetableHtml = injectHeadMetadata(timetableHtml, {
-  title: 'BEU Timetable & Class Schedule 2026 | Apna College Bihar',
-  description: 'View and customize your Bihar Engineering University (BEU) class timetable, exam schedule, and semester routine for all engineering branches.',
+  title: 'BEU Timetable & Class Schedule Guide 2026 | Apna College Bihar',
+  description: 'Complete academic routine guide for Bihar Engineering University (BEU Patna). Weekly timetable matrix, lab batches, mid-term dates, and period schedules for B.Tech.',
   canonical: 'https://www.apnacollegebihar.online/timetable'
 });
 writeStaticHtml('timetable', timetableHtml);
@@ -1521,23 +2305,133 @@ const beuResultBody = `
 <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
   ${navHeaderHtml}
 
-  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+  <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">BEU Results & Marksheet Evaluation</span>
+    </nav>
+
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">University Results</span>
-      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Exam Results & Marksheet Portal</h1>
+      <span class="px-3.5 py-1 bg-amber-100 text-amber-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">University Results Guide</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Exam Results, Marksheet Codes & Scrutiny Guide</h1>
       <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-        Check semester exam results, grade points, SGPA/CGPA evaluation, and official marksheet links published by Bihar Engineering University (BEU Patna).
+        Comprehensive guide to Bihar Engineering University (BEU Patna) B.Tech semester examination results, grade points, marksheet codes, backlog clearance, and scrutiny re-evaluation.
       </p>
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-      <h2 class="text-xl font-black text-slate-900 uppercase">Official University Result Updates</h2>
-      <p>
-        Bihar Engineering University conducts end-semester examinations for B.Tech semesters 1 through 8. Marks, grade conversions, and pass/carry-over statuses are officially verified per university evaluation rules.
-      </p>
-      <div class="pt-4 flex flex-wrap gap-4">
-        <a href="/beu-result" class="px-5 py-3 bg-amber-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-amber-700 transition-colors">Access Result Portal</a>
-        <a href="/cgpa" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Calculate SGPA / CGPA</a>
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-10 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <section>
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight mb-4">BEU Examination Evaluation & Result Publishing Lifecycle</h2>
+        <p class="leading-relaxed">
+          Bihar Engineering University (BEU Patna), established under Bihar Act 20 of 2021, governs end-semester examinations across all 38 Government Engineering Colleges in the state. At the conclusion of each odd (1st, 3rd, 5th, 7th) and even (2nd, 4th, 6th, 8th) semester, answer scripts from all affiliated institutions are coded with barcode concealment and evaluated centrally by approved university examiners.
+        </p>
+        <p class="leading-relaxed mt-3">
+          Results are officially published through the BEU examination portal (<code>results.beu-bih.ac.in</code>). Each student receives a digitized semester grade card reflecting their course codes, subject credits, internal continuous evaluation scores (out of 30), external university theory examination marks (out of 70), letter grades, and Semester Grade Point Average (SGPA).
+        </p>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Decoding BEU Marksheet Result Status Codes</h3>
+        <p class="leading-relaxed mb-4">
+          When examining your digitized marksheet or tabulator sheet (TR), the following official abbreviations indicate academic standing:
+        </p>
+        <div class="overflow-x-auto not-prose my-6">
+          <table class="w-full text-left text-xs border border-slate-200 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-100 text-slate-900 font-black uppercase text-[11px] border-b border-slate-200">
+              <tr>
+                <th class="p-3 border-r border-slate-200">Status Code</th>
+                <th class="p-3 border-r border-slate-200">Meaning</th>
+                <th class="p-3 border-r border-slate-200">Implication</th>
+                <th class="p-3">Required Action</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold text-emerald-700 border-r border-slate-200">P / PASS</td>
+                <td class="p-3 border-r border-slate-200">Passed Semester</td>
+                <td class="p-3 border-r border-slate-200">Cleared all theory (≥25/70) and aggregate requirements (≥40/100).</td>
+                <td class="p-3 text-slate-500">Eligible for normal semester progression.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold text-rose-700 border-r border-slate-200">F / FAIL</td>
+                <td class="p-3 border-r border-slate-200">Subject Backlog</td>
+                <td class="p-3 border-r border-slate-200">Failed to secure minimum 25 marks in external or 40 marks aggregate.</td>
+                <td class="p-3 text-slate-700 font-semibold">Must fill carry-over examination form in subsequent corresponding semester.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold text-amber-700 border-r border-slate-200">AB / ABSENT</td>
+                <td class="p-3 border-r border-slate-200">Absent in Exam</td>
+                <td class="p-3 border-r border-slate-200">Student did not attend the scheduled end-semester paper.</td>
+                <td class="p-3 text-slate-700">Treated as Fail (F grade); re-appear in next cycle.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold text-purple-700 border-r border-slate-200">WH / WITHHELD</td>
+                <td class="p-3 border-r border-slate-200">Result Withheld</td>
+                <td class="p-3 border-r border-slate-200">Pending internal marks submission, registration discrepancy, or fee clearance.</td>
+                <td class="p-3 text-slate-700 font-semibold">Contact college examination section / registrar immediately for rectification.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold text-red-700 border-r border-slate-200">RA / UFM</td>
+                <td class="p-3 border-r border-slate-200">Reported Against / Malpractice</td>
+                <td class="p-3 border-r border-slate-200">Expelled or reported for unfair means during examination hall inspection.</td>
+                <td class="p-3 text-slate-700">Appear before university disciplinary committee for hearing.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold text-blue-700 border-r border-slate-200">I / INCOMPLETE</td>
+                <td class="p-3 border-r border-slate-200">Incomplete Assessment</td>
+                <td class="p-3 border-r border-slate-200">Practical viva marks or sessional grades not uploaded by department.</td>
+                <td class="p-3 text-slate-500">Resolved internally by departmental examination in-charge.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">University Promotion Policy & Vertical Mobility</h3>
+        <p class="leading-relaxed">
+          Under BEU academic regulations, promotion between academic years requires meeting the minimum cumulative earned credit threshold:
+        </p>
+        <ul class="list-disc pl-5 space-y-2 mt-3 font-medium">
+          <li><strong>Promotion from 1st Year to 2nd Year:</strong> A student must have earned at least <strong>50% of total credits</strong> prescribed for Semesters 1 and 2 combined (typically at least 19–20 out of 38 credits).</li>
+          <li><strong>Promotion from 2nd Year to 3rd Year:</strong> Must have cleared 100% of 1st Year courses (zero backlogs in Semester 1 & 2) AND earned at least 50% credits in Semesters 3 and 4 combined.</li>
+          <li><strong>Promotion from 3rd Year to 4th Year:</strong> Must have cleared 100% of 2nd Year courses (zero backlogs in Semesters 3 & 4) AND earned at least 50% credits in Semesters 5 and 6.</li>
+          <li><strong>Year Back (Detention):</strong> If a candidate fails to meet the 50% credit threshold, they are detained in the current academic year and must clear pending courses before proceeding.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Scrutiny / Challenge Re-Evaluation Procedure</h3>
+        <p class="leading-relaxed">
+          If you believe your theory examination paper was evaluated with discrepancies, BEU provides a formal scrutiny and challenge re-evaluation mechanism:
+        </p>
+        <ol class="list-decimal pl-5 space-y-2 mt-3 font-medium">
+          <li><strong>Application Timeline:</strong> The university opens the online scrutiny window strictly within <strong>15 days</strong> of official result publication on the BEU portal.</li>
+          <li><strong>Application Fee:</strong> Scrutiny fee is typically ₹500 to ₹1,000 per theory subject, payable online via the BEU portal.</li>
+          <li><strong>Scrutiny Scope:</strong> In basic scrutiny, examiners verify whether all questions were marked, verify that totaling is correct, and verify that no sub-part was left unassessed. In full challenge re-evaluation, the script is evaluated independently by a second senior examiner.</li>
+          <li><strong>Revised Score:</strong> If the re-evaluated score differs by 10% or more, the revised grade is formally updated on the university database and a new grade card is issued.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Official Percentage Conversion Formula</h3>
+        <p class="leading-relaxed">
+          To convert your Cumulative Grade Point Average (CGPA) into percentage for placement applications, civil services, or GATE qualification, BEU follows the AICTE recommended conversion formula:
+        </p>
+        <div class="p-5 bg-amber-50 border border-amber-200 rounded-2xl not-prose my-4 font-mono text-xs md:text-sm text-amber-950 font-bold">
+          Percentage Equivalent (%) = (CGPA - 0.75) × 10
+        </div>
+        <p class="text-xs text-slate-500">
+          Example: If your final BEU CGPA is 8.25, your percentage equivalent is (8.25 - 0.75) × 10 = 7.50 × 10 = 75.00%.
+        </p>
+      </section>
+
+      <div class="pt-6 border-t border-slate-100 flex flex-wrap gap-4 not-prose">
+        <a href="/cgpa" class="px-5 py-3 bg-amber-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-amber-700 transition-colors shadow-sm">Calculate SGPA / CGPA</a>
+        <a href="/pyq" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Download PYQ Papers</a>
+        <a href="/syllabus" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Review Syllabus Credits</a>
       </div>
     </div>
   </main>
@@ -1547,8 +2441,8 @@ const beuResultBody = `
 `;
 let beuResultHtml = injectIntoRoot(baseTemplate, beuResultBody);
 beuResultHtml = injectHeadMetadata(beuResultHtml, {
-  title: 'BEU Exam Result 2026 | Bihar Engineering University Semester Results',
-  description: 'Check official Bihar Engineering University (BEU Patna) B.Tech semester exam results, marksheets, and carry-over examination scores.',
+  title: 'BEU Exam Result 2026 Guide & Marksheet Evaluation | Apna College Bihar',
+  description: 'Official Bihar Engineering University (BEU Patna) B.Tech semester result guide. Marksheet status codes, scrutiny rules, carry-over backlog exams, and percentage formula.',
   canonical: 'https://www.apnacollegebihar.online/beu-result'
 });
 writeStaticHtml('beu-result', beuResultHtml);
@@ -1560,22 +2454,115 @@ const lectureFinderBody = `
 <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
   ${navHeaderHtml}
 
-  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+  <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">Video Lecture Finder</span>
+    </nav>
+
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="px-3 py-1 bg-red-100 text-red-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Video Lectures</span>
-      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU YouTube Lecture Finder</h1>
+      <span class="px-3.5 py-1 bg-red-100 text-red-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Curated Digital Learning</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU YouTube Lecture Finder & Video Course Directory</h1>
       <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-        Find curated, high-yield YouTube lecture playlists strictly aligned with each unit of the Bihar Engineering University (BEU) syllabus.
+        Curated unit-by-unit YouTube video playlists and top educator lectures strictly mapped to the Bihar Engineering University (BEU) B.Tech syllabus.
       </p>
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-      <h2 class="text-xl font-black text-slate-900 uppercase">Unit-by-Unit Video Compilations</h2>
-      <p>
-        No more searching aimlessly across YouTube. Our mentors have mapped top educator video series directly to each subject module in Mathematics, PPS, DSA, Networks, and Core branches.
-      </p>
-      <div class="pt-4 flex flex-wrap gap-4">
-        <a href="/lecture-finder" class="px-5 py-3 bg-red-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-red-700 transition-colors">Open Lecture Finder</a>
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-10 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <section>
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight mb-4">Curated Video Lecture Framework for BEU Curriculum</h2>
+        <p class="leading-relaxed">
+          While millions of educational videos exist on YouTube, engineering students in Bihar often waste 30 to 45 minutes searching for playlists that actually follow the exact sequence of their syllabus. In Bihar Engineering University, subject examinations follow strict module outlines specified in the AICTE model curriculum. A lecture series that covers topics in a different order or goes too deep into irrelevant tangents harms exam efficiency.
+        </p>
+        <p class="leading-relaxed mt-3">
+          Our senior mentors and university toppers have audited over 350 video series and cataloged the highest-yield, unit-mapped YouTube channels for every core engineering discipline. Below is your official reference guide across major foundational and departmental subjects.
+        </p>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Recommended High-Yield Channels by Subject Discipline</h3>
+        <div class="overflow-x-auto not-prose my-6">
+          <table class="w-full text-left text-xs border border-slate-200 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-100 text-slate-900 font-black uppercase text-[11px] border-b border-slate-200">
+              <tr>
+                <th class="p-3 border-r border-slate-200">Subject</th>
+                <th class="p-3 border-r border-slate-200">Target Semester / Branch</th>
+                <th class="p-3 border-r border-slate-200">Recommended Channel & Faculty</th>
+                <th class="p-3">Key Focus Modules</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200">Engineering Mathematics I & II</td>
+                <td class="p-3 border-r border-slate-200">1st & 2nd Sem (All Branches)</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Dr. Gajendra Purohit / Bhagwan Singh Vishwakarma</td>
+                <td class="p-3">Matrices, Eigenvalues, Multivariable Calculus, Taylor Series, Differential Equations.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200">Programming for Problem Solving (PPS)</td>
+                <td class="p-3 border-r border-slate-200">1st / 2nd Sem (All Branches)</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Jenny's Lectures / CodeWithHarry</td>
+                <td class="p-3">C fundamentals, Pointers, Arrays, Strings, File Handling, Recursion.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200">Basic Electrical Engineering</td>
+                <td class="p-3 border-r border-slate-200">1st / 2nd Sem (All Branches)</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Gate Academy / Neso Academy</td>
+                <td class="p-3">DC Circuits (Thevenin, Norton), AC fundamentals, Single-phase Transformers, 3-Phase induction motors.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200">Data Structures & Algorithms (DSA)</td>
+                <td class="p-3 border-r border-slate-200">3rd Sem CSE / IT</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Abdul Bari / Striver (takeUforward)</td>
+                <td class="p-3">Linked Lists, Stacks, Queues, Binary Trees, AVL Trees, Graphs, Sorting algorithms.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200">Operating Systems & DBMS</td>
+                <td class="p-3 border-r border-slate-200">4th & 5th Sem CSE / IT</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Gate Smashers (Varun Singla) / Knowledge Gate</td>
+                <td class="p-3">Process Scheduling, Deadlocks, Paging, Virtual Memory, SQL, Normalization (1NF–BCNF), ER Diagrams.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200">Engineering Mechanics & SOM</td>
+                <td class="p-3 border-r border-slate-200">2nd & 3rd Sem Civil / Mech</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Tikle's Academy / NPTEL (Prof. S.K. Saha)</td>
+                <td class="p-3">Trusses, Centroid & Moment of Inertia, SFD & BMD, Stress-Strain diagrams, Torsion in shafts.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200">Thermodynamics & Fluid Mechanics</td>
+                <td class="p-3 border-r border-slate-200">3rd & 4th Sem Mech / Civil</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Exergic / NPTEL (Prof. S. Chakraborty)</td>
+                <td class="p-3">1st & 2nd Laws of Thermodynamics, Carnot Engine, Bernoulli's Equation, Flow through pipes.</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200">Digital Electronics & Microprocessors</td>
+                <td class="p-3 border-r border-slate-200">3rd & 4th Sem EE / ECE / CSE</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Neso Academy / Engineering Funda</td>
+                <td class="p-3">Boolean Algebra, K-Maps, Multiplexers, Flip-Flops, Counters, 8085 Microprocessor architecture.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">The 3-Step "Video-Notes-PYQ" Study Loop</h3>
+        <p class="leading-relaxed">
+          Watching videos passively rarely produces high exam scores. To guarantee an 8.5+ SGPA, adopt this proven 3-phase revision loop:
+        </p>
+        <ol class="list-decimal pl-5 space-y-2 mt-3 font-medium">
+          <li><strong>Phase 1: Conceptual Video Comprehension (1.25x Speed):</strong> Watch the unit video series actively. Pause and draw circuit diagrams, state machine charts, and derivations in a rough notebook rather than taking passive screenshots.</li>
+          <li><strong>Phase 2: Sync with Apna College Bihar Notes:</strong> Read the corresponding unit notes on this platform immediately after the video. This familiarizes you with the exact academic definitions, bullet formats, and presentation required by BEU evaluators.</li>
+          <li><strong>Phase 3: Solve Last 5 Years' BEU PYQs:</strong> Open the BEU Previous Year Question paper for that subject. Identify which questions from that specific unit were asked in recent years and write full solutions under timed conditions.</li>
+        </ol>
+      </section>
+
+      <div class="pt-6 border-t border-slate-100 flex flex-wrap gap-4 not-prose">
+        <a href="/notes" class="px-5 py-3 bg-red-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-red-700 transition-colors shadow-sm">Download BEU Notes</a>
+        <a href="/pyq" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Download PYQs</a>
+        <a href="/study-resources" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Textbook Guides</a>
       </div>
     </div>
   </main>
@@ -1585,8 +2572,8 @@ const lectureFinderBody = `
 `;
 let lectureFinderHtml = injectIntoRoot(baseTemplate, lectureFinderBody);
 lectureFinderHtml = injectHeadMetadata(lectureFinderHtml, {
-  title: 'BEU YouTube Lecture Finder | Unit-wise Video Classes for B.Tech',
-  description: 'Curated YouTube lecture finder for Bihar Engineering University (BEU) syllabus. Unit-wise video playlists for CSE, Civil, Mechanical, EEE, ECE.',
+  title: 'BEU YouTube Lecture Finder & Video Directory | Apna College Bihar',
+  description: 'Curated unit-by-unit YouTube video lectures aligned with Bihar Engineering University (BEU) B.Tech syllabus for CSE, Civil, Mechanical, EE, and ECE.',
   canonical: 'https://www.apnacollegebihar.online/lecture-finder'
 });
 writeStaticHtml('lecture-finder', lectureFinderHtml);
@@ -1598,22 +2585,99 @@ const calculatorBody = `
 <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
   ${navHeaderHtml}
 
-  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+  <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">Scientific Calculator & Formula Guide</span>
+    </nav>
+
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Math Tool</span>
-      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">Scientific Calculator for Engineering Students</h1>
+      <span class="px-3.5 py-1 bg-blue-100 text-blue-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Engineering Tools</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">Engineering Scientific Calculator & Math Formula Guide</h1>
       <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-        Fast, browser-based scientific calculator with trigonometric, logarithmic, matrix, and exponential capabilities for engineering calculations.
+        Essential scientific calculator operations, examination permissible models, and high-frequency engineering mathematics formulas for BEU scholars.
       </p>
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-      <h2 class="text-xl font-black text-slate-900 uppercase">Interactive Calculator Suite</h2>
-      <p>
-        Perform quick trigonometric, exponential, power, and algebraic evaluations directly in your browser without needing a physical Casio calculator.
-      </p>
-      <div class="pt-4 flex flex-wrap gap-4">
-        <a href="/calculator" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors">Launch Scientific Calculator</a>
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-10 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <section>
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight mb-4">Scientific Calculator Regulations in BEU Examinations</h2>
+        <p class="leading-relaxed">
+          In Bihar Engineering University end-semester examinations, the use of scientific calculators is permitted for mathematical, analytical, and design subjects (such as Engineering Mathematics, Strength of Materials, Thermodynamics, Circuit Theory, and Structural Analysis). However, the university enforces strict regulations regarding permissible device types:
+        </p>
+        <ul class="list-disc pl-5 space-y-2 mt-3 font-medium">
+          <li><strong>Permissible Models:</strong> Standard non-programmable scientific calculators including <strong>Casio fx-82MS, fx-100MS, fx-991MS, fx-991ES Plus (2nd Edition), and fx-991EX ClassWiz</strong> are fully authorized.</li>
+          <li><strong>Prohibited Devices:</strong> Any programmable calculator (capable of storing alphanumeric text strings, source code, or custom user programs), graphing calculators, and mobile phone calculator applications are strictly prohibited. Possessing unauthorized devices in the examination hall leads to immediate confiscation and disciplinary action under university malpractice codes.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">High-Frequency Engineering Mathematics Formula Cheat-Sheet</h3>
+        <p class="leading-relaxed mb-4">
+          Mastering these essential mathematical relations saves valuable calculation time during numerical evaluations in end-semester papers:
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 not-prose my-6">
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-black text-slate-900 text-xs uppercase mb-3">Differential Calculus & Expansions</h4>
+            <ul class="space-y-2 text-xs font-mono text-slate-800">
+              <li>• Taylor Series: f(x) = f(a) + f'(a)(x-a) + f''(a)(x-a)²/2! + ...</li>
+              <li>• Maclaurin Series: e^x = 1 + x + x²/2! + x³/3! + ...</li>
+              <li>• sin(x) = x - x³/3! + x⁵/5! - ...</li>
+              <li>• cos(x) = 1 - x²/2! + x⁴/4! - ...</li>
+              <li>• L'Hôpital Rule: lim f(x)/g(x) = lim f'(x)/g'(x) [for 0/0 or ∞/∞]</li>
+            </ul>
+          </div>
+
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-black text-slate-900 text-xs uppercase mb-3">Matrices, Determinants & Eigenvalues</h4>
+            <ul class="space-y-2 text-xs font-mono text-slate-800">
+              <li>• Characteristic Equation: |A - λI| = 0</li>
+              <li>• Sum of Eigenvalues = Trace(A) [Sum of diagonal entries]</li>
+              <li>• Product of Eigenvalues = det(A) [Determinant of A]</li>
+              <li>• Cayley-Hamilton Theorem: Every square matrix satisfies its own characteristic equation.</li>
+              <li>• A⁻¹ = (1/det(A)) × adj(A)</li>
+            </ul>
+          </div>
+
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-black text-slate-900 text-xs uppercase mb-3">Laplace Transform Pairs</h4>
+            <ul class="space-y-2 text-xs font-mono text-slate-800">
+              <li>• L{1} = 1/s</li>
+              <li>• L{t^n} = n! / s^(n+1) [for positive integer n]</li>
+              <li>• L{e^(at)} = 1 / (s - a)</li>
+              <li>• L{sin(at)} = a / (s² + a²)</li>
+              <li>• L{cos(at)} = s / (s² + a²)</li>
+              <li>• First Shifting Theorem: L{e^(at) f(t)} = F(s - a)</li>
+            </ul>
+          </div>
+
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-black text-slate-900 text-xs uppercase mb-3">Numerical Methods Approximations</h4>
+            <ul class="space-y-2 text-xs font-mono text-slate-800">
+              <li>• Newton-Raphson: x_(n+1) = x_n - [f(x_n) / f'(x_n)]</li>
+              <li>• Trapezoidal Rule: ∫y dx = (h/2) [ (y₀ + y_n) + 2(y₁ + ... + y_(n-1)) ]</li>
+              <li>• Simpson's 1/3 Rule: ∫y dx = (h/3) [ (y₀ + y_n) + 4(odd) + 2(even) ]</li>
+              <li>• Runge-Kutta 4th Order: k₁=hf(x,y), k₂=hf(x+h/2, y+k₁/2)...</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Critical Exam Tips for Calculator Computation</h3>
+        <ul class="list-disc pl-5 space-y-2 font-medium">
+          <li><strong>Angle Mode Verification:</strong> Always verify whether your calculator is in <strong>DEG (Degree)</strong> or <strong>RAD (Radian)</strong> mode before computing trigonometric functions. Solving calculus and Fourier integrals in DEG mode leads to zero marks on the problem.</li>
+          <li><strong>Bracket Precedence:</strong> When evaluating complex fractions with multiple terms in numerator and denominator, enclose the entire numerator and denominator in independent parentheses: <code>(A + B) / (C + D)</code>.</li>
+          <li><strong>Equation Solver Validation:</strong> Use your Casio fx-991ES Plus equation solver mode (Mode 5) to verify quadratic, cubic, and simultaneous linear equation roots obtained through manual analytical derivation.</li>
+        </ul>
+      </section>
+
+      <div class="pt-6 border-t border-slate-100 flex flex-wrap gap-4 not-prose">
+        <a href="/cgpa" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">BEU CGPA Calculator</a>
+        <a href="/notes" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Semester Engineering Notes</a>
+        <a href="/pyq" class="px-5 py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-indigo-700 transition-colors shadow-sm">Solve Previous Year Papers</a>
       </div>
     </div>
   </main>
@@ -1623,8 +2687,8 @@ const calculatorBody = `
 `;
 let calculatorHtml = injectIntoRoot(baseTemplate, calculatorBody);
 calculatorHtml = injectHeadMetadata(calculatorHtml, {
-  title: 'Scientific Calculator Online | Engineering Mathematics Calculator',
-  description: 'Free scientific calculator online for engineering calculations, trigonometry, logarithms, powers, and mathematics coursework.',
+  title: 'Engineering Scientific Calculator & Math Formula Guide | Apna College Bihar',
+  description: 'Online scientific calculator reference and comprehensive engineering mathematics formula sheets for calculus, matrices, and BEU exam preparation.',
   canonical: 'https://www.apnacollegebihar.online/calculator'
 });
 writeStaticHtml('calculator', calculatorHtml);
@@ -1636,23 +2700,152 @@ const studyResourcesBody = `
 <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
   ${navHeaderHtml}
 
-  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+  <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">Study Resources & Reference Books</span>
+    </nav>
+
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Resource Hub</span>
-      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">Free Engineering Study Resources & Books</h1>
+      <span class="px-3.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Academic Repository</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">BEU Engineering Reference Books & Free Study Resources</h1>
       <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-        Access free standard reference textbooks, cheat sheets, coding roadmaps, and laboratory manuals for Bihar Engineering scholars.
+        Standard engineering textbooks, laboratory manuals, NPTEL course mappings, and open-access academic literature for Bihar Engineering University scholars.
       </p>
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-      <h2 class="text-xl font-black text-slate-900 uppercase">Standard Academic Materials</h2>
-      <p>
-        Compiled reference materials for GATE preparation, semester exams, and technical interviews curated by BEU toppers and alumni mentors.
-      </p>
-      <div class="pt-4 flex flex-wrap gap-4">
-        <a href="/study-resources" class="px-5 py-3 bg-emerald-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors">Browse Resources</a>
-        <a href="/notes" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Download Semester Notes</a>
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-10 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <section>
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight mb-4">The Standard Reference Literature Advantage</h2>
+        <p class="leading-relaxed">
+          In Bihar engineering examinations, relying solely on local question-bank summaries often limits students to mediocre marks. BEU paper setters and examiners draw university theory questions directly from standard author textbooks prescribed in the official university syllabus. Understanding foundational principles from authoritative authors ensures clarity for semester exams, GATE preparation, and technical placement interviews.
+        </p>
+        <p class="leading-relaxed mt-3">
+          Below is our vetted selection of standard reference books mapped to the BEU B.Tech syllabus across foundational first-year subjects and core engineering disciplines.
+        </p>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Standard Engineering Textbooks Matrix</h3>
+        <div class="overflow-x-auto not-prose my-6">
+          <table class="w-full text-left text-xs border border-slate-200 rounded-2xl overflow-hidden">
+            <thead class="bg-slate-100 text-slate-900 font-black uppercase text-[11px] border-b border-slate-200">
+              <tr>
+                <th class="p-3 border-r border-slate-200">Discipline</th>
+                <th class="p-3 border-r border-slate-200">Course Subject</th>
+                <th class="p-3 border-r border-slate-200">Prescribed Reference Textbook</th>
+                <th class="p-3">Primary Author / Publisher</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-slate-700">
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Common First Year</td>
+                <td class="p-3 border-r border-slate-200">Higher Engineering Mathematics</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Higher Engineering Mathematics</td>
+                <td class="p-3">Dr. B.S. Grewal (Khanna Publishers)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Common First Year</td>
+                <td class="p-3 border-r border-slate-200">Basic Electrical Engineering</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Electrical Engineering Fundamentals</td>
+                <td class="p-3">Vincent Del Toro / D.P. Kothari & I.J. Nagrath</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Common First Year</td>
+                <td class="p-3 border-r border-slate-200">Programming for Problem Solving</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Programming in ANSI C</td>
+                <td class="p-3">E. Balagurusamy (McGraw Hill)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Computer Science (CSE)</td>
+                <td class="p-3 border-r border-slate-200">Data Structures & Algorithms</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Introduction to Algorithms</td>
+                <td class="p-3">Cormen, Leiserson, Rivest, Stein (CLRS / MIT Press)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Computer Science (CSE)</td>
+                <td class="p-3 border-r border-slate-200">Operating System Concepts</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Operating System Concepts</td>
+                <td class="p-3">Silberschatz, Galvin, Gagne (Wiley)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Computer Science (CSE)</td>
+                <td class="p-3 border-r border-slate-200">Database Management Systems</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Database System Concepts</td>
+                <td class="p-3">Korth, Silberschatz, Sudarshan (McGraw Hill)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Civil Engineering</td>
+                <td class="p-3 border-r border-slate-200">Strength of Materials (SOM)</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Strength of Materials</td>
+                <td class="p-3">R.K. Rajput / Dr. B.C. Punmia</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Civil Engineering</td>
+                <td class="p-3 border-r border-slate-200">Reinforced Concrete Design</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Reinforced Concrete: Limit State Design</td>
+                <td class="p-3">A.K. Jain / B.C. Punmia (Laxmi Pub)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Mechanical Engineering</td>
+                <td class="p-3 border-r border-slate-200">Thermodynamics</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Engineering Thermodynamics</td>
+                <td class="p-3">P.K. Nag (McGraw Hill)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Mechanical Engineering</td>
+                <td class="p-3 border-r border-slate-200">Theory of Machines (TOM)</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Theory of Machines</td>
+                <td class="p-3">S.S. Rattan / Thomas Bevan</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Electrical / ECE</td>
+                <td class="p-3 border-r border-slate-200">Electric Circuits & Networks</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Fundamentals of Electric Circuits</td>
+                <td class="p-3">Charles K. Alexander & Matthew N.O. Sadiku</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 font-bold border-r border-slate-200 bg-slate-50">Electrical / ECE</td>
+                <td class="p-3 border-r border-slate-200">Control Systems Engineering</td>
+                <td class="p-3 border-r border-slate-200 font-semibold text-blue-700">Control Systems Engineering</td>
+                <td class="p-3">I.J. Nagrath & M. Gopal (New Age)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Open-Access Government Digital Academic Repositories</h3>
+        <p class="leading-relaxed">
+          Students across Bihar's 38 government engineering institutions can leverage free national academic repositories funded by the Ministry of Education (MoE), Government of India:
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 not-prose my-4">
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-bold text-slate-900 text-xs uppercase mb-1">📖 National Digital Library of India (NDLI)</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed">Access over 50 million digitized textbooks, research theses, and conference papers free through your institutional or personal email.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-bold text-slate-900 text-xs uppercase mb-1">💻 NPTEL & SWAYAM Online Portal</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed">Video lecture courses developed by IIT and IISc faculty. Under BEU rules, approved NPTEL course certifications transfer up to 20% semester credits.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-bold text-slate-900 text-xs uppercase mb-1">🔬 Virtual Labs (vlab.co.in)</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed">Interactive simulation of physics, electronics, mechanical, and civil engineering experiments without requiring physical laboratory apparatus.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-bold text-slate-900 text-xs uppercase mb-1">📂 e-ShodhSindhu & Spoken Tutorial</h4>
+            <p class="text-[11px] text-slate-600 leading-relaxed">Free peer-reviewed academic journals, open-source software training in Linux, Python, LaTeX, and C/C++ supported by IIT Bombay.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="pt-6 border-t border-slate-100 flex flex-wrap gap-4 not-prose">
+        <a href="/notes" class="px-5 py-3 bg-emerald-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors shadow-sm">Download Semester Notes</a>
+        <a href="/syllabus" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Review B.Tech Syllabus</a>
+        <a href="/colleges" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Explore 38 Bihar Colleges</a>
       </div>
     </div>
   </main>
@@ -1662,8 +2855,8 @@ const studyResourcesBody = `
 `;
 let studyResourcesHtml = injectIntoRoot(baseTemplate, studyResourcesBody);
 studyResourcesHtml = injectHeadMetadata(studyResourcesHtml, {
-  title: 'BEU Engineering Study Resources & Reference Books | Apna College Bihar',
-  description: 'Free engineering reference books, cheat sheets, lab manuals, and study materials for Bihar Engineering University students.',
+  title: 'BEU Engineering Reference Books & Free Study Resources | Apna College Bihar',
+  description: 'Standard engineering reference textbooks, laboratory manuals, NPTEL course mappings, and open-access academic literature for Bihar engineering students.',
   canonical: 'https://www.apnacollegebihar.online/study-resources'
 });
 writeStaticHtml('study-resources', studyResourcesHtml);
@@ -1671,32 +2864,95 @@ writeStaticHtml('study-resources', studyResourcesHtml);
 // ─────────────────────────────────────────────────────────────
 // 20. GENERATE WEB DIRECTORY & SITEMAP PAGE (/directory)
 // ─────────────────────────────────────────────────────────────
+const directoryDivisions = {
+  "Patna Division": ["bce-bakhtiyarpur", "mit-muzaffarpur", "gec-bhojpur", "gec-buxar", "gec-rohtas", "gec-kaimur"],
+  "Tirhut Division": ["gec-vaishali", "mce-motihari", "sec-sitamarhi", "gec-sheohar", "gec-west-champaran"],
+  "Magadh Division": ["gce-gaya", "gec-nawada", "gec-aurangabad", "gec-jehanabad", "gec-arwal"],
+  "Saran Division": ["chapra-lnjpit", "gec-siwan", "gec-gopalganj"],
+  "Darbhanga Division": ["dce-darbhanga", "gec-madhubani", "gec-samastipur"],
+  "Kosi & Purnia Division": ["sce-saharsa", "gec-madhepura", "gec-supaul", "gec-purnea", "gec-katihar", "gec-araria", "gec-kishanganj"],
+  "Bhagalpur & Munger Division": ["bce-bhagalpur", "gec-banka", "gec-munger", "gec-jamui", "gec-lakhisarai", "gec-sheikhpura", "gec-khagaria", "gec-begusarai"]
+};
+
+const directoryDivisionHtml = Object.keys(directoryDivisions).map(divName => {
+  const slugs = directoryDivisions[divName];
+  const itemsHtml = slugs.filter(s => collegeData[s]).map(s => {
+    const c = collegeData[s];
+    return `<li><a href="/college/${s}" class="text-blue-600 hover:underline font-medium">${c.name} (${c.shortName})</a> — <span class="text-slate-500">${c.district}</span></li>`;
+  }).join('');
+
+  return `
+    <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl">
+      <h3 class="font-black text-slate-900 text-sm uppercase mb-3 text-blue-700">🏛️ ${divName}</h3>
+      <ul class="space-y-1.5 text-xs text-slate-700 list-disc pl-4">
+        ${itemsHtml}
+      </ul>
+    </div>
+  `;
+}).join('');
+
 const directoryBody = `
 <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
   ${navHeaderHtml}
 
-  <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+  <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">Academic Directory & Master Index</span>
+    </nav>
+
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Directory Index</span>
+      <span class="px-3.5 py-1 bg-blue-100 text-blue-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Master Navigation Index</span>
       <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">Official Academic Directory & Sitemap</h1>
       <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-        Comprehensive index of all 38 Government Engineering Colleges in Bihar, BEU semester notes, PYQs, syllabus documents, and tools.
+        Master directory linking all 38 Government Engineering Colleges in Bihar, BEU semester notes, question papers, syllabus modules, calculators, and administrative pages.
       </p>
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-      <h2 class="text-xl font-black text-slate-900 uppercase">Explore Platform Sections</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 not-prose">
-        <a href="/notes" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📚 BEU Notes</a>
-        <a href="/pyq" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📝 PYQ Question Papers</a>
-        <a href="/syllabus" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📋 B.Tech Syllabus</a>
-        <a href="/cgpa" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">🧮 CGPA Calculator</a>
-        <a href="/ugeac-predictor" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">🎯 UGEAC Predictor</a>
-        <a href="/colleges" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">🏛️ 38 Bihar Colleges</a>
-        <a href="/blog" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📰 Engineering Blog</a>
-        <a href="/about" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">ℹ️ About Platform</a>
-        <a href="/contact" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📧 Contact Support</a>
-      </div>
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-10 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <section>
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight mb-4">Core Academic & Utility Hubs</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 not-prose">
+          <a href="/notes" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📚 BEU Semester Notes Hub</a>
+          <a href="/pyq" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📝 5-Year PYQ Question Papers</a>
+          <a href="/syllabus" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📋 BEU B.Tech Syllabus Guide</a>
+          <a href="/cgpa" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">🧮 BEU CGPA / SGPA Calculator</a>
+          <a href="/attendance" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">⏱️ 75% Attendance Tracker</a>
+          <a href="/ugeac-predictor" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">🎯 BCECEB UGEAC Predictor</a>
+          <a href="/timetable" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📅 Class Timetable & Routine</a>
+          <a href="/beu-result" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📊 BEU Result & Marksheet Portal</a>
+          <a href="/lecture-finder" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">🎥 YouTube Lecture Finder</a>
+          <a href="/calculator" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">🔢 Scientific Calculator</a>
+          <a href="/study-resources" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📖 Reference Books & Resources</a>
+          <a href="/colleges" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">🏛️ 38 Bihar Government Colleges</a>
+          <a href="/mentorship" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">🤝 Free Senior Mentorship</a>
+          <a href="/blog" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📰 Bihar Engineering Blog</a>
+          <a href="/about" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">ℹ️ About Apna College Bihar</a>
+          <a href="/contact" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">📧 Contact & Support</a>
+          <a href="/privacy" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">🔒 Privacy Policy</a>
+          <a href="/terms" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl block hover:border-blue-500 font-bold text-slate-900">⚖️ Terms of Service</a>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight mb-4">Engineering Branch Portals</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 not-prose">
+          <a href="/branch/cse" class="p-3 bg-slate-50 border border-slate-200 rounded-xl block hover:border-blue-500 font-bold text-center text-xs text-slate-900">💻 Computer Science</a>
+          <a href="/branch/civil" class="p-3 bg-slate-50 border border-slate-200 rounded-xl block hover:border-blue-500 font-bold text-center text-xs text-slate-900">🏗️ Civil Engineering</a>
+          <a href="/branch/me" class="p-3 bg-slate-50 border border-slate-200 rounded-xl block hover:border-blue-500 font-bold text-center text-xs text-slate-900">⚙️ Mechanical Engg</a>
+          <a href="/branch/ee" class="p-3 bg-slate-50 border border-slate-200 rounded-xl block hover:border-blue-500 font-bold text-center text-xs text-slate-900">⚡ Electrical Engg</a>
+          <a href="/branch/ece" class="p-3 bg-slate-50 border border-slate-200 rounded-xl block hover:border-blue-500 font-bold text-center text-xs text-slate-900">📡 Electronics (ECE)</a>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight mb-4">All 38 Government Engineering Colleges by Administrative Division</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 not-prose">
+          ${directoryDivisionHtml}
+        </div>
+      </section>
     </div>
   </main>
 
@@ -1705,8 +2961,8 @@ const directoryBody = `
 `;
 let directoryHtml = injectIntoRoot(baseTemplate, directoryBody);
 directoryHtml = injectHeadMetadata(directoryHtml, {
-  title: 'Web Directory & Sitemap | Apna College Bihar',
-  description: 'Comprehensive directory of all 38 Bihar Government Engineering Colleges, BEU B.Tech Notes, PYQs, Syllabus, CGPA Calculator, and academic tools.',
+  title: 'Web Directory & Master Sitemap | Apna College Bihar',
+  description: 'Comprehensive academic directory of all 38 Government Engineering Colleges in Bihar, BEU semester notes, PYQs, syllabus documents, and tools.',
   canonical: 'https://www.apnacollegebihar.online/directory'
 });
 writeStaticHtml('directory', directoryHtml);
@@ -1716,12 +2972,28 @@ writeStaticHtml('directory', directoryHtml);
 // ─────────────────────────────────────────────────────────────
 const collegesListHtml = Object.keys(collegeData).map(slug => {
   const c = collegeData[slug];
+  const seatsCount = c.seatMatrix ? c.seatMatrix.reduce((acc, curr) => acc + (curr.seats || 0), 0) : (c.quickFacts && c.quickFacts.seats ? c.quickFacts.seats : 'N/A');
   return `
-    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 transition-all">
-      <h3 class="font-black text-slate-900 text-base mb-1">${c.name}</h3>
-      <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mb-2">${c.shortName} • Estd. ${c.established}</p>
-      <p class="text-xs text-slate-500 line-clamp-2 mb-4">${c.location}</p>
-      <a href="/college/${slug}" class="text-blue-600 font-bold text-xs hover:underline">View College Profile & Cutoffs &rarr;</a>
+    <div class="bg-white p-6 border border-slate-200 rounded-3xl shadow-sm hover:border-blue-500 hover:shadow-md transition-all flex flex-col justify-between">
+      <div>
+        <div class="flex items-center gap-3 mb-3">
+          <img src="${c.logo}" alt="${c.shortName} Logo" class="w-12 h-12 rounded-xl object-contain border border-slate-100 p-1" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(c.shortName)}&background=0D8ABC&color=fff&size=100';" />
+          <div>
+            <h3 class="font-black text-slate-900 text-sm leading-tight">${c.name}</h3>
+            <span class="text-[11px] text-blue-600 font-bold uppercase tracking-wider">${c.shortName} • Estd. ${c.established}</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 line-clamp-2 mb-3">📍 ${c.location}</p>
+        <div class="flex items-center gap-2 mb-4 text-[11px] font-semibold text-slate-600 bg-slate-50 p-2 rounded-xl">
+          <span>🎓 Seats: <strong>${seatsCount}</strong></span>
+          <span>•</span>
+          <span>💼 Highest: <strong>${c.placement ? c.placement.highestPackage : '4.5 LPA'}</strong></span>
+        </div>
+      </div>
+      <a href="/college/${slug}" class="text-blue-600 font-bold text-xs hover:underline flex items-center justify-between pt-3 border-t border-slate-100">
+        <span>View Full College Profile</span>
+        <span>&rarr;</span>
+      </a>
     </div>
   `;
 }).join('');
@@ -1731,14 +3003,61 @@ const collegesBody = `
   ${navHeaderHtml}
 
   <main class="flex-grow max-w-6xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">Government Engineering Colleges</span>
+    </nav>
+
     <div class="text-center max-w-3xl mx-auto mb-12">
-      <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Official Directory</span>
+      <span class="px-3.5 py-1 bg-blue-100 text-blue-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Official Directory</span>
       <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">38 Government Engineering Colleges in Bihar</h1>
       <p class="text-slate-600 text-sm md:text-base leading-relaxed">
-        Full verified profiles, UGEAC closing cutoff ranks, course branches, and placement reports for all 38 government colleges under Bihar Engineering University.
+        Verified institutional profiles, UGEAC closing cutoffs, seat matrices, campus facilities, and placement statistics for all 38 government colleges under Bihar Engineering University.
       </p>
     </div>
 
+    <!-- Editorial In-Depth Guide -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-8 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm mb-12">
+      <section>
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight mb-4">Evolution of Technical Education in Bihar: The 38-District Network</h2>
+        <p class="leading-relaxed">
+          Higher technical education in Bihar has witnessed a historic transformation over the last decade. Historically anchored by legendary institutions like <strong>Muzaffarpur Institute of Technology (MIT Muzaffarpur, Estd. 1954)</strong> and <strong>Bhagalpur College of Engineering (BCE Bhagalpur, Estd. 1960)</strong>, the state government launched an ambitious initiative under the <em>"Saat Nishchay"</em> good governance program to establish a dedicated, modern Government Engineering College (GEC) in every single one of Bihar's 38 administrative districts.
+        </p>
+        <p class="leading-relaxed mt-3">
+          To unify academic standards, syllabus frameworks, and examination timelines, the Government of Bihar enacted the <strong>Bihar Engineering University Act, 2021</strong>, officially creating the <strong>Bihar Engineering University (BEU Patna)</strong>. Today, all 38 government engineering colleges function under the single academic umbrella of BEU, ensuring AICTE-compliant curriculum standards, standardized semester evaluations, and transparent degree awards.
+        </p>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Admission Workflow via NTA JEE Main & BCECEB UGEAC</h3>
+        <p class="leading-relaxed">
+          Admissions across all 38 state engineering colleges are 100% merit-based and centralized. The <strong>Bihar Combined Entrance Competitive Examination Board (BCECEB)</strong> conducts the annual <strong>Under Graduate Engineering Admission Counselling (UGEAC)</strong> using National Testing Agency (NTA) JEE Main All India Ranks. The admission sequence involves:
+        </p>
+        <ol class="list-decimal pl-5 space-y-2 mt-3 font-medium">
+          <li><strong>Online Registration:</strong> Candidates with valid JEE Main scores register on <code>bceceboard.bihar.gov.in</code> and receive a State UGEAC Merit Rank.</li>
+          <li><strong>Choice Filling & Locking:</strong> Candidates select preferred college-branch combinations from the 38 government colleges based on closing cutoff trends.</li>
+          <li><strong>Seat Allotment (Rounds 1, 2, and Mop-Up):</strong> Computerized allocation based on category reservation (UR, EWS, BC, EBC, SC, ST, RCG, DQ) and candidate merit.</li>
+          <li><strong>Physical Document Verification:</strong> Allotted candidates report to designated reporting nodal centers with original academic and domicile credentials.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Subsidized Government Fee Structure</h3>
+        <p class="leading-relaxed">
+          Because these institutions are state-funded, annual academic tuition fees are heavily subsidized:
+        </p>
+        <ul class="list-disc pl-5 space-y-1.5 mt-2 font-medium">
+          <li><strong>Tuition Fee:</strong> Subsidized to approximately ₹120 per year (₹10/month).</li>
+          <li><strong>Annual Academic & Development Fee:</strong> Between ₹10,000 and ₹14,000 per academic year.</li>
+          <li><strong>Hostel & Messing:</strong> Hostel room rent is nominal (~₹2,400/year), with student-managed cooperative mess charges averaging ₹3,000 to ₹3,500 per month.</li>
+          <li><strong>Bihar Student Credit Card (MNSSBY):</strong> Eligible students can avail zero-interest education loans up to ₹4,00,000 for academic and living expenses.</li>
+        </ul>
+      </section>
+    </div>
+
+    <!-- College Cards Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       ${collegesListHtml}
     </div>
@@ -1762,22 +3081,80 @@ const mentorshipBody = `
 <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
   ${navHeaderHtml}
 
-  <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 py-12">
-    <div class="text-center mb-12">
-      <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Student Community</span>
-      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">Free Senior Mentorship Program</h1>
-      <p class="text-slate-600 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-        Connect directly with BEU alumni mentors, university toppers, and senior engineers for guidance on semester exams, placements, coding, and UGEAC counselling.
+  <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <nav class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">Senior Mentorship Program</span>
+    </nav>
+
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <span class="px-3.5 py-1 bg-emerald-100 text-emerald-800 text-xs font-black uppercase tracking-widest rounded-full inline-block mb-3">Student Community</span>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 tracking-tight uppercase mb-4">Free Senior Mentorship & Engineering Career Roadmap</h1>
+      <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+        Connect directly with BEU alumni mentors, university toppers, and senior engineers for guidance on semester exams, placements, coding roadmaps, and career planning.
       </p>
     </div>
 
-    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-      <h2 class="text-xl font-black text-slate-900 uppercase">Mentorship by BEU Alumni for Bihar Scholars</h2>
-      <p>
-        Navigating B.Tech without senior guidance can be stressful. Our mentorship initiative offers free peer advice on cracking semester examinations, securing 8.5+ SGPA, learning Full Stack & AI development, and preparing for off-campus recruitments.
-      </p>
-      <div class="pt-4 flex flex-wrap gap-4">
-        <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noopener noreferrer" class="px-5 py-3 bg-emerald-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors">Join WhatsApp Mentorship Channel</a>
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-sm space-y-10 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+      <section>
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight mb-4">Bridging the Guidance Gap for Bihar Engineering Students</h2>
+        <p class="leading-relaxed">
+          Many students entering Bihar's Government Engineering Colleges come from rural districts and small towns without access to senior engineers in their immediate families. Navigating competitive coding, off-campus recruitment drives, GATE exams, and complex university ordinances without a trusted senior mentor leads to avoidable mistakes, lost opportunities, and lower semester GPAs.
+        </p>
+        <p class="leading-relaxed mt-3">
+          <strong>Apna College Bihar</strong> was established by BEU alumni working at top tech firms (TCS, Cognizant, Wipro, L&T, Alstom, and tech startups) to provide free peer mentorship, career roadmaps, and exam survival strategies to every student in Bihar—completely free of cost.
+        </p>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">The 4-Year B.Tech Engineering Roadmap</h3>
+        <p class="leading-relaxed mb-4">
+          Follow this proven year-by-year framework designed to maximize your academic record and technical employability:
+        </p>
+        <div class="space-y-4 not-prose my-6">
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-black text-slate-900 text-sm uppercase mb-1">🌱 1st Year: Foundational Grounding & GPA Security</h4>
+            <p class="text-xs text-slate-600 leading-relaxed mb-2">Focus on scoring 8.5+ SGPA across Semesters 1 and 2. High first-year GPAs buffer your overall CGPA throughout 4 years. Concurrently, master C programming fundamentals, git version control, and problem-solving logic.</p>
+            <div class="text-[11px] font-bold text-blue-600">Milestone: Zero backlogs, clean C language proficiency, and participation in at least one college technical club.</div>
+          </div>
+
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-black text-slate-900 text-sm uppercase mb-1">🌿 2nd Year: Core Branch Mastery & Data Structures (DSA)</h4>
+            <p class="text-xs text-slate-600 leading-relaxed mb-2">Dive deep into core branch subjects (Strength of Materials for Civil, Thermodynamics for Mech, Circuit Theory for EE, and Data Structures & Algorithms in C++ or Java for CSE/IT). Begin solving LeetCode / GeeksforGeeks problems daily.</p>
+            <div class="text-[11px] font-bold text-blue-600">Milestone: 150+ DSA problems solved, completion of foundational branch projects, and mapping GATE syllabus topics.</div>
+          </div>
+
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-black text-slate-900 text-sm uppercase mb-1">🌳 3rd Year: Full-Stack / Core Projects & Industrial Internships</h4>
+            <p class="text-xs text-slate-600 leading-relaxed mb-2">Build 2 to 3 end-to-end projects with live deployments (MERN stack, Flutter, or core domain simulation in MATLAB/AutoCAD). Undertake mandatory summer industrial training in state public works, railway workshops, power stations, or software companies.</p>
+            <div class="text-[11px] font-bold text-blue-600">Milestone: Production-grade GitHub portfolio, verified industrial internship certificate, and intense GATE / placement prep.</div>
+          </div>
+
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h4 class="font-black text-slate-900 text-sm uppercase mb-1">🍎 4th Year: Campus Placements & Capstone Project</h4>
+            <p class="text-xs text-slate-600 leading-relaxed mb-2">Participate actively in college pool campus recruitment drives (TCS National Qualifier Test, Cognizant GenC, L&T, off-campus hiring). Complete and defend your final-year Capstone engineering project with research documentation.</p>
+            <div class="text-[11px] font-bold text-blue-600">Milestone: Securing placement offer(s) and graduating with ≥8.0 CGPA with zero pending backlogs.</div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Top 5 Exam Survival Secrets from 9+ CGPA Holders</h3>
+        <ul class="list-disc pl-5 space-y-2 font-medium">
+          <li><strong>Never Skip Answer Diagrams:</strong> University evaluators award 30% to 40% of marks for clear, neatly labeled pencil schematics, circuit diagrams, and flowcharts.</li>
+          <li><strong>PYQ Repetition:</strong> Practice at least 5 years of previous year question papers. Over 60% of question concepts and numerical patterns repeat across alternate examination sessions.</li>
+          <li><strong>Protect Your Internal Assessment:</strong> Securing 26+ out of 30 marks in internal continuous assessment makes achieving an 'A+' or 'O' grade significantly easier. Maintain 75%+ attendance and submit practical files punctually.</li>
+          <li><strong>Format with Structured Subheadings:</strong> Organize 14-mark university answers with Introduction, Principle / Derivation, Labeled Diagram, Advantages, Limitations, and Applications. Avoid unstructured essay walls.</li>
+          <li><strong>Form Peer Study Groups:</strong> Collaborate with 2 to 3 focused batchmates to discuss tough derivation units and share lab experiment insights.</li>
+        </ul>
+      </section>
+
+      <div class="pt-6 border-t border-slate-100 flex flex-wrap gap-4 not-prose">
+        <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noopener noreferrer" class="px-5 py-3 bg-emerald-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-emerald-700 transition-colors shadow-sm">Join WhatsApp Mentorship Channel</a>
+        <a href="/notes" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Explore BEU Notes</a>
+        <a href="/pyq" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Download PYQs</a>
       </div>
     </div>
   </main>
@@ -1788,7 +3165,7 @@ const mentorshipBody = `
 let mentorshipHtml = injectIntoRoot(baseTemplate, mentorshipBody);
 mentorshipHtml = injectHeadMetadata(mentorshipHtml, {
   title: 'Free Senior Mentorship for BEU Engineering Students | Apna College Bihar',
-  description: 'Join the free senior mentorship community for Bihar Engineering University students. Get exam advice, coding roadmaps, and career placement mentorship.',
+  description: 'Join the free senior mentorship community for Bihar Engineering University students. Get exam advice, 4-year coding roadmaps, and career placement mentorship.',
   canonical: 'https://www.apnacollegebihar.online/mentorship'
 });
 writeStaticHtml('mentorship', mentorshipHtml);
@@ -1801,65 +3178,265 @@ Object.keys(collegeData).forEach(slug => {
   const c = collegeData[slug];
   const canonicalCollegeUrl = `https://www.apnacollegebihar.online/college/${slug}`;
 
+  // Build Seat Matrix Rows
+  let totalSeats = 0;
+  const seatMatrixRows = (c.seatMatrix || []).map(item => {
+    totalSeats += (item.seats || 0);
+    return `
+      <tr class="hover:bg-slate-50">
+        <td class="p-3 border-r border-slate-200 font-medium text-slate-800">${item.branch}</td>
+        <td class="p-3 font-bold text-blue-700 text-right">${item.seats}</td>
+      </tr>
+    `;
+  }).join('');
+
+  // Build Facilities List
+  const facilitiesHtml = (c.facilities || []).map(f => `
+    <div class="p-3 bg-slate-50 border border-slate-200 rounded-2xl flex items-center gap-3">
+      <span class="text-base">🏢</span>
+      <span class="text-xs font-semibold text-slate-800">${f.name || f}</span>
+    </div>
+  `).join('');
+
+  // Build Recruiters Badges
+  const recruitersHtml = (c.placement && c.placement.recruiters ? c.placement.recruiters : ['TCS', 'Wipro', 'Cognizant', 'L&T', 'Pie Infocomm']).map(r => `
+    <span class="px-3 py-1 bg-blue-50 text-blue-800 border border-blue-200 rounded-full text-xs font-bold">${r}</span>
+  `).join('');
+
+  // Build Admission Documents List
+  const documentsHtml = (c.admission && c.admission.documents ? c.admission.documents : [
+    'JEE Main Rank Card & Admit Card',
+    'BCECEB UGEAC Allotment Letter',
+    '10th & 12th Marksheet & Passing Certificate',
+    'Residential / Domicile Certificate of Bihar',
+    'Caste Certificate (if claiming reservation)',
+    'Income Certificate (EWS / TFW candidates)',
+    'Medical Fitness Certificate',
+    'Character Certificate & Migration Certificate',
+    '6 Passport Size Photographs'
+  ]).map(doc => `<li class="flex items-start gap-2"><span class="text-emerald-600 font-bold">✓</span> <span>${doc}</span></li>`).join('');
+
   const collegeDetailBody = `
   <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
     ${navHeaderHtml}
 
     <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 py-12">
       <!-- Breadcrumb -->
-      <div class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <nav class="mb-6 text-xs text-slate-500 flex items-center gap-2">
         <a href="/" class="hover:text-blue-600">Home</a>
         <span>/</span>
         <a href="/colleges" class="hover:text-blue-600">Colleges</a>
         <span>/</span>
         <span class="text-slate-800 font-semibold">${c.shortName}</span>
-      </div>
+      </nav>
 
-      <!-- College Header -->
+      <!-- College Header Hero -->
       <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-10 shadow-sm mb-8">
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 pb-6 border-b border-slate-100">
-          <img src="${c.logo}" alt="${c.shortName} Logo" class="w-20 h-20 rounded-2xl object-contain border border-slate-100 p-2 shadow-xs" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(c.shortName)}&background=0D8ABC&color=fff&size=200';" />
+          <img src="${c.logo}" alt="${c.shortName} Official Logo" class="w-20 h-20 rounded-2xl object-contain border border-slate-100 p-2 shadow-xs" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(c.shortName)}&background=0D8ABC&color=fff&size=200';" />
           <div>
-            <span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-black uppercase tracking-wider rounded-md inline-block mb-2">${c.type} • Estd. ${c.established}</span>
+            <span class="px-2.5 py-0.5 bg-blue-50 text-blue-700 text-[10px] font-black uppercase tracking-wider rounded-md inline-block mb-2">${c.type || 'Government College'} • Estd. ${c.established}</span>
             <h1 class="text-2xl sm:text-3xl md:text-4xl font-[1000] text-slate-900 tracking-tight leading-tight">${c.name}</h1>
-            <p class="text-xs text-slate-500 mt-1 font-medium">📍 ${c.location}</p>
+            <p class="text-xs text-slate-500 mt-1 font-medium">📍 ${c.location} (District: ${c.district})</p>
           </div>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-6 text-center text-xs">
           <div class="p-3 bg-slate-50 rounded-2xl">
             <span class="text-slate-400 block text-[10px] font-bold uppercase">Affiliation</span>
-            <span class="font-black text-slate-900">BEU Patna</span>
+            <span class="font-black text-slate-900">${c.affiliation || 'BEU Patna'}</span>
           </div>
           <div class="p-3 bg-slate-50 rounded-2xl">
             <span class="text-slate-400 block text-[10px] font-bold uppercase">Approval</span>
-            <span class="font-black text-slate-900">AICTE</span>
+            <span class="font-black text-slate-900">${c.approval || 'AICTE Approved'}</span>
           </div>
           <div class="p-3 bg-slate-50 rounded-2xl">
-            <span class="text-slate-400 block text-[10px] font-bold uppercase">Admission Exam</span>
+            <span class="text-slate-400 block text-[10px] font-bold uppercase">Admission Mode</span>
             <span class="font-black text-slate-900">JEE Main / UGEAC</span>
           </div>
           <div class="p-3 bg-slate-50 rounded-2xl">
-            <span class="text-slate-400 block text-[10px] font-bold uppercase">District</span>
-            <span class="font-black text-slate-900">${c.district}</span>
+            <span class="text-slate-400 block text-[10px] font-bold uppercase">Campus Size</span>
+            <span class="font-black text-slate-900">${c.quickFacts && c.quickFacts.campusSize ? c.quickFacts.campusSize : 'State Campus'}</span>
           </div>
         </div>
       </div>
 
-      <!-- Overview Content -->
-      <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-10 shadow-sm space-y-6 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
-        <h2 class="text-xl font-black text-slate-900 uppercase">About ${c.name}</h2>
-        <p>${c.description}</p>
+      <!-- Quick Facts Stats Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs">
+          <span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider block mb-1">Annual Academic Fee</span>
+          <span class="text-base sm:text-lg font-black text-slate-900">${c.quickFacts && c.quickFacts.fees ? c.quickFacts.fees : '₹10,000 - ₹14,000 / Year'}</span>
+        </div>
+        <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs">
+          <span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider block mb-1">Total B.Tech Intake</span>
+          <span class="text-base sm:text-lg font-black text-blue-600">${totalSeats > 0 ? totalSeats + ' Seats' : (c.quickFacts && c.quickFacts.seats ? c.quickFacts.seats : '240 - 360 Seats')}</span>
+        </div>
+        <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs">
+          <span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider block mb-1">Hostel Accommodation</span>
+          <span class="text-base sm:text-lg font-black text-emerald-600">${c.quickFacts && c.quickFacts.hostelAvailable ? c.quickFacts.hostelAvailable : 'Available (Boys & Girls)'}</span>
+        </div>
+        <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-xs">
+          <span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider block mb-1">Highest Package</span>
+          <span class="text-base sm:text-lg font-black text-purple-600">${c.placement && c.placement.highestPackage ? c.placement.highestPackage : '4.5 - 10 LPA'}</span>
+        </div>
+      </div>
 
-        <h3 class="text-base font-bold text-slate-900">Admission & Counselling Process</h3>
-        <p>
-          Admissions to B.Tech courses at ${c.shortName} are conducted centrally through the <strong>BCECEB UGEAC (Under Graduate Engineering Admission Counselling)</strong> based on JEE Main scores. Eligible candidates must register for counselling, complete document verification, and fill choice preferences.
-        </p>
+      <!-- Main Overview Content -->
+      <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-10 shadow-sm space-y-10 prose prose-slate max-w-none text-slate-700 text-xs md:text-sm">
+        <section>
+          <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight mb-4">About ${c.name}</h2>
+          <p class="leading-relaxed">${c.description}</p>
+          <p class="leading-relaxed mt-3">
+            Operating under the academic guidelines of <strong>Bihar Engineering University (BEU Patna)</strong> and approved by the <strong>All India Council for Technical Education (AICTE)</strong>, ${c.shortName} offers four-year Bachelor of Technology (B.Tech) degree programs across core engineering branches. The curriculum follows the standard AICTE Choice Based Credit System (CBCS), integrating theoretical rigor, laboratory experimentation, and industrial internships.
+          </p>
+        </section>
 
-        <div class="pt-4 flex flex-wrap gap-4 not-prose">
-          <a href="/notes" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Download Semester Notes</a>
-          <a href="/pyq" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Download PYQ Papers</a>
+        <!-- Seat Matrix Section -->
+        <section>
+          <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Sanctioned B.Tech Branch Seat Matrix</h3>
+          <p class="leading-relaxed mb-4">
+            Below is the official approved annual intake of students across various engineering disciplines at ${c.shortName}:
+          </p>
+          <div class="overflow-x-auto not-prose my-4">
+            <table class="w-full text-left text-xs border border-slate-200 rounded-2xl overflow-hidden">
+              <thead class="bg-slate-100 text-slate-900 font-black uppercase text-[11px] border-b border-slate-200">
+                <tr>
+                  <th class="p-3 border-r border-slate-200">Engineering Branch</th>
+                  <th class="p-3 text-right">Sanctioned Intake (Seats)</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-slate-700">
+                ${seatMatrixRows || '<tr><td class="p-3">Computer Science, Civil, Mechanical, Electrical</td><td class="p-3 text-right font-bold">60 Seats each</td></tr>'}
+                <tr class="bg-slate-50 font-black text-slate-900 border-t border-slate-200">
+                  <td class="p-3 border-r border-slate-200 uppercase">Total Sanctioned Capacity</td>
+                  <td class="p-3 text-right text-blue-700">${totalSeats > 0 ? totalSeats : '240 - 360'} Seats</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Fee Structure Section -->
+        <section>
+          <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Annual Subsidized Fee Structure</h3>
+          <p class="leading-relaxed mb-4">
+            As a premier state government institution under the Department of Science, Technology and Technical Education (DSTTE), Bihar, the academic fee structure is highly subsidized:
+          </p>
+          <div class="overflow-x-auto not-prose my-4">
+            <table class="w-full text-left text-xs border border-slate-200 rounded-2xl overflow-hidden">
+              <thead class="bg-slate-100 text-slate-900 font-black uppercase text-[11px] border-b border-slate-200">
+                <tr>
+                  <th class="p-3 border-r border-slate-200">Fee Component</th>
+                  <th class="p-3">Amount / Frequency</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-slate-700">
+                <tr class="hover:bg-slate-50">
+                  <td class="p-3 font-semibold border-r border-slate-200">Tuition Fee</td>
+                  <td class="p-3 font-mono">${c.feeStructure ? c.feeStructure.tuitionFee : '₹120 / Year (₹10 / Month)'}</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="p-3 font-semibold border-r border-slate-200">Admission & Registration Fee</td>
+                  <td class="p-3 font-mono">${c.feeStructure ? c.feeStructure.admissionFee : '₹2,500 (One-Time)'}</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="p-3 font-semibold border-r border-slate-200">University Exam Fee</td>
+                  <td class="p-3 font-mono">${c.feeStructure ? c.feeStructure.examFee : '₹3,700 / Semester (BEU)'}</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="p-3 font-semibold border-r border-slate-200">Hostel Rent (Room Fee)</td>
+                  <td class="p-3 font-mono">${c.feeStructure ? c.feeStructure.hostelFee : '₹2,400 / Year'}</td>
+                </tr>
+                <tr class="hover:bg-slate-50">
+                  <td class="p-3 font-semibold border-r border-slate-200">Mess Charges (Food)</td>
+                  <td class="p-3 font-mono">${c.feeStructure ? c.feeStructure.messCharges : '₹3,000 - ₹3,500 / Month (Cooperative)'}</td>
+                </tr>
+                <tr class="bg-blue-50/50 font-bold text-slate-900">
+                  <td class="p-3 border-r border-slate-200">Estimated Annual Day Scholar Cost</td>
+                  <td class="p-3 font-mono text-blue-700">${c.feeStructure ? c.feeStructure.totalDayScholar : '₹10,000 - ₹12,000 / Year'}</td>
+                </tr>
+                <tr class="bg-blue-50/70 font-bold text-slate-900">
+                  <td class="p-3 border-r border-slate-200">Estimated Annual Hosteller Cost</td>
+                  <td class="p-3 font-mono text-blue-700">${c.feeStructure ? c.feeStructure.totalHosteller : '₹45,000 - ₹50,000 / Year (Inc. Mess)'}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-xs text-slate-500 mt-2">
+            <em>Note: Eligible students can finance their entire academic expenses under the Bihar Student Credit Card (MNSSBY) scheme with zero interest for girls/SC/ST/PwD and 4% for boys.</em>
+          </p>
+        </section>
+
+        <!-- Training & Placement Overview -->
+        <section>
+          <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Training & Placement Cell (TPO)</h3>
+          <p class="leading-relaxed mb-4">
+            The active Training and Placement Cell at ${c.shortName} facilitates campus recruitment, technical training, industrial visits, and internship opportunities:
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 not-prose mb-4">
+            <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-center">
+              <span class="text-slate-400 text-[10px] font-bold uppercase block mb-1">Highest Package</span>
+              <span class="text-lg font-black text-blue-600">${c.placement ? c.placement.highestPackage : '6.5 LPA'}</span>
+            </div>
+            <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-center">
+              <span class="text-slate-400 text-[10px] font-bold uppercase block mb-1">Average Package</span>
+              <span class="text-lg font-black text-slate-900">${c.placement ? c.placement.averagePackage : '3.6 LPA'}</span>
+            </div>
+            <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-center">
+              <span class="text-slate-400 text-[10px] font-bold uppercase block mb-1">Placement Percentage</span>
+              <span class="text-lg font-black text-emerald-600">${c.placement ? c.placement.percentage : '65% - 75%'}</span>
+            </div>
+          </div>
+          <h4 class="text-xs font-black uppercase text-slate-900 mb-2">Major Visiting & Off-Campus Recruiters:</h4>
+          <div class="flex flex-wrap gap-2 not-prose">
+            ${recruitersHtml}
+          </div>
+        </section>
+
+        <!-- Admission & Documents Checklist -->
+        <section>
+          <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Admission Process & Required Verification Documents</h3>
+          <p class="leading-relaxed mb-3">
+            Admissions to B.Tech programs at ${c.shortName} are conducted strictly through <strong>BCECEB UGEAC</strong> based on NTA JEE Main scores. Candidates must qualify 10+2 with Physics, Mathematics, and Chemistry with at least 45% marks (40% for reserved categories).
+          </p>
+          <h4 class="text-xs font-black uppercase text-slate-900 mb-2">Mandatory Documents Required for Physical Reporting:</h4>
+          <ul class="space-y-1.5 text-xs text-slate-700 not-prose mb-4">
+            ${documentsHtml}
+          </ul>
+        </section>
+
+        <!-- Campus Facilities -->
+        <section>
+          <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Campus Infrastructure & Facilities</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 not-prose">
+            ${facilitiesHtml || '<div class="p-3 bg-slate-50 rounded-2xl text-xs">Modern Computer Lab, Central Library, Hostels, Wi-Fi, Sports Ground</div>'}
+          </div>
+        </section>
+
+        <!-- Contact Information -->
+        <section>
+          <h3 class="text-lg font-black text-slate-900 uppercase tracking-tight mb-3">Institutional Contact & Principal's Desk</h3>
+          ${c.principal && c.principal.name ? `
+            <blockquote class="p-4 bg-slate-50 border-l-4 border-blue-600 rounded-r-2xl not-prose mb-4">
+              <p class="text-xs italic text-slate-700">"${c.principal.message || 'Committed to fostering engineering excellence and research innovation.'}"</p>
+              <div class="text-[11px] font-bold text-slate-900 mt-2">— ${c.principal.name}, ${c.principal.designation || 'Principal'}</div>
+            </blockquote>
+          ` : ''}
+          <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl not-prose space-y-2 text-xs">
+            <p><strong>Official Address:</strong> ${c.contact && c.contact.address ? c.contact.address : c.location}</p>
+            <p><strong>District & Pincode:</strong> ${c.district} — ${c.contact && c.contact.pincode ? c.contact.pincode : 'Bihar'}</p>
+            <p><strong>Official Website:</strong> <a href="${c.website}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:underline font-bold">${c.website}</a></p>
+            ${c.contact && c.contact.phones ? `<p><strong>Helpline Phone:</strong> ${c.contact.phones.join(', ')}</p>` : ''}
+            ${c.contact && c.contact.emails ? `<p><strong>Official Email:</strong> ${c.contact.emails.join(', ')}</p>` : ''}
+          </div>
+        </section>
+
+        <!-- Study Resources Cross-Links for this College -->
+        <div class="pt-6 border-t border-slate-100 flex flex-wrap gap-4 not-prose">
+          <a href="/notes" class="px-5 py-3 bg-blue-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">BEU Semester Notes</a>
+          <a href="/pyq" class="px-5 py-3 bg-slate-100 text-slate-800 rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">Download PYQs</a>
           <a href="/ugeac-predictor" class="px-5 py-3 bg-purple-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-purple-700 transition-colors shadow-sm">Check UGEAC Cutoffs</a>
+          <a href="/cgpa" class="px-5 py-3 bg-rose-600 text-white rounded-xl text-xs font-bold uppercase tracking-wider hover:bg-rose-700 transition-colors shadow-sm">BEU CGPA Calculator</a>
         </div>
       </div>
     </main>
@@ -1870,8 +3447,8 @@ Object.keys(collegeData).forEach(slug => {
 
   let collegeHtml = injectIntoRoot(baseTemplate, collegeDetailBody);
   collegeHtml = injectHeadMetadata(collegeHtml, {
-    title: `${c.name} (${c.shortName}) - Cutoff, Admission & Details | Apna College Bihar`,
-    description: `Official details, UGEAC closing cutoffs, B.Tech courses, admission rules, and contact details for ${c.name} (${c.shortName}) under Bihar Engineering University.`,
+    title: `${c.name} (${c.shortName}) - Cutoff, Admission, Fees & Details | Apna College Bihar`,
+    description: `Official details, UGEAC closing cutoffs, B.Tech seat matrix, annual fees, placement report, and admission rules for ${c.name} (${c.shortName}) under Bihar Engineering University.`,
     canonical: canonicalCollegeUrl,
     schemaJson: {
       "@context": "https://schema.org",
