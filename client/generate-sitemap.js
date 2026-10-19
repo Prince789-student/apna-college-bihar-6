@@ -70,7 +70,9 @@ if (fs.existsSync(publicDir)) {
       file !== 'offline.html' &&
       !file.includes('-cutoff-rank-') &&
       !file.startsWith('colleges-at-') &&
-      !file.includes('cutoff')
+      !file.includes('cutoff') &&
+      !file.includes('compare') &&
+      !file.includes('search')
     ) {
       const slug = file.replace(/\.html$/, '');
       urls.add(`/${slug}`);
