@@ -472,7 +472,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                         <div className="flex items-center gap-2">
                           {/* Animated Soundwave Equalizer (6 bouncing bars) */}
                           {videoPlaying && videoMode === 'motion' && (
-                            <div className="hidden sm:flex items-end gap-1 h-4 px-2 py-0.5 bg-slate-900/90 rounded-md border border-slate-800" title="Narrator Audio Waveform Active">
+                            <div className="hidden sm:flex items-end gap-1 h-4 px-2 py-0.5 bg-slate-900/90 rounded-lg border border-slate-800" title="Narrator Audio Waveform Active">
                               <span className="w-1 bg-cyan-400 rounded-full animate-eq-1"></span>
                               <span className="w-1 bg-blue-400 rounded-full animate-eq-2"></span>
                               <span className="w-1 bg-indigo-400 rounded-full animate-eq-3"></span>
@@ -507,7 +507,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                         {videoMode === 'youtube' ? (
                           <div className="w-full h-full min-h-[210px] rounded-xl overflow-hidden bg-black flex flex-col items-center justify-center p-3 text-center border border-slate-800">
                             <Youtube size={36} className="text-red-600 mb-2 animate-bounce" />
-                            <h4 className="text-sm font-bold text-white mb-1">Apna College BEU Bihar Official Channel</h4>
+                            <p className="text-sm font-bold text-white mb-1">Apna College BEU Bihar Official Channel</p>
                             <p className="text-xs text-slate-400 max-w-sm mb-3">
                               Watch complete video tutorials, semester strategy guides, and university updates on our official channel.
                             </p>
@@ -531,18 +531,18 @@ export default function InteractiveCanvasHero({ isNative }) {
                               <div className="md:col-span-7 space-y-1.5">
                                 {/* Scene Header Pill */}
                                 <div className="flex items-center justify-between gap-2 mb-1.5">
-                                  <span className="text-xs font-mono tracking-widest font-black text-blue-400 bg-blue-950/80 px-2 py-0.5 rounded-md border border-blue-800/60 uppercase">
+                                  <span className="text-xs font-mono tracking-widest font-black text-blue-400 bg-blue-950/80 px-2 py-0.5 rounded-lg border border-blue-800/60 uppercase">
                                     {videoScenes[videoChapter].tag}
                                   </span>
-                                  <span className="text-xs font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-md border border-emerald-800/60 flex items-center gap-1">
+                                  <span className="text-xs font-bold text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded-lg border border-emerald-800/60 flex items-center gap-1">
                                     <CheckCircle2 size={11} /> {videoScenes[videoChapter].badge}
                                   </span>
                                 </div>
 
                                 {/* Scene Headline */}
-                                <h3 className="font-heading text-base sm:text-lg font-black text-white leading-tight group-hover/screen:text-blue-300 transition-colors">
+                                <h2 className="font-heading text-base sm:text-lg font-black text-white leading-tight group-hover/screen:text-blue-300 transition-colors">
                                   {videoScenes[videoChapter].title}
-                                </h3>
+                                </h2>
 
                                 {/* Tagline */}
                                 <p className="text-xs font-semibold text-blue-300/90">
@@ -652,9 +652,9 @@ export default function InteractiveCanvasHero({ isNative }) {
                           <Play size={11} className="fill-white" /> Bihar's #1 Academic Hub
                         </div>
                         
-                        <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
+                        <h2 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
                           Kyun Use Karein Apna College Bihar?
-                        </h3>
+                        </h2>
                         
                         <p className="text-xs text-slate-600 leading-relaxed mb-4">
                           State engineering students ke sabhi zarooraton ka single, verified aur 100% free solution.
@@ -726,9 +726,9 @@ export default function InteractiveCanvasHero({ isNative }) {
                             <FileText size={20} />
                           </div>
                           <div>
-                            <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                            <p className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                               Operating Systems & System Architecture
-                            </h4>
+                            </p>
                             <p className="text-xs text-slate-500">Unit 1 to 5 Hand-Written Notes • BEU Updated</p>
                           </div>
                         </div>
@@ -743,9 +743,9 @@ export default function InteractiveCanvasHero({ isNative }) {
                             <BookOpen size={20} />
                           </div>
                           <div>
-                            <h4 className="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                            <p className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
                               Design & Analysis of Algorithms (DAA)
-                            </h4>
+                            </p>
                             <p className="text-xs text-slate-500">5+ Years Solved PYQ Papers & Numerical Key</p>
                           </div>
                         </div>
@@ -760,9 +760,9 @@ export default function InteractiveCanvasHero({ isNative }) {
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-600 text-white text-xs font-bold mb-3">
                           <Sparkles size={12} /> Unit-Wise Organization
                         </div>
-                        <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
+                        <h2 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
                           100% Exam-Targeted Material
-                        </h3>
+                        </h2>
                         <p className="text-xs text-slate-600 leading-relaxed mb-4">
                           Direct 1-click downloads with zero paywalls. Tailored specifically for BEU exams.
                         </p>
@@ -826,7 +826,7 @@ export default function InteractiveCanvasHero({ isNative }) {
                           <span className="font-heading text-2xl font-black">{calcSimSgpa()} / 10.00</span>
                         </div>
                         <div className="text-right">
-                          <span className="px-2 py-0.5 rounded-md bg-white/20 text-xs font-bold block mb-0.5">
+                          <span className="px-2 py-0.5 rounded-lg bg-white/20 text-xs font-bold block mb-0.5">
                             {calcSimSgpa() >= 9.0 ? 'Outstanding (O)' : 'Excellent (A+)'}
                           </span>
                           <span className="text-xs text-purple-200">BEU Official Formula</span>
@@ -839,9 +839,9 @@ export default function InteractiveCanvasHero({ isNative }) {
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-purple-600 text-white text-xs font-bold mb-3">
                           <Calculator size={12} /> Official BEU 10-Pt Formula
                         </div>
-                        <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
+                        <h2 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
                           Accurate Credit Calculations
-                        </h3>
+                        </h2>
                         <p className="text-xs text-slate-600 leading-relaxed mb-4">
                           Avoid manual calculation errors with official credit weighting for theory, lab, and MOOCs.
                         </p>
@@ -880,9 +880,9 @@ export default function InteractiveCanvasHero({ isNative }) {
                           onChange={(e) => setSimPercentile(Number(e.target.value))}
                           className="w-full h-2 bg-emerald-100 rounded-lg appearance-none cursor-pointer accent-emerald-600"
                         />
-                        <div className="flex justify-between items-center text-xs font-bold text-slate-700 mt-1.5 pt-1 border-t border-slate-100">
+                        <div className="flex justify-between items-center text-xs font-bold text-slate-600 mt-1.5 pt-1 border-t border-slate-100">
                           <span>Est. Bihar State Rank:</span>
-                          <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-black">
+                          <span className="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-lg font-black">
                             ~{calcSimRank().toLocaleString()}
                           </span>
                         </div>
@@ -895,11 +895,11 @@ export default function InteractiveCanvasHero({ isNative }) {
                             MIT
                           </div>
                           <div>
-                            <h4 className="text-xs font-bold text-slate-900">MIT Muzaffarpur • CSE / IT</h4>
+                            <p className="text-xs font-bold text-slate-900">MIT Muzaffarpur • CSE / IT</p>
                             <p className="text-xs text-slate-500">Closing Rank: 2,120</p>
                           </div>
                         </div>
-                        <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-xs">
+                        <span className="px-2 py-0.5 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-200 font-bold text-xs">
                           {simPercentile >= 88 ? '98.4% Match' : '75.2% Match'}
                         </span>
                       </div>
@@ -910,11 +910,11 @@ export default function InteractiveCanvasHero({ isNative }) {
                             BCE
                           </div>
                           <div>
-                            <h4 className="text-xs font-bold text-slate-900">BCE Bhagalpur • ECE / EE</h4>
+                            <p className="text-xs font-bold text-slate-900">BCE Bhagalpur • ECE / EE</p>
                             <p className="text-xs text-slate-500">Closing Rank: 2,450</p>
                           </div>
                         </div>
-                        <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200 font-bold text-xs">
+                        <span className="px-2 py-0.5 rounded-lg bg-blue-50 text-blue-600 border border-blue-200 font-bold text-xs">
                           {simPercentile >= 85 ? '96.2% Match' : '82.0% Match'}
                         </span>
                       </div>
@@ -925,9 +925,9 @@ export default function InteractiveCanvasHero({ isNative }) {
                         <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold mb-3">
                           <Target size={12} /> BCECEB Multi-Year Data
                         </div>
-                        <h3 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
+                        <h2 className="font-heading text-lg font-bold text-slate-900 leading-snug mb-2">
                           38+ Govt Engineering Colleges
-                        </h3>
+                        </h2>
                         <p className="text-xs text-slate-600 leading-relaxed mb-4">
                           Predict realistic seat allotment for General, EWS, OBC, EBC, SC, and ST categories.
                         </p>

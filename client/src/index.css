@@ -48,21 +48,25 @@
 }
 
 @layer components {
-  /* Unified Accessible Button System (Consolidates 23+ ad-hoc styles into 4 cohesive tiers) */
+  /* Unified Accessible Button System (Consolidates 19+ ad-hoc styles into 5 cohesive tiers) */
   .btn-primary {
-    @apply inline-flex items-center justify-center font-heading font-bold text-xs sm:text-sm py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-sm hover:shadow-md transition-all duration-200 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center font-heading font-bold text-xs sm:text-sm py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white shadow-xs hover:shadow-sm transition-all duration-200 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center font-heading font-bold text-xs sm:text-sm py-2 px-3.5 rounded-xl bg-white hover:bg-blue-50 text-blue-700 border border-blue-200 hover:border-blue-300 shadow-sm transition-colors duration-200 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center font-heading font-bold text-xs sm:text-sm py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-blue-600 border border-slate-200 hover:border-blue-400 shadow-xs hover:shadow-sm transition-all duration-200 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
   }
 
-  .btn-dark {
-    @apply inline-flex items-center justify-center font-bold text-xs py-1.5 px-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white border border-slate-700 transition-colors duration-200 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-900;
+  .btn-tab {
+    @apply inline-flex items-center justify-center font-heading font-bold text-xs py-2 px-3 rounded-lg transition-all duration-150 cursor-pointer active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500;
+  }
+
+  .btn-pill {
+    @apply inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white font-heading font-bold text-xs transition-all duration-150 shadow-xs cursor-pointer active:scale-95;
   }
 
   .btn-icon {
-    @apply inline-flex items-center justify-center w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white transition-all duration-200 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-1 focus-visible:ring-offset-slate-900;
+    @apply inline-flex items-center justify-center w-9 h-9 rounded-xl text-slate-600 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 border border-slate-200/80 transition-all duration-150 active:scale-95 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500;
   }
 }
 

@@ -370,17 +370,17 @@ export default function HomeEducationalGuide() {
             <div className="mt-6 lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-md shadow-blue-500/10 flex items-center justify-between gap-3">
                 <div>
-                  <span className="px-2 py-0.5 rounded-md bg-white/20 text-white text-[10px] font-heading font-bold inline-block mb-1">
+                  <span className="px-2 py-0.5 rounded-lg bg-white/20 text-white text-xs font-heading font-bold inline-block mb-1">
                     100% Free Tool
                   </span>
-                  <h5 className="font-heading text-xs font-bold text-white">Need Bihar Rank Guidance?</h5>
-                  <p className="text-[11px] text-blue-100 font-sans mt-0.5 leading-snug">
+                  <p className="font-heading text-xs font-bold text-white">Need Bihar Rank Guidance?</p>
+                  <p className="text-xs text-blue-100 font-sans mt-0.5 leading-snug">
                     Predict GEC admission chances based on opening/closing ranks.
                   </p>
                 </div>
                 <Link
                   to="/ugeac-predictor?tab=finder"
-                  className="shrink-0 px-3 py-2 bg-white text-blue-700 rounded-xl font-heading text-xs font-bold shadow-xs hover:bg-blue-50 active:scale-95"
+                  className="btn-secondary py-1.5 px-3 shrink-0"
                 >
                   Predictor
                 </Link>
@@ -392,13 +392,13 @@ export default function HomeEducationalGuide() {
                     <HelpCircle size={20} />
                   </div>
                   <div>
-                    <h6 className="font-heading text-xs font-bold text-slate-900">Have specific questions?</h6>
-                    <p className="text-[11px] text-slate-500 font-medium">Free 1-on-1 Senior Guidance</p>
+                    <p className="font-heading text-xs font-bold text-slate-900">Have specific questions?</p>
+                    <p className="text-xs text-slate-500 font-medium">Free 1-on-1 Senior Guidance</p>
                   </div>
                 </div>
                 <Link
                   to="/mentorship"
-                  className="shrink-0 px-3 py-2 bg-blue-600 text-white rounded-xl font-heading text-xs font-bold shadow-xs hover:bg-blue-700 active:scale-95"
+                  className="btn-primary py-1.5 px-3 shrink-0"
                 >
                   Ask Senior
                 </Link>
@@ -410,9 +410,9 @@ export default function HomeEducationalGuide() {
           {/* Sidebar Sticky Navigation HUD (Issue 19: flush with content) */}
           <div className="lg:col-span-4 hidden lg:block sticky top-24 space-y-6">
             <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-sm">
-              <h4 className="font-heading text-xs font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <p className="font-heading text-xs font-bold text-slate-900 mb-4 flex items-center gap-2">
                 <Compass size={16} className="text-blue-600" /> Guide Navigation
-              </h4>
+              </p>
 
               <div className="space-y-2">
                 {guideSections.map((sec, idx) => (
@@ -440,13 +440,13 @@ export default function HomeEducationalGuide() {
                 <span className="px-2 py-0.5 rounded-xl bg-white/20 text-white text-xs font-heading font-bold inline-block mb-2">
                   100% Free Tool
                 </span>
-                <h5 className="font-heading text-sm font-bold">Need Rank Guidance?</h5>
+                <p className="font-heading text-sm font-bold">Need Rank Guidance?</p>
                 <p className="text-xs text-blue-100 font-sans font-medium mt-1 leading-relaxed">
                   Predict your exact Bihar GEC admission chances based on genuine 2024–2025 opening & closing ranks.
                 </p>
                 <Link
                   to="/ugeac-predictor?tab=finder"
-                  className="mt-4 block text-center w-full py-2.5 px-4 bg-white text-blue-700 rounded-xl font-heading text-xs font-bold hover:bg-blue-50 transition-colors shadow-sm"
+                  className="btn-secondary w-full mt-4"
                 >
                   Launch Predictor
                 </Link>
@@ -458,7 +458,7 @@ export default function HomeEducationalGuide() {
                   <HelpCircle size={20} />
                 </div>
                 <div>
-                  <h6 className="font-heading text-xs font-bold text-slate-900">Have specific questions?</h6>
+                  <p className="font-heading text-xs font-bold text-slate-900">Have specific questions?</p>
                   <Link to="/mentorship" className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1 mt-0.5">
                     Ask a Senior Mentor <ChevronRight size={12} />
                   </Link>

@@ -577,7 +577,7 @@ export default function DashboardLayout() {
             {/* Logo & Brand */}
             <div className="flex items-center gap-2.5 sm:gap-3 group cursor-pointer" onClick={() => navigate('/')}>
               <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-0.5 bg-gradient-to-tr from-blue-600 via-indigo-500 to-blue-400 shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform shrink-0">
-                <img src="/logo-acb.png?v=99" alt="Logo" className="w-full h-full object-cover rounded-[10px] bg-white" />
+                <img src="/logo-acb.png?v=99" alt="Logo" className="w-full h-full object-cover rounded-lg bg-white" />
               </div>
               <div className="block min-w-0">
                 <span className="font-heading font-black text-sm sm:text-base md:text-lg tracking-tight uppercase text-slate-900 leading-none block">
@@ -605,7 +605,7 @@ export default function DashboardLayout() {
               </Link>
               <Link to="/mentorship" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors inline-flex items-center gap-1.5">
                 <span>Mentorship</span>
-                <span className="px-1.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-[10px] font-bold text-blue-600">Free</span>
+                <span className="px-1.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-blue-600">Free</span>
               </Link>
               <Link to="/blog" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors">
                 Blog & Guides
@@ -854,7 +854,7 @@ export default function DashboardLayout() {
                   </div>
                   <div className="text-left">
                     <span className="text-xs font-bold block text-emerald-800">Download Android App</span>
-                    <span className="text-[10px] text-emerald-600 font-medium">BEU Alerts & Fast Notes (v59)</span>
+                    <span className="text-xs text-emerald-600 font-medium">BEU Alerts & Fast Notes (v59)</span>
                   </div>
                </Link>
 
@@ -870,7 +870,7 @@ export default function DashboardLayout() {
                   </div>
                   <div className="text-left">
                     <span className="text-xs font-bold block text-rose-700">Dil Se Support</span>
-                    <span className="text-[10px] text-rose-500 font-medium">Keep 38 GECs Education Free</span>
+                    <span className="text-xs text-rose-500 font-medium">Keep 38 GECs Education Free</span>
                   </div>
                </button>
             </div>
@@ -940,7 +940,7 @@ export default function DashboardLayout() {
                 }}
               >
                 <div className="text-left">
-                  <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider mb-0.5">UPI ID (Tap to Copy)</p>
+                  <p className="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-0.5">UPI ID (Tap to Copy)</p>
                   <p className="text-sm font-[900] text-slate-900 font-mono">apnacollegebihar@slc</p>
                 </div>
                 <button

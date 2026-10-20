@@ -342,9 +342,10 @@ export default function Home() {
           <div className="mt-8 text-center">
             <Link
               to="/notifications"
-              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-white border border-slate-200 hover:border-blue-500 text-xs font-bold text-slate-700 hover:text-blue-600 transition-all shadow-xs hover:shadow-sm active:scale-95"
+              className="btn-secondary gap-2"
             >
-              View Full Notice Archive <ArrowRight size={14} />
+              <span>View Full Notice Archive</span>
+              <ArrowRight size={14} />
             </Link>
           </div>
 
@@ -384,7 +385,7 @@ export default function Home() {
                     aria-selected={isActive}
                     aria-controls="pillar-grid"
                     onClick={() => setActiveTab(key)}
-                    className={`px-2.5 sm:px-4 py-2 rounded-lg text-xs font-heading font-extrabold transition-all text-center truncate ${
+                    className={`btn-tab text-center truncate ${
                       isActive
                         ? 'bg-white text-blue-600 shadow-xs border border-slate-200/60'
                         : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
@@ -429,8 +430,9 @@ export default function Home() {
 
                 <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-400">Direct Access</span>
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 group-hover:bg-blue-600 text-blue-600 group-hover:text-white font-heading font-bold text-xs transition-all shadow-xs">
-                    Launch Tool <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
+                  <span className="btn-pill">
+                    <span>Launch Tool</span>
+                    <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
                   </span>
                 </div>
               </Link>
@@ -461,9 +463,10 @@ export default function Home() {
 
             <Link
               to="/colleges"
-              className="px-4 py-2.5 rounded-xl bg-white border border-slate-200 hover:border-blue-500 text-xs font-bold text-slate-700 hover:text-blue-600 transition-all shadow-xs inline-flex items-center gap-1.5 active:scale-95"
+              className="btn-secondary gap-1.5"
             >
-              Browse All 38+ Colleges <ArrowRight size={14} />
+              <span>Browse All 38+ Colleges</span>
+              <ArrowRight size={14} />
             </Link>
           </div>
 
@@ -536,7 +539,7 @@ export default function Home() {
 
             <button
               onClick={() => setShowScanner(true)}
-              className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-heading font-bold text-sm transition-all shadow-sm active:scale-95 inline-flex items-center gap-2"
+              className="btn-primary gap-2"
             >
               <Heart size={16} className="fill-white" /> Contribute via UPI
             </button>
@@ -559,9 +562,9 @@ export default function Home() {
               <div key={i} className="glass-card-light rounded-2xl overflow-hidden border border-slate-200/80 bg-white">
                 <button
                   onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                  className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-slate-50"
+                  className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-slate-50 cursor-pointer"
                 >
-                  <h3 className="text-sm font-bold text-slate-800 pr-4">{faq.q}</h3>
+                  <h3 className="text-sm font-bold text-slate-900 pr-4">{faq.q}</h3>
                   <div className="shrink-0 text-blue-600">
                     {openFaqIndex === i ? <Minus size={18} /> : <Plus size={18} />}
                   </div>
@@ -589,7 +592,7 @@ export default function Home() {
                 <Heart size={18} className="text-blue-600 fill-blue-600" />
                 <h3 className="font-heading font-bold text-slate-900 text-sm">Support Apna College Bihar</h3>
               </div>
-              <button onClick={() => setShowScanner(false)} className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 bg-slate-100">
+              <button onClick={() => setShowScanner(false)} className="btn-icon w-8 h-8 rounded-lg" aria-label="Close Modal">
                 <X size={16} />
               </button>
             </div>
