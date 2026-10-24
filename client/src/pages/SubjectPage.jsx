@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { db } from '../firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import notesDefaultData from '../data/notesDefaultData.json';
 import { 
   BookOpen, FileText, Download, Loader2, ChevronRight, 
   HelpCircle, Star, Award, Library, ArrowRight 
@@ -85,6 +86,31 @@ const subjectDetailsMap = {
       "Unit 3: Deadlocks (Prevention, Avoidance - Banker's Algorithm)",
       "Unit 4: Memory Management (Paging, Segmentation, Virtual Memory, Page replacement)"
     ]
+  },
+  'digital-electronics': {
+    name: "Digital Electronics",
+    description: "Covers number systems, combinational and sequential logic circuits, A/D and D/A converters, semiconductor memories, and programmable logic devices for BEU B.Tech 3rd Semester.",
+    difficulty: "Medium",
+    units: [
+      "Unit 1: Fundamentals & Number Systems",
+      "Unit 2: Combinational and Digital Circuits",
+      "Unit 3: Sequential Circuit and System",
+      "Unit 4: A/D and D/A Converters",
+      "Unit 5: Semiconductor Memories",
+      "Unit 6: Programmable Logic Devices"
+    ]
+  },
+  'introduction-to-ai': {
+    name: "Introduction to Artificial Intelligence",
+    description: "Foundational AI course covering intelligent agents, uninformed & heuristic search strategies, knowledge representation, reasoning under uncertainty, and machine learning paradigms for BEU B.Tech 1st Semester.",
+    difficulty: "Medium",
+    units: [
+      "Unit 1: Introduction to Artificial Intelligence",
+      "Unit 2: Problem Solving by Search (BFS, DFS, A*, Minimax)",
+      "Unit 3: Knowledge Representation and Reasoning (Propositional & Predicate Logic)",
+      "Unit 4: Reasoning Under Uncertainty (Bayes Theorem, Fuzzy Logic)",
+      "Unit 5: Introduction to Machine Learning & AI Applications"
+    ]
   }
 };
 
@@ -146,7 +172,11 @@ export default function SubjectPage() {
           sessionStorage.setItem('acb_documents_cache', JSON.stringify(docs));
         } catch (e) {}
       } catch (err) {
-        console.error("Firestore error loading subject documents:", err);
+        console.warn("Firestore error loading subject documents, falling back to static notes:", err.message);
+        if (Array.isArray(notesDefaultData)) {
+          const fallbackFiles = notesDefaultData.filter(d => d.type !== 'folder');
+          setDocuments(fallbackFiles);
+        }
       } finally {
         setLoading(false);
       }

@@ -3,7 +3,7 @@
 // ═════════════════════════════════════════════════════════════
 
 export const CACHE_KEYS = {
-  NOTES: 'acb_cache_notes_v1',
+  NOTES: 'acb_cache_notes_v2',
   PYQ: 'acb_cache_pyq_v1',
   ANNOUNCEMENTS: 'acb_cache_announcements_v1',
   RESOURCES: 'acb_cache_resources_v1',

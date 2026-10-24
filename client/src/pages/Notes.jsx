@@ -8,6 +8,7 @@ import {
 import { db } from '../firebase';
 import { collection, orderBy, onSnapshot, query, where, doc, deleteDoc, updateDoc, getDocs } from 'firebase/firestore';
 import { getCachedData, setCachedData, invalidateCache, CACHE_KEYS } from '../utils/dataCache';
+import notesDefaultData from '../data/notesDefaultData.json';
 import { useParams, useNavigate } from 'react-router-dom';
 import GlobalSearch from '../components/GlobalSearch';
 import PremiumAds from '../components/PremiumAds';
@@ -67,8 +68,29 @@ export default function Notes() {
   const initialBranch = branchId ? BRANCHES.find(b => b.id.toLowerCase() === branchId.toLowerCase()) : null;
   const initialSem = semesterId ? parseInt(semesterId) : null;
 
-  const [docs, setDocs] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const filterValidNotes = (rawList) => {
+    if (!Array.isArray(rawList)) return [];
+    // For semester 1, keep strictly the subjects aligned with BEU syllabus:
+    // ENGINEERING PHYSICS, ENGINEERING CHEMISTRY, INTRODUCTION TO AI
+    const validSem1Subjects = ['ENGINEERING PHYSICS', 'ENGINEERING CHEMISTRY', 'INTRODUCTION TO AI'];
+    return rawList.filter(d => {
+      if (String(d.semester) === '1') {
+        const subj = (d.subject || d.subjectFolder || d.title || '').toUpperCase();
+        return validSem1Subjects.some(s => subj.includes(s));
+      }
+      return true;
+    });
+  };
+
+  const [docs, setDocs] = useState(() => {
+    const cached = getCachedData(CACHE_KEYS.NOTES, 30 * 60 * 1000);
+    if (cached && Array.isArray(cached.data) && cached.data.length > 0) {
+      const filtered = filterValidNotes(cached.data);
+      if (filtered.length > 0) return filtered;
+    }
+    return Array.isArray(notesDefaultData) ? notesDefaultData : [];
+  });
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
 
   // Navigation state
@@ -109,11 +131,14 @@ export default function Notes() {
     if (!force) {
       const cached = getCachedData(CACHE_KEYS.NOTES, 30 * 60 * 1000); // 30 min cache
       if (cached && Array.isArray(cached.data) && cached.data.length > 0) {
-        setDocs(cached.data);
-        setLoading(false);
-        // If fresh and not forcing, skip network to save thousands of reads
-        if (!cached.isExpired) {
-          return;
+        const filtered = filterValidNotes(cached.data);
+        if (filtered.length > 0) {
+          setDocs(filtered);
+          setLoading(false);
+          // If fresh and not forcing, skip network to save thousands of reads
+          if (!cached.isExpired) {
+            return;
+          }
         }
       }
     }
@@ -134,14 +159,25 @@ export default function Notes() {
       setIsRefreshing(true);
       const q = query(collection(db, 'documents'), where('category', '==', 'NOTES'));
       const snap = await getDocs(q);
-      const freshDocs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      setDocs(freshDocs);
-      setCachedData(CACHE_KEYS.NOTES, freshDocs);
+      const rawDocs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const freshDocs = filterValidNotes(rawDocs);
+      if (freshDocs.length > 0) {
+        setDocs(freshDocs);
+        setCachedData(CACHE_KEYS.NOTES, freshDocs);
+      } else if (Array.isArray(notesDefaultData) && notesDefaultData.length > 0) {
+        setDocs(notesDefaultData);
+        setCachedData(CACHE_KEYS.NOTES, notesDefaultData);
+      }
       if (force) {
         toast.success("Notes refreshed with latest data!");
       }
     } catch (err) {
-      console.warn('[Notes] Fetch fallback:', err);
+      console.warn('[Notes] Fetch fallback (quota/network):', err.message);
+      // Fallback to static default notes data so website always renders smoothly
+      if (Array.isArray(notesDefaultData) && notesDefaultData.length > 0) {
+        setDocs(prev => (prev && prev.length > 0 ? prev : notesDefaultData));
+        setCachedData(CACHE_KEYS.NOTES, notesDefaultData);
+      }
     } finally {
       setLoading(false);
       setIsRefreshing(false);
@@ -212,7 +248,48 @@ export default function Notes() {
       String(d.semester) === String(sem) &&
       (d.category === 'NOTES' || !d.category)
     );
-    return list.sort((a, b) => (a.title || '').localeCompare(b.title || '', undefined, { numeric: true }));
+
+    // Deduplicate folders by normalized title (e.g. merge multiple DIGITAL ELECTRONICS or OOPS folders into one)
+    const folderMap = new Map();
+    for (const f of list) {
+      const key = (f.title || '').trim().toUpperCase();
+      if (!key) continue;
+
+      const matchingFiles = docs.filter(x =>
+        x.type !== 'folder' &&
+        (x.parentId === f.id || (x.subjectFolder && x.subjectFolder.toUpperCase() === key) || (x.subject && x.subject.toUpperCase() === key)) &&
+        String(x.semester) === String(sem) &&
+        x.branch === branch.id
+      );
+
+      if (!folderMap.has(key)) {
+        folderMap.set(key, {
+          ...f,
+          allFolderIds: [f.id],
+          fileCount: matchingFiles.length
+        });
+      } else {
+        const existing = folderMap.get(key);
+        existing.allFolderIds.push(f.id);
+        const allAssociated = docs.filter(x =>
+          x.type !== 'folder' &&
+          (existing.allFolderIds.includes(x.parentId) || (x.subjectFolder && x.subjectFolder.toUpperCase() === key) || (x.subject && x.subject.toUpperCase() === key)) &&
+          String(x.semester) === String(sem) &&
+          x.branch === branch.id
+        );
+        const uniqueKeys = new Set(allAssociated.map(x => (x.fileUrl || x.title || '').toLowerCase().trim()));
+        existing.fileCount = uniqueKeys.size;
+        if (f.id.startsWith('folder_notes_')) {
+          folderMap.set(key, {
+            ...f,
+            allFolderIds: existing.allFolderIds,
+            fileCount: existing.fileCount
+          });
+        }
+      }
+    }
+
+    return Array.from(folderMap.values()).sort((a, b) => (a.title || '').localeCompare(b.title || '', undefined, { numeric: true }));
   }, [docs, branch, sem]);
 
   // Orphan files: notes at root level that don't belong to any folder
@@ -224,19 +301,39 @@ export default function Notes() {
       d.branch === branch.id &&
       String(d.semester) === String(sem) &&
       (d.category === 'NOTES' || !d.category) &&
-      d.fileUrl
+      d.fileUrl &&
+      !subjectFolders.some(f => (f.title || '').trim().toUpperCase() === (d.subject || d.subjectFolder || '').trim().toUpperCase())
     ).sort((a, b) => (a.title || '').localeCompare(b.title || '', undefined, { numeric: true }));
-  }, [docs, branch, sem]);
+  }, [docs, branch, sem, subjectFolders]);
 
   // Files inside selected folder
   const folderFiles = useMemo(() => {
     if (!folder) return [];
+    const folderIds = folder.allFolderIds || [folder.id];
+    const folderTitle = (folder.title || '').trim().toUpperCase();
 
-    return docs.filter(d =>
-      d.parentId === folder.id &&
-      (d.category === 'NOTES' || !d.category || d.type === 'folder')
-    ).sort((a, b) => (a.title || '').localeCompare(b.title || '', undefined, { numeric: true }));
-  }, [docs, folder]);
+    const matches = docs.filter(d =>
+      d.type !== 'folder' &&
+      (
+        folderIds.includes(d.parentId) ||
+        (folderTitle && (d.subjectFolder?.toUpperCase() === folderTitle || d.subject?.toUpperCase() === folderTitle) && String(d.semester) === String(sem) && d.branch === branch?.id)
+      ) &&
+      (d.category === 'NOTES' || !d.category)
+    );
+
+    // Deduplicate files inside folder by fileUrl / title
+    const seen = new Set();
+    const uniqueFiles = [];
+    for (const f of matches) {
+      const fileKey = (f.fileUrl || f.title || '').toLowerCase().trim();
+      if (fileKey && !seen.has(fileKey)) {
+        seen.add(fileKey);
+        uniqueFiles.push(f);
+      }
+    }
+
+    return uniqueFiles.sort((a, b) => (a.title || '').localeCompare(b.title || '', undefined, { numeric: true }));
+  }, [docs, folder, sem, branch]);
 
   // Search across all NOTES files
   const searchResults = useMemo(() => {
@@ -504,7 +601,7 @@ export default function Notes() {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-base md:text-lg font-[900] text-slate-900 uppercase tracking-tight leading-tight">{f.title}</h3>
-                    <p className="text-[9px] md:text-[10px] font-bold text-slate-400 mt-1">{docs.filter(x => x.parentId === f.id).length} files inside</p>
+                    <p className="text-[9px] md:text-[10px] font-bold text-slate-400 mt-1">{f.fileCount !== undefined ? f.fileCount : docs.filter(x => x.parentId === f.id).length} files inside</p>
                   </div>
                   <div className={`flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${branchColor.text} group-hover:gap-2.5 transition-all`}>
                     Open Notes <ArrowRight size={10} />
