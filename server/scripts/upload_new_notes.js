@@ -43,6 +43,12 @@ const CHEMISTRY_BRANCHES = [...new Set(GROUP_C)];
 // Content specifications from Google Drive
 const DIGITAL_ELECTRONICS_NOTES = [
     {
+        unit: 1,
+        title: "Unit 1: Fundamentals of Digital Systems and Logic Families",
+        fileId: "1vMX4dDaFx1xUwJw2NpYs-tiLHZpuv0qC",
+        url: "https://drive.google.com/file/d/1vMX4dDaFx1xUwJw2NpYs-tiLHZpuv0qC/view"
+    },
+    {
         unit: 2,
         title: "Unit 2: Combinational and Digital Circuits",
         fileId: "1QzsPZFUno-1vmwGS2wMI0pQokeChotkw",
