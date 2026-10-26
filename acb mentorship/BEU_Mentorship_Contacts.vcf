@@ -1,350 +1,429 @@
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Rohit kumar 2026 EEE
-N:Rohit kumar;;;BEU 2026;
+N:EEE;BEU Rohit kumar 2026;;;
 TEL;TYPE=CELL:+916206404658
 EMAIL;TYPE=INTERNET:shivamraj8092@gmail.com
-ORG:Gaya College of Engineering (GCE), Gaya
-TITLE:Electrical & Electronics Engineering
-NOTE:BEU Mentorship 2026-2030 | Gaya - EEE | Roll: 26/EEE/49
+ORG:Gaya (EEE)
+TITLE:EEE
+NOTE:Branch: EEE (Electrical & Electronics Engineering) | College: Gaya | BEU Mentorship 2026-2030 | Roll: 26/EEE/49
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Nandani Preyashi 2026 EEE
-N:Nandani Preyashi;;;BEU 2026;
+N:EEE;BEU Nandani Preyashi 2026;;;
 TEL;TYPE=CELL:+919241068744
 EMAIL;TYPE=INTERNET:nandanipreyashi9@gmail.com
-ORG:Bakhtiyarpur College of Engineering, Bakhtiyarpur, Patna
-TITLE:Electrical & Electronics Engineering
-NOTE:BEU Mentorship 2026-2030 | Bakhtiyarpur - EEE | Roll: 26EEE18P
+ORG:Bakhtiyarpur (EEE)
+TITLE:EEE
+NOTE:Branch: EEE (Electrical & Electronics Engineering) | College: Bakhtiyarpur | BEU Mentorship 2026-2030 | Roll: 26EEE18P
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Himanshu Kumar 2026 CSE
-N:Himanshu Kumar;;;BEU 2026;
+N:CSE;BEU Himanshu Kumar 2026;;;
 TEL;TYPE=CELL:+917462982629
 EMAIL;TYPE=INTERNET:himanshukumarsingh9931@gmail.com
-ORG:Gaya College of Engineering (GCE), Gaya
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | Gaya - CSE | Roll: 26/CSE/63
+ORG:Gaya (CSE)
+TITLE:CSE
+NOTE:Branch: CSE (Computer Science & Engineering) | College: Gaya | BEU Mentorship 2026-2030 | Roll: 26/CSE/63
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU KRITI ANAND 2026 EEE
-N:KRITI ANAND;;;BEU 2026;
+N:EEE;BEU KRITI ANAND 2026;;;
 TEL;TYPE=CELL:+919934240606
 EMAIL;TYPE=INTERNET:kritianand01012008@gmail.com
-ORG:Gaya College of Engineering (GCE), Gaya
-TITLE:Electrical & Electronics Engineering
-NOTE:BEU Mentorship 2026-2030 | Gaya - EEE | Roll: 68
+ORG:Gaya (EEE)
+TITLE:EEE
+NOTE:Branch: EEE (Electrical & Electronics Engineering) | College: Gaya | BEU Mentorship 2026-2030 | Roll: 68
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU HARSH KUMAR SHARMA 2026 M&C
-N:HARSH KUMAR SHARMA;;;BEU 2026;
+N:M&C;BEU HARSH KUMAR SHARMA 2026;;;
 TEL;TYPE=CELL:+919570437725
 EMAIL;TYPE=INTERNET:harshkumar.sahuka25@gmail.com
-ORG:Gaya College of Engineering (GCE), Gaya
-TITLE:Mathematics & Computing
-NOTE:BEU Mentorship 2026-2030 | Gaya - M&C | Roll: 48
+ORG:Gaya (M&C)
+TITLE:M&C
+NOTE:Branch: M&C (Mathematics & Computing) | College: Gaya | BEU Mentorship 2026-2030 | Roll: 48
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Aditya Raushan 2026 CSE
-N:Aditya Raushan;;;BEU 2026;
+N:CSE;BEU Aditya Raushan 2026;;;
 TEL;TYPE=CELL:+917632941081
 EMAIL;TYPE=INTERNET:adityaraushan943094@gmail.com
-ORG:Gaya College of Engineering (GCE), Gaya
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | Gaya - CSE | Roll: 26/CSE/45
+ORG:Gaya (CSE)
+TITLE:CSE
+NOTE:Branch: CSE (Computer Science & Engineering) | College: Gaya | BEU Mentorship 2026-2030 | Roll: 26/CSE/45
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Deepak Kumar 2026 ECE
-N:Deepak Kumar;;;BEU 2026;
+N:ECE;BEU Deepak Kumar 2026;;;
 TEL;TYPE=CELL:+919940050839
 EMAIL;TYPE=INTERNET:rajpalkr586@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Electronics & Communication Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - ECE | Roll: 21
+ORG:Sheikhpura (ECE)
+TITLE:ECE
+NOTE:Branch: ECE (Electronics & Communication Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 21
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Aryan Kumar 2026 CSE
-N:Aryan Kumar;;;BEU 2026;
+N:CSE;BEU Aryan Kumar 2026;;;
 TEL;TYPE=CELL:+918368352928
 EMAIL;TYPE=INTERNET:kumar.aryan22209@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - CSE | Roll: 26cse47
+ORG:Sheikhpura (CSE)
+TITLE:CSE
+NOTE:Branch: CSE (Computer Science & Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 26cse47
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Abhishek kumar 2026 CSE
-N:Abhishek kumar;;;BEU 2026;
+N:CSE;BEU Abhishek kumar 2026;;;
 TEL;TYPE=CELL:+919798773944
 EMAIL;TYPE=INTERNET:ak5976987@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - CSE | Roll: Cse87
+ORG:Sheikhpura (CSE)
+TITLE:CSE
+NOTE:Branch: CSE (Computer Science & Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: Cse87
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Sanjana Swaraj 2026 CSE
-N:Sanjana Swaraj;;;BEU 2026;
+N:CSE;BEU Sanjana Swaraj 2026;;;
 TEL;TYPE=CELL:+918271901768
 EMAIL;TYPE=INTERNET:sanjana.7354@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - CSE | Roll: 26cse04
+ORG:Sheikhpura (CSE)
+TITLE:CSE
+NOTE:Branch: CSE (Computer Science & Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 26cse04
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Akriti Sarraf 2026 EEE
-N:Akriti Sarraf;;;BEU 2026;
+N:EEE;BEU Akriti Sarraf 2026;;;
 TEL;TYPE=CELL:+919288180662
 EMAIL;TYPE=INTERNET:akritisarraf721@gmail.com
-ORG:Bakhtiyarpur College of Engineering, Bakhtiyarpur, Patna
-TITLE:Electrical & Electronics Engineering
-NOTE:BEU Mentorship 2026-2030 | Bakhtiyarpur - EEE | Roll: 26EEE11P
+ORG:Bakhtiyarpur (EEE)
+TITLE:EEE
+NOTE:Branch: EEE (Electrical & Electronics Engineering) | College: Bakhtiyarpur | BEU Mentorship 2026-2030 | Roll: 26EEE11P
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Patel Ji 2026 CSE-IoT/Cyber
-N:Patel Ji;;;BEU 2026;
+N:CSE-IoT/Cyber;BEU Patel Ji 2026;;;
 TEL;TYPE=CELL:+919199612480
 EMAIL;TYPE=INTERNET:patelji919961@gmail.com
-ORG:Government Engineering College, Gopalganj
-TITLE:Computer Science & Engineering (IOT & Cyber Security including Block Chain Technology)
-NOTE:BEU Mentorship 2026-2030 | Gopalganj - CSE-IoT/Cyber | Roll: 26-cse-55
+ORG:Gopalganj (CSE-IoT/Cyber)
+TITLE:CSE-IoT/Cyber
+NOTE:Branch: CSE-IoT/Cyber (Computer Science & Engineering (IOT & Cyber Security including Block Chain Technology)) | College: Gopalganj | BEU Mentorship 2026-2030 | Roll: 26-cse-55
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Kishan kumar 2026 EE
-N:Kishan kumar;;;BEU 2026;
+N:EE;BEU Kishan kumar 2026;;;
 TEL;TYPE=CELL:+916206324393
 EMAIL;TYPE=INTERNET:kishankrstroyai@gmail.com
-ORG:Government Engineering College, Jehanabad
-TITLE:Electrical Engineering
-NOTE:BEU Mentorship 2026-2030 | Jehanabad - EE | Roll: 26/EE/23
+ORG:Jehanabad (EE)
+TITLE:EE
+NOTE:Branch: EE (Electrical Engineering) | College: Jehanabad | BEU Mentorship 2026-2030 | Roll: 26/EE/23
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Princy Raj 2026 CSE-Cyber
-N:Princy Raj;;;BEU 2026;
+N:CSE-Cyber;BEU Princy Raj 2026;;;
 TEL;TYPE=CELL:+919931634898
 EMAIL;TYPE=INTERNET:princyraj271@gmail.com
-ORG:Government Engineering College, West Champaran (Bettiah)
-TITLE:Computer Science & Engineering (Cyber Security)
-NOTE:BEU Mentorship 2026-2030 | West Champaran - CSE-Cyber | Roll: W26503
+ORG:West Champaran (CSE-Cyber)
+TITLE:CSE-Cyber
+NOTE:Branch: CSE-Cyber (Computer Science & Engineering (Cyber Security)) | College: West Champaran | BEU Mentorship 2026-2030 | Roll: W26503
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Riya Kumari 2026 ECE
-N:Riya Kumari;;;BEU 2026;
+N:ECE;BEU Riya Kumari 2026;;;
 TEL;TYPE=CELL:+919142899937
 EMAIL;TYPE=INTERNET:riyaisua1@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Electronics & Communication Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - ECE | Roll: 26ece24
+ORG:Sheikhpura (ECE)
+TITLE:ECE
+NOTE:Branch: ECE (Electronics & Communication Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 26ece24
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU SANDHYA RANI 2026 ECE
-N:SANDHYA RANI;;;BEU 2026;
+N:ECE;BEU SANDHYA RANI 2026;;;
 TEL;TYPE=CELL:+919942367962
 EMAIL;TYPE=INTERNET:sandhyarani892008@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Electronics & Communication Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - ECE | Roll: 26ECE29
+ORG:Sheikhpura (ECE)
+TITLE:ECE
+NOTE:Branch: ECE (Electronics & Communication Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 26ECE29
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
-FN:BEU Nandani kumari 2026 ECE
-N:Nandani kumari;;;BEU 2026;
+FN:BEU Nandani kumari 2026 ECE-ACT
+N:ECE-ACT;BEU Nandani kumari 2026;;;
 TEL;TYPE=CELL:+919955560243
 EMAIL;TYPE=INTERNET:nandanisubhanpur@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Electronics & Communication Engineering (Advance Communication Technology)
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - ECE | Roll: 26Ece46
+ORG:Sheikhpura (ECE-ACT)
+TITLE:ECE-ACT
+NOTE:Branch: ECE-ACT (Electronics & Communication Engineering (Advance Communication Technology)) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 26Ece46
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Anubhuti Kumari 2026 ECE
-N:Anubhuti Kumari;;;BEU 2026;
+N:ECE;BEU Anubhuti Kumari 2026;;;
 TEL;TYPE=CELL:+918709523241
 EMAIL;TYPE=INTERNET:anubhutik37@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Electronics & Communication Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - ECE | Roll: 26ECE30
+ORG:Sheikhpura (ECE)
+TITLE:ECE
+NOTE:Branch: ECE (Electronics & Communication Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 26ECE30
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Golu Raj 2026 CSE
-N:Golu Raj;;;BEU 2026;
+N:CSE;BEU Golu Raj 2026;;;
 TEL;TYPE=CELL:+919162722680
 EMAIL;TYPE=INTERNET:golujaykar4@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - CSE | Roll: 26Cse113
+ORG:Sheikhpura (CSE)
+TITLE:CSE
+NOTE:Branch: CSE (Computer Science & Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 26Cse113
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Ayush Kumar 2026 CSE-DS
-N:Ayush Kumar;;;BEU 2026;
+N:CSE-DS;BEU Ayush Kumar 2026;;;
 TEL;TYPE=CELL:+918252055886
 EMAIL;TYPE=INTERNET:igodayush@gmail.com
-ORG:Saharsa Engineering College, Saharsa
-TITLE:Computer Science & Engineering (Data Science)
-NOTE:BEU Mentorship 2026-2030 | Saharsa - CSE-DS | Roll: 26-CSE-DS-15
+ORG:Saharsa (CSE-DS)
+TITLE:CSE-DS
+NOTE:Branch: CSE-DS (Computer Science & Engineering (Data Science)) | College: Saharsa | BEU Mentorship 2026-2030 | Roll: 26-CSE-DS-15
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Nishu Kumari 2026 EEE
-N:Nishu Kumari;;;BEU 2026;
+N:EEE;BEU Nishu Kumari 2026;;;
 TEL;TYPE=CELL:+919241635946
 EMAIL;TYPE=INTERNET:an6388172@gmail.com
-ORG:Bakhtiyarpur College of Engineering, Bakhtiyarpur, Patna
-TITLE:Electrical & Electronics Engineering
-NOTE:BEU Mentorship 2026-2030 | Bakhtiyarpur - EEE | Roll: 26eee14p
+ORG:Bakhtiyarpur (EEE)
+TITLE:EEE
+NOTE:Branch: EEE (Electrical & Electronics Engineering) | College: Bakhtiyarpur | BEU Mentorship 2026-2030 | Roll: 26eee14p
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Khushnuma perween 2026 ECE
-N:Khushnuma perween;;;BEU 2026;
+N:ECE;BEU Khushnuma perween 2026;;;
 TEL;TYPE=CELL:+916200613246
 EMAIL;TYPE=INTERNET:khushnuma0575@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Electronics & Communication Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - ECE | Roll: 26ECE32
+ORG:Sheikhpura (ECE)
+TITLE:ECE
+NOTE:Branch: ECE (Electronics & Communication Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 26ECE32
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Saziya Khanam 2026 CSE
-N:Saziya Khanam;;;BEU 2026;
+N:CSE;BEU Saziya Khanam 2026;;;
 TEL;TYPE=CELL:+918521027432
 EMAIL;TYPE=INTERNET:saziyakhanam90@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - CSE | Roll: 26CSE01
+ORG:Sheikhpura (CSE)
+TITLE:CSE
+NOTE:Branch: CSE (Computer Science & Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 26CSE01
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Krishna Raj 2026 CSE
-N:Krishna Raj;;;BEU 2026;
+N:CSE;BEU Krishna Raj 2026;;;
 TEL;TYPE=CELL:+919905540052
 EMAIL;TYPE=INTERNET:krsna72111@gmail.com
-ORG:Gaya College of Engineering (GCE), Gaya
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | Gaya - CSE | Roll: 26105110083
+ORG:Gaya (CSE)
+TITLE:CSE
+NOTE:Branch: CSE (Computer Science & Engineering) | College: Gaya | BEU Mentorship 2026-2030 | Roll: 26105110083
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Ranvir kumar 2026 CE
-N:Ranvir kumar;;;BEU 2026;
+N:CE;BEU Ranvir kumar 2026;;;
 TEL;TYPE=CELL:+917079212386
 EMAIL;TYPE=INTERNET:ranveerrajprajapati@gmail.com
-ORG:Government Engineering College, Jehanabad
-TITLE:Civil Engineering
-NOTE:BEU Mentorship 2026-2030 | Jehanabad - CE | Roll: 26-CE-123
+ORG:Jehanabad (CE)
+TITLE:CE
+NOTE:Branch: CE (Civil Engineering) | College: Jehanabad | BEU Mentorship 2026-2030 | Roll: 26-CE-123
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Raushan raj 2026 CSE
-N:Raushan raj;;;BEU 2026;
+N:CSE;BEU Raushan raj 2026;;;
 TEL;TYPE=CELL:+919006521022
 EMAIL;TYPE=INTERNET:parikshitraj3105@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - CSE | Roll: 26CSE71
+ORG:Sheikhpura (CSE)
+TITLE:CSE
+NOTE:Branch: CSE (Computer Science & Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 26CSE71
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Rupam Kumari 2026 ECE
-N:Rupam Kumari;;;BEU 2026;
+N:ECE;BEU Rupam Kumari 2026;;;
 TEL;TYPE=CELL:+919229509645
 EMAIL;TYPE=INTERNET:kumari.rupam.rk0@gmail.com
-ORG:Bhagalpur College of Engineering (BCE), Bhagalpur
-TITLE:Electronics & Communication Engineering
-NOTE:BEU Mentorship 2026-2030 | Bhagalpur - ECE | Roll: 26408
+ORG:Bhagalpur (ECE)
+TITLE:ECE
+NOTE:Branch: ECE (Electronics & Communication Engineering) | College: Bhagalpur | BEU Mentorship 2026-2030 | Roll: 26408
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Ayush Singh 2026 ECE
-N:Ayush Singh;;;BEU 2026;
+N:ECE;BEU Ayush Singh 2026;;;
 TEL;TYPE=CELL:+918235051716
 EMAIL;TYPE=INTERNET:ayushsangam6@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Electronics & Communication Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - ECE | Roll: 26ECE44
+ORG:Sheikhpura (ECE)
+TITLE:ECE
+NOTE:Branch: ECE (Electronics & Communication Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 26ECE44
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Ritik Raushan 2026 ECE
-N:Ritik Raushan;;;BEU 2026;
+N:ECE;BEU Ritik Raushan 2026;;;
 TEL;TYPE=CELL:+918540814461
 EMAIL;TYPE=INTERNET:kshashiranjan1234@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Electronics & Communication Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - ECE | Roll: 26ece11
+ORG:Sheikhpura (ECE)
+TITLE:ECE
+NOTE:Branch: ECE (Electronics & Communication Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 26ece11
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Dhanraj 2026 CSE-IoT
-N:Dhanraj;;;BEU 2026;
+N:CSE-IoT;BEU Dhanraj 2026;;;
 TEL;TYPE=CELL:+919264568693
 EMAIL;TYPE=INTERNET:classmateclg78@gmail.com
-ORG:Government Engineering College, Vaishali
-TITLE:Computer Science & Engineering (IoT)
-NOTE:BEU Mentorship 2026-2030 | Vaishali - CSE-IoT | Roll: 37
+ORG:Vaishali (CSE-IoT)
+TITLE:CSE-IoT
+NOTE:Branch: CSE-IoT (Computer Science & Engineering (IoT)) | College: Vaishali | BEU Mentorship 2026-2030 | Roll: 37
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU TANYA SAKSHI 2026 CSE
-N:TANYA SAKSHI;;;BEU 2026;
+N:CSE;BEU TANYA SAKSHI 2026;;;
 TEL;TYPE=CELL:+916203840915
 EMAIL;TYPE=INTERNET:tanyasakshi04608@gmail.com
-ORG:Nalanda College of Engineering (NCE), Chandi, Nalanda
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | Chandi - CSE | Roll: 26CS37
+ORG:Chandi (CSE)
+TITLE:CSE
+NOTE:Branch: CSE (Computer Science & Engineering) | College: Chandi | BEU Mentorship 2026-2030 | Roll: 26CS37
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Sudhanshu Kumar Jha 2026 CSE-AI
-N:Sudhanshu Kumar Jha;;;BEU 2026;
+N:CSE-AI;BEU Sudhanshu Kumar Jha 2026;;;
 TEL;TYPE=CELL:+916205892124
 EMAIL;TYPE=INTERNET:jhas7906@gmail.com
-ORG:Government Engineering College, Gopalganj
-TITLE:Computer Science & Engineering (AI)
-NOTE:BEU Mentorship 2026-2030 | Gopalganj - CSE-AI | Roll: 26-CSAI-63
+ORG:Gopalganj (CSE-AI)
+TITLE:CSE-AI
+NOTE:Branch: CSE-AI (Computer Science & Engineering (AI)) | College: Gopalganj | BEU Mentorship 2026-2030 | Roll: 26-CSAI-63
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU AMAN KUMAR 2026 CSE-IoT
-N:AMAN KUMAR;;;BEU 2026;
+N:CSE-IoT;BEU AMAN KUMAR 2026;;;
 TEL;TYPE=CELL:+918521294277
 EMAIL;TYPE=INTERNET:er.amankumar@zohomail.in
-ORG:Government Engineering College, Vaishali
-TITLE:Computer Science & Engineering (IoT)
-NOTE:BEU Mentorship 2026-2030 | Vaishali - CSE-IoT | Roll: 26CSE(IOT)43
+ORG:Vaishali (CSE-IoT)
+TITLE:CSE-IoT
+NOTE:Branch: CSE-IoT (Computer Science & Engineering (IoT)) | College: Vaishali | BEU Mentorship 2026-2030 | Roll: 26CSE(IOT)43
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Rahul Kumar 2026 CSE
-N:Rahul Kumar;;;BEU 2026;
+N:CSE;BEU Rahul Kumar 2026;;;
 TEL;TYPE=CELL:+917563026204
 EMAIL;TYPE=INTERNET:rp481276@gmail.com
-ORG:Government Engineering College, West Champaran (Bettiah)
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | West Champaran - CSE | Roll: W26615
+ORG:West Champaran (CSE)
+TITLE:CSE
+NOTE:Branch: CSE (Computer Science & Engineering) | College: West Champaran | BEU Mentorship 2026-2030 | Roll: W26615
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
 FN:BEU Akash Kumar 2026 CSE
-N:Akash Kumar;;;BEU 2026;
+N:CSE;BEU Akash Kumar 2026;;;
 TEL;TYPE=CELL:+918092029412
 EMAIL;TYPE=INTERNET:aka8092ku@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - CSE | Roll: 26cse51
+ORG:Sheikhpura (CSE)
+TITLE:CSE
+NOTE:Branch: CSE (Computer Science & Engineering) | College: Sheikhpura | BEU Mentorship 2026-2030 | Roll: 26cse51
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:BEU Zayad Akhtar 2026 CSE-DS
+N:CSE-DS;BEU Zayad Akhtar 2026;;;
+TEL;TYPE=CELL:+919199128186
+EMAIL;TYPE=INTERNET:zayedakhtar94@gmail.com
+ORG:Saharsa (CSE-DS)
+TITLE:CSE-DS
+NOTE:Branch: CSE-DS (Computer Science & Engineering (Data Science)) | College: Saharsa | BEU Mentorship 2026-2030 | Roll: 26-cse-ds-20
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:BEU Mahima Kumari 2026 CSE-DS
+N:CSE-DS;BEU Mahima Kumari 2026;;;
+TEL;TYPE=CELL:+919119291771
+EMAIL;TYPE=INTERNET:sahumahima1771@gmail.com
+ORG:Saharsa (CSE-DS)
+TITLE:CSE-DS
+NOTE:Branch: CSE-DS (Computer Science & Engineering (Data Science)) | College: Saharsa | BEU Mentorship 2026-2030 | Roll: 26-cse-ds-51
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:BEU Minakshi Kumari 2026 CSE-DS
+N:CSE-DS;BEU Minakshi Kumari 2026;;;
+TEL;TYPE=CELL:+918210494194
+EMAIL;TYPE=INTERNET:minakshi123kri@gmail.com
+ORG:Sasaram (CSE-DS)
+TITLE:CSE-DS
+NOTE:Branch: CSE-DS (Computer Science & Engineering (Data Science)) | College: Sasaram | BEU Mentorship 2026-2030 | Roll: 26 CSE Ds -42
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:BEU Siddhi Kumari 2026 CSE-DS
+N:CSE-DS;BEU Siddhi Kumari 2026;;;
+TEL;TYPE=CELL:+919153417787
+EMAIL;TYPE=INTERNET:siddhikumarimorsand@gmail.com
+ORG:Saharsa (CSE-DS)
+TITLE:CSE-DS
+NOTE:Branch: CSE-DS (Computer Science & Engineering (Data Science)) | College: Saharsa | BEU Mentorship 2026-2030 | Roll: 26-CSE-DS-55
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:BEU Ankit Singh 2026 CSE-IoT
+N:CSE-IoT;BEU Ankit Singh 2026;;;
+TEL;TYPE=CELL:+919834947683
+EMAIL;TYPE=INTERNET:singhankit82975@gmail.com
+ORG:Vaishali (CSE-IoT)
+TITLE:CSE-IoT
+NOTE:Branch: CSE-IoT (Computer Science & Engineering (IoT)) | College: Vaishali | BEU Mentorship 2026-2030 | Roll: 26cseiot21
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:BEU Himanshu Kumar 2026 CSE-IoT/Cyber
+N:CSE-IoT/Cyber;BEU Himanshu Kumar 2026;;;
+EMAIL;TYPE=INTERNET:himanshukumar9b12@gmail.com
+ORG:Vaishali (CSE-IoT/Cyber)
+TITLE:CSE-IoT/Cyber
+NOTE:Branch: CSE-IoT/Cyber (Computer Science & Engineering (IOT & Cyber Security including Block Chain Technology)) | College: Vaishali | BEU Mentorship 2026-2030 | Roll: 26cseiot14
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:BEU Muskan Gupta 2026 CSE-IoT
+N:CSE-IoT;BEU Muskan Gupta 2026;;;
+TEL;TYPE=CELL:+917488223554
+EMAIL;TYPE=INTERNET:muskanmfp2008@gmail.com
+ORG:Vaishali (CSE-IoT)
+TITLE:CSE-IoT
+NOTE:Branch: CSE-IoT (Computer Science & Engineering (IoT)) | College: Vaishali | BEU Mentorship 2026-2030 | Roll: 26cse(IOT)46
+END:VCARD
+BEGIN:VCARD
+VERSION:3.0
+FN:BEU Sugandha Kumari 2026 CSE-IoT
+N:CSE-IoT;BEU Sugandha Kumari 2026;;;
+TEL;TYPE=CELL:+917232855045
+EMAIL;TYPE=INTERNET:kumarisugandha283@gmail.com
+ORG:Vaishali (CSE-IoT)
+TITLE:CSE-IoT
+NOTE:Branch: CSE-IoT (Computer Science & Engineering (IoT)) | College: Vaishali | BEU Mentorship 2026-2030 | Roll: 26CSE(IOT)44
 END:VCARD

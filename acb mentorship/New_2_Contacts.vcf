@@ -1,20 +1,20 @@
 BEGIN:VCARD
 VERSION:3.0
-FN:BEU Rahul Kumar 2026 CSE
-N:Rahul Kumar;;;BEU 2026;
-TEL;TYPE=CELL:+917563026204
-EMAIL;TYPE=INTERNET:rp481276@gmail.com
-ORG:Government Engineering College, West Champaran (Bettiah)
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | West Champaran - CSE | Roll: W26615
+FN:BEU Muskan Gupta 2026 CSE-IoT
+N:CSE-IoT;BEU Muskan Gupta 2026;;;
+TEL;TYPE=CELL:+917488223554
+EMAIL;TYPE=INTERNET:muskanmfp2008@gmail.com
+ORG:Vaishali (CSE-IoT)
+TITLE:CSE-IoT
+NOTE:Branch: CSE-IoT (Computer Science & Engineering (IoT)) | College: Vaishali | BEU Mentorship 2026-2030 | Roll: 26cse(IOT)46
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
-FN:BEU Akash Kumar 2026 CSE
-N:Akash Kumar;;;BEU 2026;
-TEL;TYPE=CELL:+918092029412
-EMAIL;TYPE=INTERNET:aka8092ku@gmail.com
-ORG:Government Engineering College, Sheikhpura
-TITLE:Computer Science & Engineering
-NOTE:BEU Mentorship 2026-2030 | Sheikhpura - CSE | Roll: 26cse51
+FN:BEU Sugandha Kumari 2026 CSE-IoT
+N:CSE-IoT;BEU Sugandha Kumari 2026;;;
+TEL;TYPE=CELL:+917232855045
+EMAIL;TYPE=INTERNET:kumarisugandha283@gmail.com
+ORG:Vaishali (CSE-IoT)
+TITLE:CSE-IoT
+NOTE:Branch: CSE-IoT (Computer Science & Engineering (IoT)) | College: Vaishali | BEU Mentorship 2026-2030 | Roll: 26CSE(IOT)44
 END:VCARD
