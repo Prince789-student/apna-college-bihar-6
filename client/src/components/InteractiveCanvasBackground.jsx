@@ -46,8 +46,9 @@ export default function InteractiveCanvasBackground() {
       active: false
     };
 
-    // Refined academic celestial constellation nodes (restrained & elegant)
-    const nodeCount = Math.min(Math.max(Math.floor((width * height) / 22000), 28), 55);
+    // Refined academic celestial constellation nodes (restrained & elegant; optimized for mobile performance)
+    const isMobile = width < 768;
+    const nodeCount = isMobile ? 14 : Math.min(Math.max(Math.floor((width * height) / 22000), 28), 55);
     const nodes = [];
     const brandColors = [
       { r: 37, g: 99, b: 235 },   // BEU Royal Blue #2563eb

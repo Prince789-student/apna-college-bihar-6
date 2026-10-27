@@ -547,7 +547,7 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#f8fafc] bg-mesh-light overflow-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30 relative">
+    <div className="flex flex-col h-[100dvh] min-h-[100dvh] w-full max-w-[100vw] bg-[#f8fafc] bg-mesh-light overflow-x-clip overflow-y-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30 relative">
       <SEO 
         title={pageTitle} 
         url={window.location.href} 
@@ -555,12 +555,12 @@ export default function DashboardLayout() {
 
       {/* Global Native Header (for Mobile Phone App only) */}
       {isMobileApp && (
-        <header className="bg-white border-b border-slate-200 shadow-sm z-[200] shrink-0 sticky top-0 px-4 py-3 flex items-center justify-between">
-          <button onClick={() => navigate(-1)} className="p-2.5 rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors active:scale-95 flex items-center justify-center">
-            <ChevronLeft size={20} strokeWidth={3} />
+        <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs z-[200] shrink-0 sticky top-0 px-3 sm:px-4 py-2.5 flex items-center justify-between pt-[max(env(safe-area-inset-top,0px),0.625rem)]">
+          <button onClick={() => navigate(-1)} className="min-w-[44px] min-h-[44px] rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors active:scale-95 flex items-center justify-center cursor-pointer" aria-label="Go Back">
+            <ChevronLeft size={20} strokeWidth={2.5} />
           </button>
           <div className="flex items-center justify-center">
-            <span className="text-xs font-bold text-slate-900 truncate px-2">{pageTitle}</span>
+            <span className="text-xs font-black text-slate-900 uppercase tracking-tight truncate px-2">{pageTitle}</span>
           </div>
           <div className="flex items-center gap-2">
             <HeaderTimer />
@@ -570,17 +570,17 @@ export default function DashboardLayout() {
 
       {/* Top Header Navigation (Desktop Web, Desktop App, and Mobile Web) */}
       {!isMobileApp && (
-        <header className="bg-white/80 backdrop-blur-2xl border-b border-slate-200/80 shadow-[0_4px_25px_rgba(0,0,0,0.03)] z-[200] shrink-0 sticky top-0 transition-all">
+        <header className="bg-white/90 backdrop-blur-2xl border-b border-slate-200/80 shadow-[0_2px_15px_rgba(0,0,0,0.03)] z-[200] shrink-0 sticky top-0 transition-all pt-[max(env(safe-area-inset-top,0px),0px)]">
           <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500/80 to-transparent"></div>
-          <div className="max-w-[1440px] mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
+          <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-8 py-2.5 sm:py-3 flex items-center justify-between">
             
             {/* Logo & Brand */}
-            <div className="flex items-center gap-2.5 sm:gap-3 group cursor-pointer" onClick={() => navigate('/')}>
-              <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-xl p-0.5 bg-gradient-to-tr from-blue-600 via-indigo-500 to-blue-400 shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform shrink-0">
-                <img src="/logo-acb.png?v=99" alt="Logo" className="w-full h-full object-cover rounded-lg bg-white" />
+            <div className="flex items-center gap-2 sm:gap-2.5 group cursor-pointer select-none" onClick={() => navigate('/')}>
+              <div className="relative w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 rounded-xl p-0.5 bg-gradient-to-tr from-blue-600 via-indigo-500 to-blue-400 shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform shrink-0">
+                <img src="/logo-acb.png?v=99" alt="Logo" className="w-full h-full object-cover rounded-[10px] bg-white" />
               </div>
               <div className="block min-w-0">
-                <span className="font-heading font-black text-sm sm:text-base md:text-lg tracking-tight uppercase text-slate-900 leading-none block">
+                <span className="font-heading font-black text-xs sm:text-sm md:text-base lg:text-lg tracking-tight uppercase text-slate-900 leading-none block">
                   Apna College <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Bihar</span>
                 </span>
               </div>
@@ -787,10 +787,10 @@ export default function DashboardLayout() {
               {/* Mobile Menu Hamburger */}
               <button 
                 onClick={() => setMobileMenuOpen(true)} 
-                className="w-10 h-10 flex xl:hidden items-center justify-center text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all ml-1 shrink-0 active:scale-95"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] flex xl:hidden items-center justify-center text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all ml-1 shrink-0 active:scale-95 cursor-pointer"
                 aria-label="Open Navigation Menu"
               >
-                <Menu size={20} />
+                <Menu size={20} strokeWidth={2.2} />
               </button>
             </div>
           </div>
@@ -798,8 +798,8 @@ export default function DashboardLayout() {
       )}
 
       {/* Main Content Area */}
-      <main id="main-scroll-container" className="flex-1 overflow-y-auto custom-scrollbar relative z-10 bg-transparent flex flex-col">
-        <div className={`w-full grow shrink-0 pb-28 md:pb-8 min-h-[80vh] ${location.pathname === '/' ? '' : 'p-4 md:p-6 lg:p-8 max-w-7xl mx-auto'}`}>
+      <main id="main-scroll-container" className="flex-1 overflow-y-auto custom-scrollbar relative z-10 bg-transparent flex flex-col overscroll-y-contain">
+        <div className={`w-full grow shrink-0 pb-28 md:pb-8 min-h-[80vh] ${location.pathname === '/' ? '' : 'p-3 sm:p-4 md:p-6 lg:p-8 max-w-7xl mx-auto'}`}>
           <React.Suspense fallback={
             <div className="flex flex-col items-center justify-center w-full h-[60vh]">
               <div className="w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
@@ -821,9 +821,9 @@ export default function DashboardLayout() {
 
       {/* Mobile Sidebar/Drawer (Slide from right) */}
       <aside className={`fixed inset-y-0 right-0 w-[85vw] max-w-xs sm:w-80 bg-white border-l border-slate-200 shadow-2xl z-[300] transform transition-transform duration-300 ease-in-out flex flex-col xl:hidden ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="flex items-center justify-between px-5 sm:px-6 py-4 sm:py-5 border-b border-slate-100 bg-slate-50">
-          <span className="text-xs font-bold text-slate-400 block leading-none">Navigation Menu</span>
-          <button onClick={() => setMobileMenuOpen(false)} className="text-slate-400 hover:text-slate-900 bg-white w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl shadow-xs border border-slate-200 active:scale-95" aria-label="Close Navigation Menu">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 sm:py-5 border-b border-slate-100 bg-slate-50 pt-[max(env(safe-area-inset-top,0px),0.875rem)]">
+          <span className="text-xs font-black text-slate-400 uppercase tracking-widest block leading-none">Navigation Menu</span>
+          <button onClick={() => setMobileMenuOpen(false)} className="text-slate-400 hover:text-slate-900 bg-white w-10 h-10 min-w-[40px] min-h-[40px] flex items-center justify-center rounded-xl shadow-xs border border-slate-200 active:scale-95 cursor-pointer" aria-label="Close Navigation Menu">
             <X size={18} strokeWidth={2.5} />
           </button>
         </div>

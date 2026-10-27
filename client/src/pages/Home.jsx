@@ -252,26 +252,27 @@ export default function Home() {
       <InteractiveCanvasHero isNative={isNative} />
 
       {/* ═══════════════════════════════════════════ */}
+      {/* ═══════════════════════════════════════════ */}
       {/* ── 2. REAL-TIME STATS BENTO HUD ── */}
       {/* ═══════════════════════════════════════════ */}
-      <section className="py-8 px-4 sm:px-6 md:px-12 relative z-10">
+      <section className="py-6 sm:py-8 px-3.5 sm:px-6 md:px-12 relative z-10">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4">
             {[
-              { label: 'Curated Notes', val: stats.notes, suffix: '+', icon: <BookOpen size={22} />, bg: 'bg-blue-50 text-blue-600 border-blue-200/60' },
-              { label: 'Verified PYQs', val: stats.pyqs, suffix: '+', icon: <FileText size={22} />, bg: 'bg-blue-50 text-blue-600 border-blue-200/60' },
-              { label: 'Active Students', val: stats.users, suffix: '+', icon: <Users size={22} />, bg: 'bg-emerald-50 text-emerald-600 border-emerald-200/60' },
-              { label: 'Govt Colleges', val: 38, suffix: '+', icon: <Building2 size={22} />, bg: 'bg-blue-50 text-blue-600 border-blue-200/60' },
+              { label: 'Curated Notes', val: stats.notes, suffix: '+', icon: <BookOpen size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-blue-50 text-blue-600 border-blue-200/60' },
+              { label: 'Verified PYQs', val: stats.pyqs, suffix: '+', icon: <FileText size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-blue-50 text-blue-600 border-blue-200/60' },
+              { label: 'Active Students', val: stats.users, suffix: '+', icon: <Users size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-emerald-50 text-emerald-600 border-emerald-200/60' },
+              { label: 'Govt Colleges', val: 38, suffix: '+', icon: <Building2 size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-blue-50 text-blue-600 border-blue-200/60' },
             ].map((item, idx) => (
-              <div key={idx} className="glass-card-light p-5 rounded-2xl flex items-center gap-4 bg-white/90">
-                <div className={`w-12 h-12 rounded-xl ${item.bg} border flex items-center justify-center shrink-0 p-3 shadow-xs`}>
+              <div key={idx} className="glass-card-light p-3.5 sm:p-5 rounded-2xl flex items-center gap-2.5 sm:gap-4 bg-white/90">
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${item.bg} border flex items-center justify-center shrink-0 p-2 sm:p-3 shadow-xs`}>
                   {item.icon}
                 </div>
-                <div>
-                  <span className="font-heading text-2xl md:text-3xl font-black text-slate-900 tracking-tight block">
+                <div className="min-w-0">
+                  <span className="font-heading text-lg sm:text-2xl md:text-3xl font-black text-slate-900 tracking-tight block">
                     <CountUp end={item.val} suffix={item.suffix} duration={1400} />
                   </span>
-                  <p className="text-xs text-slate-500 font-semibold mt-0.5">{item.label}</p>
+                  <p className="text-[11px] sm:text-xs text-slate-500 font-semibold mt-0.5 truncate">{item.label}</p>
                 </div>
               </div>
             ))}
@@ -282,22 +283,22 @@ export default function Home() {
       {/* ═══════════════════════════════════════════ */}
       {/* ── 3. LIVE BEU RADAR & NOTICES ── */}
       {/* ═══════════════════════════════════════════ */}
-      <section id="beu-radar" className="py-16 px-4 sm:px-6 md:px-12 relative z-10">
+      <section id="beu-radar" className="py-8 sm:py-12 md:py-16 px-3.5 sm:px-6 md:px-12 relative z-10">
         <div className="container mx-auto max-w-6xl">
           
-          <div className="text-center max-w-2xl mx-auto mb-8">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold mb-2">
-              <Radio size={14} className="text-emerald-500 animate-pulse" /> Live BEU Circular Radar
+          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] sm:text-xs font-bold mb-2">
+              <Radio size={13} className="text-emerald-500 animate-pulse" /> Live BEU Circular Radar
             </div>
-            <h2 className="font-heading text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
+            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
               Official University Notifications
             </h2>
-            <p className="text-xs text-slate-500 mt-1 font-medium">
+            <p className="text-[11px] sm:text-xs text-slate-500 mt-1 font-medium">
               Auto-synced from Bihar Engineering University portal (beu-bih.ac.in)
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {beuNotices.length > 0 ? (
               beuNotices.map((notice, idx) => (
                 <a
@@ -305,29 +306,29 @@ export default function Home() {
                   href={notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`)}
                   target="_blank"
                   rel="noreferrer"
-                  className={`glass-card-light p-5 rounded-2xl flex flex-col justify-between group hover:border-blue-400 relative overflow-hidden bg-white ${
+                  className={`glass-card-light p-4 sm:p-5 rounded-2xl flex flex-col justify-between group hover:border-blue-400 relative overflow-hidden bg-white active:scale-[0.99] transition-all ${
                     idx === 2 ? 'sm:col-span-2 lg:col-span-1' : ''
                   }`}
                 >
                   <div>
-                    <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className="px-2.5 py-1 rounded-xl bg-emerald-600 text-white text-xs font-bold tracking-wide shadow-xs animate-pulse">
+                    <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
+                      <span className="px-2 py-0.5 rounded-lg bg-emerald-600 text-white text-[10px] font-bold tracking-wide shadow-xs animate-pulse">
                         NEW NOTICE
                       </span>
-                      <span className="text-xs text-slate-500 font-semibold flex items-center gap-1">
+                      <span className="text-[11px] text-slate-500 font-semibold flex items-center gap-1">
                         <Calendar size={12} className="text-slate-400" />
                         {notice.date || notice.noticedate || 'Recent'}
                       </span>
                     </div>
 
-                    <h3 className="font-heading text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-3 leading-snug">
+                    <h3 className="font-heading text-xs sm:text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-3 leading-snug">
                       {notice.title || notice.board}
                     </h3>
                   </div>
 
-                  <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-blue-600 font-bold">
+                  <div className="mt-4 pt-2.5 sm:mt-5 sm:pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-blue-600 font-bold">
                     <span>View Official PDF</span>
-                    <ArrowUpRight size={15} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </div>
                 </a>
               ))
@@ -339,10 +340,10 @@ export default function Home() {
           </div>
 
           {/* Centered CTA following natural eye flow (Issue 7) */}
-          <div className="mt-8 text-center">
+          <div className="mt-6 sm:mt-8 text-center">
             <Link
               to="/notifications"
-              className="btn-secondary gap-2"
+              className="btn-secondary gap-2 min-h-[44px]"
             >
               <span>View Full Notice Archive</span>
               <ArrowRight size={14} />
@@ -355,17 +356,17 @@ export default function Home() {
       {/* ═══════════════════════════════════════════ */}
       {/* ── 4. COMPLETE FEATURE MATRIX (THE 4 PILLARS) ── */}
       {/* ═══════════════════════════════════════════ */}
-      <section className="py-16 px-4 sm:px-6 md:px-12 relative z-10">
+      <section className="py-8 sm:py-12 md:py-16 px-3.5 sm:px-6 md:px-12 relative z-10">
         <div className="container mx-auto max-w-6xl">
           
-          <div className="text-center max-w-2xl mx-auto mb-10">
+          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10">
             <span className="text-blue-600 font-heading font-extrabold text-xs tracking-wider">
               Complete Feature Matrix
             </span>
-            <h2 className="font-heading text-3xl md:text-4xl font-black text-slate-900 mt-1">
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-1">
               Everything For Your Engineering Journey
             </h2>
-            <p className="text-sm text-slate-500 mt-2 font-medium">
+            <p className="text-xs sm:text-sm text-slate-500 mt-1.5 font-medium">
               Explore specialized tools built for preparation, counselling, and campus productivity.
             </p>
 
@@ -373,7 +374,7 @@ export default function Home() {
             <div
               role="tablist"
               aria-label="Academic and Tool Pillars"
-              className="grid grid-cols-3 sm:inline-flex p-1.5 rounded-xl bg-slate-100 border border-slate-200/80 shadow-inner mt-7 w-full sm:w-auto max-w-xl mx-auto gap-1"
+              className="grid grid-cols-3 p-1 rounded-xl bg-slate-100 border border-slate-200/80 shadow-inner mt-5 sm:mt-7 w-full sm:w-auto max-w-xl mx-auto gap-1"
             >
               {Object.entries(featurePillars).map(([key, data]) => {
                 const isActive = activeTab === key;
@@ -385,7 +386,7 @@ export default function Home() {
                     aria-selected={isActive}
                     aria-controls="pillar-grid"
                     onClick={() => setActiveTab(key)}
-                    className={`btn-tab text-center truncate ${
+                    className={`btn-tab text-center truncate text-[10.5px] sm:text-xs py-2 px-1 min-h-[40px] cursor-pointer ${
                       isActive
                         ? 'bg-white text-blue-600 shadow-xs border border-slate-200/60'
                         : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'

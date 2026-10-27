@@ -63,8 +63,29 @@ body {
 }
 
 @media (max-width: 640px) {
-  .main-app-container { padding: 1rem; }
-  .app-header { padding: 2rem 1rem; margin-bottom: 2rem; }
+  .main-app-container { padding: 0.75rem 0.5rem; }
+  .app-header { 
+    padding: 1.25rem 0.875rem !important; 
+    margin-bottom: 1.25rem !important; 
+    border-radius: 1.25rem !important; 
+  }
+  .app-header h1 {
+    font-size: 1.35rem !important;
+    margin-bottom: 0.35rem !important;
+    letter-spacing: -0.02em;
+  }
+  .app-header p {
+    font-size: 0.75rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 1rem !important;
+  }
+  .app-header .floating-icon img {
+    width: 2.75rem !important;
+    height: 2.75rem !important;
+  }
+  .app-header .header-content .mb-8 {
+    margin-bottom: 0.75rem !important;
+  }
   .nav-pills { 
     display: flex; 
     overflow-x: auto; 
@@ -72,9 +93,16 @@ body {
     justify-content: flex-start;
     padding: 0.25rem;
     scrollbar-width: none;
+    gap: 0.375rem;
   }
   .nav-pills::-webkit-scrollbar { display: none; }
-  .nav-btn { padding: 0.6rem 1rem; white-space: nowrap; font-size: 0.7rem; }
+  .nav-btn { 
+    padding: 0.5rem 0.875rem; 
+    white-space: nowrap; 
+    font-size: 0.75rem; 
+    min-height: 40px;
+    border-radius: 0.75rem;
+  }
 }
 
 /* Professional Header */

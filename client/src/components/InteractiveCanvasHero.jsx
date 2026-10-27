@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   BookOpen, Calculator, FileText, Target,
   Sparkles, CheckCircle2, ArrowRight, Radio,
@@ -10,10 +10,33 @@ import {
 } from 'lucide-react';
 
 export default function InteractiveCanvasHero({ isNative }) {
+  const navigate = useNavigate();
   const canvasRef = useRef(null);
   const heroRef = useRef(null);
   const stageCardRef = useRef(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
+
+  // Mobile Quick State
+  const [mobileSearch, setMobileSearch] = useState('');
+
+  const handleMobileSearch = (e) => {
+    e.preventDefault();
+    if (mobileSearch.trim()) {
+      navigate(`/notes?search=${encodeURIComponent(mobileSearch.trim())}`);
+    } else {
+      navigate('/notes');
+    }
+  };
+
+  const mobileBranches = [
+    { id: 'cse', name: 'CSE', icon: '💻' },
+    { id: 'civil', name: 'Civil', icon: '🏗️' },
+    { id: 'me', name: 'Mechanical', icon: '⚙️' },
+    { id: 'ee', name: 'Electrical', icon: '⚡' },
+    { id: 'ece', name: 'ECE', icon: '📡' },
+    { id: 'it', name: 'IT', icon: 'ℹ️' },
+    { id: 'cse_aiml', name: 'AI & ML', icon: '🤖' },
+  ];
 
   // Interactive Stage State
   const [activeTab, setActiveTab] = useState(0);
@@ -341,9 +364,244 @@ export default function InteractiveCanvasHero({ isNative }) {
         <h1 className="sr-only">Apna College Bihar | #1 Academic Platform for BEU &amp; Bihar Engineering Students</h1>
 
         {/* ══════════════════════════════════════════════════════════════════════════ */}
-        {/* ── 3D INTERACTIVE CANVAS-UI STAGE MOCKUP (Full Jitter Motion) ── */}
+        {/* ── NATIVE MOBILE APP DASHBOARD (Dedicated Mobile-First UI) ── */}
         {/* ══════════════════════════════════════════════════════════════════════════ */}
-        <div className="relative w-full max-w-4xl mx-auto perspective-stage pt-4 sm:pt-6">
+        <div className="block md:hidden w-full text-left space-y-4 pt-1">
+          {/* Mobile Welcome Banner */}
+          <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-700 text-white rounded-3xl p-5 shadow-lg shadow-blue-600/20 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-36 h-36 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+            
+            <div className="relative z-10 space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-extrabold uppercase tracking-wider text-blue-100">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>BEU Academic Hub • 38+ GECs</span>
+              </div>
+
+              <h2 className="text-xl font-black tracking-tight leading-tight text-white">
+                Apna College Bihar
+              </h2>
+              <p className="text-xs text-blue-100/90 leading-relaxed font-medium">
+                Free B.Tech notes, verified PYQ papers, official syllabus & UGEAC rank predictors.
+              </p>
+
+              {/* Instant Search Bar */}
+              <form onSubmit={handleMobileSearch} className="pt-2">
+                <div className="relative flex items-center">
+                  <input
+                    type="text"
+                    value={mobileSearch}
+                    onChange={(e) => setMobileSearch(e.target.value)}
+                    placeholder="Search notes, subjects (e.g. Maths, CSE)..."
+                    className="w-full h-11 pl-10 pr-24 rounded-2xl bg-white text-slate-900 text-xs font-semibold placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 shadow-sm"
+                  />
+                  <Search size={16} className="absolute left-3 text-slate-400 pointer-events-none" />
+                  <button
+                    type="submit"
+                    className="absolute right-1 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] transition-all active:scale-95 cursor-pointer"
+                  >
+                    Search
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          {/* Quick Notice Banner */}
+          <Link
+            to="/notifications"
+            className="flex items-center justify-between p-3 rounded-2xl bg-emerald-50 border border-emerald-200/80 shadow-2xs active:scale-[0.98] transition-transform"
+          >
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                <Bell size={15} className="animate-bounce" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[10px] font-black uppercase text-emerald-800 tracking-wider block leading-none">
+                  Live Notice Radar
+                </span>
+                <span className="text-xs font-bold text-slate-700 truncate block mt-0.5">
+                  Latest university exam circulars & schedules
+                </span>
+              </div>
+            </div>
+            <ArrowRight size={15} className="text-emerald-700 shrink-0 ml-2" />
+          </Link>
+
+          {/* Native App Core Tiles Grid (2x3) */}
+          <div>
+            <div className="flex items-center justify-between mb-2 px-1">
+              <span className="text-[11px] font-black uppercase tracking-wider text-slate-500">
+                Study Modules & Tools
+              </span>
+              <span className="text-[10px] font-bold text-blue-600">6 Core Tools</span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2.5">
+              {/* Tile 1: Notes Vault */}
+              <Link
+                to="/notes"
+                className="flex flex-col p-3.5 rounded-2xl bg-blue-50/90 border border-blue-200/80 hover:bg-blue-100/80 transition-all active:scale-[0.97] shadow-2xs group"
+              >
+                <div className="w-9 h-9 rounded-xl bg-blue-600 text-white flex items-center justify-center mb-2 shadow-xs group-hover:scale-105 transition-transform">
+                  <BookOpen size={18} />
+                </div>
+                <span className="font-heading text-sm font-extrabold text-slate-900 leading-tight">
+                  Notes Vault
+                </span>
+                <span className="text-[10.5px] text-slate-500 font-medium leading-tight mt-0.5">
+                  Unit 1-5 handwritten PDFs
+                </span>
+                <div className="mt-3 flex items-center gap-1 text-[10px] font-black uppercase text-blue-700 tracking-wide">
+                  <span>Browse</span>
+                  <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                </div>
+              </Link>
+
+              {/* Tile 2: Solved PYQs */}
+              <Link
+                to="/pyq"
+                className="flex flex-col p-3.5 rounded-2xl bg-indigo-50/90 border border-indigo-200/80 hover:bg-indigo-100/80 transition-all active:scale-[0.97] shadow-2xs group"
+              >
+                <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center mb-2 shadow-xs group-hover:scale-105 transition-transform">
+                  <FileText size={18} />
+                </div>
+                <span className="font-heading text-sm font-extrabold text-slate-900 leading-tight">
+                  PYQ Papers
+                </span>
+                <span className="text-[10.5px] text-slate-500 font-medium leading-tight mt-0.5">
+                  5+ Yrs verified papers
+                </span>
+                <div className="mt-3 flex items-center gap-1 text-[10px] font-black uppercase text-indigo-700 tracking-wide">
+                  <span>Explore</span>
+                  <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                </div>
+              </Link>
+
+              {/* Tile 3: UGEAC Predictor */}
+              <Link
+                to="/ugeac-predictor"
+                className="flex flex-col p-3.5 rounded-2xl bg-emerald-50/90 border border-emerald-200/80 hover:bg-emerald-100/80 transition-all active:scale-[0.97] shadow-2xs group"
+              >
+                <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center mb-2 shadow-xs group-hover:scale-105 transition-transform">
+                  <Target size={18} />
+                </div>
+                <span className="font-heading text-sm font-extrabold text-slate-900 leading-tight">
+                  UGEAC Predictor
+                </span>
+                <span className="text-[10.5px] text-slate-500 font-medium leading-tight mt-0.5">
+                  38+ GECs cutoff ranks
+                </span>
+                <div className="mt-3 flex items-center gap-1 text-[10px] font-black uppercase text-emerald-700 tracking-wide">
+                  <span>Predict</span>
+                  <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                </div>
+              </Link>
+
+              {/* Tile 4: SGPA / CGPA */}
+              <Link
+                to="/cgpa"
+                className="flex flex-col p-3.5 rounded-2xl bg-purple-50/90 border border-purple-200/80 hover:bg-purple-100/80 transition-all active:scale-[0.97] shadow-2xs group"
+              >
+                <div className="w-9 h-9 rounded-xl bg-purple-600 text-white flex items-center justify-center mb-2 shadow-xs group-hover:scale-105 transition-transform">
+                  <Calculator size={18} />
+                </div>
+                <span className="font-heading text-sm font-extrabold text-slate-900 leading-tight">
+                  SGPA Calculator
+                </span>
+                <span className="text-[10.5px] text-slate-500 font-medium leading-tight mt-0.5">
+                  BEU 10-point scale
+                </span>
+                <div className="mt-3 flex items-center gap-1 text-[10px] font-black uppercase text-purple-700 tracking-wide">
+                  <span>Calculate</span>
+                  <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                </div>
+              </Link>
+
+              {/* Tile 5: BEU Syllabus */}
+              <Link
+                to="/syllabus"
+                className="flex flex-col p-3.5 rounded-2xl bg-amber-50/90 border border-amber-200/80 hover:bg-amber-100/80 transition-all active:scale-[0.97] shadow-2xs group"
+              >
+                <div className="w-9 h-9 rounded-xl bg-amber-600 text-white flex items-center justify-center mb-2 shadow-xs group-hover:scale-105 transition-transform">
+                  <GraduationCap size={18} />
+                </div>
+                <span className="font-heading text-sm font-extrabold text-slate-900 leading-tight">
+                  BEU Syllabus
+                </span>
+                <span className="text-[10.5px] text-slate-500 font-medium leading-tight mt-0.5">
+                  1st to 8th sem credits
+                </span>
+                <div className="mt-3 flex items-center gap-1 text-[10px] font-black uppercase text-amber-700 tracking-wide">
+                  <span>View</span>
+                  <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                </div>
+              </Link>
+
+              {/* Tile 6: Semester Result */}
+              <Link
+                to="/beu-result"
+                className="flex flex-col p-3.5 rounded-2xl bg-rose-50/90 border border-rose-200/80 hover:bg-rose-100/80 transition-all active:scale-[0.97] shadow-2xs group"
+              >
+                <div className="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center mb-2 shadow-xs group-hover:scale-105 transition-transform">
+                  <Zap size={18} />
+                </div>
+                <span className="font-heading text-sm font-extrabold text-slate-900 leading-tight">
+                  BEU Result Check
+                </span>
+                <span className="text-[10.5px] text-slate-500 font-medium leading-tight mt-0.5">
+                  Roll no. marksheet portal
+                </span>
+                <div className="mt-3 flex items-center gap-1 text-[10px] font-black uppercase text-rose-700 tracking-wide">
+                  <span>Check</span>
+                  <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          {/* Quick Branch Filter Chips */}
+          <div>
+            <div className="flex items-center justify-between mb-2 px-1">
+              <span className="text-[11px] font-black uppercase tracking-wider text-slate-500">
+                1-Tap Branch Notes
+              </span>
+            </div>
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+              {mobileBranches.map((br) => (
+                <Link
+                  key={br.id}
+                  to={`/notes/${br.id}`}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white border border-slate-200 shadow-2xs text-xs font-bold text-slate-700 hover:text-blue-600 hover:border-blue-300 shrink-0 active:scale-95 transition-all"
+                >
+                  <span>{br.icon}</span>
+                  <span>{br.name}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Student Mentorship & App Promo Card */}
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 to-indigo-950 text-white shadow-md relative overflow-hidden flex items-center justify-between gap-3">
+            <div className="relative z-10">
+              <div className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider text-amber-400 mb-1">
+                <Star size={11} className="fill-amber-400" /> Free Senior Mentorship
+              </div>
+              <h3 className="text-sm font-bold leading-tight">Guidance from 9+ SGPA Seniors</h3>
+              <p className="text-[11px] text-slate-400 mt-0.5">Get advice on exams, subjects & placements</p>
+            </div>
+            <Link
+              to="/mentorship"
+              className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shrink-0 active:scale-95 transition-all shadow-sm"
+            >
+              Join ➔
+            </Link>
+          </div>
+        </div>
+
+        {/* ══════════════════════════════════════════════════════════════════════════ */}
+        {/* ── 3D INTERACTIVE CANVAS-UI STAGE MOCKUP (Desktop Only) ── */}
+        {/* ══════════════════════════════════════════════════════════════════════════ */}
+        <div className="hidden md:block relative w-full max-w-4xl mx-auto perspective-stage pt-4 sm:pt-6">
           {/* Floating Badges */}
           <div className="hidden lg:flex items-center gap-2.5 px-3.5 py-2 rounded-2xl bg-white/95 border border-indigo-200 shadow-xl shadow-indigo-500/15 backdrop-blur-xl absolute -top-5 -left-6 z-30 animate-jitter-float-1 pointer-events-none">
             <div className="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-xs">
@@ -385,15 +643,12 @@ export default function InteractiveCanvasHero({ isNative }) {
             
             {/* Header with Navigation Pills */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 bg-slate-50/90 px-4 py-3 gap-3">
-              <div className="flex items-center gap-2.5">
-                <div className="flex items-center gap-1.5" aria-hidden="true">
-                  <span className="w-3 h-3 rounded-full bg-rose-400 inline-block"></span>
-                  <span className="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
-                  <span className="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span>
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <Sparkles size={14} />
                 </div>
-                <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5 ml-1">
-                  <Sparkles size={13} className="text-blue-600" />
-                  Interactive Canvas Lab
+                <span className="text-xs font-bold text-slate-800">
+                  Interactive Academic Lab
                 </span>
               </div>
 
