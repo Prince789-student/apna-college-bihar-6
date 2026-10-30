@@ -46,12 +46,12 @@ if (fs.existsSync(path.join(DESKTOP_DIR, 'assets', 'icon.png'))) {
   );
 }
 
-// Generate run.sh launcher
+// Generate run.sh launcher with universal distro & sandbox compatibility
 const runSh = `#!/bin/bash
 DIR="$(cd "$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
 chmod +x "$DIR/Apna-College-Bihar" 2>/dev/null || true
 chmod +x "$DIR/chrome-sandbox" 2>/dev/null || true
-"$DIR/Apna-College-Bihar" "$@"
+exec "$DIR/Apna-College-Bihar" --no-sandbox "$@"
 `;
 fs.writeFileSync(path.join(LINUX_OUTPUT_DIR, 'run.sh'), runSh);
 
