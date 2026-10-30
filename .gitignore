@@ -118,3 +118,7 @@ server/.cache/
 # Ignore scraped notice downloads
 server/downloads/
 downloads/
+
+*.apk
+client/public/*.apk
+

@@ -1021,12 +1021,12 @@ if (!isAdmin) return (
           </div>
         </div>
         <div className="flex flex-wrap bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 overflow-x-auto">
-           {['overview', 'mentorship', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu_notices', 'beu_whatsapp', 'donors', 'shortlinks'].map(t => {
+           {['overview', 'beuvision_app', 'mentorship', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu_notices', 'beu_whatsapp', 'donors', 'shortlinks'].map(t => {
              const isActive = tab === t || (t === 'beu_notices' && tab === 'beu');
              return (
                <button key={t} onClick={()=>setTab(t)}
                  className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isActive ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-900/20' : 'text-slate-500 hover:text-slate-700'}`}>
-                 {t === 'mentorship' ? '🎓 Mentorship' : t === 'beu_notices' ? '🔔 BEU Notices' : t === 'beu_whatsapp' ? '📢 BEU WhatsApp' : t}
+                 {t === 'mentorship' ? '🎓 Mentorship' : t === 'beuvision_app' ? '📱 BEU Vision APK' : t === 'beu_notices' ? '🔔 BEU Notices' : t === 'beu_whatsapp' ? '📢 BEU WhatsApp' : t}
                </button>
              );
            })}
@@ -1042,6 +1042,166 @@ if (!isAdmin) return (
       {/* ── MENTORSHIP TAB ── */}
       {tab === 'mentorship' && (
         <AdminMentorship flash={flash} />
+      )}
+
+      {/* ── BEU VISION MOBILE APP & APK TAB ── */}
+      {tab === 'beuvision_app' && (
+        <div className="space-y-6 animate-in fade-in duration-500">
+          {/* Main Download Hero Card */}
+          <div className="bg-gradient-to-br from-slate-900 via-indigo-950 to-blue-950 p-6 md:p-10 rounded-[2.5rem] md:rounded-[3rem] border border-blue-500/30 text-white shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-blue-500/10 rounded-full blur-[100px] pointer-events-none"></div>
+            
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-8 relative z-10">
+              <div className="flex-1 space-y-4">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-300 text-[10px] font-black uppercase tracking-wider">
+                  <Sparkles size={14} className="text-amber-400 animate-pulse" />
+                  <span>BEU Vision v2.0 · Live Android APK</span>
+                </div>
+
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-[1000] text-white tracking-tight uppercase leading-[1.1]">
+                  BEU Vision Mobile App <br />
+                  <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300 bg-clip-text text-transparent">
+                    Install &amp; Test On Android
+                  </span>
+                </h2>
+
+                <p className="text-xs sm:text-sm text-slate-300 font-medium leading-relaxed max-w-xl">
+                  BEU Vision mobile application ka compiled APK Apna College Bihar ke admin panel par successfully attach kar diya gaya hai. Aap ise seedhe apne mobile phone me download aur test kar sakte hain.
+                </p>
+
+                <div className="flex flex-wrap items-center gap-4 pt-2">
+                  <a
+                    href="https://apnacollegebihar.online/p/beuvision"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-6 py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-widest rounded-2xl shadow-xl shadow-blue-900/30 flex items-center gap-3 transition-all active:scale-95 cursor-pointer"
+                  >
+                    <Download size={18} />
+                    <span>Download BEU Vision APK (Direct)</span>
+                  </a>
+
+                  <a
+                    href="https://apnacollegebihar.online/p/arm64"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-5 py-4 bg-emerald-600/90 hover:bg-emerald-500 text-white font-black text-xs uppercase tracking-wider rounded-2xl transition-all flex items-center gap-2 shadow-lg shadow-emerald-950/20"
+                  >
+                    <Download size={16} />
+                    <span>ARM64 APK (46MB Fast)</span>
+                  </a>
+
+                  <a
+                    href="http://localhost:8090/admin/index.html"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-5 py-4 bg-white/10 hover:bg-white/15 text-white border border-white/20 font-black text-xs uppercase tracking-wider rounded-2xl transition-all flex items-center gap-2"
+                  >
+                    <Eye size={16} />
+                    <span>Open BEU Vision Admin Panel ➔</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* QR Code Card for Instant Mobile Scan */}
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 p-6 rounded-[2rem] text-center shrink-0 w-full sm:w-auto flex flex-col items-center">
+                <div className="p-3 bg-white rounded-2xl shadow-md mb-3">
+                  <img
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=https%3A%2F%2Fapnacollegebihar.online%2Fp%2Fbeuvision"
+                    alt="Scan QR code to download BEU Vision APK"
+                    className="w-36 h-36"
+                  />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-wider text-slate-300">
+                  📱 Mobile se Scan Karein
+                </span>
+                <span className="text-[9px] font-mono text-slate-400 mt-0.5">
+                  Instant APK Auto-Download
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Details & Specs Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-md">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
+                  <Smartphone size={20} />
+                </div>
+                <div>
+                  <h3 className="text-xs font-black uppercase text-slate-900">App Specifications</h3>
+                  <p className="text-[10px] text-slate-400 font-bold">Package &amp; Build details</p>
+                </div>
+              </div>
+              <ul className="text-xs space-y-2 font-medium text-slate-600">
+                <li className="flex justify-between border-b border-slate-100 pb-1.5">
+                  <span className="text-slate-400">Package ID:</span>
+                  <span className="font-mono font-bold text-slate-800">com.beuvision.sk</span>
+                </li>
+                <li className="flex justify-between border-b border-slate-100 pb-1.5">
+                  <span className="text-slate-400">Version:</span>
+                  <span className="font-bold text-blue-600">2.0 (Code 10)</span>
+                </li>
+                <li className="flex justify-between border-b border-slate-100 pb-1.5">
+                  <span className="text-slate-400">File Name:</span>
+                  <span className="font-mono text-slate-800">beuvision.apk</span>
+                </li>
+                <li className="flex justify-between">
+                  <span className="text-slate-400">Target OS:</span>
+                  <span className="font-bold text-slate-800">Android 7.0 - 15+</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-md">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
+                  <Shield size={20} />
+                </div>
+                <div>
+                  <h3 className="text-xs font-black uppercase text-slate-900">Key Features Included</h3>
+                  <p className="text-[10px] text-slate-400 font-bold">Tested &amp; Operational</p>
+                </div>
+              </div>
+              <ul className="text-xs space-y-2 font-medium text-slate-600">
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span>1st to 8th Semester Full B.Tech Syllabus</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span>Interactive Attendance Tracker + Calendar</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span>Notes &amp; PYQ In-Website PDF Viewer</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span>Chief Admin Console (prince86944@gmail.com)</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-md">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="p-2.5 bg-amber-50 text-amber-600 rounded-xl">
+                  <Download size={20} />
+                </div>
+                <div>
+                  <h3 className="text-xs font-black uppercase text-slate-900">Phone Installation Guide</h3>
+                  <p className="text-[10px] text-slate-400 font-bold">Android setup steps</p>
+                </div>
+              </div>
+              <ol className="text-xs space-y-2 font-medium text-slate-600 list-decimal pl-4">
+                <li>Apne phone me APK download karein.</li>
+                <li>Notification ya Downloads folder se APK tap karein.</li>
+                <li>Agar "Unknown Sources" maange toh <strong>Allow</strong> karein.</li>
+                <li><strong>Install</strong> par click karke BEU Vision open karein!</li>
+              </ol>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* ── SHORTLINKS TAB ── */}
@@ -1105,22 +1265,57 @@ if (!isAdmin) return (
 
       {/* ── OVERVIEW TAB ── */}
       {tab==='overview' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { label: 'Scholars', val: users.filter(x => x.role !== 'ADMIN' && x.role !== 'SUPER_ADMIN').length || users.length, icon: Users },
-            { label: 'Study Hubs', val: groups.length, icon: BookOpen },
-            { label: 'Knowledge Base', val: docs.length, icon: FileText },
-            { label: 'Admins', val: Math.max(1, users.filter(x => x.role === 'ADMIN' || x.role === 'SUPER_ADMIN').length), icon: Shield },
-          ].map(s => (
-            <div key={s.label} className="bg-white p-6 rounded-[2.5rem] border border-slate-200/80">
-               <div className="flex justify-between items-start mb-4">
-                 <div className="p-2.5 bg-slate-100 text-slate-500 rounded-xl"><s.icon size={18}/></div>
-                 <BarChart3 size={12} className="text-slate-800" />
-               </div>
-               <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">{s.label}</p>
-               <p className="text-2xl font-black text-slate-900">{s.val}</p>
+        <div className="space-y-6">
+          {/* Quick BEU Vision APK Banner */}
+          <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 p-5 md:p-6 rounded-[2rem] text-white flex flex-col sm:flex-row items-center justify-between gap-4 border border-blue-500/30 shadow-xl">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-300 border border-blue-400/30 flex items-center justify-center text-xl shrink-0">
+                📱
+              </div>
+              <div>
+                <h3 className="text-sm font-black uppercase tracking-tight text-white flex items-center gap-2">
+                  BEU Vision Mobile App (APK Live Test)
+                </h3>
+                <p className="text-xs text-blue-200/80 font-medium mt-0.5">
+                  BEU Vision app ka live APK attach hai. Mobile me install karke test karne ke liye download karein.
+                </p>
+              </div>
             </div>
-          ))}
+            <div className="flex items-center gap-3 shrink-0">
+              <a
+                href="https://apnacollegebihar.online/p/beuvision"
+                target="_blank"
+                rel="noreferrer"
+                className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-900/30 flex items-center gap-2 transition-all active:scale-95"
+              >
+                <Download size={14} /> Download APK
+              </a>
+              <button
+                onClick={() => setTab('beuvision_app')}
+                className="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all"
+              >
+                Details ➔
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { label: 'Scholars', val: users.filter(x => x.role !== 'ADMIN' && x.role !== 'SUPER_ADMIN').length || users.length, icon: Users },
+              { label: 'Study Hubs', val: groups.length, icon: BookOpen },
+              { label: 'Knowledge Base', val: docs.length, icon: FileText },
+              { label: 'Admins', val: Math.max(1, users.filter(x => x.role === 'ADMIN' || x.role === 'SUPER_ADMIN').length), icon: Shield },
+            ].map(s => (
+              <div key={s.label} className="bg-white p-6 rounded-[2.5rem] border border-slate-200/80">
+                 <div className="flex justify-between items-start mb-4">
+                   <div className="p-2.5 bg-slate-100 text-slate-500 rounded-xl"><s.icon size={18}/></div>
+                   <BarChart3 size={12} className="text-slate-800" />
+                 </div>
+                 <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-1">{s.label}</p>
+                 <p className="text-2xl font-black text-slate-900">{s.val}</p>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
