@@ -11,9 +11,12 @@
 /api/download-windows          /Apna-College-Bihar-Windows.zip 302
 /api/download-linux            /Apna-College-Bihar-Linux-x64.tar.gz 302
 /api/download-mac              /Apna-College-Bihar-macOS.zip 302
+/api/download-mac-intel        /Apna-College-Bihar-macOS-Intel.zip 302
 /linux                         /download 302
 /download-linux                /download 302
 /mac                           /download 302
 /download-mac                  /download 302
+/mac-intel                     /download 302
+/download-mac-intel            /download 302
 /api/*                         https://apna-college-bihar-6.onrender.com/api/:splat 200
 /*                             /index.html  200

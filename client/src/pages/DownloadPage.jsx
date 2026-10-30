@@ -60,8 +60,8 @@ export default function DownloadPage() {
       a: "1. 'Download Windows Setup' button par click karke Apna-College-Bihar-Setup.exe download karein.\n2. Downloaded file par double-click karein.\n3. App automatic install hokar open ho jayegi aur aapke Desktop par instant shortcut ban jayega!"
     },
     {
-      q: "Apple Mac (macOS) par kaise chalayein?",
-      a: "1. 'Download macOS App' button par click karke Apna-College-Bihar-macOS.zip download karein.\n2. Double-click karke unzip karein aur 'Apna College Bihar.app' ko apne Applications folder me move karein.\n3. App open karein (Agar Gatekeeper verification prompt aaye, toh Right-Click karke 'Open' karein ya zip ke andar diye gaye Start-Apna-College-Bihar.command par double click karein)."
+      q: "Apple Mac (macOS) par kaise chalayein aur 'can't be opened' alert kaise hatayein?",
+      a: "1. Apne Mac ke chip ke anusar (Apple Silicon M1-M4 ya Intel) zip package download karein.\n2. Double-click karke unzip karein aur 'Apna College Bihar.app' ko Applications folder me drag karein.\n3. Folder me maujood 'Start-Apna-College-Bihar.command' par double-click karein (ye Gatekeeper bypass karke direct app launch kar deta hai).\n4. Ya 'Apna College Bihar.app' par Right-Click (Control + Click) karke 'Open' select karein."
     },
     {
       q: "Linux (Ubuntu / Debian / Arch / Fedora) par kaise chalayein?",
@@ -72,8 +72,8 @@ export default function DownloadPage() {
       a: "Jab aap Desktop app mein Focus Session (25, 45, 60 ya 90 minute) start karte hain, app distraction-free full-screen mode activate kar deti hai aur distracting desktop background apps ko mute/block karti hai taaki aapka poora focus sirf syllabus aur notes par rahe."
     },
     {
-      q: "Kya macOS app Apple Silicon (M1/M2/M3/M4) chips par kaam karega?",
-      a: "Ji haan! Ye official native 64-bit ARM build hai jo Apple Silicon (M1, M2, M3, M4) MacBooks aur Mac Mini/Studio par blazing fast speed se chalta hai."
+      q: "Kya macOS app Apple Silicon aur Intel dono Macs par kaam karega?",
+      a: "Ji haan! Apple Silicon (M1, M2, M3, M4 chips) ke liye native 64-bit ARM build aur Intel processors (Core i3, i5, i7, i9) ke liye dedicated x64 build dono uplabdh hain."
     },
     {
       q: "Kin-kin Linux distributions par tested hai?",
@@ -290,32 +290,59 @@ export default function DownloadPage() {
 
               <div>
                 <div className="flex items-center justify-between text-xs text-slate-500 font-bold mb-3 px-1">
-                  <span>Package Size: ~85 MB</span>
-                  <span>Format: macOS App Bundle (.zip)</span>
+                  <span>Apple Silicon & Intel Packages Available</span>
+                  <span>macOS 11.0+ (Big Sur to Sequoia)</span>
                 </div>
 
+                {/* Primary Button: Apple Silicon (M1/M2/M3/M4) */}
                 <a
                   href="/Apna-College-Bihar-macOS.zip"
                   download="Apna-College-Bihar-macOS.zip"
-                  className="w-full py-4 px-6 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg shadow-slate-900/25 active:scale-95 transition-all text-center"
+                  className="w-full py-3.5 px-6 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg shadow-slate-900/25 active:scale-95 transition-all text-center mb-2.5"
                 >
                   <Download size={18} />
-                  <span>Download macOS App (85 MB)</span>
+                  <span>Download for Apple Silicon M1-M4 (85 MB)</span>
                 </a>
 
-                {/* macOS Gatekeeper Helper Note */}
-                <div className="mt-4 p-3.5 bg-slate-100 border border-slate-200/80 rounded-2xl text-left">
-                  <div className="flex items-center gap-2 text-slate-900 font-bold text-xs mb-1">
-                    <Command size={14} className="text-sky-600 shrink-0" />
-                    <span>macOS First Launch Tip:</span>
+                {/* Secondary Button: Intel Mac */}
+                <a
+                  href="/Apna-College-Bihar-macOS-Intel.zip"
+                  download="Apna-College-Bihar-macOS-Intel.zip"
+                  className="w-full py-2.5 px-6 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-slate-300/80 active:scale-95 transition-all text-center"
+                >
+                  <Download size={15} />
+                  <span>Download for Intel Mac (Core i3/i5/i7) (89 MB)</span>
+                </a>
+
+                {/* macOS Gatekeeper & "Can't be opened" Helper Note */}
+                <div className="mt-4 p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-left">
+                  <div className="flex items-center gap-2 text-slate-900 font-bold text-xs mb-1.5">
+                    <ShieldCheck size={15} className="text-emerald-600 shrink-0" />
+                    <span>How to Open on Mac (100% Fix):</span>
                   </div>
-                  <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
-                    Unzip karke app ko <strong>Applications</strong> me move karein. Agar Apple security alert dikhaye, toh Right-Click karke <strong>Open</strong> select karein ya zip me diye gaye <strong>Start-Apna-College-Bihar.command</strong> par click karein.
+                  <p className="text-[11px] text-slate-600 leading-relaxed font-medium mb-2">
+                    1. Unzip karke <strong>Apna College Bihar.app</strong> ko <strong>Applications</strong> folder me drag karein.<br />
+                    2. Folder me maujood <strong>Start-Apna-College-Bihar.command</strong> par double click karein (ye automatic permissions set karke app open kar dega).<br />
+                    3. Ya app par <strong>Right-Click (Control + Click) ➔ "Open"</strong> karein.
                   </p>
+                  <div className="bg-slate-900 text-slate-200 text-[11px] font-mono px-3 py-2 rounded-xl flex items-center justify-between gap-2">
+                    <span className="truncate">xattr -cr "/Applications/Apna College Bihar.app"</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText('xattr -cr "/Applications/Apna College Bihar.app"');
+                        setCopiedCommand('mac-xattr');
+                        setTimeout(() => setCopiedCommand(null), 2500);
+                      }}
+                      className="text-sky-400 hover:text-white shrink-0 text-[10px] uppercase font-bold"
+                    >
+                      {copiedCommand === 'mac-xattr' ? 'Copied!' : 'Copy'}
+                    </button>
+                  </div>
                 </div>
 
                 <p className="text-[11px] text-slate-400 font-medium text-center mt-3">
-                  Compatible with macOS 11.0 (Big Sur) up to latest macOS Sequoia
+                  Tested & 100% compatible with macOS Sequoia, Sonoma, Ventura, Monterey & Big Sur
                 </p>
               </div>
             </div>
