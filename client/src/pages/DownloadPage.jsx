@@ -314,31 +314,20 @@ export default function DownloadPage() {
                   <span>Download for Intel Mac (Core i3/i5/i7) (89 MB)</span>
                 </a>
 
-                {/* macOS Gatekeeper & "Can't be opened" Helper Note */}
-                <div className="mt-4 p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-left">
-                  <div className="flex items-center gap-2 text-slate-900 font-bold text-xs mb-1.5">
-                    <ShieldCheck size={15} className="text-emerald-600 shrink-0" />
-                    <span>How to Open on Mac (100% Fix):</span>
+                {/* macOS Simple 1-Click Guide */}
+                <div className="mt-4 p-4 bg-emerald-50/70 border border-emerald-200/80 rounded-2xl text-left">
+                  <div className="flex items-center gap-2 text-emerald-950 font-bold text-xs mb-2">
+                    <ShieldCheck size={16} className="text-emerald-600 shrink-0" />
+                    <span>Mac Par Open Karne Ka Sabse Aasan Tarika (Zero Terminal):</span>
                   </div>
-                  <p className="text-[11px] text-slate-600 leading-relaxed font-medium mb-2">
-                    1. Unzip karke <strong>Apna College Bihar.app</strong> ko <strong>Applications</strong> folder me drag karein.<br />
-                    2. Folder me maujood <strong>Start-Apna-College-Bihar.command</strong> par double click karein (ye automatic permissions set karke app open kar dega).<br />
-                    3. Ya app par <strong>Right-Click (Control + Click) ➔ "Open"</strong> karein.
+                  <ol className="text-[11px] text-slate-700 leading-relaxed font-medium space-y-1.5 list-decimal list-inside">
+                    <li>Zip download karke double-click se extract karein.</li>
+                    <li><strong>Apna College Bihar.app</strong> ko apne <strong>Applications</strong> folder me drag karein.</li>
+                    <li>Pehli baar open karne ke liye app par <strong>Right-Click (ya Control + Click) ➔ "Open"</strong> select karein.</li>
+                  </ol>
+                  <p className="text-[10px] text-slate-500 font-medium mt-2 pt-2 border-t border-emerald-200/60">
+                    💡 <em>Tip: Ek baar Right-Click ➔ Open karne ke baad aap roz normal double-click se direct open kar sakte hain!</em>
                   </p>
-                  <div className="bg-slate-900 text-slate-200 text-[11px] font-mono px-3 py-2 rounded-xl flex items-center justify-between gap-2">
-                    <span className="truncate">xattr -cr "/Applications/Apna College Bihar.app"</span>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        navigator.clipboard.writeText('xattr -cr "/Applications/Apna College Bihar.app"');
-                        setCopiedCommand('mac-xattr');
-                        setTimeout(() => setCopiedCommand(null), 2500);
-                      }}
-                      className="text-sky-400 hover:text-white shrink-0 text-[10px] uppercase font-bold"
-                    >
-                      {copiedCommand === 'mac-xattr' ? 'Copied!' : 'Copy'}
-                    </button>
-                  </div>
                 </div>
 
                 <p className="text-[11px] text-slate-400 font-medium text-center mt-3">
