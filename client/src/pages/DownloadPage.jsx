@@ -121,7 +121,7 @@ export default function DownloadPage() {
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
-              All Platforms (4)
+              All Platforms (3)
             </button>
             <button
               onClick={() => setPlatformFilter('desktop')}
@@ -386,72 +386,6 @@ export default function DownloadPage() {
 
                 <p className="text-[11px] text-slate-400 font-medium text-center mt-3">
                   Requires Android 7.0 (Nougat) or newer
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* 4. BEU VISION COMPANION APP CARD */}
-          {(platformFilter === 'all' || platformFilter === 'mobile') && (
-            <div className="bg-white rounded-3xl border border-blue-200 p-6 sm:p-8 shadow-xl shadow-blue-500/5 hover:border-blue-400 transition-all flex flex-col justify-between relative overflow-hidden group">
-              <div className="absolute top-0 right-0 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
-                BEU Engineering Companion
-              </div>
-
-              <div>
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center shadow-lg shadow-blue-600/30 shrink-0">
-                    <Smartphone size={28} />
-                  </div>
-                  <div>
-                    <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">BEU Vision Mobile App</h2>
-                    <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mt-0.5">Version 2.0 (Build 10) · B.Tech 1st to 8th Sem</p>
-                  </div>
-                </div>
-
-                <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
-                  Bihar Engineering University ke B.Tech students ke liye dedicated study companion app. Isme sabhi 8 semesters ka updated syllabus, unit topics, interactive attendance tracker with calendar, lecture notes viewer, aur official notices integrated hain.
-                </p>
-
-                {/* Feature Highlights */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                  <div className="flex items-start gap-2 text-xs text-slate-700 font-bold">
-                    <CheckCircle2 size={16} className="text-blue-600 shrink-0 mt-0.5" />
-                    <span>All Branches 1-8 Sem Syllabus</span>
-                  </div>
-                  <div className="flex items-start gap-2 text-xs text-slate-700 font-bold">
-                    <Clock size={16} className="text-emerald-600 shrink-0 mt-0.5" />
-                    <span>Attendance + Date Tracker</span>
-                  </div>
-                  <div className="flex items-start gap-2 text-xs text-slate-700 font-bold">
-                    <FileText size={16} className="text-indigo-600 shrink-0 mt-0.5" />
-                    <span>In-App Notes & PYQ Viewer</span>
-                  </div>
-                  <div className="flex items-start gap-2 text-xs text-slate-700 font-bold">
-                    <Bell size={16} className="text-amber-500 shrink-0 mt-0.5" />
-                    <span>BEU Official Notices Scraper</span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between text-xs text-slate-500 font-bold mb-3 px-1">
-                  <span>File: beuvision.apk</span>
-                  <span>Format: Android .APK Package</span>
-                </div>
-
-                <a
-                  href="https://apnacollegebihar.online/p/beuvision"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg shadow-blue-600/25 active:scale-95 transition-all text-center"
-                >
-                  <Download size={18} />
-                  <span>Download BEU Vision APK</span>
-                </a>
-
-                <p className="text-[11px] text-slate-400 font-medium text-center mt-3">
-                  Compatible with all Android devices · Direct APK Installation
                 </p>
               </div>
             </div>

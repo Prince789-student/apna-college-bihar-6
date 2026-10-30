@@ -6,7 +6,7 @@ import {
   Search, RefreshCw, BarChart3, 
   ChevronRight, ChevronLeft, Phone, Smartphone, AlertCircle, Loader2,
   FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye, Calendar, Heart,
-  Sparkles, Edit2
+  Sparkles, Edit2, CheckCircle2, Clock
 } from 'lucide-react';
 import { db, storage } from '../firebase';
 import { 
@@ -2164,6 +2164,72 @@ if (!isAdmin) return (
       {/* ── STUDY RESOURCES TAB ── */}
       {tab==='resources' && (
         <div className="space-y-8 animate-in fade-in duration-500">
+
+          {/* BEU Vision Companion Mobile App Resource Card */}
+          <div className="bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 rounded-[2rem] md:rounded-[3rem] p-6 sm:p-8 border border-blue-500/30 text-white shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
+              BEU Engineering Companion · Internal Resource
+            </div>
+
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10">
+              <div className="flex-1 space-y-3">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center shadow-lg shadow-blue-600/30 shrink-0">
+                    <Smartphone size={28} />
+                  </div>
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">BEU Vision Mobile App</h2>
+                    <p className="text-xs text-blue-300 font-bold uppercase tracking-wider mt-0.5">Version 2.0 (Build 10) · B.Tech 1st to 8th Sem · File: beuvision.apk</p>
+                  </div>
+                </div>
+
+                <p className="text-xs text-slate-300 font-medium leading-relaxed max-w-2xl">
+                  Bihar Engineering University ke B.Tech students ke liye dedicated study companion app. Isme sabhi 8 semesters ka updated syllabus, unit topics, interactive attendance tracker with calendar, lecture notes viewer, aur official notices integrated hain.
+                </p>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px] font-bold text-slate-300">
+                  <span className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-blue-400" /> All 1-8 Sem Syllabus</span>
+                  <span className="flex items-center gap-1.5"><Clock size={14} className="text-emerald-400" /> Attendance Tracker</span>
+                  <span className="flex items-center gap-1.5"><FileText size={14} className="text-indigo-400" /> In-App Notes &amp; PYQ</span>
+                  <span className="flex items-center gap-1.5"><Bell size={14} className="text-amber-400" /> Notices Scraper</span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 pt-3">
+                  <a
+                    href="https://apnacollegebihar.online/p/beuvision"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-5 py-3 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-500 text-white font-black text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-blue-900/30 active:scale-95 transition-all"
+                  >
+                    <Download size={16} />
+                    <span>Download BEU Vision APK (Direct)</span>
+                  </a>
+                  <a
+                    href="https://apnacollegebihar.online/p/arm64"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-4 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-black text-xs uppercase tracking-wider flex items-center gap-2 transition-all"
+                  >
+                    <Download size={14} />
+                    <span>ARM64 APK (46MB Fast)</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* QR Code preview */}
+              <div className="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-2xl text-center shrink-0 flex flex-col items-center">
+                <div className="p-2 bg-white rounded-xl shadow mb-2">
+                  <img
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=https%3A%2F%2Fapnacollegebihar.online%2Fp%2Fbeuvision"
+                    alt="Scan QR code to download BEU Vision APK"
+                    className="w-28 h-28"
+                  />
+                </div>
+                <span className="text-[10px] font-black uppercase text-slate-300">Scan to Download</span>
+                <span className="text-[9px] font-mono text-slate-400">Direct APK Installation</span>
+              </div>
+            </div>
+          </div>
 
           {/* Admin Add Resource Form */}
           <div className="bg-white rounded-[2rem] md:rounded-[3.5rem] border border-slate-200/80 shadow-2xl p-8">
