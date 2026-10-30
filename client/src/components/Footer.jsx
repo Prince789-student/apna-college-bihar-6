@@ -63,6 +63,7 @@ export default function Footer() {
               <Link to="/pyq" className="text-xs sm:text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">PYQ Papers</Link>
               <Link to="/syllabus" className="text-xs sm:text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">BEU Syllabus</Link>
               <Link to="/cgpa" className="text-xs sm:text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">CGPA Calculator</Link>
+              <Link to="/download" className="text-xs sm:text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">Download Apps (Windows, Linux, Android)</Link>
            </div>
         </div>
 

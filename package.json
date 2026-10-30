@@ -12,6 +12,7 @@
     "dev": "npm run dev --prefix client",
     "desktop": "npm start --prefix desktop",
     "desktop:pack": "npm run pack --prefix desktop",
+    "desktop:linux": "npm run build:linux --prefix desktop",
     "electron:dev": "electron .",
     "electron:build": "npm run build --prefix client && electron-builder",
     "electron:package": "npm run build --prefix client && electron-packager . \"Apna College Bihar\" --platform=win32 --arch=x64 --out=dist-electron --overwrite",

@@ -45,12 +45,24 @@ const BLOCKED_PROCESSES = [
 ];
 
 function killAllBlockedProcesses() {
-  if (!BLOCKED_PROCESSES.length) return;
-  // Batch all process names into a single async command to prevent UI freezing
-  const imArgs = BLOCKED_PROCESSES.map(p => `/IM "${p}"`).join(' ');
-  try {
-    exec(`taskkill /F ${imArgs} /T`, { windowsHide: true }, () => {});
-  } catch (_) {}
+  if (process.platform === 'win32') {
+    if (!BLOCKED_PROCESSES.length) return;
+    // Batch all process names into a single async command to prevent UI freezing
+    const imArgs = BLOCKED_PROCESSES.map(p => `/IM "${p}"`).join(' ');
+    try {
+      exec(`taskkill /F ${imArgs} /T`, { windowsHide: true }, () => {});
+    } catch (_) {}
+  } else if (process.platform === 'linux') {
+    const linuxNames = [
+      'discord', 'telegram-desktop', 'telegram', 'slack', 'teams', 'zoom', 'skype',
+      'steam', 'spotify', 'vlc', 'mpv'
+    ];
+    linuxNames.forEach(p => {
+      try {
+        exec(`pkill -f -i "${p}"`, () => {});
+      } catch (_) {}
+    });
+  }
 }
 
 function startFocusMode(durationSeconds) {

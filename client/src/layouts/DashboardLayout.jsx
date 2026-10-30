@@ -657,7 +657,7 @@ export default function DashboardLayout() {
                 <Link 
                   to="/download" 
                   className="hidden md:flex h-9 items-center gap-1.5 px-3 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/80 rounded-xl font-heading font-bold text-xs transition-all shadow-xs active:scale-95 shrink-0"
-                  title="Download Official PC & Android Apps"
+                  title="Download Official Windows, Linux & Android Apps"
                 >
                   <Download size={14} className="text-blue-600 animate-bounce" />
                   <span>Download App</span>

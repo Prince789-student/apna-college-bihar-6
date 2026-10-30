@@ -701,6 +701,8 @@ function App() {
               <Route path="/apps" element={<Navigate to="/download" replace />} />
               <Route path="/download-app" element={<Navigate to="/download" replace />} />
               <Route path="/desktop" element={<Navigate to="/download" replace />} />
+              <Route path="/linux" element={<Navigate to="/download" replace />} />
+              <Route path="/download-linux" element={<Navigate to="/download" replace />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:slug" element={<BlogPost />} />
               <Route path="/notifications" element={<Notifications />} />
