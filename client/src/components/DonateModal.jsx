@@ -59,17 +59,23 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
         <div className="p-3 sm:p-4 flex flex-col items-center overflow-y-auto overscroll-contain">
           {/* Community Appeal Box */}
           <div className="w-full bg-gradient-to-b from-rose-50/90 via-blue-50/70 to-amber-50/60 border border-rose-200/80 rounded-2xl p-2.5 sm:p-3 text-center mb-2.5 shadow-xs">
-            <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-600 text-white text-[9px] font-black uppercase tracking-wider mb-1 shadow-xs">
-              🚀 Student Community Fund
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-600 text-white text-[9px] font-black uppercase tracking-wider mb-1.5 shadow-xs">
+              ❤️ Student Support Initiative
             </div>
             
-            <p className="text-[11px] sm:text-xs font-bold text-slate-800 leading-snug mb-1">
-              "Hum bhi aapki tarah BEU ke Students hain 🤝"
+            <p className="text-[11px] sm:text-xs font-black text-slate-800 leading-snug mb-1">
+              "Market mein 1 subject ka notes/xerox ₹60+ ka milta hai"
             </p>
             
             <p className="text-[10px] sm:text-[11px] text-slate-600 font-medium leading-relaxed">
-              Bihar ke sabhi <strong>38 Govt Colleges</strong> ke liye platform <strong>100% FREE</strong> hai. 24x7 fast server & database ke liye aapka chhota sa support <strong className="text-rose-600">(₹10, ₹20 ya jitna aap chahein)</strong> ise hamesha free aur live rakhega!
+              Yahan Bihar ke sabhi <strong>38 Govt Engineering Colleges</strong> ke liye all semesters ke premium notes & PYQs <strong>100% FREE</strong> hain. 24x7 fast cloud server chalaye rakhne ke liye aapka chhota sa voluntary support <strong className="text-rose-600 font-bold">(₹50, ₹100 ya apni marzi se)</strong> is community platform ko hamesha sabhi ke liye free aur live rakhega! ❤️
             </p>
+
+            <div className="flex items-center justify-center gap-2 mt-2 pt-1.5 border-t border-rose-200/60">
+              <span className="px-2.5 py-0.5 rounded-lg bg-white/90 border border-rose-300 text-[10px] font-black text-rose-700 shadow-2xs">₹50</span>
+              <span className="px-2.5 py-0.5 rounded-lg bg-white/90 border border-indigo-300 text-[10px] font-black text-indigo-700 shadow-2xs">₹100</span>
+              <span className="text-[9px] font-bold text-slate-500">Ya apni iccha se 🤝</span>
+            </div>
           </div>
 
           {/* Compact Crisp QR Code Scanner */}

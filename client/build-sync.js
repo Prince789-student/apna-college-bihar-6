@@ -104,14 +104,14 @@ function syncBuild() {
             }
             if (fs.existsSync(androidAssetsDir)) {
                 fs.readdirSync(androidAssetsDir).forEach(f => {
-                    if (f.endsWith('.apk') || f.endsWith('.exe') || f.endsWith('.zip') || f.endsWith('.aab')) {
+                    if (f.endsWith('.apk') || f.endsWith('.exe') || f.endsWith('.zip') || f.endsWith('.aab') || f.endsWith('.tar.gz') || f.endsWith('.gz')) {
                         fs.unlinkSync(path.join(androidAssetsDir, f));
                     }
                 });
             } else {
                 fs.mkdirSync(androidAssetsDir, { recursive: true });
             }
-            copyRecursiveSync(srcDir, androidAssetsDir, (p, name) => !name.endsWith('.apk') && !name.endsWith('.zip') && !name.endsWith('.aab') && !name.endsWith('.exe'));
+            copyRecursiveSync(srcDir, androidAssetsDir, (p, name) => !name.endsWith('.apk') && !name.endsWith('.zip') && !name.endsWith('.aab') && !name.endsWith('.exe') && !name.endsWith('.tar.gz') && !name.endsWith('.gz'));
             
             // Clean Android index.html so it NEVER has pre-rendered desktop website HTML in <div id="root">
             const androidIndexHtmlPath = path.join(androidAssetsDir, 'index.html');
