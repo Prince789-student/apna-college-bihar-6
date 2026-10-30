@@ -86,6 +86,7 @@ server/.wpp_session/
 !server/public/**/*.pdf
 !server/public/Apna-College-Bihar-Setup.exe
 !server/public/Apna-College-Bihar-Linux-x64.tar.gz
+!server/public/Apna-College-Bihar-macOS.zip
 
 # EXCEPTIONS: Allow committing APK/AAB and Windows Setup files in the client public folder for Vercel/Netlify hosting
 !client/public/*.apk
@@ -94,8 +95,11 @@ server/.wpp_session/
 !client/public/**/*.aab
 !client/public/Apna-College-Bihar-Setup.exe
 !client/public/Apna-College-Bihar-Linux-x64.tar.gz
+!client/public/Apna-College-Bihar-macOS.zip
 client/public/Apna-College-Bihar-Windows.zip
 server/public/Apna-College-Bihar-Windows.zip
+desktop/cache/
+!desktop/build-mac.py
 
 # -----------------------------------------------------
 # Ignored for not being part of the website source code

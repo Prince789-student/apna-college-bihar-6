@@ -19,7 +19,9 @@ import {
   Laptop,
   Terminal,
   Copy,
-  Check
+  Check,
+  Command,
+  Cpu
 } from 'lucide-react';
 
 export default function DownloadPage() {
@@ -40,14 +42,26 @@ export default function DownloadPage() {
     setTimeout(() => setCopiedCmd(false), 2200);
   };
 
+  const getOSBadgeLabel = () => {
+    if (detectedOS === 'mac') return 'Apple Mac (macOS)';
+    if (detectedOS === 'linux') return 'Linux (x64)';
+    if (detectedOS === 'windows') return 'Windows (64-bit)';
+    if (detectedOS === 'android') return 'Android Mobile';
+    return detectedOS;
+  };
+
   const faqs = [
     {
-      q: "Kya Apna College Bihar ke desktop aur mobile apps bilkul free hain?",
-      a: "Haan, Apna College Bihar ke sabhi apps (Windows, Linux aur Android) Bihar Engineering University (BEU) ke students ke liye 100% free hain."
+      q: "Kya Apna College Bihar ke sabhi desktop aur mobile apps free hain?",
+      a: "Haan, Apna College Bihar ke sabhi apps (Windows, Apple Mac, Linux aur Android) Bihar Engineering University (BEU) ke students ke liye 100% free hain."
     },
     {
       q: "Windows PC par kaise install karein?",
       a: "1. 'Download Windows Setup' button par click karke Apna-College-Bihar-Setup.exe download karein.\n2. Downloaded file par double-click karein.\n3. App automatic install hokar open ho jayegi aur aapke Desktop par instant shortcut ban jayega!"
+    },
+    {
+      q: "Apple Mac (macOS) par kaise chalayein?",
+      a: "1. 'Download macOS App' button par click karke Apna-College-Bihar-macOS.zip download karein.\n2. Double-click karke unzip karein aur 'Apna College Bihar.app' ko apne Applications folder me move karein.\n3. App open karein (Agar Gatekeeper verification prompt aaye, toh Right-Click karke 'Open' karein ya zip ke andar diye gaye Start-Apna-College-Bihar.command par double click karein)."
     },
     {
       q: "Linux (Ubuntu / Debian / Arch / Fedora) par kaise chalayein?",
@@ -58,8 +72,8 @@ export default function DownloadPage() {
       a: "Jab aap Desktop app mein Focus Session (25, 45, 60 ya 90 minute) start karte hain, app distraction-free full-screen mode activate kar deti hai aur distracting desktop background apps ko mute/block karti hai taaki aapka poora focus sirf syllabus aur notes par rahe."
     },
     {
-      q: "Kya Windows 10 aur Windows 11 dono par kaam karega?",
-      a: "Ji haan, ye app sabhi 64-bit Windows 10 aur Windows 11 laptops aur PCs par smoothly chalta hai."
+      q: "Kya macOS app Apple Silicon (M1/M2/M3/M4) chips par kaam karega?",
+      a: "Ji haan! Ye official native 64-bit ARM build hai jo Apple Silicon (M1, M2, M3, M4) MacBooks aur Mac Mini/Studio par blazing fast speed se chalta hai."
     },
     {
       q: "Kin-kin Linux distributions par tested hai?",
@@ -74,9 +88,9 @@ export default function DownloadPage() {
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-['Inter'] pb-20 selection:bg-blue-500/20 overflow-x-clip">
       <SEO 
-        title="Download Apna College Bihar Apps | Windows, Linux & Android"
-        description="Download official Apna College Bihar applications for Windows PC/Laptop, Linux x64, and Android mobile. Includes Study Focus Blocker, BEU Notes, PYQs, and realtime notice alerts."
-        keywords="download apna college bihar app, apna college bihar desktop app, apna college bihar linux, beu linux app, bihar engineering desktop app, beu notes app download, beu pyq apk"
+        title="Download Apna College Bihar Apps | Windows, Mac, Linux & Android"
+        description="Download official Apna College Bihar applications for Windows PC, Apple Mac (macOS), Linux x64, and Android mobile. Includes Study Focus Blocker, BEU Notes, PYQs, and realtime notice alerts."
+        keywords="download apna college bihar app, apna college bihar mac app, apna college bihar macos, apna college bihar desktop app, apna college bihar linux, beu mac app, beu linux app, bihar engineering desktop app, beu notes app download, beu pyq apk"
       />
 
       {/* Hero Header */}
@@ -91,23 +105,23 @@ export default function DownloadPage() {
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight uppercase leading-[1.1] mb-6">
             Padhai Me <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">Zero Distraction</span>.<br />
-            Official Apps for Windows, Linux & Mobile.
+            Official Apps for Windows, Mac, Linux & Mobile.
           </h1>
 
           <p className="max-w-2xl mx-auto text-sm sm:text-base text-slate-600 font-medium leading-relaxed mb-6">
-            BEU engineering exams ki tayyari ab aur aasan. Apne Windows laptop, Linux workstation ya Android smartphone par official app install karein aur payein <strong>Study Focus Blocker</strong>, high-speed Notes, aur instant exam notices.
+            BEU engineering exams ki tayyari ab aur aasan. Apne Windows laptop, Apple Mac, Linux workstation ya Android smartphone par official app install karein aur payein <strong>Study Focus Blocker</strong>, high-speed Notes, aur instant exam notices.
           </p>
 
           {/* OS Auto-Detection Chip */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold mb-8">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            <span>Detected OS: <strong className="capitalize text-slate-900">{detectedOS === 'linux' ? 'Linux (x64)' : detectedOS === 'windows' ? 'Windows (64-bit)' : detectedOS === 'android' ? 'Android Mobile' : detectedOS}</strong></span>
+            <span>Detected Device: <strong className="capitalize text-slate-900">{getOSBadgeLabel()}</strong></span>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-bold text-slate-500">
             <span className="flex items-center gap-1.5"><CheckCircle2 size={16} className="text-emerald-600" /> 100% Free Forever</span>
             <span className="flex items-center gap-1.5"><ShieldCheck size={16} className="text-blue-600" /> Safe & Virus-Free</span>
-            <span className="flex items-center gap-1.5"><Terminal size={16} className="text-slate-700" /> Native Linux & Windows</span>
+            <span className="flex items-center gap-1.5"><Command size={16} className="text-slate-700" /> Windows, Mac & Linux</span>
             <span className="flex items-center gap-1.5"><Zap size={16} className="text-amber-500" /> Instant Access</span>
           </div>
 
@@ -121,7 +135,7 @@ export default function DownloadPage() {
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
-              All Platforms (3)
+              All Platforms (4)
             </button>
             <button
               onClick={() => setPlatformFilter('desktop')}
@@ -132,7 +146,7 @@ export default function DownloadPage() {
               }`}
             >
               <Laptop size={14} />
-              <span>Desktop (Windows & Linux)</span>
+              <span>Desktop (PC, Mac & Linux)</span>
             </button>
             <button
               onClick={() => setPlatformFilter('mobile')}
@@ -230,7 +244,84 @@ export default function DownloadPage() {
             </div>
           )}
 
-          {/* 2. LINUX PC / WORKSTATION CARD */}
+          {/* 2. APPLE macOS CARD */}
+          {(platformFilter === 'all' || platformFilter === 'desktop') && (
+            <div className={`bg-white rounded-3xl border-2 ${detectedOS === 'mac' ? 'border-sky-500 shadow-sky-500/10' : 'border-slate-300'} p-6 sm:p-8 shadow-xl hover:border-slate-800 transition-all flex flex-col justify-between relative overflow-hidden group`}>
+              <div className="absolute top-0 right-0 bg-gradient-to-l from-slate-900 to-slate-800 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm flex items-center gap-1.5">
+                <Command size={12} className="text-sky-400" />
+                <span>{detectedOS === 'mac' ? '★ Recommended For Your Mac' : 'macOS Application'}</span>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white border border-slate-700 p-1.5 flex items-center justify-center shadow-lg shadow-slate-900/20 shrink-0">
+                    <Command size={28} className="text-sky-400" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">macOS Desktop App</h2>
+                    <p className="text-xs text-sky-600 font-bold uppercase tracking-wider mt-0.5">Version 2.2 · Apple Silicon (M1/M2/M3/M4) & Intel</p>
+                  </div>
+                </div>
+
+                <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
+                  Apple MacBooks aur iMacs ke liye dedicated desktop app. Native Unix performance, built-in <strong>Study Focus Blocker</strong>, fullscreen BEU Notes aur PYQ viewer ke saath ready.
+                </p>
+
+                {/* Feature Highlights */}
+                <div className="space-y-3 mb-6 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
+                    <Cpu size={16} className="text-sky-600 shrink-0 mt-0.5" />
+                    <span>Apple Silicon Optimized (Runs natively on M1/M2/M3/M4)</span>
+                  </div>
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
+                    <Lock size={16} className="text-indigo-600 shrink-0 mt-0.5" />
+                    <span>Study Focus Mode (Distraction-free fullscreen learning)</span>
+                  </div>
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
+                    <FileText size={16} className="text-emerald-600 shrink-0 mt-0.5" />
+                    <span>Fast Offline-ready BEU Notes & Fullscreen PYQ viewer</span>
+                  </div>
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
+                    <Sparkles size={16} className="text-amber-500 shrink-0 mt-0.5" />
+                    <span>1-Click Launcher (Start-Apna-College-Bihar.command included)</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between text-xs text-slate-500 font-bold mb-3 px-1">
+                  <span>Package Size: ~85 MB</span>
+                  <span>Format: macOS App Bundle (.zip)</span>
+                </div>
+
+                <a
+                  href="/Apna-College-Bihar-macOS.zip"
+                  download="Apna-College-Bihar-macOS.zip"
+                  className="w-full py-4 px-6 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg shadow-slate-900/25 active:scale-95 transition-all text-center"
+                >
+                  <Download size={18} />
+                  <span>Download macOS App (85 MB)</span>
+                </a>
+
+                {/* macOS Gatekeeper Helper Note */}
+                <div className="mt-4 p-3.5 bg-slate-100 border border-slate-200/80 rounded-2xl text-left">
+                  <div className="flex items-center gap-2 text-slate-900 font-bold text-xs mb-1">
+                    <Command size={14} className="text-sky-600 shrink-0" />
+                    <span>macOS First Launch Tip:</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 leading-relaxed font-medium">
+                    Unzip karke app ko <strong>Applications</strong> me move karein. Agar Apple security alert dikhaye, toh Right-Click karke <strong>Open</strong> select karein ya zip me diye gaye <strong>Start-Apna-College-Bihar.command</strong> par click karein.
+                  </p>
+                </div>
+
+                <p className="text-[11px] text-slate-400 font-medium text-center mt-3">
+                  Compatible with macOS 11.0 (Big Sur) up to latest macOS Sequoia
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* 3. LINUX PC / WORKSTATION CARD */}
           {(platformFilter === 'all' || platformFilter === 'desktop') && (
             <div className={`bg-white rounded-3xl border-2 ${detectedOS === 'linux' ? 'border-indigo-600 shadow-indigo-600/10' : 'border-slate-800/30'} p-6 sm:p-8 shadow-xl hover:border-slate-800 transition-all flex flex-col justify-between relative overflow-hidden group`}>
               <div className="absolute top-0 right-0 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm flex items-center gap-1.5">
@@ -306,7 +397,7 @@ export default function DownloadPage() {
 
               <div>
                 <div className="flex items-center justify-between text-xs text-slate-500 font-bold mb-3 px-1">
-                  <span>Archive Size: ~106 MB</span>
+                  <span>Archive Size: ~92 MB</span>
                   <span>Type: Portable Linux Archive (.tar.gz)</span>
                 </div>
 
@@ -316,7 +407,7 @@ export default function DownloadPage() {
                   className="w-full py-4 px-6 rounded-2xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg shadow-slate-900/25 active:scale-95 transition-all text-center"
                 >
                   <Download size={18} />
-                  <span>Download Linux Package (106 MB)</span>
+                  <span>Download Linux Package (92 MB)</span>
                 </a>
 
                 <p className="text-[11px] text-slate-400 font-medium text-center mt-3">
@@ -326,7 +417,7 @@ export default function DownloadPage() {
             </div>
           )}
 
-          {/* 3. ANDROID MOBILE CARD */}
+          {/* 4. ANDROID MOBILE CARD */}
           {(platformFilter === 'all' || platformFilter === 'mobile') && (
             <div className={`bg-white rounded-3xl border-2 ${detectedOS === 'android' ? 'border-emerald-500 shadow-emerald-500/10' : 'border-slate-200'} p-6 sm:p-8 shadow-xl hover:border-slate-300 transition-all flex flex-col justify-between relative overflow-hidden group`}>
               <div className="absolute top-0 right-0 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
@@ -399,73 +490,95 @@ export default function DownloadPage() {
         <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-10 shadow-sm">
           <div className="text-center max-w-xl mx-auto mb-10">
             <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">How to Install</h2>
-            <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">Simple installation guide for Windows, Linux & Android</p>
+            <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">Simple installation guide for Windows, Mac, Linux & Android</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
             
             {/* Windows Steps */}
-            <div className="space-y-6 pt-4 md:pt-0">
-              <div className="flex items-center gap-3">
-                <Laptop size={20} className="text-blue-600" />
-                <h3 className="font-bold text-sm text-slate-900 uppercase tracking-wider">Windows Laptop / PC</h3>
+            <div className="space-y-5 pt-4 sm:pt-0">
+              <div className="flex items-center gap-2.5">
+                <Laptop size={18} className="text-blue-600" />
+                <h3 className="font-bold text-xs sm:text-sm text-slate-900 uppercase tracking-wider">Windows PC</h3>
               </div>
-              <ol className="space-y-4 text-xs font-semibold text-slate-600">
-                <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold">1</span>
-                  <span><strong>Download Windows Setup</strong> button se Setup (.exe) download karein.</span>
+              <ol className="space-y-3.5 text-xs font-semibold text-slate-600">
+                <li className="flex gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold text-[10px]">1</span>
+                  <span><strong>Download Windows Setup</strong> se .exe download karein.</span>
                 </li>
-                <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold">2</span>
-                  <span>Downloaded file <strong>Apna-College-Bihar-Setup.exe</strong> par double-click karke launch karein.</span>
+                <li className="flex gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold text-[10px]">2</span>
+                  <span>Downloaded file par double-click karein.</span>
                 </li>
-                <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold">3</span>
-                  <span>App automatically install hokar open ho jayegi aur Desktop shortcut ban jayega!</span>
+                <li className="flex gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold text-[10px]">3</span>
+                  <span>Automatic install hokar Desktop shortcut ready!</span>
+                </li>
+              </ol>
+            </div>
+
+            {/* Mac Steps */}
+            <div className="space-y-5 pt-6 sm:pt-0 sm:pl-6">
+              <div className="flex items-center gap-2.5">
+                <Command size={18} className="text-sky-600" />
+                <h3 className="font-bold text-xs sm:text-sm text-slate-900 uppercase tracking-wider">Apple Mac</h3>
+              </div>
+              <ol className="space-y-3.5 text-xs font-semibold text-slate-600">
+                <li className="flex gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center shrink-0 font-bold text-[10px]">1</span>
+                  <span><strong>Download macOS App</strong> se .zip download karein.</span>
+                </li>
+                <li className="flex gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center shrink-0 font-bold text-[10px]">2</span>
+                  <span>Unzip karke <strong>Applications</strong> me drag karein.</span>
+                </li>
+                <li className="flex gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center shrink-0 font-bold text-[10px]">3</span>
+                  <span>Right-Click karke <strong>Open</strong> select karein.</span>
                 </li>
               </ol>
             </div>
 
             {/* Linux Steps */}
-            <div className="space-y-6 pt-6 md:pt-0 md:pl-8">
-              <div className="flex items-center gap-3">
-                <Terminal size={20} className="text-indigo-600" />
-                <h3 className="font-bold text-sm text-slate-900 uppercase tracking-wider">Linux Workstation</h3>
+            <div className="space-y-5 pt-6 sm:pt-0 sm:pl-6">
+              <div className="flex items-center gap-2.5">
+                <Terminal size={18} className="text-indigo-600" />
+                <h3 className="font-bold text-xs sm:text-sm text-slate-900 uppercase tracking-wider">Linux Workstation</h3>
               </div>
-              <ol className="space-y-4 text-xs font-semibold text-slate-600">
-                <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 font-bold">1</span>
-                  <span><strong>Download Linux Package</strong> se .tar.gz archive download karein.</span>
+              <ol className="space-y-3.5 text-xs font-semibold text-slate-600">
+                <li className="flex gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 font-bold text-[10px]">1</span>
+                  <span><strong>Download Linux Package</strong> se .tar.gz download karein.</span>
                 </li>
-                <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 font-bold">2</span>
-                  <span>Terminal me extract karein: <code className="bg-slate-100 px-1 py-0.5 rounded text-indigo-700 font-mono">tar -xzf Apna-College-Bihar-Linux-x64.tar.gz</code></span>
+                <li className="flex gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 font-bold text-[10px]">2</span>
+                  <span>Terminal me extract karein: <code className="bg-slate-100 px-1 py-0.5 rounded text-indigo-700 font-mono text-[10px]">tar -xzf</code></span>
                 </li>
-                <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 font-bold">3</span>
-                  <span>Run karein: <code className="bg-slate-100 px-1 py-0.5 rounded text-indigo-700 font-mono">cd Apna-College-Bihar-linux-x64 && ./run.sh</code>. Instant launch!</span>
+                <li className="flex gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 font-bold text-[10px]">3</span>
+                  <span>Folder me jaakar <code className="bg-slate-100 px-1 py-0.5 rounded text-indigo-700 font-mono text-[10px]">./run.sh</code> run karein.</span>
                 </li>
               </ol>
             </div>
 
             {/* Android Steps */}
-            <div className="space-y-6 pt-6 md:pt-0 md:pl-8">
-              <div className="flex items-center gap-3">
-                <Smartphone size={20} className="text-emerald-600" />
-                <h3 className="font-bold text-sm text-slate-900 uppercase tracking-wider">Android Smartphone</h3>
+            <div className="space-y-5 pt-6 sm:pt-0 sm:pl-6">
+              <div className="flex items-center gap-2.5">
+                <Smartphone size={18} className="text-emerald-600" />
+                <h3 className="font-bold text-xs sm:text-sm text-slate-900 uppercase tracking-wider">Android Phone</h3>
               </div>
-              <ol className="space-y-4 text-xs font-semibold text-slate-600">
-                <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold">1</span>
-                  <span><strong>Download Android APK</strong> button par tap karke APK file download karein.</span>
+              <ol className="space-y-3.5 text-xs font-semibold text-slate-600">
+                <li className="flex gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold text-[10px]">1</span>
+                  <span><strong>Download Android APK</strong> tap karein.</span>
                 </li>
-                <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold">2</span>
-                  <span>Notification bar se download complete hone par tap karein aur 'Allow from this source' enable karein.</span>
+                <li className="flex gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold text-[10px]">2</span>
+                  <span>Notification bar se 'Allow unknown source' karein.</span>
                 </li>
-                <li className="flex gap-3">
-                  <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold">3</span>
-                  <span><strong>Install</strong> par click karein aur apna Google account login karke padhai start karein.</span>
+                <li className="flex gap-2.5">
+                  <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold text-[10px]">3</span>
+                  <span><strong>Install</strong> click karke padhai shuru karein.</span>
                 </li>
               </ol>
             </div>
