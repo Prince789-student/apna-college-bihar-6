@@ -10,6 +10,7 @@
     "pack": "node build-app.js",
     "pack:linux": "electron-packager . \"Apna-College-Bihar\" --platform=linux --arch=x64 --out=dist --overwrite",
     "build:linux": "node build-linux.js",
+    "build:mac": "python build-mac.py",
     "build:installer": "npx electron-builder --win nsis --x64"
   },
   "author": "Apna College Bihar",

@@ -52,12 +52,12 @@ function killAllBlockedProcesses() {
     try {
       exec(`taskkill /F ${imArgs} /T`, { windowsHide: true }, () => {});
     } catch (_) {}
-  } else if (process.platform === 'linux') {
-    const linuxNames = [
+  } else if (process.platform === 'linux' || process.platform === 'darwin') {
+    const unixNames = [
       'discord', 'telegram-desktop', 'telegram', 'slack', 'teams', 'zoom', 'skype',
       'steam', 'spotify', 'vlc', 'mpv'
     ];
-    linuxNames.forEach(p => {
+    unixNames.forEach(p => {
       try {
         exec(`pkill -f -i "${p}"`, () => {});
       } catch (_) {}
