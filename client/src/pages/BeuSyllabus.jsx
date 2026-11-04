@@ -89,7 +89,9 @@ function cleanOcrGlitch(text) {
     .replace(/\bK\?map\b/gi, 'K-map')
     .replace(/\blCs\b/g, 'ICs')
     .replace(/Relevant Units\s*\/?\s*Body of Knowledge\s*\(BoK\)/gi, '')
+    .replace(/𝑅𝑛/g, 'Rn')
     .replace(/^[)\s]*hrs\)?\s*[:\-]?\s*/gi, '')
+    .replace(/\(?\b\d+\s*(?:hrs?|hours?)\b\)?/gi, '')
     .replace(/[:\-]?[ \t]+\d+[ \t]*(?:hrs?|hours?)\b/gi, '').replace(/^[ \t]*\d+[ \t]*(?:hrs?|hours?)\b[ \t]*/gmi, '')
     .replace(/[ \t]+/g, ' ');
 }
@@ -241,13 +243,22 @@ function splitIntoTopics(text, isNewSyllabus = false) {
     p = p.replace(/^[:\-–—,\.\s]+/, '');
     p = p.replace(/[:\-–—,\.\s]+$/, '');
     
+    // Discard pure hours like "(4 Hours)" or "6 hrs" or pure punctuation
+    if (/^\(?\d+\s*(?:hrs?|hours?)\)?$/i.test(p)) continue;
+    if (/^[^a-zA-Z0-9]+$/.test(p)) continue;
+
+    // Strip trailing publisher / ISBN / edition dumps
+    p = p.replace(/\s*(?:ISBN[:\s\-\dXx]+|CRC Press|Pearson|McGraw|Wiley|Khanna Book|Indra Publishing|Oxford University|Dhanpat Rai|S\.?\s*Chand|University Science Press).*$/i, '');
+    p = p.replace(/[:\-]?\s*\(?\b\d+\s*(?:hrs?|hours?)\b\)?[:\-\.]?/gi, '').trim();
+
     const isKnapsack = /^0\/1\s*Knapsack/i.test(p);
     if (!isKnapsack) {
       // Strip ALL leading numbering variations:
-      // Match \d+\.\d+ BEFORE \d+\. to prevent leaving trailing numbers
       p = p.replace(/^(?:LE[-–\s]*\d+\.?|L[-–\s]*\d+\.?|\d+\.\d+(?:\.\d+)?|\d+\.|\([a-z0-9]+\)|[a-z0-9]\))\s*[:\-–—]?\s*/i, '');
-      // Strip standalone numbers like "1 " or "4 " but NOT "32-bit" or "16-bit"
-      p = p.replace(/^\d+\s+[:\-–—]?\s*/, '');
+      // Strip standalone leading numbers (e.g. "1 ", "4 ") but NOT technical numbers ("32-bit", "3D", "0/1", etc.)
+      if (!/^(?:2D|3D|0\/1|8085|8086|32-bit|64-bit|4-stroke|2-stroke|2-port|4-bit|8-bit|16-bit|3-phase|1-phase|2-phase)\b/i.test(p)) {
+        p = p.replace(/^\d+\s+[:\-–—]?\s*/, '');
+      }
     }
     
     // Strip leading conjunctions
@@ -255,9 +266,6 @@ function splitIntoTopics(text, isNewSyllabus = false) {
     p = p.replace(/^[:\-–—,\.\s]+/, '');
     p = p.replace(/[:\-–—,\.\s]+$/, '');
     p = p.trim();
-
-    p = p.replace(/^[:\-]?\s*\d+\s*(?:hrs?|hours?)\b\s*[:\-]?/gi, '').trim();
-    p = p.replace(/\b\d+\s*(?:hrs?|hours?)\s*[:\-]?$/gi, '').trim();
 
     if (p.length > 3) {
       p = p.charAt(0).toUpperCase() + p.slice(1);
@@ -734,7 +742,7 @@ export default function BeuSyllabus() {
 
   const [syllabusData, setSyllabusData] = useState(() => {
     try {
-      const cached = localStorage.getItem('beu_syllabus_cache_v4');
+      const cached = localStorage.getItem('beu_syllabus_cache_v5');
       if (cached) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -751,13 +759,20 @@ export default function BeuSyllabus() {
   const [aiTopicData, setAiTopicData] = useState(null);
 
   useEffect(() => {
+    // Clear legacy caches to ensure latest clean data
+    try {
+      ['beu_syllabus_cache', 'beu_syllabus_cache_v1', 'beu_syllabus_cache_v2', 'beu_syllabus_cache_v3', 'beu_syllabus_cache_v4'].forEach(k => {
+        localStorage.removeItem(k);
+      });
+    } catch (e) {}
+
     const baseUrl = Capacitor.isNativePlatform() ? 'https://apnacollegebihar.online' : '';
     fetch(`${baseUrl}/data/syllabus.json?v=` + new Date().getTime())
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
           setSyllabusData(data);
-          try { localStorage.setItem('beu_syllabus_cache_v4', JSON.stringify(data)); } catch (e) {}
+          try { localStorage.setItem('beu_syllabus_cache_v5', JSON.stringify(data)); } catch (e) {}
         }
         if (selectedBranch && selectedSem) {
           setTimeout(() => {
