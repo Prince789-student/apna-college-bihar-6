@@ -559,6 +559,7 @@ function App() {
     sessionStorage.setItem('standalone', 'true');
   }
   const isStandalone = isNative || (sessionStorage.getItem('standalone') === 'true');
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false);
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
@@ -789,7 +790,7 @@ function App() {
         <div className="w-16 h-16 bg-red-600/20 text-red-500 rounded-2xl flex items-center justify-center mb-6"><AlertTriangle size={32} /></div>
         <h2 className="text-xl font-black text-white uppercase tracking-tighter mb-2">Interface Error</h2>
         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest leading-relaxed mb-8">Something went wrong while initializing the hub. Please try restarting the app.</p>
-        <button onClick={() => setLoading(true)} className="px-8 py-4 bg-white text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">Retry Hub</button>
+        <button onClick={() => window.location.reload()} className="px-8 py-4 bg-white text-slate-900 rounded-2xl text-[10px] font-black uppercase tracking-widest active:scale-95 transition-all">Retry Hub</button>
       </div>
     );
   }

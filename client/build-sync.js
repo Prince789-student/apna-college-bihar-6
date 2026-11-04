@@ -139,6 +139,18 @@ function syncBuild() {
             }
         });
         console.log('Build static HTML assets synced to client/public successfully!');
+
+        // 4. Sync canonical syllabus dataset to client/public and server/public
+        const syllabusSrcFile = path.join(__dirname, 'src', 'data', 'syllabusData.json');
+        const syllabusPublicFile = path.join(clientPublicDir, 'data', 'syllabus.json');
+        const syllabusServerFile = path.join(destDir, 'data', 'syllabus.json');
+        if (fs.existsSync(syllabusSrcFile)) {
+            if (!fs.existsSync(path.dirname(syllabusPublicFile))) fs.mkdirSync(path.dirname(syllabusPublicFile), { recursive: true });
+            if (!fs.existsSync(path.dirname(syllabusServerFile))) fs.mkdirSync(path.dirname(syllabusServerFile), { recursive: true });
+            fs.copyFileSync(syllabusSrcFile, syllabusPublicFile);
+            fs.copyFileSync(syllabusSrcFile, syllabusServerFile);
+            console.log('Canonical syllabus.json synced to public directories successfully!');
+        }
     } catch (err) {
         console.error('Error syncing build:', err);
         process.exit(1);

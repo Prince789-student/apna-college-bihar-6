@@ -66,91 +66,80 @@ const CustomDropdown = ({ label, value, options, onChange, enableSearch = false 
   );
 };
 
-// ─── Smart Syllabus Text Cleaner ──────────────────────────────────────────────
+// ─── Smart Syllabus Text Cleaner & Topic Splitter ─────────────────────────────
+function cleanOcrGlitch(text) {
+  if (!text) return text;
+  return text
+    .replace(/\bra\s+diations\b/gi, 'radiations')
+    .replace(/\badditi\s+on\b/gi, 'addition')
+    .replace(/\bpro\s+cess\b/gi, 'process')
+    .replace(/\bBas\s+ic\b/gi, 'Basic')
+    .replace(/\bInderminate\b/gi, 'Indeterminate')
+    .replace(/\boplanar\b/gi, 'Coplanar')
+    .replace(/\bMo\s+ment\b/gi, 'Moment')
+    .replace(/\bRevie\s+w\b/gi, 'Review')
+    .replace(/\bKin\s+etics\b/gi, 'Kinetics')
+    .replace(/\bT\s+aylor\b/gi, 'Taylor')
+    .replace(/\bTr\s+ansformation\b/gi, 'Transformation')
+    .replace(/one\?s and two\?s/gi, "1's and 2's")
+    .replace(/one['’]?s and two['’]?s/gi, "1's and 2's")
+    .replace(/Don\?t/gi, "Don't")
+    .replace(/D\?Alembert/gi, "D'Alembert")
+    .replace(/Masters\?/gi, "Master's")
+    .replace(/\bK\?map\b/gi, 'K-map')
+    .replace(/\blCs\b/g, 'ICs')
+    .replace(/Relevant Units\s*\/?\s*Body of Knowledge\s*\(BoK\)/gi, '')
+    .replace(/^[)\s]*hrs\)?\s*[:\-]?\s*/gi, '')
+    .replace(/[:\-]?[ \t]+\d+[ \t]*(?:hrs?|hours?)\b/gi, '').replace(/^[ \t]*\d+[ \t]*(?:hrs?|hours?)\b[ \t]*/gmi, '')
+    .replace(/[ \t]+/g, ' ');
+}
+
 function cleanSyllabusText(rawText) {
   if (!rawText) return rawText;
+  let text = cleanOcrGlitch(rawText);
 
-  let text = rawText
-    .replace(/ -\n([a-z])/g, '-$1')
-    .replace(/-\n([a-z])/g, '-$1');
+  // Fix line breaks splitting words across lines
+  text = text.replace(/(\b[a-zA-Z]+)-\s*\n\s*([a-zA-Z]+\b)/g, '$1$2');
 
-  const prefixes = ['co', 'non', 'pre', 'self', 'over', 'sub', 'inter', 'intra', 're', 'semi', 'multi', 'poly'];
-  for (const p of prefixes) {
-    text = text.replace(new RegExp(`\\b${p} -([a-z])`, 'g'), `${p}-$1`);
-  }
-
-  text = text
-    .replace(/([A-Za-z]) - ([A-Z])/g, '$1-$2')
-    .replace(/([A-Z][a-z]+) -([A-Z0-9])/g, '$1-$2')
-
-  text = text
-    .replace(/^[–\-]?\w{1,4}\s+\d\s+\d\s+\d\s+\d\s*$/gm, '')
-    .replace(/^\(\)\s*$/gm, '')
-    .replace(/^\s*\(\s*\)\s*$/gm, '');
+  const prefixes = ['co', 'non', 'pre', 'self', 'over', 'sub', 'inter', 'intra', 'multi', 'micro', 'macro', 'semi', 'anti'];
+  prefixes.forEach(p => {
+    const re = new RegExp(`\b${p}\s+([a-z]{3,})\b`, 'gi');
+    text = text.replace(re, `${p}$1`);
+  });
 
   const lines = text.split('\n');
   const result = [];
-  let insideReferences = false;
-
   for (let i = 0; i < lines.length; i++) {
-    let line = lines[i].trim();
-    if (!line) { result.push(''); continue; }
+    const line = lines[i];
+    const trimmed = line.trim();
 
-    if (/^(test|text)[\s/]+reference[s]?[-:]*/i.test(line)) {
-      insideReferences = true;
-      result.push('\n**📚 References & Textbooks:**\n');
-      continue;
-    }
-
-    if (insideReferences && /^\d+[\.\)]/.test(line)) {
-      line = line.replace(/^#+\s*/, '');
-      result.push(`- ${line}`);
-      continue;
-    }
-
-    if (line.startsWith('####')) {
-      const cleaned = line.replace(/^#+\s*/, '').trim();
-      if (insideReferences) {
-        result.push(`- ${cleaned}`);
-      } else {
-        result.push(line);
+    // Preserve empty lines & headers
+    if (!trimmed || trimmed.startsWith('#')) {
+      // Normalise Unit Headers
+      if (trimmed.startsWith('#')) {
+        const cleaned = trimmed.replace(/^#+\s*/, '').trim();
+        const unitMatch = cleaned.match(/^UNIT\s+(\d+\.?\d*)\s*[-–:.]?\s*(.+)$/i);
+        if (unitMatch) {
+          result.push(`### Unit ${unitMatch[1]}: ${unitMatch[2].trim()}`);
+          continue;
+        }
+        const modMatch = cleaned.match(/^Module\s+(\d+\.?\d*)\s*[-–:.]?\s*(.+)$/i);
+        if (modMatch) {
+          result.push(`### Module ${modMatch[1]}: ${modMatch[2].trim()}`);
+          continue;
+        }
       }
-      continue;
-    }
-
-    // Strip "hrs" from the line globally so topics don't have ": 5 hrs"
-    line = line.replace(/[:\-]?\s*\d+\s*hrs?/gi, '').trim();
-
-    // Re-check if line is empty after stripping hrs
-    if (!line) { result.push(''); continue; }
-
-    const unitMatch = line.match(/^UNIT\s+(\d+\.?\d*)\s*[-–:.]?\s*(.+)$/i);
-    if (unitMatch && !line.startsWith('#')) {
-      const num = unitMatch[1];
-      const title = unitMatch[2].replace(/\s{2,}/g, ' ').trim();
-      result.push(`\n### 📌 Unit ${num}: ${title}\n`);
-      insideReferences = false;
-      continue;
-    }
-
-    const unitMatch2 = line.match(/^Unit[-–\s]+(\d+\.?\d*)\s*[:.]?\s*(.+)$/i);
-    if (unitMatch2 && !line.startsWith('#')) {
-      const num = unitMatch2[1];
-      const title = unitMatch2[2].replace(/\s{2,}/g, ' ').trim();
-      result.push(`\n### 📌 Unit ${num}: ${title}\n`);
-      insideReferences = false;
+      result.push(line);
       continue;
     }
 
     result.push(line);
   }
-
-  return result.join('\n').replace(/\n{3,}/g, '\n\n');
+  return result.join('\n');
 }
 
-// ─── Parse markdown syllabus text into structured subjects and units with topics ───
-
 function cleanTitleStr(s) {
+  if (!s) return '';
   let res = s.replace(/[^\x20-\x7E]/g, '');
   res = res.replace(/["'”]/g, '');
   const firstAlpha = res.search(/[A-Za-z0-9]/);
@@ -159,50 +148,129 @@ function cleanTitleStr(s) {
 }
 
 function splitIntoTopics(text, isNewSyllabus = false) {
-  if (!text || text.length < 5) return [];
-  
-  let t = text.trim();
+  if (!text || text.length < 4) return [];
+
+  let t = cleanOcrGlitch(text.trim());
   t = t.replace(/\.\s*$/, '');
-  const parts = [];
+
+  // Protect technical terms like 0/1 Knapsack
+  t = t.replace(/\b0\/1\s*Knapsack\b/gi, '__ZERO_ONE_KNAPSACK__');
+  t = t.replace(/\b0-1\s*Knapsack\b/gi, '__ZERO_ONE_KNAPSACK__');
+
+  const abbrevs = [
+    'e.g.', 'i.e.', 'etc.', 'vs.', 'viz.', 'approx.', 'Fig.', 'IC #', 'IC#', 
+    'Nos.', 'Vol.', 'p.f.', 'R.M.S.', 'r.m.s.', 'd.c.', 'a.c.', 'D.C.', 'A.C.',
+    'St.', 'Dr.', 'Prof.', 'Lt.'
+  ];
+  abbrevs.forEach((abb, idx) => {
+    t = t.split(abb).join(`__ABB${idx}__`);
+    t = t.split(abb.toUpperCase()).join(`__ABB${idx}__`);
+  });
+
+  // Balance unclosed parenthesis before embedded section numbers
+  t = t.replace(/\(([^)]*?)(?=\s+\d+\.\d+\b)/g, '($1)');
+
+  // 1. Insert delimiters before embedded section numbers:
+  t = t.replace(/(?<=\S)\s+(\d+\.\d+(?:\.\d+)?)\b/g, '; $1');
+  
+  // 2. Insert delimiters before embedded Roman/letter lists or LE markers:
+  t = t.replace(/(?<=\S)\s+(\([ivxlcdm]+\)|\([a-z]\))\s*/gi, '; $1 ');
+  t = t.replace(/(?<=\S)\s+(LE[-–\s]*\d+)\b/gi, '; $1');
+
+  const rawParts = [];
   let depth = 0;
   let current = '';
+
   for (let i = 0; i < t.length; i++) {
     const ch = t[i];
     if (ch === '(' || ch === '[') depth++;
-    if (ch === ')' || ch === ']') depth--;
-    
-    let isDelimiter = false;
-    if (isNewSyllabus) {
-      isDelimiter = (ch === ';' || (ch === '.' && (i === t.length - 1 || t[i+1] === ' ' || t[i+1] === '\n')));
-    } else {
-      isDelimiter = (ch === ';' || ch === ',' || (ch === '.' && (i === t.length - 1 || t[i+1] === ' ' || t[i+1] === '\n')));
+    if (ch === ')' || ch === ']') {
+      if (depth > 0) depth--;
     }
-    
-    if (depth === 0 && isDelimiter) {
-      if (current.trim().length > 3) parts.push(current.trim());
+
+    // Primary delimiters: semicolon, period followed by whitespace/newline, or newline
+    const isPeriodDelim = ch === '.' && (i === t.length - 1 || t[i + 1] === ' ' || t[i + 1] === '\n');
+    const isSemicolonDelim = ch === ';';
+    const isNewlineDelim = ch === '\n';
+
+    if (depth === 0 && (isPeriodDelim || isSemicolonDelim || isNewlineDelim)) {
+      if (current.trim().length > 3) rawParts.push(current.trim());
       current = '';
     } else {
       current += ch;
     }
   }
-  if (current.trim().length > 3) parts.push(current.trim());
-  
-  // Clean up any remaining leading/trailing characters from the split chunks
-  return parts.map(p => {
-    let clean = p.trim();
-    // Strip hours like ": 5 hrs" at the beginning or end of topic strings
-    clean = clean.replace(/^[:\-]?\s*\d+\s*(?:hrs?|hours?)\b\s*[:\-]?/gi, '').trim();
-    clean = clean.replace(/\b\d+\s*(?:hrs?|hours?)\s*[:\-]?$/gi, '').trim();
+  if (current.trim().length > 3) rawParts.push(current.trim());
+
+  // Restore abbreviations and protected tokens
+  const restored = rawParts.map(p => {
+    let r = p;
+    abbrevs.forEach((abb, idx) => {
+      r = r.split(`__ABB${idx}__`).join(abb);
+    });
+    r = r.split('__ZERO_ONE_KNAPSACK__').join('0/1 Knapsack');
+    return r;
+  });
+
+  // Secondary pass: split overly long sentences (>130 chars) with commas between major clauses
+  const subSplit = [];
+  for (const part of restored) {
+    if (part.length > 130 && part.includes(',')) {
+      const commaChunks = part.split(/,\s+/);
+      let buffer = '';
+      for (const chunk of commaChunks) {
+        if (!buffer) {
+          buffer = chunk;
+        } else if (buffer.length < 35 || chunk.length < 20) {
+          buffer += ', ' + chunk;
+        } else {
+          subSplit.push(buffer);
+          buffer = chunk;
+        }
+      }
+      if (buffer) subSplit.push(buffer);
+    } else {
+      subSplit.push(part);
+    }
+  }
+
+  // Final cleanup of topic strings
+  const finalTopics = [];
+  for (let p of subSplit) {
+    p = p.trim();
+    p = p.replace(/^[:\-–—,\.\s]+/, '');
+    p = p.replace(/[:\-–—,\.\s]+$/, '');
     
-    if (clean.startsWith('-')) clean = clean.substring(1).trim();
-    if (clean.endsWith('-')) clean = clean.substring(0, clean.length - 1).trim();
-    return clean;
-  }).filter(p => p.length > 2);
+    const isKnapsack = /^0\/1\s*Knapsack/i.test(p);
+    if (!isKnapsack) {
+      // Strip ALL leading numbering variations:
+      // Match \d+\.\d+ BEFORE \d+\. to prevent leaving trailing numbers
+      p = p.replace(/^(?:LE[-–\s]*\d+\.?|L[-–\s]*\d+\.?|\d+\.\d+(?:\.\d+)?|\d+\.|\([a-z0-9]+\)|[a-z0-9]\))\s*[:\-–—]?\s*/i, '');
+      // Strip standalone numbers like "1 " or "4 " but NOT "32-bit" or "16-bit"
+      p = p.replace(/^\d+\s+[:\-–—]?\s*/, '');
+    }
+    
+    // Strip leading conjunctions
+    p = p.replace(/^(?:and|or|as well as)\s+/i, '');
+    p = p.replace(/^[:\-–—,\.\s]+/, '');
+    p = p.replace(/[:\-–—,\.\s]+$/, '');
+    p = p.trim();
+
+    p = p.replace(/^[:\-]?\s*\d+\s*(?:hrs?|hours?)\b\s*[:\-]?/gi, '').trim();
+    p = p.replace(/\b\d+\s*(?:hrs?|hours?)\s*[:\-]?$/gi, '').trim();
+
+    if (p.length > 3) {
+      p = p.charAt(0).toUpperCase() + p.slice(1);
+      finalTopics.push(p);
+    }
+  }
+
+  return finalTopics;
 }
 
-
 function getSubjectCredit(courseCode, title) {
-  if (/SPORTS|YOGA|NCC|NSS|SWACHH|SWATCH|INDIAN KNOWLEDGE/i.test(title)) return '0';
+  if (!title) return '3';
+  if (/SPORTS|YOGA|NCC|NSS|SWACHH|SWATCH|INDIAN KNOWLEDGE|ENVIRONMENTAL/i.test(title)) return '0';
   if (/LAB/i.test(title) || /P$/i.test(courseCode || '')) {
     if (/graphics|design/i.test(title)) return '1.5';
     if (/workshop/i.test(title)) return '1.5';
@@ -219,8 +287,6 @@ function getSubjectCredit(courseCode, title) {
 function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
   if (!rawText) return [];
   const cleaned = cleanSyllabusText(rawText);
-  
-  // First, split into raw subjects
   const subjectBlocks = cleaned.split(/\n(?=##\s+)/);
   const subjects = [];
 
@@ -230,29 +296,13 @@ function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
     let currentUnit = null;
     let parsingReferences = false;
 
-    // First pass of the block: find out if it contains any explicit unit headers
-    let hasExplicitUnits = false;
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (/^#{3,4}\s*(?:📌)?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
-          /^UNIT\s+\d/i.test(trimmed) || 
-          /^Module\s+\d/i.test(trimmed) || 
-          /^#{3,4}\s*Module\s+\d/i.test(trimmed) ||
-          /^#{3,4}\s*(?:📌)?\s*PRACTICAL EXPERIMENTS/i.test(trimmed)) {
-        hasExplicitUnits = true;
-        break;
-      }
-    }
-
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
       const trimmed = line.trim();
       if (!trimmed) continue;
 
-      // Subject title
       if (/^##\s+/.test(trimmed)) {
-        let title = trimmed.replace(/^##\s*/, '');
-        title = title.replace(/^📘\s*/, '').replace(/"/g, '').trim();
+        let title = trimmed.replace(/^##\s*/, '').replace(/^[📘#\s*]+/, '').replace(/"/g, '').trim();
         subject = { title, courseCode: '', units: [] };
         subjects.push(subject);
         continue;
@@ -260,7 +310,6 @@ function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
 
       if (!subject) continue;
 
-      // Course Code
       if (/^\*\*Course Code:\*\*/i.test(trimmed)) {
         subject.courseCode = trimmed.replace(/^\*\*Course Code:\*\*\s*/i, '').trim();
         continue;
@@ -270,133 +319,45 @@ function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
         continue;
       }
 
-      // Check for Unit header
+      // Check for Unit header or Practical Experiments
       const isExplicitUnit = /^#{3,4}\s*(?:📌)?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
                              /^UNIT\s+\d/i.test(trimmed) || 
                              /^Module\s+\d/i.test(trimmed) || 
                              /^#{3,4}\s*Module\s+\d/i.test(trimmed) ||
-                             /^#{3,4}\s*(?:📌)?\s*PRACTICAL EXPERIMENTS/i.test(trimmed);
+                             /^\*\*(?:Unit|Module)\s+\d+[:.]?/i.test(trimmed) ||
+                             /^#{3,4}\s*(?:📌)?\s*(?:Practical Experiments|PRACTICAL EXPERIMENTS|List of Experiments)/i.test(trimmed);
 
-      const isNumberedUnit = !hasExplicitUnits && 
-                             /^\d+\s*\\?\.\s*\*\*(.+?)\*\*/.test(trimmed) && 
-                             !/course/i.test(trimmed) && 
-                             !/credit/i.test(trimmed) &&
-                             !/l\s*t\s*p/i.test(trimmed);
-
-      const isH4NumberedUnit = !hasExplicitUnits && /^####\s*\d+\\?\.\s*(.+?)/.test(trimmed);
-
-      if (isExplicitUnit || isNumberedUnit || isH4NumberedUnit) {
+      if (isExplicitUnit) {
         parsingReferences = false;
-        let title = '';
-        let remainingText = '';
-
-        if (isExplicitUnit) {
-          title = trimmed.replace(/^#+\s*(?:📌)?\s*/, '').replace(/^UNIT\s+/i, 'Unit ').trim();
-          title = title.replace(/[:\-]?\s*\d+\s*(?:hrs?|hours?)\s*$/i, '');
-        } else if (isNumberedUnit) {
-          const match = trimmed.match(/^\d+\s*\\?\.\s*\*\*(.+?)\*\*/);
-          const num = match[0].match(/\d+/)[0];
-          title = `Unit ${num}: ${match[1].replace(/\*\*/g, '').trim()}`;
-          remainingText = trimmed.replace(/^\d+\s*\\?\.\s*\*\*(.+?)\*\*\s*[:.-]?\s*/, '').trim();
-        } else if (isH4NumberedUnit) {
-          title = trimmed.replace(/^####\s*/, '').trim();
-        }
-
-        // SMART NEXT-LINE TITLE GRABBER & SUBHEADING COLLATOR:
-        const titleCleaned = title
-          .replace(/Unit[-–\s_—]*\d*/i, '')
-          .replace(/Module[-–\s_—]*\d*/i, '')
-          .replace(/\d+\s*(?:hrs?|hours?)/i, '')
-          .replace(/[^a-zA-Z]/g, '')
+        let title = trimmed
+          .replace(/^#+\s*(?:📌)?\s*/, '')
+          .replace(/^\*\*/, '')
+          .replace(/\*\*$/, '')
+          .replace(/^UNIT\s+/i, 'Unit ')
+          .replace(/^Module\s+/i, 'Module ')
           .trim();
-        const hasDescriptiveText = titleCleaned.length >= 3;
 
-        if (!hasDescriptiveText) {
-          // Strategy A: Next non-empty line title grabber
-          let lookAheadIdx = i + 1;
-          while (lookAheadIdx < lines.length && !lines[lookAheadIdx].trim()) {
-            lookAheadIdx++;
-          }
-          
-          let foundTitle = false;
-          if (lookAheadIdx < lines.length) {
-            const nextLine = lines[lookAheadIdx].trim();
-            const isNotHeader = !nextLine.startsWith('#');
-            const isNotListItem = !/^[-*•]\s+/.test(nextLine) && !/^\d+\s*\\?\.\s*/.test(nextLine);
-            const hasLetters = /[a-zA-Z]{3,}/.test(nextLine);
-            
-            if (isNotHeader && isNotListItem && hasLetters) {
-              let descriptiveTitle = nextLine;
-              if (descriptiveTitle.includes(':')) {
-                descriptiveTitle = descriptiveTitle.split(':')[0].trim();
-              }
-              title = `${title}: ${descriptiveTitle}`;
-              i = lookAheadIdx;
-              foundTitle = true;
-            }
-          }
-          
-          // Strategy B: Collect subheadings inside this unit (e.g. Physics)
-          if (!foundTitle) {
-            let scanIdx = i + 1;
-            const subheadings = [];
-            while (scanIdx < lines.length) {
-              const scanLine = lines[scanIdx].trim();
-              if (!scanLine) { scanIdx++; continue; }
-              
-              const isNextUnit = /^#{3,4}\s*(?:📌)?\s*Unit[-–\s_—]*\d/i.test(scanLine) || 
-                                 /^UNIT\s+\d/i.test(scanLine) || 
-                                 /^Module\s+\d/i.test(scanLine) || 
-                                 /^#{3,4}\s*Module\s+\d/i.test(scanLine);
-              if (isNextUnit || /^##\s+/.test(scanLine)) {
-                break;
-              }
-              
-              if (scanLine.startsWith('####')) {
-                let subhead = scanLine.replace(/^#+\s*/, '').trim();
-                subhead = subhead.replace(/^\d+\s*\\?\.\s*/, '').replace(/^\d+\s*\)\s*/, '');
-                subhead = subhead.replace(/:\s*$/, '').replace(/\(\d+\s*hrs?\)/i, '').trim();
-                if (subhead.length > 2) {
-                  subheadings.push(subhead);
-                }
-              }
-              scanIdx++;
-            }
-            
-            if (subheadings.length > 0) {
-              title = `${title}: ${subheadings.join(' & ')}`;
-            }
-          }
-        }
-
+        title = title.replace(/[:\-]?\s*\d+\s*(?:hrs?|hours?)\s*$/i, '');
         currentUnit = { title, topics: [] };
         subject.units.push(currentUnit);
-
-        if (remainingText && remainingText.length > 5) {
-          currentUnit.topics.push({ text: remainingText, isHeading: false });
-        }
         continue;
       }
 
-      // Topics
+      // Topics inside a unit
       if (currentUnit) {
         if (/^(test|text\s*book|reference|credit|l\s*t\s*p|course outcome|suggested reading|books recommended)/i.test(trimmed)) {
           parsingReferences = true;
           continue;
         }
-        
         if (trimmed.toLowerCase().includes('references & textbooks')) {
           parsingReferences = true;
           continue;
         }
-
-        if (parsingReferences) {
-          continue;
-        }
+        if (parsingReferences) continue;
 
         if (/^####/.test(trimmed)) {
           const text = trimmed.replace(/^#+\s*/, '').trim();
-          currentUnit.topics.push({ text, isHeading: true });
+          currentUnit.topics.push({ text, isHeading: false });
           continue;
         }
 
@@ -416,57 +377,23 @@ function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
           continue;
         }
 
-        if (trimmed.length > 10 && !/^\d+\s+\d+\s+\d+/.test(trimmed)) {
+        if (trimmed.length > 8 && !/^\d+\s+\d+\s+\d+/.test(trimmed)) {
           const text = trimmed.replace(/\*\*/g, '').trim();
-          if (currentUnit.topics.length > 0 && !currentUnit.topics[currentUnit.topics.length - 1].isHeading) {
-            currentUnit.topics[currentUnit.topics.length - 1].text += ' ' + text;
-          } else {
-            currentUnit.topics.push({ text, isHeading: false });
-          }
+          currentUnit.topics.push({ text, isHeading: false });
         }
       }
     }
 
-    // FALLBACK MECHANISM: If a subject has NO units parsed, create a default unit
+    // Fallback if no units parsed
     if (subject && subject.units.length === 0) {
-      const defaultUnit = { title: 'Syllabus Topics', topics: [] };
+      const defaultUnit = { title: 'Core Syllabus Topics', topics: [] };
       for (const line of lines) {
         const tr = line.trim();
-        // Skip subject header, credits, references, etc.
-        if (tr.startsWith('##') || /^(course code|\*\*course code|credits|\*\*credits|l\s*t\s*p|references|textbook)/i.test(tr)) {
-          continue;
-        }
-        if (/^#{3,4}\s*(.+?)/.test(tr)) {
-          const headingText = tr.replace(/^#+\s*/, '').trim();
-          defaultUnit.topics.push({ text: headingText, isHeading: true });
-          continue;
-        }
-        if (/^[-*•]\s+/.test(tr)) {
-          const text = tr.replace(/^[-*•]\s+/, '').replace(/\*\*/g, '').trim();
-          if (text.length > 3) {
-            defaultUnit.topics.push({ text, isHeading: false });
-          }
-          continue;
-        }
-        if (/^\d+\s*\\?\.\s*(.+?)/.test(tr)) {
-          const text = tr.replace(/^\d+\s*\\?\.\s*/, '').replace(/\*\*/g, '').trim();
-          if (text.length > 3) {
-            defaultUnit.topics.push({ text, isHeading: false });
-          }
-          continue;
-        }
-        if (tr.includes('References & Textbooks')) {
-          defaultUnit.topics.push({ text: 'References & Textbooks', isHeading: true });
-          continue;
-        }
-        if (tr.length > 15 && !/^\d+\s+\d+\s+\d+/.test(tr)) {
-          let text = tr.replace(/\*\*/g, '').trim();
-          text = text.replace(/^:?\s*\d+\s*(?:hrs?|hours?)\s*/i, '').trim();
-          if (defaultUnit.topics.length > 0 && !defaultUnit.topics[defaultUnit.topics.length - 1].isHeading) {
-            defaultUnit.topics[defaultUnit.topics.length - 1].text += ' ' + text;
-          } else {
-            defaultUnit.topics.push({ text, isHeading: false });
-          }
+        if (tr.startsWith('##') || /^(course code|\*\*course code|credits|\*\*credits|l\s*t\s*p|references|textbook)/i.test(tr)) continue;
+        if (/^####\s*(.+?)/.test(tr)) {
+          defaultUnit.topics.push({ text: tr.replace(/^#+\s*/, '').trim(), isHeading: false });
+        } else if (tr.length > 10 && !/^\d+\s+\d+\s+\d+/.test(tr)) {
+          defaultUnit.topics.push({ text: tr.replace(/\*\*/g, '').trim(), isHeading: false });
         }
       }
       if (defaultUnit.topics.length > 0) {
@@ -475,11 +402,9 @@ function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
     }
   }
 
-  
+  // Topic splitting pass
   for (const subject of subjects) {
-    if (subject.title) {
-      subject.title = cleanTitleStr(subject.title);
-    }
+    if (subject.title) subject.title = cleanTitleStr(subject.title);
     for (const unit of subject.units) {
       const newTopics = [];
       for (const topic of unit.topics) {
@@ -495,13 +420,17 @@ function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
       unit.topics = newTopics;
     }
   }
-    return subjects.sort((a, b) => {
-    const aIsLab = /LAB/i.test(a.title) || /P$/i.test(a.courseCode);
-    const bIsLab = /LAB/i.test(b.title) || /P$/i.test(b.courseCode);
-    if (aIsLab && !bIsLab) return 1;
-    if (!aIsLab && bIsLab) return -1;
-    return 0;
-  });
+
+  // Filter empty subjects/units and sort theory before labs
+  return subjects
+    .filter(s => s.units.length > 0)
+    .sort((a, b) => {
+      const aIsLab = /LAB/i.test(a.title) || /P$/i.test(a.courseCode);
+      const bIsLab = /LAB/i.test(b.title) || /P$/i.test(b.courseCode);
+      if (aIsLab && !bIsLab) return 1;
+      if (!aIsLab && bIsLab) return -1;
+      return 0;
+    });
 }
 
 // ─── AI Study Mentor Modal Component ─────────────────────────────────────────────
@@ -805,7 +734,7 @@ export default function BeuSyllabus() {
 
   const [syllabusData, setSyllabusData] = useState(() => {
     try {
-      const cached = localStorage.getItem('beu_syllabus_cache_v2');
+      const cached = localStorage.getItem('beu_syllabus_cache_v4');
       if (cached) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -828,7 +757,7 @@ export default function BeuSyllabus() {
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
           setSyllabusData(data);
-          try { localStorage.setItem('beu_syllabus_cache_v2', JSON.stringify(data)); } catch (e) {}
+          try { localStorage.setItem('beu_syllabus_cache_v4', JSON.stringify(data)); } catch (e) {}
         }
         if (selectedBranch && selectedSem) {
           setTimeout(() => {
@@ -854,7 +783,10 @@ export default function BeuSyllabus() {
 
   const oldBranches = [
     { id: 'cse', label: 'Computer Science (All Spec.)' },
+    { id: 'cse_iot_cs', label: 'CSE (IoT & Cyber Security with Blockchain)' },
+    { id: 'cse_iot', label: 'CSE (IoT)' },
     { id: 'civil', label: 'Civil Engineering' },
+    { id: 'civil_ca', label: 'Civil Engineering (with Computer App)' },
     { id: 'mech', label: 'Mechanical Engineering' },
     { id: 'ee', label: 'Electrical Engineering' },
     { id: 'ece', label: 'Electronics & Comm.' },
@@ -902,7 +834,14 @@ export default function BeuSyllabus() {
   const selectedBranchObj = branches.find(b => b.id === selectedBranch);
   const syllabusBranchQuery = selectedSem === 'sem1_new' ? selectedBranchObj?.groupId : selectedBranch;
 
-  const currentSyllabus = syllabusData.find(s => s.semester === selectedSem && s.branch === syllabusBranchQuery);
+  let currentSyllabus = syllabusData.find(s => s.semester === selectedSem && s.branch === syllabusBranchQuery);
+  if (!currentSyllabus && syllabusBranchQuery) {
+    if (syllabusBranchQuery.startsWith('cse')) {
+      currentSyllabus = syllabusData.find(s => s.semester === selectedSem && s.branch === 'cse');
+    } else if (syllabusBranchQuery.startsWith('civil')) {
+      currentSyllabus = syllabusData.find(s => s.semester === selectedSem && s.branch === 'civil');
+    }
+  }
   const isNewSyllabus = selectedSem === 'sem1_new';
   const subjects = currentSyllabus ? parseSyllabusIntoSubjects(currentSyllabus.content, isNewSyllabus) : [];
   const semBranchKey = `${selectedSem}_${syllabusBranchQuery}`;

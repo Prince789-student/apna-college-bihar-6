@@ -124,3 +124,8 @@ if (fs.existsSync(path.dirname(serverPublicPath))) {
   fs.writeFileSync(serverPublicPath, xml, 'utf8');
   console.log(`[Sitemap] Synced to ${serverPublicPath}`);
 }
+
+// Also write to project root sitemap.xml
+const rootPublicPath = path.join(__dirname, '..', 'sitemap.xml');
+fs.writeFileSync(rootPublicPath, xml, 'utf8');
+console.log(`[Sitemap] Synced to root ${rootPublicPath}`);
