@@ -27,6 +27,7 @@ const staticRoutes = [
   '/blog',
   '/directory',
   '/about',
+  '/author',
   '/contact',
   '/privacy-policy',
   '/terms',
@@ -68,6 +69,8 @@ if (fs.existsSync(publicDir)) {
       !file.startsWith('google') &&
       file !== 'index.html' &&
       file !== 'offline.html' &&
+      file !== 'desktop-auth.html' &&
+      file !== 'author.html' &&
       !file.includes('-cutoff-rank-') &&
       !file.startsWith('colleges-at-') &&
       !file.includes('cutoff') &&

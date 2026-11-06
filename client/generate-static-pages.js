@@ -32,7 +32,7 @@ const conflictingDirs = [
   'about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca',
   'notes', 'pyq', 'syllabus', 'ugeac-predictor', 'cgpa',
   'attendance', 'timetable', 'beu-result', 'lecture-finder', 'calculator',
-  'study-resources', 'directory', 'colleges', 'mentorship'
+  'study-resources', 'directory', 'colleges', 'mentorship', 'author', 'hackathons'
 ];
 conflictingDirs.forEach(dir => {
   const p = path.join(distDir, dir);
@@ -223,11 +223,12 @@ const navHeaderHtml = `
       <a href="/syllabus" class="hover:text-blue-600 transition-colors">Syllabus</a>
       <a href="/ugeac-predictor" class="hover:text-blue-600 transition-colors">UGEAC Predictor</a>
       <a href="/blog" class="text-blue-600 font-black">Blog</a>
+      <a href="/author" class="hover:text-blue-600 transition-colors">Author</a>
       <a href="/about" class="hover:text-blue-600 transition-colors">About Us</a>
       <a href="/contact" class="hover:text-blue-600 transition-colors">Contact</a>
     </nav>
     <div class="flex items-center gap-2">
-      <a href="/apna-college-bihar-v58.apk" download class="px-3.5 py-2 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Get App</a>
+      <a href="/apna-college-bihar.apk" download class="px-3.5 py-2 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Get App</a>
     </div>
   </div>
 </header>
@@ -272,6 +273,7 @@ const footerHtml = `
       <div>
         <h4 class="font-black uppercase tracking-widest text-slate-300 mb-3">Institutional & Legal</h4>
         <ul class="space-y-2 text-slate-400 font-medium">
+          <li><a href="/author" class="hover:text-white transition-colors">Author & Founder</a></li>
           <li><a href="/about" class="hover:text-white transition-colors">About Our Platform</a></li>
           <li><a href="/contact" class="hover:text-white transition-colors">Contact Support Center</a></li>
           <li><a href="/privacy-policy" class="hover:text-white transition-colors">Privacy Policy</a></li>
@@ -357,7 +359,7 @@ function injectHeadMetadata(html, { title, description, canonical, ogType = 'web
   return modified;
 }
 
-// Helper to write static file as flat .html for Vercel cleanUrls
+// Helper to write static file as flat .html for Vercel cleanUrls (writes to both dist and public)
 function writeStaticHtml(subPath, htmlContent) {
   const flatFilePath = path.join(distDir, `${subPath}.html`);
   const flatFileDir = path.dirname(flatFilePath);
@@ -365,6 +367,15 @@ function writeStaticHtml(subPath, htmlContent) {
     fs.mkdirSync(flatFileDir, { recursive: true });
   }
   fs.writeFileSync(flatFilePath, htmlContent, 'utf8');
+
+  // Also write to client/public so files are preserved in git and instantly deployed
+  const publicFilePath = path.join(__dirname, 'public', `${subPath}.html`);
+  const publicFileDir = path.dirname(publicFilePath);
+  if (!fs.existsSync(publicFileDir)) {
+    fs.mkdirSync(publicFileDir, { recursive: true });
+  }
+  fs.writeFileSync(publicFilePath, htmlContent, 'utf8');
+
   console.log(`[SSG] Generated: /${subPath}.html`);
 }
 
@@ -3759,4 +3770,487 @@ enrichedHomeHtml = injectHeadMetadata(enrichedHomeHtml, {
 fs.writeFileSync(templatePath, enrichedHomeHtml, 'utf8');
 console.log('[SSG] Successfully enriched dist/index.html with static homepage content!');
 
+
+// Also write directly to client/public/index.html and server/public/index.html so Vercel, Netlify, and Render always serve the pre-rendered homepage!
+const clientPublicIndex = path.join(__dirname, 'public', 'index.html');
+fs.writeFileSync(clientPublicIndex, enrichedHomeHtml, 'utf8');
+const serverPublicIndex = path.join(__dirname, '..', 'server', 'public', 'index.html');
+if (fs.existsSync(path.dirname(serverPublicIndex))) {
+  fs.writeFileSync(serverPublicIndex, enrichedHomeHtml, 'utf8');
+}
+
+// ─────────────────────────────────────────────────────────────
+// 25. GENERATE AUTHOR & EDITORIAL PROFILE PAGE (/author)
+// ─────────────────────────────────────────────────────────────
+console.log('[SSG] Generating Author & Editorial Profile page (/author)...');
+
+const authorBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-4xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <div class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">Author & Founder</span>
+    </div>
+
+    <!-- Author Profile Header Card -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 sm:p-12 shadow-sm mb-12">
+      <div class="flex flex-col sm:flex-row items-center sm:items-start gap-8">
+        <div class="relative">
+          <img src="/logo-acb.png" alt="Er. Prince Kumar" class="w-32 h-32 rounded-3xl object-cover shadow-lg border-2 border-blue-500" />
+          <span class="absolute -bottom-2 -right-2 bg-blue-600 text-white w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shadow">✓</span>
+        </div>
+        <div class="space-y-3 text-center sm:text-left flex-grow">
+          <div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 text-xs font-black uppercase tracking-widest rounded-full">
+            <span>Verified Founder & Lead Academic Author</span>
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-[1000] text-slate-900 uppercase tracking-tight">Er. Prince Kumar</h1>
+          <p class="text-sm font-bold text-slate-600">
+            Founder, Chief Educational Content Architect & Engineering Mentor at Apna College Bihar
+          </p>
+          <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-slate-500 pt-2 border-t border-slate-100">
+            <span>🎓 Alumnus, Bihar Engineering University</span>
+            <span>📍 Patna, Bihar, India</span>
+            <span>📧 <a href="mailto:prince86944@gmail.com" class="text-blue-600 font-bold hover:underline">prince86944@gmail.com</a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Editorial Mission & Academic Background -->
+    <div class="space-y-8">
+      <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-4">
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight">About the Creator & Academic Mission</h2>
+        <p class="text-slate-700 leading-relaxed text-sm md:text-base">
+          Er. Prince Kumar founded <strong>Apna College Bihar (ACB)</strong> with a singular, transformative vision: to bridge the resource gap for thousands of undergraduate engineers studying across Bihar's 38 Government Engineering Colleges (GECs) affiliated with <strong>Bihar Engineering University (BEU Patna)</strong>.
+        </p>
+        <p class="text-slate-700 leading-relaxed text-sm md:text-base">
+          Having experienced the unique hurdles of state university engineering education firsthand — fragmented syllabus updates, scarce semester question papers, confusing counselling cutoffs, and the lack of organized semester notes — Prince spearheaded the creation of Bihar's most comprehensive digital academic hub. Today, Apna College Bihar serves more than 20,000+ engineering scholars across all branches, offering 100% free lecture notes, previous year question papers (PYQs), CGPA calculators, and real UGEAC counselling prediction tools.
+        </p>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-4">
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight">Editorial Standards & Fact-Checking Process</h2>
+        <p class="text-slate-700 leading-relaxed text-sm md:text-base">
+          At Apna College Bihar, every study material, syllabus breakdown, cutoff analysis, and exam strategy published under Prince Kumar's guidance adheres to rigorous academic standards:
+        </p>
+        <ul class="space-y-3 text-slate-700 text-sm">
+          <li class="flex items-start gap-3">
+            <span class="text-blue-600 font-bold text-base">✓</span>
+            <span><strong>University Curriculum Alignment:</strong> All subject modules, unit divisions, and topic outlines are audited strictly against official BEU AICTE course structure documents.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-blue-600 font-bold text-base">✓</span>
+            <span><strong>Exam PYQ Integrity:</strong> Question papers from previous university semesters are collected from genuine examination centres across Bihar, digitized via optical character recognition (OCR), cross-checked for missing pages, and verified against university question code patterns.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-blue-600 font-bold text-base">✓</span>
+            <span><strong>Cutoff & Counselling Accuracy:</strong> UGEAC opening and closing ranks are compiled directly from BCECEB allotment matrices across multiple rounds (General, EWS, BC, EBC, SC, ST) with no speculative or fabricated estimations.</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="text-blue-600 font-bold text-base">✓</span>
+            <span><strong>Transparent Peer Mentorship:</strong> A dedicated network of top-ranking senior scholars from MIT Muzaffarpur, BCE Bhagalpur, and BCE Bakhtiyarpur assists in review passes before educational content is uploaded.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-4">
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight">Areas of Expertise & Mentorship Guidance</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h3 class="font-black text-sm text-slate-900 uppercase mb-1">💻 Computer Science & Software</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">Data Structures, Algorithms, Full-Stack Web Development, System Architecture, and Open-Source software.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h3 class="font-black text-sm text-slate-900 uppercase mb-1">🎯 UGEAC & BCECEB Counselling</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">JEE Main rank analysis, choice filling optimization, category reservations, and college reporting strategies.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h3 class="font-black text-sm text-slate-900 uppercase mb-1">📝 BEU Exam Preparation</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">High-yield study strategies, 9+ CGPA scoring methodology, diagrammatic answer writing, and backlog prevention.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h3 class="font-black text-sm text-slate-900 uppercase mb-1">🚀 National Hackathons & Tech Fests</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">Smart India Hackathon (SIH) project mentoring, idea formulation, team composition, and prototype pitching.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-4">
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight">Contact, Feedback & Content Corrections</h2>
+        <p class="text-slate-700 leading-relaxed text-sm md:text-base">
+          Academic excellence is an evolving dialogue. If you detect any inaccuracy in our study materials, syllabus sheets, or rank tables, or if you are a faculty member or senior scholar interested in contributing verified notes, reach out directly:
+        </p>
+        <div class="p-5 bg-blue-50 border border-blue-200 rounded-2xl text-xs space-y-2 text-slate-800">
+          <p><strong>Primary Author Email:</strong> <a href="mailto:prince86944@gmail.com" class="text-blue-600 font-bold hover:underline">prince86944@gmail.com</a></p>
+          <p><strong>Institutional Inquiries:</strong> <a href="mailto:admin@apnacollegebihar.online" class="text-blue-600 font-bold hover:underline">admin@apnacollegebihar.online</a></p>
+          <p><strong>Official Address:</strong> Apna College Bihar Academic Desk, Patna, Bihar 800001, India</p>
+          <p><strong>Response Time:</strong> Inquiries are typically reviewed and addressed within 24 to 48 hours.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+
+let authorHtml = injectIntoRoot(baseTemplate, authorBody);
+authorHtml = injectHeadMetadata(authorHtml, {
+  title: "Er. Prince Kumar - Founder & Lead Academic Author | Apna College Bihar",
+  description: "Meet Er. Prince Kumar, Founder and Lead Academic Author of Apna College Bihar. BEU alumnus, engineering mentor, and creator of free notes, PYQs, and UGEAC tools for 38 Bihar colleges.",
+  canonical: "https://www.apnacollegebihar.online/author",
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Prince Kumar",
+      "alternateName": "Er. Prince Kumar",
+      "jobTitle": "Founder & Lead Educational Content Creator",
+      "worksFor": {
+        "@type": "EducationalOrganization",
+        "name": "Apna College Bihar",
+        "url": "https://www.apnacollegebihar.online"
+      },
+      "alumniOf": "Bihar Engineering University",
+      "description": "Founder and lead educational author at Apna College Bihar, providing verified notes, question papers, syllabus breakdowns, and counselling tools to Bihar engineering scholars.",
+      "email": "prince86944@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Patna",
+        "addressRegion": "Bihar",
+        "addressCountry": "IN"
+      }
+    }
+  }
+});
+writeStaticHtml('author', authorHtml);
+
+// ─────────────────────────────────────────────────────────────
+// 26. GENERATE ALL 5 BRANCH HUBS (/branch/:branchId)
+// ─────────────────────────────────────────────────────────────
+console.log('[SSG] Generating Branch Hub pages (/branch/cse, civil, me, ee, ece)...');
+
+const branchDefinitions = [
+  {
+    id: 'cse',
+    code: 'CSE',
+    name: 'Computer Science & Engineering',
+    icon: '💻',
+    tagline: 'Software Engineering, Algorithms, Systems Architecture & Artificial Intelligence',
+    description: 'Computer Science & Engineering (CSE) is the most sought-after discipline under Bihar Engineering University (BEU Patna). The curriculum adheres strictly to AICTE model guidelines, encompassing foundational mathematics, algorithmic thinking, low-level system design, distributed networking, and modern artificial intelligence.',
+    semesters: [
+      { sem: 'Semester 1 & 2 (1st Year)', subjects: ['Programming for Problem Solving (C Language)', 'Engineering Mathematics I & II', 'Basic Electrical Engineering', 'Physics for Engineers', 'Engineering Graphics & Design'] },
+      { sem: 'Semester 3 (2nd Year)', subjects: ['Data Structures & Algorithms (DSA)', 'Object-Oriented Programming (OOP) in C++/Java', 'Digital Electronics', 'Discrete Mathematics', 'Technical Communication'] },
+      { sem: 'Semester 4 (2nd Year)', subjects: ['Design & Analysis of Algorithms (DAA)', 'Operating Systems (OS)', 'Computer Organization & Architecture (COA)', 'Formal Language & Automata Theory (FLAT)', 'Universal Human Values'] },
+      { sem: 'Semester 5 (3rd Year)', subjects: ['Database Management Systems (DBMS)', 'Compiler Design', 'Computer Networks (CN)', 'Software Engineering & Agile Methodologies', 'Elective I: Web Technologies'] },
+      { sem: 'Semester 6 (3rd Year)', subjects: ['Artificial Intelligence & Machine Learning', 'Cryptography & Network Security', 'Cloud Computing Architecture', 'Open Elective I', 'Minor Project & Industrial Seminar'] },
+      { sem: 'Semester 7 & 8 (4th Year)', subjects: ['Deep Learning & Neural Networks', 'Big Data Analytics', 'Cyber Security & Digital Forensics', 'Major Capstone Project', 'Industrial Internship & Viva-Voce'] }
+    ],
+    careers: ['Full-Stack Software Engineer', 'Data Scientist / Machine Learning Engineer', 'Cloud Infrastructure & DevOps Specialist', 'Cybersecurity Analyst', 'Civil Services (UPSC / BPSC) & GATE CSE Higher Research'],
+    topColleges: ['MIT Muzaffarpur', 'BCE Bhagalpur', 'BCE Bakhtiyarpur', 'GCE Gaya', 'DCE Darbhanga', 'NCE Chandi']
+  },
+  {
+    id: 'civil',
+    code: 'CE',
+    name: 'Civil Engineering',
+    icon: '🏗️',
+    tagline: 'Structural Analysis, Geotechnical Engineering, Transportation & Water Resources',
+    description: 'Civil Engineering is the oldest and one of the largest branches across Bihar Government Engineering Colleges. With huge state infrastructure initiatives including roads, bridges, irrigation canals, and urban flyovers, civil engineers from BEU have massive opportunities in public sector recruitment like BPSC AE, RRB JE, and SSC JE.',
+    semesters: [
+      { sem: 'Semester 1 & 2 (1st Year)', subjects: ['Engineering Mechanics', 'Basic Electrical & Electronics', 'Mathematics I & II', 'Chemistry for Engineers', 'Workshop Practice'] },
+      { sem: 'Semester 3 (2nd Year)', subjects: ['Mechanics of Solids (Strength of Materials)', 'Building Materials & Construction Technology', 'Surveying & Geomatics', 'Fluid Mechanics', 'Engineering Geology'] },
+      { sem: 'Semester 4 (2nd Year)', subjects: ['Structural Analysis I', 'Hydraulics & Hydraulic Machines', 'Concrete Technology', 'Environmental Engineering I', 'Civil Engineering Drawing'] },
+      { sem: 'Semester 5 (3rd Year)', subjects: ['Design of Concrete Structures (RCC)', 'Geotechnical Engineering (Soil Mechanics)', 'Structural Analysis II', 'Transportation Engineering I (Highway Design)', 'Hydrology & Water Resources Engineering'] },
+      { sem: 'Semester 6 (3rd Year)', subjects: ['Design of Steel Structures', 'Foundation Engineering', 'Environmental Engineering II', 'Transportation Engineering II (Railway, Airport & Harbours)', 'Construction Planning & Management'] },
+      { sem: 'Semester 7 & 8 (4th Year)', subjects: ['Irrigation Engineering', 'Earthquake Resistant Design', 'Estimating, Costing & Valuation', 'Major Capstone Project', 'Field Internship & Viva-Voce'] }
+    ],
+    careers: ['BPSC Assistant Engineer (AE) in RCD, WRD, PHED', 'SSC Junior Engineer (JE) & RRB JE (Indian Railways)', 'Structural Consultant & Project Manager', 'PSU Engineer (NHAI, NBCC, RITES, IOCL)', 'GATE CE Higher Studies (M.Tech at IITs/NITs)'],
+    topColleges: ['MIT Muzaffarpur (Estd. 1954)', 'BCE Bhagalpur (Estd. 1960)', 'GCE Gaya', 'DCE Darbhanga', 'MCE Motihari', 'LNJPIT Chapra']
+  },
+  {
+    id: 'me',
+    code: 'ME',
+    name: 'Mechanical Engineering',
+    icon: '⚙️',
+    tagline: 'Thermal Systems, Machine Design, Fluid Power & Advanced Manufacturing',
+    description: 'Mechanical Engineering forms the industrial backbone of engineering technology. The BEU curriculum thoroughly trains students in thermodynamics, refrigeration, fluid machinery, machine element design, CAD/CAM, and automated industrial manufacturing.',
+    semesters: [
+      { sem: 'Semester 1 & 2 (1st Year)', subjects: ['Engineering Mechanics', 'Basic Electrical Engineering', 'Mathematics I & II', 'Physics for Engineers', 'Workshop Practice & Manufacturing Processes'] },
+      { sem: 'Semester 3 (2nd Year)', subjects: ['Thermodynamics', 'Strength of Materials (Solid Mechanics)', 'Material Science & Metallurgy', 'Machine Drawing & CAD', 'Mathematics III'] },
+      { sem: 'Semester 4 (2nd Year)', subjects: ['Applied Thermodynamics (IC Engines & Gas Turbines)', 'Fluid Mechanics & Machinery', 'Kinematics of Machines', 'Manufacturing Processes I (Casting, Forming & Welding)', 'Measurement & Instrumentation'] },
+      { sem: 'Semester 5 (3rd Year)', subjects: ['Heat and Mass Transfer (HMT)', 'Dynamics of Machines', 'Design of Machine Elements I', 'Manufacturing Processes II (Machining & Machine Tools)', 'Industrial Engineering & Operations Research'] },
+      { sem: 'Semester 6 (3rd Year)', subjects: ['Refrigeration & Air Conditioning (RAC)', 'Design of Machine Elements II', 'Computer Aided Design & Manufacturing (CAD/CAM)', 'Internal Combustion Engines', 'Automobile Engineering'] },
+      { sem: 'Semester 7 & 8 (4th Year)', subjects: ['Power Plant Engineering', 'Mechatronics & Industrial Robotics', 'Finite Element Methods (FEM)', 'Major Industrial Capstone Project', 'Industrial Training & Viva'] }
+    ],
+    careers: ['PSU Executive Engineer (NTPC, BHEL, IOCL, ONGC, SAIL, GAIL)', 'Indian Railways Senior Section Engineer (SSE / RRB JE)', 'Automotive & Aerospace Design Engineer', 'HVAC & Thermal Plant Specialist', 'GATE ME Top Ranker for PSU recruitment and M.Tech'],
+    topColleges: ['MIT Muzaffarpur', 'BCE Bhagalpur', 'GCE Gaya', 'DCE Darbhanga', 'BCE Bakhtiyarpur', 'RRSDCE Begusarai']
+  },
+  {
+    id: 'ee',
+    code: 'EE',
+    name: 'Electrical Engineering',
+    icon: '⚡',
+    tagline: 'Power Systems, Electrical Machines, Control Automation & Smart Grid',
+    description: 'Electrical Engineering powers modern civilization. BEU Electrical Engineering graduates play a pivotal role in Bihar State Power Holding Company Limited (BSPHCL), Power Grid Corporation of India (PGCIL), renewable solar/wind installations, and industrial motor automation.',
+    semesters: [
+      { sem: 'Semester 1 & 2 (1st Year)', subjects: ['Basic Electrical Engineering', 'Engineering Mathematics I & II', 'Physics of Semiconductor Devices', 'Programming for Problem Solving', 'Engineering Graphics'] },
+      { sem: 'Semester 3 (2nd Year)', subjects: ['Electric Circuit Analysis (Network Theory)', 'Electrical Machines I (Transformers & DC Machines)', 'Analog Electronics', 'Electromagnetic Fields', 'Engineering Mathematics III'] },
+      { sem: 'Semester 4 (2nd Year)', subjects: ['Electrical Machines II (Induction & Synchronous Machines)', 'Digital Electronics & Logic Design', 'Power Systems I (Generation & Transmission)', 'Signals and Systems', 'Electrical Measurements & Instrumentation'] },
+      { sem: 'Semester 5 (3rd Year)', subjects: ['Control Systems Engineering', 'Power Systems II (Protection & Switchgear)', 'Power Electronics Devices & Circuits', 'Microprocessors & Microcontrollers (8085/8086/ARM)', 'Elective I: Renewable Energy Systems'] },
+      { sem: 'Semester 6 (3rd Year)', subjects: ['Electric Drives & Control', 'High Voltage Engineering', 'Power System Operation & Control', 'Smart Grid Technology & IoT in Energy', 'Minor Capstone Project'] },
+      { sem: 'Semester 7 & 8 (4th Year)', subjects: ['Utilization of Electrical Energy & Traction', 'Flexible AC Transmission Systems (FACTS)', 'Industrial Automation & PLC/SCADA', 'Major Capstone Project', 'Industrial Internship & Viva-Voce'] }
+    ],
+    careers: ['BSPHCL Assistant Electrical Engineer (AEE) / Junior Engineer (JE)', 'Power Grid Corporation of India Limited (PGCIL)', 'NTPC / NHPC Electrical Officer', 'Industrial Automation & PLC / SCADA Specialist', 'GATE EE Researcher in Renewable Energy & Smart Grid'],
+    topColleges: ['MIT Muzaffarpur', 'BCE Bhagalpur', 'GCE Gaya', 'NCE Chandi', 'DCE Darbhanga', 'KEC Katihar']
+  },
+  {
+    id: 'ece',
+    code: 'ECE',
+    name: 'Electronics & Communication Engineering',
+    icon: '📡',
+    tagline: 'Semiconductors, VLSI Chip Design, Digital Communication & Embedded Systems',
+    description: 'Electronics & Communication Engineering (ECE) merges hardware silicon engineering with modern high-speed communications. As India establishes semiconductor fabrication units, BEU ECE scholars are primed for high-growth careers in VLSI chip design, embedded IoT, 5G wireless networking, and defense electronics.',
+    semesters: [
+      { sem: 'Semester 1 & 2 (1st Year)', subjects: ['Basic Electrical & Electronics', 'Mathematics I & II', 'Physics of Semiconductors', 'Programming in C', 'Engineering Graphics'] },
+      { sem: 'Semester 3 (2nd Year)', subjects: ['Electronic Devices & Circuits (EDC)', 'Digital System Design (DSD)', 'Network Theory', 'Signals and Systems', 'Mathematics III'] },
+      { sem: 'Semester 4 (2nd Year)', subjects: ['Analog Electronic Circuits', 'Analog Communication Systems', 'Electromagnetic Waves & Transmission Lines', 'Computer Architecture & Microprocessors (8086)', 'Control Systems'] },
+      { sem: 'Semester 5 (3rd Year)', subjects: ['Digital Communication Systems', 'Linear Integrated Circuits & Applications (Op-Amps)', 'Digital Signal Processing (DSP)', 'Microcontrollers & Embedded Systems (ARM/Arduino)', 'Information Theory & Coding'] },
+      { sem: 'Semester 6 (3rd Year)', subjects: ['VLSI Design (Verilog / CMOS Circuit Design)', 'Antennas and Wave Propagation', 'Microwave & Radar Engineering', 'Optical Fiber Communication', 'Minor Prototype Project'] },
+      { sem: 'Semester 7 & 8 (4th Year)', subjects: ['Wireless & Cellular Communication (5G/6G)', 'Internet of Things (IoT) Architecture', 'Embedded System Hardware-Software Co-Design', 'Major Capstone Project', 'Industrial Internship & Viva-Voce'] }
+    ],
+    careers: ['VLSI Physical Design & Verification Engineer (Intel, Qualcomm, Texas Instruments)', 'Embedded Software Developer & IoT Architect', 'Telecom Network Specialist (BSNL, Airtel, Jio, Ericsson)', 'ISRO, DRDO, BEL & BARC Scientist/Engineer', 'GATE ECE Scholar for Microelectronics and Communication M.Tech'],
+    topColleges: ['BCE Bhagalpur', 'MIT Muzaffarpur', 'BCE Bakhtiyarpur', 'GCE Gaya', 'DCE Darbhanga', 'SIT Sitamarhi']
+  }
+];
+
+branchDefinitions.forEach(branch => {
+  const semesterTablesHtml = branch.semesters.map(s => `
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm mb-6">
+      <h3 class="text-base font-black text-slate-900 uppercase tracking-tight mb-3 flex items-center justify-between">
+        <span>${s.sem}</span>
+        <span class="text-xs px-2.5 py-1 bg-blue-50 text-blue-700 rounded-full font-bold">BEU Curriculum</span>
+      </h3>
+      <ul class="space-y-2 text-xs md:text-sm text-slate-700">
+        ${s.subjects.map(sub => `<li class="flex items-start gap-2.5"><span class="text-blue-600 font-bold">•</span><span>${sub}</span></li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+
+  const branchBody = `
+  <div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+    ${navHeaderHtml}
+
+    <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 py-12">
+      <!-- Breadcrumb -->
+      <div class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+        <a href="/" class="hover:text-blue-600">Home</a>
+        <span>/</span>
+        <a href="/branches" class="hover:text-blue-600">Branches</a>
+        <span>/</span>
+        <span class="text-slate-800 font-semibold">${branch.code} Hub</span>
+      </div>
+
+      <!-- Hero Section -->
+      <div class="bg-white border border-slate-200 rounded-3xl p-8 sm:p-12 shadow-sm mb-12">
+        <div class="flex items-center gap-4 mb-4">
+          <span class="text-4xl">${branch.icon}</span>
+          <div>
+            <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-black uppercase tracking-widest rounded-full inline-block">B.Tech Specialization</span>
+            <h1 class="text-2xl sm:text-4xl font-[1000] text-slate-900 uppercase tracking-tight mt-1">${branch.name} (${branch.code})</h1>
+          </div>
+        </div>
+        <p class="text-sm sm:text-base font-bold text-blue-600 mb-4">${branch.tagline}</p>
+        <p class="text-slate-700 leading-relaxed text-sm md:text-base mb-6">${branch.description}</p>
+        <div class="flex flex-wrap gap-3 pt-4 border-t border-slate-100">
+          <a href="/notes" class="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-wider hover:bg-blue-700 transition-colors">Download ${branch.code} Notes</a>
+          <a href="/pyq" class="px-4 py-2 bg-slate-100 text-slate-800 rounded-xl text-xs font-black uppercase tracking-wider hover:bg-slate-200 transition-colors">${branch.code} Previous Papers</a>
+          <a href="/syllabus" class="px-4 py-2 bg-slate-100 text-slate-800 rounded-xl text-xs font-black uppercase tracking-wider hover:bg-slate-200 transition-colors">Official Syllabus PDF</a>
+        </div>
+      </div>
+
+      <!-- Semester-Wise Academic Breakdown -->
+      <section class="mb-12">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-xl sm:text-2xl font-[1000] text-slate-900 uppercase tracking-tight">Official 8-Semester Syllabus Breakdown</h2>
+          <span class="text-xs font-bold text-slate-500">BEU Patna Regulation</span>
+        </div>
+        ${semesterTablesHtml}
+      </section>
+
+      <!-- Career Scope & Industry Opportunities -->
+      <section class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm mb-12 space-y-4">
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight">Career Opportunities & Competitive Exams for ${branch.code}</h2>
+        <p class="text-slate-700 text-sm leading-relaxed">
+          Graduates of ${branch.name} from Bihar Government Engineering Colleges have multiple high-impact career pathways:
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          ${branch.careers.map(car => `
+            <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-3">
+              <span class="text-emerald-600 font-bold text-sm">✦</span>
+              <span class="text-xs font-bold text-slate-800">${car}</span>
+            </div>
+          `).join('')}
+        </div>
+      </section>
+
+      <!-- Leading Bihar GECs Offering this Branch -->
+      <section class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm mb-12 space-y-4">
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight">Top Bihar Government Engineering Colleges for ${branch.code}</h2>
+        <p class="text-slate-700 text-sm leading-relaxed">
+          Based on historical BCECEB UGEAC opening and closing ranks, placement records, and campus laboratory infrastructure, these are premier institutes under BEU:
+        </p>
+        <div class="flex flex-wrap gap-2.5 pt-2">
+          ${branch.topColleges.map(col => `
+            <span class="px-3.5 py-1.5 bg-blue-50 border border-blue-200 text-blue-800 rounded-xl text-xs font-black uppercase tracking-wider">${col}</span>
+          `).join('')}
+        </div>
+        <p class="text-xs text-slate-500 pt-2">
+          Explore complete seat matrices, annual fees, and historical cutoffs on our <a href="/colleges" class="text-blue-600 font-bold hover:underline">Colleges Directory</a> and <a href="/ugeac-predictor" class="text-blue-600 font-bold hover:underline">UGEAC Predictor</a>.
+        </p>
+      </section>
+    </main>
+
+    ${footerHtml}
+  </div>
+  `;
+
+  let bHtml = injectIntoRoot(baseTemplate, branchBody);
+  bHtml = injectHeadMetadata(bHtml, {
+    title: `${branch.name} (${branch.code}) Syllabus, Notes, PYQ & Career Guide | Apna College Bihar`,
+    description: `Complete BEU 8-semester syllabus, handwritten lecture notes, previous year question papers (PYQs), and career roadmap for ${branch.name} (${branch.code}) across 38 Bihar engineering colleges.`,
+    canonical: `https://www.apnacollegebihar.online/branch/${branch.id}`,
+    schemaJson: {
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": `B.Tech in ${branch.name}`,
+      "description": branch.description,
+      "provider": {
+        "@type": "EducationalOrganization",
+        "name": "Apna College Bihar",
+        "url": "https://www.apnacollegebihar.online"
+      }
+    }
+  });
+
+  writeStaticHtml(`branch/${branch.id}`, bHtml);
+});
+
+// ─────────────────────────────────────────────────────────────
+// 27. GENERATE HACKATHON HUB PAGE (/hackathons)
+// ─────────────────────────────────────────────────────────────
+console.log('[SSG] Generating Hackathon Hub page (/hackathons)...');
+
+const hackathonsBody = `
+<div class="min-h-screen bg-slate-50 font-['Inter'] flex flex-col justify-between">
+  ${navHeaderHtml}
+
+  <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 py-12">
+    <!-- Breadcrumb -->
+    <div class="mb-6 text-xs text-slate-500 flex items-center gap-2">
+      <a href="/" class="hover:text-blue-600">Home</a>
+      <span>/</span>
+      <span class="text-slate-800 font-semibold">Hackathon Hub</span>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="bg-white border border-slate-200 rounded-3xl p-8 sm:p-12 shadow-sm mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-100 text-purple-700 text-xs font-black uppercase tracking-widest rounded-full mb-3">
+        <span>Innovation & Competitions 2026</span>
+      </div>
+      <h1 class="text-3xl sm:text-5xl font-[1000] text-slate-900 uppercase tracking-tight mb-4">
+        Bihar Engineering Hackathon Hub & SIH 2026 Strategy Guide
+      </h1>
+      <p class="text-slate-700 leading-relaxed text-sm md:text-base">
+        Welcome to Bihar's dedicated hackathon accelerator for engineering scholars. Whether you are competing in the prestigious <strong>Smart India Hackathon (SIH 2026)</strong>, collegiate technical fests like MIT Muzaffarpur TechFest and BCE Bhagalpur Technokriti, or national open-source hackathons on Unstop, this guide provides actionable roadmaps, team formation tactics, PPT slide frameworks, and problem selection formulas.
+      </p>
+    </div>
+
+    <!-- Core Sections Grid -->
+    <div class="space-y-8">
+      <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-4">
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight">Smart India Hackathon (SIH 2026): Step-by-Step Blueprint</h2>
+        <p class="text-slate-700 text-sm leading-relaxed">
+          Smart India Hackathon is the world's largest open-innovation model initiated by the Ministry of Education (MoE), Government of India. Follow this verified 5-stage strategy:
+        </p>
+        <div class="space-y-4 pt-2">
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h3 class="font-black text-sm text-slate-900 uppercase mb-1">1. Balanced Interdisciplinary Team Composition</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">Every SIH team requires exactly 6 members, including at least one female scholar. Ideal balance: 2 Backend Developers, 1 Frontend / UI/UX Designer, 1 AI/ML Specialist, 1 IoT/Hardware or Domain Researcher, and 1 Pitch Presenter.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h3 class="font-black text-sm text-slate-900 uppercase mb-1">2. Problem Statement (PS) Evaluation Strategy</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">Filter problem statements published by central ministries and state departments. Prioritize statements with high feasibility, measurable impact, and clear data availability. Avoid overly saturated generic concepts.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h3 class="font-black text-sm text-slate-900 uppercase mb-1">3. The 4-Slide Official Idea Submission PPT</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">Strict adherence to the Ministry template: Slide 1: Problem Statement & Innovation summary; Slide 2: Technical Architecture Diagram; Slide 3: Feasibility, Tech Stack & Dependencies; Slide 4: Real-World Social & Business Impact.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+            <h3 class="font-black text-sm text-slate-900 uppercase mb-1">4. Working Prototype Over Slides</h3>
+            <p class="text-xs text-slate-600 leading-relaxed">In collegiate internal hackathons and Grand Finale rounds, working code with an interactive frontend, responsive APIs, and deployed live links always triumphs over theoretical presentation decks.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm space-y-4">
+        <h2 class="text-xl font-black text-slate-900 uppercase tracking-tight">Major Technical Fests in Bihar Government Engineering Colleges</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 text-xs">
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-1">
+            <h3 class="font-black text-sm text-slate-900 uppercase">MIT Muzaffarpur TechFest</h3>
+            <p class="text-slate-600">Robo-War, Speed Coding Hackathons, Web3 prototypes, and technical paper presentations.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-1">
+            <h3 class="font-black text-sm text-slate-900 uppercase">BCE Technokriti (Bhagalpur)</h3>
+            <p class="text-slate-600">Eastern Bihar's largest collegiate technical symposium with live hackathons and drone design challenges.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-1">
+            <h3 class="font-black text-sm text-slate-900 uppercase">GCE Gaya Innovate</h3>
+            <p class="text-slate-600">Hardware IoT expos, renewable energy modeling, and state-level algorithmic programming cups.</p>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-1">
+            <h3 class="font-black text-sm text-slate-900 uppercase">DCE Darbhanga Tech Spectrum</h3>
+            <p class="text-slate-600">Inter-college mobile app prototyping, smart irrigation IoT design, and technical paper showcases.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  ${footerHtml}
+</div>
+`;
+
+let hackathonsHtml = injectIntoRoot(baseTemplate, hackathonsBody);
+hackathonsHtml = injectHeadMetadata(hackathonsHtml, {
+  title: "Bihar Engineering Hackathons & SIH 2026 Strategy Guide | Apna College Bihar",
+  description: "Official guide to Smart India Hackathon (SIH 2026) and Bihar Engineering college techfests. Team formation tips, problem statement selection, winning PPT templates, and prototype architectures.",
+  canonical: "https://www.apnacollegebihar.online/hackathons",
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Bihar Engineering Hackathons & SIH 2026 Strategy Guide",
+    "author": {
+      "@type": "Person",
+      "name": "Er. Prince Kumar",
+      "jobTitle": "Lead Engineering Mentor",
+      "worksFor": {
+        "@type": "EducationalOrganization",
+        "name": "Apna College Bihar"
+      }
+    },
+    "publisher": {
+      "@type": "EducationalOrganization",
+      "name": "Apna College Bihar",
+      "url": "https://www.apnacollegebihar.online"
+    }
+  }
+});
+writeStaticHtml('hackathons', hackathonsHtml);
+
 console.log('[SSG] All static pages generated successfully!');
+

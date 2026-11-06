@@ -62,7 +62,7 @@ function syncBuild() {
             'about', 'contact', 'privacy-policy', 'terms', 'disclaimer', 'dmca',
             'notes', 'pyq', 'syllabus', 'ugeac-predictor', 'cgpa',
             'attendance', 'timetable', 'beu-result', 'lecture-finder', 'calculator',
-            'study-resources', 'directory', 'colleges', 'mentorship'
+            'study-resources', 'directory', 'colleges', 'mentorship', 'author', 'hackathons'
         ];
         conflictingDirs.forEach(dir => {
             const p = path.join(destDir, dir);
@@ -133,8 +133,14 @@ function syncBuild() {
         if (!fs.existsSync(publicCollegeDir)) fs.mkdirSync(publicCollegeDir, { recursive: true });
         copyRecursiveSync(path.join(srcDir, 'college'), publicCollegeDir);
 
+        const publicBranchDir = path.join(clientPublicDir, 'branch');
+        if (fs.existsSync(path.join(srcDir, 'branch'))) {
+            if (!fs.existsSync(publicBranchDir)) fs.mkdirSync(publicBranchDir, { recursive: true });
+            copyRecursiveSync(path.join(srcDir, 'branch'), publicBranchDir);
+        }
+
         fs.readdirSync(srcDir).forEach(file => {
-            if (file.endsWith('.html') && file !== 'index.html') {
+            if (file.endsWith('.html')) {
                 fs.copyFileSync(path.join(srcDir, file), path.join(clientPublicDir, file));
             }
         });

@@ -52,27 +52,27 @@ export default function PremiumAds({ type = 'BANNER', onClick }) {
 
   const current = ad || FALLBACK_ADS[type];
 
-  // Force Render AdSense Slot if configured
+  // Render AdSense Slot ONLY if configured with a real, valid adSlot
   useEffect(() => {
-     if (current?.useAdSense) {
+     if (current?.useAdSense && current?.adSlot) {
         try {
            (window.adsbygoogle = window.adsbygoogle || []).push({});
         } catch (e) {
            console.error("AdSense Error:", e);
         }
      }
-  }, [current?.useAdSense]);
+  }, [current?.useAdSense, current?.adSlot]);
 
   if (loading) return null;
 
-  if (current?.useAdSense) {
+  if (current?.useAdSense && current?.adSlot) {
      return (
         <div className={`w-full overflow-hidden flex justify-center py-4`}>
            {/* AdSense Standard Placeholder */}
            <ins className="adsbygoogle"
                 style={{ display: 'block' }}
                 data-ad-client="ca-pub-4005389118070865"
-                data-ad-slot={current.adSlot || (type === 'BANNER' ? '1234567890' : '0987654321')}
+                data-ad-slot={current.adSlot}
                 data-ad-format="auto"
                 data-full-width-responsive="true"></ins>
         </div>
