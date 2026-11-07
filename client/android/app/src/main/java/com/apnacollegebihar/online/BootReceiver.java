@@ -68,20 +68,21 @@ public class BootReceiver extends BroadcastReceiver {
     }
 
     static void scheduleAllAlarms(Context context) {
-        // Schedule each of the 5 alarms
-        // 1. 6:00 AM (target_morning) -> Request Code 6000
-        scheduleSpecificAlarm(context, 6, 0, 6000, "target_morning");
-        // 2. 8:00 AM (timetable) -> Request Code 8000
-        scheduleSpecificAlarm(context, 8, 0, 8000, "timetable");
-        // 3. 8:30 AM (attendance) -> Request Code 8300
-        scheduleSpecificAlarm(context, 8, 30, 8300, "attendance");
-        // 4. 10:30 PM / 22:30 (target_night) -> Request Code 2230
-        scheduleSpecificAlarm(context, 22, 30, 2230, "target_night");
-        // 5. 11:00 PM / 23:00 (good_night) -> Request Code 2300
-        scheduleSpecificAlarm(context, 23, 0, 2300, "good_night");
+        // Disabled: Only BEU official notifications are allowed.
+        // Ensure any previously scheduled local alarms are actively cancelled.
+        cancelAllAlarms(context);
     }
 
-    private static void scheduleSpecificAlarm(Context context, int hour, int minute, int requestCode, String alarmType) {
+    public static void cancelAllAlarms(Context context) {
+        cancelSpecificAlarm(context, 6000, "target_morning");
+        cancelSpecificAlarm(context, 8000, "timetable");
+        cancelSpecificAlarm(context, 8300, "attendance");
+        cancelSpecificAlarm(context, 2230, "target_night");
+        cancelSpecificAlarm(context, 2300, "good_night");
+        Log.d(TAG, "All non-BEU daily alarms have been cancelled.");
+    }
+
+    private static void cancelSpecificAlarm(Context context, int requestCode, String alarmType) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
 
@@ -95,38 +96,7 @@ public class BootReceiver extends BroadcastReceiver {
             alarmIntent,
             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        // If time already passed today, schedule for tomorrow
-        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (alarmManager.canScheduleExactAlarms()) {
-                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            } else {
-                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(),
-                pendingIntent
-            );
-        } else {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY,
-                pendingIntent
-            );
-        }
-        Log.d(TAG, "Alarm " + alarmType + " scheduled for " + hour + ":" + minute + " (Request Code: " + requestCode + ")");
+        alarmManager.cancel(pendingIntent);
+        pendingIntent.cancel();
     }
 }

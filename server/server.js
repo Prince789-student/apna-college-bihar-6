@@ -27,9 +27,9 @@ if (process.env.MONGO_URI) {
     .then(() => console.log('✅ MongoDB Connected'))
     .catch(err => console.log('❌ MongoDB Connect Error:', err));
 }
-// Start daily cron job for class notifications
-const startDailyCron = require('./cron/dailyNotifier');
-startDailyCron();
+// Class notifications cron disabled: ONLY official BEU notices are allowed
+// const startDailyCron = require('./cron/dailyNotifier');
+// startDailyCron();
 
 // Start daily cron job to fetch hackathons
 const { startHackathonCron } = require('./cron/hackathonFetcher');
@@ -47,20 +47,37 @@ if (process.env.ENABLE_WHATSAPP_BOT === 'true') {
 
 // Removed route to place it below CORS middleware
 
-// 1. ABSOLUTE PRIORITY: APK DOWNLOAD ROUTE
+// 1. ABSOLUTE PRIORITY: APK DOWNLOAD & VERSION ROUTES
 // This must be BEFORE any other middleware to avoid SPA interception
+app.get('/api/app-version', (req, res) => {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Content-Type', 'application/json');
+    res.json({
+        latestVersionCode: 62,
+        latestVersionName: "62.0",
+        minRequiredVersionCode: 62,
+        forceUpdate: true,
+        apkUrl: "https://www.apnacollegebihar.online/api/download-apk",
+        directApkUrl: "https://www.apnacollegebihar.online/apna-college-bihar-v62.apk",
+        title: "Update Available! 🚀",
+        message: "Naya version (v62) aa gaya hai! BEU official notices aur naye features paane ke liye abhi update karein."
+    });
+});
+
 app.get('/api/download-apk', (req, res) => {
+    const v62Path = path.join(__dirname, 'public', 'apna-college-bihar-v62.apk');
+    const v61Path = path.join(__dirname, 'public', 'apna-college-bihar-v61.apk');
+    const v60Path = path.join(__dirname, 'public', 'apna-college-bihar-v60.apk');
     const v59Path = path.join(__dirname, 'public', 'apna-college-bihar-v59.apk');
-    const v58Path = path.join(__dirname, 'public', 'apna-college-bihar-v58.apk');
-    const stablePath = path.join(__dirname, 'public', 'ApnaCollegeBihar_Stable.apk');
-    const apkPath = fs.existsSync(v59Path) ? v59Path : (fs.existsSync(v58Path) ? v58Path : (fs.existsSync(stablePath) ? stablePath : null));
+    const stablePath = path.join(__dirname, 'public', 'apna-college-bihar.apk');
+    const apkPath = fs.existsSync(v62Path) ? v62Path : (fs.existsSync(v61Path) ? v61Path : (fs.existsSync(v60Path) ? v60Path : (fs.existsSync(stablePath) ? stablePath : null)));
     
     if (apkPath) {
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');
         res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-        res.setHeader('Content-Disposition', 'attachment; filename="apna-college-bihar-v59.apk"');
+        res.setHeader('Content-Disposition', 'attachment; filename="apna-college-bihar-v62.apk"');
         return res.sendFile(apkPath);
     } else {
         res.status(404).send("APK file not found on server.");

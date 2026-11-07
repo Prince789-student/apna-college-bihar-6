@@ -45,7 +45,7 @@ public class DailyNotificationPlugin extends Plugin {
     @PluginMethod
     public void scheduleDailyNotification(PluginCall call) {
         Context context = getContext();
-        BootReceiver.scheduleAllAlarms(context);
+        BootReceiver.cancelAllAlarms(context);
 
         JSObject result = new JSObject();
         result.put("success", true);

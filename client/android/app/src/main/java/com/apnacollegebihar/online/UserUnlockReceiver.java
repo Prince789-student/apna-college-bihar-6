@@ -57,24 +57,7 @@ public class UserUnlockReceiver extends BroadcastReceiver {
                 e.printStackTrace();
             }
 
-            Calendar cal = Calendar.getInstance();
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-
-            // Trigger greeting only between 5:00 AM and 11:00 AM
-            if (hour >= 5 && hour < 11) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                String today = sdf.format(cal.getTime());
-
-                SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-                String lastGreetingDate = prefs.getString(KEY_LAST_GREETING_DATE, "");
-
-                if (!today.equals(lastGreetingDate)) {
-                    // Save date so we only show the greeting once per day
-                    prefs.edit().putString(KEY_LAST_GREETING_DATE, today).apply();
-                    Log.d(TAG, "First unlock of the day. Showing morning notification.");
-                    showMorningNotification(context);
-                }
-            }
+            // Morning greeting notification disabled: ONLY official BEU notices are allowed.
 
             // Attempt to restore Launcher Icon if the OEM launcher aggressively hides it after failed uninstall
             try {

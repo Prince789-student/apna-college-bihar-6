@@ -162,24 +162,10 @@ export default function Attendance() {
     }
   };
 
-  // Web Push Notification: Request permission and show daily notification
+  // Web Push Notification: Daily class notification disabled (Only BEU notices allowed)
   const scheduleDailyWebNotification = async (classes) => {
-    if (!('Notification' in window)) return;
-    // Only show notification if permission is already granted (don't auto-prompt)
-    if (Notification.permission === 'granted' && classes.length > 0) {
-      // Check if we already notified today
-      const todayKey = new Date().toLocaleDateString('en-CA');
-      const lastNotified = localStorage.getItem('lastAttendanceNotification');
-      if (lastNotified !== todayKey) {
-        localStorage.setItem('lastAttendanceNotification', todayKey);
-        new Notification('📚 Aaj ki Classes — Apna College Bihar', {
-          body: `${classes.length} class${classes.length > 1 ? 'es' : ''} today: ${classes.map(c => c.subject).join(', ')}`,
-          icon: '/icons/icon-192x192.png',
-          badge: '/icons/icon-192x192.png',
-          tag: 'daily-attendance',
-        });
-      }
-    }
+    // Disabled: only BEU official notifications are allowed
+    return;
   };
 
   const requestNotificationPermission = async () => {
@@ -189,8 +175,7 @@ export default function Attendance() {
     }
     const result = await Notification.requestPermission();
     if (result === 'granted') {
-      toast.success('✅ Notifications enabled! You will get daily class reminders.');
-      scheduleDailyWebNotification(todayClasses);
+      toast.success('✅ Notifications enabled for BEU official updates.');
     } else {
       toast.error('Notifications blocked. Please allow from browser settings.');
     }

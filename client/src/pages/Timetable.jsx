@@ -199,17 +199,7 @@ export default function Timetable() {
         attendance: updatedAttendance
       });
 
-      // Notification logic for Native Android
-      try {
-        const { Capacitor } = await import('@capacitor/core');
-        if (Capacitor.isNativePlatform()) {
-          const plugin = Capacitor.Plugins && Capacitor.Plugins.DailyNotificationPlugin;
-          if (plugin) {
-            await plugin.saveTimetableForNotification({ timetableJson: JSON.stringify(schedule) });
-            await plugin.scheduleDailyNotification({ hour: 8, minute: 0 });
-          }
-        }
-      } catch (e) {}
+      // Daily class notifications disabled (Only BEU notices allowed)
 
       setSaved(true);
       if (addedCount > 0) {

@@ -483,12 +483,12 @@ export default function DownloadPage() {
                 </div>
 
                 <a
-                  href="/apna-college-bihar-v61.apk"
-                  download="apna-college-bihar-v61.apk"
+                  href="/apna-college-bihar-v62.apk"
+                  download="apna-college-bihar-v62.apk"
                   className="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg shadow-emerald-600/20 active:scale-95 transition-all text-center"
                 >
                   <Download size={18} />
-                  <span>Download Android APK (v61)</span>
+                  <span>Download Android APK (v62)</span>
                 </a>
 
                 <p className="text-[11px] text-slate-400 font-medium text-center mt-3">

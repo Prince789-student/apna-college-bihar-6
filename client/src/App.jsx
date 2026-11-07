@@ -17,6 +17,7 @@ import AdminRoute from './components/AdminRoute';
 import SmartRedirect from './components/SmartRedirect';
 import CookieBanner from './components/CookieBanner';
 import WhatsAppPopup from './components/WhatsAppPopup';
+import AppUpdateChecker from './components/AppUpdateChecker';
 import ScrollToTop from './components/ScrollToTop';
 import InteractiveCanvasBackground from './components/InteractiveCanvasBackground';
 
@@ -666,6 +667,7 @@ function App() {
           </div>
         )}
         <Toaster position="top-right" />
+        <AppUpdateChecker />
         <GlobalCounsellingPopup />
         <GlobalProfilePrompt />
         <CookieBanner />
