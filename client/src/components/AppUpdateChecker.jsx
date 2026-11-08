@@ -1,33 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { App as CapacitorApp } from '@capacitor/app';
-import { Download, Sparkles, RefreshCw } from 'lucide-react';
+import { Download, Sparkles, RefreshCw, AlertTriangle } from 'lucide-react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase';
 
-const CURRENT_APP_VERSION_CODE = 62;
-const CURRENT_APP_VERSION_NAME = "62.0";
+const CURRENT_APP_VERSION_CODE = 63;
+const CURRENT_APP_VERSION_NAME = "63.0";
 const DOWNLOAD_URL = "https://www.apnacollegebihar.online/api/download-apk";
 
 export default function AppUpdateChecker() {
   const [updateRequired, setUpdateRequired] = useState(false);
-  const [installedVersion, setInstalledVersion] = useState("61.0");
+  const [installedVersion, setInstalledVersion] = useState("62.0");
   const [latestVersion, setLatestVersion] = useState(CURRENT_APP_VERSION_NAME);
   const [downloading, setDownloading] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+
+    // Detect if running on native platform, localhost app container, or test mode
     const isNative = Capacitor.isNativePlatform() 
       || !!window.Capacitor?.isNative 
       || window.location.protocol === 'file:' 
-      || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' && !window.location.port));
+      || (typeof window !== 'undefined' && window.location.hostname === 'localhost' && !window.location.port);
 
-    if (!isNative) return;
+    const isTestMode = typeof window !== 'undefined' && (
+      window.location.search.includes('testUpdate') || 
+      localStorage.getItem('test_app_update') === 'true'
+    );
 
-    const checkVersion = async () => {
-      try {
-        let currentCode = 61; // Default assumption for older installed builds
+    const evaluateVersion = async (targetCode, targetName) => {
+      if (!isMounted) return;
+      const targetVName = targetName || CURRENT_APP_VERSION_NAME;
+      const targetVCode = targetCode || CURRENT_APP_VERSION_CODE;
+      setLatestVersion(targetVName);
+
+      if (isTestMode) {
+        setInstalledVersion("62.0 (Test Mode)");
+        setUpdateRequired(true);
+        return;
+      }
+
+      let currentCode = 62; // Assume older installed build by default
+      if (Capacitor.isNativePlatform() || !!window.Capacitor?.isNative) {
         try {
           const info = await CapacitorApp.getInfo();
           if (info && info.build) {
-            currentCode = parseInt(info.build, 10) || 61;
+            currentCode = parseInt(info.build, 10) || 62;
           }
           if (info && info.version) {
             setInstalledVersion(info.version);
@@ -35,42 +54,84 @@ export default function AppUpdateChecker() {
         } catch (e) {
           console.warn("Could not read local app info:", e);
         }
-
-        // Fetch latest version metadata from public endpoints
-        const endpoints = [
-          'https://www.apnacollegebihar.online/api/app-version',
-          'https://apna-college-bihar-6.onrender.com/api/app-version',
-          '/app-version.json'
-        ];
-
-        let remoteConfig = null;
-        for (const url of endpoints) {
-          try {
-            const res = await fetch(url, { cache: 'no-store' });
-            if (res.ok) {
-              remoteConfig = await res.json();
-              break;
-            }
-          } catch (err) {}
+      } else {
+        // Web / desktop environment
+        const savedCode = parseInt(localStorage.getItem('app_version_code'), 10);
+        if (savedCode) {
+          currentCode = savedCode;
+        } else if (isNative) {
+          currentCode = 62;
         }
+      }
 
-        const targetCode = remoteConfig?.latestVersionCode || CURRENT_APP_VERSION_CODE;
-        const targetName = remoteConfig?.latestVersionName || CURRENT_APP_VERSION_NAME;
-        setLatestVersion(targetName);
-
-        if (currentCode < targetCode) {
-          setUpdateRequired(true);
-        }
-      } catch (err) {
-        console.warn("Update check error:", err);
+      // If installed version is older than target version code, force popup
+      if (currentCode < targetVCode) {
+        setUpdateRequired(true);
       }
     };
 
-    checkVersion();
+    // 1. Real-time Firestore Listener (Instant, Zero Server Lag)
+    let unsubFirestore = () => {};
+    try {
+      const versionDocRef = doc(db, 'app_config', 'version');
+      unsubFirestore = onSnapshot(versionDocRef, (snap) => {
+        if (!isMounted) return;
+        if (snap.exists()) {
+          const data = snap.data();
+          const targetCode = data.latestVersionCode || CURRENT_APP_VERSION_CODE;
+          const targetName = data.latestVersionName || CURRENT_APP_VERSION_NAME;
+          evaluateVersion(targetCode, targetName);
+        } else {
+          evaluateVersion(CURRENT_APP_VERSION_CODE, CURRENT_APP_VERSION_NAME);
+        }
+      }, (err) => {
+        console.warn("Firestore version snapshot error:", err);
+        evaluateVersion(CURRENT_APP_VERSION_CODE, CURRENT_APP_VERSION_NAME);
+      });
+    } catch (e) {
+      console.warn("Firestore version check failed:", e);
+      evaluateVersion(CURRENT_APP_VERSION_CODE, CURRENT_APP_VERSION_NAME);
+    }
+
+    // 2. HTTP Fallback with strict 2500ms timeout
+    const checkHttpEndpoints = async () => {
+      const endpoints = [
+        '/api/app-version',
+        'https://www.apnacollegebihar.online/api/app-version',
+        '/app-version.json'
+      ];
+
+      for (const url of endpoints) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 2500);
+          const res = await fetch(url, { signal: controller.signal, cache: 'no-store' });
+          clearTimeout(timeoutId);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && data.latestVersionCode) {
+              evaluateVersion(data.latestVersionCode, data.latestVersionName);
+              break;
+            }
+          }
+        } catch (err) {
+          // Timeout or network error, ignore and continue
+        }
+      }
+    };
+
+    checkHttpEndpoints();
+
+    return () => {
+      isMounted = false;
+      unsubFirestore();
+    };
   }, []);
 
   const handleDownload = async () => {
     setDownloading(true);
+
+    // 1. Trigger native Android Downloader plugin (DownloadManager notification bar)
     try {
       const plugin = Capacitor.Plugins?.AndroidDownloader;
       if (plugin && typeof plugin.downloadFile === 'function') {
@@ -84,11 +145,19 @@ export default function AppUpdateChecker() {
       console.warn("Native downloader fallback:", e);
     }
 
+    // 2. Also trigger direct browser / webview download
     try {
       window.open(DOWNLOAD_URL, '_system');
     } catch (e) {
       window.location.href = DOWNLOAD_URL;
     }
+
+    // 3. Keep fallback redirect active
+    setTimeout(() => {
+      try {
+        window.location.href = DOWNLOAD_URL;
+      } catch (e) {}
+    }, 600);
   };
 
   if (!updateRequired) return null;

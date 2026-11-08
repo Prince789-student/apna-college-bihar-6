@@ -53,31 +53,32 @@ app.get('/api/app-version', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Content-Type', 'application/json');
     res.json({
-        latestVersionCode: 62,
-        latestVersionName: "62.0",
-        minRequiredVersionCode: 62,
+        latestVersionCode: 63,
+        latestVersionName: "63.0",
+        minRequiredVersionCode: 63,
         forceUpdate: true,
         apkUrl: "https://www.apnacollegebihar.online/api/download-apk",
-        directApkUrl: "https://www.apnacollegebihar.online/apna-college-bihar-v62.apk",
+        directApkUrl: "https://www.apnacollegebihar.online/apna-college-bihar-v63.apk",
         title: "Update Available! 🚀",
-        message: "Naya version (v62) aa gaya hai! BEU official notices aur naye features paane ke liye abhi update karein."
+        message: "Naya version (v63.0) aa gaya hai! BEU official notices aur naye features paane ke liye abhi update karein."
     });
 });
 
 app.get('/api/download-apk', (req, res) => {
+    const v63Path = path.join(__dirname, 'public', 'apna-college-bihar-v63.apk');
     const v62Path = path.join(__dirname, 'public', 'apna-college-bihar-v62.apk');
     const v61Path = path.join(__dirname, 'public', 'apna-college-bihar-v61.apk');
     const v60Path = path.join(__dirname, 'public', 'apna-college-bihar-v60.apk');
     const v59Path = path.join(__dirname, 'public', 'apna-college-bihar-v59.apk');
     const stablePath = path.join(__dirname, 'public', 'apna-college-bihar.apk');
-    const apkPath = fs.existsSync(v62Path) ? v62Path : (fs.existsSync(v61Path) ? v61Path : (fs.existsSync(v60Path) ? v60Path : (fs.existsSync(stablePath) ? stablePath : null)));
+    const apkPath = fs.existsSync(v63Path) ? v63Path : (fs.existsSync(v62Path) ? v62Path : (fs.existsSync(v61Path) ? v61Path : (fs.existsSync(v60Path) ? v60Path : (fs.existsSync(stablePath) ? stablePath : null))));
     
     if (apkPath) {
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');
         res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-        res.setHeader('Content-Disposition', 'attachment; filename="apna-college-bihar-v62.apk"');
+        res.setHeader('Content-Disposition', 'attachment; filename="apna-college-bihar-v63.apk"');
         return res.sendFile(apkPath);
     } else {
         res.status(404).send("APK file not found on server.");
