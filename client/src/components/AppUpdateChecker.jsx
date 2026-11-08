@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { App as CapacitorApp } from '@capacitor/app';
-import { Download, Sparkles, RefreshCw, AlertTriangle } from 'lucide-react';
+import { Download, Sparkles, RefreshCw } from 'lucide-react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -15,19 +15,23 @@ export default function AppUpdateChecker() {
   const [latestVersion, setLatestVersion] = useState(CURRENT_APP_VERSION_NAME);
   const [downloading, setDownloading] = useState(false);
 
+  // STRICT CHECK: Must ONLY run inside the native Android mobile app container
+  const isNativeApp = typeof window !== 'undefined' && Boolean(
+    Capacitor.isNativePlatform() ||
+    window.Capacitor?.isNative ||
+    (window.Capacitor?.getPlatform && window.Capacitor.getPlatform() === 'android') ||
+    window.location.protocol === 'file:' ||
+    (window.location.hostname === 'localhost' && !window.location.port)
+  );
+
   useEffect(() => {
+    // If this is a regular website visitor (desktop/mobile browser), NEVER run update checker!
+    if (!isNativeApp) {
+      setUpdateRequired(false);
+      return;
+    }
+
     let isMounted = true;
-
-    // Detect if running on native platform, localhost app container, or test mode
-    const isNative = Capacitor.isNativePlatform() 
-      || !!window.Capacitor?.isNative 
-      || window.location.protocol === 'file:' 
-      || (typeof window !== 'undefined' && window.location.hostname === 'localhost' && !window.location.port);
-
-    const isTestMode = typeof window !== 'undefined' && (
-      window.location.search.includes('testUpdate') || 
-      localStorage.getItem('test_app_update') === 'true'
-    );
 
     const evaluateVersion = async (targetCode, targetName) => {
       if (!isMounted) return;
@@ -35,38 +39,24 @@ export default function AppUpdateChecker() {
       const targetVCode = targetCode || CURRENT_APP_VERSION_CODE;
       setLatestVersion(targetVName);
 
-      if (isTestMode) {
-        setInstalledVersion("62.0 (Test Mode)");
-        setUpdateRequired(true);
-        return;
-      }
-
       let currentCode = 62; // Assume older installed build by default
-      if (Capacitor.isNativePlatform() || !!window.Capacitor?.isNative) {
-        try {
-          const info = await CapacitorApp.getInfo();
-          if (info && info.build) {
-            currentCode = parseInt(info.build, 10) || 62;
-          }
-          if (info && info.version) {
-            setInstalledVersion(info.version);
-          }
-        } catch (e) {
-          console.warn("Could not read local app info:", e);
+      try {
+        const info = await CapacitorApp.getInfo();
+        if (info && info.build) {
+          currentCode = parseInt(info.build, 10) || 62;
         }
-      } else {
-        // Web / desktop environment
-        const savedCode = parseInt(localStorage.getItem('app_version_code'), 10);
-        if (savedCode) {
-          currentCode = savedCode;
-        } else if (isNative) {
-          currentCode = 62;
+        if (info && info.version) {
+          setInstalledVersion(info.version);
         }
+      } catch (e) {
+        console.warn("Could not read local app info:", e);
       }
 
-      // If installed version is older than target version code, force popup
+      // If installed APK version is older than target version code, force popup
       if (currentCode < targetVCode) {
         setUpdateRequired(true);
+      } else {
+        setUpdateRequired(false);
       }
     };
 
@@ -126,7 +116,12 @@ export default function AppUpdateChecker() {
       isMounted = false;
       unsubFirestore();
     };
-  }, []);
+  }, [isNativeApp]);
+
+  // NEVER render anything on website
+  if (!isNativeApp || !updateRequired) {
+    return null;
+  }
 
   const handleDownload = async () => {
     setDownloading(true);
@@ -159,8 +154,6 @@ export default function AppUpdateChecker() {
       } catch (e) {}
     }, 600);
   };
-
-  if (!updateRequired) return null;
 
   return (
     <div className="fixed inset-0 z-[999999] bg-slate-950/95 backdrop-blur-xl flex items-center justify-center p-4 select-none font-['Inter'] animate-in fade-in duration-300">
