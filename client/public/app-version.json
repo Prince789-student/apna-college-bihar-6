@@ -1,11 +1,11 @@
 {
-  "latestVersionCode": 63,
-  "latestVersionName": "63.0",
-  "minRequiredVersionCode": 63,
+  "latestVersionCode": 64,
+  "latestVersionName": "64.0",
+  "minRequiredVersionCode": 64,
   "forceUpdate": true,
   "apkUrl": "https://www.apnacollegebihar.online/api/download-apk",
-  "directApkUrl": "https://www.apnacollegebihar.online/apna-college-bihar-v63.apk",
+  "directApkUrl": "https://www.apnacollegebihar.online/apna-college-bihar-v64.apk",
   "title": "Update Available! 🚀",
-  "message": "Naya version (v63.0) aa gaya hai! BEU official notices aur naye features paane ke liye abhi update karein.",
-  "releasedAt": "2026-11-08T03:00:00.000Z"
+  "message": "Naya version (v64.0) aa gaya hai! BEU official notices aur naye features paane ke liye abhi update karein.",
+  "releasedAt": "2026-11-08T11:00:00.000Z"
 }

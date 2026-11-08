@@ -5,18 +5,26 @@ import { Download, Sparkles, RefreshCw } from 'lucide-react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 
-const CURRENT_APP_VERSION_CODE = 63;
-const CURRENT_APP_VERSION_NAME = "63.0";
+const CURRENT_APP_VERSION_CODE = 64;
+const CURRENT_APP_VERSION_NAME = "64.0";
 const DOWNLOAD_URL = "https://www.apnacollegebihar.online/api/download-apk";
 
 export default function AppUpdateChecker() {
   const [updateRequired, setUpdateRequired] = useState(false);
-  const [installedVersion, setInstalledVersion] = useState("62.0");
+  const [installedVersion, setInstalledVersion] = useState("63.0");
   const [latestVersion, setLatestVersion] = useState(CURRENT_APP_VERSION_NAME);
   const [downloading, setDownloading] = useState(false);
 
-  // STRICT CHECK: Must ONLY run inside the native Android mobile app container
-  const isNativeApp = typeof window !== 'undefined' && Boolean(
+  // STRICT GUARANTEE: Never, ever execute or show on public web domain
+  const isWebDomain = typeof window !== 'undefined' && Boolean(
+    window.location.hostname.includes('apnacollegebihar.online') ||
+    window.location.hostname.includes('onrender.com') ||
+    window.location.hostname.includes('firebaseapp.com') ||
+    window.location.hostname.includes('web.app')
+  );
+
+  // MUST ONLY run inside the native Android mobile app container
+  const isNativeApp = !isWebDomain && typeof window !== 'undefined' && Boolean(
     Capacitor.isNativePlatform() ||
     window.Capacitor?.isNative ||
     (window.Capacitor?.getPlatform && window.Capacitor.getPlatform() === 'android') ||

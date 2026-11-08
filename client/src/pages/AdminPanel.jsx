@@ -561,6 +561,50 @@ export default function AdminPanel() {
     }
   };
 
+  const handleEditAcademics = async (userObj) => {
+    const currentCollege = userObj.collegeName || userObj.college || '';
+    const currentBranch = userObj.branch || '';
+    const currentDistrict = userObj.district || userObj.homeDistrict || '';
+
+    const newCollege = window.prompt(`Scholar "${userObj.name || 'Student'}" ke liye College Name daalein:`, currentCollege);
+    if (newCollege === null) return;
+
+    const newBranch = window.prompt(`Branch daalein (e.g. CSE, Civil, ECE, EE, ME):`, currentBranch);
+    if (newBranch === null) return;
+
+    const newDistrict = window.prompt(`Home District daalein (e.g. Patna, Gaya, Bhagalpur):`, currentDistrict);
+    if (newDistrict === null) return;
+
+    const targetUid = userObj.id || userObj.uid;
+    const patchData = {
+      collegeName: newCollege.trim(),
+      branch: newBranch.trim().toUpperCase(),
+      district: newDistrict.trim()
+    };
+
+    try {
+      // 1. Client SDK direct update
+      const userDocRef = doc(db, 'users', targetUid);
+      await setDoc(userDocRef, patchData, { merge: true });
+
+      // 2. Server API fallback using Admin SDK
+      try {
+        const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+        const headers = await getAdminHeaders();
+        await fetch(`${apiBase}/api/admin/update-user-academics`, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ uid: targetUid, ...patchData })
+        });
+      } catch (_) {}
+
+      setUsers(prev => prev.map(u => (u.id === targetUid || u.uid === targetUid) ? { ...u, ...patchData } : u));
+      flash(`Academic details update ho gayi! 🎓✅`, 'ok');
+    } catch (err) {
+      alert("Academics update failed: " + err.message);
+    }
+  };
+
   const handleAddOrPromoteAdmin = async (e) => {
     e.preventDefault();
     if (!isSuper) {
@@ -1291,7 +1335,12 @@ if (!isAdmin) return (
                        )}
                      </div>
                      <div>
-                       <span className="text-slate-400 block text-[9px] font-bold uppercase">College:</span>
+                       <div className="flex items-center justify-between">
+                         <span className="text-slate-400 block text-[9px] font-bold uppercase">College:</span>
+                         <button type="button" onClick={() => handleEditAcademics(u)} className="text-[9px] text-blue-600 font-bold hover:underline flex items-center gap-0.5">
+                           <Edit2 size={10} /> Edit
+                         </button>
+                       </div>
                        <span className="font-bold text-slate-700 truncate block" title={u.collegeName || u.college}>{u.collegeName || u.college || 'N/A'}</span>
                      </div>
                      <div>
@@ -1432,16 +1481,26 @@ if (!isAdmin) return (
 
                        {/* Academics */}
                        <td className="py-3 px-5">
-                          <div className="max-w-[200px]">
-                             <p className="text-xs font-bold text-slate-800 uppercase tracking-tight truncate" title={u.collegeName || u.college || u.college_name}>
-                               {u.collegeName || u.college || u.college_name || 'N/A'}
-                             </p>
-                             <p className="text-[10px] font-semibold text-slate-500 uppercase truncate mt-0.5">
+                          <div className="max-w-[210px] space-y-1">
+                             <div className="flex items-center justify-between gap-1.5">
+                               <p className="text-xs font-bold text-slate-800 uppercase tracking-tight truncate" title={u.collegeName || u.college || u.college_name}>
+                                 {u.collegeName || u.college || u.college_name || <span className="text-slate-400 italic font-normal">N/A</span>}
+                               </p>
+                               <button
+                                 type="button"
+                                 onClick={() => handleEditAcademics(u)}
+                                 className="p-1 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors shrink-0"
+                                 title="Edit College / Branch / District"
+                               >
+                                 <Edit2 size={11} />
+                               </button>
+                             </div>
+                             <p className="text-[10px] font-semibold text-slate-500 uppercase truncate">
                                Dist: <span className="text-indigo-600 font-bold">{u.homeDistrict || u.district || u.home_district || 'N/A'}</span>
                                {u.branch ? ` • ${u.branch}` : ''}
                              </p>
                              {u.dob && (
-                               <p className="text-[9px] text-slate-400 truncate mt-0.5">
+                               <p className="text-[9px] text-slate-400 truncate">
                                  DOB: {new Date(u.dob).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                                </p>
                              )}

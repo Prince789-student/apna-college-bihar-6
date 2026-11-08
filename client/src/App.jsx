@@ -133,8 +133,8 @@ function GlobalProfilePrompt() {
 
   const isAdmin = user?.role === 'admin' || user?.role === 'super_admin' || user?.email === 'prince86944@gmail.com';
 
-  const hasPhone = Boolean(user?.phone && user.phone.trim() !== '' && user.phone !== 'NOT LINKED');
-  const hasCollege = Boolean(user?.collegeName && user.collegeName.trim() !== '');
+  const hasPhone = Boolean(user?.phone && typeof user.phone === 'string' && user.phone.replace(/\D/g, '').length === 10 && user.phone !== 'NOT LINKED');
+  const hasCollege = Boolean(user?.collegeName && typeof user.collegeName === 'string' && user.collegeName.trim() !== '' && user.collegeName !== 'N/A');
   const isCompleted = Boolean(user?.profileCompleted === true || user?.profileCompleted === "true");
   const hasCallPref = user?.wantsCall !== undefined;
 
@@ -161,7 +161,7 @@ function GlobalProfilePrompt() {
     if (!dob.trim()) return toast.error("Kripya date of birth chunein!");
     
     const cleanPhone = phoneNumber.replace(/\D/g, '').trim();
-    if (cleanPhone.length < 10) {
+    if (cleanPhone.length !== 10) {
       return toast.error("Kripya valid 10-digit mobile number daalein!");
     }
 
@@ -527,10 +527,19 @@ function SplashUI() {
 
 function App() {
   const { user } = useAuth();
-  const isNative = Capacitor.isNativePlatform() 
+  const isWebDomain = typeof window !== 'undefined' && Boolean(
+    window.location.hostname.includes('apnacollegebihar.online') ||
+    window.location.hostname.includes('onrender.com') ||
+    window.location.hostname.includes('firebaseapp.com') ||
+    window.location.hostname.includes('web.app')
+  );
+
+  const isNative = !isWebDomain && Boolean(
+    Capacitor.isNativePlatform() 
     || !!window.Capacitor?.isNative 
     || window.location.protocol === 'file:' 
-    || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' && !window.location.port));
+    || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' && !window.location.port))
+  );
 
   useEffect(() => {
     if (isNative) {

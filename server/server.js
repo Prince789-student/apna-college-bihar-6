@@ -53,32 +53,33 @@ app.get('/api/app-version', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Content-Type', 'application/json');
     res.json({
-        latestVersionCode: 63,
-        latestVersionName: "63.0",
-        minRequiredVersionCode: 63,
+        latestVersionCode: 64,
+        latestVersionName: "64.0",
+        minRequiredVersionCode: 64,
         forceUpdate: true,
         apkUrl: "https://www.apnacollegebihar.online/api/download-apk",
-        directApkUrl: "https://www.apnacollegebihar.online/apna-college-bihar-v63.apk",
+        directApkUrl: "https://www.apnacollegebihar.online/apna-college-bihar-v64.apk",
         title: "Update Available! 🚀",
-        message: "Naya version (v63.0) aa gaya hai! BEU official notices aur naye features paane ke liye abhi update karein."
+        message: "Naya version (v64.0) aa gaya hai! BEU official notices aur naye features paane ke liye abhi update karein."
     });
 });
 
 app.get('/api/download-apk', (req, res) => {
+    const v64Path = path.join(__dirname, 'public', 'apna-college-bihar-v64.apk');
     const v63Path = path.join(__dirname, 'public', 'apna-college-bihar-v63.apk');
     const v62Path = path.join(__dirname, 'public', 'apna-college-bihar-v62.apk');
     const v61Path = path.join(__dirname, 'public', 'apna-college-bihar-v61.apk');
     const v60Path = path.join(__dirname, 'public', 'apna-college-bihar-v60.apk');
     const v59Path = path.join(__dirname, 'public', 'apna-college-bihar-v59.apk');
     const stablePath = path.join(__dirname, 'public', 'apna-college-bihar.apk');
-    const apkPath = fs.existsSync(v63Path) ? v63Path : (fs.existsSync(v62Path) ? v62Path : (fs.existsSync(v61Path) ? v61Path : (fs.existsSync(v60Path) ? v60Path : (fs.existsSync(stablePath) ? stablePath : null))));
+    const apkPath = fs.existsSync(v64Path) ? v64Path : (fs.existsSync(v63Path) ? v63Path : (fs.existsSync(v62Path) ? v62Path : (fs.existsSync(v61Path) ? v61Path : (fs.existsSync(v60Path) ? v60Path : (fs.existsSync(stablePath) ? stablePath : null)))));
     
     if (apkPath) {
         res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
         res.setHeader('Pragma', 'no-cache');
         res.setHeader('Expires', '0');
         res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-        res.setHeader('Content-Disposition', 'attachment; filename="apna-college-bihar-v63.apk"');
+        res.setHeader('Content-Disposition', 'attachment; filename="apna-college-bihar-v64.apk"');
         return res.sendFile(apkPath);
     } else {
         res.status(404).send("APK file not found on server.");
@@ -583,6 +584,15 @@ app.post('/api/admin/sync-users', protect, adminOnly, authenticatedLimiter, asyn
         pageToken = result.pageToken;
     } while (pageToken);
 
+    // Read mentorship students to enrich missing profiles
+    let mentorshipStudents = [];
+    try {
+        const mSnap = await db.collection('mentorship').doc('data').get();
+        if (mSnap.exists) {
+            mentorshipStudents = mSnap.data().students || [];
+        }
+    } catch (_) {}
+
     const batchSize = 400;
     let batch = db.batch();
     let count = 0;
@@ -598,11 +608,20 @@ app.post('/api/admin/sync-users', protect, adminOnly, authenticatedLimiter, asyn
             createdAt: u.metadata.creationTime ? new Date(u.metadata.creationTime) : new Date(),
             lastLogin: u.metadata.lastSignInTime ? new Date(u.metadata.lastSignInTime) : new Date()
         };
-        // Only set phone if Firebase Auth actually has a phone number,
-        // otherwise preserve the phone number the user entered in their profile
         if (u.phoneNumber) {
             data.phone = u.phoneNumber;
         }
+
+        // Cross-reference with mentorship records if available
+        if (u.email) {
+            const mMatch = mentorshipStudents.find(s => s.email && s.email.toLowerCase().trim() === u.email.toLowerCase().trim());
+            if (mMatch) {
+                if (mMatch.whatsapp && !data.phone) data.phone = mMatch.whatsapp;
+                if (mMatch.college) data.collegeName = mMatch.college;
+                if (mMatch.branch) data.branch = mMatch.branch;
+            }
+        }
+
         batch.set(userDocRef, data, { merge: true });
         count++;
         if (count % batchSize === 0) {
@@ -634,6 +653,29 @@ app.post('/api/admin/update-user-phone', protect, adminOnly, authenticatedLimite
     }, { merge: true });
 
     res.json({ success: true, message: 'Phone updated successfully', phone: cleanPhone });
+}));
+
+app.post('/api/admin/update-user-academics', protect, adminOnly, authenticatedLimiter, asyncHandler(async (req, res) => {
+    const { uid, collegeName, branch, district, dob, phone } = req.body;
+    if (!uid) {
+        return res.status(400).json({ success: false, message: 'UID is required' });
+    }
+    const adminSdk = require('./firebaseAdmin');
+    if (!adminSdk || !adminSdk.apps.length) {
+        return res.status(503).json({ success: false, message: 'Firebase Admin SDK unavailable' });
+    }
+    const updateData = { updatedAt: new Date() };
+    if (collegeName !== undefined) updateData.collegeName = String(collegeName).trim();
+    if (branch !== undefined) updateData.branch = String(branch).trim();
+    if (district !== undefined) updateData.district = String(district).trim();
+    if (dob !== undefined) updateData.dob = String(dob).trim();
+    if (phone !== undefined) {
+        const cleanPhone = String(phone).replace(/\D/g, '').trim();
+        if (cleanPhone) updateData.phone = cleanPhone;
+    }
+    await adminSdk.firestore().collection('users').doc(uid).set(updateData, { merge: true });
+
+    res.json({ success: true, message: 'Academic details updated successfully', data: updateData });
 }));
 
 // Unhandled API routes catch-all to prevent falling through to SPA HTML
