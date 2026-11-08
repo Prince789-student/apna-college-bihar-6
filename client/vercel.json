@@ -37,6 +37,23 @@
       ]
     },
     {
+      "source": "/(api/app-version|app-version.json)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, OPTIONS"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
       "source": "/(.*)\\.apk",
       "headers": [
         {
@@ -106,8 +123,38 @@
   "redirects": [
     {
       "source": "/api/download-apk",
-      "destination": "/apna-college-bihar-v58.apk",
+      "destination": "/apna-college-bihar-v64.apk",
       "permanent": false
+    },
+    {
+      "source": "/apna-college-bihar-v63.apk",
+      "destination": "/apna-college-bihar-v64.apk",
+      "permanent": true
+    },
+    {
+      "source": "/apna-college-bihar-v62.apk",
+      "destination": "/apna-college-bihar-v64.apk",
+      "permanent": true
+    },
+    {
+      "source": "/apna-college-bihar-v61.apk",
+      "destination": "/apna-college-bihar-v64.apk",
+      "permanent": true
+    },
+    {
+      "source": "/apna-college-bihar-v60.apk",
+      "destination": "/apna-college-bihar-v64.apk",
+      "permanent": true
+    },
+    {
+      "source": "/apna-college-bihar-v59.apk",
+      "destination": "/apna-college-bihar-v64.apk",
+      "permanent": true
+    },
+    {
+      "source": "/apna-college-bihar-v58.apk",
+      "destination": "/apna-college-bihar-v64.apk",
+      "permanent": true
     },
     {
       "source": "/p/ai-unit1",

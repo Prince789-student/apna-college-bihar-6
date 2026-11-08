@@ -676,7 +676,7 @@ function App() {
           </div>
         )}
         <Toaster position="top-right" />
-        {isNative && <AppUpdateChecker />}
+        <AppUpdateChecker />
         <GlobalCounsellingPopup />
         <GlobalProfilePrompt />
         <CookieBanner />

@@ -50,6 +50,9 @@ if (process.env.ENABLE_WHATSAPP_BOT === 'true') {
 // 1. ABSOLUTE PRIORITY: APK DOWNLOAD & VERSION ROUTES
 // This must be BEFORE any other middleware to avoid SPA interception
 app.get('/api/app-version', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Content-Type', 'application/json');
     res.json({
@@ -65,6 +68,8 @@ app.get('/api/app-version', (req, res) => {
 });
 
 app.get('/api/download-apk', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     const v64Path = path.join(__dirname, 'public', 'apna-college-bihar-v64.apk');
     const v63Path = path.join(__dirname, 'public', 'apna-college-bihar-v63.apk');
     const v62Path = path.join(__dirname, 'public', 'apna-college-bihar-v62.apk');

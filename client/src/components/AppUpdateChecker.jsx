@@ -24,13 +24,33 @@ export default function AppUpdateChecker() {
   );
 
   // MUST ONLY run inside the native Android mobile app container
-  const isNativeApp = !isWebDomain && typeof window !== 'undefined' && Boolean(
-    Capacitor.isNativePlatform() ||
-    window.Capacitor?.isNative ||
-    (window.Capacitor?.getPlatform && window.Capacitor.getPlatform() === 'android') ||
-    window.location.protocol === 'file:' ||
-    (window.location.hostname === 'localhost' && !window.location.port)
-  );
+  const [isNativeApp, setIsNativeApp] = useState(() => {
+    if (isWebDomain) return false;
+    return typeof window !== 'undefined' && Boolean(
+      Capacitor.isNativePlatform() ||
+      window.Capacitor?.isNative ||
+      (window.Capacitor?.getPlatform && window.Capacitor.getPlatform() === 'android') ||
+      window.location.protocol === 'file:' ||
+      (window.location.hostname === 'localhost' && !window.location.port)
+    );
+  });
+
+  useEffect(() => {
+    if (isWebDomain) return;
+    const checkNative = () => {
+      const native = Boolean(
+        Capacitor.isNativePlatform() ||
+        window.Capacitor?.isNative ||
+        (window.Capacitor?.getPlatform && window.Capacitor.getPlatform() === 'android') ||
+        window.location.protocol === 'file:' ||
+        (window.location.hostname === 'localhost' && !window.location.port)
+      );
+      if (native) setIsNativeApp(true);
+    };
+    checkNative();
+    const t = setTimeout(checkNative, 500);
+    return () => clearTimeout(t);
+  }, [isWebDomain]);
 
   useEffect(() => {
     // If this is a regular website visitor (desktop/mobile browser), NEVER run update checker!
