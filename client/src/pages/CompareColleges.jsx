@@ -30,7 +30,7 @@ export default function CompareColleges() {
   const col2 = useMemo(() => colleges.find(c => c.id === Number(col2Id)) || colleges[1], [col2Id]);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans relative overflow-hidden py-10 px-4 sm:px-6 md:px-12">
+    <div className="min-h-screen bg-[#f8fafc] md:bg-transparent text-slate-900 md:text-white font-sans relative overflow-hidden py-10 px-4 sm:px-6 md:px-12">
       <SEO 
         title={`${col1?.short || 'College'} vs ${col2?.short || 'College'} Comparison | Apna College Bihar`}
         description={`Compare side-by-side details, fee structure, location, tier rank, facilities, and branches between ${col1?.name} and ${col2?.name}.`} 
@@ -48,25 +48,25 @@ export default function CompareColleges() {
           <ChevronRight size={10} />
           <Link to="/colleges" className="hover:text-blue-600 transition-colors">Colleges</Link>
           <ChevronRight size={10} />
-          <span className="text-slate-700">Compare</span>
+          <span className="text-slate-700 md:text-slate-300">Compare</span>
         </div>
 
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200/80 text-blue-700 text-xs font-heading font-extrabold uppercase tracking-wider shadow-sm">
-            <Scale size={14} className="text-blue-600" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 md:bg-blue-500/20 border border-blue-200/80 md:border-blue-400/30 text-blue-700 md:text-cyan-300 text-xs font-heading font-extrabold uppercase tracking-wider shadow-sm">
+            <Scale size={14} className="text-blue-600 md:text-cyan-400" />
             Head-to-Head College Comparison
           </div>
-          <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
-            Compare <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Bihar Engineering Colleges</span>
+          <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 md:text-white tracking-tight leading-tight">
+            Compare <span className="bg-gradient-to-r from-blue-600 to-indigo-600 md:from-blue-400 md:to-cyan-400 bg-clip-text text-transparent">Bihar Engineering Colleges</span>
           </h1>
-          <p className="text-slate-600 text-xs sm:text-sm font-medium leading-relaxed">
+          <p className="text-slate-600 md:text-slate-300 text-xs sm:text-sm font-medium leading-relaxed">
             Side-by-side breakdown of institutional tier, district campus location, establishment history, and facilities across 38+ Govt Engineering Colleges.
           </p>
         </div>
 
         {/* College Selector Controls */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 bg-white border border-slate-200/90 p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 bg-white md:bg-slate-900/85 md:backdrop-blur-md border border-slate-200/90 md:border-white/15 p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm md:shadow-2xl">
           <div className="space-y-2">
             <label className="text-[10px] font-heading font-black text-slate-400 uppercase tracking-widest block flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-blue-600"></span> Select College A
@@ -74,10 +74,10 @@ export default function CompareColleges() {
             <select 
               value={col1Id} 
               onChange={(e) => setCol1Id(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-slate-900 text-xs font-heading font-bold outline-none focus:border-blue-500 focus:bg-white transition-all"
+              className="w-full bg-slate-50 md:bg-slate-950/60 border border-slate-200 md:border-white/20 rounded-2xl p-3.5 text-slate-900 md:text-white text-xs font-heading font-bold outline-none focus:border-blue-500 focus:bg-white md:focus:bg-slate-900 transition-all"
             >
               {colleges.map(c => (
-                <option key={c.id} value={c.id}>
+                <option key={c.id} value={c.id} className="text-slate-900 bg-white">
                   {c.name} ({c.location}) - Tier {c.tier}
                 </option>
               ))}
@@ -91,10 +91,10 @@ export default function CompareColleges() {
             <select 
               value={col2Id} 
               onChange={(e) => setCol2Id(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-slate-900 text-xs font-heading font-bold outline-none focus:border-indigo-500 focus:bg-white transition-all"
+              className="w-full bg-slate-50 md:bg-slate-950/60 border border-slate-200 md:border-white/20 rounded-2xl p-3.5 text-slate-900 md:text-white text-xs font-heading font-bold outline-none focus:border-indigo-500 focus:bg-white md:focus:bg-slate-900 transition-all"
             >
               {colleges.map(c => (
-                <option key={c.id} value={c.id}>
+                <option key={c.id} value={c.id} className="text-slate-900 bg-white">
                   {c.name} ({c.location}) - Tier {c.tier}
                 </option>
               ))}
@@ -106,7 +106,7 @@ export default function CompareColleges() {
         {col1 && col2 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* College 1 Card */}
-            <div className="p-6 sm:p-8 bg-white border border-slate-200/90 rounded-3xl shadow-sm hover:shadow-md transition-shadow space-y-6">
+            <div className="p-6 sm:p-8 bg-white md:bg-slate-900/85 md:backdrop-blur-md border border-slate-200/90 md:border-white/15 rounded-3xl shadow-sm md:shadow-xl hover:shadow-md transition-shadow space-y-6 md:text-white">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <span className="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200/80 text-[10px] font-heading font-black uppercase tracking-wider block w-fit mb-2">
@@ -169,7 +169,7 @@ export default function CompareColleges() {
             </div>
 
             {/* College 2 Card */}
-            <div className="p-6 sm:p-8 bg-white border border-slate-200/90 rounded-3xl shadow-sm hover:shadow-md transition-shadow space-y-6">
+            <div className="p-6 sm:p-8 bg-white md:bg-slate-900/85 md:backdrop-blur-md border border-slate-200/90 md:border-white/15 rounded-3xl shadow-sm md:shadow-xl hover:shadow-md transition-shadow space-y-6 md:text-white">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <span className="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200/80 text-[10px] font-heading font-black uppercase tracking-wider block w-fit mb-2">

@@ -47,6 +47,31 @@ export default function DashboardLayout() {
   const [showSupportModal, setShowSupportModal] = useState(false);
   const isHomePage = location.pathname === '/';
 
+  const [isMobileScreen, setIsMobileScreen] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return Boolean(
+      isMobileApp ||
+      ((window.innerWidth < 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '')) &&
+        !new URLSearchParams(window.location.search).get('desktop') &&
+        !new URLSearchParams(window.location.search).get('mode')?.includes('desktop'))
+    );
+  });
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobileScreen(
+        Boolean(
+          isMobileApp ||
+          ((window.innerWidth < 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '')) &&
+            !new URLSearchParams(window.location.search).get('desktop') &&
+            !new URLSearchParams(window.location.search).get('mode')?.includes('desktop'))
+        )
+      );
+    };
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [isMobileApp]);
+
   useEffect(() => {
     if (isNative) {
       // AdMob banner has been temporarily disabled because it overlaps the UI
@@ -283,23 +308,25 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] min-h-[100dvh] w-full max-w-[100vw] bg-[#070b14] text-white overflow-x-clip overflow-y-hidden font-['Inter'] selection:bg-cyan-500/30 relative">
+    <div className={`flex flex-col h-[100dvh] min-h-[100dvh] w-full max-w-[100vw] ${
+      isMobileScreen ? 'bg-[#f8fafc] bg-mesh-light text-slate-900' : 'bg-[#070b14] text-white'
+    } overflow-x-clip overflow-y-hidden font-['Inter'] selection:bg-cyan-500/30 relative`}>
       <SEO 
         title={pageTitle} 
         url={window.location.href} 
       />
 
-      {/* ── Global Full-Page Brand Film Video Background across ALL pages ── */}
-      <BrandFilmBackground />
+      {/* ── Global Full-Page Brand Film Video Background across ALL pages (Laptop & Tablet only) ── */}
+      {!isMobileScreen && <BrandFilmBackground />}
 
-      {/* Global Native Header (for Mobile Phone App only) */}
-      {isMobileApp && (
-        <header className="bg-slate-900/95 backdrop-blur-md border-b border-white/10 shadow-xs z-[200] shrink-0 sticky top-0 px-3 sm:px-4 py-2.5 flex items-center justify-between pt-[max(env(safe-area-inset-top,0px),0.625rem)] text-white">
-          <button onClick={() => navigate(-1)} className="min-w-[44px] min-h-[44px] rounded-xl bg-white/10 text-slate-200 hover:bg-white/20 transition-colors active:scale-95 flex items-center justify-center cursor-pointer" aria-label="Go Back">
+      {/* Global Native Header (for Mobile Phone only - Unchanged Light UI) */}
+      {(isMobileApp || isMobileScreen) && (
+        <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs z-[200] shrink-0 sticky top-0 px-3 sm:px-4 py-2.5 flex items-center justify-between pt-[max(env(safe-area-inset-top,0px),0.625rem)] text-slate-900">
+          <button onClick={() => navigate(-1)} className="min-w-[44px] min-h-[44px] rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors active:scale-95 flex items-center justify-center cursor-pointer" aria-label="Go Back">
             <ChevronLeft size={20} strokeWidth={2.5} />
           </button>
           <div className="flex items-center justify-center">
-            <span className="text-xs font-black text-white uppercase tracking-tight truncate px-2">{pageTitle}</span>
+            <span className="text-xs font-black text-slate-900 uppercase tracking-tight truncate px-2">{pageTitle}</span>
           </div>
           <div className="flex items-center gap-2">
             <HeaderTimer />
@@ -307,8 +334,8 @@ export default function DashboardLayout() {
         </header>
       )}
 
-      {/* Top Header Navigation (Desktop Web, Desktop App, and Mobile Web) */}
-      {!isMobileApp && (
+      {/* Top Header Navigation (Desktop Web, Laptop & Tablet) */}
+      {!(isMobileApp || isMobileScreen) && (
         <header className="backdrop-blur-2xl border-b border-white/10 shadow-[0_2px_15px_rgba(0,0,0,0.5)] z-[200] shrink-0 sticky top-0 transition-all pt-[max(env(safe-area-inset-top,0px),0px)] bg-black/70 text-white">
           <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500/80 to-transparent"></div>
           <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-8 py-2.5 sm:py-3 flex items-center justify-between">

@@ -1030,7 +1030,7 @@ export default function BeuSyllabus() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-['Inter'] pb-24">
+    <div className="min-h-screen bg-slate-50 md:bg-transparent font-['Inter'] pb-24">
       <SEO 
         title={`BEU ${selectedBranch.toUpperCase()} Sem ${selectedSem.replace('sem', '')} Syllabus ✅ | Apna College Bihar`}
         description={`Check official Bihar Engineering University (BEU) syllabus for ${selectedBranch.toUpperCase()} Semester ${selectedSem.replace('sem', '')}. Track your syllabus progress online.`}
@@ -1038,7 +1038,7 @@ export default function BeuSyllabus() {
       />
       
       {/* Header */}
-      <div className="bg-indigo-600 text-white rounded-b-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
+      <div className="bg-indigo-600 md:bg-slate-900/85 md:backdrop-blur-md text-white rounded-b-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden border-b md:border-white/10">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center text-center">
           <Link to="/app" className="self-start text-[10px] font-black uppercase tracking-widest bg-white/20 px-4 py-2 rounded-xl mb-8 hover:bg-white/30 transition-all">

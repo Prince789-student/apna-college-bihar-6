@@ -801,7 +801,7 @@ export default function FreeMentorship() {
       />
 
       {/* ── Top Hero Header ── */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 rounded-[2.5rem] p-6 sm:p-10 border border-blue-800/30 shadow-2xl text-white">
+      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 md:bg-slate-900/85 md:backdrop-blur-md rounded-[2.5rem] p-6 sm:p-10 border border-blue-800/30 md:border-white/15 shadow-2xl text-white">
         <div className="absolute top-0 right-0 -mr-16 -mt-16 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -831,14 +831,14 @@ export default function FreeMentorship() {
       {/* ── NOT LOGGED IN: Auth Screen (Student Login vs Mentor Login) ── */}
       {!activeStudent && !activeMentor ? (
         <div className="space-y-12">
-          <div className="bg-white rounded-[2rem] border border-slate-200 shadow-xl p-6 sm:p-10 space-y-6 max-w-2xl mx-auto">
+          <div className="bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-[2rem] border border-slate-200 md:border-white/15 shadow-xl md:shadow-2xl p-6 sm:p-10 space-y-6 max-w-2xl mx-auto md:text-white transition-all">
           
           {/* Tabs: Student Login vs Mentor Login */}
-          <div className="flex bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
+          <div className="flex bg-slate-100 md:bg-black/40 p-1.5 rounded-2xl border border-slate-200 md:border-white/15">
             <button
               onClick={() => setActiveTab('student')}
               className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
-                activeTab === 'student' ? 'bg-white text-blue-600 shadow-md' : 'text-slate-500 hover:text-slate-800'
+                activeTab === 'student' ? 'bg-white md:bg-blue-600 text-blue-600 md:text-white shadow-md' : 'text-slate-500 md:text-slate-300 hover:text-slate-800 md:hover:text-white'
               }`}
             >
               <LogIn size={16} /> Student Login
@@ -846,7 +846,7 @@ export default function FreeMentorship() {
             <button
               onClick={() => setActiveTab('mentor')}
               className={`flex-1 py-3 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all ${
-                activeTab === 'mentor' ? 'bg-white text-indigo-600 shadow-md' : 'text-slate-500 hover:text-slate-800'
+                activeTab === 'mentor' ? 'bg-white md:bg-indigo-600 text-indigo-600 md:text-white shadow-md' : 'text-slate-500 md:text-slate-300 hover:text-slate-800 md:hover:text-white'
               }`}
             >
               <GraduationCap size={16} /> Mentor Login
@@ -857,17 +857,17 @@ export default function FreeMentorship() {
           {activeTab === 'student' ? (
             <div className="space-y-6">
               <div className="text-center space-y-1">
-                <h2 className="text-2xl font-black text-slate-900 tracking-tight">Student Mentorship Login</h2>
-                <p className="text-xs text-slate-500 font-medium">
+                <h2 className="text-2xl font-black text-slate-900 md:text-white tracking-tight">Student Mentorship Login</h2>
+                <p className="text-xs text-slate-500 md:text-slate-300 font-medium">
                   Apna Phone Number (Username) ya Roll Number aur Password daal kar login karein.
                 </p>
               </div>
 
               <form onSubmit={handleLogin} className="space-y-4">
                 <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-600 mb-1 flex items-center justify-between">
+                  <label className="block text-[11px] font-black uppercase text-slate-600 md:text-slate-300 mb-1 flex items-center justify-between">
                     <span>Username (Student ID / Roll / Phone)</span>
-                    <span className="text-[10px] text-blue-600 font-bold normal-case">ID, Roll ya Phone daalein</span>
+                    <span className="text-[10px] text-blue-600 md:text-cyan-400 font-bold normal-case">ID, Roll ya Phone daalein</span>
                   </label>
                   <div className="relative">
                     <input 
@@ -875,7 +875,7 @@ export default function FreeMentorship() {
                       placeholder="Student ID (e.g. 26EEE46), Roll No, ya Phone..."
                       value={loginRoll}
                       onChange={(e) => setLoginRoll(e.target.value)}
-                      className="w-full pl-4 pr-10 py-3.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-900 font-bold tracking-wider placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition-all text-sm"
+                      className="w-full pl-4 pr-10 py-3.5 bg-slate-50 md:bg-slate-950/60 border-2 border-slate-200 md:border-white/20 rounded-xl text-slate-900 md:text-white font-bold tracking-wider placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white md:focus:bg-slate-900 transition-all text-sm"
                       required
                     />
                     <Target size={18} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -883,7 +883,7 @@ export default function FreeMentorship() {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-600 mb-1">
+                  <label className="block text-[11px] font-black uppercase text-slate-600 md:text-slate-300 mb-1">
                     Password
                   </label>
                   <div className="relative">
@@ -892,13 +892,13 @@ export default function FreeMentorship() {
                       placeholder="Apna password (e.g. 26ACBEEE01) daalein"
                       value={loginPassword}
                       onChange={(e) => setLoginPassword(e.target.value)}
-                      className="w-full pl-4 pr-12 py-3.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-900 font-bold tracking-wider placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white transition-all text-sm font-mono"
+                      className="w-full pl-4 pr-12 py-3.5 bg-slate-50 md:bg-slate-950/60 border-2 border-slate-200 md:border-white/20 rounded-xl text-slate-900 md:text-white font-bold tracking-wider placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white md:focus:bg-slate-900 transition-all text-sm font-mono"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 md:hover:text-slate-200"
                     >
                       {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
@@ -926,18 +926,18 @@ export default function FreeMentorship() {
             /* ── TAB 2: MENTOR LOGIN FORM ── */
             <div className="space-y-6">
               <div className="text-center space-y-1">
-                <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto border border-indigo-100 shadow-sm">
+                <div className="w-12 h-12 rounded-2xl bg-indigo-50 md:bg-indigo-500/20 text-indigo-600 md:text-indigo-400 flex items-center justify-center mx-auto border border-indigo-100 md:border-indigo-400/30 shadow-sm">
                   <GraduationCap size={26} />
                 </div>
-                <h2 className="text-2xl font-black text-slate-900 tracking-tight">Mentor Portal Login</h2>
-                <p className="text-xs text-slate-500 font-medium">
+                <h2 className="text-2xl font-black text-slate-900 md:text-white tracking-tight">Mentor Portal Login</h2>
+                <p className="text-xs text-slate-500 md:text-slate-300 font-medium">
                   BEU Senior Mentors yahan login karke apne sabhi students aur unke <strong>"Kya Padha" study tracker</strong> aur <strong>timer records</strong> access karein.
                 </p>
               </div>
 
               <form onSubmit={handleMentorLogin} className="space-y-4">
                 <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-600 mb-1">
+                  <label className="block text-[11px] font-black uppercase text-slate-600 md:text-slate-300 mb-1">
                     Phone Number (Username) / Email
                   </label>
                   <div className="relative">
@@ -946,7 +946,7 @@ export default function FreeMentorship() {
                       placeholder="Phone Number ya Email (jaise admin ne diya)"
                       value={mentorEmail}
                       onChange={(e) => setMentorEmail(e.target.value)}
-                      className="w-full pl-4 pr-10 py-3.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-900 font-bold tracking-wider placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:bg-white transition-all text-sm"
+                      className="w-full pl-4 pr-10 py-3.5 bg-slate-50 md:bg-slate-950/60 border-2 border-slate-200 md:border-white/20 rounded-xl text-slate-900 md:text-white font-bold tracking-wider placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:bg-white md:focus:bg-slate-900 transition-all text-sm"
                       required
                     />
                     <Phone size={18} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -954,7 +954,7 @@ export default function FreeMentorship() {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-black uppercase text-slate-600 mb-1">
+                  <label className="block text-[11px] font-black uppercase text-slate-600 md:text-slate-300 mb-1">
                     Mentor Password
                   </label>
                   <div className="relative">
@@ -963,13 +963,13 @@ export default function FreeMentorship() {
                       placeholder="Mentor account password"
                       value={mentorPassword}
                       onChange={(e) => setMentorPassword(e.target.value)}
-                      className="w-full pl-4 pr-12 py-3.5 bg-slate-50 border-2 border-slate-200 rounded-xl text-slate-900 font-bold tracking-wider placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:bg-white transition-all text-sm"
+                      className="w-full pl-4 pr-12 py-3.5 bg-slate-50 md:bg-slate-950/60 border-2 border-slate-200 md:border-white/20 rounded-xl text-slate-900 md:text-white font-bold tracking-wider placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:border-indigo-600 focus:bg-white md:focus:bg-slate-900 transition-all text-sm"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowMentorPassword(!showMentorPassword)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 md:hover:text-slate-200"
                     >
                       {showMentorPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
@@ -998,24 +998,24 @@ export default function FreeMentorship() {
         </div>
 
         {/* ── 1000+ WORD COMPREHENSIVE BEU MENTORSHIP GUIDE & AD-SENSE HIGH VALUE CONTENT ── */}
-        <div className="bg-white rounded-[2.5rem] border border-slate-200 shadow-sm p-6 sm:p-12 space-y-12 text-slate-800">
+        <div className="bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-[2.5rem] border border-slate-200 md:border-white/15 shadow-sm p-6 sm:p-12 space-y-12 text-slate-800 md:text-slate-200">
           
           {/* Main Title & Overview */}
-          <div className="border-b border-slate-100 pb-8 space-y-3">
-            <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-black uppercase tracking-widest rounded-full inline-block">
+          <div className="border-b border-slate-100 md:border-white/10 pb-8 space-y-3">
+            <span className="px-3 py-1 bg-blue-100 md:bg-blue-500/20 text-blue-700 md:text-cyan-300 text-xs font-black uppercase tracking-widest rounded-full inline-block">
               Free Academic Initiative
             </span>
-            <h2 className="text-2xl sm:text-4xl font-[1000] text-slate-900 tracking-tight uppercase leading-tight">
+            <h2 className="text-2xl sm:text-4xl font-[1000] text-slate-900 md:text-white tracking-tight uppercase leading-tight">
               The Comprehensive Guide to Free BEU Mentorship: Navigating Engineering Excellence in Bihar
             </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+            <p className="text-slate-600 md:text-slate-300 text-sm sm:text-base leading-relaxed">
               Empowering 38+ Government Engineering Colleges across Bihar with structured peer guidance, verified semester exam strategies, daily study accountability, and industry placement roadmaps.
             </p>
           </div>
 
           {/* Section 1: The Transition Challenge */}
           <section className="space-y-4">
-            <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 md:text-white tracking-tight flex items-center gap-2">
               <span>1. The Transition Challenge: Why Bihar Engineering Scholars Need Peer Mentorship</span>
             </h3>
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
@@ -1031,47 +1031,47 @@ export default function FreeMentorship() {
 
           {/* Section 2: Core Pillars */}
           <section className="space-y-6">
-            <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 md:text-white tracking-tight">
               2. Core Pillars of the ACB Free Mentorship Framework
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               
-              <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-black text-base">
+              <div className="p-6 rounded-3xl bg-slate-50 md:bg-black/30 border border-slate-200/80 md:border-white/10 space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-blue-100 md:bg-blue-500/20 text-blue-700 md:text-cyan-300 flex items-center justify-center font-black text-base">
                   01
                 </div>
-                <h4 className="text-base font-black text-slate-900 uppercase tracking-tight">1-on-1 Personalized Senior Matching</h4>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                <h4 className="text-base font-black text-slate-900 md:text-white uppercase tracking-tight">1-on-1 Personalized Senior Matching</h4>
+                <p className="text-xs text-slate-600 md:text-slate-300 leading-relaxed font-medium">
                   Unlike generic advisory forums, our algorithm pairs each enrolled student with a verified senior mentor from their specific branch (CSE, Civil, Mechanical, EEE, ECE) or alumni network. This guarantees that subject-specific nuances—such as lab manual drafting, university numerical derivations, and faculty evaluation preferences—are addressed with pinpoint contextual accuracy.
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-black text-base">
+              <div className="p-6 rounded-3xl bg-slate-50 md:bg-black/30 border border-slate-200/80 md:border-white/10 space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-100 md:bg-emerald-500/20 text-emerald-700 md:text-emerald-300 flex items-center justify-center font-black text-base">
                   02
                 </div>
-                <h4 className="text-base font-black text-slate-900 uppercase tracking-tight">The "Kya Padha, Kitna Padha" Daily Accountability Habit</h4>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                <h4 className="text-base font-black text-slate-900 md:text-white uppercase tracking-tight">The "Kya Padha, Kitna Padha" Daily Accountability Habit</h4>
+                <p className="text-xs text-slate-600 md:text-slate-300 leading-relaxed font-medium">
                   Consistency is the ultimate differentiator in university examinations. The integrated study log tracker encourages students to record their daily topics, chapter revisions, and Pomodoro focus sessions. Mentors actively monitor these logs, praising productive study streaks and intervening when inactivity signals potential study bottlenecks before mid-semester exams arrive.
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-black text-base">
+              <div className="p-6 rounded-3xl bg-slate-50 md:bg-black/30 border border-slate-200/80 md:border-white/10 space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-amber-100 md:bg-amber-500/20 text-amber-700 md:text-amber-300 flex items-center justify-center font-black text-base">
                   03
                 </div>
-                <h4 className="text-base font-black text-slate-900 uppercase tracking-tight">BEU PYQ & Derivation Mastery</h4>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                <h4 className="text-base font-black text-slate-900 md:text-white uppercase tracking-tight">BEU PYQ & Derivation Mastery</h4>
+                <p className="text-xs text-slate-600 md:text-slate-300 leading-relaxed font-medium">
                   University exams conducted by BEU place heavy emphasis on theoretical derivations, standard proofs, and recurring problem archetypes spanning the last 5 to 7 years. Mentors provide students with curated Previous Year Question (PYQ) breakdowns, highlighting high-yield units and training them to produce presentation-perfect answer sheets with clean pencil schematics and boxed numerical answers.
                 </p>
               </div>
 
-              <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center font-black text-base">
+              <div className="p-6 rounded-3xl bg-slate-50 md:bg-black/30 border border-slate-200/80 md:border-white/10 space-y-3">
+                <div className="w-10 h-10 rounded-2xl bg-purple-100 md:bg-purple-500/20 text-purple-700 md:text-purple-300 flex items-center justify-center font-black text-base">
                   04
                 </div>
-                <h4 className="text-base font-black text-slate-900 uppercase tracking-tight">Career, Internship & Placement Guidance</h4>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                <h4 className="text-base font-black text-slate-900 md:text-white uppercase tracking-tight">Career, Internship & Placement Guidance</h4>
+                <p className="text-xs text-slate-600 md:text-slate-300 leading-relaxed font-medium">
                   Beyond semester grades, students receive strategic clarity regarding internships, Smart India Hackathon (SIH) participations, GATE preparation timelines, State Engineering Service (BPSC AE) foundations, and software engineering hiring tracks. Mentors review GitHub profiles, suggest curated YouTube lecture playlists, and conduct mock technical interview drills.
                 </p>
               </div>
@@ -1081,46 +1081,46 @@ export default function FreeMentorship() {
 
           {/* Section 3: Branch-Specific 4-Year Progression Blueprints */}
           <section className="space-y-6">
-            <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 md:text-white tracking-tight">
               3. Branch-Specific 4-Year Academic & Skill Progression Blueprint
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm text-slate-600 md:text-slate-300 leading-relaxed font-medium">
               Every engineering specialization demands a distinct balance between university curriculum adherence and external industry skill acquisition. Here is the structured roadmap recommended by our senior mentors:
             </p>
 
             <div className="space-y-4">
-              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
-                <h4 className="text-sm font-black text-blue-900 flex items-center gap-2">
+              <div className="p-5 rounded-2xl border border-slate-200 md:border-white/10 bg-slate-50/50 md:bg-black/30 space-y-2">
+                <h4 className="text-sm font-black text-blue-900 md:text-cyan-300 flex items-center gap-2">
                   <span>💻 Computer Science & IT (CSE, AI/ML, Data Science, Cyber Security)</span>
                 </h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-slate-600 md:text-slate-300 leading-relaxed">
                   <strong>Year 1:</strong> Master C Programming fundamentals and discrete mathematics; maintain SGPA &gt; 8.5. <strong>Year 2:</strong> Data Structures &amp; Algorithms (Java or C++), Object-Oriented Design, Database Management Systems (SQL), and Version Control (Git/GitHub). <strong>Year 3:</strong> Operating Systems, Computer Networks, full-stack web or ML project development, open-source contributions, and internship hunting. <strong>Year 4:</strong> Advanced LeetCode problem solving, system design fundamentals, resume tailoring, and off-campus/on-campus placement drives.
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
-                <h4 className="text-sm font-black text-emerald-900 flex items-center gap-2">
+              <div className="p-5 rounded-2xl border border-slate-200 md:border-white/10 bg-slate-50/50 md:bg-black/30 space-y-2">
+                <h4 className="text-sm font-black text-emerald-900 md:text-emerald-300 flex items-center gap-2">
                   <span>🏗️ Civil Engineering (CE)</span>
                 </h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-slate-600 md:text-slate-300 leading-relaxed">
                   <strong>Year 1 &amp; 2:</strong> Develop deep mastery in Strength of Materials (SOM), Fluid Mechanics, Surveying, and Building Materials. <strong>Year 3:</strong> Structural Analysis, Design of Concrete Structures (RCC), Soil Mechanics, and software proficiency in AutoCAD, STAAD Pro, or Revit. <strong>Year 4:</strong> Intensive preparation for GATE Civil, BPSC AE, and SSC JE examinations, alongside site engineering internship experience.
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
-                <h4 className="text-sm font-black text-amber-900 flex items-center gap-2">
+              <div className="p-5 rounded-2xl border border-slate-200 md:border-white/10 bg-slate-50/50 md:bg-black/30 space-y-2">
+                <h4 className="text-sm font-black text-amber-900 md:text-amber-300 flex items-center gap-2">
                   <span>⚙️ Mechanical Engineering (ME)</span>
                 </h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-slate-600 md:text-slate-300 leading-relaxed">
                   <strong>Year 1 &amp; 2:</strong> Solidify core concepts in Engineering Thermodynamics, Kinematics of Machines, and Manufacturing Processes. <strong>Year 3:</strong> Heat Transfer, Fluid Machines, Machine Design, and 3D CAD modeling (SolidWorks/CATIA). <strong>Year 4:</strong> Thermal &amp; design project implementation, industrial plant training reports, and PSU/GATE competitive exam test series.
                 </p>
               </div>
 
-              <div className="p-5 rounded-2xl border border-slate-200 bg-slate-50/50 space-y-2">
-                <h4 className="text-sm font-black text-indigo-900 flex items-center gap-2">
+              <div className="p-5 rounded-2xl border border-slate-200 md:border-white/10 bg-slate-50/50 md:bg-black/30 space-y-2">
+                <h4 className="text-sm font-black text-indigo-900 md:text-indigo-300 flex items-center gap-2">
                   <span>⚡ Electrical & Electronics Engineering (EEE / EE / ECE)</span>
                 </h4>
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-xs text-slate-600 md:text-slate-300 leading-relaxed">
                   <strong>Year 1 &amp; 2:</strong> Circuit &amp; Network Theory, Analog Electronics, Electromagnetic Fields, and Digital Logic. <strong>Year 3:</strong> Control Systems, Electrical Machines, Microprocessors, Power Systems, and MATLAB/Simulink simulations. <strong>Year 4:</strong> Renewable energy capstone projects, Embedded C or VLSI fundamentals, and core electrical/electronics placement preparation.
                 </p>
               </div>
@@ -1129,13 +1129,13 @@ export default function FreeMentorship() {
 
           {/* Section 4: Tips for 9+ CGPA in BEU */}
           <section className="space-y-4">
-            <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 md:text-white tracking-tight">
               4. The Blueprint to Securing an 8.5+ or 9.0+ CGPA in BEU Semester Examinations
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+            <p className="text-xs sm:text-sm text-slate-600 md:text-slate-300 leading-relaxed font-medium">
               Scoring high marks in Bihar Engineering University is not about rote memorization; it is about strategic presentation and syllabus alignment. Senior mentors highlight five proven rules:
             </p>
-            <ul className="list-disc pl-5 space-y-2 text-xs sm:text-sm text-slate-600 font-medium">
+            <ul className="list-disc pl-5 space-y-2 text-xs sm:text-sm text-slate-600 md:text-slate-300 font-medium">
               <li><strong>Prioritize High-Weightage Syllabus Units:</strong> BEU question papers offer internal choices. Identify the 3 core units per subject that reliably generate full 14-mark questions and master their derivations completely.</li>
               <li><strong>Incorporate Structured Schematics &amp; Flowcharts:</strong> Examiners evaluate hundreds of answer booklets. Neatly labeled pencil diagrams, circuit layouts, and algorithmic flowcharts immediately elevate your paper above average submissions.</li>
               <li><strong>Formula Box Highlighting:</strong> Conclude every mathematical derivation by boxing the final formula with standard units and clear parameter definitions. This signals rigor and thorough understanding.</li>
@@ -1146,35 +1146,35 @@ export default function FreeMentorship() {
 
           {/* Section 5: Frequently Asked Questions (FAQs) */}
           <section className="space-y-4">
-            <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 md:text-white tracking-tight">
               5. Frequently Asked Questions (FAQs)
             </h3>
             
             <div className="space-y-3">
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <h5 className="text-xs sm:text-sm font-black text-slate-900 mb-1">Q1: Is the BEU Mentorship Program really 100% free?</h5>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+              <div className="p-4 rounded-2xl bg-slate-50 md:bg-black/30 border border-slate-200 md:border-white/10">
+                <h5 className="text-xs sm:text-sm font-black text-slate-900 md:text-white mb-1">Q1: Is the BEU Mentorship Program really 100% free?</h5>
+                <p className="text-xs text-slate-600 md:text-slate-300 leading-relaxed font-medium">
                   Yes, absolutely. Apna College Bihar is an independent community initiative created by students and alumni. There are no fees, hidden subscriptions, or premium tiers for mentorship, doubt clearing, or tracker access.
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <h5 className="text-xs sm:text-sm font-black text-slate-900 mb-1">Q2: How do I get my login username and password?</h5>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+              <div className="p-4 rounded-2xl bg-slate-50 md:bg-black/30 border border-slate-200 md:border-white/10">
+                <h5 className="text-xs sm:text-sm font-black text-slate-900 md:text-white mb-1">Q2: How do I get my login username and password?</h5>
+                <p className="text-xs text-slate-600 md:text-slate-300 leading-relaxed font-medium">
                   Enrolled students receive their credentials directly via official WhatsApp communications from our administrator desk. Your username is typically your registered WhatsApp Phone Number or University Roll Number, accompanied by your secure access password.
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <h5 className="text-xs sm:text-sm font-black text-slate-900 mb-1">Q3: How are mentors selected and assigned?</h5>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+              <div className="p-4 rounded-2xl bg-slate-50 md:bg-black/30 border border-slate-200 md:border-white/10">
+                <h5 className="text-xs sm:text-sm font-black text-slate-900 md:text-white mb-1">Q3: How are mentors selected and assigned?</h5>
+                <p className="text-xs text-slate-600 md:text-slate-300 leading-relaxed font-medium">
                   Our mentors are verified 3rd-year, 4th-year scholars and alumni across Bihar Government Engineering Colleges with exceptional academic records (8.5+ CGPA) and proven track records in technical projects, hackathons, or competitive examinations.
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <h5 className="text-xs sm:text-sm font-black text-slate-900 mb-1">Q4: Can I book live 1-on-1 video calls with my mentor?</h5>
-                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+              <div className="p-4 rounded-2xl bg-slate-50 md:bg-black/30 border border-slate-200 md:border-white/10">
+                <h5 className="text-xs sm:text-sm font-black text-slate-900 md:text-white mb-1">Q4: Can I book live 1-on-1 video calls with my mentor?</h5>
+                <p className="text-xs text-slate-600 md:text-slate-300 leading-relaxed font-medium">
                   Yes! Once logged into your student dashboard, you can request 1-on-1 Google Meet sessions, submit specific academic doubts via the Doubt Box, or connect directly through official WhatsApp channels for swift feedback.
                 </p>
               </div>

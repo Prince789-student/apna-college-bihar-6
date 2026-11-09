@@ -272,7 +272,7 @@ export default function PYQ() {
     <div className="max-w-5xl mx-auto px-3 md:px-4 pb-24 space-y-4 md:space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
 
       {/* Header */}
-      <div className="bg-white p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] border border-slate-200/80 shadow-xl relative overflow-hidden">
+      <div className="bg-white md:bg-slate-900/85 md:backdrop-blur-md p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] border border-slate-200/80 md:border-white/15 shadow-xl relative overflow-hidden md:text-white">
         <div className="absolute top-0 right-0 w-[350px] h-[350px] bg-amber-500/8 rounded-full blur-[80px] pointer-events-none"></div>
         <div className="relative z-10">
           <div className="flex items-center justify-between gap-3 md:gap-4 mb-4 md:mb-6">
@@ -283,14 +283,14 @@ export default function PYQ() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl md:text-3xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">PYQ Bank</h1>
+                  <h1 className="text-xl md:text-3xl font-[1000] text-slate-900 md:text-white tracking-tighter uppercase leading-none">PYQ Bank</h1>
                   {isOffline && (
                     <span className="inline-flex items-center gap-1 text-[8px] md:text-[9px] font-black uppercase px-2 py-0.5 bg-amber-500/10 text-amber-600 border border-amber-500/20 rounded-full">
                       <WifiOff size={10} /> Offline
                     </span>
                   )}
                 </div>
-                <p className="text-[8px] md:text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] mt-0.5 md:mt-1">Branch → Semester → Subject → Papers</p>
+                <p className="text-[8px] md:text-[10px] text-slate-400 md:text-slate-400 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] mt-0.5 md:mt-1">Branch → Semester → Subject → Papers</p>
               </div>
             </div>
 
@@ -298,7 +298,7 @@ export default function PYQ() {
               onClick={() => fetchPYQs(true)}
               disabled={isRefreshing}
               title="Sync latest PYQs"
-              className="p-2.5 md:p-3 rounded-xl bg-slate-100 hover:bg-amber-50 text-slate-500 hover:text-amber-600 transition-all border border-slate-200/60 active:scale-95 shrink-0 flex items-center gap-1.5"
+              className="p-2.5 md:p-3 rounded-xl bg-slate-100 md:bg-white/10 hover:bg-amber-50 md:hover:bg-amber-500/20 text-slate-500 md:text-slate-300 hover:text-amber-600 md:hover:text-amber-400 transition-all border border-slate-200/60 md:border-white/10 active:scale-95 shrink-0 flex items-center gap-1.5"
             >
               <RefreshCw size={14} className={isRefreshing ? 'animate-spin text-amber-600' : ''} />
               <span className="hidden sm:inline text-[9px] font-black uppercase tracking-wider">Sync</span>
@@ -307,10 +307,10 @@ export default function PYQ() {
 
           {/* Breadcrumb */}
           <div className="flex items-center gap-1 md:gap-1.5 flex-wrap mb-3 md:mb-5">
-            <button onClick={goHome} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'branch' ? 'bg-amber-500 text-white' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50'}`}>📋 PYQ</button>
-            {branch && <><ChevronRight size={12} className="text-slate-300" /><button onClick={goToBranch} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'sem' ? 'bg-amber-500 text-white' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50'}`}>{branch.emoji} {branch.short}</button></>}
-            {sem && <><ChevronRight size={12} className="text-slate-300" /><button onClick={goToSem} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'subject' ? 'bg-amber-500 text-white' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50'}`}>Sem {sem}</button></>}
-            {folder && <><ChevronRight size={12} className="text-slate-300" />{navHistory.map((h, i) => (<React.Fragment key={h.id}><button onClick={() => { setNavHistory(nh => nh.slice(0, i)); setFolder(h); }} className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg text-slate-400 hover:text-amber-600 hover:bg-amber-50">{h.title}</button><ChevronRight size={12} className="text-slate-300" /></React.Fragment>))}<span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg bg-amber-500 text-white">{folder.title}</span></>}
+            <button onClick={goHome} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'branch' ? 'bg-amber-500 text-white' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50 md:hover:bg-white/10'}`}>📋 PYQ</button>
+            {branch && <><ChevronRight size={12} className="text-slate-300 md:text-slate-500" /><button onClick={goToBranch} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'sem' ? 'bg-amber-500 text-white' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50 md:hover:bg-white/10'}`}>{branch.emoji} {branch.short}</button></>}
+            {sem && <><ChevronRight size={12} className="text-slate-300 md:text-slate-500" /><button onClick={goToSem} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'subject' ? 'bg-amber-500 text-white' : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50 md:hover:bg-white/10'}`}>Sem {sem}</button></>}
+            {folder && <><ChevronRight size={12} className="text-slate-300 md:text-slate-500" />{navHistory.map((h, i) => (<React.Fragment key={h.id}><button onClick={() => { setNavHistory(nh => nh.slice(0, i)); setFolder(h); }} className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg text-slate-400 hover:text-amber-600 hover:bg-amber-50 md:hover:bg-white/10">{h.title}</button><ChevronRight size={12} className="text-slate-300 md:text-slate-500" /></React.Fragment>))}<span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg bg-amber-500 text-white">{folder.title}</span></>}
           </div>
 
           {/* Search */}
@@ -318,7 +318,7 @@ export default function PYQ() {
             <Search className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-amber-500" size={16} />
             <input value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search PYQ..."
-              className="w-full bg-slate-100 border-2 border-transparent focus:border-amber-500/40 rounded-xl md:rounded-2xl py-3 md:py-4 pl-11 md:pl-14 pr-4 md:pr-5 text-slate-900 text-xs md:text-sm font-bold outline-none transition-all placeholder:text-slate-400" />
+              className="w-full bg-slate-100 md:bg-black/40 border-2 border-transparent md:border-white/10 focus:border-amber-500/40 rounded-xl md:rounded-2xl py-3 md:py-4 pl-11 md:pl-14 pr-4 md:pr-5 text-slate-900 md:text-white text-xs md:text-sm font-bold outline-none transition-all placeholder:text-slate-400" />
           </div>
         </div>
       </div>

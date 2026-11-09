@@ -45,11 +45,11 @@ export default function WhatsAppPopup() {
         aria-label="WhatsApp Community"
         className="fixed bottom-[calc(4.85rem+env(safe-area-inset-bottom,0px))] right-3 md:bottom-7 md:right-7 z-[170] flex items-end gap-2.5 select-none pointer-events-auto"
       >
-        {/* Animated Speech Bubble / Pill Tooltip (Desktop/Tablet only) */}
+        {/* Animated Speech Bubble / Pill Tooltip (Desktop/Tablet only, completely hidden on mobile phones) */}
         {showTooltip && (
           <div 
             onClick={() => setIsOpen(true)}
-            className="hidden sm:flex items-center gap-2.5 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.12),0_0_15px_rgba(37,211,102,0.25)] border border-emerald-200/80 cursor-pointer animate-wa-float group hover:scale-105 transition-all duration-200"
+            className="hidden md:flex items-center gap-2.5 bg-white/95 backdrop-blur-md px-3.5 py-2 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.12),0_0_15px_rgba(37,211,102,0.25)] border border-emerald-200/80 cursor-pointer animate-wa-float group hover:scale-105 transition-all duration-200"
           >
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>

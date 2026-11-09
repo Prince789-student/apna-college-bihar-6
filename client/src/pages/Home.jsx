@@ -252,13 +252,9 @@ export default function Home() {
             </div>
 
             {/* Main Headline */}
-            <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight sm:leading-none mb-4 drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
+            <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight sm:leading-none mb-6 drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
               Apna College <span className="bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-300 bg-clip-text text-transparent">Bihar</span>
             </h1>
-
-            <p className="text-sm sm:text-lg md:text-xl font-medium text-slate-200 max-w-3xl mx-auto leading-relaxed mb-8 drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
-              Free B.Tech unit notes, verified university PYQs, official BEU syllabus, CGPA calculators &amp; senior mentorship — built specifically for students across all 38 Government Engineering Colleges.
-            </p>
 
             {/* Direct Quick Launch Action Buttons */}
             <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-8">

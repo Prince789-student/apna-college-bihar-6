@@ -86,7 +86,7 @@ export default function DownloadPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-['Inter'] pb-20 selection:bg-blue-500/20 overflow-x-clip">
+    <div className="min-h-screen bg-[#f8fafc] md:bg-transparent text-slate-900 md:text-white font-['Inter'] pb-20 selection:bg-cyan-500/30 overflow-x-clip">
       <SEO 
         title="Download Apna College Bihar Apps | Windows, Mac, Linux & Android"
         description="Download official Apna College Bihar applications for Windows PC, Apple Mac (macOS), Linux x64, and Android mobile. Includes Study Focus Blocker, BEU Notes, PYQs, and realtime notice alerts."
@@ -94,35 +94,35 @@ export default function DownloadPage() {
       />
 
       {/* Hero Header */}
-      <section className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-24 border-b border-slate-200/80 bg-white">
+      <section className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-24 border-b border-slate-200/80 md:border-white/10 bg-white md:bg-slate-900/85 md:backdrop-blur-md md:rounded-3xl max-w-6xl mx-auto shadow-2xl">
         <div className="absolute inset-0 bg-radial-gradient from-blue-50/60 to-transparent pointer-events-none"></div>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold uppercase tracking-wider mb-6 shadow-xs">
-            <Sparkles size={14} className="text-blue-600 animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 md:bg-blue-500/20 border border-blue-200 md:border-blue-400/30 text-blue-700 md:text-cyan-300 text-xs font-bold uppercase tracking-wider mb-6 shadow-xs">
+            <Sparkles size={14} className="text-blue-600 md:text-cyan-400 animate-pulse" />
             <span>Official Apps Ecosystem</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 tracking-tight uppercase leading-[1.1] mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-900 md:text-white tracking-tight uppercase leading-[1.1] mb-6">
             Padhai Me <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">Zero Distraction</span>.<br />
             Official Apps for Windows, Mac, Linux & Mobile.
           </h1>
 
-          <p className="max-w-2xl mx-auto text-sm sm:text-base text-slate-600 font-medium leading-relaxed mb-6">
+          <p className="max-w-2xl mx-auto text-sm sm:text-base text-slate-600 md:text-slate-300 font-medium leading-relaxed mb-6">
             BEU engineering exams ki tayyari ab aur aasan. Apne Windows laptop, Apple Mac, Linux workstation ya Android smartphone par official app install karein aur payein <strong>Study Focus Blocker</strong>, high-speed Notes, aur instant exam notices.
           </p>
 
           {/* OS Auto-Detection Chip */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold mb-8">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100 md:bg-black/40 border border-slate-200 md:border-white/15 text-slate-700 md:text-slate-300 text-xs font-semibold mb-8">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-            <span>Detected Device: <strong className="capitalize text-slate-900">{getOSBadgeLabel()}</strong></span>
+            <span>Detected Device: <strong className="capitalize text-slate-900 md:text-white">{getOSBadgeLabel()}</strong></span>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-bold text-slate-500">
-            <span className="flex items-center gap-1.5"><CheckCircle2 size={16} className="text-emerald-600" /> 100% Free Forever</span>
-            <span className="flex items-center gap-1.5"><ShieldCheck size={16} className="text-blue-600" /> Safe & Virus-Free</span>
-            <span className="flex items-center gap-1.5"><Command size={16} className="text-slate-700" /> Windows, Mac & Linux</span>
-            <span className="flex items-center gap-1.5"><Zap size={16} className="text-amber-500" /> Instant Access</span>
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs font-bold text-slate-500 md:text-slate-300">
+            <span className="flex items-center gap-1.5"><CheckCircle2 size={16} className="text-emerald-500" /> 100% Free Forever</span>
+            <span className="flex items-center gap-1.5"><ShieldCheck size={16} className="text-blue-500" /> Safe & Virus-Free</span>
+            <span className="flex items-center gap-1.5"><Command size={16} className="text-slate-400 md:text-slate-300" /> Windows, Mac & Linux</span>
+            <span className="flex items-center gap-1.5"><Zap size={16} className="text-amber-400" /> Instant Access</span>
           </div>
 
           {/* Category Filter Pills */}
@@ -131,8 +131,8 @@ export default function DownloadPage() {
               onClick={() => setPlatformFilter('all')}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                 platformFilter === 'all'
-                  ? 'bg-slate-900 text-white shadow-md'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-slate-900 md:bg-white md:text-slate-900 text-white shadow-md'
+                  : 'bg-slate-100 md:bg-black/40 text-slate-600 md:text-slate-300 hover:bg-slate-200 md:hover:bg-white/10 md:border md:border-white/10'
               }`}
             >
               All Platforms (4)
@@ -142,7 +142,7 @@ export default function DownloadPage() {
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                 platformFilter === 'desktop'
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  : 'bg-slate-100 md:bg-black/40 text-slate-600 md:text-slate-300 hover:bg-slate-200 md:hover:bg-white/10 md:border md:border-white/10'
               }`}
             >
               <Laptop size={14} />
@@ -153,7 +153,7 @@ export default function DownloadPage() {
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
                 platformFilter === 'mobile'
                   ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/20'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  : 'bg-slate-100 md:bg-black/40 text-slate-600 md:text-slate-300 hover:bg-slate-200 md:hover:bg-white/10 md:border md:border-white/10'
               }`}
             >
               <Smartphone size={14} />
@@ -170,7 +170,7 @@ export default function DownloadPage() {
 
           {/* 1. WINDOWS PC / LAPTOP CARD */}
           {(platformFilter === 'all' || platformFilter === 'desktop') && (
-            <div className={`bg-white rounded-3xl border-2 ${detectedOS === 'windows' ? 'border-blue-500 shadow-blue-500/10' : 'border-blue-500/30'} p-6 sm:p-8 shadow-xl hover:border-blue-500 transition-all flex flex-col justify-between relative overflow-hidden group`}>
+            <div className={`bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-3xl border-2 ${detectedOS === 'windows' ? 'border-blue-500 shadow-blue-500/10' : 'border-blue-500/30 md:border-white/15'} p-6 sm:p-8 shadow-xl hover:border-blue-500 transition-all flex flex-col justify-between relative overflow-hidden group md:text-white`}>
               <div className="absolute top-0 right-0 bg-gradient-to-l from-blue-600 to-indigo-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
                 {detectedOS === 'windows' ? '★ Recommended For Your PC' : 'Official Windows Setup'}
               </div>
@@ -181,31 +181,31 @@ export default function DownloadPage() {
                     <img src="/logo-192.png" alt="Apna College Bihar Logo" className="w-full h-full object-contain" />
                   </div>
                   <div>
-                    <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Windows Desktop App</h2>
-                    <p className="text-xs text-blue-600 font-bold uppercase tracking-wider mt-0.5">Version 2.2 · 64-bit Windows (10 & 11)</p>
+                    <h2 className="text-xl sm:text-2xl font-black text-slate-900 md:text-white tracking-tight">Windows Desktop App</h2>
+                    <p className="text-xs text-blue-600 md:text-cyan-400 font-bold uppercase tracking-wider mt-0.5">Version 2.2 · 64-bit Windows (10 & 11)</p>
                   </div>
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
+                <p className="text-xs sm:text-sm text-slate-600 md:text-slate-300 font-medium leading-relaxed mb-6">
                   Laptops aur Desktop computers ke liye specially optimized. Isme built-in <strong>Study Focus Blocker</strong> hai jo padhai ke dauran social media aur game notifications ko mute kar deta hai.
                 </p>
 
                 {/* Feature Highlights */}
-                <div className="space-y-3 mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <Lock size={16} className="text-blue-600 shrink-0 mt-0.5" />
+                <div className="space-y-3 mb-8 bg-slate-50 md:bg-black/30 p-4 rounded-2xl border border-slate-100 md:border-white/10">
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <Lock size={16} className="text-blue-500 shrink-0 mt-0.5" />
                     <span>Strict Focus Mode (Locks distractions during study)</span>
                   </div>
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <Clock size={16} className="text-indigo-600 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <Clock size={16} className="text-indigo-400 shrink-0 mt-0.5" />
                     <span>Desktop Stopwatch & Integrated Session Tracker</span>
                   </div>
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <FileText size={16} className="text-emerald-600 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <FileText size={16} className="text-emerald-400 shrink-0 mt-0.5" />
                     <span>Offline-ready BEU Notes & Fullscreen PYQ viewer</span>
                   </div>
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <Monitor size={16} className="text-amber-600 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <Monitor size={16} className="text-amber-400 shrink-0 mt-0.5" />
                     <span>F5 Quick Refresh & System Tray Background Monitor</span>
                   </div>
                 </div>
@@ -246,7 +246,7 @@ export default function DownloadPage() {
 
           {/* 2. APPLE macOS CARD */}
           {(platformFilter === 'all' || platformFilter === 'desktop') && (
-            <div className={`bg-white rounded-3xl border-2 ${detectedOS === 'mac' ? 'border-sky-500 shadow-sky-500/10' : 'border-slate-300'} p-6 sm:p-8 shadow-xl hover:border-slate-800 transition-all flex flex-col justify-between relative overflow-hidden group`}>
+            <div className={`bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-3xl border-2 ${detectedOS === 'mac' ? 'border-sky-500 shadow-sky-500/10' : 'border-slate-300 md:border-white/15'} p-6 sm:p-8 shadow-xl hover:border-slate-800 transition-all flex flex-col justify-between relative overflow-hidden group md:text-white`}>
               <div className="absolute top-0 right-0 bg-gradient-to-l from-slate-900 to-slate-800 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm flex items-center gap-1.5">
                 <Command size={12} className="text-sky-400" />
                 <span>{detectedOS === 'mac' ? '★ Recommended For Your Mac' : 'macOS Application'}</span>
@@ -258,31 +258,31 @@ export default function DownloadPage() {
                     <Command size={28} className="text-sky-400" />
                   </div>
                   <div>
-                    <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">macOS Desktop App</h2>
-                    <p className="text-xs text-sky-600 font-bold uppercase tracking-wider mt-0.5">Version 2.2 · Apple Silicon (M1/M2/M3/M4) & Intel</p>
+                    <h2 className="text-xl sm:text-2xl font-black text-slate-900 md:text-white tracking-tight">macOS Desktop App</h2>
+                    <p className="text-xs text-sky-600 md:text-sky-400 font-bold uppercase tracking-wider mt-0.5">Version 2.2 · Apple Silicon (M1/M2/M3/M4) & Intel</p>
                   </div>
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
+                <p className="text-xs sm:text-sm text-slate-600 md:text-slate-300 font-medium leading-relaxed mb-6">
                   Apple MacBooks aur iMacs ke liye dedicated desktop app. Native Unix performance, built-in <strong>Study Focus Blocker</strong>, fullscreen BEU Notes aur PYQ viewer ke saath ready.
                 </p>
 
                 {/* Feature Highlights */}
-                <div className="space-y-3 mb-6 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <Cpu size={16} className="text-sky-600 shrink-0 mt-0.5" />
+                <div className="space-y-3 mb-6 bg-slate-50 md:bg-black/30 p-4 rounded-2xl border border-slate-100 md:border-white/10">
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <Cpu size={16} className="text-sky-500 shrink-0 mt-0.5" />
                     <span>Apple Silicon Optimized (Runs natively on M1/M2/M3/M4)</span>
                   </div>
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <Lock size={16} className="text-indigo-600 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <Lock size={16} className="text-indigo-400 shrink-0 mt-0.5" />
                     <span>Study Focus Mode (Distraction-free fullscreen learning)</span>
                   </div>
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <FileText size={16} className="text-emerald-600 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <FileText size={16} className="text-emerald-400 shrink-0 mt-0.5" />
                     <span>Fast Offline-ready BEU Notes & Fullscreen PYQ viewer</span>
                   </div>
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <Sparkles size={16} className="text-amber-500 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <Sparkles size={16} className="text-amber-400 shrink-0 mt-0.5" />
                     <span>1-Click Launcher (Start-Apna-College-Bihar.command included)</span>
                   </div>
                 </div>
@@ -339,7 +339,7 @@ export default function DownloadPage() {
 
           {/* 3. LINUX PC / WORKSTATION CARD */}
           {(platformFilter === 'all' || platformFilter === 'desktop') && (
-            <div className={`bg-white rounded-3xl border-2 ${detectedOS === 'linux' ? 'border-indigo-600 shadow-indigo-600/10' : 'border-slate-800/30'} p-6 sm:p-8 shadow-xl hover:border-slate-800 transition-all flex flex-col justify-between relative overflow-hidden group`}>
+            <div className={`bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-3xl border-2 ${detectedOS === 'linux' ? 'border-indigo-600 shadow-indigo-600/10' : 'border-slate-800/30 md:border-white/15'} p-6 sm:p-8 shadow-xl hover:border-slate-800 transition-all flex flex-col justify-between relative overflow-hidden group md:text-white`}>
               <div className="absolute top-0 right-0 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm flex items-center gap-1.5">
                 <Terminal size={12} className="text-emerald-400" />
                 <span>{detectedOS === 'linux' ? '★ Recommended For Your Linux' : 'Portable Linux Build'}</span>
@@ -351,31 +351,31 @@ export default function DownloadPage() {
                     <Terminal size={28} />
                   </div>
                   <div>
-                    <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Linux Desktop App</h2>
-                    <p className="text-xs text-indigo-600 font-bold uppercase tracking-wider mt-0.5">Version 2.2 · 64-bit Linux (x64)</p>
+                    <h2 className="text-xl sm:text-2xl font-black text-slate-900 md:text-white tracking-tight">Linux Desktop App</h2>
+                    <p className="text-xs text-indigo-600 md:text-cyan-400 font-bold uppercase tracking-wider mt-0.5">Version 2.2 · 64-bit Linux (x64)</p>
                   </div>
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
+                <p className="text-xs sm:text-sm text-slate-600 md:text-slate-300 font-medium leading-relaxed mb-6">
                   Ubuntu, Debian, Linux Mint, Fedora aur Arch Linux ke liye native portable package. Built-in <strong>Study Focus Blocker</strong>, distraction-free environment, offline BEU Notes aur PYQ viewer ke saath ready.
                 </p>
 
                 {/* Feature Highlights */}
-                <div className="space-y-3 mb-6 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <Zap size={16} className="text-amber-500 shrink-0 mt-0.5" />
+                <div className="space-y-3 mb-6 bg-slate-50 md:bg-black/30 p-4 rounded-2xl border border-slate-100 md:border-white/10">
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <Zap size={16} className="text-amber-400 shrink-0 mt-0.5" />
                     <span>Zero Sudo / Root Required (Portable extract & run)</span>
                   </div>
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <Lock size={16} className="text-indigo-600 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <Lock size={16} className="text-indigo-400 shrink-0 mt-0.5" />
                     <span>Strict Focus Mode (Locks distractions during study)</span>
                   </div>
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <FileText size={16} className="text-emerald-600 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <FileText size={16} className="text-emerald-400 shrink-0 mt-0.5" />
                     <span>Full-screen BEU Notes & Offline PYQ Paper Viewer</span>
                   </div>
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <Terminal size={16} className="text-slate-800 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <Terminal size={16} className="text-slate-400 md:text-slate-200 shrink-0 mt-0.5" />
                     <span>Includes run.sh launcher & .desktop shortcut entry</span>
                   </div>
                 </div>
@@ -435,7 +435,7 @@ export default function DownloadPage() {
 
           {/* 4. ANDROID MOBILE CARD */}
           {(platformFilter === 'all' || platformFilter === 'mobile') && (
-            <div className={`bg-white rounded-3xl border-2 ${detectedOS === 'android' ? 'border-emerald-500 shadow-emerald-500/10' : 'border-slate-200'} p-6 sm:p-8 shadow-xl hover:border-slate-300 transition-all flex flex-col justify-between relative overflow-hidden group`}>
+            <div className={`bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-3xl border-2 ${detectedOS === 'android' ? 'border-emerald-500 shadow-emerald-500/10' : 'border-slate-200 md:border-white/15'} p-6 sm:p-8 shadow-xl hover:border-slate-300 transition-all flex flex-col justify-between relative overflow-hidden group md:text-white`}>
               <div className="absolute top-0 right-0 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
                 {detectedOS === 'android' ? '★ Recommended For Your Phone' : 'Official APK'}
               </div>
@@ -446,31 +446,31 @@ export default function DownloadPage() {
                     <Smartphone size={28} />
                   </div>
                   <div>
-                    <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Android Mobile App</h2>
-                    <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">Version 61 · Android 7.0+</p>
+                    <h2 className="text-xl sm:text-2xl font-black text-slate-900 md:text-white tracking-tight">Android Mobile App</h2>
+                    <p className="text-xs text-slate-500 md:text-slate-400 font-bold uppercase tracking-wider mt-0.5">Version 61 · Android 7.0+</p>
                   </div>
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
+                <p className="text-xs sm:text-sm text-slate-600 md:text-slate-300 font-medium leading-relaxed mb-6">
                   Apne smartphone par BEU notes padhein aur exam updates se connect rahein. Mobile background blocker aur instant notice push alerts ke saath ready.
                 </p>
 
                 {/* Feature Highlights */}
-                <div className="space-y-3 mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <Bell size={16} className="text-emerald-600 shrink-0 mt-0.5" />
+                <div className="space-y-3 mb-8 bg-slate-50 md:bg-black/30 p-4 rounded-2xl border border-slate-100 md:border-white/10">
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <Bell size={16} className="text-emerald-500 shrink-0 mt-0.5" />
                     <span>Real-time BEU Notice Push Notifications</span>
                   </div>
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <Lock size={16} className="text-red-500 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <Lock size={16} className="text-red-400 shrink-0 mt-0.5" />
                     <span>Mobile App Blocker (Blocks Instagram during study)</span>
                   </div>
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <CheckCircle2 size={16} className="text-blue-600 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <CheckCircle2 size={16} className="text-blue-500 shrink-0 mt-0.5" />
                     <span>BEU 75% Attendance Tracker & Timetable Alarms</span>
                   </div>
-                  <div className="flex items-start gap-2.5 text-xs text-slate-700 font-bold">
-                    <Zap size={16} className="text-amber-500 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-2.5 text-xs text-slate-700 md:text-slate-200 font-bold">
+                    <Zap size={16} className="text-amber-400 shrink-0 mt-0.5" />
                     <span>One-click Google Sign-in & Fast PDF Loading</span>
                   </div>
                 </div>
@@ -503,31 +503,31 @@ export default function DownloadPage() {
 
       {/* Step-by-Step Installation Guide */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 md:mt-24">
-        <div className="bg-white rounded-3xl border border-slate-200/80 p-6 sm:p-10 shadow-sm">
+        <div className="bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-3xl border border-slate-200/80 md:border-white/15 p-6 sm:p-10 shadow-sm md:text-white">
           <div className="text-center max-w-xl mx-auto mb-10">
-            <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">How to Install</h2>
-            <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">Simple installation guide for Windows, Mac, Linux & Android</p>
+            <h2 className="text-2xl font-black text-slate-900 md:text-white uppercase tracking-tight">How to Install</h2>
+            <p className="text-xs text-slate-500 md:text-slate-400 font-bold uppercase tracking-wider mt-1">Simple installation guide for Windows, Mac, Linux & Android</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-slate-100 md:divide-white/10">
             
             {/* Windows Steps */}
             <div className="space-y-5 pt-4 sm:pt-0">
               <div className="flex items-center gap-2.5">
-                <Laptop size={18} className="text-blue-600" />
-                <h3 className="font-bold text-xs sm:text-sm text-slate-900 uppercase tracking-wider">Windows PC</h3>
+                <Laptop size={18} className="text-blue-600 md:text-cyan-400" />
+                <h3 className="font-bold text-xs sm:text-sm text-slate-900 md:text-white uppercase tracking-wider">Windows PC</h3>
               </div>
-              <ol className="space-y-3.5 text-xs font-semibold text-slate-600">
+              <ol className="space-y-3.5 text-xs font-semibold text-slate-600 md:text-slate-300">
                 <li className="flex gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold text-[10px]">1</span>
+                  <span className="w-5 h-5 rounded-full bg-blue-100 md:bg-blue-500/20 text-blue-700 md:text-cyan-300 flex items-center justify-center shrink-0 font-bold text-[10px]">1</span>
                   <span><strong>Download Windows Setup</strong> se .exe download karein.</span>
                 </li>
                 <li className="flex gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold text-[10px]">2</span>
+                  <span className="w-5 h-5 rounded-full bg-blue-100 md:bg-blue-500/20 text-blue-700 md:text-cyan-300 flex items-center justify-center shrink-0 font-bold text-[10px]">2</span>
                   <span>Downloaded file par double-click karein.</span>
                 </li>
                 <li className="flex gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold text-[10px]">3</span>
+                  <span className="w-5 h-5 rounded-full bg-blue-100 md:bg-blue-500/20 text-blue-700 md:text-cyan-300 flex items-center justify-center shrink-0 font-bold text-[10px]">3</span>
                   <span>Automatic install hokar Desktop shortcut ready!</span>
                 </li>
               </ol>
@@ -536,20 +536,20 @@ export default function DownloadPage() {
             {/* Mac Steps */}
             <div className="space-y-5 pt-6 sm:pt-0 sm:pl-6">
               <div className="flex items-center gap-2.5">
-                <Command size={18} className="text-sky-600" />
-                <h3 className="font-bold text-xs sm:text-sm text-slate-900 uppercase tracking-wider">Apple Mac</h3>
+                <Command size={18} className="text-sky-600 md:text-sky-400" />
+                <h3 className="font-bold text-xs sm:text-sm text-slate-900 md:text-white uppercase tracking-wider">Apple Mac</h3>
               </div>
-              <ol className="space-y-3.5 text-xs font-semibold text-slate-600">
+              <ol className="space-y-3.5 text-xs font-semibold text-slate-600 md:text-slate-300">
                 <li className="flex gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center shrink-0 font-bold text-[10px]">1</span>
+                  <span className="w-5 h-5 rounded-full bg-sky-100 md:bg-sky-500/20 text-sky-700 md:text-sky-300 flex items-center justify-center shrink-0 font-bold text-[10px]">1</span>
                   <span><strong>Download macOS App</strong> se .zip download karein.</span>
                 </li>
                 <li className="flex gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center shrink-0 font-bold text-[10px]">2</span>
+                  <span className="w-5 h-5 rounded-full bg-sky-100 md:bg-sky-500/20 text-sky-700 md:text-sky-300 flex items-center justify-center shrink-0 font-bold text-[10px]">2</span>
                   <span>Unzip karke <strong>Applications</strong> me drag karein.</span>
                 </li>
                 <li className="flex gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center shrink-0 font-bold text-[10px]">3</span>
+                  <span className="w-5 h-5 rounded-full bg-sky-100 md:bg-sky-500/20 text-sky-700 md:text-sky-300 flex items-center justify-center shrink-0 font-bold text-[10px]">3</span>
                   <span>Right-Click karke <strong>Open</strong> select karein.</span>
                 </li>
               </ol>
@@ -558,21 +558,21 @@ export default function DownloadPage() {
             {/* Linux Steps */}
             <div className="space-y-5 pt-6 sm:pt-0 sm:pl-6">
               <div className="flex items-center gap-2.5">
-                <Terminal size={18} className="text-indigo-600" />
-                <h3 className="font-bold text-xs sm:text-sm text-slate-900 uppercase tracking-wider">Linux Workstation</h3>
+                <Terminal size={18} className="text-indigo-600 md:text-indigo-400" />
+                <h3 className="font-bold text-xs sm:text-sm text-slate-900 md:text-white uppercase tracking-wider">Linux Workstation</h3>
               </div>
-              <ol className="space-y-3.5 text-xs font-semibold text-slate-600">
+              <ol className="space-y-3.5 text-xs font-semibold text-slate-600 md:text-slate-300">
                 <li className="flex gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 font-bold text-[10px]">1</span>
+                  <span className="w-5 h-5 rounded-full bg-indigo-100 md:bg-indigo-500/20 text-indigo-700 md:text-indigo-300 flex items-center justify-center shrink-0 font-bold text-[10px]">1</span>
                   <span><strong>Download Linux Package</strong> se .tar.gz download karein.</span>
                 </li>
                 <li className="flex gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 font-bold text-[10px]">2</span>
-                  <span>Terminal me extract karein: <code className="bg-slate-100 px-1 py-0.5 rounded text-indigo-700 font-mono text-[10px]">tar -xzf</code></span>
+                  <span className="w-5 h-5 rounded-full bg-indigo-100 md:bg-indigo-500/20 text-indigo-700 md:text-indigo-300 flex items-center justify-center shrink-0 font-bold text-[10px]">2</span>
+                  <span>Terminal me extract karein: <code className="bg-slate-100 md:bg-black/40 px-1 py-0.5 rounded text-indigo-700 md:text-indigo-300 font-mono text-[10px]">tar -xzf</code></span>
                 </li>
                 <li className="flex gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 font-bold text-[10px]">3</span>
-                  <span>Folder me jaakar <code className="bg-slate-100 px-1 py-0.5 rounded text-indigo-700 font-mono text-[10px]">./run.sh</code> run karein.</span>
+                  <span className="w-5 h-5 rounded-full bg-indigo-100 md:bg-indigo-500/20 text-indigo-700 md:text-indigo-300 flex items-center justify-center shrink-0 font-bold text-[10px]">3</span>
+                  <span>Folder me jaakar <code className="bg-slate-100 md:bg-black/40 px-1 py-0.5 rounded text-indigo-700 md:text-indigo-300 font-mono text-[10px]">./run.sh</code> run karein.</span>
                 </li>
               </ol>
             </div>
@@ -580,20 +580,20 @@ export default function DownloadPage() {
             {/* Android Steps */}
             <div className="space-y-5 pt-6 sm:pt-0 sm:pl-6">
               <div className="flex items-center gap-2.5">
-                <Smartphone size={18} className="text-emerald-600" />
-                <h3 className="font-bold text-xs sm:text-sm text-slate-900 uppercase tracking-wider">Android Phone</h3>
+                <Smartphone size={18} className="text-emerald-600 md:text-emerald-400" />
+                <h3 className="font-bold text-xs sm:text-sm text-slate-900 md:text-white uppercase tracking-wider">Android Phone</h3>
               </div>
-              <ol className="space-y-3.5 text-xs font-semibold text-slate-600">
+              <ol className="space-y-3.5 text-xs font-semibold text-slate-600 md:text-slate-300">
                 <li className="flex gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold text-[10px]">1</span>
+                  <span className="w-5 h-5 rounded-full bg-emerald-100 md:bg-emerald-500/20 text-emerald-700 md:text-emerald-300 flex items-center justify-center shrink-0 font-bold text-[10px]">1</span>
                   <span><strong>Download Android APK</strong> tap karein.</span>
                 </li>
                 <li className="flex gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold text-[10px]">2</span>
+                  <span className="w-5 h-5 rounded-full bg-emerald-100 md:bg-emerald-500/20 text-emerald-700 md:text-emerald-300 flex items-center justify-center shrink-0 font-bold text-[10px]">2</span>
                   <span>Notification bar se 'Allow unknown source' karein.</span>
                 </li>
                 <li className="flex gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold text-[10px]">3</span>
+                  <span className="w-5 h-5 rounded-full bg-emerald-100 md:bg-emerald-500/20 text-emerald-700 md:text-emerald-300 flex items-center justify-center shrink-0 font-bold text-[10px]">3</span>
                   <span><strong>Install</strong> click karke padhai shuru karein.</span>
                 </li>
               </ol>
@@ -606,25 +606,25 @@ export default function DownloadPage() {
       {/* Frequently Asked Questions */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 md:mt-20">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 p-2 rounded-xl bg-slate-100 text-slate-600 mb-2">
+          <div className="inline-flex items-center gap-2 p-2 rounded-xl bg-slate-100 md:bg-black/40 text-slate-600 md:text-cyan-300 mb-2">
             <HelpCircle size={18} />
           </div>
-          <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Frequently Asked Questions</h2>
-          <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">App installation se jude zaroori sawal</p>
+          <h2 className="text-2xl font-black text-slate-900 md:text-white uppercase tracking-tight">Frequently Asked Questions</h2>
+          <p className="text-xs text-slate-500 md:text-slate-400 font-bold uppercase tracking-wider mt-1">App installation se jude zaroori sawal</p>
         </div>
 
         <div className="space-y-3">
           {faqs.map((faq, idx) => (
-            <div key={idx} className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-xs">
+            <div key={idx} className="bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-2xl border border-slate-200/80 md:border-white/15 overflow-hidden shadow-xs md:text-white">
               <button
                 onClick={() => toggleFaq(idx)}
-                className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-xs sm:text-sm text-slate-800 hover:text-blue-600 transition-colors"
+                className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-xs sm:text-sm text-slate-800 md:text-white hover:text-blue-600 md:hover:text-cyan-300 transition-colors"
               >
                 <span>{faq.q}</span>
-                <ChevronDown size={16} className={`text-slate-400 transition-transform duration-200 shrink-0 ${activeFaq === idx ? 'rotate-180 text-blue-600' : ''}`} />
+                <ChevronDown size={16} className={`text-slate-400 transition-transform duration-200 shrink-0 ${activeFaq === idx ? 'rotate-180 text-blue-600 md:text-cyan-400' : ''}`} />
               </button>
               {activeFaq === idx && (
-                <div className="px-4 pb-5 sm:px-5 sm:pb-5 text-xs text-slate-600 leading-relaxed font-medium border-t border-slate-50 pt-3 whitespace-pre-line animate-in fade-in duration-200">
+                <div className="px-4 pb-5 sm:px-5 sm:pb-5 text-xs text-slate-600 md:text-slate-300 leading-relaxed font-medium border-t border-slate-50 md:border-white/10 pt-3 whitespace-pre-line animate-in fade-in duration-200">
                   {faq.a}
                 </div>
               )}

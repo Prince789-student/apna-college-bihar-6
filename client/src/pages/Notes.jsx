@@ -400,12 +400,12 @@ export default function Notes() {
       <div className="absolute top-40 right-10 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '2.5s' }} />
 
       {/* Header */}
-      <div className="bg-white/95 backdrop-blur-xl p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] border border-slate-200/80 shadow-xl relative overflow-hidden group">
+      <div className="bg-white/95 md:bg-slate-900/85 md:backdrop-blur-md p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] border border-slate-200/80 md:border-white/15 shadow-xl relative overflow-hidden group md:text-white">
         <div className="absolute -top-12 -right-12 w-64 h-64 bg-gradient-to-br from-indigo-500/15 via-blue-500/10 to-transparent rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
         <div className="relative z-10">
           {/* Top Live Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 rounded-full text-blue-700 text-[10px] font-black uppercase tracking-wider mb-4 shadow-2xs">
-            <span className="w-2 h-2 rounded-full bg-blue-600 animate-ping" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-blue-50 to-indigo-50 md:bg-blue-500/20 border border-blue-200/80 md:border-blue-400/30 rounded-full text-blue-700 md:text-cyan-300 text-[10px] font-black uppercase tracking-wider mb-4 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-blue-600 md:bg-cyan-400 animate-ping" />
             <span>BEU Syllabus Vault • 100% Free Verified Notes</span>
           </div>
 
@@ -417,14 +417,14 @@ export default function Notes() {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl md:text-3xl font-[1000] text-slate-900 tracking-tighter uppercase leading-none">Notes Library</h1>
+                  <h1 className="text-xl md:text-3xl font-[1000] text-slate-900 md:text-white tracking-tighter uppercase leading-none">Notes Library</h1>
                   {isOffline && (
                     <span className="inline-flex items-center gap-1 text-[8px] md:text-[9px] font-black uppercase px-2 py-0.5 bg-amber-500/10 text-amber-600 border border-amber-500/20 rounded-full">
                       <WifiOff size={10} /> Offline
                     </span>
                   )}
                 </div>
-                <p className="text-[8px] md:text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] mt-0.5 md:mt-1">Branch → Semester → Subject → Files</p>
+                <p className="text-[8px] md:text-[10px] text-slate-400 md:text-slate-400 font-black uppercase tracking-[0.2em] md:tracking-[0.3em] mt-0.5 md:mt-1">Branch → Semester → Subject → Files</p>
               </div>
             </div>
 
@@ -432,7 +432,7 @@ export default function Notes() {
               onClick={() => fetchNotes(true)}
               disabled={isRefreshing}
               title="Sync latest notes"
-              className="p-2.5 md:p-3 rounded-xl bg-slate-100 hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 transition-all border border-slate-200/60 active:scale-95 shrink-0 flex items-center gap-1.5 shadow-2xs hover:shadow-sm"
+              className="p-2.5 md:p-3 rounded-xl bg-slate-100 md:bg-white/10 hover:bg-indigo-50 md:hover:bg-indigo-500/20 text-slate-600 md:text-slate-300 hover:text-indigo-600 md:hover:text-cyan-300 transition-all border border-slate-200/60 md:border-white/10 active:scale-95 shrink-0 flex items-center gap-1.5 shadow-2xs hover:shadow-sm"
             >
               <RefreshCw size={14} className={isRefreshing ? 'animate-spin text-indigo-600' : 'group-hover:rotate-180 transition-transform duration-500'} />
               <span className="hidden sm:inline text-[9px] font-black uppercase tracking-wider">Sync</span>
@@ -441,10 +441,10 @@ export default function Notes() {
 
           {/* Breadcrumb */}
           <div className="flex items-center gap-1 md:gap-1.5 flex-wrap mb-3 md:mb-5">
-            <button onClick={goHome} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'branch' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600 hover:bg-indigo-50'}`}>📚 Notes</button>
-            {branch && <><ChevronRight size={12} className="text-slate-300" /><button onClick={goToBranch} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'sem' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600 hover:bg-indigo-50'}`}>{branch.emoji} {branch.short}</button></>}
-            {sem && <><ChevronRight size={12} className="text-slate-300" /><button onClick={goToSem} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'subject' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600 hover:bg-indigo-50'}`}>Sem {sem}</button></>}
-            {folder && <><ChevronRight size={12} className="text-slate-300" />{navHistory.map((h, i) => (<React.Fragment key={h.id}><button onClick={() => { setNavHistory(nh => nh.slice(0, i)); setFolder(h); }} className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50">{h.title}</button><ChevronRight size={12} className="text-slate-300" /></React.Fragment>))}<span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg bg-indigo-600 text-white">{folder.title}</span></>}
+            <button onClick={goHome} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'branch' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 md:hover:bg-white/10'}`}>📚 Notes</button>
+            {branch && <><ChevronRight size={12} className="text-slate-300 md:text-slate-500" /><button onClick={goToBranch} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'sem' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 md:hover:bg-white/10'}`}>{branch.emoji} {branch.short}</button></>}
+            {sem && <><ChevronRight size={12} className="text-slate-300 md:text-slate-500" /><button onClick={goToSem} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'subject' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 md:hover:bg-white/10'}`}>Sem {sem}</button></>}
+            {folder && <><ChevronRight size={12} className="text-slate-300 md:text-slate-500" />{navHistory.map((h, i) => (<React.Fragment key={h.id}><button onClick={() => { setNavHistory(nh => nh.slice(0, i)); setFolder(h); }} className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 md:hover:bg-white/10">{h.title}</button><ChevronRight size={12} className="text-slate-300 md:text-slate-500" /></React.Fragment>))}<span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg bg-indigo-600 text-white">{folder.title}</span></>}
           </div>
 
           {/* Search */}
@@ -452,7 +452,7 @@ export default function Notes() {
             <Search className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500" size={16} />
             <input value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search notes..."
-              className="w-full bg-slate-100 border-2 border-transparent focus:border-indigo-500/40 rounded-xl md:rounded-2xl py-3 md:py-4 pl-11 md:pl-14 pr-4 md:pr-5 text-slate-900 text-xs md:text-sm font-bold outline-none transition-all placeholder:text-slate-400" />
+              className="w-full bg-slate-100 md:bg-black/40 border-2 border-transparent md:border-white/10 focus:border-indigo-500/40 rounded-xl md:rounded-2xl py-3 md:py-4 pl-11 md:pl-14 pr-4 md:pr-5 text-slate-900 md:text-white text-xs md:text-sm font-bold outline-none transition-all placeholder:text-slate-400" />
           </div>
         </div>
       </div>
