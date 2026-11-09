@@ -10,47 +10,18 @@ const CURRENT_APP_VERSION_NAME = "64.0";
 const DOWNLOAD_URL = "https://www.apnacollegebihar.online/api/download-apk";
 
 export default function AppUpdateChecker() {
+  // STRICT GUARANTEE: Never, ever execute or show on public web browsers
+  if (!Capacitor.isNativePlatform()) {
+    return null;
+  }
+
   const [updateRequired, setUpdateRequired] = useState(false);
   const [installedVersion, setInstalledVersion] = useState("63.0");
   const [latestVersion, setLatestVersion] = useState(CURRENT_APP_VERSION_NAME);
   const [downloading, setDownloading] = useState(false);
 
-  // STRICT GUARANTEE: Never, ever execute or show on public web domain
-  const isWebDomain = typeof window !== 'undefined' && Boolean(
-    window.location.hostname.includes('apnacollegebihar.online') ||
-    window.location.hostname.includes('onrender.com') ||
-    window.location.hostname.includes('firebaseapp.com') ||
-    window.location.hostname.includes('web.app')
-  );
-
   // MUST ONLY run inside the native Android mobile app container
-  const [isNativeApp, setIsNativeApp] = useState(() => {
-    if (isWebDomain) return false;
-    return typeof window !== 'undefined' && Boolean(
-      Capacitor.isNativePlatform() ||
-      window.Capacitor?.isNative ||
-      (window.Capacitor?.getPlatform && window.Capacitor.getPlatform() === 'android') ||
-      window.location.protocol === 'file:' ||
-      (window.location.hostname === 'localhost' && !window.location.port)
-    );
-  });
-
-  useEffect(() => {
-    if (isWebDomain) return;
-    const checkNative = () => {
-      const native = Boolean(
-        Capacitor.isNativePlatform() ||
-        window.Capacitor?.isNative ||
-        (window.Capacitor?.getPlatform && window.Capacitor.getPlatform() === 'android') ||
-        window.location.protocol === 'file:' ||
-        (window.location.hostname === 'localhost' && !window.location.port)
-      );
-      if (native) setIsNativeApp(true);
-    };
-    checkNative();
-    const t = setTimeout(checkNative, 500);
-    return () => clearTimeout(t);
-  }, [isWebDomain]);
+  const [isNativeApp, setIsNativeApp] = useState(() => Capacitor.isNativePlatform());
 
   useEffect(() => {
     // If this is a regular website visitor (desktop/mobile browser), NEVER run update checker!

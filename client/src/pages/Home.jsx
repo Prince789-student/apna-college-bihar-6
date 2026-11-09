@@ -4,7 +4,7 @@ import {
   BookOpen, Calculator, Timer, Users,
   ArrowRight, CheckCircle, GraduationCap,
   Globe, Shield, Zap, Send, Youtube,
-  User, LogOut, ChevronDown, Download, MessageCircle,
+  User, LogOut, Download, MessageCircle,
   ShieldCheck, Calendar, Sparkles, FileText, Library,
   Star, ChevronRight, Search, MapPin, Target,
   RefreshCw, Heart, Building2, Award, Mail,
@@ -34,7 +34,7 @@ export default function Home() {
   );
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [stats, setStats] = useState({ users: 120, notes: 85, pyqs: 60, groups: 24 });
+  const [stats, setStats] = useState({ users: 231, notes: 296, pyqs: 340, groups: 24 });
   const [activeTab, setActiveTab] = useState('academic');
   const [topDonors, setTopDonors] = useState([]);
   const [showScanner, setShowScanner] = useState(false);
@@ -209,16 +209,15 @@ export default function Home() {
       })
       .catch(() => {});
 
-    // 3. Fetch community stats (Sanitized & deduplicated)
+    // 3. Fetch community stats (Real database metrics)
     fetch(`${apiBase}/api/public/home-stats`)
       .then(res => res.json())
       .then(json => {
         if (json.success && json.stats) {
-          // Normalize and prevent inflated duplicate counts
           setStats({
-            notes: Math.min(json.stats.notes || 85, 120),
-            pyqs: Math.min(json.stats.pyqs || 60, 85),
-            users: Math.min(json.stats.users || 120, 150),
+            notes: json.stats.notes || 296,
+            pyqs: json.stats.pyqs || 340,
+            users: json.stats.users || 231,
             groups: json.stats.groups || 24
           });
         }
@@ -299,14 +298,8 @@ export default function Home() {
           </div>
 
           {/* Global Search Bar */}
-          <div className="max-w-2xl mx-auto mb-6">
+          <div className="max-w-2xl mx-auto mb-2">
             <GlobalSearch />
-          </div>
-
-          {/* Scroll Guidance Indicator */}
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-slate-300 text-[11px] font-mono tracking-wider shadow-lg">
-            <span>Scroll down — background film animates frame-by-frame from header to footer</span>
-            <ChevronDown size={13} className="text-cyan-400 animate-bounce" />
           </div>
 
         </div>
