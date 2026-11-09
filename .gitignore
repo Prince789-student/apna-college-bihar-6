@@ -127,3 +127,6 @@ server/.cache/
 server/downloads/
 downloads/
 
+
+.vercel
+.env*

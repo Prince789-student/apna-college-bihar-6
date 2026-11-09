@@ -276,14 +276,14 @@ export default function Home() {
               </Link>
               <Link
                 to="/download"
-                className="px-5 py-3 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white flex items-center gap-2 text-xs sm:text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-all"
+                className="px-5 py-3 rounded-xl bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-white/25 hover:border-cyan-400/60 text-white flex items-center gap-2 text-xs sm:text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-all"
               >
                 <Download size={16} className="text-cyan-400" />
                 <span>Download Official App (v64)</span>
               </Link>
               <Link
                 to="/ugeac-predictor?tab=finder"
-                className="px-5 py-3 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/35 backdrop-blur-md border border-cyan-400/40 text-cyan-300 flex items-center gap-2 text-xs sm:text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-all"
+                className="px-5 py-3 rounded-xl bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-cyan-400/40 hover:border-cyan-400 text-cyan-300 flex items-center gap-2 text-xs sm:text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-all"
               >
                 <Target size={16} />
                 <span>UGEAC Predictor</span>

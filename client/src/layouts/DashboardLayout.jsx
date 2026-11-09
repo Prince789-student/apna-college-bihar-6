@@ -282,7 +282,9 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] min-h-[100dvh] w-full max-w-[100vw] bg-[#f8fafc] bg-mesh-light overflow-x-clip overflow-y-hidden text-slate-900 font-['Inter'] selection:bg-blue-500/30 relative">
+    <div className={`flex flex-col h-[100dvh] min-h-[100dvh] w-full max-w-[100vw] ${
+      isHomePage ? 'bg-[#070b14] text-white' : 'bg-[#f8fafc] bg-mesh-light text-slate-900'
+    } overflow-x-clip overflow-y-hidden font-['Inter'] selection:bg-blue-500/30 relative`}>
       <SEO 
         title={pageTitle} 
         url={window.location.href} 
