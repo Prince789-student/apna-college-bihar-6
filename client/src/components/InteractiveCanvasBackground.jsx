@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 
 /**
  * InteractiveCanvasBackground - Executive Academic Silk Aurora Engine
@@ -12,6 +13,11 @@ import React, { useEffect, useRef } from 'react';
  */
 export default function InteractiveCanvasBackground() {
   const canvasRef = useRef(null);
+  const location = useLocation();
+
+  // On the Homepage, the BrandFilmBackground is the primary full-page scroll background
+  const isHomePage = location.pathname === '/' || location.pathname === '';
+  if (isHomePage) return null;
 
   useEffect(() => {
     const canvas = canvasRef.current;

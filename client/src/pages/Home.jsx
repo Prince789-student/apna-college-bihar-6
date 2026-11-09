@@ -18,7 +18,7 @@ import GlobalSearch from '../components/GlobalSearch';
 import CountUp from '../components/CountUp';
 import Reveal from '../components/Reveal';
 import HomeEducationalGuide from '../components/HomeEducationalGuide';
-import BrandFilmHero from '../components/BrandFilmHero';
+import BrandFilmBackground from '../components/BrandFilmBackground';
 import InteractiveCanvasBackground from '../components/InteractiveCanvasBackground';
 import { collegeData } from '../data/collegeData';
 import { blogPosts } from '../data/blogPosts';
@@ -231,7 +231,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-800 font-sans relative overflow-x-clip bg-mesh-light">
+    <div className="min-h-screen bg-transparent text-slate-800 font-sans relative overflow-x-clip">
       <SEO
         title="Apna College Bihar | #1 Academic Platform for BEU & Bihar Engineering Students"
         description="Comprehensive academic portal for Bihar Engineering University (BEU) and AKU students. Free B.Tech Notes, 5+ Yrs PYQs, Official Syllabus, UGEAC Predictor, CGPA Calculator, and real-time WhatsApp Notice Alerts."
@@ -239,17 +239,70 @@ export default function Home() {
         schema={combinedSchema}
       />
 
-      {/* Floating Animated Gradient Orbs in Background */}
-      <div className="absolute top-12 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[650px] pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-[-50px] left-[5%] w-[480px] h-[480px] rounded-full bg-gradient-to-tr from-blue-300/30 to-indigo-400/20 blur-3xl animate-float" />
-        <div className="absolute top-[80px] right-[8%] w-[500px] h-[500px] rounded-full bg-gradient-to-br from-violet-300/25 to-pink-300/20 blur-3xl animate-float" style={{ animationDelay: '2s' }} />
-        <div className="absolute bottom-[20px] left-[35%] w-[380px] h-[380px] rounded-full bg-gradient-to-r from-emerald-200/20 to-teal-300/20 blur-3xl" />
-      </div>
+      {/* ── Global Full-Page Brand Film Video Background (Header to Footer) ── */}
+      <BrandFilmBackground />
 
       {/* ═══════════════════════════════════════════ */}
-      {/* ── 1. FULLY ANIMATED CANVAS-UI HERO STAGE ── */}
+      {/* ── 1. CINEMATIC OPEN HERO STAGE ── */}
       {/* ═══════════════════════════════════════════ */}
-      <BrandFilmHero isNative={isNative} />
+      <section className="pt-10 sm:pt-16 pb-12 sm:pb-16 px-4 sm:px-6 md:px-12 relative z-10">
+        <div className="container mx-auto max-w-5xl text-center">
+          
+          {/* Subtle Live Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/15 text-white text-xs font-bold mb-6 shadow-xl animate-pulse">
+            <Sparkles size={14} className="text-cyan-400" />
+            <span className="tracking-wide">Bihar's #1 Academic Platform for BEU Students</span>
+          </div>
+
+          {/* Main Headline */}
+          <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight sm:leading-none mb-4 drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
+            Apna College <span className="bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-300 bg-clip-text text-transparent">Bihar</span>
+          </h1>
+
+          <p className="text-sm sm:text-lg md:text-xl font-medium text-slate-200 max-w-3xl mx-auto leading-relaxed mb-8 drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+            Free B.Tech unit notes, verified university PYQs, official BEU syllabus, CGPA calculators &amp; senior mentorship — built specifically for students across all 38 Government Engineering Colleges.
+          </p>
+
+          {/* Quick Action Buttons */}
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-8">
+            <Link
+              to="/notes"
+              className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-xs uppercase tracking-widest flex items-center gap-2 shadow-2xl shadow-blue-500/30 transition-all active:scale-95 cursor-pointer"
+            >
+              <BookOpen size={16} />
+              <span>Explore Notes &amp; PYQs</span>
+            </Link>
+
+            <a
+              href="/api/download-apk"
+              className="px-6 py-3.5 rounded-2xl bg-slate-900/85 hover:bg-slate-800 border border-white/20 text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 shadow-xl backdrop-blur-md transition-all active:scale-95 hover:border-emerald-400 cursor-pointer"
+            >
+              <Download size={16} className="text-emerald-400" />
+              <span>Download Official App (v64)</span>
+            </a>
+
+            <Link
+              to="/ugeac-predictor?tab=finder"
+              className="px-5 py-3.5 rounded-2xl bg-black/60 hover:bg-black/80 border border-white/15 text-slate-200 hover:text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 backdrop-blur-md transition-all cursor-pointer"
+            >
+              <Target size={16} className="text-cyan-400" />
+              <span>UGEAC Predictor</span>
+            </Link>
+          </div>
+
+          {/* Global Search Bar */}
+          <div className="max-w-2xl mx-auto mb-6">
+            <GlobalSearch />
+          </div>
+
+          {/* Scroll Guidance Indicator */}
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/60 backdrop-blur-md border border-white/15 text-slate-300 text-[11px] font-mono tracking-wider shadow-lg">
+            <span>Scroll down — background film animates frame-by-frame from header to footer</span>
+            <ChevronDown size={13} className="text-cyan-400 animate-bounce" />
+          </div>
+
+        </div>
+      </section>
 
       {/* ═══════════════════════════════════════════ */}
       {/* ═══════════════════════════════════════════ */}
@@ -286,7 +339,7 @@ export default function Home() {
       <section id="beu-radar" className="py-8 sm:py-12 md:py-16 px-3.5 sm:px-6 md:px-12 relative z-10">
         <div className="container mx-auto max-w-6xl">
           
-          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
+          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8 bg-white/90 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/60 shadow-sm">
             <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] sm:text-xs font-bold mb-2">
               <Radio size={13} className="text-emerald-500 animate-pulse" /> Live BEU Circular Radar
             </div>
@@ -359,7 +412,7 @@ export default function Home() {
       <section className="py-8 sm:py-12 md:py-16 px-3.5 sm:px-6 md:px-12 relative z-10">
         <div className="container mx-auto max-w-6xl">
           
-          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10">
+          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10 bg-white/90 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/60 shadow-sm">
             <span className="text-blue-600 font-heading font-extrabold text-xs tracking-wider">
               Complete Feature Matrix
             </span>
@@ -449,7 +502,7 @@ export default function Home() {
       <section id="colleges-section" className="py-16 px-4 sm:px-6 md:px-12 relative z-10">
         <div className="container mx-auto max-w-6xl">
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 bg-white/90 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/60 shadow-sm">
             <div>
               <span className="text-blue-600 font-heading font-extrabold text-xs tracking-wider">
                 38+ Govt Engineering Institutions
@@ -553,7 +606,7 @@ export default function Home() {
       {/* ═══════════════════════════════════════════ */}
       <section className="py-16 px-4 sm:px-6 md:px-12 relative z-10">
         <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-10">
+          <div className="text-center mb-10 bg-white/90 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/60 shadow-sm max-w-xl mx-auto">
             <span className="text-blue-600 font-heading font-extrabold text-xs tracking-wider">Got Questions?</span>
             <h2 className="font-heading text-3xl font-black text-slate-900 mt-1">Frequently Asked Questions</h2>
           </div>
