@@ -74,6 +74,49 @@ const NotFound = React.lazy(() => import('./pages/NotFound'));
 const ShortLinkResolver = React.lazy(() => import('./pages/ShortLinkResolver'));
 const DownloadPage = React.lazy(() => import('./pages/DownloadPage'));
 
+class AppErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('AppErrorBoundary caught error:', error, errorInfo);
+    const isChunkError = /Loading chunk|Failed to fetch dynamically imported module/i.test(error?.message || '');
+    if (isChunkError && !sessionStorage.getItem('chunk_reload_attempted')) {
+      sessionStorage.setItem('chunk_reload_attempted', 'true');
+      window.location.reload();
+    }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center bg-white text-slate-900">
+          <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center mb-4 text-2xl shadow-sm">
+            ⚡
+          </div>
+          <h2 className="text-xl font-black text-slate-900 mb-2">Interface Updated</h2>
+          <p className="text-xs text-slate-600 max-w-md mb-6 leading-relaxed">
+            A new update of Apna College Bihar was deployed. Click below to load the latest version.
+          </p>
+          <button 
+            onClick={() => { sessionStorage.removeItem('chunk_reload_attempted'); window.location.reload(); }}
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer"
+          >
+            Refresh Now
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function LoadingScreen() {
   return (
     <div className="min-h-screen bg-[#0a0f1d] flex flex-col items-center justify-center">
@@ -693,6 +736,7 @@ function App() {
         <ScrollToTop />
         <InteractiveCanvasBackground />
         <React.Suspense fallback={<LoadingScreen />}>
+          <AppErrorBoundary>
           <Routes>
             {/* Public Routes */}
             <Route path="/hub" element={<AppHub />} />
@@ -800,6 +844,7 @@ function App() {
               </>
             } />
           </Routes>
+          </AppErrorBoundary>
         </React.Suspense>
       </>
     );

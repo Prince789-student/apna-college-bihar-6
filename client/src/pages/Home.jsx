@@ -41,12 +41,87 @@ export default function Home() {
   const [beuNotices, setBeuNotices] = useState([]);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
-  // Interactive UGEAC Predictor State (From Image 2)
+  // Authentic BCECEB UGEAC Rank Piecewise Mapping (From Official 2024-2025 Data)
+  const UGEAC_RANK_MAP = [
+    { ur: 4, air: 28003 }, { ur: 13, air: 50299 }, { ur: 70, air: 81272 }, { ur: 109, air: 92809 },
+    { ur: 156, air: 100028 }, { ur: 215, air: 109032 }, { ur: 333, air: 127662 }, { ur: 436, air: 140082 },
+    { ur: 525, air: 150732 }, { ur: 617, air: 162821 }, { ur: 716, air: 171028 }, { ur: 816, air: 181269 },
+    { ur: 914, air: 188077 }, { ur: 1012, air: 197425 }, { ur: 1115, air: 209122 }, { ur: 1209, air: 219690 },
+    { ur: 1307, air: 229952 }, { ur: 1404, air: 238780 }, { ur: 1507, air: 247321 }, { ur: 1601, air: 257341 },
+    { ur: 1714, air: 268036 }, { ur: 1821, air: 278080 }, { ur: 1930, air: 288768 }, { ur: 2041, air: 297962 },
+    { ur: 2137, air: 306613 }, { ur: 2243, air: 315619 }, { ur: 2333, air: 323379 }, { ur: 2425, air: 330324 },
+    { ur: 2522, air: 339013 }, { ur: 2615, air: 347652 }, { ur: 2711, air: 355967 }, { ur: 2808, air: 364892 },
+    { ur: 2901, air: 373625 }, { ur: 3003, air: 383352 }, { ur: 3101, air: 392168 }, { ur: 3207, air: 402310 },
+    { ur: 3308, air: 413189 }, { ur: 3400, air: 421323 }, { ur: 3501, air: 430878 }, { ur: 3596, air: 440370 },
+    { ur: 3693, air: 449449 }, { ur: 3795, air: 458443 }, { ur: 3894, air: 467591 }, { ur: 3992, air: 476591 },
+    { ur: 4089, air: 484050 }, { ur: 4184, air: 492240 }, { ur: 4288, air: 501868 }, { ur: 4377, air: 508894 },
+    { ur: 4474, air: 518100 }, { ur: 4581, air: 529594 }, { ur: 4680, air: 542092 }, { ur: 4776, air: 550964 },
+    { ur: 4876, air: 559448 }, { ur: 4966, air: 568797 }, { ur: 5056, air: 577816 }, { ur: 5153, air: 587447 },
+    { ur: 5257, air: 597045 }, { ur: 5353, air: 606934 }, { ur: 5441, air: 620541 }, { ur: 5542, air: 630524 },
+    { ur: 5641, air: 641360 }, { ur: 5737, air: 651370 }, { ur: 5843, air: 661098 }, { ur: 5946, air: 673598 },
+    { ur: 6056, air: 686974 }, { ur: 6159, air: 697844 }, { ur: 6256, air: 707967 }, { ur: 6366, air: 720052 },
+    { ur: 6468, air: 732511 }, { ur: 6582, air: 743681 }, { ur: 6692, air: 757517 }, { ur: 6800, air: 768611 },
+    { ur: 6919, air: 781525 }, { ur: 7036, air: 795064 }, { ur: 7141, air: 806823 }, { ur: 7245, air: 819493 },
+    { ur: 7360, air: 833200 }, { ur: 7466, air: 848290 }, { ur: 7570, air: 859488 }, { ur: 7686, air: 874752 },
+    { ur: 7797, air: 888309 }, { ur: 7912, air: 903348 }, { ur: 8026, air: 920910 }, { ur: 8130, air: 933806 },
+    { ur: 8229, air: 948876 }, { ur: 8334, air: 965845 }, { ur: 8428, air: 978036 }, { ur: 8531, air: 993492 },
+    { ur: 8643, air: 1010934 }, { ur: 8749, air: 1024049 }, { ur: 8852, air: 1040387 }, { ur: 8951, air: 1055816 },
+    { ur: 9057, air: 1070983 }, { ur: 9161, air: 1091239 }, { ur: 9269, air: 1108363 }, { ur: 9364, air: 1126814 },
+    { ur: 9469, air: 1145041 }, { ur: 9577, air: 1167857 }, { ur: 9674, air: 1183901 }, { ur: 9771, air: 1197906 },
+    { ur: 9873, air: 1219504 }, { ur: 9967, air: 1242227 }
+  ];
+
   const [simPercentile, setSimPercentile] = useState(89.4);
-  const calcSimRank = () => {
-    const totalCandidates = 35000;
-    const rank = Math.round(((100 - simPercentile) / 100) * totalCandidates);
-    return Math.max(120, rank);
+
+  const calcAirAndUgeacRank = (percentile) => {
+    const air = Math.max(1, Math.round(((100 - percentile) / 100) * 1400000));
+    if (air <= UGEAC_RANK_MAP[0].air) {
+      return {
+        air,
+        ugeacRank: Math.max(1, Math.floor((air / UGEAC_RANK_MAP[0].air) * UGEAC_RANK_MAP[0].ur))
+      };
+    }
+    for (let i = 0; i < UGEAC_RANK_MAP.length - 1; i++) {
+      const p1 = UGEAC_RANK_MAP[i], p2 = UGEAC_RANK_MAP[i + 1];
+      if (air >= p1.air && air <= p2.air) {
+        return {
+          air,
+          ugeacRank: Math.floor(p1.ur + ((air - p1.air) / (p2.air - p1.air)) * (p2.ur - p1.ur))
+        };
+      }
+    }
+    const last = UGEAC_RANK_MAP[UGEAC_RANK_MAP.length - 1];
+    return {
+      air,
+      ugeacRank: Math.floor(last.ur + (air - last.air) * 0.008)
+    };
+  };
+
+  const { air: currentAir, ugeacRank: currentUgeacRank } = calcAirAndUgeacRank(simPercentile);
+
+  // Official BCECEB UGEAC Benchmark Cutoffs (UR General)
+  const officialCollegeCutoffs = [
+    { code: 'MIT', college: 'MIT Muzaffarpur', branch: 'Information Technology (IT)', closing: 221, color: 'bg-cyan-500/20 text-cyan-300 border-cyan-400/30' },
+    { code: 'BCE', college: 'BCE Bhagalpur', branch: 'Computer Science & Engg (CSE)', closing: 142, color: 'bg-blue-500/20 text-blue-300 border-blue-400/30' },
+    { code: 'BCEB', college: 'BCE Bakhtiyarpur', branch: 'Computer Science (CSE)', closing: 412, color: 'bg-purple-500/20 text-purple-300 border-purple-400/30' },
+    { code: 'GCE', college: 'GCE Gaya', branch: 'Computer Science (CSE)', closing: 681, color: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30' },
+    { code: 'DCE', college: 'DCE Darbhanga', branch: 'Computer Science (CSE)', closing: 925, color: 'bg-amber-500/20 text-amber-300 border-amber-400/30' },
+    { code: 'MIT', college: 'MIT Muzaffarpur', branch: 'Civil Engineering', closing: 1081, color: 'bg-teal-500/20 text-teal-300 border-teal-400/30' },
+    { code: 'BCE', college: 'BCE Bhagalpur', branch: 'Electrical Engineering', closing: 1501, color: 'bg-indigo-500/20 text-indigo-300 border-indigo-400/30' },
+    { code: 'MIT', college: 'MIT Muzaffarpur', branch: 'Mechanical Engineering', closing: 2239, color: 'bg-rose-500/20 text-rose-300 border-rose-400/30' }
+  ];
+
+  // Pick dynamic 3 colleges based on student's predicted rank
+  const getSimulatedCollegeMatches = (rank) => {
+    if (rank <= 250) {
+      return [officialCollegeCutoffs[1], officialCollegeCutoffs[0], officialCollegeCutoffs[2]];
+    } else if (rank <= 600) {
+      return [officialCollegeCutoffs[0], officialCollegeCutoffs[2], officialCollegeCutoffs[3]];
+    } else if (rank <= 1200) {
+      return [officialCollegeCutoffs[3], officialCollegeCutoffs[4], officialCollegeCutoffs[5]];
+    } else {
+      return [officialCollegeCutoffs[5], officialCollegeCutoffs[6], officialCollegeCutoffs[7]];
+    }
   };
 
   // 8 Core Academic Tools
@@ -258,33 +333,34 @@ export default function Home() {
           <div className="container mx-auto max-w-6xl">
             <div className="rounded-3xl bg-slate-950/40 backdrop-blur-xl border border-white/15 p-4 sm:p-6 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.7)] text-white">
               
-              {/* Header Bar with Tabs */}
-              <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 pb-6 border-b border-white/10">
-                <div>
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-bold mb-2">
-                    <Sparkles size={13} className="text-cyan-400" /> Interactive Academic Lab
+              {/* Header Bar with Full-Width Typography & Navigation */}
+              <div className="pb-6 border-b border-white/10 space-y-4">
+                <div className="flex flex-col gap-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-bold w-fit shadow-xs">
+                    <Sparkles size={13} className="text-cyan-400" />
+                    <span>BEU PATNA OFFICIAL STUDY ENGINE • 38 GOVT ENGINEERING COLLEGES</span>
                   </div>
-                  <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight drop-shadow-md">
-                    Everything For Bihar Engineering Students
+                  <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-[1000] text-white tracking-tight drop-shadow-md">
+                    Bihar Engineering Academic Lab &amp; Tools
                   </h2>
-                  <p className="text-xs text-slate-300 mt-1 font-medium">
-                    Switch tabs to explore tools, predict rank, check colleges, or read live circulars without clutter.
+                  <p className="text-xs sm:text-sm text-slate-300 font-medium max-w-3xl leading-relaxed">
+                    Access verified B.Tech semester notes, past 5-year PYQ blueprints, SGPA calculator, and real-time BCECEB UGEAC cutoff intelligence across all 38 Government Engineering Colleges.
                   </p>
                 </div>
 
-                {/* Tab Navigation Pill Bar */}
-                <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-black/60 border border-white/15 overflow-x-auto custom-scrollbar shrink-0">
+                {/* Tab Navigation Pill Bar (Clean, Spacious & Responsive) */}
+                <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-black/60 border border-white/15 overflow-x-auto custom-scrollbar">
                   {[
                     { id: 'tools', label: '🛠️ Academic Tools', badge: '8 Tools' },
-                    { id: 'predictor', label: '🎯 UGEAC Predictor', badge: 'Interactive' },
-                    { id: 'colleges', label: '🏛️ Top 38 Colleges', badge: 'Cutoffs' },
+                    { id: 'predictor', label: '🎯 UGEAC Predictor', badge: 'Cutoffs 2024–25' },
+                    { id: 'colleges', label: '🏛️ Top 38 Colleges', badge: 'Profiles' },
                     { id: 'radar', label: '📡 Live BEU Radar', badge: beuNotices.length > 0 ? 'Live' : null },
                     { id: 'guide', label: '🧭 Guide & FAQ', badge: 'Prep' },
                   ].map(tab => (
                     <button
                       key={tab.id}
                       onClick={() => setActiveConsoleTab(tab.id)}
-                      className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-heading font-bold transition-all whitespace-nowrap cursor-pointer ${
+                      className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-heading font-bold transition-all whitespace-nowrap cursor-pointer ${
                         activeConsoleTab === tab.id
                           ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg border border-cyan-400/40'
                           : 'text-slate-300 hover:text-white hover:bg-white/10'
@@ -341,91 +417,115 @@ export default function Home() {
                 </div>
               )}
 
-              {/* ── TAB 2: UGEAC PREDICTOR (From Image 2) ── */}
+              {/* ── TAB 2: UGEAC PREDICTOR (Authentic BCECEB Data & Math) ── */}
               {activeConsoleTab === 'predictor' && (
                 <div className="pt-6 animate-in fade-in duration-200">
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                     
                     {/* Left: Interactive Slider & College Match Preview */}
                     <div className="lg:col-span-7 space-y-4">
                       
                       {/* Percentile Slider Card */}
-                      <div className="p-4 sm:p-5 rounded-2xl bg-black/40 border border-white/15 backdrop-blur-md shadow-lg">
+                      <div className="p-4 sm:p-5 rounded-2xl bg-black/45 border border-white/15 backdrop-blur-md shadow-lg">
                         <div className="flex items-center justify-between text-xs sm:text-sm mb-2 font-bold">
-                          <span className="text-slate-300">JEE Main Percentile:</span>
-                          <span className="text-cyan-400 font-black text-base sm:text-lg">{simPercentile}%ile</span>
+                          <span className="text-slate-300">Your JEE Main Percentile:</span>
+                          <span className="text-cyan-400 font-[1000] text-base sm:text-lg">{simPercentile}%ile</span>
                         </div>
                         <input
                           type="range"
                           min="70"
-                          max="99"
+                          max="99.5"
                           step="0.5"
                           value={simPercentile}
                           onChange={(e) => setSimPercentile(Number(e.target.value))}
                           className="w-full h-2.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
                         />
-                        <div className="flex justify-between items-center text-xs font-bold text-slate-300 mt-2.5 pt-2 border-t border-white/10">
-                          <span>Est. Bihar State Rank:</span>
-                          <span className="text-emerald-400 bg-emerald-500/20 border border-emerald-400/30 px-2.5 py-0.5 rounded-lg font-black text-sm">
-                            ~{calcSimRank().toLocaleString()}
-                          </span>
+                        
+                        {/* Dual Rank Metrics (AIR + BCECEB State UR Rank) */}
+                        <div className="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-white/10">
+                          <div className="bg-white/5 p-2.5 rounded-xl border border-white/5">
+                            <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">All India CRL (AIR)</span>
+                            <span className="text-white font-[1000] text-sm sm:text-base">~{currentAir.toLocaleString()}</span>
+                          </div>
+                          <div className="bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-400/20">
+                            <span className="text-[10px] uppercase font-bold text-emerald-300 block tracking-wider">Est. Bihar State Rank (UR)</span>
+                            <span className="text-emerald-400 font-[1000] text-sm sm:text-base">#{currentUgeacRank.toLocaleString()}</span>
+                          </div>
                         </div>
                       </div>
 
-                      {/* Live College Match Cards */}
+                      {/* Live College Match Cards (Based on Real 2024-2025 BCECEB Cutoffs) */}
                       <div className="space-y-2.5">
-                        <div className="p-3.5 rounded-2xl bg-black/35 border border-white/10 flex items-center justify-between hover:border-cyan-400/40 transition-all">
-                          <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 flex items-center justify-center font-bold text-xs">
-                              MIT
-                            </div>
-                            <div>
-                              <p className="text-xs sm:text-sm font-bold text-white">MIT Muzaffarpur • CSE / IT</p>
-                              <p className="text-[11px] text-slate-400">Closing Rank: ~2,120</p>
-                            </div>
-                          </div>
-                          <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 font-bold text-xs">
-                            {simPercentile >= 88 ? '98.4% Match' : '75.2% Match'}
-                          </span>
+                        <div className="flex items-center justify-between text-xs font-bold text-slate-300 px-1">
+                          <span>Predicted Seat Allotment Status (General UR):</span>
+                          <span className="text-[11px] text-cyan-400">2024-2025 Closing Cutoff</span>
                         </div>
 
-                        <div className="p-3.5 rounded-2xl bg-black/35 border border-white/10 flex items-center justify-between hover:border-cyan-400/40 transition-all">
-                          <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-400/30 flex items-center justify-center font-bold text-xs">
-                              BCE
+                        {getSimulatedCollegeMatches(currentUgeacRank).map((col, idx) => {
+                          const isLikely = currentUgeacRank <= col.closing;
+                          const isModerate = !isLikely && currentUgeacRank <= Math.round(col.closing * 1.35);
+
+                          return (
+                            <div key={idx} className="p-3.5 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between hover:border-cyan-400/40 transition-all">
+                              <div className="flex items-center gap-3">
+                                <div className={`w-10 h-10 rounded-xl ${col.color} border flex items-center justify-center font-black text-xs shrink-0`}>
+                                  {col.code}
+                                </div>
+                                <div>
+                                  <p className="text-xs sm:text-sm font-bold text-white leading-tight">
+                                    {col.college} • <span className="text-cyan-300 font-semibold">{col.branch}</span>
+                                  </p>
+                                  <p className="text-[11px] text-slate-400 mt-0.5">
+                                    Closing Rank: <strong className="text-slate-200">#{col.closing.toLocaleString()}</strong>
+                                  </p>
+                                </div>
+                              </div>
+
+                              <div className="text-right shrink-0">
+                                {isLikely ? (
+                                  <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 font-bold text-xs inline-flex items-center gap-1">
+                                    <span>High Chance</span> <span>✓</span>
+                                  </span>
+                                ) : isModerate ? (
+                                  <span className="px-2.5 py-1 rounded-lg bg-amber-500/20 border border-amber-400/30 text-amber-300 font-bold text-xs inline-flex items-center gap-1">
+                                    <span>Round 2 / Mop-Up</span> <span>⚠️</span>
+                                  </span>
+                                ) : (
+                                  <span className="px-2.5 py-1 rounded-lg bg-slate-800/80 border border-white/10 text-slate-400 font-bold text-xs inline-flex items-center gap-1">
+                                    <span>Cutoff Exceeded</span> <span>✕</span>
+                                  </span>
+                                )}
+                              </div>
                             </div>
-                            <div>
-                              <p className="text-xs sm:text-sm font-bold text-white">BCE Bhagalpur • ECE / EE</p>
-                              <p className="text-[11px] text-slate-400">Closing Rank: ~2,450</p>
-                            </div>
-                          </div>
-                          <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 font-bold text-xs">
-                            {simPercentile >= 85 ? '96.2% Match' : '71.0% Match'}
-                          </span>
-                        </div>
+                          );
+                        })}
                       </div>
 
                     </div>
 
                     {/* Right: Predictor Callout Box */}
-                    <div className="lg:col-span-5 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-blue-600/30 to-cyan-600/20 border border-cyan-400/30 flex flex-col justify-between h-full backdrop-blur-md">
+                    <div className="lg:col-span-5 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-blue-600/30 to-cyan-600/20 border border-cyan-400/30 flex flex-col justify-between backdrop-blur-md space-y-6">
                       <div>
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-bold mb-3">
-                          <Target size={13} /> BCECEB Multi-Year Data
+                          <Target size={13} /> Official BCECEB Multi-Year Cutoffs
                         </div>
                         <h3 className="font-heading text-lg sm:text-xl font-bold text-white mb-2">
-                          38+ Govt Engineering Colleges
+                          All 38 Bihar Govt Engineering Colleges
                         </h3>
-                        <p className="text-xs text-slate-200 leading-relaxed mb-6 font-medium">
-                          Predict realistic seat allotment for General, EWS, OBC, EBC, SC, and ST categories based on genuine 2024–2025 opening &amp; closing cutoffs.
+                        <p className="text-xs text-slate-200 leading-relaxed font-medium mb-4">
+                          Explore category quota predictions (General UR, BC, EBC, SC, ST, EWS &amp; RCG) across every campus — MIT Muzaffarpur, BCE Bhagalpur, Bakhtiyarpur, Gaya, Darbhanga, and 33 more.
                         </p>
+                        <div className="bg-black/30 p-3 rounded-xl border border-white/10 text-xs text-slate-300 space-y-1">
+                          <p>• <strong>Authentic Data:</strong> Direct from BCECEB allotment seat charts.</p>
+                          <p>• <strong>Category Quota:</strong> Includes 33% girls horizontal reservation.</p>
+                        </div>
                       </div>
 
                       <Link
-                        to="/ugeac-predictor?tab=finder"
+                        to="/ugeac-predictor"
                         className="btn-primary w-full text-xs sm:text-sm flex items-center justify-center gap-2 py-3 shadow-xl"
                       >
-                        <span>Check Full UGEAC Predictor</span>
+                        <span>Launch Full UGEAC Predictor (All 38 Colleges)</span>
                         <ArrowRight size={14} />
                       </Link>
                     </div>

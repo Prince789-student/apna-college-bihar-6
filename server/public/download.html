@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8" />
+   <meta name="color-scheme" content="light only" />
+   <base href="/" />
+   <!-- Preconnect + DNS Prefetch for all external services -->
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+   <link rel="preconnect" href="https://www.googletagmanager.com" />
+   <link rel="preconnect" href="https://firestore.googleapis.com" />
+   <link rel="preconnect" href="https://firebase.googleapis.com" />
+   <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+   <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
+
+   <!-- Preload Google Fonts stylesheet for Ultra Modern Typography -->
+   <link rel="preconnect" href="https://fonts.googleapis.com" />
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+   <!-- Apple / PWA Icons -->
+   <link rel="apple-touch-icon" sizes="180x180" href="/logo-acb.png" />
+   <link rel="apple-touch-icon" sizes="152x152" href="/logo-acb.png" />
+
+   <script>
+      // ── Service Worker Registration ─────────────────────────────
+      if ('serviceWorker' in navigator) {
+         const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+         if (isNative) {
+            document.documentElement.classList.add('native-app');
+         } else {
+            window.addEventListener('load', () => {
+               navigator.serviceWorker.register('/sw.js').catch(err => console.warn('[SW] Registration failed:', err));
+            });
+         }
+      }
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+         e.preventDefault();
+         window.deferredPrompt = e;
+         window.dispatchEvent(new Event('pwa-ready'));
+      });
+   </script>
+
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+   <meta name="mobile-web-app-capable" content="yes" />
+   <meta name="apple-mobile-web-app-capable" content="yes" />
+   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+   <meta name="theme-color" content="#2563eb" />
+   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+   <meta name="google-site-verification" content="RYqt3qpPlTqKuw2uXw9hLSZNDCLA3iGIzzv_JLOQEVs" />
+   <meta name="google" content="notranslate" />
+   <meta name="author" content="Apna College Bihar" />
+   <meta name="language" content="Hindi, English" />
+   <meta name="geo.region" content="IN-BR" />
+   <meta name="geo.placename" content="Bihar, India" />
+
+   <title>Download Apna College Bihar Apps | Windows, Mac, Linux & Android</title>
+   <meta name="description" content="Download official Apna College Bihar desktop and mobile applications for Windows PC, Apple Mac (macOS), Linux x64, and Android. Built-in Study Focus Blocker, offline BEU Notes, PYQs, and exam circulars." />
+   <link rel="canonical" href="https://www.apnacollegebihar.online/download" />
+
+   <!-- Open Graph / Facebook -->
+   <meta property="og:type" content="website" />
+   <meta property="og:url" content="https://www.apnacollegebihar.online/download" />
+   <meta property="og:title" content="Download Apna College Bihar Apps | Windows, Mac, Linux & Android" />
+   <meta property="og:description" content="Download official Apna College Bihar desktop and mobile applications for Windows PC, Apple Mac (macOS), Linux x64, and Android. Built-in Study Focus Blocker, offline BEU Notes, PYQs, and exam circulars." />
+   <meta property="og:site_name" content="Apna College Bihar" />
+   <meta property="og:image" content="https://www.apnacollegebihar.online/logo-acb.png" />
+   <meta property="og:image:width" content="512" />
+   <meta property="og:image:height" content="512" />
+   <meta property="og:image:alt" content="Apna College Bihar Logo" />
+   <meta property="og:locale" content="en_IN" />
+
+   <!-- Twitter Card -->
+   <meta name="twitter:card" content="summary_large_image" />
+   <meta name="twitter:title" content="Download Apna College Bihar Apps | Windows, Mac, Linux & Android" />
+   <meta name="twitter:description" content="Download official Apna College Bihar desktop and mobile applications for Windows PC, Apple Mac (macOS), Linux x64, and Android. Built-in Study Focus Blocker, offline BEU Notes, PYQs, and exam circulars." />
+   <meta name="twitter:image" content="https://www.apnacollegebihar.online/logo-acb.png" />
+
+   <!-- Schema.org JSON-LD Structured Data: WebSite & EducationalOrganization -->
+   <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Apna College Bihar Official App",
+  "operatingSystem": "Windows 10+, macOS, Linux, Android",
+  "applicationCategory": "EducationalApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "INR"
+  },
+  "description": "Comprehensive academic learning application for Bihar Engineering University students featuring offline notes, past question papers, and study distraction blocker."
+}
+   </script>
+
+   <!-- Google AdSense Official Verification & Publisher Script -->
+   <meta name="google-adsense-account" content="ca-pub-4005389118070865" />
+   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4005389118070865"
+      crossorigin="anonymous"></script>
+
+
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BXF7KW1XQS"></script>
+   <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+      gtag('config', 'G-BXF7KW1XQS');
+   </script>
+
+   <link rel="manifest" href="/manifest.json" />
+   <link rel="icon" type="image/png" href="/logo-acb.png?v=99" />
+   <link rel="shortcut icon" href="/logo-acb.png?v=99" />
+
+   <!-- Tailwind CSS is now built locally -->
+
+   <style>
+      html,
+      body,
+      #root {
+         font-family: 'Inter', sans-serif;
+         scroll-behavior: smooth;
+         margin: 0 !important;
+         padding: 0 !important;
+         height: 100% !important;
+         min-height: 100% !important;
+         width: 100% !important;
+         max-width: 100vw !important;
+         overflow-x: hidden !important;
+         overflow-y: auto !important;
+      }
+
+      html.native-app,
+      html.native-app body,
+      html.native-app #root {
+         -webkit-user-select: none;
+         -moz-user-select: none;
+              user-select: none;
+         -webkit-touch-callout: none;
+      }
+
+      input,
+      textarea {
+         -webkit-user-select: auto;
+         -moz-user-select: auto;
+              user-select: auto;
+      }
+
+      .adsbygoogle[data-ad-status="unfilled"] {
+         display: none !important;
+         height: 0 !important;
+         width: 0 !important;
+      }
+   </style>
+  <script type="module" crossorigin src="/assets/index.250e543d.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/dependencies.57fbe88f.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor.f064e869.js">
+  <link rel="modulepreload" crossorigin href="/assets/firebase.9b1c1008.js">
+  <link rel="stylesheet" href="/assets/index.273f9c94.css">
+</head>
+
+<body class="bg-slate-50 font-sans antialiased text-slate-900">
+   <!-- Initial App Loading Overlay: Prevents visual flash while Vite JS bundle loads -->
+   <div id="app-init-loader" aria-hidden="true" style="position:fixed;inset:0;z-index:999999;background:#f8fafc;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.28s ease,visibility 0.28s ease;">
+      <div style="display:flex;flex-direction:column;align-items:center;max-width:320px;padding:24px;text-align:center;">
+         <div style="position:relative;width:68px;height:68px;margin-bottom:18px;display:flex;align-items:center;justify-content:center;">
+            <div style="position:absolute;inset:0;border-radius:20px;background:rgba(37,99,235,0.18);filter:blur(8px);animation:acbPulse 2s infinite ease-in-out;"></div>
+            <img src="/logo-acb.png" alt="Apna College Bihar" style="position:relative;width:64px;height:64px;border-radius:18px;object-fit:cover;box-shadow:0 8px 24px -4px rgba(37,99,235,0.25);border:1px solid rgba(226,232,240,0.9);background:#ffffff;" />
+         </div>
+         <div style="font-family:'Outfit','Inter',system-ui,sans-serif;font-size:20px;font-weight:900;letter-spacing:-0.5px;text-transform:uppercase;color:#0f172a;margin:0 0 6px 0;line-height:1.2;">
+            Apna College <span style="color:#2563eb;">Bihar</span>
+         </div>
+         <p style="font-family:'Inter',system-ui,sans-serif;font-size:12px;font-weight:600;color:#64748b;margin:0 0 22px 0;letter-spacing:0.2px;">
+            Official Engineering Hub for BEU
+         </p>
+         <div style="width:120px;height:4px;background:#e2e8f0;border-radius:9999px;overflow:hidden;position:relative;">
+            <div style="position:absolute;top:0;left:0;bottom:0;width:40%;background:linear-gradient(90deg,#2563eb,#4f46e5);border-radius:9999px;animation:acbBarProgress 1.2s infinite ease-in-out;"></div>
+         </div>
+      </div>
+   </div>
+
+   <div id="root">
+
+<div class="min-h-screen bg-[#f8fafc] text-slate-900 font-sans pb-20 selection:bg-blue-500/20 overflow-x-clip">
+  
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2.5">
+      <img src="/logo-acb.png" alt="Apna College Bihar" class="w-8 h-8 rounded-lg" />
+      <span class="font-black text-base md:text-lg text-slate-900 uppercase tracking-tight">Apna College <span class="text-blue-600">Bihar</span></span>
+    </a>
+    <nav class="hidden md:flex items-center gap-6 text-xs font-bold uppercase tracking-wider text-slate-600">
+      <a href="/" class="hover:text-blue-600 transition-colors">Home</a>
+      <a href="/notes" class="hover:text-blue-600 transition-colors">BEU Notes</a>
+      <a href="/pyq" class="hover:text-blue-600 transition-colors">PYQ Papers</a>
+      <a href="/syllabus" class="hover:text-blue-600 transition-colors">Syllabus</a>
+      <a href="/ugeac-predictor" class="hover:text-blue-600 transition-colors">UGEAC Predictor</a>
+      <a href="/blog" class="text-blue-600 font-black">Blog</a>
+      <a href="/author" class="hover:text-blue-600 transition-colors">Author</a>
+      <a href="/about" class="hover:text-blue-600 transition-colors">About Us</a>
+      <a href="/contact" class="hover:text-blue-600 transition-colors">Contact</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="/apna-college-bihar.apk" download class="px-3.5 py-2 bg-blue-600 text-white rounded-xl text-xs font-black uppercase tracking-wider hover:bg-blue-700 transition-colors shadow-sm">Get App</a>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Breadcrumbs -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+    <nav class="flex text-xs font-semibold text-slate-500 gap-2 items-center" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-blue-600 transition-colors">Home</a>
+      <span>/</span>
+      <span class="text-slate-900">Download Official Apps</span>
+    </nav>
+  </div>
+
+  <!-- Hero Header -->
+  <section class="relative overflow-hidden pt-10 pb-16 md:pt-14 md:pb-20 border-b border-slate-200/80 bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold uppercase tracking-wider mb-6 shadow-xs">
+        <span>✨ Official Apps Ecosystem · Zero Distractions</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-[1000] text-slate-900 tracking-tight uppercase leading-[1.15] mb-6">
+        Padhai Me <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">Zero Distraction</span>.<br />
+        Official Apps for Windows, Mac, Linux & Mobile.
+      </h1>
+
+      <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-600 font-medium leading-relaxed mb-6">
+        BEU engineering exams ki tayyari ab aur aasan. Apne Windows laptop, Apple Mac, Linux workstation ya Android smartphone par official app install karein aur payein <strong>Study Focus Blocker</strong>, high-speed Notes, aur instant exam notices.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-4 text-xs font-bold text-slate-500">
+        <span class="inline-flex items-center gap-1.5 text-emerald-600 font-semibold">✓ 100% Free Forever</span>
+        <span class="inline-flex items-center gap-1.5 text-blue-600 font-semibold">✓ Safe & Virus-Free</span>
+        <span class="inline-flex items-center gap-1.5 text-slate-700 font-semibold">✓ Windows, Mac & Linux</span>
+        <span class="inline-flex items-center gap-1.5 text-amber-600 font-semibold">✓ Instant Offline Access</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download Cards Grid -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+      <!-- 1. Windows App Card -->
+      <div class="bg-white rounded-3xl border-2 border-blue-500/30 p-6 sm:p-8 shadow-xl hover:border-blue-500 transition-all flex flex-col justify-between relative overflow-hidden group">
+        <div class="absolute top-0 right-0 bg-gradient-to-l from-blue-600 to-indigo-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
+          ★ Recommended For PC
+        </div>
+        <div>
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-white border border-blue-200/80 p-1.5 flex items-center justify-center shadow-lg shadow-blue-600/15 shrink-0 overflow-hidden">
+              <img src="/logo-192.png" alt="Apna College Bihar Logo" class="w-full h-full object-contain" />
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Windows Desktop App</h2>
+              <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mt-0.5">Version 2.2 · 64-bit Windows (10 & 11)</p>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
+            Laptops aur Desktop computers ke liye specially optimized. Isme built-in <strong>Study Focus Blocker</strong> hai jo padhai ke dauran social media aur game notifications ko mute kar deta hai.
+          </p>
+          <div class="space-y-3 mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs text-slate-700 font-semibold">
+            <div class="flex items-start gap-2.5">
+              <span class="text-blue-600 font-bold">🔒</span>
+              <span>Strict Focus Mode (Locks distractions during study sessions)</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-indigo-600 font-bold">⚡</span>
+              <span>Full BEU Notes & PYQ Library accessible offline</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-600 font-bold">🔔</span>
+              <span>Instant desktop notifications for official BEU exam notices</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <a href="/Apna-College-Bihar-Setup.exe" download class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl shadow-blue-600/25 transition-all transform hover:-translate-y-0.5">
+            <span>Download Windows Setup (.exe)</span>
+            <span>↓</span>
+          </a>
+          <p class="text-[11px] text-center text-slate-400 font-medium mt-3">Size: ~85 MB · Tested safe with Windows Defender</p>
+        </div>
+      </div>
+
+      <!-- 2. Apple Mac App Card -->
+      <div class="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xl hover:border-slate-800 transition-all flex flex-col justify-between relative overflow-hidden group">
+        <div class="absolute top-0 right-0 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
+          macOS Universal
+        </div>
+        <div>
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-lg shrink-0 text-2xl font-black">
+              
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Apple Mac (macOS)</h2>
+              <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">Apple Silicon (M1-M4) & Intel</p>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
+            MacBook Air, MacBook Pro aur Mac mini ke liye high performance native app. Metal acceleration aur Dark Mode ke saath smooth experience.
+          </p>
+          <div class="space-y-3 mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs text-slate-700 font-semibold">
+            <div class="flex items-start gap-2.5">
+              <span class="text-slate-900 font-bold">⚡</span>
+              <span>Universal binary optimized for M1, M2, M3, M4 & Intel chips</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-slate-900 font-bold">🚀</span>
+              <span>Double-click launcher included for instant bypass of Gatekeeper alert</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-slate-900 font-bold">📖</span>
+              <span>Distraction-free floating study window for split-screen reading</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <a href="/Apna-College-Bihar-Mac-Universal.zip" download class="w-full py-4 px-6 rounded-2xl bg-slate-900 hover:bg-black text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl shadow-slate-900/20 transition-all transform hover:-translate-y-0.5">
+            <span>Download Mac Package (.zip)</span>
+            <span>↓</span>
+          </a>
+          <p class="text-[11px] text-center text-slate-400 font-medium mt-3">Universal DMG / ZIP · Double-click run</p>
+        </div>
+      </div>
+
+      <!-- 3. Linux Workstation Card -->
+      <div class="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xl hover:border-amber-500 transition-all flex flex-col justify-between relative overflow-hidden group">
+        <div class="absolute top-0 right-0 bg-amber-500 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
+          Linux Portable
+        </div>
+        <div>
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 p-2 flex items-center justify-center shadow-md shrink-0 text-2xl font-black text-amber-700">
+              🐧
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Linux Desktop (x64)</h2>
+              <p class="text-xs text-amber-700 font-bold uppercase tracking-wider mt-0.5">Ubuntu · Debian · Fedora · Arch</p>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
+            Open-source developers aur Linux enthusiasts ke liye portable tar.gz package. Bina kisi sudo/root permission ke directly extract karke run karein.
+          </p>
+          <div class="p-3.5 bg-slate-900 text-slate-200 rounded-2xl font-mono text-xs mb-8 overflow-x-auto">
+            <p class="text-[11px] text-slate-400 mb-1 font-sans"># Terminal Quick Run:</p>
+            <code class="text-emerald-400 select-all">tar -xzf Apna-College-Bihar-Linux-x64.tar.gz && cd Apna-College-Bihar-linux-x64 && ./run.sh</code>
+          </div>
+        </div>
+        <div>
+          <a href="/Apna-College-Bihar-Linux-x64.tar.gz" download class="w-full py-4 px-6 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl shadow-amber-600/20 transition-all transform hover:-translate-y-0.5">
+            <span>Download Linux Package (.tar.gz)</span>
+            <span>↓</span>
+          </a>
+          <p class="text-[11px] text-center text-slate-400 font-medium mt-3">x86_64 Portable Bundle · Zero dependencies</p>
+        </div>
+      </div>
+
+      <!-- 4. Android Mobile App Card -->
+      <div class="bg-white rounded-3xl border-2 border-emerald-500/30 p-6 sm:p-8 shadow-xl hover:border-emerald-500 transition-all flex flex-col justify-between relative overflow-hidden group">
+        <div class="absolute top-0 right-0 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
+          Mobile App (v64)
+        </div>
+        <div>
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 p-2 flex items-center justify-center shadow-md shrink-0 text-2xl font-black text-emerald-700">
+              📱
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Android Mobile App</h2>
+              <p class="text-xs text-emerald-600 font-bold uppercase tracking-wider mt-0.5">APK v64 · Android 8.0 & Above</p>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
+            Apne mobile phone par sabhi BEU notes, question papers, aur official exam alerts hamesha saath rakhein. Lightweight aur fast-loading.
+          </p>
+          <div class="space-y-3 mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs text-slate-700 font-semibold">
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-600 font-bold">📲</span>
+              <span>Offline saving of subject PDFs directly in app</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-600 font-bold">🔔</span>
+              <span>Realtime push alerts for university semester schedules</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-600 font-bold">⚡</span>
+              <span>100% Ad-Free study mode for high focus</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <a href="/apna-college-bihar-v64.apk" download class="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl shadow-emerald-600/25 transition-all transform hover:-translate-y-0.5">
+            <span>Download Android APK (v64)</span>
+            <span>↓</span>
+          </a>
+          <p class="text-[11px] text-center text-slate-400 font-medium mt-3">Direct APK Download · Size: ~12 MB</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Feature Spotlight: Study Focus Blocker -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+    <div class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-8 sm:p-12 rounded-3xl border border-indigo-500/20 shadow-2xl relative overflow-hidden">
+      <div class="max-w-3xl">
+        <span class="px-3.5 py-1.5 rounded-full bg-indigo-500/30 border border-indigo-400/30 text-indigo-300 text-xs font-bold uppercase tracking-wider mb-4 inline-block">
+          Exclusive Desktop Feature
+        </span>
+        <h3 class="text-2xl sm:text-3xl font-[1000] text-white tracking-tight uppercase mb-4">
+          Study Focus Blocker: Padhai Ke Time Zero Distraction
+        </h3>
+        <p class="text-sm sm:text-base text-slate-300 leading-relaxed font-medium mb-6">
+          Exam time me sabse badi samasya hoti hai notifications aur distractions. Apna College Bihar Desktop App me built-in timer hai (25 min Pomodoro, 45 min Deep Study, 60 min Exam Sprint). Ek baar start karne par app screen par focus lock kar deti hai taaki aapka dhyaan sirf notes aur numericals par rahe.
+        </p>
+        <div class="flex flex-wrap gap-4 text-xs font-bold text-slate-300">
+          <span class="bg-white/10 px-4 py-2 rounded-xl">🎯 25m Pomodoro Mode</span>
+          <span class="bg-white/10 px-4 py-2 rounded-xl">⚡ 45m Deep Work</span>
+          <span class="bg-white/10 px-4 py-2 rounded-xl">🔥 90m Marathon Sprint</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+    <h3 class="text-2xl font-[1000] text-slate-900 uppercase tracking-tight text-center mb-8">Frequently Asked Questions (FAQ)</h3>
+    <div class="space-y-4">
+      <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-xs">
+        <h4 class="font-bold text-slate-900 text-sm">Kya Apna College Bihar ke sabhi desktop aur mobile apps free hain?</h4>
+        <p class="text-slate-600 text-xs sm:text-sm mt-2 leading-relaxed">Haan, Apna College Bihar ke sabhi apps (Windows, Apple Mac, Linux aur Android) Bihar Engineering University (BEU) ke students ke liye 100% free hain.</p>
+      </div>
+      <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-xs">
+        <h4 class="font-bold text-slate-900 text-sm">Windows PC par kaise install karein?</h4>
+        <p class="text-slate-600 text-xs sm:text-sm mt-2 leading-relaxed">1. 'Download Windows Setup' par click karein.<br>2. Downloaded file par double-click karein.<br>3. Setup automatic install hokar Desktop par instant shortcut create kar dega.</p>
+      </div>
+      <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-xs">
+        <h4 class="font-bold text-slate-900 text-sm">Apple Mac (macOS) par kaise open karein?</h4>
+        <p class="text-slate-600 text-xs sm:text-sm mt-2 leading-relaxed">Zip file ko extract karein. Folder me diye gaye 'Start-Apna-College-Bihar.command' launcher par double click karein ya 'Apna College Bihar.app' par Right-Click karke 'Open' select karein.</p>
+      </div>
+      <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-xs">
+        <h4 class="font-bold text-slate-900 text-sm">Android APK kaise install karein?</h4>
+        <p class="text-slate-600 text-xs sm:text-sm mt-2 leading-relaxed">APK download karne ke baad notification bar ya Downloads folder se open karein. Agar 'Install from Unknown Sources' ka prompt aaye toh Allow karke Install par click karein.</p>
+      </div>
+    </div>
+  </section>
+
+  
+<footer class="bg-slate-900 text-white pt-16 pb-12 border-t border-slate-800">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-slate-800 text-xs">
+      <div class="space-y-3 md:col-span-1">
+        <div class="flex items-center gap-2">
+          <img src="/logo-acb.png" alt="ACB Logo" class="w-7 h-7 rounded" />
+          <span class="font-black text-sm uppercase tracking-wider">Apna College <span class="text-blue-400">Bihar</span></span>
+        </div>
+        <p class="text-slate-400 leading-relaxed">
+          The premier digital study engine and guidance platform for Bihar Engineering University (BEU) scholars across 38 government colleges.
+        </p>
+        <p class="text-slate-500 font-bold">Patna, Bihar 800001, India</p>
+        <p class="text-slate-500">Contact: <a href="mailto:prince86944@gmail.com" class="text-blue-400 hover:underline">prince86944@gmail.com</a></p>
+      </div>
+      <div>
+        <h4 class="font-black uppercase tracking-widest text-slate-300 mb-3">Academic Tools</h4>
+        <ul class="space-y-2 text-slate-400 font-medium">
+          <li><a href="/notes" class="hover:text-white transition-colors">BEU Semester Notes</a></li>
+          <li><a href="/pyq" class="hover:text-white transition-colors">Previous Year Questions</a></li>
+          <li><a href="/syllabus" class="hover:text-white transition-colors">Official B.Tech Syllabus</a></li>
+          <li><a href="/cgpa" class="hover:text-white transition-colors">BEU CGPA Calculator</a></li>
+          <li><a href="/ugeac-predictor" class="hover:text-white transition-colors">UGEAC College Predictor</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-black uppercase tracking-widest text-slate-300 mb-3">Quick Navigation</h4>
+        <ul class="space-y-2 text-slate-400 font-medium">
+          <li><a href="/blog" class="hover:text-white transition-colors">Engineering Blog & Guides</a></li>
+          <li><a href="/colleges" class="hover:text-white transition-colors">Bihar GEC Directory</a></li>
+          <li><a href="/hackathons" class="hover:text-white transition-colors">Hackathon Hub</a></li>
+          <li><a href="/lecture-finder" class="hover:text-white transition-colors">YouTube Lecture Finder</a></li>
+          <li><a href="/directory" class="hover:text-white transition-colors">Sitemap Directory</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-black uppercase tracking-widest text-slate-300 mb-3">Institutional & Legal</h4>
+        <ul class="space-y-2 text-slate-400 font-medium">
+          <li><a href="/author" class="hover:text-white transition-colors">Author & Founder</a></li>
+          <li><a href="/about" class="hover:text-white transition-colors">About Our Platform</a></li>
+          <li><a href="/contact" class="hover:text-white transition-colors">Contact Support Center</a></li>
+          <li><a href="/privacy-policy" class="hover:text-white transition-colors">Privacy Policy</a></li>
+          <li><a href="/terms" class="hover:text-white transition-colors">Terms of Service</a></li>
+          <li><a href="/disclaimer" class="hover:text-white transition-colors">Disclaimer</a></li>
+          <li><a href="/dmca" class="hover:text-white transition-colors">DMCA Notice</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <p>&copy; 2026 Apna College Bihar. All rights reserved. Built with dedication for Bihar Engineering Scholars.</p>
+      <div class="flex items-center gap-4">
+        <a href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition-colors">WhatsApp Channel</a>
+        <a href="https://youtube.com/@apnacollegebihar" target="_blank" rel="noopener noreferrer" class="hover:text-red-400 transition-colors">YouTube</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+</div><noscript>
+      <div
+         style="padding: 20px; font-family: sans-serif; text-align: center; max-width: 800px; margin: 0 auto; color: #333;">
+         <h1>Apna College Bihar - The Ultimate Engineering Study Hub</h1>
+         <p>Please enable JavaScript to access the official BEU study resources, PYQs, and tools.</p>
+         <p>Welcome to <strong>Apna College Bihar</strong>, the premier digital learning platform dedicated specifically
+            to students of <strong>Bihar Engineering University (BEU)</strong>. Whether you are pursuing Computer
+            Science (CSE), Civil Engineering, Mechanical Engineering, or Electrical Engineering, finding structured,
+            high-quality study materials can be challenging. Our mission is to bridge this gap by providing
+            comprehensive, easy-to-understand resources that align perfectly with the official BEU B.Tech syllabus.</p>
+         <h2>Comprehensive BEU Notes and Study Materials</h2>
+         <p>One of the biggest hurdles engineering students face is the lack of concise and accurate study notes. At
+            Apna College Bihar, we offer meticulously crafted <strong>BEU Notes</strong> that cover every unit of your
+            semester. These notes are designed by top-performing students and subject matter experts to ensure that you
+            grasp complex engineering concepts quickly.</p>
+         <h2>Mastering Exams with BEU Previous Year Questions (PYQs)</h2>
+         <p>It is a well-known fact that analyzing <strong>BEU Previous Year Question Papers (PYQs)</strong> is the most
+            effective strategy for exam preparation. The university exam patterns often repeat crucial concepts and
+            question formats. Our platform provides a vast, organized repository of BEU PYQs for all branches and
+            semesters.</p>
+         <h2>Advanced Tools: CGPA Calculator, Syllabus, and Timetable</h2>
+         <p>Beyond study materials, Apna College Bihar equips you with powerful digital tools to manage your academic
+            life. Our <strong>BEU CGPA Calculator</strong> allows you to accurately track your academic performance. We
+            also provide an easily navigable version of the <strong>BEU B.Tech Syllabus</strong> so you never miss a
+            topic.</p>
+         <a href="/directory">View Sitemap Directory</a>
+      </div>
+   </noscript>
+
+   <script>
+      (function () {
+         document.addEventListener('click', function (e) {
+            try {
+               const a = e.target.closest && e.target.closest('a');
+               if (!a) return;
+               const href = a.getAttribute && a.getAttribute('href');
+               if (!href) return;
+               if (href.startsWith('/') && !a.hasAttribute('download') && a.target !== '_blank' && !href.startsWith('//')) {
+                  if (href.startsWith('#')) return;
+                  e.preventDefault();
+                  if (window.location.pathname + window.location.search !== href) {
+                     history.pushState({}, '', href);
+                  }
+                  window.dispatchEvent(new PopStateEvent('popstate'));
+               }
+            } catch (err) { }
+         }, false);
+      })();
+   </script>
+   
+</body>
+
+</html>

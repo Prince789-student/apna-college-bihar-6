@@ -3182,6 +3182,283 @@ mentorshipHtml = injectHeadMetadata(mentorshipHtml, {
 writeStaticHtml('mentorship', mentorshipHtml);
 
 // ─────────────────────────────────────────────────────────────
+// 22b. GENERATE DOWNLOAD PAGE (/download)
+// ─────────────────────────────────────────────────────────────
+console.log(`[SSG] Generating Apps Download page (/download)...`);
+const downloadBody = `
+<div class="min-h-screen bg-[#f8fafc] text-slate-900 font-sans pb-20 selection:bg-blue-500/20 overflow-x-clip">
+  ${navHeaderHtml}
+
+  <!-- Breadcrumbs -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+    <nav class="flex text-xs font-semibold text-slate-500 gap-2 items-center" aria-label="Breadcrumb">
+      <a href="/" class="hover:text-blue-600 transition-colors">Home</a>
+      <span>/</span>
+      <span class="text-slate-900">Download Official Apps</span>
+    </nav>
+  </div>
+
+  <!-- Hero Header -->
+  <section class="relative overflow-hidden pt-10 pb-16 md:pt-14 md:pb-20 border-b border-slate-200/80 bg-white">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold uppercase tracking-wider mb-6 shadow-xs">
+        <span>✨ Official Apps Ecosystem · Zero Distractions</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-[1000] text-slate-900 tracking-tight uppercase leading-[1.15] mb-6">
+        Padhai Me <span class="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">Zero Distraction</span>.<br />
+        Official Apps for Windows, Mac, Linux & Mobile.
+      </h1>
+
+      <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-600 font-medium leading-relaxed mb-6">
+        BEU engineering exams ki tayyari ab aur aasan. Apne Windows laptop, Apple Mac, Linux workstation ya Android smartphone par official app install karein aur payein <strong>Study Focus Blocker</strong>, high-speed Notes, aur instant exam notices.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-4 text-xs font-bold text-slate-500">
+        <span class="inline-flex items-center gap-1.5 text-emerald-600 font-semibold">✓ 100% Free Forever</span>
+        <span class="inline-flex items-center gap-1.5 text-blue-600 font-semibold">✓ Safe & Virus-Free</span>
+        <span class="inline-flex items-center gap-1.5 text-slate-700 font-semibold">✓ Windows, Mac & Linux</span>
+        <span class="inline-flex items-center gap-1.5 text-amber-600 font-semibold">✓ Instant Offline Access</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download Cards Grid -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+      <!-- 1. Windows App Card -->
+      <div class="bg-white rounded-3xl border-2 border-blue-500/30 p-6 sm:p-8 shadow-xl hover:border-blue-500 transition-all flex flex-col justify-between relative overflow-hidden group">
+        <div class="absolute top-0 right-0 bg-gradient-to-l from-blue-600 to-indigo-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
+          ★ Recommended For PC
+        </div>
+        <div>
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-white border border-blue-200/80 p-1.5 flex items-center justify-center shadow-lg shadow-blue-600/15 shrink-0 overflow-hidden">
+              <img src="/logo-192.png" alt="Apna College Bihar Logo" class="w-full h-full object-contain" />
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Windows Desktop App</h2>
+              <p class="text-xs text-blue-600 font-bold uppercase tracking-wider mt-0.5">Version 2.2 · 64-bit Windows (10 & 11)</p>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
+            Laptops aur Desktop computers ke liye specially optimized. Isme built-in <strong>Study Focus Blocker</strong> hai jo padhai ke dauran social media aur game notifications ko mute kar deta hai.
+          </p>
+          <div class="space-y-3 mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs text-slate-700 font-semibold">
+            <div class="flex items-start gap-2.5">
+              <span class="text-blue-600 font-bold">🔒</span>
+              <span>Strict Focus Mode (Locks distractions during study sessions)</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-indigo-600 font-bold">⚡</span>
+              <span>Full BEU Notes & PYQ Library accessible offline</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-600 font-bold">🔔</span>
+              <span>Instant desktop notifications for official BEU exam notices</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <a href="/Apna-College-Bihar-Setup.exe" download class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl shadow-blue-600/25 transition-all transform hover:-translate-y-0.5">
+            <span>Download Windows Setup (.exe)</span>
+            <span>↓</span>
+          </a>
+          <p class="text-[11px] text-center text-slate-400 font-medium mt-3">Size: ~85 MB · Tested safe with Windows Defender</p>
+        </div>
+      </div>
+
+      <!-- 2. Apple Mac App Card -->
+      <div class="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xl hover:border-slate-800 transition-all flex flex-col justify-between relative overflow-hidden group">
+        <div class="absolute top-0 right-0 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
+          macOS Universal
+        </div>
+        <div>
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-slate-900 text-white flex items-center justify-center shadow-lg shrink-0 text-2xl font-black">
+              
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Apple Mac (macOS)</h2>
+              <p class="text-xs text-slate-500 font-bold uppercase tracking-wider mt-0.5">Apple Silicon (M1-M4) & Intel</p>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
+            MacBook Air, MacBook Pro aur Mac mini ke liye high performance native app. Metal acceleration aur Dark Mode ke saath smooth experience.
+          </p>
+          <div class="space-y-3 mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs text-slate-700 font-semibold">
+            <div class="flex items-start gap-2.5">
+              <span class="text-slate-900 font-bold">⚡</span>
+              <span>Universal binary optimized for M1, M2, M3, M4 & Intel chips</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-slate-900 font-bold">🚀</span>
+              <span>Double-click launcher included for instant bypass of Gatekeeper alert</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-slate-900 font-bold">📖</span>
+              <span>Distraction-free floating study window for split-screen reading</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <a href="/Apna-College-Bihar-Mac-Universal.zip" download class="w-full py-4 px-6 rounded-2xl bg-slate-900 hover:bg-black text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl shadow-slate-900/20 transition-all transform hover:-translate-y-0.5">
+            <span>Download Mac Package (.zip)</span>
+            <span>↓</span>
+          </a>
+          <p class="text-[11px] text-center text-slate-400 font-medium mt-3">Universal DMG / ZIP · Double-click run</p>
+        </div>
+      </div>
+
+      <!-- 3. Linux Workstation Card -->
+      <div class="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xl hover:border-amber-500 transition-all flex flex-col justify-between relative overflow-hidden group">
+        <div class="absolute top-0 right-0 bg-amber-500 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
+          Linux Portable
+        </div>
+        <div>
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 p-2 flex items-center justify-center shadow-md shrink-0 text-2xl font-black text-amber-700">
+              🐧
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Linux Desktop (x64)</h2>
+              <p class="text-xs text-amber-700 font-bold uppercase tracking-wider mt-0.5">Ubuntu · Debian · Fedora · Arch</p>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
+            Open-source developers aur Linux enthusiasts ke liye portable tar.gz package. Bina kisi sudo/root permission ke directly extract karke run karein.
+          </p>
+          <div class="p-3.5 bg-slate-900 text-slate-200 rounded-2xl font-mono text-xs mb-8 overflow-x-auto">
+            <p class="text-[11px] text-slate-400 mb-1 font-sans"># Terminal Quick Run:</p>
+            <code class="text-emerald-400 select-all">tar -xzf Apna-College-Bihar-Linux-x64.tar.gz && cd Apna-College-Bihar-linux-x64 && ./run.sh</code>
+          </div>
+        </div>
+        <div>
+          <a href="/Apna-College-Bihar-Linux-x64.tar.gz" download class="w-full py-4 px-6 rounded-2xl bg-amber-600 hover:bg-amber-700 text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl shadow-amber-600/20 transition-all transform hover:-translate-y-0.5">
+            <span>Download Linux Package (.tar.gz)</span>
+            <span>↓</span>
+          </a>
+          <p class="text-[11px] text-center text-slate-400 font-medium mt-3">x86_64 Portable Bundle · Zero dependencies</p>
+        </div>
+      </div>
+
+      <!-- 4. Android Mobile App Card -->
+      <div class="bg-white rounded-3xl border-2 border-emerald-500/30 p-6 sm:p-8 shadow-xl hover:border-emerald-500 transition-all flex flex-col justify-between relative overflow-hidden group">
+        <div class="absolute top-0 right-0 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
+          Mobile App (v64)
+        </div>
+        <div>
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 p-2 flex items-center justify-center shadow-md shrink-0 text-2xl font-black text-emerald-700">
+              📱
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Android Mobile App</h2>
+              <p class="text-xs text-emerald-600 font-bold uppercase tracking-wider mt-0.5">APK v64 · Android 8.0 & Above</p>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed mb-6">
+            Apne mobile phone par sabhi BEU notes, question papers, aur official exam alerts hamesha saath rakhein. Lightweight aur fast-loading.
+          </p>
+          <div class="space-y-3 mb-8 bg-slate-50 p-4 rounded-2xl border border-slate-100 text-xs text-slate-700 font-semibold">
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-600 font-bold">📲</span>
+              <span>Offline saving of subject PDFs directly in app</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-600 font-bold">🔔</span>
+              <span>Realtime push alerts for university semester schedules</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="text-emerald-600 font-bold">⚡</span>
+              <span>100% Ad-Free study mode for high focus</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <a href="/apna-college-bihar-v64.apk" download class="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 shadow-xl shadow-emerald-600/25 transition-all transform hover:-translate-y-0.5">
+            <span>Download Android APK (v64)</span>
+            <span>↓</span>
+          </a>
+          <p class="text-[11px] text-center text-slate-400 font-medium mt-3">Direct APK Download · Size: ~12 MB</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Feature Spotlight: Study Focus Blocker -->
+  <section class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+    <div class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-8 sm:p-12 rounded-3xl border border-indigo-500/20 shadow-2xl relative overflow-hidden">
+      <div class="max-w-3xl">
+        <span class="px-3.5 py-1.5 rounded-full bg-indigo-500/30 border border-indigo-400/30 text-indigo-300 text-xs font-bold uppercase tracking-wider mb-4 inline-block">
+          Exclusive Desktop Feature
+        </span>
+        <h3 class="text-2xl sm:text-3xl font-[1000] text-white tracking-tight uppercase mb-4">
+          Study Focus Blocker: Padhai Ke Time Zero Distraction
+        </h3>
+        <p class="text-sm sm:text-base text-slate-300 leading-relaxed font-medium mb-6">
+          Exam time me sabse badi samasya hoti hai notifications aur distractions. Apna College Bihar Desktop App me built-in timer hai (25 min Pomodoro, 45 min Deep Study, 60 min Exam Sprint). Ek baar start karne par app screen par focus lock kar deti hai taaki aapka dhyaan sirf notes aur numericals par rahe.
+        </p>
+        <div class="flex flex-wrap gap-4 text-xs font-bold text-slate-300">
+          <span class="bg-white/10 px-4 py-2 rounded-xl">🎯 25m Pomodoro Mode</span>
+          <span class="bg-white/10 px-4 py-2 rounded-xl">⚡ 45m Deep Work</span>
+          <span class="bg-white/10 px-4 py-2 rounded-xl">🔥 90m Marathon Sprint</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+    <h3 class="text-2xl font-[1000] text-slate-900 uppercase tracking-tight text-center mb-8">Frequently Asked Questions (FAQ)</h3>
+    <div class="space-y-4">
+      <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-xs">
+        <h4 class="font-bold text-slate-900 text-sm">Kya Apna College Bihar ke sabhi desktop aur mobile apps free hain?</h4>
+        <p class="text-slate-600 text-xs sm:text-sm mt-2 leading-relaxed">Haan, Apna College Bihar ke sabhi apps (Windows, Apple Mac, Linux aur Android) Bihar Engineering University (BEU) ke students ke liye 100% free hain.</p>
+      </div>
+      <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-xs">
+        <h4 class="font-bold text-slate-900 text-sm">Windows PC par kaise install karein?</h4>
+        <p class="text-slate-600 text-xs sm:text-sm mt-2 leading-relaxed">1. 'Download Windows Setup' par click karein.<br>2. Downloaded file par double-click karein.<br>3. Setup automatic install hokar Desktop par instant shortcut create kar dega.</p>
+      </div>
+      <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-xs">
+        <h4 class="font-bold text-slate-900 text-sm">Apple Mac (macOS) par kaise open karein?</h4>
+        <p class="text-slate-600 text-xs sm:text-sm mt-2 leading-relaxed">Zip file ko extract karein. Folder me diye gaye 'Start-Apna-College-Bihar.command' launcher par double click karein ya 'Apna College Bihar.app' par Right-Click karke 'Open' select karein.</p>
+      </div>
+      <div class="p-5 bg-white border border-slate-200 rounded-2xl shadow-xs">
+        <h4 class="font-bold text-slate-900 text-sm">Android APK kaise install karein?</h4>
+        <p class="text-slate-600 text-xs sm:text-sm mt-2 leading-relaxed">APK download karne ke baad notification bar ya Downloads folder se open karein. Agar 'Install from Unknown Sources' ka prompt aaye toh Allow karke Install par click karein.</p>
+      </div>
+    </div>
+  </section>
+
+  ${footerHtml}
+</div>
+`;
+
+let downloadHtml = injectIntoRoot(baseTemplate, downloadBody);
+downloadHtml = injectHeadMetadata(downloadHtml, {
+  title: 'Download Apna College Bihar Apps | Windows, Mac, Linux & Android',
+  description: 'Download official Apna College Bihar desktop and mobile applications for Windows PC, Apple Mac (macOS), Linux x64, and Android. Built-in Study Focus Blocker, offline BEU Notes, PYQs, and exam circulars.',
+  canonical: 'https://www.apnacollegebihar.online/download',
+  schemaJson: {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Apna College Bihar Official App",
+    "operatingSystem": "Windows 10+, macOS, Linux, Android",
+    "applicationCategory": "EducationalApplication",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "INR"
+    },
+    "description": "Comprehensive academic learning application for Bihar Engineering University students featuring offline notes, past question papers, and study distraction blocker."
+  }
+});
+writeStaticHtml('download', downloadHtml);
+
+// ─────────────────────────────────────────────────────────────
 // 23. GENERATE ALL 38 INDIVIDUAL COLLEGE PAGES (/college/:slug)
 // ─────────────────────────────────────────────────────────────
 console.log(`[SSG] Starting static page generation for ${Object.keys(collegeData).length} colleges...`);
