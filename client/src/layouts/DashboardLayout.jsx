@@ -20,6 +20,7 @@ import { messaging, VAPID_KEY, db } from '../firebase';
 import SEO from '../components/SEO';
 import Footer from '../components/Footer';
 import MobileBottomNav from '../components/MobileBottomNav';
+import BrandFilmBackground from '../components/BrandFilmBackground';
 import { toast } from 'react-hot-toast';
 
 export default function DashboardLayout() {
@@ -282,22 +283,23 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className={`flex flex-col h-[100dvh] min-h-[100dvh] w-full max-w-[100vw] ${
-      isHomePage ? 'bg-[#070b14] text-white' : 'bg-[#f8fafc] bg-mesh-light text-slate-900'
-    } overflow-x-clip overflow-y-hidden font-['Inter'] selection:bg-blue-500/30 relative`}>
+    <div className="flex flex-col h-[100dvh] min-h-[100dvh] w-full max-w-[100vw] bg-[#070b14] text-white overflow-x-clip overflow-y-hidden font-['Inter'] selection:bg-cyan-500/30 relative">
       <SEO 
         title={pageTitle} 
         url={window.location.href} 
       />
 
+      {/* ── Global Full-Page Brand Film Video Background across ALL pages ── */}
+      <BrandFilmBackground />
+
       {/* Global Native Header (for Mobile Phone App only) */}
       {isMobileApp && (
-        <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs z-[200] shrink-0 sticky top-0 px-3 sm:px-4 py-2.5 flex items-center justify-between pt-[max(env(safe-area-inset-top,0px),0.625rem)]">
-          <button onClick={() => navigate(-1)} className="min-w-[44px] min-h-[44px] rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors active:scale-95 flex items-center justify-center cursor-pointer" aria-label="Go Back">
+        <header className="bg-slate-900/95 backdrop-blur-md border-b border-white/10 shadow-xs z-[200] shrink-0 sticky top-0 px-3 sm:px-4 py-2.5 flex items-center justify-between pt-[max(env(safe-area-inset-top,0px),0.625rem)] text-white">
+          <button onClick={() => navigate(-1)} className="min-w-[44px] min-h-[44px] rounded-xl bg-white/10 text-slate-200 hover:bg-white/20 transition-colors active:scale-95 flex items-center justify-center cursor-pointer" aria-label="Go Back">
             <ChevronLeft size={20} strokeWidth={2.5} />
           </button>
           <div className="flex items-center justify-center">
-            <span className="text-xs font-black text-slate-900 uppercase tracking-tight truncate px-2">{pageTitle}</span>
+            <span className="text-xs font-black text-white uppercase tracking-tight truncate px-2">{pageTitle}</span>
           </div>
           <div className="flex items-center gap-2">
             <HeaderTimer />
@@ -307,11 +309,7 @@ export default function DashboardLayout() {
 
       {/* Top Header Navigation (Desktop Web, Desktop App, and Mobile Web) */}
       {!isMobileApp && (
-        <header className={`backdrop-blur-2xl border-b shadow-[0_2px_15px_rgba(0,0,0,0.03)] z-[200] shrink-0 sticky top-0 transition-all pt-[max(env(safe-area-inset-top,0px),0px)] ${
-          isHomePage 
-            ? 'bg-black/60 border-white/10 text-white' 
-            : 'bg-white/90 border-slate-200/80 text-slate-900'
-        }`}>
+        <header className="backdrop-blur-2xl border-b border-white/10 shadow-[0_2px_15px_rgba(0,0,0,0.5)] z-[200] shrink-0 sticky top-0 transition-all pt-[max(env(safe-area-inset-top,0px),0px)] bg-black/70 text-white">
           <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500/80 to-transparent"></div>
           <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-8 py-2.5 sm:py-3 flex items-center justify-between">
             
@@ -321,62 +319,42 @@ export default function DashboardLayout() {
                 <img src="/logo-acb.png?v=99" alt="Logo" className="w-full h-full object-cover rounded-[10px] bg-white" />
               </div>
               <div className="block min-w-0">
-                <span className={`font-heading font-black text-xs sm:text-sm md:text-base lg:text-lg tracking-tight uppercase leading-none block ${
-                  isHomePage ? 'text-white' : 'text-slate-900'
-                }`}>
+                <span className="font-heading font-black text-xs sm:text-sm md:text-base lg:text-lg tracking-tight uppercase leading-none block text-white">
                   Apna College <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Bihar</span>
                 </span>
               </div>
             </div>
 
-            {/* Desktop Navigation Links (Issue 15: Streamlined clean navigation) */}
+            {/* Desktop Navigation Links */}
             <nav className="hidden xl:flex items-center gap-1.5 text-xs font-heading font-bold">
-              <Link to="/" className={`px-3 py-2 rounded-xl transition-colors ${
-                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
-              }`}>
+              <Link to="/" className="px-3 py-2 rounded-xl transition-colors text-slate-300 hover:text-cyan-400 hover:bg-white/10">
                 Home
               </Link>
-              <Link to="/notes" className={`px-3 py-2 rounded-xl transition-colors ${
-                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
-              }`}>
+              <Link to="/notes" className="px-3 py-2 rounded-xl transition-colors text-slate-300 hover:text-cyan-400 hover:bg-white/10">
                 Notes
               </Link>
-              <Link to="/pyq" className={`px-3 py-2 rounded-xl transition-colors ${
-                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
-              }`}>
+              <Link to="/pyq" className="px-3 py-2 rounded-xl transition-colors text-slate-300 hover:text-cyan-400 hover:bg-white/10">
                 PYQ
               </Link>
-              <Link to="/ugeac-predictor?tab=finder" className={`px-3 py-2 rounded-xl transition-colors ${
-                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
-              }`}>
+              <Link to="/ugeac-predictor?tab=finder" className="px-3 py-2 rounded-xl transition-colors text-slate-300 hover:text-cyan-400 hover:bg-white/10">
                 Predictor
               </Link>
-              <Link to="/compare-colleges" className={`px-3 py-2 rounded-xl transition-colors whitespace-nowrap ${
-                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
-              }`}>
+              <Link to="/compare-colleges" className="px-3 py-2 rounded-xl transition-colors whitespace-nowrap text-slate-300 hover:text-cyan-400 hover:bg-white/10">
                 Compare Colleges
               </Link>
-              <Link to="/mentorship" className={`px-3 py-2 rounded-xl transition-colors inline-flex items-center gap-1.5 ${
-                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
-              }`}>
+              <Link to="/mentorship" className="px-3 py-2 rounded-xl transition-colors inline-flex items-center gap-1.5 text-slate-300 hover:text-cyan-400 hover:bg-white/10">
                 <span>Mentorship</span>
-                <span className={`px-1.5 py-0.5 rounded-full text-xs font-bold ${
-                  isHomePage ? 'bg-blue-500/20 border border-blue-400/30 text-cyan-300' : 'bg-blue-50 border border-blue-200 text-blue-600'
-                }`}>Free</span>
+                <span className="px-1.5 py-0.5 rounded-full text-xs font-bold bg-blue-500/20 border border-blue-400/30 text-cyan-300">Free</span>
               </Link>
-              <Link to="/blog" className={`px-3 py-2 rounded-xl transition-colors ${
-                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
-              }`}>
-                Blog & Guides
+              <Link to="/blog" className="px-3 py-2 rounded-xl transition-colors text-slate-300 hover:text-cyan-400 hover:bg-white/10">
+                Blog &amp; Guides
               </Link>
 
               {/* All Tools Dropdown */}
               <div className="relative ml-1">
                 <button
                   onClick={() => setActiveFeatureIndex(activeFeatureIndex === 0 ? null : 0)}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors text-xs font-heading font-bold cursor-pointer ${
-                    isHomePage ? 'bg-white/10 hover:bg-white/20 text-white border border-white/15' : 'bg-slate-100/90 hover:bg-slate-200 text-slate-700 hover:text-slate-900'
-                  }`}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors text-xs font-heading font-bold cursor-pointer bg-white/10 hover:bg-white/20 text-white border border-white/15"
                 >
                   <span>All Tools</span>
                   <ChevronDown size={14} className={`transition-transform duration-200 ${activeFeatureIndex === 0 ? 'rotate-180' : ''}`} />
@@ -417,14 +395,10 @@ export default function DashboardLayout() {
               {!isNative && (
                 <Link 
                   to="/download" 
-                  className={`hidden md:flex h-9 items-center gap-1.5 px-3 rounded-xl font-heading font-bold text-xs transition-all shadow-xs active:scale-95 shrink-0 ${
-                    isHomePage 
-                      ? 'bg-blue-500/20 hover:bg-blue-500/30 text-cyan-300 border border-blue-400/30' 
-                      : 'bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/80'
-                  }`}
+                  className="hidden md:flex h-9 items-center gap-1.5 px-3 rounded-xl font-heading font-bold text-xs transition-all shadow-xs active:scale-95 shrink-0 bg-blue-500/20 hover:bg-blue-500/30 text-cyan-300 border border-blue-400/30"
                   title="Download Official Windows, Mac, Linux & Android Apps"
                 >
-                  <Download size={14} className={isHomePage ? 'text-cyan-400 animate-bounce' : 'text-blue-600 animate-bounce'} />
+                  <Download size={14} className="text-cyan-400 animate-bounce" />
                   <span>Download App</span>
                 </Link>
               )}
@@ -438,11 +412,7 @@ export default function DashboardLayout() {
                   <div className="relative">
                     <button 
                       onClick={() => setShowProfileMenu(!showProfileMenu)}
-                      className={`h-9 flex items-center gap-2 px-3 rounded-xl font-heading font-bold text-xs transition-all shadow-xs active:scale-95 group shrink-0 ${
-                        isHomePage 
-                          ? 'bg-white/10 hover:bg-white/20 border border-white/15 text-white' 
-                          : 'bg-slate-50 border border-slate-200 hover:border-blue-500/50 text-slate-900'
-                      }`}
+                      className="h-9 flex items-center gap-2 px-3 rounded-xl font-heading font-bold text-xs transition-all shadow-xs active:scale-95 group shrink-0 bg-white/10 hover:bg-white/20 border border-white/15 text-white"
                     >
                       <div className="w-5 h-5 rounded-lg overflow-hidden bg-slate-100">
                         <img src="/logo-acb.png?v=99" alt="Profile" className="w-full h-full object-cover" />
@@ -546,9 +516,7 @@ export default function DashboardLayout() {
 
                   <Link 
                     to="/login" 
-                    className={`hidden sm:flex h-9 items-center px-3 font-heading font-bold text-xs transition-colors ${
-                      isHomePage ? 'text-slate-300 hover:text-white' : 'text-slate-600 hover:text-slate-900'
-                    }`}
+                    className="hidden sm:flex h-9 items-center px-3 font-heading font-bold text-xs transition-colors text-slate-300 hover:text-white"
                   >
                     Login
                   </Link>
@@ -564,11 +532,7 @@ export default function DashboardLayout() {
               {/* Mobile Menu Hamburger */}
               <button 
                 onClick={() => setMobileMenuOpen(true)} 
-                className={`w-11 h-11 min-w-[44px] min-h-[44px] flex xl:hidden items-center justify-center rounded-xl transition-all ml-1 shrink-0 active:scale-95 cursor-pointer ${
-                  isHomePage 
-                    ? 'text-white bg-white/10 hover:bg-white/20 border border-white/15' 
-                    : 'text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200'
-                }`}
+                className="w-11 h-11 min-w-[44px] min-h-[44px] flex xl:hidden items-center justify-center rounded-xl transition-all ml-1 shrink-0 active:scale-95 cursor-pointer text-white bg-white/10 hover:bg-white/20 border border-white/15"
                 aria-label="Open Navigation Menu"
               >
                 <Menu size={20} strokeWidth={2.2} />

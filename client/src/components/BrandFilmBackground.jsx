@@ -82,7 +82,14 @@ export default function BrandFilmBackground() {
       offsetY = 0;
     }
 
-    ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+    // ── Watermark Elimination: 7% outward zoom pushes bottom-right watermark 100% off-screen ──
+    const zoom = 1.07;
+    const zWidth = drawWidth * zoom;
+    const zHeight = drawHeight * zoom;
+    const zOffsetX = (cWidth - zWidth) / 2;
+    const zOffsetY = (cHeight - zHeight) / 2;
+
+    ctx.drawImage(img, zOffsetX, zOffsetY, zWidth, zHeight);
     lastDrawnFrameRef.current = frameIndex;
   }, []);
 
@@ -246,8 +253,11 @@ export default function BrandFilmBackground() {
         className="absolute inset-0 w-full h-full object-cover"
       />
 
-      {/* ── Soft Ambient Vignette (Keeps Video Vivid & Crystal Clear) ── */}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-slate-950/30 pointer-events-none" />
+      {/* ── Ambient Contrast Veil (Tones down bright laptop glare so text is 100% visible) ── */}
+      <div className="absolute inset-0 bg-slate-950/45 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/50 pointer-events-none" />
+      {/* Corner protection (Ensures zero watermark or symbol leakage in bottom-right corner) */}
+      <div className="absolute bottom-0 right-0 w-48 h-32 bg-gradient-to-tl from-slate-950 via-slate-950/70 to-transparent pointer-events-none" />
 
       {/* ── Global Bottom Scroll Progress Line ── */}
       <div className="fixed bottom-0 left-0 right-0 h-1 bg-white/10 z-40 pointer-events-none">

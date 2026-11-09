@@ -16,7 +16,6 @@ import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
 import GlobalSearch from '../components/GlobalSearch';
 import CountUp from '../components/CountUp';
-import BrandFilmBackground from '../components/BrandFilmBackground';
 import { collegeData } from '../data/collegeData';
 import { blogPosts } from '../data/blogPosts';
 import toast from 'react-hot-toast';
@@ -35,7 +34,6 @@ export default function Home() {
   // Authentic platform stats
   const [stats, setStats] = useState({ users: 166, notes: 296, pyqs: 340, groups: 24 });
   const [activeConsoleTab, setActiveConsoleTab] = useState('tools'); // 'tools' | 'predictor' | 'colleges' | 'radar' | 'guide'
-  const [cinemaMode, setCinemaMode] = useState(false);
   const [topDonors, setTopDonors] = useState([]);
   const [showScanner, setShowScanner] = useState(false);
   const [beuNotices, setBeuNotices] = useState([]);
@@ -238,11 +236,8 @@ export default function Home() {
         schema={combinedSchema}
       />
 
-      {/* ── Global Full-Page Brand Film Video Background (Header to Footer) ── */}
-      <BrandFilmBackground />
-
-      {/* ── Foreground Content Wrapper (Seamless Cinema View Transition) ── */}
-      <div className={`transition-opacity duration-500 ${cinemaMode ? 'opacity-10 hover:opacity-90' : 'opacity-100'}`}>
+      {/* ── Foreground Content Wrapper ── */}
+      <div className="relative z-10">
 
         {/* ═══════════════════════════════════════════ */}
         {/* ── 1. CINEMATIC OPEN HERO STAGE ── */}
@@ -387,29 +382,32 @@ export default function Home() {
                       <Link
                         key={idx}
                         to={tool.path}
-                        className="py-4 px-3 rounded-xl flex flex-col justify-between group transition-all hover:bg-white/5 active:scale-[0.98] border-b border-white/15 hover:border-cyan-400/60"
+                        className="p-5 rounded-2xl bg-slate-900/85 hover:bg-slate-900/95 backdrop-blur-md border border-white/15 hover:border-cyan-400/60 shadow-xl flex flex-col justify-between group transition-all hover:-translate-y-1 active:scale-[0.98]"
                       >
                         <div>
-                          <div className="flex items-center justify-between mb-2.5">
-                            <div className="w-10 h-10 rounded-lg bg-cyan-500/15 text-cyan-300 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md">
                               {tool.icon}
                             </div>
                             {tool.badge && (
-                              <span className="px-2 py-0.5 rounded-md bg-white/10 text-cyan-300 text-[10px] font-black uppercase tracking-wider drop-shadow-sm">
+                              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-[10px] font-black uppercase tracking-wider">
                                 {tool.badge}
                               </span>
                             )}
                           </div>
-                          <h3 className="font-heading text-base font-bold text-white group-hover:text-cyan-300 transition-colors drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+                          <h3 className="font-heading text-base font-extrabold text-white group-hover:text-cyan-300 transition-colors">
                             {tool.name}
                           </h3>
-                          <p className="text-xs text-slate-200 font-medium mt-1 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
+                          <p className="text-xs text-slate-300 font-medium mt-1.5 leading-relaxed">
                             {tool.desc}
                           </p>
                         </div>
-                        <div className="mt-4 pt-2 border-t border-white/10 flex items-center gap-1.5 text-xs text-cyan-400 font-extrabold drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
-                          <span>Launch Tool</span>
-                          <ArrowRight size={13} className="group-hover:translate-x-1.5 transition-transform" />
+                        <div className="mt-5 pt-3 border-t border-white/10 flex items-center justify-between">
+                          <span className="text-[11px] text-slate-400 font-medium">Direct Access</span>
+                          <span className="px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-xs font-bold flex items-center gap-1 group-hover:bg-cyan-500 group-hover:text-white transition-all">
+                            <span>Launch Tool</span>
+                            <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                          </span>
                         </div>
                       </Link>
                     ))}
@@ -426,7 +424,7 @@ export default function Home() {
                     <div className="lg:col-span-7 space-y-4">
                       
                       {/* Percentile Slider Card */}
-                      <div className="p-4 sm:p-5 rounded-2xl bg-black/25 border border-white/15 shadow-md">
+                      <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/85 backdrop-blur-md border border-white/15 shadow-xl">
                         <div className="flex items-center justify-between text-xs sm:text-sm mb-2 font-bold">
                           <span className="text-slate-200">Your JEE Main Percentile:</span>
                           <span className="text-cyan-400 font-[1000] text-base sm:text-lg">{simPercentile}%ile</span>
@@ -466,7 +464,7 @@ export default function Home() {
                           const isModerate = !isLikely && currentUgeacRank <= Math.round(col.closing * 1.35);
 
                           return (
-                            <div key={idx} className="p-3.5 rounded-xl bg-black/25 border border-white/10 flex items-center justify-between hover:border-cyan-400/40 transition-all">
+                            <div key={idx} className="p-3.5 rounded-xl bg-slate-900/85 backdrop-blur-md border border-white/15 flex items-center justify-between hover:border-cyan-400/40 shadow-lg transition-all">
                               <div className="flex items-center gap-3">
                                 <div className={`w-10 h-10 rounded-xl ${col.color} border flex items-center justify-center font-black text-xs shrink-0`}>
                                   {col.code}
@@ -555,7 +553,7 @@ export default function Home() {
                       <Link
                         key={idx}
                         to={`/college/${col.slug}`}
-                        className="py-4 px-3.5 rounded-xl group transition-all flex flex-col justify-between hover:bg-white/5 border-b border-white/15 hover:border-cyan-400 text-white"
+                        className="p-5 rounded-2xl group transition-all flex flex-col justify-between bg-slate-900/85 hover:bg-slate-900/95 backdrop-blur-md border border-white/15 hover:border-cyan-400/60 shadow-xl text-white hover:-translate-y-0.5 active:scale-[0.98]"
                       >
                         <div>
                           <div className="flex items-center justify-between mb-2">
@@ -608,7 +606,7 @@ export default function Home() {
                           href={notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`)}
                           target="_blank"
                           rel="noreferrer"
-                          className="py-4 px-3.5 rounded-xl flex flex-col justify-between group hover:bg-white/5 border-b border-white/15 hover:border-cyan-400 text-white transition-all"
+                          className="p-5 rounded-2xl flex flex-col justify-between group bg-slate-900/85 hover:bg-slate-900/95 backdrop-blur-md border border-white/15 hover:border-cyan-400/60 shadow-xl text-white transition-all hover:-translate-y-0.5 active:scale-[0.98]"
                         >
                           <div>
                             <div className="flex items-center justify-between gap-2 mb-2">
@@ -646,7 +644,7 @@ export default function Home() {
                 <div className="pt-6 animate-in fade-in duration-200">
                   <div className="space-y-3">
                     {faqs.map((faq, i) => (
-                      <div key={i} className="rounded-xl overflow-hidden border-b border-white/15 hover:bg-white/5 text-white transition-all">
+                      <div key={i} className="rounded-2xl overflow-hidden bg-slate-900/85 backdrop-blur-md border border-white/15 text-white transition-all shadow-md">
                         <button
                           onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
                           className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
@@ -689,7 +687,7 @@ export default function Home() {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mb-6">
               {topDonors.map((donor, idx) => (
-                <div key={idx} className="bg-white/5 border border-white/10 p-3.5 rounded-xl text-center shadow-xs">
+                <div key={idx} className="bg-slate-900/85 backdrop-blur-md border border-white/15 p-3.5 rounded-2xl text-center shadow-lg">
                   <div className="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 font-bold text-sm mx-auto flex items-center justify-center mb-1.5 shadow-xs">
                     {donor.name?.charAt(0) || 'S'}
                   </div>
@@ -709,18 +707,6 @@ export default function Home() {
           </div>
         </section>
 
-      </div>
-
-      {/* ── Floating Cinema View Mode Toggle (Desktop only) ── */}
-      <div className="fixed bottom-5 right-5 z-40 hidden md:flex items-center">
-        <button
-          onClick={() => setCinemaMode(!cinemaMode)}
-          title="Toggle Cinema Mode to clearly view the background film"
-          className="px-3.5 py-1.5 rounded-full bg-black/60 hover:bg-black/85 backdrop-blur-md border border-white/20 text-slate-200 hover:text-white text-xs font-heading font-bold shadow-2xl flex items-center gap-1.5 transition-all cursor-pointer hover:border-cyan-400 active:scale-95"
-        >
-          <Sparkles size={13} className="text-cyan-400" />
-          <span>{cinemaMode ? 'Exit Cinema View' : 'Cinema View'}</span>
-        </button>
       </div>
 
       {/* ── SCANNER MODAL ── */}
