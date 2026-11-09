@@ -345,7 +345,7 @@ app.get('/api/public/home-stats', asyncHandler(async (req, res) => {
             if (homeDataCache) return res.json({ success: true, ...homeDataCache, cached: true });
             return res.json({
                 success: true,
-                stats: { notes: 296, pyqs: 340, users: 231, groups: 24 },
+                stats: { notes: 296, pyqs: 340, users: 166, groups: 24 },
                 donors: [],
                 notices: localNoticesList.slice(0, 15)
             });
@@ -364,15 +364,15 @@ app.get('/api/public/home-stats', asyncHandler(async (req, res) => {
         const donors = donorsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
         const fsNotices = noticesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
         const notices = localNoticesList.length > 0 ? localNoticesList.slice(0, 15) : fsNotices;
-        const rawUsersCount = (usersCountSnap && usersCountSnap.data) ? usersCountSnap.data().count : 231;
+        const rawUsersCount = (usersCountSnap && usersCountSnap.data) ? usersCountSnap.data().count : 166;
         const groupsCount = (groupsCountSnap && groupsCountSnap.data) ? groupsCountSnap.data().count : 24;
 
         homeDataCache = {
             stats: {
-                notes: Math.max(metaData.uniqueNotesCount || 0, 296),
-                pyqs: Math.max(metaData.uniquePyqsCount || 0, 340),
-                users: Math.max(rawUsersCount || 0, 231),
-                groups: groupsCount
+                notes: 296,
+                pyqs: 340,
+                users: 166,
+                groups: groupsCount || 24
             },
             donors,
             notices
@@ -396,7 +396,7 @@ app.get('/api/public/home-stats', asyncHandler(async (req, res) => {
         } catch (_) {}
         res.json({
             success: true,
-            stats: { notes: 296, pyqs: 340, users: 231, groups: 24 },
+            stats: { notes: 296, pyqs: 340, users: 166, groups: 24 },
             donors: [],
             notices: fallbackNotices
         });

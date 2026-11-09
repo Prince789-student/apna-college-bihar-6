@@ -1,9 +1,23 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 
 const TOTAL_FRAMES = 239;
 const getFrameSrc = (index) => `/brand-film/frame_${String(index).padStart(3, '0')}.webp`;
 
 export default function BrandFilmBackground() {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth < 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
+  });
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || ''));
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile, { passive: true });
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const canvasRef = useRef(null);
   const imagesRef = useRef(new Array(TOTAL_FRAMES));
   const loadedFlagsRef = useRef(new Uint8Array(TOTAL_FRAMES));
@@ -72,8 +86,9 @@ export default function BrandFilmBackground() {
     lastDrawnFrameRef.current = frameIndex;
   }, []);
 
-  // 3. Ultra-Lightweight Chunked Preloader (No network flood, super fast page load)
+  // 3. Ultra-Lightweight Chunked Preloader (Disabled on mobile)
   useEffect(() => {
+    if (isMobile) return;
     let mounted = true;
 
     const loadImage = (idx) => {
@@ -140,8 +155,9 @@ export default function BrandFilmBackground() {
     };
   }, [drawFrame]);
 
-  // 4. Responsive Canvas Sizing (Clamped DPR for smooth mobile performance)
+  // 4. Responsive Canvas Sizing
   useEffect(() => {
+    if (isMobile) return;
     const handleResize = () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -161,8 +177,9 @@ export default function BrandFilmBackground() {
     return () => window.removeEventListener('resize', handleResize);
   }, [drawFrame]);
 
-  // 5. Zero-State-Rerender Scroll Engine (60fps - 120fps solid, no React lag)
+  // 5. Zero-State-Rerender Scroll Engine (Disabled on mobile)
   useEffect(() => {
+    if (isMobile) return;
     const updateScroll = () => {
       const scroller = getScroller();
       let p = 0;
@@ -217,6 +234,10 @@ export default function BrandFilmBackground() {
     };
   }, [drawFrame, getScroller]);
 
+  if (isMobile) {
+    return null; // Zero background animation or video canvas on mobile
+  }
+
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
       {/* ── Fixed Fullscreen High-DPI Video Canvas ── */}
@@ -225,8 +246,8 @@ export default function BrandFilmBackground() {
         className="absolute inset-0 w-full h-full object-cover"
       />
 
-      {/* ── Soft Ambient Vignette (Keeps Video Vivid & Beautifully Visible) ── */}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/50 pointer-events-none" />
+      {/* ── Soft Ambient Vignette (Keeps Video Vivid & Crystal Clear) ── */}
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-slate-950/30 pointer-events-none" />
 
       {/* ── Global Bottom Scroll Progress Line ── */}
       <div className="fixed bottom-0 left-0 right-0 h-1 bg-white/10 z-40 pointer-events-none">

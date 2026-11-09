@@ -391,6 +391,16 @@ export default function AppHub() {
               <span className="text-[9px] font-black uppercase tracking-widest text-slate-700">YouTube</span>
             </button>
           </div>
+
+          <div className="mt-4 pt-3 border-t border-slate-100 text-center">
+            <a 
+              href="/?desktop=true"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all shadow-xs"
+            >
+              <span>💻 Switch to Desktop Experience</span>
+              <ArrowRight size={13} />
+            </a>
+          </div>
         </div>
       </div>
 

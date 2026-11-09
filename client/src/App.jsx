@@ -541,6 +541,15 @@ function App() {
     || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' && !window.location.port))
   );
 
+  const isMobileScreen = Boolean(
+    isNative || 
+    (typeof window !== 'undefined' && (
+      (window.innerWidth < 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '')) &&
+      !new URLSearchParams(window.location.search).get('desktop') &&
+      !new URLSearchParams(window.location.search).get('mode')?.includes('desktop')
+    ))
+  );
+
   useEffect(() => {
     if (isNative) {
       SplashScreen.hide().catch(() => {});
@@ -706,9 +715,9 @@ function App() {
 
             {/* Landing page for all visitors (web and mobile app) */}
             
-            {isNative && <Route path="/" element={<AppHub />} />}
+            {isMobileScreen && <Route path="/" element={<AppHub />} />}
             <Route element={<DashboardLayout />}>
-              {!isNative && <Route path="/" element={<Home />} />}
+              {!isMobileScreen && <Route path="/" element={<Home />} />}
               <Route path="/download" element={<DownloadPage />} />
               <Route path="/apps" element={<Navigate to="/download" replace />} />
               <Route path="/download-app" element={<Navigate to="/download" replace />} />

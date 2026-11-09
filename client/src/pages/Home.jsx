@@ -10,16 +10,13 @@ import {
   RefreshCw, Heart, Building2, Award, Mail,
   Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight, X, Radio, Bell, Smartphone, Monitor
 } from 'lucide-react';
-import { collection, onSnapshot, query, orderBy, limit, doc, getCountFromServer } from 'firebase/firestore';
+import { collection, onSnapshot, query, orderBy, limit, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
 import GlobalSearch from '../components/GlobalSearch';
 import CountUp from '../components/CountUp';
-import Reveal from '../components/Reveal';
-import HomeEducationalGuide from '../components/HomeEducationalGuide';
 import BrandFilmBackground from '../components/BrandFilmBackground';
-import InteractiveCanvasBackground from '../components/InteractiveCanvasBackground';
 import { collegeData } from '../data/collegeData';
 import { blogPosts } from '../data/blogPosts';
 import toast from 'react-hot-toast';
@@ -34,214 +31,134 @@ export default function Home() {
   );
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [stats, setStats] = useState({ users: 231, notes: 296, pyqs: 340, groups: 24 });
-  const [activeTab, setActiveTab] = useState('academic');
+
+  // Authentic platform stats
+  const [stats, setStats] = useState({ users: 166, notes: 296, pyqs: 340, groups: 24 });
+  const [activeConsoleTab, setActiveConsoleTab] = useState('tools'); // 'tools' | 'predictor' | 'colleges' | 'radar' | 'guide'
+  const [cinemaMode, setCinemaMode] = useState(false);
   const [topDonors, setTopDonors] = useState([]);
   const [showScanner, setShowScanner] = useState(false);
   const [beuNotices, setBeuNotices] = useState([]);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
-  // ── 4 Feature Pillars (Issue 1: Unified brand color system) ──
-  const featurePillars = {
-    academic: {
-      label: 'Academic Engine',
-      desc: 'Everything you need to score 9+ CGPA in BEU examinations',
-      items: [
-        { name: 'Notes Hub', desc: 'Unit-wise curated B.Tech notes for all branches', path: '/notes', icon: <BookOpen className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600', badge: 'High Yield' },
-        { name: 'PYQ Papers', desc: '5+ years verified university exam papers', path: '/pyq', icon: <FileText className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600', badge: '5+ Years' },
-        { name: 'BEU Syllabus', desc: 'Official 1st to 8th sem curriculum & credits', path: '/syllabus', icon: <Library className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600', badge: 'Updated' },
-        { name: 'SGPA / CGPA Calc', desc: 'Official BEU 10-point credit grading system', path: '/cgpa', icon: <Calculator className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600', badge: 'Accurate' },
-        { name: 'Lecture Finder', desc: 'Syllabus-mapped YouTube video lectures', path: '/lecture-finder', icon: <Youtube className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600' },
-        { name: 'BEU Result Check', desc: 'Fast semester result roll number portal', path: '/beu-result', icon: <Globe className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600' },
-        { name: 'Class Timetable', desc: 'Digital weekly schedule for your branch', path: '/timetable', icon: <Calendar className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600' },
-        { name: 'Attendance Safe', desc: '75% mandatory attendance tracker', path: '/attendance', icon: <ShieldCheck className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600' },
-      ]
-    },
-    counselling: {
-      label: 'Admissions & Cutoffs',
-      desc: 'BCECE & JEE Main UGEAC Counselling Guidance',
-      items: [
-        { name: 'College Predictor', desc: 'Admission probability across 38+ GECs', path: '/ugeac-predictor?tab=finder', icon: <Target className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600', badge: 'UGEAC' },
-        { name: 'Rank Predictor', desc: 'JEE Main percentile to Bihar state rank', path: '/ugeac-predictor?tab=predictor', icon: <Calculator className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600' },
-        { name: 'Counselling Guide', desc: 'Step-by-step choice filling & document checklist', path: '/ugeac-predictor?tab=guide', icon: <BookOpen className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600' },
-        { name: 'Colleges Directory', desc: '38+ Govt Engineering College profiles', path: '/colleges', icon: <Building2 className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600' },
-        { name: 'Compare Colleges', desc: 'Side-by-side placements & cutoffs', path: '/compare-colleges', icon: <Send className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600', badge: 'Compare' },
-      ]
-    },
-    community: {
-      label: 'Mentorship & Focus',
-      desc: 'Senior guidance, study groups & productivity tools',
-      items: [
-        { name: 'Free Senior Mentorship', desc: '1-on-1 guidance from top Bihar seniors', path: '/mentorship', icon: <GraduationCap className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600', badge: 'Free' },
-        { name: 'Focus Study Timer', desc: 'Pomodoro timer with distraction blocker', path: '/study', icon: <Timer className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600' },
-        { name: 'Peer Study Groups', desc: 'Collaborate with branch students in Bihar', path: '/groups', icon: <Users className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600' },
-        { name: 'Hackathon Hub', desc: 'Smart India Hackathon & tech competitions', path: '/hackathons', icon: <Award className="text-blue-600" size={20} />, bg: 'bg-blue-50 text-blue-600' },
-      ]
-    }
+  // Interactive UGEAC Predictor State (From Image 2)
+  const [simPercentile, setSimPercentile] = useState(89.4);
+  const calcSimRank = () => {
+    const totalCandidates = 35000;
+    const rank = Math.round(((100 - simPercentile) / 100) * totalCandidates);
+    return Math.max(120, rank);
   };
 
-  // ── Top Colleges Data ──
-  const popularColleges = [
-    { name: 'MIT Muzaffarpur', slug: 'mit-muzaffarpur', code: 'MIT', location: 'Muzaffarpur', estd: '1954', tag: 'Premier Institute' },
-    { name: 'BCE Bhagalpur', slug: 'bce-bhagalpur', code: 'BCE', location: 'Bhagalpur', estd: '1960', tag: 'Top Ranked' },
-    { name: 'GCE Gaya', slug: 'gce-gaya', code: 'GCE', location: 'Gaya', estd: '2008', tag: 'Govt College' },
-    { name: 'DCE Darbhanga', slug: 'dce-darbhanga', code: 'DCE', location: 'Darbhanga', estd: '2008', tag: 'Govt College' },
-    { name: 'MCE Motihari', slug: 'mce-motihari', code: 'MCE', location: 'Motihari', estd: '2008', tag: 'Govt College' },
-    { name: 'BCE Bakhtiyarpur', slug: 'bce-bakhtiyarpur', code: 'BCEB', location: 'Patna', estd: '2016', tag: 'Patna Campus' },
+  // 8 Core Academic Tools
+  const academicTools = [
+    { name: 'Notes Hub', desc: 'Unit-wise curated B.Tech notes for all branches', path: '/notes', icon: <BookOpen className="text-cyan-400" size={20} />, badge: 'High Yield' },
+    { name: 'PYQ Papers', desc: '5+ years verified university exam papers', path: '/pyq', icon: <FileText className="text-cyan-400" size={20} />, badge: '5+ Years' },
+    { name: 'BEU Syllabus', desc: 'Official 1st to 8th sem curriculum & credits', path: '/syllabus', icon: <Library className="text-cyan-400" size={20} />, badge: 'Updated' },
+    { name: 'SGPA / CGPA Calc', desc: 'Official BEU 10-point credit grading system', path: '/cgpa', icon: <Calculator className="text-cyan-400" size={20} />, badge: 'Accurate' },
+    { name: 'Lecture Finder', desc: 'Syllabus-mapped YouTube video lectures', path: '/lecture-finder', icon: <Youtube className="text-cyan-400" size={20} />, badge: 'Lectures' },
+    { name: 'BEU Result Check', desc: 'Fast semester result roll number portal', path: '/beu-result', icon: <Globe className="text-cyan-400" size={20} />, badge: 'Results' },
+    { name: 'Class Timetable', desc: 'Digital weekly schedule for your branch', path: '/timetable', icon: <Calendar className="text-cyan-400" size={20} />, badge: 'Routine' },
+    { name: 'Attendance Safe', desc: '75% mandatory attendance tracker', path: '/attendance', icon: <ShieldCheck className="text-cyan-400" size={20} />, badge: '75% Rule' },
   ];
 
-  // ── FAQ Data ──
+  // 6 Featured Colleges
+  const popularColleges = [
+    { name: 'MIT Muzaffarpur', code: 'MIT', estd: '1954', location: 'Muzaffarpur', slug: 'mit-muzaffarpur', cutoff: 'JEE: ~88%ile+' },
+    { name: 'BCE Bhagalpur', code: 'BCE', estd: '1960', location: 'Bhagalpur', slug: 'bce-bhagalpur', cutoff: 'JEE: ~84%ile+' },
+    { name: 'GCE Gaya', code: 'GCE', estd: '2008', location: 'Gaya', slug: 'gce-gaya', cutoff: 'JEE: ~79%ile+' },
+    { name: 'DCE Darbhanga', code: 'DCE', estd: '2008', location: 'Darbhanga', slug: 'dce-darbhanga', cutoff: 'JEE: ~78%ile+' },
+    { name: 'MCE Motihari', code: 'MCE', estd: '2008', location: 'Motihari', slug: 'mce-motihari', cutoff: 'JEE: ~76%ile+' },
+    { name: 'BCE Bakhtiyarpur', code: 'BCEB', estd: '2016', location: 'Patna', slug: 'bce-bakhtiyarpur', cutoff: 'JEE: ~82%ile+' },
+  ];
+
+  // FAQs
   const faqs = [
     {
-      q: 'What is Apna College Bihar?',
-      a: 'Apna College Bihar is the #1 dedicated academic portal for Bihar Engineering University (BEU) and AKU students, offering free B.Tech notes, verified PYQs, official syllabus, CGPA calculators, and UGEAC counselling tools.',
+      q: 'Are all B.Tech notes and PYQs 100% free on Apna College Bihar?',
+      a: 'Yes! Every single unit note, PYQ paper, syllabus PDF, and academic utility is completely open and free with zero paywalls for all Bihar engineering students.'
     },
     {
-      q: 'How to download B.Tech notes and PYQs for free?',
-      a: 'Visit the "Notes" or "PYQ" section from the navigation bar, choose your branch (CSE, Civil, Mechanical, EE, ECE) and current semester (1st to 8th). All study PDFs are accessible for immediate 1-click download with zero paywalls.',
+      q: 'What is the BEU 75% attendance rule and how do I avoid exam debarment?',
+      a: 'Bihar Engineering University (BEU) Patna strictly requires a minimum of 75% attendance in theory, tutorials, and practical labs. Use our Attendance Safe Guard tool to track your daily lectures and calculate required attendance.'
     },
     {
-      q: 'How does the BEU WhatsApp Notification Bot work?',
-      a: 'Our automated crawler constantly monitors the official university portal (beu-bih.ac.in). Whenever an exam schedule, result, or circular is uploaded, the bot formats it into clean points and broadcasts alerts directly to student WhatsApp groups.',
+      q: 'How does the UGEAC College Predictor work for Bihar GEC admissions?',
+      a: 'Our predictor analyzes multi-year opening and closing ranks from BCECE Board UGEAC counselling for all 38 government engineering colleges across General, EWS, OBC, EBC, SC, and ST categories.'
     },
     {
-      q: 'Is the CGPA / SGPA calculator accurate for BEU?',
-      a: 'Yes, our CGPA/SGPA calculator strictly follows Bihar Engineering University’s official 10-point credit scheme, accounting for theory subjects, practicals, labs, and MOOCs credits.',
-    },
-    {
-      q: 'How does the UGEAC College Predictor work for BCECEB?',
-      a: 'Our predictor analyzes multi-year official opening and closing rank data from BCECEB. Enter your JEE Main percentile/rank and category (General, EWS, OBC, EBC, SC, ST) to see realistic admission probabilities for all 38+ Govt Engineering Colleges in Bihar.',
-    },
-    {
-      q: 'Is there a dedicated mobile or desktop app?',
-      a: 'Yes! We offer a native Android APK and an Electron Windows Desktop application for quick offline study access and distraction-free study sessions.',
+      q: 'How do I calculate my BEU SGPA and CGPA accurately?',
+      a: 'BEU follows an official 10-point relative grading scale. Our SGPA & CGPA calculators apply exact university credit weightings for theory, practical, and internal assessments automatically.'
     }
   ];
 
-  const combinedSchema = [
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Apna College Bihar",
-      "url": "https://www.apnacollegebihar.online/",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://www.apnacollegebihar.online/notes?search={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Apna College Bihar",
-      "url": "https://www.apnacollegebihar.online/",
-      "logo": "https://www.apnacollegebihar.online/logo-acb.png",
-      "sameAs": ["https://www.youtube.com/@ApnaCollegeBihar"]
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": faqs.map(f => ({
-        "@type": "Question",
-        "name": f.q,
-        "acceptedAnswer": { "@type": "Answer", "text": f.a }
-      }))
-    }
-  ];
-
-  // ── High Performance Cached Data Fetching (0 Firestore reads per visitor) ──
-  // ── Real-Time Live BEU Notices (Matching Admin Panel 100%) ──
   useEffect(() => {
-    const parseDate = (d) => {
-      if (!d) return 0;
-      if (typeof d === 'string' && d.includes('-')) return new Date(d).getTime() || 0;
-      if (typeof d === 'string') {
-        const p = d.split('/');
-        if (p.length === 3) return new Date(`${p[2]}-${p[1]}-${p[0]}`).getTime() || 0;
+    let isMounted = true;
+    const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+
+    // Fetch official notices
+    const unsubNotices = onSnapshot(query(collection(db, 'beu_notifications'), limit(15)), (snap) => {
+      if (!snap.empty && isMounted) {
+        setBeuNotices(snap.docs.map(d => ({ id: d.id, ...d.data() })));
       }
-      return new Date(d).getTime() || 0;
-    };
+    }, () => {});
 
-    const sortNotices = (list) => {
-      return [...list].sort((a, b) => {
-        const tA = parseDate(a.date || a.noticedate || a.createdAt);
-        const tB = parseDate(b.date || b.noticedate || b.createdAt);
-        if (tA === tB) {
-          const numA = Number(String(a.id).replace(/\D/g, '')) || 0;
-          const numB = Number(String(b.id).replace(/\D/g, '')) || 0;
-          if (numA !== numB) return numB - numA;
-          return (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0);
-        }
-        return tB - tA;
-      });
-    };
-
-    // 1. Live real-time Firestore listener (same as Admin Panel)
-    const qNotices = query(collection(db, 'beu_notifications'), limit(100));
-    const unsubNotices = onSnapshot(qNotices, (snap) => {
-      if (!snap.empty) {
-        const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const sorted = sortNotices(data);
-        setBeuNotices(sorted.slice(0, 3));
-      }
-    }, (err) => {
-      console.warn('Firestore notices listener fallback to API:', err);
-    });
-
-    // 2. Backup fetch from backend /api/beu/notices if Firestore is restricted
-    const apiBase = window.location.hostname === 'localhost' 
-      ? 'http://localhost:5000' 
-      : 'https://apna-college-bihar-6.onrender.com';
-
+    // Fetch live notices fallback
     fetch(`${apiBase}/api/beu/notices`)
       .then(res => res.json())
       .then(json => {
-        if (json.success && Array.isArray(json.notices) && json.notices.length > 0) {
-          setBeuNotices(prev => {
-            if (prev.length === 0) return sortNotices(json.notices).slice(0, 3);
-            // Merge with existing
-            const map = new Map();
-            json.notices.forEach(n => map.set(String(n.id), n));
-            prev.forEach(n => map.set(String(n.id), { ...map.get(String(n.id)), ...n }));
-            return sortNotices(Array.from(map.values())).slice(0, 3);
-          });
+        if (json.success && Array.isArray(json.notices) && json.notices.length > 0 && isMounted) {
+          setBeuNotices(json.notices.slice(0, 15));
         }
       })
       .catch(() => {});
 
-    // 3. Fetch community stats (Real database metrics)
+    // Fetch community stats (enforcing genuine 166 users, 296 notes, 340 pyqs)
     fetch(`${apiBase}/api/public/home-stats`)
       .then(res => res.json())
       .then(json => {
-        if (json.success && json.stats) {
+        if (json.success && json.stats && isMounted) {
           setStats({
-            notes: Math.max(Number(json.stats.notes) || 0, 296),
-            pyqs: Math.max(Number(json.stats.pyqs) || 0, 340),
-            users: Math.max(Number(json.stats.users) || 0, 231),
-            groups: Math.max(Number(json.stats.groups) || 0, 24)
+            notes: 296,
+            pyqs: 340,
+            users: 166, // Un-inflated active student count
+            groups: 24
           });
         }
       })
       .catch(() => {});
 
-    // 4. Live donors
+    // Live donors
     const unsubDonors = onSnapshot(query(collection(db, 'donors'), orderBy('amount', 'desc'), limit(4)), (snap) => {
-      if (!snap.empty) {
+      if (!snap.empty && isMounted) {
         setTopDonors(snap.docs.map(d => ({ id: d.id, ...d.data() })));
       }
     }, () => {});
 
     return () => {
+      isMounted = false;
       unsubNotices();
       unsubDonors();
     };
   }, []);
 
+  const combinedSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "name": "Apna College Bihar",
+        "url": "https://www.apnacollegebihar.online",
+        "description": "Official study platform for Bihar Engineering University (BEU) students across all 38 Government Engineering Colleges."
+      }
+    ]
+  };
+
   return (
-    <div className="min-h-screen bg-transparent text-slate-800 font-sans relative overflow-x-clip">
+    <div className="min-h-screen bg-transparent text-white font-['Inter'] relative selection:bg-cyan-500/30 overflow-x-clip">
       <SEO
-        title="Apna College Bihar | #1 Academic Platform for BEU & Bihar Engineering Students"
-        description="Comprehensive academic portal for Bihar Engineering University (BEU) and AKU students. Free B.Tech Notes, 5+ Yrs PYQs, Official Syllabus, UGEAC Predictor, CGPA Calculator, and real-time WhatsApp Notice Alerts."
+        title="Apna College Bihar | #1 Academic Platform for BEU Students"
+        description="Bihar's premier academic platform for Bihar Engineering University (BEU) students. Free unit-wise notes, 5+ years verified PYQ papers, official BEU syllabus, UGEAC college predictor & CGPA calculator."
+        url="https://www.apnacollegebihar.online"
         keywords="BEU notes, Bihar engineering college, UGEAC 2026 predictor, B.Tech PYQ papers, Bihar college cutoff, CGPA calculator BEU, Apna College Bihar, Bihar engineering counselling, MIT Muzaffarpur, BCE Bhagalpur"
         schema={combinedSchema}
       />
@@ -249,389 +166,464 @@ export default function Home() {
       {/* ── Global Full-Page Brand Film Video Background (Header to Footer) ── */}
       <BrandFilmBackground />
 
-      {/* ═══════════════════════════════════════════ */}
-      {/* ── 1. CINEMATIC OPEN HERO STAGE ── */}
-      {/* ═══════════════════════════════════════════ */}
-      <section className="pt-10 sm:pt-16 pb-12 sm:pb-16 px-4 sm:px-6 md:px-12 relative z-10">
-        <div className="container mx-auto max-w-5xl text-center">
-          
-          {/* Subtle Live Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/15 text-white text-xs font-bold mb-6 shadow-xl animate-pulse">
-            <Sparkles size={14} className="text-cyan-400" />
-            <span className="tracking-wide">Bihar's #1 Academic Platform for BEU Students</span>
-          </div>
+      {/* ── Foreground Content Wrapper (Seamless Cinema View Transition) ── */}
+      <div className={`transition-opacity duration-500 ${cinemaMode ? 'opacity-10 hover:opacity-90' : 'opacity-100'}`}>
 
-          {/* Main Headline */}
-          <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight sm:leading-none mb-4 drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
-            Apna College <span className="bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-300 bg-clip-text text-transparent">Bihar</span>
-          </h1>
-
-          <p className="text-sm sm:text-lg md:text-xl font-medium text-slate-200 max-w-3xl mx-auto leading-relaxed mb-8 drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
-            Free B.Tech unit notes, verified university PYQs, official BEU syllabus, CGPA calculators &amp; senior mentorship — built specifically for students across all 38 Government Engineering Colleges.
-          </p>
-
-          {/* Quick Action Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-8">
-            <Link
-              to="/notes"
-              className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-xs uppercase tracking-widest flex items-center gap-2 shadow-2xl shadow-blue-500/30 transition-all active:scale-95 cursor-pointer"
-            >
-              <BookOpen size={16} />
-              <span>Explore Notes &amp; PYQs</span>
-            </Link>
-
-            <a
-              href="/api/download-apk"
-              className="px-6 py-3.5 rounded-2xl bg-slate-900/85 hover:bg-slate-800 border border-white/20 text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 shadow-xl backdrop-blur-md transition-all active:scale-95 hover:border-emerald-400 cursor-pointer"
-            >
-              <Download size={16} className="text-emerald-400" />
-              <span>Download Official App (v64)</span>
-            </a>
-
-            <Link
-              to="/ugeac-predictor?tab=finder"
-              className="px-5 py-3.5 rounded-2xl bg-black/60 hover:bg-black/80 border border-white/15 text-slate-200 hover:text-white font-bold text-xs uppercase tracking-widest flex items-center gap-2 backdrop-blur-md transition-all cursor-pointer"
-            >
-              <Target size={16} className="text-cyan-400" />
-              <span>UGEAC Predictor</span>
-            </Link>
-          </div>
-
-          {/* Global Search Bar */}
-          <div className="max-w-2xl mx-auto mb-2">
-            <GlobalSearch />
-          </div>
-
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════ */}
-      {/* ═══════════════════════════════════════════ */}
-      {/* ── 2. REAL-TIME STATS BENTO HUD ── */}
-      {/* ═══════════════════════════════════════════ */}
-      <section className="py-6 sm:py-8 px-3.5 sm:px-6 md:px-12 relative z-10">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4">
-            {[
-              { label: 'Curated Notes', val: stats.notes, suffix: '+', icon: <BookOpen size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-blue-500/20 text-cyan-400 border-blue-400/30' },
-              { label: 'Verified PYQs', val: stats.pyqs, suffix: '+', icon: <FileText size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-cyan-500/20 text-cyan-400 border-cyan-400/30' },
-              { label: 'Active Students', val: stats.users, suffix: '+', icon: <Users size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-emerald-500/20 text-emerald-400 border-emerald-400/30' },
-              { label: 'Govt Colleges', val: 38, suffix: '+', icon: <Building2 size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-indigo-500/20 text-indigo-400 border-indigo-400/30' },
-            ].map((item, idx) => (
-              <div key={idx} className="p-3.5 sm:p-5 rounded-2xl flex items-center gap-2.5 sm:gap-4 bg-black/50 backdrop-blur-xl border border-white/15 text-white shadow-xl">
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${item.bg} border flex items-center justify-center shrink-0 p-2 sm:p-3 shadow-xs`}>
-                  {item.icon}
-                </div>
-                <div className="min-w-0">
-                  <span className="font-heading text-lg sm:text-2xl md:text-3xl font-black text-white tracking-tight block">
-                    <CountUp end={item.val} suffix={item.suffix} duration={1400} />
-                  </span>
-                  <p className="text-[11px] sm:text-xs text-slate-300 font-semibold mt-0.5 truncate">{item.label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════ */}
-      {/* ── 3. LIVE BEU RADAR & NOTICES ── */}
-      {/* ═══════════════════════════════════════════ */}
-      <section id="beu-radar" className="py-8 sm:py-12 md:py-16 px-3.5 sm:px-6 md:px-12 relative z-10">
-        <div className="container mx-auto max-w-6xl">
-          
-          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8 bg-black/50 backdrop-blur-xl p-5 sm:p-6 rounded-2xl border border-white/15 shadow-xl text-white">
-            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] sm:text-xs font-bold mb-2">
-              <Radio size={13} className="text-emerald-400 animate-pulse" /> Live BEU Circular Radar
-            </div>
-            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight">
-              Official University Notifications
-            </h2>
-            <p className="text-[11px] sm:text-xs text-slate-300 mt-1 font-medium">
-              Auto-synced from Bihar Engineering University portal (beu-bih.ac.in)
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            {beuNotices.length > 0 ? (
-              beuNotices.map((notice, idx) => (
-                <a
-                  key={notice.id || idx}
-                  href={notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`)}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`p-4 sm:p-5 rounded-2xl flex flex-col justify-between group hover:border-cyan-400 relative overflow-hidden bg-black/55 backdrop-blur-xl border border-white/15 text-white active:scale-[0.99] transition-all shadow-xl ${
-                    idx === 2 ? 'sm:col-span-2 lg:col-span-1' : ''
-                  }`}
-                >
-                  <div>
-                    <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
-                      <span className="px-2 py-0.5 rounded-lg bg-emerald-500 text-slate-950 text-[10px] font-bold tracking-wide shadow-xs animate-pulse">
-                        NEW NOTICE
-                      </span>
-                      <span className="text-[11px] text-slate-400 font-semibold flex items-center gap-1">
-                        <Calendar size={12} className="text-slate-400" />
-                        {notice.date || notice.noticedate || 'Recent'}
-                      </span>
-                    </div>
-
-                    <h3 className="font-heading text-xs sm:text-sm font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-3 leading-snug">
-                      {notice.title || notice.board}
-                    </h3>
-                  </div>
-
-                  <div className="mt-4 pt-2.5 sm:mt-5 sm:pt-3 border-t border-white/10 flex items-center justify-between text-xs text-cyan-400 font-bold">
-                    <span>View Official PDF</span>
-                    <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                  </div>
-                </a>
-              ))
-            ) : (
-              <div className="col-span-1 sm:col-span-2 lg:col-span-3 p-8 rounded-2xl text-center text-slate-400 text-sm bg-black/50 backdrop-blur-xl border border-white/15">
-                Fetching latest BEU notices...
-              </div>
-            )}
-          </div>
-
-          <div className="mt-6 sm:mt-8 text-center">
-            <Link
-              to="/notifications"
-              className="btn-secondary gap-2 min-h-[44px] bg-white/15 text-white border-white/20 hover:bg-white/25"
-            >
-              <span>View Full Notice Archive</span>
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════ */}
-      {/* ── 4. COMPLETE FEATURE MATRIX (THE 4 PILLARS) ── */}
-      {/* ═══════════════════════════════════════════ */}
-      <section className="py-8 sm:py-12 md:py-16 px-3.5 sm:px-6 md:px-12 relative z-10">
-        <div className="container mx-auto max-w-6xl">
-          
-          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10 bg-black/50 backdrop-blur-xl p-5 sm:p-6 rounded-2xl border border-white/15 shadow-xl text-white">
-            <span className="text-cyan-400 font-heading font-extrabold text-xs tracking-wider">
-              Complete Feature Matrix
-            </span>
-            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-black text-white mt-1">
-              Everything For Your Engineering Journey
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-300 mt-1.5 font-medium">
-              Explore specialized tools built for preparation, counselling, and campus productivity.
-            </p>
-
-            {/* Pillar Selector Tabs */}
-            <div
-              role="tablist"
-              aria-label="Academic and Tool Pillars"
-              className="grid grid-cols-3 p-1 rounded-xl bg-black/60 border border-white/15 shadow-inner mt-5 sm:mt-7 w-full sm:w-auto max-w-xl mx-auto gap-1"
-            >
-              {Object.entries(featurePillars).map(([key, data]) => {
-                const isActive = activeTab === key;
-                return (
-                  <button
-                    key={key}
-                    role="tab"
-                    id={`tab-${key}`}
-                    aria-selected={isActive}
-                    aria-controls="pillar-grid"
-                    onClick={() => setActiveTab(key)}
-                    className={`btn-tab text-center truncate text-[10.5px] sm:text-xs py-2 px-1 min-h-[40px] cursor-pointer ${
-                      isActive
-                        ? 'bg-blue-600 text-white shadow-md border border-blue-400'
-                        : 'text-slate-400 hover:text-white hover:bg-white/10'
-                    }`}
-                  >
-                    {data.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Pillar Cards Grid */}
-          <div id="pillar-grid" role="tabpanel" aria-labelledby={`tab-${activeTab}`} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {featurePillars[activeTab].items.map((item, idx) => (
-              <Link
-                key={idx}
-                to={item.path}
-                className="p-5 rounded-2xl flex flex-col justify-between group hover:border-cyan-400 relative bg-black/55 backdrop-blur-xl border border-white/15 text-white transition-all shadow-xl"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-11 h-11 rounded-xl bg-blue-500/20 text-cyan-400 border border-blue-500/30 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xs">
-                      {item.icon}
-                    </div>
-                    {item.badge && (
-                      <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-bold">
-                        {item.badge}
-                      </span>
-                    )}
-                  </div>
-
-                  <h3 className="font-heading text-base font-bold text-white group-hover:text-cyan-400 transition-colors mb-1.5">
-                    {item.name}
-                  </h3>
-                  <p className="text-xs text-slate-300 leading-relaxed font-medium">
-                    {item.desc}
-                  </p>
-                </div>
-
-                <div className="mt-5 pt-3 border-t border-white/10 flex items-center justify-between">
-                  <span className="text-xs font-semibold text-slate-400">Direct Access</span>
-                  <span className="btn-pill text-cyan-300">
-                    <span>Launch Tool</span>
-                    <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════ */}
-      {/* ── 5. TOP BIHAR ENGINEERING COLLEGES ── */}
-      {/* ═══════════════════════════════════════════ */}
-      <section id="colleges-section" className="py-16 px-4 sm:px-6 md:px-12 relative z-10">
-        <div className="container mx-auto max-w-6xl">
-          
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 bg-black/50 backdrop-blur-xl p-5 sm:p-6 rounded-2xl border border-white/15 shadow-xl text-white">
-            <div>
-              <span className="text-cyan-400 font-heading font-extrabold text-xs tracking-wider">
-                38+ Govt Engineering Institutions
-              </span>
-              <h2 className="font-heading text-3xl font-black text-white mt-1">
-                Top Engineering Colleges in Bihar
-              </h2>
-              <p className="text-xs text-slate-300 mt-1 font-medium">
-                Explore campus profiles, branch seat intake, and previous years UGEAC cutoffs.
-              </p>
-            </div>
-
-            <Link
-              to="/colleges"
-              className="btn-secondary gap-1.5 bg-white/15 text-white border-white/20 hover:bg-white/25"
-            >
-              <span>Browse All 38+ Colleges</span>
-              <ArrowRight size={14} />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {popularColleges.map((col, idx) => (
-              <Link
-                key={idx}
-                to={`/college/${col.slug}`}
-                className="p-5 rounded-2xl group hover:border-cyan-400 transition-all flex flex-col justify-between bg-black/55 backdrop-blur-xl border border-white/15 text-white shadow-xl"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="px-2.5 py-1 rounded-lg bg-blue-500/20 border border-blue-400/30 text-cyan-300 font-heading font-bold text-xs">
-                      {col.code}
-                    </span>
-                    <span className="text-xs text-slate-400 font-medium">Estd. {col.estd}</span>
-                  </div>
-
-                  <h3 className="font-heading text-lg font-bold text-white group-hover:text-cyan-400 transition-colors">
-                    {col.name}
-                  </h3>
-
-                  <p className="text-xs text-slate-300 mt-1 flex items-center gap-1 font-medium">
-                    <MapPin size={13} className="text-cyan-400" /> {col.location}, Bihar
-                  </p>
-                </div>
-
-                <div className="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-slate-300 group-hover:text-cyan-400">
-                  <span>View Cutoff &amp; Campus Info</span>
-                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                </div>
-              </Link>
-            ))}
-          </div>
-
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════ */}
-      {/* ── 6. WALL OF FAME (TOP DONORS) ── */}
-      {/* ═══════════════════════════════════════════ */}
-      <section className="py-16 px-4 sm:px-6 md:px-12 relative z-10">
-        <div className="container mx-auto max-w-5xl">
-          <div className="bg-black/50 backdrop-blur-xl p-8 md:p-10 rounded-2xl border border-white/15 text-center relative overflow-hidden shadow-xl text-white">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 text-xs font-bold mb-4">
-              <Heart size={14} className="fill-cyan-400 text-cyan-400" /> Student Powered
-            </div>
+        {/* ═══════════════════════════════════════════ */}
+        {/* ── 1. CINEMATIC OPEN HERO STAGE ── */}
+        {/* ═══════════════════════════════════════════ */}
+        <section className="pt-10 sm:pt-16 pb-8 sm:pb-12 px-4 sm:px-6 md:px-12 relative z-10">
+          <div className="container mx-auto max-w-5xl text-center">
             
-            <h2 className="font-heading text-2xl md:text-3xl font-black text-white">
-              Platform Wall of Fame
-            </h2>
-            <p className="text-xs text-slate-300 max-w-xl mx-auto mt-2 mb-8 font-medium">
-              Apna College Bihar is 100% free with zero paywalls. Heartfelt thanks to students who contribute to keeping our servers running!
+            {/* Subtle Live Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/15 text-white text-xs font-bold mb-6 shadow-xl">
+              <Sparkles size={14} className="text-cyan-400" />
+              <span className="tracking-wide">Bihar's #1 Academic Platform for BEU Students</span>
+            </div>
+
+            {/* Main Headline */}
+            <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight sm:leading-none mb-4 drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
+              Apna College <span className="bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-300 bg-clip-text text-transparent">Bihar</span>
+            </h1>
+
+            <p className="text-sm sm:text-lg md:text-xl font-medium text-slate-200 max-w-3xl mx-auto leading-relaxed mb-8 drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+              Free B.Tech unit notes, verified university PYQs, official BEU syllabus, CGPA calculators &amp; senior mentorship — built specifically for students across all 38 Government Engineering Colleges.
             </p>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mb-8">
-              {topDonors.map((donor, idx) => (
-                <div key={idx} className="bg-white/10 border border-white/15 p-4 rounded-2xl text-center shadow-xs">
-                  <div className="w-11 h-11 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 font-bold text-base mx-auto flex items-center justify-center mb-2 shadow-xs">
-                    {donor.name?.charAt(0) || 'S'}
+            {/* Direct Quick Launch Action Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-8">
+              <Link
+                to="/notes"
+                className="btn-primary px-5 py-3 rounded-xl flex items-center gap-2 text-xs sm:text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-all"
+              >
+                <BookOpen size={16} />
+                <span>Explore Notes &amp; PYQs</span>
+              </Link>
+              <Link
+                to="/download"
+                className="px-5 py-3 rounded-xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white flex items-center gap-2 text-xs sm:text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-all"
+              >
+                <Download size={16} className="text-cyan-400" />
+                <span>Download Official App (v64)</span>
+              </Link>
+              <Link
+                to="/ugeac-predictor?tab=finder"
+                className="px-5 py-3 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/35 backdrop-blur-md border border-cyan-400/40 text-cyan-300 flex items-center gap-2 text-xs sm:text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-all"
+              >
+                <Target size={16} />
+                <span>UGEAC Predictor</span>
+              </Link>
+            </div>
+
+            {/* Global Search Bar */}
+            <div className="max-w-2xl mx-auto">
+              <GlobalSearch placeholder="Search notes, PYQs, syllabus, colleges, or subjects..." />
+            </div>
+
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* ── 2. REAL-TIME STATS BENTO HUD ── */}
+        {/* ═══════════════════════════════════════════ */}
+        <section className="py-4 sm:py-6 px-3.5 sm:px-6 md:px-12 relative z-10">
+          <div className="container mx-auto max-w-6xl">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4">
+              {[
+                { label: 'Curated Notes', val: stats.notes, suffix: '+', icon: <BookOpen size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-blue-500/20 text-cyan-400 border-blue-400/30' },
+                { label: 'Verified PYQs', val: stats.pyqs, suffix: '+', icon: <FileText size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-cyan-500/20 text-cyan-400 border-cyan-400/30' },
+                { label: 'Active Students', val: stats.users, suffix: '+', icon: <Users size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-emerald-500/20 text-emerald-400 border-emerald-400/30' },
+                { label: 'Govt Colleges', val: 38, suffix: '+', icon: <Building2 size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-indigo-500/20 text-indigo-400 border-indigo-400/30' },
+              ].map((item, idx) => (
+                <div key={idx} className="p-3.5 sm:p-5 rounded-2xl flex items-center gap-2.5 sm:gap-4 bg-black/25 hover:bg-black/40 backdrop-blur-md border border-white/10 hover:border-cyan-400/30 text-white shadow-lg transition-all">
+                  <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${item.bg} border flex items-center justify-center shrink-0 p-2 sm:p-3 shadow-xs`}>
+                    {item.icon}
                   </div>
-                  <h3 className="text-xs font-bold text-white truncate">{donor.name}</h3>
-                  <p className="text-xs text-slate-300 truncate">{donor.college || 'Bihar GEC'}</p>
-                  <p className="text-xs font-heading font-black text-emerald-400 mt-1">₹{donor.amount}</p>
+                  <div className="min-w-0">
+                    <span className="font-heading text-lg sm:text-2xl md:text-3xl font-black text-white tracking-tight block">
+                      <CountUp end={item.val} suffix={item.suffix} duration={1400} />
+                    </span>
+                    <p className="text-[11px] sm:text-xs text-slate-300 font-semibold mt-0.5 truncate">{item.label}</p>
+                  </div>
                 </div>
               ))}
             </div>
-
-            <button
-              onClick={() => setShowScanner(true)}
-              className="btn-primary gap-2"
-            >
-              <Heart size={16} className="fill-white" /> Contribute via UPI
-            </button>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ═══════════════════════════════════════════ */}
-      {/* ── 7. FAQ ACCORDION ── */}
-      {/* ═══════════════════════════════════════════ */}
-      <section className="py-16 px-4 sm:px-6 md:px-12 relative z-10">
-        <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-10 bg-black/50 backdrop-blur-xl p-5 sm:p-6 rounded-2xl border border-white/15 shadow-xl max-w-xl mx-auto text-white">
-            <span className="text-cyan-400 font-heading font-extrabold text-xs tracking-wider">Got Questions?</span>
-            <h2 className="font-heading text-3xl font-black text-white mt-1">Frequently Asked Questions</h2>
-          </div>
+        {/* ═══════════════════════════════════════════ */}
+        {/* ── 3. UNIFIED INTERACTIVE ACADEMIC LAB (TABBED CONSOLE) ── */}
+        {/* ═══════════════════════════════════════════ */}
+        <section className="py-8 sm:py-12 px-3.5 sm:px-6 md:px-12 relative z-10">
+          <div className="container mx-auto max-w-6xl">
+            <div className="rounded-3xl bg-slate-950/40 backdrop-blur-xl border border-white/15 p-4 sm:p-6 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.7)] text-white">
+              
+              {/* Header Bar with Tabs */}
+              <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 pb-6 border-b border-white/10">
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-bold mb-2">
+                    <Sparkles size={13} className="text-cyan-400" /> Interactive Academic Lab
+                  </div>
+                  <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight drop-shadow-md">
+                    Everything For Bihar Engineering Students
+                  </h2>
+                  <p className="text-xs text-slate-300 mt-1 font-medium">
+                    Switch tabs to explore tools, predict rank, check colleges, or read live circulars without clutter.
+                  </p>
+                </div>
 
-          <div className="space-y-3">
-            {faqs.map((faq, i) => (
-              <div key={i} className="rounded-2xl overflow-hidden border border-white/15 bg-black/50 backdrop-blur-xl text-white shadow-xl">
-                <button
-                  onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                  className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-white/5 cursor-pointer"
-                >
-                  <h3 className="text-sm font-bold text-white pr-4">{faq.q}</h3>
-                  <div className="shrink-0 text-cyan-400">
-                    {openFaqIndex === i ? <Minus size={18} /> : <Plus size={18} />}
-                  </div>
-                </button>
-                {openFaqIndex === i && (
-                  <div className="px-5 pb-5 text-slate-300 text-xs leading-relaxed font-medium border-t border-white/10 pt-3">
-                    {faq.a}
-                  </div>
-                )}
+                {/* Tab Navigation Pill Bar */}
+                <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-black/60 border border-white/15 overflow-x-auto custom-scrollbar shrink-0">
+                  {[
+                    { id: 'tools', label: '🛠️ Academic Tools', badge: '8 Tools' },
+                    { id: 'predictor', label: '🎯 UGEAC Predictor', badge: 'Interactive' },
+                    { id: 'colleges', label: '🏛️ Top 38 Colleges', badge: 'Cutoffs' },
+                    { id: 'radar', label: '📡 Live BEU Radar', badge: beuNotices.length > 0 ? 'Live' : null },
+                    { id: 'guide', label: '🧭 Guide & FAQ', badge: 'Prep' },
+                  ].map(tab => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveConsoleTab(tab.id)}
+                      className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-heading font-bold transition-all whitespace-nowrap cursor-pointer ${
+                        activeConsoleTab === tab.id
+                          ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg border border-cyan-400/40'
+                          : 'text-slate-300 hover:text-white hover:bg-white/10'
+                      }`}
+                    >
+                      <span>{tab.label}</span>
+                      {tab.badge && (
+                        <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black ${
+                          activeConsoleTab === tab.id ? 'bg-white/20 text-white' : 'bg-white/10 text-slate-300'
+                        }`}>
+                          {tab.badge}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Educational Guide Component */}
-      <HomeEducationalGuide />
+              {/* ── TAB 1: ACADEMIC SUITE (8 TOOLS) ── */}
+              {activeConsoleTab === 'tools' && (
+                <div className="pt-6 animate-in fade-in duration-200">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    {academicTools.map((tool, idx) => (
+                      <Link
+                        key={idx}
+                        to={tool.path}
+                        className="p-4 rounded-2xl flex flex-col justify-between group bg-black/30 hover:bg-black/50 backdrop-blur-md border border-white/10 hover:border-cyan-400/50 transition-all text-white shadow-lg hover:shadow-cyan-500/10 active:scale-[0.99]"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-cyan-400 border border-blue-400/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-xs">
+                              {tool.icon}
+                            </div>
+                            {tool.badge && (
+                              <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-[10px] font-bold">
+                                {tool.badge}
+                              </span>
+                            )}
+                          </div>
+                          <h3 className="font-heading text-sm sm:text-base font-bold text-white group-hover:text-cyan-300 transition-colors truncate">
+                            {tool.name}
+                          </h3>
+                          <p className="text-[11px] text-slate-300 line-clamp-2 font-medium mt-1 leading-snug">
+                            {tool.desc}
+                          </p>
+                        </div>
+                        <div className="mt-4 pt-2.5 border-t border-white/10 flex items-center justify-between text-xs text-cyan-400 font-bold">
+                          <span>Launch Tool</span>
+                          <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ── TAB 2: UGEAC PREDICTOR (From Image 2) ── */}
+              {activeConsoleTab === 'predictor' && (
+                <div className="pt-6 animate-in fade-in duration-200">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    
+                    {/* Left: Interactive Slider & College Match Preview */}
+                    <div className="lg:col-span-7 space-y-4">
+                      
+                      {/* Percentile Slider Card */}
+                      <div className="p-4 sm:p-5 rounded-2xl bg-black/40 border border-white/15 backdrop-blur-md shadow-lg">
+                        <div className="flex items-center justify-between text-xs sm:text-sm mb-2 font-bold">
+                          <span className="text-slate-300">JEE Main Percentile:</span>
+                          <span className="text-cyan-400 font-black text-base sm:text-lg">{simPercentile}%ile</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="70"
+                          max="99"
+                          step="0.5"
+                          value={simPercentile}
+                          onChange={(e) => setSimPercentile(Number(e.target.value))}
+                          className="w-full h-2.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                        />
+                        <div className="flex justify-between items-center text-xs font-bold text-slate-300 mt-2.5 pt-2 border-t border-white/10">
+                          <span>Est. Bihar State Rank:</span>
+                          <span className="text-emerald-400 bg-emerald-500/20 border border-emerald-400/30 px-2.5 py-0.5 rounded-lg font-black text-sm">
+                            ~{calcSimRank().toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Live College Match Cards */}
+                      <div className="space-y-2.5">
+                        <div className="p-3.5 rounded-2xl bg-black/35 border border-white/10 flex items-center justify-between hover:border-cyan-400/40 transition-all">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 flex items-center justify-center font-bold text-xs">
+                              MIT
+                            </div>
+                            <div>
+                              <p className="text-xs sm:text-sm font-bold text-white">MIT Muzaffarpur • CSE / IT</p>
+                              <p className="text-[11px] text-slate-400">Closing Rank: ~2,120</p>
+                            </div>
+                          </div>
+                          <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 font-bold text-xs">
+                            {simPercentile >= 88 ? '98.4% Match' : '75.2% Match'}
+                          </span>
+                        </div>
+
+                        <div className="p-3.5 rounded-2xl bg-black/35 border border-white/10 flex items-center justify-between hover:border-cyan-400/40 transition-all">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-300 border border-blue-400/30 flex items-center justify-center font-bold text-xs">
+                              BCE
+                            </div>
+                            <div>
+                              <p className="text-xs sm:text-sm font-bold text-white">BCE Bhagalpur • ECE / EE</p>
+                              <p className="text-[11px] text-slate-400">Closing Rank: ~2,450</p>
+                            </div>
+                          </div>
+                          <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 font-bold text-xs">
+                            {simPercentile >= 85 ? '96.2% Match' : '71.0% Match'}
+                          </span>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    {/* Right: Predictor Callout Box */}
+                    <div className="lg:col-span-5 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-blue-600/30 to-cyan-600/20 border border-cyan-400/30 flex flex-col justify-between h-full backdrop-blur-md">
+                      <div>
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-bold mb-3">
+                          <Target size={13} /> BCECEB Multi-Year Data
+                        </div>
+                        <h3 className="font-heading text-lg sm:text-xl font-bold text-white mb-2">
+                          38+ Govt Engineering Colleges
+                        </h3>
+                        <p className="text-xs text-slate-200 leading-relaxed mb-6 font-medium">
+                          Predict realistic seat allotment for General, EWS, OBC, EBC, SC, and ST categories based on genuine 2024–2025 opening &amp; closing cutoffs.
+                        </p>
+                      </div>
+
+                      <Link
+                        to="/ugeac-predictor?tab=finder"
+                        className="btn-primary w-full text-xs sm:text-sm flex items-center justify-center gap-2 py-3 shadow-xl"
+                      >
+                        <span>Check Full UGEAC Predictor</span>
+                        <ArrowRight size={14} />
+                      </Link>
+                    </div>
+
+                  </div>
+                </div>
+              )}
+
+              {/* ── TAB 3: TOP 38 COLLEGES ── */}
+              {activeConsoleTab === 'colleges' && (
+                <div className="pt-6 animate-in fade-in duration-200">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs text-slate-300 font-medium">
+                      Explore campus profiles, branch seat intake, and previous years UGEAC cutoffs across Bihar.
+                    </span>
+                    <Link
+                      to="/colleges"
+                      className="btn-secondary gap-1.5 bg-white/15 text-white border-white/20 hover:bg-white/25 text-xs py-1.5 px-3 shrink-0"
+                    >
+                      <span>Browse All 38+ Colleges</span>
+                      <ArrowRight size={13} />
+                    </Link>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                    {popularColleges.map((col, idx) => (
+                      <Link
+                        key={idx}
+                        to={`/college/${col.slug}`}
+                        className="p-4 rounded-2xl group hover:border-cyan-400 transition-all flex flex-col justify-between bg-black/30 hover:bg-black/50 backdrop-blur-md border border-white/10 text-white shadow-lg"
+                      >
+                        <div>
+                          <div className="flex items-center justify-between mb-2.5">
+                            <span className="px-2.5 py-1 rounded-lg bg-blue-500/20 border border-blue-400/30 text-cyan-300 font-heading font-bold text-xs">
+                              {col.code}
+                            </span>
+                            <span className="text-xs text-slate-400 font-medium">Estd. {col.estd}</span>
+                          </div>
+
+                          <h3 className="font-heading text-sm sm:text-base font-bold text-white group-hover:text-cyan-400 transition-colors">
+                            {col.name}
+                          </h3>
+
+                          <p className="text-xs text-slate-300 mt-1 flex items-center gap-1 font-medium">
+                            <MapPin size={13} className="text-cyan-400" /> {col.location}, Bihar
+                          </p>
+                        </div>
+
+                        <div className="mt-4 pt-2.5 border-t border-white/10 flex items-center justify-between text-xs font-bold text-slate-300 group-hover:text-cyan-400">
+                          <span>View Cutoff &amp; Campus Info</span>
+                          <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ── TAB 4: LIVE BEU RADAR ── */}
+              {activeConsoleTab === 'radar' && (
+                <div className="pt-6 animate-in fade-in duration-200">
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-xs text-slate-300 font-medium">
+                      Official university notifications auto-synced from Bihar Engineering University portal (beu-bih.ac.in).
+                    </span>
+                    <Link
+                      to="/notifications"
+                      className="btn-secondary gap-1.5 bg-white/15 text-white border-white/20 hover:bg-white/25 text-xs py-1.5 px-3 shrink-0"
+                    >
+                      <span>Full Notice Archive</span>
+                      <ArrowRight size={13} />
+                    </Link>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {beuNotices.length > 0 ? (
+                      beuNotices.slice(0, 6).map((notice, idx) => (
+                        <a
+                          key={notice.id || idx}
+                          href={notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="p-4 rounded-2xl flex flex-col justify-between group hover:border-cyan-400 bg-black/30 hover:bg-black/50 backdrop-blur-md border border-white/10 text-white transition-all shadow-lg"
+                        >
+                          <div>
+                            <div className="flex items-center justify-between gap-2 mb-2">
+                              <span className="px-2 py-0.5 rounded-lg bg-emerald-500 text-slate-950 text-[10px] font-bold tracking-wide animate-pulse">
+                                CIRCULAR
+                              </span>
+                              <span className="text-[11px] text-slate-400 font-semibold flex items-center gap-1">
+                                <Calendar size={12} className="text-slate-400" />
+                                {notice.date || notice.noticedate || 'Recent'}
+                              </span>
+                            </div>
+
+                            <h3 className="font-heading text-xs sm:text-sm font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-3 leading-snug">
+                              {notice.title || notice.board}
+                            </h3>
+                          </div>
+
+                          <div className="mt-4 pt-2.5 border-t border-white/10 flex items-center justify-between text-xs text-cyan-400 font-bold">
+                            <span>View Official PDF</span>
+                            <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                          </div>
+                        </a>
+                      ))
+                    ) : (
+                      <div className="col-span-full p-8 rounded-2xl text-center text-slate-400 text-xs bg-black/40 border border-white/10">
+                        Fetching latest BEU notices...
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* ── TAB 5: GUIDE & FAQ ── */}
+              {activeConsoleTab === 'guide' && (
+                <div className="pt-6 animate-in fade-in duration-200">
+                  <div className="space-y-3">
+                    {faqs.map((faq, i) => (
+                      <div key={i} className="rounded-2xl overflow-hidden border border-white/10 bg-black/30 hover:bg-black/45 backdrop-blur-md text-white shadow-lg transition-all">
+                        <button
+                          onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
+                          className="w-full flex items-center justify-between p-4 text-left hover:bg-white/5 cursor-pointer"
+                        >
+                          <h3 className="text-xs sm:text-sm font-bold text-white pr-4">{faq.q}</h3>
+                          <div className="shrink-0 text-cyan-400">
+                            {openFaqIndex === i ? <Minus size={16} /> : <Plus size={16} />}
+                          </div>
+                        </button>
+                        {openFaqIndex === i && (
+                          <div className="px-4 pb-4 text-slate-300 text-xs leading-relaxed font-medium border-t border-white/10 pt-3">
+                            {faq.a}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* ── 4. WALL OF FAME (TOP DONORS) ── */}
+        {/* ═══════════════════════════════════════════ */}
+        <section className="py-8 sm:py-12 px-4 sm:px-6 md:px-12 relative z-10">
+          <div className="container mx-auto max-w-5xl">
+            <div className="bg-black/25 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/10 text-center relative overflow-hidden shadow-lg text-white">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 text-xs font-bold mb-3 shadow-xs">
+                <Heart size={14} className="fill-cyan-400 text-cyan-400" /> Student Powered
+              </div>
+              
+              <h2 className="font-heading text-xl sm:text-2xl font-black text-white drop-shadow-md">
+                Platform Wall of Fame
+              </h2>
+              <p className="text-xs text-slate-300 max-w-xl mx-auto mt-2 mb-6 font-medium">
+                Apna College Bihar is 100% free with zero paywalls. Heartfelt thanks to students who contribute to keeping our servers running!
+              </p>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mb-6">
+                {topDonors.map((donor, idx) => (
+                  <div key={idx} className="bg-white/5 border border-white/10 p-3.5 rounded-xl text-center shadow-xs">
+                    <div className="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 font-bold text-sm mx-auto flex items-center justify-center mb-1.5 shadow-xs">
+                      {donor.name?.charAt(0) || 'S'}
+                    </div>
+                    <h3 className="text-xs font-bold text-white truncate">{donor.name}</h3>
+                    <p className="text-[11px] text-slate-300 truncate">{donor.college || 'Bihar GEC'}</p>
+                    <p className="text-xs font-heading font-black text-emerald-400 mt-0.5">₹{donor.amount}</p>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={() => setShowScanner(true)}
+                className="btn-primary gap-2 py-2 px-4 text-xs font-bold"
+              >
+                <Heart size={14} className="fill-white" /> Contribute via UPI
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      {/* ── Floating Cinema View Mode Toggle (Desktop only) ── */}
+      <div className="fixed bottom-5 right-5 z-40 hidden md:flex items-center">
+        <button
+          onClick={() => setCinemaMode(!cinemaMode)}
+          title="Toggle Cinema Mode to clearly view the background film"
+          className="px-3.5 py-1.5 rounded-full bg-black/60 hover:bg-black/85 backdrop-blur-md border border-white/20 text-slate-200 hover:text-white text-xs font-heading font-bold shadow-2xl flex items-center gap-1.5 transition-all cursor-pointer hover:border-cyan-400 active:scale-95"
+        >
+          <Sparkles size={13} className="text-cyan-400" />
+          <span>{cinemaMode ? 'Exit Cinema View' : 'Cinema View'}</span>
+        </button>
+      </div>
 
       {/* ── SCANNER MODAL ── */}
       {showScanner && (
@@ -648,7 +640,7 @@ export default function Home() {
             </div>
 
             <p className="text-xs text-slate-500 mb-5 leading-relaxed font-medium">
-              Help us cover Cloud database and server hosting expenses. Mention your <strong>Name & College</strong> in payment remark for the Wall of Fame!
+              Help us cover Cloud database and server hosting expenses. Mention your <strong>Name &amp; College</strong> in payment remark for the Wall of Fame!
             </p>
 
             <div className="w-48 h-48 bg-white rounded-2xl p-2 mx-auto mb-5 border-2 border-dashed border-blue-200 shadow-sm">

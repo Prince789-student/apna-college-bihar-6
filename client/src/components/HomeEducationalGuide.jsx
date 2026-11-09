@@ -22,15 +22,15 @@ export default function HomeEducationalGuide() {
       <div className="container mx-auto max-w-6xl relative z-10">
         <Reveal delay={50}>
           {/* Header */}
-          <div className="text-center max-w-3xl mx-auto mb-8 bg-black/50 backdrop-blur-xl p-6 sm:p-8 rounded-3xl border border-white/15 shadow-2xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 text-xs font-heading font-bold mb-3 shadow-xs">
+          <div className="text-center max-w-3xl mx-auto mb-8">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 text-xs font-heading font-bold mb-3 shadow-xs backdrop-blur-md">
               <Sparkles size={14} className="text-cyan-400" />
               Ultimate Engineering Guide 2026
             </div>
-            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight drop-shadow-md">
               Bihar Engineering &amp; <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">BEU Master Guide</span>
             </h2>
-            <p className="text-slate-300 text-sm md:text-base font-sans font-medium mt-3 leading-relaxed">
+            <p className="text-slate-300 text-sm md:text-base font-sans font-medium mt-3 leading-relaxed drop-shadow-xs">
               Your authoritative, step-by-step handbook covering B.Tech admission via JEE Main, UGEAC choice filling blueprints, BEU 10-point credit grading, and real placement strategies across 38+ Government Engineering Colleges.
             </p>
           </div>
@@ -41,7 +41,7 @@ export default function HomeEducationalGuide() {
           <div
             role="tablist"
             aria-label="Master Guide Phases"
-            className="grid grid-cols-2 sm:grid-cols-4 p-1.5 rounded-2xl bg-black/60 backdrop-blur-xl border border-white/15 shadow-xl gap-1.5"
+            className="grid grid-cols-2 sm:grid-cols-4 p-1.5 rounded-2xl bg-black/35 backdrop-blur-md border border-white/10 shadow-xl gap-1.5"
           >
             {guideSections.map((sec, idx) => {
               const isActive = activeSection === sec.id;
@@ -74,7 +74,7 @@ export default function HomeEducationalGuide() {
 
             {/* Section 1: Admission Guide */}
             {activeSection === 'admission' && (
-              <div id="guide-panel-admission" role="tabpanel" aria-labelledby="guide-tab-admission" className="bg-black/50 backdrop-blur-xl border border-white/15 rounded-2xl p-5 sm:p-7 shadow-2xl relative overflow-hidden animate-fadeIn text-white">
+              <div id="guide-panel-admission" role="tabpanel" aria-labelledby="guide-tab-admission" className="bg-black/25 backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-7 shadow-2xl relative overflow-hidden animate-fadeIn text-white">
                 <div className="flex items-center gap-3.5 mb-5">
                   <div className="w-12 h-12 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-cyan-400 shadow-sm shrink-0">
                     <GraduationCap size={24} />
@@ -158,7 +158,7 @@ export default function HomeEducationalGuide() {
 
             {/* Section 2: UGEAC Counselling */}
             {activeSection === 'ugeac' && (
-              <div id="guide-panel-ugeac" role="tabpanel" aria-labelledby="guide-tab-ugeac" className="bg-black/50 backdrop-blur-xl border border-white/15 rounded-2xl p-5 sm:p-7 shadow-2xl relative overflow-hidden animate-fadeIn text-white">
+              <div id="guide-panel-ugeac" role="tabpanel" aria-labelledby="guide-tab-ugeac" className="bg-black/25 backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-7 shadow-2xl relative overflow-hidden animate-fadeIn text-white">
                 <div className="flex items-center gap-3.5 mb-5">
                   <div className="w-11 h-11 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-cyan-400 shadow-sm shrink-0">
                     <MapPin size={22} />
@@ -227,7 +227,7 @@ export default function HomeEducationalGuide() {
 
             {/* Section 3: BEU Academic System */}
             {activeSection === 'beu' && (
-              <div id="guide-panel-beu" role="tabpanel" aria-labelledby="guide-tab-beu" className="bg-black/50 backdrop-blur-xl border border-white/15 rounded-2xl p-5 sm:p-7 shadow-2xl relative overflow-hidden animate-fadeIn text-white">
+              <div id="guide-panel-beu" role="tabpanel" aria-labelledby="guide-tab-beu" className="bg-black/25 backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-7 shadow-2xl relative overflow-hidden animate-fadeIn text-white">
                 <div className="flex items-center gap-3.5 mb-5">
                   <div className="w-11 h-11 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-cyan-400 shadow-sm shrink-0">
                     <BookOpen size={22} />
@@ -298,7 +298,7 @@ export default function HomeEducationalGuide() {
 
             {/* Section 4: Placement Reality */}
             {activeSection === 'placements' && (
-              <div id="guide-panel-placements" role="tabpanel" aria-labelledby="guide-tab-placements" className="bg-black/50 backdrop-blur-xl border border-white/15 rounded-2xl p-5 sm:p-7 shadow-2xl relative overflow-hidden animate-fadeIn text-white">
+              <div id="guide-panel-placements" role="tabpanel" aria-labelledby="guide-tab-placements" className="bg-black/25 backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-7 shadow-2xl relative overflow-hidden animate-fadeIn text-white">
                 <div className="flex items-center gap-3.5 mb-5">
                   <div className="w-11 h-11 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-cyan-400 shadow-sm shrink-0">
                     <Briefcase size={22} />
@@ -382,7 +382,7 @@ export default function HomeEducationalGuide() {
                 </Link>
               </div>
 
-              <div className="p-4 rounded-2xl bg-black/60 backdrop-blur-xl border border-white/15 shadow-xl flex items-center justify-between gap-3 text-white">
+              <div className="p-4 rounded-2xl bg-black/30 backdrop-blur-md border border-white/10 shadow-xl flex items-center justify-between gap-3 text-white">
                 <div className="flex items-center gap-2.5">
                   <div className="w-10 h-10 rounded-xl bg-blue-500/20 border border-blue-400/30 flex items-center justify-center text-cyan-400 shrink-0">
                     <HelpCircle size={20} />
@@ -405,7 +405,7 @@ export default function HomeEducationalGuide() {
 
           {/* Sidebar Sticky Navigation HUD */}
           <div className="lg:col-span-4 hidden lg:block sticky top-24 space-y-6">
-            <div className="bg-black/50 backdrop-blur-xl border border-white/15 rounded-2xl p-6 shadow-2xl text-white">
+            <div className="bg-black/25 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-2xl text-white">
               <p className="font-heading text-xs font-bold text-white mb-4 flex items-center gap-2">
                 <Compass size={16} className="text-cyan-400" /> Guide Navigation
               </p>
