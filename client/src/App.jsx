@@ -758,10 +758,9 @@ function App() {
             <Route path="/p/:shortId" element={<ShortLinkResolver />} />
 
             {/* Landing page for all visitors (web and mobile app) */}
-            
-            {isMobileScreen && <Route path="/" element={<AppHub />} />}
+            {isNative && <Route path="/" element={<AppHub />} />}
             <Route element={<DashboardLayout />}>
-              {!isMobileScreen && <Route path="/" element={<Home />} />}
+              {!isNative && <Route path="/" element={<Home />} />}
               <Route path="/download" element={<DownloadPage />} />
               <Route path="/apps" element={<Navigate to="/download" replace />} />
               <Route path="/download-app" element={<Navigate to="/download" replace />} />

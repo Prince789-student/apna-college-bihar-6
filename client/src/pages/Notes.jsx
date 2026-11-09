@@ -505,21 +505,21 @@ export default function Notes() {
           {/* Core Branches */}
           <div>
             <div className="flex items-center gap-2 mb-4 px-1">
-              <span className="text-slate-400 text-xs font-black uppercase tracking-[0.25em]">Core Branches</span>
-              <div className="h-px flex-1 bg-slate-200"></div>
+              <span className="text-slate-400 md:text-slate-300 text-xs font-black uppercase tracking-[0.25em]">Core Branches</span>
+              <div className="h-px flex-1 bg-slate-200 md:bg-white/10"></div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 md:gap-4">
               {BRANCHES.filter(b => b.type === 'core').map(b => {
                 const c = BRANCH_COLORS[b.color] || BRANCH_COLORS.indigo;
                 return (
                   <button key={b.id} onClick={() => { setBranch(b); setSem(null); setFolder(null); }}
-                    className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:-translate-y-1.5 hover:shadow-xl active:scale-95 transition-all duration-300 text-left shadow-xs group cursor-pointer relative overflow-hidden`}>
+                    className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} md:bg-slate-900/60 md:backdrop-blur-md md:border-white/15 md:hover:border-cyan-400/50 hover:-translate-y-1.5 hover:shadow-xl active:scale-95 transition-all duration-300 text-left shadow-xs group cursor-pointer relative overflow-hidden`}>
                     <span className="text-xl md:text-2xl group-hover:scale-125 transition-transform duration-300 inline-block">{b.emoji}</span>
                     <div>
-                      <p className={`text-sm md:text-base font-[900] tracking-tight ${c.text}`}>{b.short}</p>
-                      <p className="text-[8px] md:text-[9px] font-bold text-slate-500 mt-0.5 leading-tight">{b.label}</p>
+                      <p className={`text-sm md:text-base font-[900] tracking-tight ${c.text} md:text-white`}>{b.short}</p>
+                      <p className="text-[8px] md:text-[9px] font-bold text-slate-500 md:text-slate-300 mt-0.5 leading-tight">{b.label}</p>
                     </div>
-                    <div className={`mt-auto flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${c.text}`}>
+                    <div className={`mt-auto flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${c.text} md:text-cyan-400`}>
                       Select <ArrowRight size={10} className="group-hover:translate-x-1.5 transition-transform" />
                     </div>
                   </button>
@@ -531,21 +531,21 @@ export default function Notes() {
           {/* Specialization Branches */}
           <div>
             <div className="flex items-center gap-2 mb-4 px-1">
-              <span className="text-slate-400 text-xs font-black uppercase tracking-[0.25em]">Specialization Branches</span>
-              <div className="h-px flex-1 bg-slate-200"></div>
+              <span className="text-slate-400 md:text-slate-300 text-xs font-black uppercase tracking-[0.25em]">Specialization Branches</span>
+              <div className="h-px flex-1 bg-slate-200 md:bg-white/10"></div>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 md:gap-4">
               {BRANCHES.filter(b => b.type === 'spec').map(b => {
                 const c = BRANCH_COLORS[b.color] || BRANCH_COLORS.indigo;
                 return (
                   <button key={b.id} onClick={() => { setBranch(b); setSem(null); setFolder(null); }}
-                    className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} hover:-translate-y-1.5 hover:shadow-xl active:scale-95 transition-all duration-300 text-left shadow-xs group cursor-pointer relative overflow-hidden`}>
+                    className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} md:bg-slate-900/60 md:backdrop-blur-md md:border-white/15 md:hover:border-cyan-400/50 hover:-translate-y-1.5 hover:shadow-xl active:scale-95 transition-all duration-300 text-left shadow-xs group cursor-pointer relative overflow-hidden`}>
                     <span className="text-xl md:text-2xl group-hover:scale-125 transition-transform duration-300 inline-block">{b.emoji}</span>
                     <div>
-                      <p className={`text-sm md:text-base font-[900] tracking-tight ${c.text}`}>{b.short}</p>
-                      <p className="text-[8px] md:text-[9px] font-bold text-slate-500 mt-0.5 leading-tight">{b.label}</p>
+                      <p className={`text-sm md:text-base font-[900] tracking-tight ${c.text} md:text-white`}>{b.short}</p>
+                      <p className="text-[8px] md:text-[9px] font-bold text-slate-500 md:text-slate-300 mt-0.5 leading-tight">{b.label}</p>
                     </div>
-                    <div className={`mt-auto flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${c.text}`}>
+                    <div className={`mt-auto flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${c.text} md:text-cyan-400`}>
                       Select <ArrowRight size={10} className="group-hover:translate-x-1.5 transition-transform" />
                     </div>
                   </button>
@@ -566,9 +566,9 @@ export default function Notes() {
           <div className="grid grid-cols-4 md:grid-cols-8 gap-2.5 md:gap-3">
             {SEMESTERS.map(s => (
               <button key={s} onClick={() => setSem(s)}
-                className={`aspect-square rounded-2xl flex flex-col items-center justify-center border-2 font-[900] text-xl transition-all hover:scale-105 active:scale-95 shadow-sm hover:shadow-md ${branchColor.bg} ${branchColor.border} ${branchColor.text}`}>
+                className={`aspect-square rounded-2xl flex flex-col items-center justify-center border-2 font-[900] text-xl transition-all hover:scale-105 active:scale-95 shadow-sm hover:shadow-md ${branchColor.bg} ${branchColor.border} ${branchColor.text} md:bg-slate-900/60 md:backdrop-blur-md md:border-white/15 md:text-white md:hover:border-cyan-400`}>
                 {s}
-                <span className="text-[8px] font-bold text-slate-400 mt-0.5">SEM</span>
+                <span className="text-[8px] font-bold text-slate-400 md:text-slate-300 mt-0.5">SEM</span>
               </button>
             ))}
           </div>
@@ -579,31 +579,31 @@ export default function Notes() {
       {!search.trim() && step === 'subject' && (
         <div>
           <div className="flex items-center gap-3 mb-4">
-            <button onClick={goToBranch} className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition-all"><ArrowLeft size={16} className="text-slate-600" /></button>
-            <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{branch.emoji} {branch.short} · Semester {sem} — Select Subject</p>
+            <button onClick={goToBranch} className="p-2 rounded-xl bg-slate-100 md:bg-white/10 hover:bg-slate-200 transition-all cursor-pointer"><ArrowLeft size={16} className="text-slate-600 md:text-white" /></button>
+            <p className="text-[11px] font-black text-slate-400 md:text-slate-300 uppercase tracking-[0.2em]">{branch.emoji} {branch.short} · Semester {sem} — Select Subject</p>
           </div>
           {loading ? (
             <div className="py-16 text-center"><p className="text-slate-400 font-black uppercase tracking-widest animate-pulse text-sm">Loading subjects...</p></div>
           ) : subjectFolders.length === 0 && looseFiles.length === 0 ? (
-            <div className="py-16 text-center bg-white rounded-[2rem] border border-dashed border-slate-200">
+            <div className="py-16 text-center bg-white md:bg-slate-900/60 md:backdrop-blur-md rounded-[2rem] border border-dashed border-slate-200 md:border-white/15">
               <div className="text-4xl mb-3">📂</div>
-              <p className="text-slate-800 font-black text-base uppercase tracking-tight">Coming Soon!</p>
-              <p className="text-slate-400 text-xs font-bold mt-1">Wait bruh! Jald hi notes upload honge. Stay tuned!</p>
+              <p className="text-slate-800 md:text-white font-black text-base uppercase tracking-tight">Coming Soon!</p>
+              <p className="text-slate-400 md:text-slate-300 text-xs font-bold mt-1">Wait bruh! Jald hi notes upload honge. Stay tuned!</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
               {subjectFolders.map(f => (
                 <button key={f.id} onClick={() => selectFolder(f)}
-                  className={`flex flex-col items-start gap-3 md:gap-4 p-5 md:p-7 rounded-2xl md:rounded-[2rem] border-2 bg-white hover:${branchColor.bg} ${branchColor.border} hover:scale-[1.01] active:scale-[0.99] transition-all text-left shadow-sm hover:shadow-lg group`}>
-                  <div className={`w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center ${branchColor.badge}`}>
+                  className={`flex flex-col items-start gap-3 md:gap-4 p-5 md:p-7 rounded-2xl md:rounded-[2rem] border-2 bg-white md:bg-slate-900/60 md:backdrop-blur-md hover:${branchColor.bg} ${branchColor.border} md:border-white/15 md:hover:border-cyan-400/50 hover:scale-[1.01] active:scale-[0.99] transition-all text-left shadow-sm hover:shadow-lg group md:text-white cursor-pointer`}>
+                  <div className={`w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center ${branchColor.badge} md:bg-cyan-500/20 md:text-cyan-300`}>
                     <FolderOpen size={20} className={`md:hidden ${branchColor.text.replace('text-', 'text-')}`} />
-                    <FolderOpen size={26} className={`hidden md:block ${branchColor.text.replace('text-', 'text-')}`} />
+                    <FolderOpen size={26} className="hidden md:block text-cyan-300" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-base md:text-lg font-[900] text-slate-900 uppercase tracking-tight leading-tight">{f.title}</h3>
-                    <p className="text-[9px] md:text-[10px] font-bold text-slate-400 mt-1">{f.fileCount !== undefined ? f.fileCount : docs.filter(x => x.parentId === f.id).length} files inside</p>
+                    <h3 className="text-base md:text-lg font-[900] text-slate-900 md:text-white uppercase tracking-tight leading-tight">{f.title}</h3>
+                    <p className="text-[9px] md:text-[10px] font-bold text-slate-400 md:text-slate-300 mt-1">{f.fileCount !== undefined ? f.fileCount : docs.filter(x => x.parentId === f.id).length} files inside</p>
                   </div>
-                  <div className={`flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${branchColor.text} group-hover:gap-2.5 transition-all`}>
+                  <div className={`flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${branchColor.text} md:text-cyan-400 group-hover:gap-2.5 transition-all`}>
                     Open Notes <ArrowRight size={10} />
                   </div>
                 </button>
@@ -745,7 +745,7 @@ function FileCard({ d, onAction, accentColor = 'indigo', user, onEdit, onDelete 
   };
   const c = colors[accentColor] || colors.indigo;
   return (
-    <div className="relative bg-white rounded-2xl md:rounded-[2rem] border border-slate-200/80 p-4 md:p-6 hover:border-indigo-300/50 transition-all group flex flex-col shadow-sm hover:shadow-md">
+    <div className="relative bg-white md:bg-slate-900/60 md:backdrop-blur-md rounded-2xl md:rounded-[2rem] border border-slate-200/80 md:border-white/15 p-4 md:p-6 hover:border-indigo-300/50 md:hover:border-cyan-400/50 transition-all group flex flex-col shadow-sm hover:shadow-md md:text-white">
       
       {/* Admin Actions */}
       {(user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN') && (
@@ -755,21 +755,21 @@ function FileCard({ d, onAction, accentColor = 'indigo', user, onEdit, onDelete 
         </div>
       )}
 
-      <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4 ${c.icon} group-hover:scale-110 transition-transform`}>
+      <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center mb-3 md:mb-4 ${c.icon} md:bg-cyan-500/20 md:text-cyan-300 group-hover:scale-110 transition-transform`}>
         <FileDigit size={18} className="md:hidden" />
         <FileDigit size={22} className="hidden md:block" />
       </div>
       <div className="flex-1 space-y-1 md:space-y-1.5 mb-3 md:mb-4">
         <div className="flex items-center gap-1.5 md:gap-2 flex-wrap">
-          <span className={`text-[7px] md:text-[8px] font-black px-1.5 md:px-2 py-0.5 rounded-full uppercase tracking-widest border ${c.badge}`}>NOTES</span>
-          {d.semester && <span className="text-[7px] md:text-[8px] font-black bg-slate-100 text-slate-500 px-1.5 md:px-2 py-0.5 rounded-full uppercase tracking-widest border border-slate-200">Sem {d.semester}</span>}
+          <span className={`text-[7px] md:text-[8px] font-black px-1.5 md:px-2 py-0.5 rounded-full uppercase tracking-widest border ${c.badge} md:bg-cyan-500/20 md:border-cyan-400/30 md:text-cyan-300`}>NOTES</span>
+          {d.semester && <span className="text-[7px] md:text-[8px] font-black bg-slate-100 md:bg-white/10 text-slate-500 md:text-slate-300 px-1.5 md:px-2 py-0.5 rounded-full uppercase tracking-widest border border-slate-200 md:border-white/15">Sem {d.semester}</span>}
         </div>
-        <h3 className="text-xs md:text-sm font-[900] text-slate-900 uppercase tracking-tight leading-tight">{d.title}</h3>
-        {d.subject && <p className="text-[9px] md:text-[10px] font-bold text-slate-500 flex items-center gap-1"><Bookmark size={9} className="text-indigo-400" />{d.subject}</p>}
+        <h3 className="text-xs md:text-sm font-[900] text-slate-900 md:text-white uppercase tracking-tight leading-tight">{d.title}</h3>
+        {d.subject && <p className="text-[9px] md:text-[10px] font-bold text-slate-500 md:text-slate-300 flex items-center gap-1"><Bookmark size={9} className="text-indigo-400 md:text-cyan-400" />{d.subject}</p>}
       </div>
-      <div className="flex items-center gap-1.5 md:gap-2 pt-3 md:pt-4 border-t border-slate-100">
+      <div className="flex items-center gap-1.5 md:gap-2 pt-3 md:pt-4 border-t border-slate-100 md:border-white/10">
         <button onClick={() => onAction(d.fileUrl, () => window.open(d.fileUrl, '_blank'))}
-          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 md:py-3 bg-slate-50 hover:bg-slate-100 text-slate-700 rounded-lg md:rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all">
+          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 md:py-3 bg-slate-50 md:bg-white/10 hover:bg-slate-100 md:hover:bg-white/20 text-slate-700 md:text-white rounded-lg md:rounded-xl text-[8px] md:text-[9px] font-black uppercase tracking-widest transition-all cursor-pointer">
           <Eye size={11} /> View
         </button>
         {!Capacitor.isNativePlatform() && (

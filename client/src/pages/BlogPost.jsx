@@ -63,7 +63,7 @@ export default function BlogPost() {
   };
 
   return (
-    <div className="min-h-screen bg-white font-['Inter'] pb-20">
+    <div className="min-h-screen bg-white md:bg-transparent font-['Inter'] pb-20 md:text-white">
       <SEO 
         title={`${post.title} | Apna College Bihar Blog`} 
         description={post.excerpt}
@@ -71,27 +71,27 @@ export default function BlogPost() {
       />
       
       {/* Article Header */}
-      <article className="pt-24 pb-12 px-6 bg-slate-50 border-b border-slate-200">
+      <article className="pt-24 pb-12 px-6 bg-slate-50 md:bg-slate-900/60 md:backdrop-blur-md border-b border-slate-200 md:border-white/10 md:rounded-3xl max-w-4xl mx-auto my-6 shadow-sm md:shadow-xl md:text-white">
         <div className="container mx-auto max-w-3xl">
-          <button onClick={() => navigate('/blog')} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-blue-600 transition-colors mb-8">
+          <button onClick={() => navigate('/blog')} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 md:text-cyan-400 hover:text-blue-600 md:hover:text-cyan-300 transition-colors mb-8 cursor-pointer">
             <ArrowLeft size={14} /> Back to Articles
           </button>
           
-          <h1 className="text-3xl md:text-5xl font-[1000] text-slate-900 tracking-tighter leading-tight mb-6">
+          <h1 className="text-3xl md:text-5xl font-[1000] text-slate-900 md:text-white tracking-tighter leading-tight mb-6">
             {post.title}
           </h1>
           
-          <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-slate-500">
+          <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-slate-500 md:text-slate-300">
             <div className="flex items-center gap-1.5">
-              <Calendar size={16} className="text-blue-500"/> 
+              <Calendar size={16} className="text-blue-500 md:text-cyan-400"/> 
               {new Date(post.date).toLocaleDateString('en-IN', {day: 'numeric', month: 'long', year: 'numeric'})}
             </div>
             <div className="flex items-center gap-1.5">
-              <User size={16} className="text-blue-500"/> 
+              <User size={16} className="text-blue-500 md:text-cyan-400"/> 
               {post.author}
             </div>
             <div className="flex items-center gap-1.5">
-              <Clock size={16} className="text-blue-500"/> 
+              <Clock size={16} className="text-blue-500 md:text-cyan-400"/> 
               5 min read
             </div>
           </div>
@@ -99,33 +99,33 @@ export default function BlogPost() {
       </article>
 
       {/* Article Content */}
-      <div className="container mx-auto max-w-3xl px-6 py-12">
-        <div className="prose prose-slate prose-lg md:prose-xl prose-headings:font-[900] prose-headings:tracking-tight prose-headings:text-slate-900 prose-a:text-blue-600 max-w-none">
+      <div className="container mx-auto max-w-4xl px-6 py-8 md:p-10 md:bg-slate-900/60 md:backdrop-blur-md md:rounded-3xl md:border md:border-white/15 md:shadow-xl">
+        <div className="prose prose-slate md:prose-invert prose-lg md:prose-xl prose-headings:font-[900] prose-headings:tracking-tight prose-headings:text-slate-900 md:prose-headings:text-white prose-p:md:text-slate-200 prose-strong:md:text-white prose-a:text-blue-600 md:prose-a:text-cyan-400 max-w-none">
           <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
         
         {/* Author Bio (E-E-A-T Signal) */}
-        <div className="mt-12 pt-8 border-t border-slate-200">
+        <div className="mt-12 pt-8 border-t border-slate-200 md:border-white/10">
           <div className="flex items-start gap-4">
-            <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 border-2 border-blue-200 overflow-hidden">
-              <User size={32} className="text-blue-500" />
+            <div className="w-16 h-16 rounded-full bg-blue-100 md:bg-cyan-500/20 flex items-center justify-center flex-shrink-0 border-2 border-blue-200 md:border-cyan-400/40 overflow-hidden">
+              <User size={32} className="text-blue-500 md:text-cyan-300" />
             </div>
             <div>
-              <h3 className="text-lg font-[900] text-slate-900 mb-1">{post.author}</h3>
-              <p className="text-slate-600 text-sm leading-relaxed mb-2">
+              <h3 className="text-lg font-[900] text-slate-900 md:text-white mb-1">{post.author}</h3>
+              <p className="text-slate-600 md:text-slate-300 text-sm leading-relaxed mb-2 font-medium">
                 The Apna College Bihar Editorial Team consists of BEU alumni, educators, and placement experts dedicated to helping engineering students across Bihar excel in their academics and technical careers.
               </p>
-              <div className="text-[10px] font-black uppercase tracking-widest text-blue-600">
-                Editorial & Content Integrity Team
+              <div className="text-[10px] font-black uppercase tracking-widest text-blue-600 md:text-cyan-400 font-bold">
+                Editorial &amp; Content Integrity Team
               </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-slate-200 flex items-center justify-between">
+        <div className="mt-8 pt-8 border-t border-slate-200 md:border-white/10 flex items-center justify-between">
           <div className="flex flex-col">
             <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Share this article</span>
-            <button onClick={handleShare} className="flex items-center gap-2 text-blue-600 font-bold hover:text-blue-700 transition-colors">
+            <button onClick={handleShare} className="flex items-center gap-2 text-blue-600 md:text-cyan-400 font-bold hover:text-blue-700 md:hover:text-cyan-300 transition-colors cursor-pointer">
               <Share2 size={18} /> Share with friends
             </button>
           </div>

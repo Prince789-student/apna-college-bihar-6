@@ -102,15 +102,18 @@ export default function BrandFilmBackground() {
       if (imagesRef.current[idx]) return;
       const img = new Image();
       img.src = getFrameSrc(idx);
-      img.onload = () => {
+      const onDone = () => {
         if (!mounted) return;
         loadedFlagsRef.current[idx] = 1;
-        if (idx === 0 && lastDrawnFrameRef.current === -1) {
-          drawFrame(0);
-        } else if (lastDrawnFrameRef.current === idx) {
+        if ((idx === 0 && lastDrawnFrameRef.current <= 0) || lastDrawnFrameRef.current === idx) {
           drawFrame(idx);
         }
       };
+      if (img.complete && img.naturalWidth > 0) {
+        onDone();
+      } else {
+        img.onload = onDone;
+      }
       imagesRef.current[idx] = img;
     };
 
@@ -247,17 +250,27 @@ export default function BrandFilmBackground() {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {/* ── Instant Fallback Poster Layer (Zero Black Screen Flash on Initial Load) ── */}
+      <img
+        src="/brand-film/frame_000.webp"
+        alt=""
+        fetchpriority="high"
+        loading="eager"
+        decoding="async"
+        className="absolute inset-0 w-full h-full object-cover scale-[1.07] pointer-events-none select-none"
+      />
+
       {/* ── Fixed Fullscreen High-DPI Video Canvas ── */}
       <canvas 
         ref={canvasRef} 
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover relative z-10"
       />
 
       {/* ── Ambient Contrast Veil (Tones down bright laptop glare so text is 100% visible) ── */}
-      <div className="absolute inset-0 bg-slate-950/45 pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/50 pointer-events-none" />
+      <div className="absolute inset-0 bg-slate-950/45 pointer-events-none z-20" />
+      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/50 pointer-events-none z-20" />
       {/* Corner protection (Ensures zero watermark or symbol leakage in bottom-right corner) */}
-      <div className="absolute bottom-0 right-0 w-48 h-32 bg-gradient-to-tl from-slate-950 via-slate-950/70 to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-48 h-32 bg-gradient-to-tl from-slate-950 via-slate-950/70 to-transparent pointer-events-none z-20" />
 
       {/* ── Global Bottom Scroll Progress Line ── */}
       <div className="fixed bottom-0 left-0 right-0 h-1 bg-white/10 z-40 pointer-events-none">

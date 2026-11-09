@@ -7,7 +7,7 @@
 //    - EVERYTHING ELSE → Network-First
 // ═══════════════════════════════════════════════════════════════
 
-const CACHE_VERSION = 'acb-v36';
+const CACHE_VERSION = 'acb-v37';
 const STATIC_CACHE  = `${CACHE_VERSION}-static`;
 const DATA_CACHE    = `${CACHE_VERSION}-data`;
 const OFFLINE_URL   = '/offline.html';
@@ -21,6 +21,7 @@ const STATIC_ASSETS = [
   '/logo-acb.png',
   '/logo-192.png',
   '/logo-512.png',
+  '/brand-film/frame_000.webp',
 ];
 
 // ─── Install: pre-cache the shell ──────────────────────────────

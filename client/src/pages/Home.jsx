@@ -31,6 +31,29 @@ export default function Home() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  const [isMobileScreen, setIsMobileScreen] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return Boolean(
+      (window.innerWidth < 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '')) &&
+      !new URLSearchParams(window.location.search).get('desktop') &&
+      !new URLSearchParams(window.location.search).get('mode')?.includes('desktop')
+    );
+  });
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobileScreen(
+        Boolean(
+          (window.innerWidth < 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '')) &&
+          !new URLSearchParams(window.location.search).get('desktop') &&
+          !new URLSearchParams(window.location.search).get('mode')?.includes('desktop')
+        )
+      );
+    };
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Authentic platform stats
   const [stats, setStats] = useState({ users: 166, notes: 296, pyqs: 340, groups: 24 });
   const [activeConsoleTab, setActiveConsoleTab] = useState('tools'); // 'tools' | 'predictor' | 'colleges' | 'radar' | 'guide'
@@ -227,7 +250,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-transparent text-white font-['Inter'] relative selection:bg-cyan-500/30 overflow-x-clip">
+    <div className={`min-h-screen ${isMobileScreen ? 'bg-[#f8fafc] text-slate-900' : 'bg-transparent text-white'} font-['Inter'] relative selection:bg-cyan-500/30 overflow-x-clip`}>
       <SEO
         title="Apna College Bihar | #1 Academic Platform for BEU Students"
         description="Bihar's premier academic platform for Bihar Engineering University (BEU) students. Free unit-wise notes, 5+ years verified PYQ papers, official BEU syllabus, UGEAC college predictor & CGPA calculator."
@@ -246,14 +269,22 @@ export default function Home() {
           <div className="container mx-auto max-w-5xl text-center">
             
             {/* Subtle Live Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/15 text-white text-xs font-bold mb-6 shadow-xl">
-              <Sparkles size={14} className="text-cyan-400" />
+            <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full ${
+              isMobileScreen 
+                ? 'bg-white border border-slate-200 text-blue-700 shadow-sm' 
+                : 'bg-slate-900/80 backdrop-blur-md border border-white/15 text-white shadow-xl'
+            } text-xs font-bold mb-6`}>
+              <Sparkles size={14} className={isMobileScreen ? 'text-blue-600' : 'text-cyan-400'} />
               <span className="tracking-wide">Bihar's #1 Academic Platform for BEU Students</span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="font-heading text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight sm:leading-none mb-6 drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
-              Apna College <span className="bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-300 bg-clip-text text-transparent">Bihar</span>
+            <h1 className={`font-heading text-3xl sm:text-5xl md:text-6xl font-black ${
+              isMobileScreen ? 'text-slate-900' : 'text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]'
+            } tracking-tight leading-tight sm:leading-none mb-6`}>
+              Apna College <span className={`bg-gradient-to-r ${
+                isMobileScreen ? 'from-blue-600 via-indigo-600 to-teal-500' : 'from-blue-400 via-cyan-300 to-teal-300'
+              } bg-clip-text text-transparent`}>Bihar</span>
             </h1>
 
             {/* Direct Quick Launch Action Buttons */}
@@ -267,14 +298,22 @@ export default function Home() {
               </Link>
               <Link
                 to="/download"
-                className="px-5 py-3 rounded-xl bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-white/25 hover:border-cyan-400/60 text-white flex items-center gap-2 text-xs sm:text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-all"
+                className={`px-5 py-3 rounded-xl ${
+                  isMobileScreen
+                    ? 'bg-white text-slate-800 border border-slate-200 hover:bg-slate-50'
+                    : 'bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-white/25 hover:border-cyan-400/60 text-white'
+                } flex items-center gap-2 text-xs sm:text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-all`}
               >
-                <Download size={16} className="text-cyan-400" />
+                <Download size={16} className={isMobileScreen ? 'text-blue-600' : 'text-cyan-400'} />
                 <span>Download Official App (v64)</span>
               </Link>
               <Link
                 to="/ugeac-predictor?tab=finder"
-                className="px-5 py-3 rounded-xl bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-cyan-400/40 hover:border-cyan-400 text-cyan-300 flex items-center gap-2 text-xs sm:text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-all"
+                className={`px-5 py-3 rounded-xl ${
+                  isMobileScreen
+                    ? 'bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100'
+                    : 'bg-slate-900/80 hover:bg-slate-800 backdrop-blur-md border border-cyan-400/40 hover:border-cyan-400 text-cyan-300'
+                } flex items-center gap-2 text-xs sm:text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-all`}
               >
                 <Target size={16} />
                 <span>UGEAC Predictor</span>
@@ -294,22 +333,34 @@ export default function Home() {
         {/* ═══════════════════════════════════════════ */}
         <section className="py-4 sm:py-6 px-3.5 sm:px-6 md:px-12 relative z-10">
           <div className="container mx-auto max-w-6xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 border-y border-white/10 py-4">
+            <div className={`grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 border-y ${
+              isMobileScreen ? 'border-slate-200' : 'border-white/10'
+            } py-4`}>
               {[
                 { label: 'Curated Notes', val: stats.notes, suffix: '+', icon: <BookOpen size={20} className="sm:w-[22px] sm:h-[22px]" /> },
                 { label: 'Verified PYQs', val: stats.pyqs, suffix: '+', icon: <FileText size={20} className="sm:w-[22px] sm:h-[22px]" /> },
                 { label: 'Active Students', val: stats.users, suffix: '+', icon: <Users size={20} className="sm:w-[22px] sm:h-[22px]" /> },
                 { label: 'Govt Colleges', val: 38, suffix: '+', icon: <Building2 size={20} className="sm:w-[22px] sm:h-[22px]" /> },
               ].map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3 text-white transition-all hover:translate-y-[-2px]">
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-cyan-500/15 border border-cyan-400/25 flex items-center justify-center shrink-0 text-cyan-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                <div key={idx} className={`flex items-center gap-3 ${
+                  isMobileScreen ? 'text-slate-900 bg-white p-3 rounded-2xl border border-slate-200/80 shadow-xs' : 'text-white'
+                } transition-all hover:translate-y-[-2px]`}>
+                  <div className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl ${
+                    isMobileScreen 
+                      ? 'bg-blue-50 border border-blue-100 text-blue-600' 
+                      : 'bg-cyan-500/15 border border-cyan-400/25 text-cyan-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]'
+                  } flex items-center justify-center shrink-0`}>
                     {item.icon}
                   </div>
                   <div className="min-w-0">
-                    <span className="font-heading text-xl sm:text-2xl md:text-3xl font-[1000] text-white tracking-tight block drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+                    <span className={`font-heading text-xl sm:text-2xl md:text-3xl font-[1000] ${
+                      isMobileScreen ? 'text-slate-900' : 'text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]'
+                    } tracking-tight block`}>
                       <CountUp end={item.val} suffix={item.suffix} duration={1400} />
                     </span>
-                    <p className="text-[11px] sm:text-xs text-slate-200 font-bold tracking-wide uppercase drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)] truncate">{item.label}</p>
+                    <p className={`text-[11px] sm:text-xs ${
+                      isMobileScreen ? 'text-slate-500 font-semibold' : 'text-slate-200 font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]'
+                    } tracking-wide uppercase truncate`}>{item.label}</p>
                   </div>
                 </div>
               ))}
@@ -325,22 +376,32 @@ export default function Home() {
             <div className="text-white">
               
               {/* Header Bar with Full-Width Typography & Navigation */}
-              <div className="pb-6 border-b border-white/10 space-y-4">
+              <div className={`pb-6 border-b ${isMobileScreen ? 'border-slate-200' : 'border-white/10'} space-y-4`}>
                 <div className="flex flex-col gap-2">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-bold w-fit shadow-xs">
-                    <Sparkles size={13} className="text-cyan-400" />
+                  <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full ${
+                    isMobileScreen 
+                      ? 'bg-blue-50 border border-blue-200 text-blue-700' 
+                      : 'bg-cyan-500/20 border border-cyan-400/30 text-cyan-300'
+                  } text-xs font-bold w-fit shadow-xs`}>
+                    <Sparkles size={13} className={isMobileScreen ? 'text-blue-600' : 'text-cyan-400'} />
                     <span>BEU PATNA OFFICIAL STUDY ENGINE • 38 GOVT ENGINEERING COLLEGES</span>
                   </div>
-                  <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-[1000] text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+                  <h2 className={`font-heading text-2xl sm:text-3xl md:text-4xl font-[1000] ${
+                    isMobileScreen ? 'text-slate-900' : 'text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]'
+                  } tracking-tight`}>
                     Bihar Engineering Academic Lab &amp; Tools
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-200 font-medium max-w-3xl leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
+                  <p className={`text-xs sm:text-sm ${
+                    isMobileScreen ? 'text-slate-600' : 'text-slate-200 drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]'
+                  } font-medium max-w-3xl leading-relaxed`}>
                     Access verified B.Tech semester notes, past 5-year PYQ blueprints, SGPA calculator, and real-time BCECEB UGEAC cutoff intelligence across all 38 Government Engineering Colleges.
                   </p>
                 </div>
 
                 {/* Tab Navigation Pill Bar (Clean, Spacious & Responsive) */}
-                <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-black/40 border border-white/15 overflow-x-auto custom-scrollbar">
+                <div className={`flex items-center gap-2 p-1.5 rounded-2xl ${
+                  isMobileScreen ? 'bg-slate-100 border border-slate-200' : 'bg-black/40 border border-white/15'
+                } overflow-x-auto custom-scrollbar`}>
                   {[
                     { id: 'tools', label: '🛠️ Academic Tools', badge: '8 Tools' },
                     { id: 'predictor', label: '🎯 UGEAC Predictor', badge: 'Cutoffs 2024–25' },
@@ -353,14 +414,20 @@ export default function Home() {
                       onClick={() => setActiveConsoleTab(tab.id)}
                       className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-heading font-bold transition-all whitespace-nowrap cursor-pointer ${
                         activeConsoleTab === tab.id
-                          ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg border border-cyan-400/40'
-                          : 'text-slate-300 hover:text-white hover:bg-white/10'
+                          ? isMobileScreen 
+                            ? 'bg-blue-600 text-white shadow-md' 
+                            : 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg border border-cyan-400/40'
+                          : isMobileScreen 
+                            ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-200' 
+                            : 'text-slate-300 hover:text-white hover:bg-white/10'
                       }`}
                     >
                       <span>{tab.label}</span>
                       {tab.badge && (
                         <span className={`px-1.5 py-0.5 rounded-md text-[9px] font-black ${
-                          activeConsoleTab === tab.id ? 'bg-white/20 text-white' : 'bg-white/10 text-slate-300'
+                          activeConsoleTab === tab.id 
+                            ? 'bg-white/20 text-white' 
+                            : isMobileScreen ? 'bg-slate-200 text-slate-700' : 'bg-white/10 text-slate-300'
                         }`}>
                           {tab.badge}
                         </span>
@@ -370,7 +437,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* ── TAB 1: ACADEMIC SUITE (8 TOOLS - CLEAN TRANSPARENT TYPOGRAPHY WITHOUT BLURRED BOXES) ── */}
+              {/* ── TAB 1: ACADEMIC SUITE (8 TOOLS - CLEAN FROSTED GLASS TO REVEAL BACKGROUND) ── */}
               {activeConsoleTab === 'tools' && (
                 <div className="pt-6 animate-in fade-in duration-200">
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -378,29 +445,43 @@ export default function Home() {
                       <Link
                         key={idx}
                         to={tool.path}
-                        className="p-5 rounded-2xl bg-slate-900/85 hover:bg-slate-900/95 backdrop-blur-md border border-white/15 hover:border-cyan-400/60 shadow-xl flex flex-col justify-between group transition-all hover:-translate-y-1 active:scale-[0.98]"
+                        className={`p-5 rounded-2xl ${
+                          isMobileScreen 
+                            ? 'bg-white hover:bg-slate-50 border border-slate-200/90 shadow-sm text-slate-900' 
+                            : 'bg-slate-900/60 hover:bg-slate-900/80 backdrop-blur-md border border-white/15 hover:border-cyan-400/60 shadow-xl text-white'
+                        } flex flex-col justify-between group transition-all hover:-translate-y-1 active:scale-[0.98]`}
                       >
                         <div>
                           <div className="flex items-center justify-between mb-3">
-                            <div className="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md">
+                            <div className={`w-10 h-10 rounded-xl ${
+                              isMobileScreen ? 'bg-blue-50 text-blue-600' : 'bg-cyan-500/20 text-cyan-300'
+                            } flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform shadow-md`}>
                               {tool.icon}
                             </div>
                             {tool.badge && (
-                              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-[10px] font-black uppercase tracking-wider">
+                              <span className={`px-2.5 py-0.5 rounded-full ${
+                                isMobileScreen ? 'bg-blue-50 border border-blue-200 text-blue-700' : 'bg-cyan-500/20 border border-cyan-400/30 text-cyan-300'
+                              } text-[10px] font-black uppercase tracking-wider`}>
                                 {tool.badge}
                               </span>
                             )}
                           </div>
-                          <h3 className="font-heading text-base font-extrabold text-white group-hover:text-cyan-300 transition-colors">
+                          <h3 className={`font-heading text-base font-extrabold ${
+                            isMobileScreen ? 'text-slate-900 group-hover:text-blue-600' : 'text-white group-hover:text-cyan-300'
+                          } transition-colors`}>
                             {tool.name}
                           </h3>
-                          <p className="text-xs text-slate-300 font-medium mt-1.5 leading-relaxed">
+                          <p className={`text-xs ${isMobileScreen ? 'text-slate-600' : 'text-slate-200'} font-medium mt-1.5 leading-relaxed`}>
                             {tool.desc}
                           </p>
                         </div>
-                        <div className="mt-5 pt-3 border-t border-white/10 flex items-center justify-between">
-                          <span className="text-[11px] text-slate-400 font-medium">Direct Access</span>
-                          <span className="px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-xs font-bold flex items-center gap-1 group-hover:bg-cyan-500 group-hover:text-white transition-all">
+                        <div className={`mt-5 pt-3 border-t ${isMobileScreen ? 'border-slate-100' : 'border-white/10'} flex items-center justify-between`}>
+                          <span className={`text-[11px] ${isMobileScreen ? 'text-slate-400' : 'text-slate-400'} font-medium`}>Direct Access</span>
+                          <span className={`px-2.5 py-1 rounded-lg ${
+                            isMobileScreen 
+                              ? 'bg-blue-50 text-blue-600 border border-blue-200 group-hover:bg-blue-600 group-hover:text-white' 
+                              : 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 group-hover:bg-cyan-500 group-hover:text-white'
+                          } text-xs font-bold flex items-center gap-1 transition-all`}>
                             <span>Launch Tool</span>
                             <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
                           </span>
@@ -420,10 +501,10 @@ export default function Home() {
                     <div className="lg:col-span-7 space-y-4">
                       
                       {/* Percentile Slider Card */}
-                      <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/85 backdrop-blur-md border border-white/15 shadow-xl">
+                      <div className={`p-4 sm:p-5 rounded-2xl ${isMobileScreen ? 'bg-white border border-slate-200/90 shadow-sm text-slate-900' : 'bg-slate-900/60 backdrop-blur-md border border-white/15 shadow-xl text-white'}`}>
                         <div className="flex items-center justify-between text-xs sm:text-sm mb-2 font-bold">
-                          <span className="text-slate-200">Your JEE Main Percentile:</span>
-                          <span className="text-cyan-400 font-[1000] text-base sm:text-lg">{simPercentile}%ile</span>
+                          <span className={isMobileScreen ? 'text-slate-700' : 'text-slate-200'}>Your JEE Main Percentile:</span>
+                          <span className={`${isMobileScreen ? 'text-blue-600' : 'text-cyan-400'} font-[1000] text-base sm:text-lg`}>{simPercentile}%ile</span>
                         </div>
                         <input
                           type="range"
@@ -432,27 +513,27 @@ export default function Home() {
                           step="0.5"
                           value={simPercentile}
                           onChange={(e) => setSimPercentile(Number(e.target.value))}
-                          className="w-full h-2.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                          className="w-full h-2.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600 md:accent-cyan-400"
                         />
                         
                         {/* Dual Rank Metrics (AIR + BCECEB State UR Rank) */}
-                        <div className="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-white/10">
-                          <div className="bg-white/5 p-2.5 rounded-xl border border-white/10">
-                            <span className="text-[10px] uppercase font-bold text-slate-300 block tracking-wider">All India CRL (AIR)</span>
-                            <span className="text-white font-[1000] text-sm sm:text-base">~{currentAir.toLocaleString()}</span>
+                        <div className={`grid grid-cols-2 gap-3 mt-3 pt-3 border-t ${isMobileScreen ? 'border-slate-100' : 'border-white/10'}`}>
+                          <div className={`${isMobileScreen ? 'bg-slate-50 border-slate-200' : 'bg-white/5 border-white/10'} p-2.5 rounded-xl border`}>
+                            <span className={`text-[10px] uppercase font-bold ${isMobileScreen ? 'text-slate-500' : 'text-slate-300'} block tracking-wider`}>All India CRL (AIR)</span>
+                            <span className={`${isMobileScreen ? 'text-slate-900' : 'text-white'} font-[1000] text-sm sm:text-base`}>~{currentAir.toLocaleString()}</span>
                           </div>
-                          <div className="bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-400/20">
-                            <span className="text-[10px] uppercase font-bold text-emerald-300 block tracking-wider">Est. Bihar State Rank (UR)</span>
-                            <span className="text-emerald-400 font-[1000] text-sm sm:text-base">#{currentUgeacRank.toLocaleString()}</span>
+                          <div className={`${isMobileScreen ? 'bg-emerald-50 border-emerald-200' : 'bg-emerald-500/10 border-emerald-400/20'} p-2.5 rounded-xl border`}>
+                            <span className={`text-[10px] uppercase font-bold ${isMobileScreen ? 'text-emerald-700' : 'text-emerald-300'} block tracking-wider`}>Est. Bihar State Rank (UR)</span>
+                            <span className={`${isMobileScreen ? 'text-emerald-600' : 'text-emerald-400'} font-[1000] text-sm sm:text-base`}>#{currentUgeacRank.toLocaleString()}</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Live College Match Cards (Based on Real 2024-2025 BCECEB Cutoffs) */}
                       <div className="space-y-2.5">
-                        <div className="flex items-center justify-between text-xs font-bold text-slate-200 px-1">
+                        <div className={`flex items-center justify-between text-xs font-bold ${isMobileScreen ? 'text-slate-700' : 'text-slate-200'} px-1`}>
                           <span>Predicted Seat Allotment Status (General UR):</span>
-                          <span className="text-[11px] text-cyan-400">2024-2025 Closing Cutoff</span>
+                          <span className={`text-[11px] ${isMobileScreen ? 'text-blue-600' : 'text-cyan-400'}`}>2024-2025 Closing Cutoff</span>
                         </div>
 
                         {getSimulatedCollegeMatches(currentUgeacRank).map((col, idx) => {
@@ -460,32 +541,42 @@ export default function Home() {
                           const isModerate = !isLikely && currentUgeacRank <= Math.round(col.closing * 1.35);
 
                           return (
-                            <div key={idx} className="p-3.5 rounded-xl bg-slate-900/85 backdrop-blur-md border border-white/15 flex items-center justify-between hover:border-cyan-400/40 shadow-lg transition-all">
+                            <div key={idx} className={`p-3.5 rounded-xl ${
+                              isMobileScreen 
+                                ? 'bg-white border border-slate-200 shadow-xs text-slate-900' 
+                                : 'bg-slate-900/60 backdrop-blur-md border border-white/15 text-white hover:border-cyan-400/40 shadow-lg'
+                            } flex items-center justify-between transition-all`}>
                               <div className="flex items-center gap-3">
                                 <div className={`w-10 h-10 rounded-xl ${col.color} border flex items-center justify-center font-black text-xs shrink-0`}>
                                   {col.code}
                                 </div>
                                 <div>
-                                  <p className="text-xs sm:text-sm font-bold text-white leading-tight">
-                                    {col.college} • <span className="text-cyan-300 font-semibold">{col.branch}</span>
+                                  <p className={`text-xs sm:text-sm font-bold ${isMobileScreen ? 'text-slate-900' : 'text-white'} leading-tight`}>
+                                    {col.college} • <span className={isMobileScreen ? 'text-blue-600 font-semibold' : 'text-cyan-300 font-semibold'}>{col.branch}</span>
                                   </p>
-                                  <p className="text-[11px] text-slate-300 mt-0.5">
-                                    Closing Rank: <strong className="text-white">#{col.closing.toLocaleString()}</strong>
+                                  <p className={`text-[11px] ${isMobileScreen ? 'text-slate-500' : 'text-slate-300'} mt-0.5`}>
+                                    Closing Rank: <strong className={isMobileScreen ? 'text-slate-900' : 'text-white'}>#{col.closing.toLocaleString()}</strong>
                                   </p>
                                 </div>
                               </div>
 
                               <div className="text-right shrink-0">
                                 {isLikely ? (
-                                  <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 font-bold text-xs inline-flex items-center gap-1">
+                                  <span className={`px-2.5 py-1 rounded-lg ${
+                                    isMobileScreen ? 'bg-emerald-50 border border-emerald-200 text-emerald-700' : 'bg-emerald-500/20 border border-emerald-400/30 text-emerald-300'
+                                  } font-bold text-xs inline-flex items-center gap-1`}>
                                     <span>High Chance</span> <span>✓</span>
                                   </span>
                                 ) : isModerate ? (
-                                  <span className="px-2.5 py-1 rounded-lg bg-amber-500/20 border border-amber-400/30 text-amber-300 font-bold text-xs inline-flex items-center gap-1">
+                                  <span className={`px-2.5 py-1 rounded-lg ${
+                                    isMobileScreen ? 'bg-amber-50 border border-amber-200 text-amber-700' : 'bg-amber-500/20 border border-amber-400/30 text-amber-300'
+                                  } font-bold text-xs inline-flex items-center gap-1`}>
                                     <span>Round 2 / Mop-Up</span> <span>⚠️</span>
                                   </span>
                                 ) : (
-                                  <span className="px-2.5 py-1 rounded-lg bg-slate-800/80 border border-white/10 text-slate-400 font-bold text-xs inline-flex items-center gap-1">
+                                  <span className={`px-2.5 py-1 rounded-lg ${
+                                    isMobileScreen ? 'bg-slate-100 border border-slate-200 text-slate-500' : 'bg-slate-800/80 border border-white/10 text-slate-400'
+                                  } font-bold text-xs inline-flex items-center gap-1`}>
                                     <span>Cutoff Exceeded</span> <span>✕</span>
                                   </span>
                                 )}
@@ -498,18 +589,24 @@ export default function Home() {
                     </div>
 
                     {/* Right: Predictor Callout Box */}
-                    <div className="lg:col-span-5 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-blue-600/20 to-cyan-600/15 border border-cyan-400/30 flex flex-col justify-between space-y-6">
+                    <div className={`lg:col-span-5 p-5 sm:p-6 rounded-2xl ${
+                      isMobileScreen 
+                        ? 'bg-blue-50/80 border border-blue-200/80 text-slate-900 shadow-sm' 
+                        : 'bg-gradient-to-br from-blue-600/20 to-cyan-600/15 border border-cyan-400/30 text-white'
+                    } flex flex-col justify-between space-y-6`}>
                       <div>
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-bold mb-3">
+                        <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full ${
+                          isMobileScreen ? 'bg-blue-100 text-blue-700 border border-blue-200' : 'bg-cyan-500/20 border border-cyan-400/30 text-cyan-300'
+                        } text-xs font-bold mb-3`}>
                           <Target size={13} /> Official BCECEB Multi-Year Cutoffs
                         </div>
-                        <h3 className="font-heading text-lg sm:text-xl font-bold text-white mb-2">
+                        <h3 className={`font-heading text-lg sm:text-xl font-bold ${isMobileScreen ? 'text-slate-900' : 'text-white'} mb-2`}>
                           All 38 Bihar Govt Engineering Colleges
                         </h3>
-                        <p className="text-xs text-slate-200 leading-relaxed font-medium mb-4">
+                        <p className={`text-xs ${isMobileScreen ? 'text-slate-600' : 'text-slate-200'} leading-relaxed font-medium mb-4`}>
                           Explore category quota predictions (General UR, BC, EBC, SC, ST, EWS &amp; RCG) across every campus — MIT Muzaffarpur, BCE Bhagalpur, Bakhtiyarpur, Gaya, Darbhanga, and 33 more.
                         </p>
-                        <div className="bg-black/20 p-3 rounded-xl border border-white/10 text-xs text-slate-300 space-y-1">
+                        <div className={`${isMobileScreen ? 'bg-white border-slate-200 text-slate-600' : 'bg-black/20 border-white/10 text-slate-300'} p-3 rounded-xl border text-xs space-y-1`}>
                           <p>• <strong>Authentic Data:</strong> Direct from BCECEB allotment seat charts.</p>
                           <p>• <strong>Category Quota:</strong> Includes 33% girls horizontal reservation.</p>
                         </div>
@@ -532,12 +629,16 @@ export default function Home() {
               {activeConsoleTab === 'colleges' && (
                 <div className="pt-6 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs text-slate-200 font-medium">
+                    <span className={`text-xs ${isMobileScreen ? 'text-slate-600' : 'text-slate-200'} font-medium`}>
                       Explore campus profiles, branch seat intake, and previous years UGEAC cutoffs across Bihar.
                     </span>
                     <Link
                       to="/colleges"
-                      className="btn-secondary gap-1.5 bg-white/15 text-white border-white/20 hover:bg-white/25 text-xs py-1.5 px-3 shrink-0"
+                      className={`btn-secondary gap-1.5 ${
+                        isMobileScreen 
+                          ? 'bg-white text-slate-800 border-slate-200' 
+                          : 'bg-white/15 text-white border-white/20 hover:bg-white/25'
+                      } text-xs py-1.5 px-3 shrink-0`}
                     >
                       <span>Browse All 38+ Colleges</span>
                       <ArrowRight size={13} />
@@ -549,26 +650,36 @@ export default function Home() {
                       <Link
                         key={idx}
                         to={`/college/${col.slug}`}
-                        className="p-5 rounded-2xl group transition-all flex flex-col justify-between bg-slate-900/85 hover:bg-slate-900/95 backdrop-blur-md border border-white/15 hover:border-cyan-400/60 shadow-xl text-white hover:-translate-y-0.5 active:scale-[0.98]"
+                        className={`p-5 rounded-2xl group transition-all flex flex-col justify-between ${
+                          isMobileScreen
+                            ? 'bg-white hover:bg-slate-50 border border-slate-200 shadow-sm text-slate-900'
+                            : 'bg-slate-900/60 hover:bg-slate-900/80 backdrop-blur-md border border-white/15 hover:border-cyan-400/60 shadow-xl text-white'
+                        } hover:-translate-y-0.5 active:scale-[0.98]`}
                       >
                         <div>
                           <div className="flex items-center justify-between mb-2">
-                            <span className="px-2 py-0.5 rounded-md bg-cyan-500/15 border border-cyan-400/25 text-cyan-300 font-heading font-black text-xs">
+                            <span className={`px-2 py-0.5 rounded-md ${
+                              isMobileScreen ? 'bg-blue-50 border border-blue-200 text-blue-700' : 'bg-cyan-500/15 border border-cyan-400/25 text-cyan-300'
+                            } font-heading font-black text-xs`}>
                               {col.code}
                             </span>
-                            <span className="text-xs text-slate-300 font-medium">Estd. {col.estd}</span>
+                            <span className={`text-xs ${isMobileScreen ? 'text-slate-400' : 'text-slate-300'} font-medium`}>Estd. {col.estd}</span>
                           </div>
 
-                          <h3 className="font-heading text-sm sm:text-base font-bold text-white group-hover:text-cyan-300 transition-colors drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+                          <h3 className={`font-heading text-sm sm:text-base font-bold ${
+                            isMobileScreen ? 'text-slate-900 group-hover:text-blue-600' : 'text-white group-hover:text-cyan-300'
+                          } transition-colors`}>
                             {col.name}
                           </h3>
 
-                          <p className="text-xs text-slate-200 mt-1 flex items-center gap-1 font-medium drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
-                            <MapPin size={13} className="text-cyan-400" /> {col.location}, Bihar
+                          <p className={`text-xs ${isMobileScreen ? 'text-slate-500' : 'text-slate-200'} mt-1 flex items-center gap-1 font-medium`}>
+                            <MapPin size={13} className={isMobileScreen ? 'text-blue-600' : 'text-cyan-400'} /> {col.location}, Bihar
                           </p>
                         </div>
 
-                        <div className="mt-4 pt-2 border-t border-white/10 flex items-center justify-between text-xs font-bold text-slate-200 group-hover:text-cyan-300">
+                        <div className={`mt-4 pt-2 border-t ${
+                          isMobileScreen ? 'border-slate-100 text-slate-600 group-hover:text-blue-600' : 'border-white/10 text-slate-200 group-hover:text-cyan-300'
+                        } flex items-center justify-between text-xs font-bold`}>
                           <span>View Cutoff &amp; Campus Info</span>
                           <ArrowRight size={13} className="group-hover:translate-x-1.5 transition-transform" />
                         </div>
@@ -582,12 +693,16 @@ export default function Home() {
               {activeConsoleTab === 'radar' && (
                 <div className="pt-6 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs text-slate-200 font-medium">
+                    <span className={`text-xs ${isMobileScreen ? 'text-slate-600' : 'text-slate-200'} font-medium`}>
                       Official university notifications auto-synced from Bihar Engineering University portal (beu-bih.ac.in).
                     </span>
                     <Link
                       to="/notifications"
-                      className="btn-secondary gap-1.5 bg-white/15 text-white border-white/20 hover:bg-white/25 text-xs py-1.5 px-3 shrink-0"
+                      className={`btn-secondary gap-1.5 ${
+                        isMobileScreen 
+                          ? 'bg-white text-slate-800 border-slate-200' 
+                          : 'bg-white/15 text-white border-white/20 hover:bg-white/25'
+                      } text-xs py-1.5 px-3 shrink-0`}
                     >
                       <span>Full Notice Archive</span>
                       <ArrowRight size={13} />
@@ -602,32 +717,40 @@ export default function Home() {
                           href={notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`)}
                           target="_blank"
                           rel="noreferrer"
-                          className="p-5 rounded-2xl flex flex-col justify-between group bg-slate-900/85 hover:bg-slate-900/95 backdrop-blur-md border border-white/15 hover:border-cyan-400/60 shadow-xl text-white transition-all hover:-translate-y-0.5 active:scale-[0.98]"
+                          className={`p-5 rounded-2xl flex flex-col justify-between group ${
+                            isMobileScreen
+                              ? 'bg-white hover:bg-slate-50 border border-slate-200 shadow-sm text-slate-900'
+                              : 'bg-slate-900/60 hover:bg-slate-900/80 backdrop-blur-md border border-white/15 hover:border-cyan-400/60 shadow-xl text-white'
+                          } transition-all hover:-translate-y-0.5 active:scale-[0.98]`}
                         >
                           <div>
                             <div className="flex items-center justify-between gap-2 mb-2">
                               <span className="px-2 py-0.5 rounded-md bg-emerald-500 text-slate-950 text-[10px] font-bold tracking-wide animate-pulse">
                                 CIRCULAR
                               </span>
-                              <span className="text-[11px] text-slate-300 font-semibold flex items-center gap-1">
-                                <Calendar size={12} className="text-slate-300" />
+                              <span className={`text-[11px] ${isMobileScreen ? 'text-slate-400' : 'text-slate-300'} font-semibold flex items-center gap-1`}>
+                                <Calendar size={12} className={isMobileScreen ? 'text-slate-400' : 'text-slate-300'} />
                                 {notice.date || notice.noticedate || 'Recent'}
                               </span>
                             </div>
 
-                            <h3 className="font-heading text-xs sm:text-sm font-bold text-white group-hover:text-cyan-300 transition-colors line-clamp-3 leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
+                            <h3 className={`font-heading text-xs sm:text-sm font-bold ${
+                              isMobileScreen ? 'text-slate-900 group-hover:text-blue-600' : 'text-white group-hover:text-cyan-300'
+                            } transition-colors line-clamp-3 leading-snug`}>
                               {notice.title || notice.board}
                             </h3>
                           </div>
 
-                          <div className="mt-4 pt-2 border-t border-white/10 flex items-center justify-between text-xs text-cyan-400 font-bold">
+                          <div className={`mt-4 pt-2 border-t ${
+                            isMobileScreen ? 'border-slate-100 text-blue-600' : 'border-white/10 text-cyan-400'
+                          } flex items-center justify-between text-xs font-bold`}>
                             <span>View Official PDF</span>
                             <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                           </div>
                         </a>
                       ))
                     ) : (
-                      <div className="col-span-full p-8 rounded-xl text-center text-slate-300 text-xs border border-white/10">
+                      <div className={`col-span-full p-8 rounded-xl text-center ${isMobileScreen ? 'bg-white border-slate-200 text-slate-500' : 'border-white/10 text-slate-300'} text-xs border`}>
                         Fetching latest BEU notices...
                       </div>
                     )}
@@ -640,18 +763,20 @@ export default function Home() {
                 <div className="pt-6 animate-in fade-in duration-200">
                   <div className="space-y-3">
                     {faqs.map((faq, i) => (
-                      <div key={i} className="rounded-2xl overflow-hidden bg-slate-900/85 backdrop-blur-md border border-white/15 text-white transition-all shadow-md">
+                      <div key={i} className={`rounded-2xl overflow-hidden ${
+                        isMobileScreen ? 'bg-white border border-slate-200 shadow-sm text-slate-900' : 'bg-slate-900/60 backdrop-blur-md border border-white/15 text-white shadow-md'
+                      } transition-all`}>
                         <button
                           onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
                           className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
                         >
-                          <h3 className="text-xs sm:text-sm font-bold text-white pr-4 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">{faq.q}</h3>
-                          <div className="shrink-0 text-cyan-400">
+                          <h3 className={`text-xs sm:text-sm font-bold ${isMobileScreen ? 'text-slate-900' : 'text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]'} pr-4`}>{faq.q}</h3>
+                          <div className={`shrink-0 ${isMobileScreen ? 'text-blue-600' : 'text-cyan-400'}`}>
                             {openFaqIndex === i ? <Minus size={16} /> : <Plus size={16} />}
                           </div>
                         </button>
                         {openFaqIndex === i && (
-                          <div className="px-4 pb-4 text-slate-200 text-xs leading-relaxed font-medium border-t border-white/10 pt-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
+                          <div className={`px-4 pb-4 ${isMobileScreen ? 'text-slate-600 border-slate-100' : 'text-slate-200 border-white/10 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]'} text-xs leading-relaxed font-medium border-t pt-3`}>
                             {faq.a}
                           </div>
                         )}
@@ -668,28 +793,30 @@ export default function Home() {
         {/* ═══════════════════════════════════════════ */}
         {/* ── 4. WALL OF FAME (TOP DONORS) ── */}
         {/* ═══════════════════════════════════════════ */}
-        <section className="py-8 sm:py-12 px-4 sm:px-6 md:px-12 relative z-10 border-t border-white/10">
-          <div className="container mx-auto max-w-5xl text-center text-white">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 text-xs font-bold mb-3 shadow-xs">
-              <Heart size={14} className="fill-cyan-400 text-cyan-400" /> Student Powered
+        <section className={`py-8 sm:py-12 px-4 sm:px-6 md:px-12 relative z-10 border-t ${isMobileScreen ? 'border-slate-200 text-slate-900' : 'border-white/10 text-white'}`}>
+          <div className="container mx-auto max-w-5xl text-center">
+            <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full ${
+              isMobileScreen ? 'bg-blue-50 border border-blue-200 text-blue-700' : 'bg-blue-500/20 border border-blue-400/30 text-cyan-300'
+            } text-xs font-bold mb-3 shadow-xs`}>
+              <Heart size={14} className={isMobileScreen ? 'fill-blue-600 text-blue-600' : 'fill-cyan-400 text-cyan-400'} /> Student Powered
             </div>
             
-            <h2 className="font-heading text-xl sm:text-2xl font-black text-white drop-shadow-md">
+            <h2 className={`font-heading text-xl sm:text-2xl font-black ${isMobileScreen ? 'text-slate-900' : 'text-white drop-shadow-md'}`}>
               Platform Wall of Fame
             </h2>
-            <p className="text-xs text-slate-200 max-w-xl mx-auto mt-2 mb-6 font-medium">
+            <p className={`text-xs ${isMobileScreen ? 'text-slate-600' : 'text-slate-200'} max-w-xl mx-auto mt-2 mb-6 font-medium`}>
               Apna College Bihar is 100% free with zero paywalls. Heartfelt thanks to students who contribute to keeping our servers running!
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mb-6">
               {topDonors.map((donor, idx) => (
-                <div key={idx} className="bg-slate-900/85 backdrop-blur-md border border-white/15 p-3.5 rounded-2xl text-center shadow-lg">
-                  <div className="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 font-bold text-sm mx-auto flex items-center justify-center mb-1.5 shadow-xs">
+                <div key={idx} className={`${isMobileScreen ? 'bg-white border-slate-200 shadow-sm text-slate-900' : 'bg-slate-900/60 backdrop-blur-md border-white/15 text-white shadow-lg'} border p-3.5 rounded-2xl text-center`}>
+                  <div className={`w-10 h-10 rounded-full ${isMobileScreen ? 'bg-blue-50 border-blue-100 text-blue-600' : 'bg-blue-500/20 border-blue-400/30 text-cyan-300'} font-bold text-sm mx-auto flex items-center justify-center mb-1.5 shadow-xs`}>
                     {donor.name?.charAt(0) || 'S'}
                   </div>
-                  <h3 className="text-xs font-bold text-white truncate">{donor.name}</h3>
-                  <p className="text-[11px] text-slate-300 truncate">{donor.college || 'Bihar GEC'}</p>
-                  <p className="text-xs font-heading font-black text-emerald-400 mt-0.5">₹{donor.amount}</p>
+                  <h3 className={`text-xs font-bold ${isMobileScreen ? 'text-slate-900' : 'text-white'} truncate`}>{donor.name}</h3>
+                  <p className={`text-[11px] ${isMobileScreen ? 'text-slate-500' : 'text-slate-300'} truncate`}>{donor.college || 'Bihar GEC'}</p>
+                  <p className="text-xs font-heading font-black text-emerald-500 mt-0.5">₹{donor.amount}</p>
                 </div>
               ))}
             </div>

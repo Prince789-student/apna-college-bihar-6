@@ -106,7 +106,7 @@ export default function CompareColleges() {
         {col1 && col2 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* College 1 Card */}
-            <div className="p-6 sm:p-8 bg-white md:bg-slate-900/85 md:backdrop-blur-md border border-slate-200/90 md:border-white/15 rounded-3xl shadow-sm md:shadow-xl hover:shadow-md transition-shadow space-y-6 md:text-white">
+            <div className="p-6 sm:p-8 bg-white md:bg-slate-900/60 md:backdrop-blur-md border border-slate-200/90 md:border-white/15 rounded-3xl shadow-sm md:shadow-xl hover:shadow-md transition-shadow space-y-6 md:text-white">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <span className="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200/80 text-[10px] font-heading font-black uppercase tracking-wider block w-fit mb-2">
@@ -169,7 +169,7 @@ export default function CompareColleges() {
             </div>
 
             {/* College 2 Card */}
-            <div className="p-6 sm:p-8 bg-white md:bg-slate-900/85 md:backdrop-blur-md border border-slate-200/90 md:border-white/15 rounded-3xl shadow-sm md:shadow-xl hover:shadow-md transition-shadow space-y-6 md:text-white">
+            <div className="p-6 sm:p-8 bg-white md:bg-slate-900/60 md:backdrop-blur-md border border-slate-200/90 md:border-white/15 rounded-3xl shadow-sm md:shadow-xl hover:shadow-md transition-shadow space-y-6 md:text-white">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <span className="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200/80 text-[10px] font-heading font-black uppercase tracking-wider block w-fit mb-2">
@@ -235,42 +235,42 @@ export default function CompareColleges() {
 
         {/* Head-to-Head Comparison Matrix */}
         {col1 && col2 && (
-          <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-8 shadow-sm">
-            <h3 className="font-heading text-lg font-black text-slate-900 uppercase tracking-tight mb-4 flex items-center gap-2">
-              <Scale size={20} className="text-blue-600" /> Comparison Matrix
+          <div className="bg-white md:bg-slate-900/60 md:backdrop-blur-md border border-slate-200/90 md:border-white/15 rounded-3xl p-6 sm:p-8 shadow-sm md:shadow-xl md:text-white">
+            <h3 className="font-heading text-lg font-black text-slate-900 md:text-white uppercase tracking-tight mb-4 flex items-center gap-2">
+              <Scale size={20} className="text-blue-600 md:text-cyan-400" /> Comparison Matrix
             </h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200 text-slate-400 font-heading font-black uppercase tracking-wider">
+                  <tr className="border-b border-slate-200 md:border-white/10 text-slate-400 md:text-slate-300 font-heading font-black uppercase tracking-wider">
                     <th className="pb-3 w-1/3">Feature</th>
-                    <th className="pb-3 w-1/3 text-blue-700">{col1.name}</th>
-                    <th className="pb-3 w-1/3 text-indigo-700">{col2.name}</th>
+                    <th className="pb-3 w-1/3 text-blue-700 md:text-cyan-300 font-extrabold">{col1.name}</th>
+                    <th className="pb-3 w-1/3 text-indigo-700 md:text-teal-300 font-extrabold">{col2.name}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+                <tbody className="divide-y divide-slate-100 md:divide-white/10 font-medium text-slate-700 md:text-slate-200">
                   <tr>
-                    <td className="py-3 font-bold text-slate-900">District</td>
+                    <td className="py-3 font-bold text-slate-900 md:text-white">District</td>
                     <td className="py-3">{col1.location}</td>
                     <td className="py-3">{col2.location}</td>
                   </tr>
                   <tr>
-                    <td className="py-3 font-bold text-slate-900">Tier Category</td>
-                    <td className="py-3"><span className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-bold">Tier {col1.tier}</span></td>
-                    <td className="py-3"><span className="px-2 py-0.5 rounded bg-indigo-50 text-indigo-700 font-bold">Tier {col2.tier}</span></td>
+                    <td className="py-3 font-bold text-slate-900 md:text-white">Tier Category</td>
+                    <td className="py-3"><span className="px-2 py-0.5 rounded bg-blue-50 md:bg-blue-500/20 text-blue-700 md:text-cyan-300 font-bold border border-transparent md:border-blue-400/30">Tier {col1.tier}</span></td>
+                    <td className="py-3"><span className="px-2 py-0.5 rounded bg-indigo-50 md:bg-teal-500/20 text-indigo-700 md:text-teal-300 font-bold border border-transparent md:border-teal-400/30">Tier {col2.tier}</span></td>
                   </tr>
                   <tr>
-                    <td className="py-3 font-bold text-slate-900">Established</td>
+                    <td className="py-3 font-bold text-slate-900 md:text-white">Established</td>
                     <td className="py-3">{col1.estd || 'State Govt'}</td>
                     <td className="py-3">{col2.estd || 'State Govt'}</td>
                   </tr>
                   <tr>
-                    <td className="py-3 font-bold text-slate-900">Governing Body</td>
+                    <td className="py-3 font-bold text-slate-900 md:text-white">Governing Body</td>
                     <td className="py-3">DST Bihar / BEU Patna</td>
                     <td className="py-3">DST Bihar / BEU Patna</td>
                   </tr>
                   <tr>
-                    <td className="py-3 font-bold text-slate-900">Counselling Gateway</td>
+                    <td className="py-3 font-bold text-slate-900 md:text-white">Counselling Gateway</td>
                     <td className="py-3">UGEAC (BCECEB) via JEE Main</td>
                     <td className="py-3">UGEAC (BCECEB) via JEE Main</td>
                   </tr>
@@ -281,21 +281,21 @@ export default function CompareColleges() {
         )}
 
         {/* Prediction CTA Box */}
-        <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 p-8 md:p-10 rounded-3xl text-center space-y-4 shadow-md shadow-blue-500/20 text-white relative overflow-hidden">
+        <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 md:from-slate-900/70 md:via-slate-900/60 md:to-slate-900/70 md:backdrop-blur-md md:border md:border-cyan-400/30 p-8 md:p-10 rounded-3xl text-center space-y-4 shadow-md md:shadow-xl text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-60 h-60 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-          <span className="px-3 py-1 rounded-full bg-white/20 text-white text-[10px] font-heading font-black uppercase tracking-wider inline-block">
+          <span className="px-3 py-1 rounded-full bg-white/20 md:bg-cyan-500/20 text-white md:text-cyan-300 border border-transparent md:border-cyan-400/30 text-[10px] font-heading font-black uppercase tracking-wider inline-block">
             UGEAC 2026 Engine
           </span>
           <h3 className="font-heading text-2xl md:text-3xl font-black uppercase tracking-tight">
             Evaluate Your Allotment Probability
           </h3>
-          <p className="text-xs md:text-sm text-blue-100 max-w-xl mx-auto font-medium leading-relaxed">
+          <p className="text-xs md:text-sm text-blue-100 md:text-slate-300 max-w-xl mx-auto font-medium leading-relaxed">
             Use the official Apna College Bihar predictor engine to check your genuine admission probability at {col1?.short} vs {col2?.short} based on authentic past closing ranks.
           </p>
           <div className="pt-2">
             <Link 
               to="/ugeac-predictor?tab=finder" 
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-blue-700 rounded-xl font-heading text-xs font-black uppercase tracking-widest transition-all hover:bg-blue-50 shadow-md active:scale-95"
+              className="inline-flex items-center gap-2 px-8 py-3.5 bg-white text-blue-700 md:bg-cyan-400 md:text-slate-950 rounded-xl font-heading text-xs font-black uppercase tracking-widest transition-all hover:bg-blue-50 md:hover:bg-cyan-300 shadow-md active:scale-95"
             >
               Launch Predictor Engine <ArrowRight size={14} />
             </Link>

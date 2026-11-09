@@ -539,6 +539,59 @@
   .animate-eq-4 { animation: eq-bounce-4 0.9s ease-in-out infinite 0.2s; }
   .animate-eq-5 { animation: eq-bounce-5 1.2s ease-in-out infinite 0.4s; }
   .animate-eq-6 { animation: eq-bounce-6 0.95s ease-in-out infinite 0.1s; }
+
+  /* ── Desktop Full-Page Brand Film Glass Enhancements (Zero Solid Blocks) ── */
+  @media (min-width: 768px) {
+    .glass-card-light {
+      background-color: rgba(15, 23, 42, 0.58) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+      color: #ffffff !important;
+    }
+
+    /* All containers, cards, and panels inside main view become frosted glass */
+    #main-scroll-container .bg-white:not(button):not(input):not(select):not(textarea):not(img):not(svg):not(.keep-solid-white),
+    #main-scroll-container .bg-slate-50:not(button):not(input):not(select):not(textarea):not(.keep-solid-white),
+    #main-scroll-container .bg-slate-100:not(button):not(input):not(select):not(textarea):not(.keep-solid-white),
+    #main-scroll-container .glass-panel {
+      background-color: rgba(15, 23, 42, 0.58) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+    }
+
+    /* Translucent dark panels so video shines through (no solid black/opaque slate blocks) */
+    #main-scroll-container .bg-slate-900:not(button):not(input):not(select):not(textarea):not(.keep-solid-white),
+    #main-scroll-container .bg-slate-950:not(button):not(input):not(select):not(textarea):not(.keep-solid-white) {
+      background-color: rgba(15, 23, 42, 0.58) !important;
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+    }
+
+    /* Text contrast: Ensure headings and body are bright, crisp white/slate on frosted glass */
+    #main-scroll-container .text-slate-900:not(button):not(input):not(select):not(textarea),
+    #main-scroll-container .text-slate-800:not(button):not(input):not(select):not(textarea),
+    #main-scroll-container .text-slate-700:not(button):not(input):not(select):not(textarea),
+    #main-scroll-container .text-black:not(button):not(input):not(select):not(textarea) {
+      color: #ffffff !important;
+    }
+
+    #main-scroll-container .text-slate-600:not(button):not(input):not(select):not(textarea),
+    #main-scroll-container .text-slate-500:not(button):not(input):not(select):not(textarea) {
+      color: #cbd5e1 !important;
+    }
+
+    #main-scroll-container .text-slate-400:not(button):not(input):not(select):not(textarea) {
+      color: #94a3b8 !important;
+    }
+
+    #main-scroll-container .border-slate-100,
+    #main-scroll-container .border-slate-200,
+    #main-scroll-container .border-slate-300 {
+      border-color: rgba(255, 255, 255, 0.12) !important;
+    }
+  }
 }
 
 
