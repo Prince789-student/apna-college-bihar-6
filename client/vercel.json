@@ -469,6 +469,14 @@
   ],
   "rewrites": [
     {
+      "source": "/film",
+      "destination": "/film/index.html"
+    },
+    {
+      "source": "/experience",
+      "destination": "/film/index.html"
+    },
+    {
       "source": "/api/:path*",
       "destination": "https://apna-college-bihar-6.onrender.com/api/:path*"
     },
