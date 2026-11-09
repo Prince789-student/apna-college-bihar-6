@@ -26,6 +26,7 @@
     "cheerio": "^1.2.0",
     "cordova-plugin-inappbrowser": "^6.0.1",
     "firebase": "^12.11.0",
+    "gsap": "^3.15.1",
     "jimp": "^0.16.13",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.7",

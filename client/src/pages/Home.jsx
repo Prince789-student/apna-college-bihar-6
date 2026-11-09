@@ -18,7 +18,7 @@ import GlobalSearch from '../components/GlobalSearch';
 import CountUp from '../components/CountUp';
 import Reveal from '../components/Reveal';
 import HomeEducationalGuide from '../components/HomeEducationalGuide';
-import InteractiveCanvasHero from '../components/InteractiveCanvasHero';
+import BrandFilmHero from '../components/BrandFilmHero';
 import InteractiveCanvasBackground from '../components/InteractiveCanvasBackground';
 import { collegeData } from '../data/collegeData';
 import { blogPosts } from '../data/blogPosts';
@@ -249,7 +249,7 @@ export default function Home() {
       {/* ═══════════════════════════════════════════ */}
       {/* ── 1. FULLY ANIMATED CANVAS-UI HERO STAGE ── */}
       {/* ═══════════════════════════════════════════ */}
-      <InteractiveCanvasHero isNative={isNative} />
+      <BrandFilmHero isNative={isNative} />
 
       {/* ═══════════════════════════════════════════ */}
       {/* ═══════════════════════════════════════════ */}
