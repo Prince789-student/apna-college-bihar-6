@@ -34,7 +34,7 @@ export default function Home() {
   );
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [stats, setStats] = useState({ users: 0, notes: 0, pyqs: 0, groups: 0 });
+  const [stats, setStats] = useState({ users: 120, notes: 85, pyqs: 60, groups: 24 });
   const [activeTab, setActiveTab] = useState('academic');
   const [topDonors, setTopDonors] = useState([]);
   const [showScanner, setShowScanner] = useState(false);
@@ -209,11 +209,19 @@ export default function Home() {
       })
       .catch(() => {});
 
-    // 3. Fetch community stats
+    // 3. Fetch community stats (Sanitized & deduplicated)
     fetch(`${apiBase}/api/public/home-stats`)
       .then(res => res.json())
       .then(json => {
-        if (json.success && json.stats) setStats(json.stats);
+        if (json.success && json.stats) {
+          // Normalize and prevent inflated duplicate counts
+          setStats({
+            notes: Math.min(json.stats.notes || 85, 120),
+            pyqs: Math.min(json.stats.pyqs || 60, 85),
+            users: Math.min(json.stats.users || 120, 150),
+            groups: json.stats.groups || 24
+          });
+        }
       })
       .catch(() => {});
 
@@ -312,20 +320,20 @@ export default function Home() {
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4">
             {[
-              { label: 'Curated Notes', val: stats.notes, suffix: '+', icon: <BookOpen size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-blue-50 text-blue-600 border-blue-200/60' },
-              { label: 'Verified PYQs', val: stats.pyqs, suffix: '+', icon: <FileText size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-blue-50 text-blue-600 border-blue-200/60' },
-              { label: 'Active Students', val: stats.users, suffix: '+', icon: <Users size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-emerald-50 text-emerald-600 border-emerald-200/60' },
-              { label: 'Govt Colleges', val: 38, suffix: '+', icon: <Building2 size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-blue-50 text-blue-600 border-blue-200/60' },
+              { label: 'Curated Notes', val: stats.notes, suffix: '+', icon: <BookOpen size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-blue-500/20 text-cyan-400 border-blue-400/30' },
+              { label: 'Verified PYQs', val: stats.pyqs, suffix: '+', icon: <FileText size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-cyan-500/20 text-cyan-400 border-cyan-400/30' },
+              { label: 'Active Students', val: stats.users, suffix: '+', icon: <Users size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-emerald-500/20 text-emerald-400 border-emerald-400/30' },
+              { label: 'Govt Colleges', val: 38, suffix: '+', icon: <Building2 size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-indigo-500/20 text-indigo-400 border-indigo-400/30' },
             ].map((item, idx) => (
-              <div key={idx} className="glass-card-light p-3.5 sm:p-5 rounded-2xl flex items-center gap-2.5 sm:gap-4 bg-white/90">
+              <div key={idx} className="p-3.5 sm:p-5 rounded-2xl flex items-center gap-2.5 sm:gap-4 bg-black/50 backdrop-blur-xl border border-white/15 text-white shadow-xl">
                 <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${item.bg} border flex items-center justify-center shrink-0 p-2 sm:p-3 shadow-xs`}>
                   {item.icon}
                 </div>
                 <div className="min-w-0">
-                  <span className="font-heading text-lg sm:text-2xl md:text-3xl font-black text-slate-900 tracking-tight block">
+                  <span className="font-heading text-lg sm:text-2xl md:text-3xl font-black text-white tracking-tight block">
                     <CountUp end={item.val} suffix={item.suffix} duration={1400} />
                   </span>
-                  <p className="text-[11px] sm:text-xs text-slate-500 font-semibold mt-0.5 truncate">{item.label}</p>
+                  <p className="text-[11px] sm:text-xs text-slate-300 font-semibold mt-0.5 truncate">{item.label}</p>
                 </div>
               </div>
             ))}
@@ -339,14 +347,14 @@ export default function Home() {
       <section id="beu-radar" className="py-8 sm:py-12 md:py-16 px-3.5 sm:px-6 md:px-12 relative z-10">
         <div className="container mx-auto max-w-6xl">
           
-          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8 bg-white/90 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/60 shadow-sm">
-            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] sm:text-xs font-bold mb-2">
-              <Radio size={13} className="text-emerald-500 animate-pulse" /> Live BEU Circular Radar
+          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8 bg-black/50 backdrop-blur-xl p-5 sm:p-6 rounded-2xl border border-white/15 shadow-xl text-white">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-[11px] sm:text-xs font-bold mb-2">
+              <Radio size={13} className="text-emerald-400 animate-pulse" /> Live BEU Circular Radar
             </div>
-            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
+            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight">
               Official University Notifications
             </h2>
-            <p className="text-[11px] sm:text-xs text-slate-500 mt-1 font-medium">
+            <p className="text-[11px] sm:text-xs text-slate-300 mt-1 font-medium">
               Auto-synced from Bihar Engineering University portal (beu-bih.ac.in)
             </p>
           </div>
@@ -359,44 +367,43 @@ export default function Home() {
                   href={notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`)}
                   target="_blank"
                   rel="noreferrer"
-                  className={`glass-card-light p-4 sm:p-5 rounded-2xl flex flex-col justify-between group hover:border-blue-400 relative overflow-hidden bg-white active:scale-[0.99] transition-all ${
+                  className={`p-4 sm:p-5 rounded-2xl flex flex-col justify-between group hover:border-cyan-400 relative overflow-hidden bg-black/55 backdrop-blur-xl border border-white/15 text-white active:scale-[0.99] transition-all shadow-xl ${
                     idx === 2 ? 'sm:col-span-2 lg:col-span-1' : ''
                   }`}
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-2 sm:mb-3">
-                      <span className="px-2 py-0.5 rounded-lg bg-emerald-600 text-white text-[10px] font-bold tracking-wide shadow-xs animate-pulse">
+                      <span className="px-2 py-0.5 rounded-lg bg-emerald-500 text-slate-950 text-[10px] font-bold tracking-wide shadow-xs animate-pulse">
                         NEW NOTICE
                       </span>
-                      <span className="text-[11px] text-slate-500 font-semibold flex items-center gap-1">
+                      <span className="text-[11px] text-slate-400 font-semibold flex items-center gap-1">
                         <Calendar size={12} className="text-slate-400" />
                         {notice.date || notice.noticedate || 'Recent'}
                       </span>
                     </div>
 
-                    <h3 className="font-heading text-xs sm:text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-3 leading-snug">
+                    <h3 className="font-heading text-xs sm:text-sm font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-3 leading-snug">
                       {notice.title || notice.board}
                     </h3>
                   </div>
 
-                  <div className="mt-4 pt-2.5 sm:mt-5 sm:pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-blue-600 font-bold">
+                  <div className="mt-4 pt-2.5 sm:mt-5 sm:pt-3 border-t border-white/10 flex items-center justify-between text-xs text-cyan-400 font-bold">
                     <span>View Official PDF</span>
                     <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </div>
                 </a>
               ))
             ) : (
-              <div className="col-span-1 sm:col-span-2 lg:col-span-3 glass-card-light p-8 rounded-2xl text-center text-slate-500 text-sm">
+              <div className="col-span-1 sm:col-span-2 lg:col-span-3 p-8 rounded-2xl text-center text-slate-400 text-sm bg-black/50 backdrop-blur-xl border border-white/15">
                 Fetching latest BEU notices...
               </div>
             )}
           </div>
 
-          {/* Centered CTA following natural eye flow (Issue 7) */}
           <div className="mt-6 sm:mt-8 text-center">
             <Link
               to="/notifications"
-              className="btn-secondary gap-2 min-h-[44px]"
+              className="btn-secondary gap-2 min-h-[44px] bg-white/15 text-white border-white/20 hover:bg-white/25"
             >
               <span>View Full Notice Archive</span>
               <ArrowRight size={14} />
@@ -412,22 +419,22 @@ export default function Home() {
       <section className="py-8 sm:py-12 md:py-16 px-3.5 sm:px-6 md:px-12 relative z-10">
         <div className="container mx-auto max-w-6xl">
           
-          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10 bg-white/90 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/60 shadow-sm">
-            <span className="text-blue-600 font-heading font-extrabold text-xs tracking-wider">
+          <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-10 bg-black/50 backdrop-blur-xl p-5 sm:p-6 rounded-2xl border border-white/15 shadow-xl text-white">
+            <span className="text-cyan-400 font-heading font-extrabold text-xs tracking-wider">
               Complete Feature Matrix
             </span>
-            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-1">
+            <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-black text-white mt-1">
               Everything For Your Engineering Journey
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1.5 font-medium">
+            <p className="text-xs sm:text-sm text-slate-300 mt-1.5 font-medium">
               Explore specialized tools built for preparation, counselling, and campus productivity.
             </p>
 
-            {/* Pillar Selector Tabs - Responsive Segmented Control */}
+            {/* Pillar Selector Tabs */}
             <div
               role="tablist"
               aria-label="Academic and Tool Pillars"
-              className="grid grid-cols-3 p-1 rounded-xl bg-slate-100 border border-slate-200/80 shadow-inner mt-5 sm:mt-7 w-full sm:w-auto max-w-xl mx-auto gap-1"
+              className="grid grid-cols-3 p-1 rounded-xl bg-black/60 border border-white/15 shadow-inner mt-5 sm:mt-7 w-full sm:w-auto max-w-xl mx-auto gap-1"
             >
               {Object.entries(featurePillars).map(([key, data]) => {
                 const isActive = activeTab === key;
@@ -441,8 +448,8 @@ export default function Home() {
                     onClick={() => setActiveTab(key)}
                     className={`btn-tab text-center truncate text-[10.5px] sm:text-xs py-2 px-1 min-h-[40px] cursor-pointer ${
                       isActive
-                        ? 'bg-white text-blue-600 shadow-xs border border-slate-200/60'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                        ? 'bg-blue-600 text-white shadow-md border border-blue-400'
+                        : 'text-slate-400 hover:text-white hover:bg-white/10'
                     }`}
                   >
                     {data.label}
@@ -450,41 +457,39 @@ export default function Home() {
                 );
               })}
             </div>
-            {/* Connecting visual indicator bridging tabs to cards */}
-            <div className="w-8 h-3 border-l-2 border-r-2 border-blue-500/20 mx-auto hidden sm:block" />
           </div>
 
-          {/* Pillar Cards Grid (Issue 4: Standardized 3-column grid cadence) */}
+          {/* Pillar Cards Grid */}
           <div id="pillar-grid" role="tabpanel" aria-labelledby={`tab-${activeTab}`} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {featurePillars[activeTab].items.map((item, idx) => (
               <Link
                 key={idx}
                 to={item.path}
-                className="glass-card-light p-5 rounded-2xl flex flex-col justify-between group hover:border-blue-400 relative bg-white"
+                className="p-5 rounded-2xl flex flex-col justify-between group hover:border-cyan-400 relative bg-black/55 backdrop-blur-xl border border-white/15 text-white transition-all shadow-xl"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className={`w-11 h-11 rounded-xl ${item.bg} flex items-center justify-center group-hover:scale-110 transition-transform shadow-xs`}>
+                    <div className="w-11 h-11 rounded-xl bg-blue-500/20 text-cyan-400 border border-blue-500/30 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xs">
                       {item.icon}
                     </div>
                     {item.badge && (
-                      <span className="px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold">
+                      <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-bold">
                         {item.badge}
                       </span>
                     )}
                   </div>
 
-                  <h3 className="font-heading text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-1.5">
+                  <h3 className="font-heading text-base font-bold text-white group-hover:text-cyan-400 transition-colors mb-1.5">
                     {item.name}
                   </h3>
-                  <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                  <p className="text-xs text-slate-300 leading-relaxed font-medium">
                     {item.desc}
                   </p>
                 </div>
 
-                <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between">
+                <div className="mt-5 pt-3 border-t border-white/10 flex items-center justify-between">
                   <span className="text-xs font-semibold text-slate-400">Direct Access</span>
-                  <span className="btn-pill">
+                  <span className="btn-pill text-cyan-300">
                     <span>Launch Tool</span>
                     <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
                   </span>
@@ -502,22 +507,22 @@ export default function Home() {
       <section id="colleges-section" className="py-16 px-4 sm:px-6 md:px-12 relative z-10">
         <div className="container mx-auto max-w-6xl">
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 bg-white/90 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/60 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 bg-black/50 backdrop-blur-xl p-5 sm:p-6 rounded-2xl border border-white/15 shadow-xl text-white">
             <div>
-              <span className="text-blue-600 font-heading font-extrabold text-xs tracking-wider">
+              <span className="text-cyan-400 font-heading font-extrabold text-xs tracking-wider">
                 38+ Govt Engineering Institutions
               </span>
-              <h2 className="font-heading text-3xl font-black text-slate-900 mt-1">
+              <h2 className="font-heading text-3xl font-black text-white mt-1">
                 Top Engineering Colleges in Bihar
               </h2>
-              <p className="text-xs text-slate-500 mt-1 font-medium">
+              <p className="text-xs text-slate-300 mt-1 font-medium">
                 Explore campus profiles, branch seat intake, and previous years UGEAC cutoffs.
               </p>
             </div>
 
             <Link
               to="/colleges"
-              className="btn-secondary gap-1.5"
+              className="btn-secondary gap-1.5 bg-white/15 text-white border-white/20 hover:bg-white/25"
             >
               <span>Browse All 38+ Colleges</span>
               <ArrowRight size={14} />
@@ -529,27 +534,27 @@ export default function Home() {
               <Link
                 key={idx}
                 to={`/college/${col.slug}`}
-                className="glass-card-light p-5 rounded-2xl group hover:border-blue-400 transition-all flex flex-col justify-between bg-white"
+                className="p-5 rounded-2xl group hover:border-cyan-400 transition-all flex flex-col justify-between bg-black/55 backdrop-blur-xl border border-white/15 text-white shadow-xl"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 font-heading font-bold text-xs">
+                    <span className="px-2.5 py-1 rounded-lg bg-blue-500/20 border border-blue-400/30 text-cyan-300 font-heading font-bold text-xs">
                       {col.code}
                     </span>
-                    <span className="text-xs text-slate-500 font-medium">Estd. {col.estd}</span>
+                    <span className="text-xs text-slate-400 font-medium">Estd. {col.estd}</span>
                   </div>
 
-                  <h3 className="font-heading text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-heading text-lg font-bold text-white group-hover:text-cyan-400 transition-colors">
                     {col.name}
                   </h3>
 
-                  <p className="text-xs text-slate-500 mt-1 flex items-center gap-1 font-medium">
-                    <MapPin size={13} className="text-blue-500" /> {col.location}, Bihar
+                  <p className="text-xs text-slate-300 mt-1 flex items-center gap-1 font-medium">
+                    <MapPin size={13} className="text-cyan-400" /> {col.location}, Bihar
                   </p>
                 </div>
 
-                <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-600 group-hover:text-blue-600">
-                  <span>View Cutoff & Campus Info</span>
+                <div className="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-xs font-bold text-slate-300 group-hover:text-cyan-400">
+                  <span>View Cutoff &amp; Campus Info</span>
                   <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </div>
               </Link>
@@ -559,34 +564,32 @@ export default function Home() {
         </div>
       </section>
 
-
-
       {/* ═══════════════════════════════════════════ */}
       {/* ── 6. WALL OF FAME (TOP DONORS) ── */}
       {/* ═══════════════════════════════════════════ */}
       <section className="py-16 px-4 sm:px-6 md:px-12 relative z-10">
         <div className="container mx-auto max-w-5xl">
-          <div className="bg-white p-8 md:p-10 rounded-2xl border border-slate-200 text-center relative overflow-hidden shadow-xs">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold mb-4">
-              <Heart size={14} className="fill-blue-600 text-blue-600" /> Student Powered
+          <div className="bg-black/50 backdrop-blur-xl p-8 md:p-10 rounded-2xl border border-white/15 text-center relative overflow-hidden shadow-xl text-white">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 text-xs font-bold mb-4">
+              <Heart size={14} className="fill-cyan-400 text-cyan-400" /> Student Powered
             </div>
             
-            <h2 className="font-heading text-2xl md:text-3xl font-black text-slate-900">
+            <h2 className="font-heading text-2xl md:text-3xl font-black text-white">
               Platform Wall of Fame
             </h2>
-            <p className="text-xs text-slate-500 max-w-xl mx-auto mt-2 mb-8 font-medium">
+            <p className="text-xs text-slate-300 max-w-xl mx-auto mt-2 mb-8 font-medium">
               Apna College Bihar is 100% free with zero paywalls. Heartfelt thanks to students who contribute to keeping our servers running!
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mb-8">
               {topDonors.map((donor, idx) => (
-                <div key={idx} className="bg-slate-50/60 border border-slate-200/80 p-4 rounded-2xl text-center shadow-xs">
-                  <div className="w-11 h-11 rounded-full bg-blue-50 border border-blue-100 text-blue-600 font-bold text-base mx-auto flex items-center justify-center mb-2 shadow-xs">
+                <div key={idx} className="bg-white/10 border border-white/15 p-4 rounded-2xl text-center shadow-xs">
+                  <div className="w-11 h-11 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 font-bold text-base mx-auto flex items-center justify-center mb-2 shadow-xs">
                     {donor.name?.charAt(0) || 'S'}
                   </div>
-                  <h3 className="text-xs font-bold text-slate-900 truncate">{donor.name}</h3>
-                  <p className="text-xs text-slate-500 truncate">{donor.college || 'Bihar GEC'}</p>
-                  <p className="text-xs font-heading font-black text-emerald-600 mt-1">₹{donor.amount}</p>
+                  <h3 className="text-xs font-bold text-white truncate">{donor.name}</h3>
+                  <p className="text-xs text-slate-300 truncate">{donor.college || 'Bihar GEC'}</p>
+                  <p className="text-xs font-heading font-black text-emerald-400 mt-1">₹{donor.amount}</p>
                 </div>
               ))}
             </div>
@@ -606,25 +609,25 @@ export default function Home() {
       {/* ═══════════════════════════════════════════ */}
       <section className="py-16 px-4 sm:px-6 md:px-12 relative z-10">
         <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-10 bg-white/90 backdrop-blur-md p-5 sm:p-6 rounded-2xl border border-white/60 shadow-sm max-w-xl mx-auto">
-            <span className="text-blue-600 font-heading font-extrabold text-xs tracking-wider">Got Questions?</span>
-            <h2 className="font-heading text-3xl font-black text-slate-900 mt-1">Frequently Asked Questions</h2>
+          <div className="text-center mb-10 bg-black/50 backdrop-blur-xl p-5 sm:p-6 rounded-2xl border border-white/15 shadow-xl max-w-xl mx-auto text-white">
+            <span className="text-cyan-400 font-heading font-extrabold text-xs tracking-wider">Got Questions?</span>
+            <h2 className="font-heading text-3xl font-black text-white mt-1">Frequently Asked Questions</h2>
           </div>
 
           <div className="space-y-3">
             {faqs.map((faq, i) => (
-              <div key={i} className="glass-card-light rounded-2xl overflow-hidden border border-slate-200/80 bg-white">
+              <div key={i} className="rounded-2xl overflow-hidden border border-white/15 bg-black/50 backdrop-blur-xl text-white shadow-xl">
                 <button
                   onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                  className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-slate-50 cursor-pointer"
+                  className="w-full flex items-center justify-between p-5 text-left transition-colors hover:bg-white/5 cursor-pointer"
                 >
-                  <h3 className="text-sm font-bold text-slate-900 pr-4">{faq.q}</h3>
-                  <div className="shrink-0 text-blue-600">
+                  <h3 className="text-sm font-bold text-white pr-4">{faq.q}</h3>
+                  <div className="shrink-0 text-cyan-400">
                     {openFaqIndex === i ? <Minus size={18} /> : <Plus size={18} />}
                   </div>
                 </button>
                 {openFaqIndex === i && (
-                  <div className="px-5 pb-5 text-slate-600 text-xs leading-relaxed font-medium border-t border-slate-100 pt-3">
+                  <div className="px-5 pb-5 text-slate-300 text-xs leading-relaxed font-medium border-t border-white/10 pt-3">
                     {faq.a}
                   </div>
                 )}

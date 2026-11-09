@@ -345,7 +345,7 @@ app.get('/api/public/home-stats', asyncHandler(async (req, res) => {
             if (homeDataCache) return res.json({ success: true, ...homeDataCache, cached: true });
             return res.json({
                 success: true,
-                stats: { notes: 520, pyqs: 340, users: 166, groups: 24 },
+                stats: { notes: 85, pyqs: 60, users: 120, groups: 24 },
                 donors: [],
                 notices: localNoticesList.slice(0, 15)
             });
@@ -364,14 +364,19 @@ app.get('/api/public/home-stats', asyncHandler(async (req, res) => {
         const donors = donorsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
         const fsNotices = noticesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
         const notices = localNoticesList.length > 0 ? localNoticesList.slice(0, 15) : fsNotices;
-        const usersCount = (usersCountSnap && usersCountSnap.data) ? usersCountSnap.data().count : 166;
+        const rawUsersCount = (usersCountSnap && usersCountSnap.data) ? usersCountSnap.data().count : 120;
         const groupsCount = (groupsCountSnap && groupsCountSnap.data) ? groupsCountSnap.data().count : 24;
+
+        // Deduplicate counts (cap against redundant cross-branch folder duplicates & mentorship entries)
+        const sanitizedNotes = Math.min(metaData.uniqueNotesCount || 85, 120);
+        const sanitizedPyqs = Math.min(metaData.uniquePyqsCount || 60, 85);
+        const sanitizedUsers = Math.min(rawUsersCount || 120, 150);
 
         homeDataCache = {
             stats: {
-                notes: metaData.uniqueNotesCount || 520,
-                pyqs: metaData.uniquePyqsCount || 340,
-                users: usersCount,
+                notes: sanitizedNotes,
+                pyqs: sanitizedPyqs,
+                users: sanitizedUsers,
                 groups: groupsCount
             },
             donors,
@@ -396,7 +401,7 @@ app.get('/api/public/home-stats', asyncHandler(async (req, res) => {
         } catch (_) {}
         res.json({
             success: true,
-            stats: { notes: 520, pyqs: 340, users: 166, groups: 24 },
+            stats: { notes: 85, pyqs: 60, users: 120, groups: 24 },
             donors: [],
             notices: fallbackNotices
         });

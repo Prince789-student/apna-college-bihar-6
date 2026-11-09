@@ -44,6 +44,7 @@ export default function DashboardLayout() {
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(null);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showSupportModal, setShowSupportModal] = useState(false);
+  const isHomePage = location.pathname === '/';
 
   useEffect(() => {
     if (isNative) {
@@ -304,8 +305,12 @@ export default function DashboardLayout() {
 
       {/* Top Header Navigation (Desktop Web, Desktop App, and Mobile Web) */}
       {!isMobileApp && (
-        <header className="bg-white/90 backdrop-blur-2xl border-b border-slate-200/80 shadow-[0_2px_15px_rgba(0,0,0,0.03)] z-[200] shrink-0 sticky top-0 transition-all pt-[max(env(safe-area-inset-top,0px),0px)]">
-          <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-blue-500/80 to-transparent"></div>
+        <header className={`backdrop-blur-2xl border-b shadow-[0_2px_15px_rgba(0,0,0,0.03)] z-[200] shrink-0 sticky top-0 transition-all pt-[max(env(safe-area-inset-top,0px),0px)] ${
+          isHomePage 
+            ? 'bg-black/60 border-white/10 text-white' 
+            : 'bg-white/90 border-slate-200/80 text-slate-900'
+        }`}>
+          <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500/80 to-transparent"></div>
           <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-8 py-2.5 sm:py-3 flex items-center justify-between">
             
             {/* Logo & Brand */}
@@ -314,34 +319,52 @@ export default function DashboardLayout() {
                 <img src="/logo-acb.png?v=99" alt="Logo" className="w-full h-full object-cover rounded-[10px] bg-white" />
               </div>
               <div className="block min-w-0">
-                <span className="font-heading font-black text-xs sm:text-sm md:text-base lg:text-lg tracking-tight uppercase text-slate-900 leading-none block">
-                  Apna College <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Bihar</span>
+                <span className={`font-heading font-black text-xs sm:text-sm md:text-base lg:text-lg tracking-tight uppercase leading-none block ${
+                  isHomePage ? 'text-white' : 'text-slate-900'
+                }`}>
+                  Apna College <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">Bihar</span>
                 </span>
               </div>
             </div>
 
             {/* Desktop Navigation Links (Issue 15: Streamlined clean navigation) */}
             <nav className="hidden xl:flex items-center gap-1.5 text-xs font-heading font-bold">
-              <Link to="/" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors">
+              <Link to="/" className={`px-3 py-2 rounded-xl transition-colors ${
+                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
+              }`}>
                 Home
               </Link>
-              <Link to="/notes" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors">
+              <Link to="/notes" className={`px-3 py-2 rounded-xl transition-colors ${
+                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
+              }`}>
                 Notes
               </Link>
-              <Link to="/pyq" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors">
+              <Link to="/pyq" className={`px-3 py-2 rounded-xl transition-colors ${
+                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
+              }`}>
                 PYQ
               </Link>
-              <Link to="/ugeac-predictor?tab=finder" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors">
+              <Link to="/ugeac-predictor?tab=finder" className={`px-3 py-2 rounded-xl transition-colors ${
+                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
+              }`}>
                 Predictor
               </Link>
-              <Link to="/compare-colleges" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors whitespace-nowrap">
+              <Link to="/compare-colleges" className={`px-3 py-2 rounded-xl transition-colors whitespace-nowrap ${
+                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
+              }`}>
                 Compare Colleges
               </Link>
-              <Link to="/mentorship" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors inline-flex items-center gap-1.5">
+              <Link to="/mentorship" className={`px-3 py-2 rounded-xl transition-colors inline-flex items-center gap-1.5 ${
+                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
+              }`}>
                 <span>Mentorship</span>
-                <span className="px-1.5 py-0.5 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-blue-600">Free</span>
+                <span className={`px-1.5 py-0.5 rounded-full text-xs font-bold ${
+                  isHomePage ? 'bg-blue-500/20 border border-blue-400/30 text-cyan-300' : 'bg-blue-50 border border-blue-200 text-blue-600'
+                }`}>Free</span>
               </Link>
-              <Link to="/blog" className="px-3 py-2 rounded-xl text-slate-600 hover:text-blue-600 hover:bg-blue-50/60 transition-colors">
+              <Link to="/blog" className={`px-3 py-2 rounded-xl transition-colors ${
+                isHomePage ? 'text-slate-300 hover:text-cyan-400 hover:bg-white/10' : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50/60'
+              }`}>
                 Blog & Guides
               </Link>
 
@@ -349,7 +372,9 @@ export default function DashboardLayout() {
               <div className="relative ml-1">
                 <button
                   onClick={() => setActiveFeatureIndex(activeFeatureIndex === 0 ? null : 0)}
-                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100/90 hover:bg-slate-200 text-slate-700 hover:text-slate-900 transition-colors text-xs font-heading font-bold"
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl transition-colors text-xs font-heading font-bold cursor-pointer ${
+                    isHomePage ? 'bg-white/10 hover:bg-white/20 text-white border border-white/15' : 'bg-slate-100/90 hover:bg-slate-200 text-slate-700 hover:text-slate-900'
+                  }`}
                 >
                   <span>All Tools</span>
                   <ChevronDown size={14} className={`transition-transform duration-200 ${activeFeatureIndex === 0 ? 'rotate-180' : ''}`} />
@@ -358,7 +383,7 @@ export default function DashboardLayout() {
                 {activeFeatureIndex === 0 && (
                   <>
                     <div className="fixed inset-0 z-[1900]" onClick={() => setActiveFeatureIndex(null)} />
-                    <div className="absolute right-0 mt-3 w-80 bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-2xl shadow-2xl p-3.5 z-[2000] animate-in fade-in zoom-in-95 duration-150 origin-top-right">
+                    <div className="absolute right-0 mt-3 w-80 bg-slate-950/95 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl p-3.5 z-[2000] animate-in fade-in zoom-in-95 duration-150 origin-top-right text-white">
                       {featureCategories.map((cat) => (
                         <div key={cat.title} className="mb-3 last:mb-0">
                           <span className="text-xs font-heading font-bold text-slate-400 px-3 py-1 block">
@@ -370,9 +395,9 @@ export default function DashboardLayout() {
                                 key={it.name}
                                 to={it.path}
                                 onClick={() => setActiveFeatureIndex(null)}
-                                className="flex items-center gap-2 p-2 rounded-xl hover:bg-blue-50 text-slate-700 hover:text-blue-600 transition-colors text-xs font-heading font-semibold"
+                                className="flex items-center gap-2 p-2 rounded-xl hover:bg-white/10 text-slate-200 hover:text-cyan-400 transition-colors text-xs font-heading font-semibold"
                               >
-                                <span className="w-4 h-4 text-blue-600 shrink-0">{it.icon}</span>
+                                <span className="w-4 h-4 text-cyan-400 shrink-0">{it.icon}</span>
                                 <span className="truncate">{it.name}</span>
                               </Link>
                             ))}
@@ -390,16 +415,20 @@ export default function DashboardLayout() {
               {!isNative && (
                 <Link 
                   to="/download" 
-                  className="hidden md:flex h-9 items-center gap-1.5 px-3 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/80 rounded-xl font-heading font-bold text-xs transition-all shadow-xs active:scale-95 shrink-0"
+                  className={`hidden md:flex h-9 items-center gap-1.5 px-3 rounded-xl font-heading font-bold text-xs transition-all shadow-xs active:scale-95 shrink-0 ${
+                    isHomePage 
+                      ? 'bg-blue-500/20 hover:bg-blue-500/30 text-cyan-300 border border-blue-400/30' 
+                      : 'bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/80'
+                  }`}
                   title="Download Official Windows, Mac, Linux & Android Apps"
                 >
-                  <Download size={14} className="text-blue-600 animate-bounce" />
+                  <Download size={14} className={isHomePage ? 'text-cyan-400 animate-bounce' : 'text-blue-600 animate-bounce'} />
                   <span>Download App</span>
                 </Link>
               )}
 
               {loading ? (
-                <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
               ) : user ? (
                 <div className="flex items-center gap-2 md:gap-3">
                   <HeaderTimer />
@@ -407,7 +436,11 @@ export default function DashboardLayout() {
                   <div className="relative">
                     <button 
                       onClick={() => setShowProfileMenu(!showProfileMenu)}
-                      className="h-9 flex items-center gap-2 px-3 bg-slate-50 border border-slate-200 hover:border-blue-500/50 text-slate-900 rounded-xl font-heading font-bold text-xs transition-all shadow-xs active:scale-95 group shrink-0"
+                      className={`h-9 flex items-center gap-2 px-3 rounded-xl font-heading font-bold text-xs transition-all shadow-xs active:scale-95 group shrink-0 ${
+                        isHomePage 
+                          ? 'bg-white/10 hover:bg-white/20 border border-white/15 text-white' 
+                          : 'bg-slate-50 border border-slate-200 hover:border-blue-500/50 text-slate-900'
+                      }`}
                     >
                       <div className="w-5 h-5 rounded-lg overflow-hidden bg-slate-100">
                         <img src="/logo-acb.png?v=99" alt="Profile" className="w-full h-full object-cover" />
@@ -509,10 +542,18 @@ export default function DashboardLayout() {
                 <div className="flex items-center gap-2 sm:gap-3">
                   <HeaderTimer />
 
-                  <Link to="/login" className="hidden sm:flex h-9 items-center px-3 text-slate-600 hover:text-slate-900 font-heading font-bold text-xs transition-colors">
+                  <Link 
+                    to="/login" 
+                    className={`hidden sm:flex h-9 items-center px-3 font-heading font-bold text-xs transition-colors ${
+                      isHomePage ? 'text-slate-300 hover:text-white' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
                     Login
                   </Link>
-                  <Link to="/signup" className="h-9 flex items-center px-4 bg-slate-900 hover:bg-blue-600 text-white rounded-xl font-heading font-bold text-xs transition-all shadow-sm active:scale-95 shrink-0">
+                  <Link 
+                    to="/signup" 
+                    className="h-9 flex items-center px-4 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white rounded-xl font-heading font-bold text-xs transition-all shadow-md active:scale-95 shrink-0"
+                  >
                     Sign Up
                   </Link>
                 </div>
@@ -521,7 +562,11 @@ export default function DashboardLayout() {
               {/* Mobile Menu Hamburger */}
               <button 
                 onClick={() => setMobileMenuOpen(true)} 
-                className="w-11 h-11 min-w-[44px] min-h-[44px] flex xl:hidden items-center justify-center text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 rounded-xl transition-all ml-1 shrink-0 active:scale-95 cursor-pointer"
+                className={`w-11 h-11 min-w-[44px] min-h-[44px] flex xl:hidden items-center justify-center rounded-xl transition-all ml-1 shrink-0 active:scale-95 cursor-pointer ${
+                  isHomePage 
+                    ? 'text-white bg-white/10 hover:bg-white/20 border border-white/15' 
+                    : 'text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200'
+                }`}
                 aria-label="Open Navigation Menu"
               >
                 <Menu size={20} strokeWidth={2.2} />
