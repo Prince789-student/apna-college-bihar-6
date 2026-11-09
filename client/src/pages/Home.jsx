@@ -303,22 +303,22 @@ export default function Home() {
         {/* ═══════════════════════════════════════════ */}
         <section className="py-4 sm:py-6 px-3.5 sm:px-6 md:px-12 relative z-10">
           <div className="container mx-auto max-w-6xl">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 border-y border-white/10 py-4">
               {[
-                { label: 'Curated Notes', val: stats.notes, suffix: '+', icon: <BookOpen size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-blue-500/20 text-cyan-400 border-blue-400/30' },
-                { label: 'Verified PYQs', val: stats.pyqs, suffix: '+', icon: <FileText size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-cyan-500/20 text-cyan-400 border-cyan-400/30' },
-                { label: 'Active Students', val: stats.users, suffix: '+', icon: <Users size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-emerald-500/20 text-emerald-400 border-emerald-400/30' },
-                { label: 'Govt Colleges', val: 38, suffix: '+', icon: <Building2 size={20} className="sm:w-[22px] sm:h-[22px]" />, bg: 'bg-indigo-500/20 text-indigo-400 border-indigo-400/30' },
+                { label: 'Curated Notes', val: stats.notes, suffix: '+', icon: <BookOpen size={20} className="sm:w-[22px] sm:h-[22px]" /> },
+                { label: 'Verified PYQs', val: stats.pyqs, suffix: '+', icon: <FileText size={20} className="sm:w-[22px] sm:h-[22px]" /> },
+                { label: 'Active Students', val: stats.users, suffix: '+', icon: <Users size={20} className="sm:w-[22px] sm:h-[22px]" /> },
+                { label: 'Govt Colleges', val: 38, suffix: '+', icon: <Building2 size={20} className="sm:w-[22px] sm:h-[22px]" /> },
               ].map((item, idx) => (
-                <div key={idx} className="p-3.5 sm:p-5 rounded-2xl flex items-center gap-2.5 sm:gap-4 bg-black/25 hover:bg-black/40 backdrop-blur-md border border-white/10 hover:border-cyan-400/30 text-white shadow-lg transition-all">
-                  <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${item.bg} border flex items-center justify-center shrink-0 p-2 sm:p-3 shadow-xs`}>
+                <div key={idx} className="flex items-center gap-3 text-white transition-all hover:translate-y-[-2px]">
+                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-cyan-500/15 border border-cyan-400/25 flex items-center justify-center shrink-0 text-cyan-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                     {item.icon}
                   </div>
                   <div className="min-w-0">
-                    <span className="font-heading text-lg sm:text-2xl md:text-3xl font-black text-white tracking-tight block">
+                    <span className="font-heading text-xl sm:text-2xl md:text-3xl font-[1000] text-white tracking-tight block drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
                       <CountUp end={item.val} suffix={item.suffix} duration={1400} />
                     </span>
-                    <p className="text-[11px] sm:text-xs text-slate-300 font-semibold mt-0.5 truncate">{item.label}</p>
+                    <p className="text-[11px] sm:text-xs text-slate-200 font-bold tracking-wide uppercase drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)] truncate">{item.label}</p>
                   </div>
                 </div>
               ))}
@@ -331,7 +331,7 @@ export default function Home() {
         {/* ═══════════════════════════════════════════ */}
         <section className="py-8 sm:py-12 px-3.5 sm:px-6 md:px-12 relative z-10">
           <div className="container mx-auto max-w-6xl">
-            <div className="rounded-3xl bg-slate-950/40 backdrop-blur-xl border border-white/15 p-4 sm:p-6 md:p-8 shadow-[0_8px_32px_rgba(0,0,0,0.7)] text-white">
+            <div className="text-white">
               
               {/* Header Bar with Full-Width Typography & Navigation */}
               <div className="pb-6 border-b border-white/10 space-y-4">
@@ -340,16 +340,16 @@ export default function Home() {
                     <Sparkles size={13} className="text-cyan-400" />
                     <span>BEU PATNA OFFICIAL STUDY ENGINE • 38 GOVT ENGINEERING COLLEGES</span>
                   </div>
-                  <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-[1000] text-white tracking-tight drop-shadow-md">
+                  <h2 className="font-heading text-2xl sm:text-3xl md:text-4xl font-[1000] text-white tracking-tight drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
                     Bihar Engineering Academic Lab &amp; Tools
                   </h2>
-                  <p className="text-xs sm:text-sm text-slate-300 font-medium max-w-3xl leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-200 font-medium max-w-3xl leading-relaxed drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
                     Access verified B.Tech semester notes, past 5-year PYQ blueprints, SGPA calculator, and real-time BCECEB UGEAC cutoff intelligence across all 38 Government Engineering Colleges.
                   </p>
                 </div>
 
                 {/* Tab Navigation Pill Bar (Clean, Spacious & Responsive) */}
-                <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-black/60 border border-white/15 overflow-x-auto custom-scrollbar">
+                <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-black/40 border border-white/15 overflow-x-auto custom-scrollbar">
                   {[
                     { id: 'tools', label: '🛠️ Academic Tools', badge: '8 Tools' },
                     { id: 'predictor', label: '🎯 UGEAC Predictor', badge: 'Cutoffs 2024–25' },
@@ -379,37 +379,37 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* ── TAB 1: ACADEMIC SUITE (8 TOOLS) ── */}
+              {/* ── TAB 1: ACADEMIC SUITE (8 TOOLS - CLEAN TRANSPARENT TYPOGRAPHY WITHOUT BLURRED BOXES) ── */}
               {activeConsoleTab === 'tools' && (
                 <div className="pt-6 animate-in fade-in duration-200">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                     {academicTools.map((tool, idx) => (
                       <Link
                         key={idx}
                         to={tool.path}
-                        className="p-4 rounded-2xl flex flex-col justify-between group bg-black/30 hover:bg-black/50 backdrop-blur-md border border-white/10 hover:border-cyan-400/50 transition-all text-white shadow-lg hover:shadow-cyan-500/10 active:scale-[0.99]"
+                        className="py-4 px-3 rounded-xl flex flex-col justify-between group transition-all hover:bg-white/5 active:scale-[0.98] border-b border-white/15 hover:border-cyan-400/60"
                       >
                         <div>
-                          <div className="flex items-center justify-between mb-3">
-                            <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-cyan-400 border border-blue-400/30 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform shadow-xs">
+                          <div className="flex items-center justify-between mb-2.5">
+                            <div className="w-10 h-10 rounded-lg bg-cyan-500/15 text-cyan-300 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
                               {tool.icon}
                             </div>
                             {tool.badge && (
-                              <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-[10px] font-bold">
+                              <span className="px-2 py-0.5 rounded-md bg-white/10 text-cyan-300 text-[10px] font-black uppercase tracking-wider drop-shadow-sm">
                                 {tool.badge}
                               </span>
                             )}
                           </div>
-                          <h3 className="font-heading text-sm sm:text-base font-bold text-white group-hover:text-cyan-300 transition-colors truncate">
+                          <h3 className="font-heading text-base font-bold text-white group-hover:text-cyan-300 transition-colors drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
                             {tool.name}
                           </h3>
-                          <p className="text-[11px] text-slate-300 line-clamp-2 font-medium mt-1 leading-snug">
+                          <p className="text-xs text-slate-200 font-medium mt-1 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
                             {tool.desc}
                           </p>
                         </div>
-                        <div className="mt-4 pt-2.5 border-t border-white/10 flex items-center justify-between text-xs text-cyan-400 font-bold">
+                        <div className="mt-4 pt-2 border-t border-white/10 flex items-center gap-1.5 text-xs text-cyan-400 font-extrabold drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
                           <span>Launch Tool</span>
-                          <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+                          <ArrowRight size={13} className="group-hover:translate-x-1.5 transition-transform" />
                         </div>
                       </Link>
                     ))}
@@ -426,9 +426,9 @@ export default function Home() {
                     <div className="lg:col-span-7 space-y-4">
                       
                       {/* Percentile Slider Card */}
-                      <div className="p-4 sm:p-5 rounded-2xl bg-black/45 border border-white/15 backdrop-blur-md shadow-lg">
+                      <div className="p-4 sm:p-5 rounded-2xl bg-black/25 border border-white/15 shadow-md">
                         <div className="flex items-center justify-between text-xs sm:text-sm mb-2 font-bold">
-                          <span className="text-slate-300">Your JEE Main Percentile:</span>
+                          <span className="text-slate-200">Your JEE Main Percentile:</span>
                           <span className="text-cyan-400 font-[1000] text-base sm:text-lg">{simPercentile}%ile</span>
                         </div>
                         <input
@@ -443,8 +443,8 @@ export default function Home() {
                         
                         {/* Dual Rank Metrics (AIR + BCECEB State UR Rank) */}
                         <div className="grid grid-cols-2 gap-3 mt-3 pt-3 border-t border-white/10">
-                          <div className="bg-white/5 p-2.5 rounded-xl border border-white/5">
-                            <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">All India CRL (AIR)</span>
+                          <div className="bg-white/5 p-2.5 rounded-xl border border-white/10">
+                            <span className="text-[10px] uppercase font-bold text-slate-300 block tracking-wider">All India CRL (AIR)</span>
                             <span className="text-white font-[1000] text-sm sm:text-base">~{currentAir.toLocaleString()}</span>
                           </div>
                           <div className="bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-400/20">
@@ -456,7 +456,7 @@ export default function Home() {
 
                       {/* Live College Match Cards (Based on Real 2024-2025 BCECEB Cutoffs) */}
                       <div className="space-y-2.5">
-                        <div className="flex items-center justify-between text-xs font-bold text-slate-300 px-1">
+                        <div className="flex items-center justify-between text-xs font-bold text-slate-200 px-1">
                           <span>Predicted Seat Allotment Status (General UR):</span>
                           <span className="text-[11px] text-cyan-400">2024-2025 Closing Cutoff</span>
                         </div>
@@ -466,7 +466,7 @@ export default function Home() {
                           const isModerate = !isLikely && currentUgeacRank <= Math.round(col.closing * 1.35);
 
                           return (
-                            <div key={idx} className="p-3.5 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-between hover:border-cyan-400/40 transition-all">
+                            <div key={idx} className="p-3.5 rounded-xl bg-black/25 border border-white/10 flex items-center justify-between hover:border-cyan-400/40 transition-all">
                               <div className="flex items-center gap-3">
                                 <div className={`w-10 h-10 rounded-xl ${col.color} border flex items-center justify-center font-black text-xs shrink-0`}>
                                   {col.code}
@@ -475,8 +475,8 @@ export default function Home() {
                                   <p className="text-xs sm:text-sm font-bold text-white leading-tight">
                                     {col.college} • <span className="text-cyan-300 font-semibold">{col.branch}</span>
                                   </p>
-                                  <p className="text-[11px] text-slate-400 mt-0.5">
-                                    Closing Rank: <strong className="text-slate-200">#{col.closing.toLocaleString()}</strong>
+                                  <p className="text-[11px] text-slate-300 mt-0.5">
+                                    Closing Rank: <strong className="text-white">#{col.closing.toLocaleString()}</strong>
                                   </p>
                                 </div>
                               </div>
@@ -504,7 +504,7 @@ export default function Home() {
                     </div>
 
                     {/* Right: Predictor Callout Box */}
-                    <div className="lg:col-span-5 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-blue-600/30 to-cyan-600/20 border border-cyan-400/30 flex flex-col justify-between backdrop-blur-md space-y-6">
+                    <div className="lg:col-span-5 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-blue-600/20 to-cyan-600/15 border border-cyan-400/30 flex flex-col justify-between space-y-6">
                       <div>
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 text-xs font-bold mb-3">
                           <Target size={13} /> Official BCECEB Multi-Year Cutoffs
@@ -515,7 +515,7 @@ export default function Home() {
                         <p className="text-xs text-slate-200 leading-relaxed font-medium mb-4">
                           Explore category quota predictions (General UR, BC, EBC, SC, ST, EWS &amp; RCG) across every campus — MIT Muzaffarpur, BCE Bhagalpur, Bakhtiyarpur, Gaya, Darbhanga, and 33 more.
                         </p>
-                        <div className="bg-black/30 p-3 rounded-xl border border-white/10 text-xs text-slate-300 space-y-1">
+                        <div className="bg-black/20 p-3 rounded-xl border border-white/10 text-xs text-slate-300 space-y-1">
                           <p>• <strong>Authentic Data:</strong> Direct from BCECEB allotment seat charts.</p>
                           <p>• <strong>Category Quota:</strong> Includes 33% girls horizontal reservation.</p>
                         </div>
@@ -538,7 +538,7 @@ export default function Home() {
               {activeConsoleTab === 'colleges' && (
                 <div className="pt-6 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs text-slate-300 font-medium">
+                    <span className="text-xs text-slate-200 font-medium">
                       Explore campus profiles, branch seat intake, and previous years UGEAC cutoffs across Bihar.
                     </span>
                     <Link
@@ -550,33 +550,33 @@ export default function Home() {
                     </Link>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {popularColleges.map((col, idx) => (
                       <Link
                         key={idx}
                         to={`/college/${col.slug}`}
-                        className="p-4 rounded-2xl group hover:border-cyan-400 transition-all flex flex-col justify-between bg-black/30 hover:bg-black/50 backdrop-blur-md border border-white/10 text-white shadow-lg"
+                        className="py-4 px-3.5 rounded-xl group transition-all flex flex-col justify-between hover:bg-white/5 border-b border-white/15 hover:border-cyan-400 text-white"
                       >
                         <div>
-                          <div className="flex items-center justify-between mb-2.5">
-                            <span className="px-2.5 py-1 rounded-lg bg-blue-500/20 border border-blue-400/30 text-cyan-300 font-heading font-bold text-xs">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="px-2 py-0.5 rounded-md bg-cyan-500/15 border border-cyan-400/25 text-cyan-300 font-heading font-black text-xs">
                               {col.code}
                             </span>
-                            <span className="text-xs text-slate-400 font-medium">Estd. {col.estd}</span>
+                            <span className="text-xs text-slate-300 font-medium">Estd. {col.estd}</span>
                           </div>
 
-                          <h3 className="font-heading text-sm sm:text-base font-bold text-white group-hover:text-cyan-400 transition-colors">
+                          <h3 className="font-heading text-sm sm:text-base font-bold text-white group-hover:text-cyan-300 transition-colors drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
                             {col.name}
                           </h3>
 
-                          <p className="text-xs text-slate-300 mt-1 flex items-center gap-1 font-medium">
+                          <p className="text-xs text-slate-200 mt-1 flex items-center gap-1 font-medium drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
                             <MapPin size={13} className="text-cyan-400" /> {col.location}, Bihar
                           </p>
                         </div>
 
-                        <div className="mt-4 pt-2.5 border-t border-white/10 flex items-center justify-between text-xs font-bold text-slate-300 group-hover:text-cyan-400">
+                        <div className="mt-4 pt-2 border-t border-white/10 flex items-center justify-between text-xs font-bold text-slate-200 group-hover:text-cyan-300">
                           <span>View Cutoff &amp; Campus Info</span>
-                          <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+                          <ArrowRight size={13} className="group-hover:translate-x-1.5 transition-transform" />
                         </div>
                       </Link>
                     ))}
@@ -588,7 +588,7 @@ export default function Home() {
               {activeConsoleTab === 'radar' && (
                 <div className="pt-6 animate-in fade-in duration-200">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs text-slate-300 font-medium">
+                    <span className="text-xs text-slate-200 font-medium">
                       Official university notifications auto-synced from Bihar Engineering University portal (beu-bih.ac.in).
                     </span>
                     <Link
@@ -600,7 +600,7 @@ export default function Home() {
                     </Link>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {beuNotices.length > 0 ? (
                       beuNotices.slice(0, 6).map((notice, idx) => (
                         <a
@@ -608,32 +608,32 @@ export default function Home() {
                           href={notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`)}
                           target="_blank"
                           rel="noreferrer"
-                          className="p-4 rounded-2xl flex flex-col justify-between group hover:border-cyan-400 bg-black/30 hover:bg-black/50 backdrop-blur-md border border-white/10 text-white transition-all shadow-lg"
+                          className="py-4 px-3.5 rounded-xl flex flex-col justify-between group hover:bg-white/5 border-b border-white/15 hover:border-cyan-400 text-white transition-all"
                         >
                           <div>
                             <div className="flex items-center justify-between gap-2 mb-2">
-                              <span className="px-2 py-0.5 rounded-lg bg-emerald-500 text-slate-950 text-[10px] font-bold tracking-wide animate-pulse">
+                              <span className="px-2 py-0.5 rounded-md bg-emerald-500 text-slate-950 text-[10px] font-bold tracking-wide animate-pulse">
                                 CIRCULAR
                               </span>
-                              <span className="text-[11px] text-slate-400 font-semibold flex items-center gap-1">
-                                <Calendar size={12} className="text-slate-400" />
+                              <span className="text-[11px] text-slate-300 font-semibold flex items-center gap-1">
+                                <Calendar size={12} className="text-slate-300" />
                                 {notice.date || notice.noticedate || 'Recent'}
                               </span>
                             </div>
 
-                            <h3 className="font-heading text-xs sm:text-sm font-bold text-white group-hover:text-cyan-400 transition-colors line-clamp-3 leading-snug">
+                            <h3 className="font-heading text-xs sm:text-sm font-bold text-white group-hover:text-cyan-300 transition-colors line-clamp-3 leading-snug drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]">
                               {notice.title || notice.board}
                             </h3>
                           </div>
 
-                          <div className="mt-4 pt-2.5 border-t border-white/10 flex items-center justify-between text-xs text-cyan-400 font-bold">
+                          <div className="mt-4 pt-2 border-t border-white/10 flex items-center justify-between text-xs text-cyan-400 font-bold">
                             <span>View Official PDF</span>
                             <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                           </div>
                         </a>
                       ))
                     ) : (
-                      <div className="col-span-full p-8 rounded-2xl text-center text-slate-400 text-xs bg-black/40 border border-white/10">
+                      <div className="col-span-full p-8 rounded-xl text-center text-slate-300 text-xs border border-white/10">
                         Fetching latest BEU notices...
                       </div>
                     )}
@@ -646,18 +646,18 @@ export default function Home() {
                 <div className="pt-6 animate-in fade-in duration-200">
                   <div className="space-y-3">
                     {faqs.map((faq, i) => (
-                      <div key={i} className="rounded-2xl overflow-hidden border border-white/10 bg-black/30 hover:bg-black/45 backdrop-blur-md text-white shadow-lg transition-all">
+                      <div key={i} className="rounded-xl overflow-hidden border-b border-white/15 hover:bg-white/5 text-white transition-all">
                         <button
                           onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                          className="w-full flex items-center justify-between p-4 text-left hover:bg-white/5 cursor-pointer"
+                          className="w-full flex items-center justify-between p-4 text-left cursor-pointer"
                         >
-                          <h3 className="text-xs sm:text-sm font-bold text-white pr-4">{faq.q}</h3>
+                          <h3 className="text-xs sm:text-sm font-bold text-white pr-4 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">{faq.q}</h3>
                           <div className="shrink-0 text-cyan-400">
                             {openFaqIndex === i ? <Minus size={16} /> : <Plus size={16} />}
                           </div>
                         </button>
                         {openFaqIndex === i && (
-                          <div className="px-4 pb-4 text-slate-300 text-xs leading-relaxed font-medium border-t border-white/10 pt-3">
+                          <div className="px-4 pb-4 text-slate-200 text-xs leading-relaxed font-medium border-t border-white/10 pt-3 drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
                             {faq.a}
                           </div>
                         )}
@@ -674,40 +674,38 @@ export default function Home() {
         {/* ═══════════════════════════════════════════ */}
         {/* ── 4. WALL OF FAME (TOP DONORS) ── */}
         {/* ═══════════════════════════════════════════ */}
-        <section className="py-8 sm:py-12 px-4 sm:px-6 md:px-12 relative z-10">
-          <div className="container mx-auto max-w-5xl">
-            <div className="bg-black/25 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-white/10 text-center relative overflow-hidden shadow-lg text-white">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 text-xs font-bold mb-3 shadow-xs">
-                <Heart size={14} className="fill-cyan-400 text-cyan-400" /> Student Powered
-              </div>
-              
-              <h2 className="font-heading text-xl sm:text-2xl font-black text-white drop-shadow-md">
-                Platform Wall of Fame
-              </h2>
-              <p className="text-xs text-slate-300 max-w-xl mx-auto mt-2 mb-6 font-medium">
-                Apna College Bihar is 100% free with zero paywalls. Heartfelt thanks to students who contribute to keeping our servers running!
-              </p>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mb-6">
-                {topDonors.map((donor, idx) => (
-                  <div key={idx} className="bg-white/5 border border-white/10 p-3.5 rounded-xl text-center shadow-xs">
-                    <div className="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 font-bold text-sm mx-auto flex items-center justify-center mb-1.5 shadow-xs">
-                      {donor.name?.charAt(0) || 'S'}
-                    </div>
-                    <h3 className="text-xs font-bold text-white truncate">{donor.name}</h3>
-                    <p className="text-[11px] text-slate-300 truncate">{donor.college || 'Bihar GEC'}</p>
-                    <p className="text-xs font-heading font-black text-emerald-400 mt-0.5">₹{donor.amount}</p>
-                  </div>
-                ))}
-              </div>
-
-              <button
-                onClick={() => setShowScanner(true)}
-                className="btn-primary gap-2 py-2 px-4 text-xs font-bold"
-              >
-                <Heart size={14} className="fill-white" /> Contribute via UPI
-              </button>
+        <section className="py-8 sm:py-12 px-4 sm:px-6 md:px-12 relative z-10 border-t border-white/10">
+          <div className="container mx-auto max-w-5xl text-center text-white">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 text-xs font-bold mb-3 shadow-xs">
+              <Heart size={14} className="fill-cyan-400 text-cyan-400" /> Student Powered
             </div>
+            
+            <h2 className="font-heading text-xl sm:text-2xl font-black text-white drop-shadow-md">
+              Platform Wall of Fame
+            </h2>
+            <p className="text-xs text-slate-200 max-w-xl mx-auto mt-2 mb-6 font-medium">
+              Apna College Bihar is 100% free with zero paywalls. Heartfelt thanks to students who contribute to keeping our servers running!
+            </p>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl mx-auto mb-6">
+              {topDonors.map((donor, idx) => (
+                <div key={idx} className="bg-white/5 border border-white/10 p-3.5 rounded-xl text-center shadow-xs">
+                  <div className="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-400/30 text-cyan-300 font-bold text-sm mx-auto flex items-center justify-center mb-1.5 shadow-xs">
+                    {donor.name?.charAt(0) || 'S'}
+                  </div>
+                  <h3 className="text-xs font-bold text-white truncate">{donor.name}</h3>
+                  <p className="text-[11px] text-slate-300 truncate">{donor.college || 'Bihar GEC'}</p>
+                  <p className="text-xs font-heading font-black text-emerald-400 mt-0.5">₹{donor.amount}</p>
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setShowScanner(true)}
+              className="btn-primary gap-2 py-2.5 px-5 text-xs font-bold"
+            >
+              <Heart size={14} className="fill-white" /> Contribute via UPI
+            </button>
           </div>
         </section>
 

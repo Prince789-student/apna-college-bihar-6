@@ -17,9 +17,9 @@ export default function InteractiveCanvasBackground() {
 
   // On the Homepage, the BrandFilmBackground is the primary full-page scroll background
   const isHomePage = location.pathname === '/' || location.pathname === '';
-  if (isHomePage) return null;
 
   useEffect(() => {
+    if (isHomePage) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -243,7 +243,9 @@ export default function InteractiveCanvasBackground() {
       window.removeEventListener('touchend', onPointerLeave);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [isHomePage]);
+
+  if (isHomePage) return null;
 
   return (
     <canvas
