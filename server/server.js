@@ -369,9 +369,9 @@ app.get('/api/public/home-stats', asyncHandler(async (req, res) => {
 
         homeDataCache = {
             stats: {
-                notes: metaData.uniqueNotesCount || 296,
-                pyqs: metaData.uniquePyqsCount || 340,
-                users: rawUsersCount || 231,
+                notes: Math.max(metaData.uniqueNotesCount || 0, 296),
+                pyqs: Math.max(metaData.uniquePyqsCount || 0, 340),
+                users: Math.max(rawUsersCount || 0, 231),
                 groups: groupsCount
             },
             donors,

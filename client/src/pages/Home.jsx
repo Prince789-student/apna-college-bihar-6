@@ -215,10 +215,10 @@ export default function Home() {
       .then(json => {
         if (json.success && json.stats) {
           setStats({
-            notes: json.stats.notes || 296,
-            pyqs: json.stats.pyqs || 340,
-            users: json.stats.users || 231,
-            groups: json.stats.groups || 24
+            notes: Math.max(Number(json.stats.notes) || 0, 296),
+            pyqs: Math.max(Number(json.stats.pyqs) || 0, 340),
+            users: Math.max(Number(json.stats.users) || 0, 231),
+            groups: Math.max(Number(json.stats.groups) || 0, 24)
           });
         }
       })
