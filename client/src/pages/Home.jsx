@@ -231,7 +231,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-800 font-sans relative overflow-hidden bg-mesh-light">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-800 font-sans relative overflow-x-clip bg-mesh-light">
       <SEO
         title="Apna College Bihar | #1 Academic Platform for BEU & Bihar Engineering Students"
         description="Comprehensive academic portal for Bihar Engineering University (BEU) and AKU students. Free B.Tech Notes, 5+ Yrs PYQs, Official Syllabus, UGEAC Predictor, CGPA Calculator, and real-time WhatsApp Notice Alerts."
