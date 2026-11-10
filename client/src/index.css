@@ -554,11 +554,11 @@
     .glass-card-light,
     .glass-panel,
     #main-scroll-container article,
-    #main-scroll-container [class*="bg-white"]:not(button):not(input):not(select):not(textarea):not(img):not(svg):not(.keep-solid-white),
-    #main-scroll-container [class*="bg-slate-"]:not(button):not(input):not(select):not(textarea):not(.keep-solid-white),
-    #main-scroll-container [class*="bg-black"]:not(button):not(input):not(select):not(textarea):not(.keep-solid-white),
-    #main-scroll-container [class*="bg-blue-"]:not(button):not(input):not(select):not(textarea):not(.keep-solid-white),
-    #main-scroll-container [class*="bg-indigo-"]:not(button):not(input):not(select):not(textarea):not(.keep-solid-white),
+    #main-scroll-container [class*="bg-white"]:not(input):not(select):not(textarea):not(img):not(svg):not(.keep-solid-white),
+    #main-scroll-container [class*="bg-slate-"]:not(input):not(select):not(textarea):not(.keep-solid-white),
+    #main-scroll-container [class*="bg-black"]:not(input):not(select):not(textarea):not(.keep-solid-white),
+    #main-scroll-container [class*="bg-blue-"]:not(input):not(select):not(textarea):not(.keep-solid-white),
+    #main-scroll-container [class*="bg-indigo-"]:not(input):not(select):not(textarea):not(.keep-solid-white),
     #main-scroll-container [class*="bg-gradient-"]:not(button):not(input):not(select):not(textarea):not(.keep-solid-white) {
       background-color: rgba(0, 0, 0, 0.22) !important;
       background-image: none !important;
@@ -568,31 +568,87 @@
       color: #ffffff !important;
     }
 
-    /* 3. Text contrast: Ensure headings and body are bright, crisp white/slate with high-contrast text shadows */
+    /* 3. Never turn interactive cards, buttons or folders solid white on hover/focus/active */
+    #main-scroll-container [class*="hover:bg-white"]:hover,
+    #main-scroll-container [class*="hover:bg-slate-"]:hover,
+    #main-scroll-container [class*="hover:bg-blue-"]:hover,
+    #main-scroll-container [class*="hover:bg-indigo-"]:hover,
+    #main-scroll-container [class*="hover:bg-amber-"]:hover,
+    #main-scroll-container [class*="hover:bg-teal-"]:hover,
+    #main-scroll-container [class*="hover:bg-emerald-"]:hover {
+      background-color: rgba(255, 255, 255, 0.12) !important;
+      border-color: rgba(6, 182, 212, 0.7) !important;
+    }
+
+    #main-scroll-container button:focus,
+    #main-scroll-container button:active {
+      background-color: rgba(255, 255, 255, 0.16) !important;
+    }
+
+    /* 4. Prose Auto-Invert on Desktop for educational sections and guides */
+    #main-scroll-container .prose,
+    #main-scroll-container .prose-slate {
+      --tw-prose-body: #f8fafc !important;
+      --tw-prose-headings: #ffffff !important;
+      --tw-prose-lead: #f1f5f9 !important;
+      --tw-prose-links: #38bdf8 !important;
+      --tw-prose-bold: #ffffff !important;
+      --tw-prose-counters: #38bdf8 !important;
+      --tw-prose-bullets: #38bdf8 !important;
+      --tw-prose-hr: rgba(255, 255, 255, 0.15) !important;
+      --tw-prose-quotes: #f8fafc !important;
+      --tw-prose-quote-borders: #06b6d4 !important;
+      --tw-prose-captions: #cbd5e1 !important;
+      color: #f8fafc !important;
+    }
+
+    /* 5. Text contrast: Ensure headings and body are bright, crisp white/slate with high-contrast text shadows */
     #main-scroll-container h1,
     #main-scroll-container h2,
     #main-scroll-container h3,
     #main-scroll-container h4,
-    #main-scroll-container [class*="text-slate-900"]:not(button):not(input):not(select):not(textarea),
-    #main-scroll-container [class*="text-slate-800"]:not(button):not(input):not(select):not(textarea),
-    #main-scroll-container [class*="text-slate-700"]:not(button):not(input):not(select):not(textarea),
-    #main-scroll-container [class*="text-black"]:not(button):not(input):not(select):not(textarea) {
+    #main-scroll-container [class*="text-slate-900"]:not(input):not(select):not(textarea),
+    #main-scroll-container [class*="text-slate-800"]:not(input):not(select):not(textarea),
+    #main-scroll-container [class*="text-slate-700"]:not(input):not(select):not(textarea),
+    #main-scroll-container [class*="text-indigo-900"]:not(input):not(select):not(textarea),
+    #main-scroll-container [class*="text-indigo-800"]:not(input):not(select):not(textarea),
+    #main-scroll-container [class*="text-blue-900"]:not(input):not(select):not(textarea),
+    #main-scroll-container [class*="text-blue-800"]:not(input):not(select):not(textarea),
+    #main-scroll-container [class*="text-amber-900"]:not(input):not(select):not(textarea),
+    #main-scroll-container [class*="text-amber-800"]:not(input):not(select):not(textarea),
+    #main-scroll-container [class*="text-black"]:not(input):not(select):not(textarea) {
       color: #ffffff !important;
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 2px 10px rgba(0, 0, 0, 0.85) !important;
     }
 
-    #main-scroll-container [class*="text-slate-600"]:not(button):not(input):not(select):not(textarea),
-    #main-scroll-container [class*="text-slate-500"]:not(button):not(input):not(select):not(textarea) {
-      color: #e2e8f0 !important;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+    #main-scroll-container p,
+    #main-scroll-container li,
+    #main-scroll-container article p,
+    #main-scroll-container .prose p,
+    #main-scroll-container .prose li,
+    #main-scroll-container [class*="text-slate-600"]:not(input):not(select):not(textarea),
+    #main-scroll-container [class*="text-slate-500"]:not(input):not(select):not(textarea),
+    #main-scroll-container [class*="text-indigo-700"]:not(input):not(select):not(textarea),
+    #main-scroll-container [class*="text-indigo-600"]:not(input):not(select):not(textarea),
+    #main-scroll-container [class*="text-amber-700"]:not(input):not(select):not(textarea) {
+      color: #f1f5f9 !important;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95), 0 2px 6px rgba(0, 0, 0, 0.8) !important;
     }
 
-    #main-scroll-container [class*="text-slate-400"]:not(button):not(input):not(select):not(textarea) {
+    #main-scroll-container strong,
+    #main-scroll-container b {
+      color: #ffffff !important;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.95) !important;
+    }
+
+    #main-scroll-container [class*="text-slate-400"]:not(input):not(select):not(textarea) {
       color: #cbd5e1 !important;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85) !important;
     }
 
-    #main-scroll-container [class*="border-slate-"] {
+    #main-scroll-container [class*="border-slate-"],
+    #main-scroll-container [class*="border-indigo-100"],
+    #main-scroll-container [class*="border-amber-100"] {
       border-color: rgba(255, 255, 255, 0.15) !important;
     }
   }

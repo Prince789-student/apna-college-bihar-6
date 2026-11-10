@@ -430,9 +430,9 @@ export default function PYQ() {
           <div className="grid grid-cols-4 md:grid-cols-8 gap-2.5 md:gap-3">
             {SEMESTERS.map(s => (
               <button key={s} onClick={() => handleSemSelect(s)}
-                className={`aspect-square rounded-2xl flex flex-col items-center justify-center border-2 font-[900] text-xl transition-all hover:scale-105 active:scale-95 shadow-sm hover:shadow-md ${branchColor.bg} ${branchColor.border} ${branchColor.text} md:bg-slate-900/60 md:backdrop-blur-md md:border-white/15 md:text-white md:hover:border-cyan-400 cursor-pointer`}>
+                className={`aspect-square rounded-2xl flex flex-col items-center justify-center border-2 font-[900] text-xl transition-all hover:scale-105 active:scale-95 shadow-sm hover:shadow-md ${branchColor.bg} ${branchColor.border} ${branchColor.text} md:bg-black/25 md:hover:bg-white/10 md:border-white/15 md:text-white md:hover:border-cyan-400 cursor-pointer`}>
                 {s}
-                <span className="text-[8px] font-bold text-slate-400 md:text-slate-300 mt-0.5">SEM</span>
+                <span className="text-[8px] font-bold text-slate-400 md:text-cyan-300 mt-0.5">SEM</span>
               </button>
             ))}
           </div>
@@ -458,16 +458,16 @@ export default function PYQ() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
               {subjectFolders.map(f => (
                 <button key={f.id} onClick={() => selectFolder(f)}
-                  className={`flex flex-col items-start gap-3 md:gap-4 p-5 md:p-7 rounded-2xl md:rounded-[2rem] border-2 bg-white md:bg-slate-900/60 md:backdrop-blur-md hover:${branchColor.bg} ${branchColor.border} md:border-white/15 md:hover:border-cyan-400/50 hover:scale-[1.01] active:scale-[0.99] transition-all text-left shadow-sm hover:shadow-lg group md:text-white cursor-pointer`}>
-                  <div className={`w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center ${branchColor.badge} md:bg-cyan-500/20 md:text-cyan-300`}>
+                  className={`flex flex-col items-start gap-3 md:gap-4 p-5 md:p-7 rounded-2xl md:rounded-[2rem] border-2 bg-white md:bg-black/25 hover:bg-slate-50 md:hover:bg-white/10 ${branchColor.border} md:border-white/15 md:hover:border-cyan-400/70 hover:scale-[1.01] active:scale-[0.99] md:active:bg-white/15 transition-all text-left shadow-sm hover:shadow-lg group text-slate-900 md:text-white cursor-pointer outline-none`}>
+                  <div className={`w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center ${branchColor.badge} md:bg-cyan-500/20 md:border md:border-cyan-400/30 md:text-cyan-300`}>
                     <FolderOpen size={20} className="md:hidden" />
                     <FolderOpen size={26} className="hidden md:block text-cyan-300" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-base md:text-lg font-[900] text-slate-900 md:text-white uppercase tracking-tight leading-tight">{f.title}</h3>
-                    <p className="text-[9px] md:text-[10px] font-bold text-slate-400 md:text-slate-300 mt-1">{docs.filter(x => x.parentId === f.id).length} papers inside</p>
+                    <h3 className="text-base md:text-lg font-[900] text-slate-900 md:text-white uppercase tracking-tight leading-tight drop-shadow-sm md:drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]">{f.title}</h3>
+                    <p className="text-[9px] md:text-[10px] font-bold text-slate-400 md:text-cyan-300 mt-1">{docs.filter(x => x.parentId === f.id).length} papers inside</p>
                   </div>
-                  <div className={`flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${branchColor.text} md:text-cyan-400 group-hover:gap-2.5 transition-all`}>
+                  <div className={`flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${branchColor.text} md:text-cyan-400 md:group-hover:text-cyan-300 group-hover:gap-2.5 transition-all`}>
                     Open PYQs <ArrowRight size={10} />
                   </div>
                 </button>
@@ -498,13 +498,13 @@ export default function PYQ() {
                 <React.Fragment key={d.id}>
                   {d.type === 'folder' ? (
                     <button onClick={() => selectFolder(d)}
-                      className="flex flex-col items-start gap-3 md:gap-4 p-5 md:p-7 rounded-2xl md:rounded-[2rem] border-2 bg-white hover:bg-amber-50 border-amber-100 hover:border-amber-300 transition-all text-left shadow-sm hover:shadow-md group">
-                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center bg-amber-100"><FolderOpen size={20} className="text-amber-600" /></div>
+                      className="flex flex-col items-start gap-3 md:gap-4 p-5 md:p-7 rounded-2xl md:rounded-[2rem] border-2 bg-white md:bg-black/25 hover:bg-amber-50 md:hover:bg-white/10 border-amber-100 md:border-white/15 hover:border-amber-300 md:hover:border-cyan-400/70 transition-all text-left shadow-sm hover:shadow-md group cursor-pointer text-slate-900 md:text-white outline-none">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center bg-amber-100 md:bg-cyan-500/20 md:border md:border-cyan-400/30"><FolderOpen size={20} className="text-amber-600 md:text-cyan-300" /></div>
                       <div>
-                        <h3 className="text-base font-[900] text-slate-900 uppercase tracking-tight">{d.title}</h3>
-                        <p className="text-[10px] font-bold text-slate-400 mt-1">{docs.filter(x => x.parentId === d.id).length} papers</p>
+                        <h3 className="text-base font-[900] text-slate-900 md:text-white uppercase tracking-tight drop-shadow-sm md:drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]">{d.title}</h3>
+                        <p className="text-[10px] font-bold text-slate-400 md:text-cyan-300 mt-1">{docs.filter(x => x.parentId === d.id).length} papers</p>
                       </div>
-                      <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-amber-600 group-hover:gap-2.5 transition-all">Open <ArrowRight size={10} /></div>
+                      <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-amber-600 md:text-cyan-400 md:group-hover:text-cyan-300 group-hover:gap-2.5 transition-all">Open <ArrowRight size={10} /></div>
                     </button>
                   ) : (
                     <PYQFileCard key={d.id} d={d} onAction={handleAction} user={user} onEdit={handleEditPYQ} onDelete={handleDeletePYQ} />
@@ -518,62 +518,62 @@ export default function PYQ() {
       )}
 
       {/* Footer */}
-      <div className="bg-slate-50 p-4 md:p-6 rounded-2xl md:rounded-[2.5rem] border border-slate-200/50 flex items-center gap-3">
-        <div className="w-9 h-9 md:w-10 md:h-10 bg-amber-100 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0"><ShieldCheck size={18} className="text-amber-600"/></div>
+      <div className="bg-slate-50 md:bg-black/20 p-4 md:p-6 rounded-2xl md:rounded-[2.5rem] border border-slate-200/50 md:border-white/10 flex items-center gap-3">
+        <div className="w-9 h-9 md:w-10 md:h-10 bg-amber-100 md:bg-cyan-500/20 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0"><ShieldCheck size={18} className="text-amber-600 md:text-cyan-300"/></div>
         <div>
-          <p className="text-slate-900 font-black uppercase text-[10px] md:text-xs">Verified PYQ Content</p>
-          <p className="text-[8px] md:text-[9px] text-slate-400 font-bold uppercase mt-0.5">Files verified by ACB Admin Team</p>
+          <p className="text-slate-900 md:text-white font-black uppercase text-[10px] md:text-xs">Verified PYQ Content</p>
+          <p className="text-[8px] md:text-[9px] text-slate-400 md:text-cyan-300 font-bold uppercase mt-0.5">Files verified by ACB Admin Team</p>
         </div>
       </div>
 
       {/* ── Educational SEO Content ── */}
-      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 mx-auto prose prose-slate max-w-none shadow-sm mb-8">
-        <h2 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tighter mb-6">
+      <div className="bg-white md:bg-black/25 p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 md:border-white/15 mt-12 mx-auto prose prose-slate md:prose-invert max-w-none shadow-sm mb-8 text-left">
+        <h2 className="text-2xl md:text-3xl font-black text-slate-900 md:text-white uppercase tracking-tighter mb-6 drop-shadow-sm md:drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]">
           Bihar Engineering University (BEU) {branch ? `${branch.label} ` : ''}{sem ? `Semester ${sem} ` : ''}Previous Year Questions (PYQ)
         </h2>
         
-        <p className="text-slate-700 text-lg leading-relaxed mb-6">
-          Welcome to Apna College Bihar's most comprehensive and verified collection of <strong>Bihar Engineering University (BEU) {branch ? `${branch.label} ` : ''}{sem ? `Semester ${sem} ` : ''}Previous Year Question (PYQ) papers</strong>. Excelling in engineering semester exams in Bihar heavily relies on understanding the specific exam pattern, recognizing the weightage of different modules, and practicing the exact types of numericals and theoretical questions asked. {branch ? `For ${branch.label} students, ` : 'There is no better or more proven strategy to decode the university exam framework than by '}analyzing the actual End Semester papers from the past 5-10 years.
+        <p className="text-slate-700 md:text-slate-100 text-lg leading-relaxed mb-6 font-medium">
+          Welcome to Apna College Bihar's most comprehensive and verified collection of <strong className="text-slate-900 md:text-cyan-300">Bihar Engineering University (BEU) {branch ? `${branch.label} ` : ''}{sem ? `Semester ${sem} ` : ''}Previous Year Question (PYQ) papers</strong>. Excelling in engineering semester exams in Bihar heavily relies on understanding the specific exam pattern, recognizing the weightage of different modules, and practicing the exact types of numericals and theoretical questions asked. {branch ? `For ${branch.label} students, ` : 'There is no better or more proven strategy to decode the university exam framework than by '}analyzing the actual End Semester papers from the past 5-10 years.
         </p>
 
-        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-2xl my-8">
-          <h3 className="text-xl font-bold text-amber-900 mt-0 mb-3">Why are PYQs the Ultimate Strategy for {branch ? `${branch.short} ` : ''}Exams?</h3>
-          <p className="text-amber-800 mb-0">
+        <div className="bg-amber-50 md:bg-cyan-950/30 border-l-4 border-amber-500 md:border-cyan-400 p-6 rounded-r-2xl my-8 md:border md:border-l-4 md:border-white/10 md:border-l-cyan-400">
+          <h3 className="text-xl font-bold text-amber-900 md:text-cyan-300 mt-0 mb-3 drop-shadow-sm">Why are PYQs the Ultimate Strategy for {branch ? `${branch.short} ` : ''}Exams?</h3>
+          <p className="text-amber-800 md:text-slate-100 mb-0 leading-relaxed font-medium">
             Unlike internal assessments, the End Semester Exams (worth 70 Marks) conducted by BEU follow a highly structured and traditional testing pattern. Historically, a significant percentage of questions—sometimes ranging from 30% to 40%—are either directly repeated from previous years or follow the exact same derivations and numerical models with minor value changes. Solving {sem ? `Semester ${sem} ` : ''}PYQs systematically is the smartest, most efficient way to guarantee that you easily clear the passing threshold (25 marks) and drastically push your CGPA upwards towards 8.5 and beyond.
           </p>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-5">How to Download & Practice BEU {branch ? branch.short : ''} PYQ PDFs</h3>
-        <p className="text-slate-700 mb-4">
+        <h3 className="text-2xl font-bold text-slate-800 md:text-white mt-10 mb-5 drop-shadow-sm">How to Download & Practice BEU {branch ? branch.short : ''} PYQ PDFs</h3>
+        <p className="text-slate-700 md:text-slate-100 mb-4 leading-relaxed font-medium">
           We have made accessing these critical resources as simple as possible for {branch ? branch.label : 'Engineering'} students:
         </p>
-        <ol className="space-y-4 text-slate-700 mb-8">
-          <li><strong>Select your Engineering Branch:</strong> Our extensive database includes categorized PYQs for {branch ? `your branch (${branch.label})` : 'Computer Science Engineering (CSE), Civil Engineering, Mechanical Engineering, Electrical & Electronics Engineering (EEE), Information Technology (IT), and specialized branches'}.</li>
-          <li><strong>Choose your current Semester:</strong> Filter through Semester 1 to Semester 8 to immediately find the relevant question papers for your current academic term.</li>
-          <li><strong>Navigate to the Subject Folder:</strong> Access neatly organized, year-wise question papers sorted strictly by the official BEU subject codes.</li>
-          <li><strong>Download or Preview:</strong> Click the Download icon to save the official university question paper PDF directly to your mobile device or laptop for focused offline study, or use the View button for a quick glance.</li>
+        <ol className="space-y-4 text-slate-700 md:text-slate-100 mb-8 leading-relaxed font-medium">
+          <li><strong className="text-slate-900 md:text-cyan-300">Select your Engineering Branch:</strong> Our extensive database includes categorized PYQs for {branch ? `your branch (${branch.label})` : 'Computer Science Engineering (CSE), Civil Engineering, Mechanical Engineering, Electrical & Electronics Engineering (EEE), Information Technology (IT), and specialized branches'}.</li>
+          <li><strong className="text-slate-900 md:text-cyan-300">Choose your current Semester:</strong> Filter through Semester 1 to Semester 8 to immediately find the relevant question papers for your current academic term.</li>
+          <li><strong className="text-slate-900 md:text-cyan-300">Navigate to the Subject Folder:</strong> Access neatly organized, year-wise question papers sorted strictly by the official BEU subject codes.</li>
+          <li><strong className="text-slate-900 md:text-cyan-300">Download or Preview:</strong> Click the Download icon to save the official university question paper PDF directly to your mobile device or laptop for focused offline study, or use the View button for a quick glance.</li>
         </ol>
 
-        <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-6">Frequently Asked Questions (FAQs)</h3>
+        <h3 className="text-2xl font-bold text-slate-800 md:text-white mt-10 mb-6 drop-shadow-sm">Frequently Asked Questions (FAQs)</h3>
         
         <div className="space-y-6">
-          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <h4 className="text-lg font-bold text-slate-900 mb-2">Are these Official BCECEB/BEU Question Papers?</h4>
-            <p className="text-slate-600 mb-0">
+          <div className="bg-slate-50 md:bg-black/20 p-6 rounded-2xl border border-slate-100 md:border-white/10">
+            <h4 className="text-lg font-bold text-slate-900 md:text-cyan-300 mb-2">Are these Official BCECEB/BEU Question Papers?</h4>
+            <p className="text-slate-600 md:text-slate-100 mb-0 font-medium leading-relaxed">
               Yes, absolutely! Every single paper available in our directory is the original, authentic question paper distributed during the official BEU End Semester Examinations. These are painstakingly crowd-sourced, scanned, and collected directly from students across all 38 Government Engineering Colleges in Bihar. We rigorously update and verify our database after every exam cycle to ensure you have access to the absolute latest papers.
             </p>
           </div>
 
-          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <h4 className="text-lg font-bold text-slate-900 mb-2">Are the {branch ? branch.short : ''} PYQs free to download?</h4>
-            <p className="text-slate-600 mb-0">
+          <div className="bg-slate-50 md:bg-black/20 p-6 rounded-2xl border border-slate-100 md:border-white/10">
+            <h4 className="text-lg font-bold text-slate-900 md:text-cyan-300 mb-2">Are the {branch ? branch.short : ''} PYQs free to download?</h4>
+            <p className="text-slate-600 md:text-slate-100 mb-0 font-medium leading-relaxed">
               Yes. All Previous Year Question papers provided by Apna College Bihar are 100% free to access and download. We believe that every student deserves equal access to essential study materials without any financial barriers.
             </p>
           </div>
           
-          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <h4 className="text-lg font-bold text-slate-900 mb-2">How many years of PYQs should I solve?</h4>
-            <p className="text-slate-600 mb-0">
+          <div className="bg-slate-50 md:bg-black/20 p-6 rounded-2xl border border-slate-100 md:border-white/10">
+            <h4 className="text-lg font-bold text-slate-900 md:text-cyan-300 mb-2">How many years of PYQs should I solve?</h4>
+            <p className="text-slate-600 md:text-slate-100 mb-0 font-medium leading-relaxed">
               For optimal preparation {sem ? `in semester ${sem}` : ''}, we recommend thoroughly solving at least the last 3 to 5 years of PYQs. Focus especially on identifying the questions that appear repeatedly across different years, as these are considered "high-probability" topics by university examiners.
             </p>
           </div>

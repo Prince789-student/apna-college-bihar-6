@@ -566,9 +566,9 @@ export default function Notes() {
           <div className="grid grid-cols-4 md:grid-cols-8 gap-2.5 md:gap-3">
             {SEMESTERS.map(s => (
               <button key={s} onClick={() => setSem(s)}
-                className={`aspect-square rounded-2xl flex flex-col items-center justify-center border-2 font-[900] text-xl transition-all hover:scale-105 active:scale-95 shadow-sm hover:shadow-md ${branchColor.bg} ${branchColor.border} ${branchColor.text} md:bg-slate-900/60 md:backdrop-blur-md md:border-white/15 md:text-white md:hover:border-cyan-400`}>
+                className={`aspect-square rounded-2xl flex flex-col items-center justify-center border-2 font-[900] text-xl transition-all hover:scale-105 active:scale-95 shadow-sm hover:shadow-md ${branchColor.bg} ${branchColor.border} ${branchColor.text} md:bg-black/25 md:hover:bg-white/10 md:border-white/15 md:text-white md:hover:border-cyan-400 cursor-pointer`}>
                 {s}
-                <span className="text-[8px] font-bold text-slate-400 md:text-slate-300 mt-0.5">SEM</span>
+                <span className="text-[8px] font-bold text-slate-400 md:text-cyan-300 mt-0.5">SEM</span>
               </button>
             ))}
           </div>
@@ -594,16 +594,16 @@ export default function Notes() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
               {subjectFolders.map(f => (
                 <button key={f.id} onClick={() => selectFolder(f)}
-                  className={`flex flex-col items-start gap-3 md:gap-4 p-5 md:p-7 rounded-2xl md:rounded-[2rem] border-2 bg-white md:bg-slate-900/60 md:backdrop-blur-md hover:${branchColor.bg} ${branchColor.border} md:border-white/15 md:hover:border-cyan-400/50 hover:scale-[1.01] active:scale-[0.99] transition-all text-left shadow-sm hover:shadow-lg group md:text-white cursor-pointer`}>
-                  <div className={`w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center ${branchColor.badge} md:bg-cyan-500/20 md:text-cyan-300`}>
+                  className={`flex flex-col items-start gap-3 md:gap-4 p-5 md:p-7 rounded-2xl md:rounded-[2rem] border-2 bg-white md:bg-black/25 hover:bg-slate-50 md:hover:bg-white/10 ${branchColor.border} md:border-white/15 md:hover:border-cyan-400/70 hover:scale-[1.01] active:scale-[0.99] md:active:bg-white/15 transition-all text-left shadow-sm hover:shadow-lg group text-slate-900 md:text-white cursor-pointer outline-none`}>
+                  <div className={`w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl flex items-center justify-center ${branchColor.badge} md:bg-cyan-500/20 md:border md:border-cyan-400/30 md:text-cyan-300`}>
                     <FolderOpen size={20} className={`md:hidden ${branchColor.text.replace('text-', 'text-')}`} />
                     <FolderOpen size={26} className="hidden md:block text-cyan-300" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-base md:text-lg font-[900] text-slate-900 md:text-white uppercase tracking-tight leading-tight">{f.title}</h3>
-                    <p className="text-[9px] md:text-[10px] font-bold text-slate-400 md:text-slate-300 mt-1">{f.fileCount !== undefined ? f.fileCount : docs.filter(x => x.parentId === f.id).length} files inside</p>
+                    <h3 className="text-base md:text-lg font-[900] text-slate-900 md:text-white uppercase tracking-tight leading-tight drop-shadow-sm md:drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]">{f.title}</h3>
+                    <p className="text-[9px] md:text-[10px] font-bold text-slate-400 md:text-cyan-300 mt-1">{f.fileCount !== undefined ? f.fileCount : docs.filter(x => x.parentId === f.id).length} files inside</p>
                   </div>
-                  <div className={`flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${branchColor.text} md:text-cyan-400 group-hover:gap-2.5 transition-all`}>
+                  <div className={`flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${branchColor.text} md:text-cyan-400 md:group-hover:text-cyan-300 group-hover:gap-2.5 transition-all`}>
                     Open Notes <ArrowRight size={10} />
                   </div>
                 </button>
@@ -646,13 +646,13 @@ export default function Notes() {
                 <React.Fragment key={d.id}>
                   {d.type === 'folder' ? (
                     <button onClick={() => selectFolder(d)}
-                      className="flex flex-col items-start gap-3 md:gap-4 p-5 md:p-7 rounded-2xl md:rounded-[2rem] border-2 bg-white hover:bg-indigo-50 border-indigo-100 hover:border-indigo-300 transition-all text-left shadow-sm hover:shadow-md group">
-                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center bg-indigo-100"><FolderOpen size={20} className="text-indigo-600" /></div>
+                      className="flex flex-col items-start gap-3 md:gap-4 p-5 md:p-7 rounded-2xl md:rounded-[2rem] border-2 bg-white md:bg-black/25 hover:bg-indigo-50 md:hover:bg-white/10 border-indigo-100 md:border-white/15 hover:border-indigo-300 md:hover:border-cyan-400/70 transition-all text-left shadow-sm hover:shadow-md group cursor-pointer text-slate-900 md:text-white outline-none">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center bg-indigo-100 md:bg-cyan-500/20 md:border md:border-cyan-400/30"><FolderOpen size={20} className="text-indigo-600 md:text-cyan-300" /></div>
                       <div>
-                        <h3 className="text-base font-[900] text-slate-900 uppercase tracking-tight">{d.title}</h3>
-                        <p className="text-[10px] font-bold text-slate-400 mt-1">{docs.filter(x => x.parentId === d.id).length} files</p>
+                        <h3 className="text-base font-[900] text-slate-900 md:text-white uppercase tracking-tight drop-shadow-sm md:drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]">{d.title}</h3>
+                        <p className="text-[10px] font-bold text-slate-400 md:text-cyan-300 mt-1">{docs.filter(x => x.parentId === d.id).length} files</p>
                       </div>
-                      <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-indigo-600 group-hover:gap-2.5 transition-all">Open <ArrowRight size={10} /></div>
+                      <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-indigo-600 md:text-cyan-400 md:group-hover:text-cyan-300 group-hover:gap-2.5 transition-all">Open <ArrowRight size={10} /></div>
                     </button>
                   ) : (
                     <FileCard d={d} onAction={handleAction} accentColor="indigo" user={user} onEdit={handleEditNote} onDelete={handleDeleteNote} />
@@ -675,53 +675,53 @@ export default function Notes() {
       </div>
 
       {/* ── Educational SEO Content ── */}
-      <div className="bg-white p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 mt-12 mx-auto prose prose-slate max-w-none shadow-sm mb-8">
-        <h2 className="text-2xl md:text-3xl font-black text-slate-900 uppercase tracking-tighter mb-6">
+      <div className="bg-white md:bg-black/25 p-8 md:p-12 rounded-[2.5rem] border border-slate-200/50 md:border-white/15 mt-12 mx-auto prose prose-slate md:prose-invert max-w-none shadow-sm mb-8 text-left">
+        <h2 className="text-2xl md:text-3xl font-black text-slate-900 md:text-white uppercase tracking-tighter mb-6 drop-shadow-sm md:drop-shadow-[0_1px_4px_rgba(0,0,0,0.95)]">
           Bihar Engineering University (BEU) {branch ? `${branch.label} ` : ''}{sem ? `Semester ${sem} ` : ''}B.Tech Notes & Study Material
         </h2>
         
-        <p className="text-slate-700 text-lg leading-relaxed mb-6">
-          Welcome to Apna College Bihar's dedicated portal for <strong>B.Tech Notes for Bihar Engineering University (BEU) {branch ? `for ${branch.label} ` : ''}{sem ? `Semester ${sem}` : ''}</strong>. This is the largest, most organized, and entirely free repository designed specifically for engineering students across Bihar. {branch ? `For ${branch.short} students, ` : 'Whether you are pursuing Computer Science Engineering (CSE), Civil Engineering, Mechanical Engineering, Electrical Engineering, or specialized branches like Artificial Intelligence, '}our platform provides comprehensive, chapter-wise handwritten and digital notes. All materials are strictly aligned with the latest AICTE guidelines and the official BEU {sem ? `Semester ${sem} ` : ''}Syllabus.
+        <p className="text-slate-700 md:text-slate-100 text-lg leading-relaxed mb-6 font-medium">
+          Welcome to Apna College Bihar's dedicated portal for <strong className="text-slate-900 md:text-cyan-300">B.Tech Notes for Bihar Engineering University (BEU) {branch ? `for ${branch.label} ` : ''}{sem ? `Semester ${sem}` : ''}</strong>. This is the largest, most organized, and entirely free repository designed specifically for engineering students across Bihar. {branch ? `For ${branch.short} students, ` : 'Whether you are pursuing Computer Science Engineering (CSE), Civil Engineering, Mechanical Engineering, Electrical Engineering, or specialized branches like Artificial Intelligence, '}our platform provides comprehensive, chapter-wise handwritten and digital notes. All materials are strictly aligned with the latest AICTE guidelines and the official BEU {sem ? `Semester ${sem} ` : ''}Syllabus.
         </p>
 
-        <div className="bg-indigo-50 border-l-4 border-indigo-500 p-6 rounded-r-2xl my-8">
-          <h3 className="text-xl font-bold text-indigo-900 mt-0 mb-3">Why Rely on Official BEU Syllabus Notes for {branch ? branch.short : 'Engineering'}?</h3>
-          <p className="text-indigo-800 mb-0">
-            The Bihar Engineering University standardizes the curriculum across all 38+ Government Engineering Colleges in Bihar, including prestigious institutions like MIT Muzaffarpur, BCE Bhagalpur, and DCE Darbhanga. Relying on generic internet notes can be detrimental to your grades because they often miss the specific modules and derivations required for your {sem ? `Semester ${sem} ` : ''}End Semester Examinations. Our team meticulously curates notes from college toppers, senior students, and highly qualified faculties to ensure they exactly match the <strong>BEU Module-wise breakdown</strong>. This targeted approach ensures you maximize your study efficiency and don't waste time on irrelevant topics.
+        <div className="bg-indigo-50 md:bg-cyan-950/30 border-l-4 border-indigo-500 md:border-cyan-400 p-6 rounded-r-2xl my-8 md:border md:border-l-4 md:border-white/10 md:border-l-cyan-400">
+          <h3 className="text-xl font-bold text-indigo-900 md:text-cyan-300 mt-0 mb-3 drop-shadow-sm">Why Rely on Official BEU Syllabus Notes for {branch ? branch.short : 'Engineering'}?</h3>
+          <p className="text-indigo-800 md:text-slate-100 mb-0 leading-relaxed font-medium">
+            The Bihar Engineering University standardizes the curriculum across all 38+ Government Engineering Colleges in Bihar, including prestigious institutions like MIT Muzaffarpur, BCE Bhagalpur, and DCE Darbhanga. Relying on generic internet notes can be detrimental to your grades because they often miss the specific modules and derivations required for your {sem ? `Semester ${sem} ` : ''}End Semester Examinations. Our team meticulously curates notes from college toppers, senior students, and highly qualified faculties to ensure they exactly match the <strong className="text-indigo-950 md:text-white">BEU Module-wise breakdown</strong>. This targeted approach ensures you maximize your study efficiency and don't waste time on irrelevant topics.
           </p>
         </div>
 
-        <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-5">How to Effectively Use These {branch ? branch.short : ''} Engineering Notes</h3>
-        <p className="text-slate-700 mb-4">
+        <h3 className="text-2xl font-bold text-slate-800 md:text-white mt-10 mb-5 drop-shadow-sm">How to Effectively Use These {branch ? branch.short : ''} Engineering Notes</h3>
+        <p className="text-slate-700 md:text-slate-100 mb-4 leading-relaxed font-medium">
           To get the most out of our study materials and secure a high SGPA/CGPA, follow this structured approach:
         </p>
-        <ol className="space-y-4 text-slate-700 mb-8">
-          <li><strong>Select your specific Branch and Semester:</strong> Navigation is straightforward. Choose from core branches like CSE, Civil, ECE, Mechanical, IT, etc., and select your current semester (Sem 1 to 8) to find your exact curriculum.</li>
-          <li><strong>Locate the Subject Folder:</strong> Find folders labeled with your specific subject code (e.g., Physics, Engineering Chemistry, Basic Electrical Engineering, Data Structures & Algorithms, Machine Learning).</li>
-          <li><strong>Download or View Online:</strong> Click the Download icon to save the high-quality PDF directly to your device for offline reading, or click 'View' to read directly in our fast, integrated PDF viewer without downloading.</li>
-          <li><strong>Cross-Reference with the Syllabus:</strong> Always keep a copy of the official BEU syllabus handy. As you read through a module in our notes, check it off your syllabus copy to track your progress.</li>
+        <ol className="space-y-4 text-slate-700 md:text-slate-100 mb-8 leading-relaxed font-medium">
+          <li><strong className="text-slate-900 md:text-cyan-300">Select your specific Branch and Semester:</strong> Navigation is straightforward. Choose from core branches like CSE, Civil, ECE, Mechanical, IT, etc., and select your current semester (Sem 1 to 8) to find your exact curriculum.</li>
+          <li><strong className="text-slate-900 md:text-cyan-300">Locate the Subject Folder:</strong> Find folders labeled with your specific subject code (e.g., Physics, Engineering Chemistry, Basic Electrical Engineering, Data Structures & Algorithms, Machine Learning).</li>
+          <li><strong className="text-slate-900 md:text-cyan-300">Download or View Online:</strong> Click the Download icon to save the high-quality PDF directly to your device for offline reading, or click 'View' to read directly in our fast, integrated PDF viewer without downloading.</li>
+          <li><strong className="text-slate-900 md:text-cyan-300">Cross-Reference with the Syllabus:</strong> Always keep a copy of the official BEU syllabus handy. As you read through a module in our notes, check it off your syllabus copy to track your progress.</li>
         </ol>
 
-        <h3 className="text-2xl font-bold text-slate-800 mt-10 mb-6">Frequently Asked Questions (FAQs)</h3>
+        <h3 className="text-2xl font-bold text-slate-800 md:text-white mt-10 mb-6 drop-shadow-sm">Frequently Asked Questions (FAQs)</h3>
         
         <div className="space-y-6">
-          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <h4 className="text-lg font-bold text-slate-900 mb-2">Are these Notes Sufficient for BEU {sem ? `Semester ${sem} ` : ''}End Semester Exams?</h4>
-            <p className="text-slate-600 mb-0">
-              Absolutely! These notes have been thoroughly tested by thousands of engineering students across Bihar. However, to maximize your SGPA and CGPA, we strongly recommend combining these notes with our <strong>Previous Year Questions (PYQs)</strong> section. While notes build your conceptual foundation and help in understanding complex derivations and numericals, solving PYQs is the ultimate strategy to understand the exam pattern and question framing.
+          <div className="bg-slate-50 md:bg-black/20 p-6 rounded-2xl border border-slate-100 md:border-white/10">
+            <h4 className="text-lg font-bold text-slate-900 md:text-cyan-300 mb-2">Are these Notes Sufficient for BEU {sem ? `Semester ${sem} ` : ''}End Semester Exams?</h4>
+            <p className="text-slate-600 md:text-slate-100 mb-0 font-medium leading-relaxed">
+              Absolutely! These notes have been thoroughly tested by thousands of engineering students across Bihar. However, to maximize your SGPA and CGPA, we strongly recommend combining these notes with our <strong className="text-slate-800 md:text-white">Previous Year Questions (PYQs)</strong> section. While notes build your conceptual foundation and help in understanding complex derivations and numericals, solving PYQs is the ultimate strategy to understand the exam pattern and question framing.
             </p>
           </div>
 
-          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <h4 className="text-lg font-bold text-slate-900 mb-2">Is the {branch ? branch.short : ''} study material completely free?</h4>
-            <p className="text-slate-600 mb-0">
+          <div className="bg-slate-50 md:bg-black/20 p-6 rounded-2xl border border-slate-100 md:border-white/10">
+            <h4 className="text-lg font-bold text-slate-900 md:text-cyan-300 mb-2">Is the {branch ? branch.short : ''} study material completely free?</h4>
+            <p className="text-slate-600 md:text-slate-100 mb-0 font-medium leading-relaxed">
               Yes, Apna College Bihar is committed to democratizing engineering education in Bihar. All our B.Tech notes, previous year question papers, syllabus copies, and counselling tools are 100% free for all students. You do not need to pay any subscription fees to download or view the PDFs.
             </p>
           </div>
 
-          <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <h4 className="text-lg font-bold text-slate-900 mb-2">How often are the notes updated?</h4>
-            <p className="text-slate-600 mb-0">
+          <div className="bg-slate-50 md:bg-black/20 p-6 rounded-2xl border border-slate-100 md:border-white/10">
+            <h4 className="text-lg font-bold text-slate-900 md:text-cyan-300 mb-2">How often are the notes updated?</h4>
+            <p className="text-slate-600 md:text-slate-100 mb-0 font-medium leading-relaxed">
               Our academic team and community of student contributors continuously review and update the content. Whenever BEU introduces a syllabus change (like the recent updates to the CSE and emerging branches curriculum), we prioritize acquiring and uploading the updated notes. We ensure that the material reflects the most current academic requirements.
             </p>
           </div>
