@@ -540,27 +540,26 @@
   .animate-eq-5 { animation: eq-bounce-5 1.2s ease-in-out infinite 0.4s; }
   .animate-eq-6 { animation: eq-bounce-6 0.95s ease-in-out infinite 0.1s; }
 
-  /* ── Desktop Full-Page Brand Film Glass Enhancements (Zero Blur & Clear Video Visibility) ── */
+  /* ── Desktop Full-Page Brand Film Glass Enhancements (Zero Blur on Page, 25-30% Glass) ── */
   @media (min-width: 768px) {
-    /* 1. Universally eliminate blur on desktop so background brand film video is 100% crisp & razor-sharp */
-    #main-scroll-container *,
-    #main-scroll-container [class*="backdrop-blur"],
-    [class*="backdrop-blur"] {
+    /* 1. Eliminate blur on page cards so background brand film video is 100% crisp & razor-sharp (preserve modal backdrops) */
+    #main-scroll-container *:not([class*="fixed"]):not([class*="inset-0"]):not([class*="z-[99"]):not([class*="z-[200]"]),
+    #main-scroll-container [class*="backdrop-blur"]:not([class*="fixed"]):not([class*="inset-0"]):not([class*="z-[99"]):not([class*="z-[200]"]) {
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
     }
 
-    /* 2. Glass Cards: Transparent subtle background so video shines through (Zero heavy black or white boxes) */
+    /* 2. Glass Cards: Transparent 25-30% background so video shines through (Zero heavy black or white boxes) */
     .glass-card-light,
     .glass-panel,
     #main-scroll-container article,
-    #main-scroll-container [class*="bg-white"]:not(input):not(select):not(textarea):not(img):not(svg):not(.keep-solid-white),
-    #main-scroll-container [class*="bg-slate-"]:not(input):not(select):not(textarea):not(.keep-solid-white),
-    #main-scroll-container [class*="bg-black"]:not(input):not(select):not(textarea):not(.keep-solid-white),
-    #main-scroll-container [class*="bg-blue-"]:not(input):not(select):not(textarea):not(.keep-solid-white),
-    #main-scroll-container [class*="bg-indigo-"]:not(input):not(select):not(textarea):not(.keep-solid-white),
-    #main-scroll-container [class*="bg-gradient-"]:not(button):not(input):not(select):not(textarea):not(.keep-solid-white) {
-      background-color: rgba(0, 0, 0, 0.22) !important;
+    #main-scroll-container [class*="bg-white"]:not(input):not(select):not(textarea):not(img):not(svg):not(.keep-solid-white):not([class*="fixed"]):not([class*="inset-0"]):not(.modal-dialog-content):not([role="dialog"]):not(.qr-code-box),
+    #main-scroll-container [class*="bg-slate-"]:not(input):not(select):not(textarea):not(.keep-solid-white):not([class*="fixed"]):not([class*="inset-0"]):not(.modal-dialog-content):not([role="dialog"]),
+    #main-scroll-container [class*="bg-black"]:not(input):not(select):not(textarea):not(.keep-solid-white):not([class*="fixed"]):not([class*="inset-0"]):not(.modal-dialog-content):not([role="dialog"]),
+    #main-scroll-container [class*="bg-blue-"]:not(input):not(select):not(textarea):not(.keep-solid-white):not([class*="fixed"]):not([class*="inset-0"]):not(.modal-dialog-content):not([role="dialog"]),
+    #main-scroll-container [class*="bg-indigo-"]:not(input):not(select):not(textarea):not(.keep-solid-white):not([class*="fixed"]):not([class*="inset-0"]):not(.modal-dialog-content):not([role="dialog"]),
+    #main-scroll-container [class*="bg-gradient-"]:not(button):not(input):not(select):not(textarea):not(.keep-solid-white):not([class*="fixed"]):not([class*="inset-0"]):not(.modal-dialog-content):not([role="dialog"]) {
+      background-color: rgba(0, 0, 0, 0.28) !important;
       background-image: none !important;
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
@@ -568,7 +567,72 @@
       color: #ffffff !important;
     }
 
-    /* 3. Never turn interactive cards, buttons or folders solid white on hover/focus/active */
+    /* 3. Modals & Dialogs: Opaque & Solid Scrim (Zero text bleed-through or background overlap) */
+    .modal-backdrop,
+    [role="dialog"].fixed,
+    div[class*="fixed"][class*="inset-0"][class*="z-[99"],
+    div[class*="fixed"][class*="inset-0"][class*="z-[200]"],
+    div[class*="fixed"][class*="inset-0"][class*="z-50"]:not(.pointer-events-none) {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      background-color: rgba(0, 0, 0, 0.88) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+    }
+
+    .modal-backdrop > div,
+    [role="dialog"] > div,
+    .modal-dialog-content {
+      background-color: #0c1322 !important;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.98), 0 0 35px rgba(0, 0, 0, 0.85) !important;
+      color: #ffffff !important;
+    }
+
+    .modal-dialog-content [class*="bg-slate-"] {
+      background-color: #162032 !important;
+      border-color: rgba(255, 255, 255, 0.15) !important;
+      color: #ffffff !important;
+    }
+
+    /* QR Code container must stay pure white for camera scanning */
+    .qr-code-box {
+      background-color: #ffffff !important;
+      border: 2px dashed #f43f5e !important;
+    }
+    .qr-code-box img {
+      background-color: #ffffff !important;
+    }
+
+    /* 4. Form Inputs & Textareas on Desktop: Dark glass with crisp white typed text */
+    #main-scroll-container input:not([type="checkbox"]):not([type="radio"]),
+    #main-scroll-container textarea,
+    #main-scroll-container select {
+      background-color: rgba(0, 0, 0, 0.35) !important;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+    }
+
+    #main-scroll-container input::placeholder,
+    #main-scroll-container textarea::placeholder {
+      color: #94a3b8 !important;
+    }
+
+    #main-scroll-container input:focus,
+    #main-scroll-container textarea:focus,
+    #main-scroll-container select:focus {
+      border-color: #06b6d4 !important;
+      box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.25) !important;
+      background-color: rgba(0, 0, 0, 0.50) !important;
+    }
+
+    /* 5. Never turn interactive cards, buttons or folders solid white on hover/focus/active */
     #main-scroll-container [class*="hover:bg-white"]:hover,
     #main-scroll-container [class*="hover:bg-slate-"]:hover,
     #main-scroll-container [class*="hover:bg-blue-"]:hover,
@@ -585,7 +649,7 @@
       background-color: rgba(255, 255, 255, 0.16) !important;
     }
 
-    /* 4. Prose Auto-Invert on Desktop for educational sections and guides */
+    /* 6. Prose Auto-Invert on Desktop for educational sections and guides */
     #main-scroll-container .prose,
     #main-scroll-container .prose-slate {
       --tw-prose-body: #f8fafc !important;
@@ -602,7 +666,7 @@
       color: #f8fafc !important;
     }
 
-    /* 5. Text contrast: Ensure headings and body are bright, crisp white/slate with high-contrast text shadows */
+    /* 7. Text contrast: Ensure headings and body are bright, crisp white/slate with high-contrast text shadows */
     #main-scroll-container h1,
     #main-scroll-container h2,
     #main-scroll-container h3,

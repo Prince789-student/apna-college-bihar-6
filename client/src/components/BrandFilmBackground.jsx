@@ -266,7 +266,7 @@ export default function BrandFilmBackground() {
   }
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-transparent" style={{ backgroundColor: 'transparent' }}>
       {/* ── Instant Fallback Poster Layer (Zero Black Screen Flash on Initial Load) ── */}
       <img
         src="/brand-film/frame_000.webp"

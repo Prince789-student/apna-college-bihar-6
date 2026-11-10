@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Copy, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -25,20 +26,20 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
     onClose();
   };
 
-  return (
+  const modalContent = (
     <div 
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 bg-slate-900/70 backdrop-blur-sm animate-in fade-in duration-200" 
+      className="fixed inset-0 top-0 left-0 right-0 bottom-0 w-screen h-screen z-[99999] flex items-center justify-center p-3 sm:p-4 bg-slate-950/85 backdrop-blur-md animate-in fade-in duration-200 modal-backdrop" 
       onClick={onClose}
     >
       <div 
-        className="bg-white rounded-3xl shadow-2xl max-w-[400px] w-full max-h-[92dvh] sm:max-h-[88vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-100" 
+        className="bg-white md:bg-[#0c1322] rounded-3xl shadow-2xl max-w-[400px] w-full max-h-[92dvh] sm:max-h-[88vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-100 md:border-white/20 modal-dialog-content" 
         onClick={e => e.stopPropagation()}
       >
         {/* Compact & Vibrant Top Header */}
         <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-rose-700 relative pt-3.5 pb-2.5 sm:pt-4 sm:pb-3 flex flex-col items-center flex-shrink-0 text-center px-4">
           <button 
             onClick={onClose} 
-            className="absolute top-2.5 right-2.5 text-white/80 hover:text-white transition-colors p-1.5 bg-white/15 hover:bg-white/25 rounded-full" 
+            className="absolute top-2.5 right-2.5 text-white/80 hover:text-white transition-colors p-1.5 bg-white/15 hover:bg-white/25 rounded-full cursor-pointer" 
             aria-label="Close"
           >
             <X size={15} />
@@ -58,28 +59,28 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
         {/* Scrollable Content Body - Optimized for Mobile Screen Height */}
         <div className="p-3 sm:p-4 flex flex-col items-center overflow-y-auto overscroll-contain">
           {/* Community Appeal Box */}
-          <div className="w-full bg-gradient-to-b from-rose-50/90 via-blue-50/70 to-amber-50/60 border border-rose-200/80 rounded-2xl p-2.5 sm:p-3 text-center mb-2.5 shadow-xs">
+          <div className="w-full bg-gradient-to-b from-rose-50/90 via-blue-50/70 to-amber-50/60 md:from-slate-800/90 md:via-slate-800/80 md:to-slate-850 border border-rose-200/80 md:border-white/15 rounded-2xl p-2.5 sm:p-3 text-center mb-2.5 shadow-xs">
             <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-600 text-white text-[9px] font-black uppercase tracking-wider mb-1.5 shadow-xs">
               ❤️ Student Support Initiative
             </div>
             
-            <p className="text-[11px] sm:text-xs font-black text-slate-800 leading-snug mb-1">
+            <p className="text-[11px] sm:text-xs font-black text-slate-800 md:text-white leading-snug mb-1">
               "Market mein 1 subject ka notes/xerox ₹60+ ka milta hai"
             </p>
             
-            <p className="text-[10px] sm:text-[11px] text-slate-600 font-medium leading-relaxed">
-              Yahan Bihar ke sabhi <strong>38 Govt Engineering Colleges</strong> ke liye all semesters ke premium notes & PYQs <strong>100% FREE</strong> hain. 24x7 fast cloud server chalaye rakhne ke liye aapka chhota sa voluntary support <strong className="text-rose-600 font-bold">(₹50, ₹100 ya apni marzi se)</strong> is community platform ko hamesha sabhi ke liye free aur live rakhega! ❤️
+            <p className="text-[10px] sm:text-[11px] text-slate-600 md:text-slate-200 font-medium leading-relaxed">
+              Yahan Bihar ke sabhi <strong>38 Govt Engineering Colleges</strong> ke liye all semesters ke premium notes & PYQs <strong>100% FREE</strong> hain. 24x7 fast cloud server chalaye rakhne ke liye aapka chhota sa voluntary support <strong className="text-rose-600 md:text-rose-400 font-bold">(₹50, ₹100 ya apni marzi se)</strong> is community platform ko hamesha sabhi ke liye free aur live rakhega! ❤️
             </p>
 
-            <div className="flex items-center justify-center gap-2 mt-2 pt-1.5 border-t border-rose-200/60">
-              <span className="px-2.5 py-0.5 rounded-lg bg-white/90 border border-rose-300 text-[10px] font-black text-rose-700 shadow-2xs">₹50</span>
-              <span className="px-2.5 py-0.5 rounded-lg bg-white/90 border border-indigo-300 text-[10px] font-black text-indigo-700 shadow-2xs">₹100</span>
-              <span className="text-[9px] font-bold text-slate-500">Ya apni iccha se 🤝</span>
+            <div className="flex items-center justify-center gap-2 mt-2 pt-1.5 border-t border-rose-200/60 md:border-white/10">
+              <span className="px-2.5 py-0.5 rounded-lg bg-white/90 md:bg-white/10 border border-rose-300 md:border-rose-400/40 text-[10px] font-black text-rose-700 md:text-rose-300 shadow-2xs">₹50</span>
+              <span className="px-2.5 py-0.5 rounded-lg bg-white/90 md:bg-white/10 border border-indigo-300 md:border-indigo-400/40 text-[10px] font-black text-indigo-700 md:text-indigo-300 shadow-2xs">₹100</span>
+              <span className="text-[9px] font-bold text-slate-500 md:text-slate-400">Ya apni iccha se 🤝</span>
             </div>
           </div>
 
-          {/* Compact Crisp QR Code Scanner */}
-          <div className="w-28 h-28 sm:w-32 sm:h-32 bg-white rounded-2xl p-1.5 border-2 border-dashed border-rose-300 flex items-center justify-center overflow-hidden mb-2.5 shadow-xs flex-shrink-0">
+          {/* Compact Crisp QR Code Scanner - Always solid white so mobile scanners can read */}
+          <div className="w-28 h-28 sm:w-32 sm:h-32 bg-white rounded-2xl p-1.5 border-2 border-dashed border-rose-300 flex items-center justify-center overflow-hidden mb-2.5 shadow-md flex-shrink-0 qr-code-box">
             <img 
               src="/scanner-qr.jpg" 
               alt="UPI Scanner QR Code" 
@@ -89,14 +90,14 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
           
           {/* UPI ID Box with 1-Tap Copy */}
           <div 
-            className="w-full bg-slate-50 border border-slate-200 hover:border-rose-300 rounded-xl p-2 sm:p-2.5 flex items-center justify-between group cursor-pointer hover:bg-rose-50/30 transition-all shadow-xs"
+            className="w-full bg-slate-50 md:bg-slate-800/90 border border-slate-200 md:border-white/15 hover:border-rose-300 md:hover:border-rose-400 rounded-xl p-2 sm:p-2.5 flex items-center justify-between group cursor-pointer hover:bg-rose-50/30 md:hover:bg-slate-750 transition-all shadow-xs"
             onClick={handleCopy}
           >
             <div className="text-left pr-2 truncate">
-              <p className="text-[9px] font-bold text-rose-600 uppercase tracking-widest mb-0.5">
+              <p className="text-[9px] font-bold text-rose-600 md:text-rose-400 uppercase tracking-widest mb-0.5">
                 Official UPI ID (Tap to Copy)
               </p>
-              <p className="text-xs sm:text-sm font-black text-slate-900 font-mono tracking-tight select-all truncate">
+              <p className="text-xs sm:text-sm font-black text-slate-900 md:text-white font-mono tracking-tight select-all truncate">
                 {upiId}
               </p>
             </div>
@@ -126,13 +127,13 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
             </button>
           </div>
 
-          <p className="text-[9px] text-slate-500 font-semibold uppercase tracking-wider text-center mt-1.5">
-            💡 UPI Remark mein apna <strong className="text-slate-800">Name & College</strong> likhein — Wall of Fame me aayenge!
+          <p className="text-[9px] text-slate-500 md:text-slate-400 font-semibold uppercase tracking-wider text-center mt-1.5">
+            💡 UPI Remark mein apna <strong className="text-slate-800 md:text-slate-200">Name & College</strong> likhein — Wall of Fame me aayenge!
           </p>
         </div>
 
         {/* Action Button Footer */}
-        <div className="p-2.5 sm:p-3 bg-white border-t border-slate-100 flex-shrink-0">
+        <div className="p-2.5 sm:p-3 bg-white md:bg-[#0c1322] border-t border-slate-100 md:border-white/10 flex-shrink-0">
           {mode === 'DOWNLOAD' ? (
             <button 
               onClick={handleProceed}
@@ -152,4 +153,7 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
       </div>
     </div>
   );
+
+  if (typeof document === 'undefined') return null;
+  return createPortal(modalContent, document.body);
 }
