@@ -33,7 +33,7 @@ export default function Blog() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {blogPosts.map((post, index) => (
               <Reveal key={post.id} delay={index * 50}>
-                <article className="bg-white md:bg-slate-900/60 md:backdrop-blur-md border border-slate-200 md:border-white/15 rounded-[2rem] overflow-hidden hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] hover:border-blue-200 md:hover:border-cyan-400/50 transition-all duration-300 group flex flex-col h-full md:text-white">
+                <article className="bg-white md:bg-black/25 border border-slate-200 md:border-white/15 rounded-[2rem] overflow-hidden hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] hover:border-blue-200 md:hover:border-cyan-400/50 transition-all duration-300 group flex flex-col h-full md:text-white">
                   <div className="p-8 flex flex-col h-full">
                     <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest text-slate-500 md:text-slate-400 mb-4">
                       <span className="flex items-center gap-1.5"><Calendar size={14} className="text-blue-500 md:text-cyan-400"/> {new Date(post.date).toLocaleDateString('en-IN', {day: 'numeric', month: 'long', year: 'numeric'})}</span>

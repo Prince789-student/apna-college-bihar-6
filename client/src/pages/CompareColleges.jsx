@@ -66,7 +66,7 @@ export default function CompareColleges() {
         </div>
 
         {/* College Selector Controls */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 bg-white md:bg-slate-900/85 md:backdrop-blur-md border border-slate-200/90 md:border-white/15 p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm md:shadow-2xl">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 bg-white md:bg-black/25 border border-slate-200/90 md:border-white/15 p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-sm md:shadow-2xl">
           <div className="space-y-2">
             <label className="text-[10px] font-heading font-black text-slate-400 uppercase tracking-widest block flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-blue-600"></span> Select College A
@@ -106,7 +106,7 @@ export default function CompareColleges() {
         {col1 && col2 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* College 1 Card */}
-            <div className="p-6 sm:p-8 bg-white md:bg-slate-900/60 md:backdrop-blur-md border border-slate-200/90 md:border-white/15 rounded-3xl shadow-sm md:shadow-xl hover:shadow-md transition-shadow space-y-6 md:text-white">
+            <div className="p-6 sm:p-8 bg-white md:bg-black/25 border border-slate-200/90 md:border-white/15 rounded-3xl shadow-sm md:shadow-xl hover:shadow-md transition-shadow space-y-6 md:text-white">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <span className="px-2.5 py-1 rounded-lg bg-blue-50 text-blue-700 border border-blue-200/80 text-[10px] font-heading font-black uppercase tracking-wider block w-fit mb-2">
@@ -169,7 +169,7 @@ export default function CompareColleges() {
             </div>
 
             {/* College 2 Card */}
-            <div className="p-6 sm:p-8 bg-white md:bg-slate-900/60 md:backdrop-blur-md border border-slate-200/90 md:border-white/15 rounded-3xl shadow-sm md:shadow-xl hover:shadow-md transition-shadow space-y-6 md:text-white">
+            <div className="p-6 sm:p-8 bg-white md:bg-black/25 border border-slate-200/90 md:border-white/15 rounded-3xl shadow-sm md:shadow-xl hover:shadow-md transition-shadow space-y-6 md:text-white">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <span className="px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 border border-indigo-200/80 text-[10px] font-heading font-black uppercase tracking-wider block w-fit mb-2">
@@ -235,7 +235,7 @@ export default function CompareColleges() {
 
         {/* Head-to-Head Comparison Matrix */}
         {col1 && col2 && (
-          <div className="bg-white md:bg-slate-900/60 md:backdrop-blur-md border border-slate-200/90 md:border-white/15 rounded-3xl p-6 sm:p-8 shadow-sm md:shadow-xl md:text-white">
+          <div className="bg-white md:bg-black/25 border border-slate-200/90 md:border-white/15 rounded-3xl p-6 sm:p-8 shadow-sm md:shadow-xl md:text-white">
             <h3 className="font-heading text-lg font-black text-slate-900 md:text-white uppercase tracking-tight mb-4 flex items-center gap-2">
               <Scale size={20} className="text-blue-600 md:text-cyan-400" /> Comparison Matrix
             </h3>
@@ -281,7 +281,7 @@ export default function CompareColleges() {
         )}
 
         {/* Prediction CTA Box */}
-        <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 md:from-slate-900/70 md:via-slate-900/60 md:to-slate-900/70 md:backdrop-blur-md md:border md:border-cyan-400/30 p-8 md:p-10 rounded-3xl text-center space-y-4 shadow-md md:shadow-xl text-white relative overflow-hidden">
+        <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 md:from-black/30 md:via-black/20 md:to-black/30 md:border md:border-cyan-400/30 p-8 md:p-10 rounded-3xl text-center space-y-4 shadow-md md:shadow-xl text-white relative overflow-hidden">
           <div className="absolute top-0 right-0 w-60 h-60 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
           <span className="px-3 py-1 rounded-full bg-white/20 md:bg-cyan-500/20 text-white md:text-cyan-300 border border-transparent md:border-cyan-400/30 text-[10px] font-heading font-black uppercase tracking-wider inline-block">
             UGEAC 2026 Engine

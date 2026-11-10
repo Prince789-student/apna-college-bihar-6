@@ -831,7 +831,7 @@ export default function FreeMentorship() {
       {/* ── NOT LOGGED IN: Auth Screen (Student Login vs Mentor Login) ── */}
       {!activeStudent && !activeMentor ? (
         <div className="space-y-12">
-          <div className="bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-[2rem] border border-slate-200 md:border-white/15 shadow-xl md:shadow-2xl p-6 sm:p-10 space-y-6 max-w-2xl mx-auto md:text-white transition-all">
+          <div className="bg-white md:bg-black/25 rounded-[2rem] border border-slate-200 md:border-white/15 shadow-xl md:shadow-2xl p-6 sm:p-10 space-y-6 max-w-2xl mx-auto md:text-white transition-all">
           
           {/* Tabs: Student Login vs Mentor Login */}
           <div className="flex bg-slate-100 md:bg-black/40 p-1.5 rounded-2xl border border-slate-200 md:border-white/15">

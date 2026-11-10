@@ -319,8 +319,8 @@ export default function DashboardLayout() {
       {/* ── Global Full-Page Brand Film Video Background across ALL pages (Laptop & Tablet only) ── */}
       {!isMobileScreen && <BrandFilmBackground />}
 
-      {/* Global Native Header (for Mobile Phone only - Unchanged Light UI) */}
-      {(isMobileApp || isMobileScreen) && (
+      {/* Global Native Header (for Mobile Phone only - Sub-pages only; Home page has its own app header) */}
+      {(isMobileApp || isMobileScreen) && !isHomePage && (
         <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs z-[200] shrink-0 sticky top-0 px-3 sm:px-4 py-2.5 flex items-center justify-between pt-[max(env(safe-area-inset-top,0px),0.625rem)] text-slate-900">
           <button onClick={() => navigate(-1)} className="min-w-[44px] min-h-[44px] rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors active:scale-95 flex items-center justify-center cursor-pointer" aria-label="Go Back">
             <ChevronLeft size={20} strokeWidth={2.5} />

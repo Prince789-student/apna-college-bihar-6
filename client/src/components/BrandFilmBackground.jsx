@@ -8,6 +8,7 @@ export default function BrandFilmBackground() {
     if (typeof window === 'undefined') return false;
     return window.innerWidth < 768 || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
   });
+  const [canvasReady, setCanvasReady] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -37,7 +38,7 @@ export default function BrandFilmBackground() {
   const drawFrame = useCallback((frameIndex) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: false });
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     let img = imagesRef.current[frameIndex];
@@ -90,7 +91,23 @@ export default function BrandFilmBackground() {
     const zOffsetY = (cHeight - zHeight) / 2;
 
     ctx.drawImage(img, zOffsetX, zOffsetY, zWidth, zHeight);
+
+    // ── Eradicate AI Video Watermark 4-Point Star Symbol seamlessly ──
+    // Samples adjacent bare wood grain texture and soft-blends it over the star
+    try {
+      const patchX = zOffsetX + zWidth * 0.875;
+      const patchY = zOffsetY + zHeight * 0.77;
+      const patchW = zWidth * 0.065;
+      const patchH = zHeight * 0.10;
+      const sampleY = zOffsetY + zHeight * 0.88;
+      ctx.save();
+      ctx.filter = 'blur(6px)';
+      ctx.drawImage(canvas, patchX, sampleY, patchW, patchH, patchX, patchY, patchW, patchH);
+      ctx.restore();
+    } catch (e) {}
+
     lastDrawnFrameRef.current = frameIndex;
+    setCanvasReady(true);
   }, []);
 
   // 3. Ultra-Lightweight Chunked Preloader (Disabled on mobile)
@@ -256,21 +273,26 @@ export default function BrandFilmBackground() {
         alt=""
         fetchpriority="high"
         loading="eager"
-        decoding="async"
-        className="absolute inset-0 w-full h-full object-cover scale-[1.07] pointer-events-none select-none"
+        decoding="sync"
+        className="absolute inset-0 w-full h-full object-cover scale-[1.07] pointer-events-none select-none z-0"
       />
 
-      {/* ── Fixed Fullscreen High-DPI Video Canvas ── */}
+      {/* Fallback Poster Watermark Blocker (Conceals watermark star symbol before canvas boots) */}
+      <div className="absolute bottom-[13%] right-[7%] w-24 h-24 rounded-full bg-[#8b5a38]/85 blur-lg pointer-events-none z-5" />
+
+      {/* ── Fixed Fullscreen High-DPI Video Canvas (Smoothly reveals when frame 0 is drawn) ── */}
       <canvas 
         ref={canvasRef} 
-        className="absolute inset-0 w-full h-full object-cover relative z-10"
+        className={`absolute inset-0 w-full h-full object-cover relative z-10 transition-opacity duration-300 ${
+          canvasReady ? 'opacity-100' : 'opacity-0'
+        }`}
       />
 
       {/* ── Ambient Contrast Veil (Tones down bright laptop glare so text is 100% visible) ── */}
       <div className="absolute inset-0 bg-slate-950/45 pointer-events-none z-20" />
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/50 pointer-events-none z-20" />
       {/* Corner protection (Ensures zero watermark or symbol leakage in bottom-right corner) */}
-      <div className="absolute bottom-0 right-0 w-48 h-32 bg-gradient-to-tl from-slate-950 via-slate-950/70 to-transparent pointer-events-none z-20" />
+      <div className="absolute bottom-0 right-0 w-64 h-48 bg-gradient-to-tl from-slate-950/90 via-slate-950/50 to-transparent pointer-events-none z-20" />
 
       {/* ── Global Bottom Scroll Progress Line ── */}
       <div className="fixed bottom-0 left-0 right-0 h-1 bg-white/10 z-40 pointer-events-none">
