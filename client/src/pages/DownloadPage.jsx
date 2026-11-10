@@ -94,7 +94,7 @@ export default function DownloadPage() {
       />
 
       {/* Hero Header */}
-      <section className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-24 border-b border-slate-200/80 md:border-white/10 bg-white md:bg-slate-900/85 md:backdrop-blur-md md:rounded-3xl max-w-6xl mx-auto shadow-2xl">
+      <section className="relative overflow-hidden pt-12 pb-16 md:pt-16 md:pb-24 border-b border-slate-200/80 md:border-white/15 bg-white md:bg-black/25 md:rounded-3xl max-w-6xl mx-auto shadow-2xl">
         <div className="absolute inset-0 bg-radial-gradient from-blue-50/60 to-transparent pointer-events-none"></div>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           
@@ -170,7 +170,7 @@ export default function DownloadPage() {
 
           {/* 1. WINDOWS PC / LAPTOP CARD */}
           {(platformFilter === 'all' || platformFilter === 'desktop') && (
-            <div className={`bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-3xl border-2 ${detectedOS === 'windows' ? 'border-blue-500 shadow-blue-500/10' : 'border-blue-500/30 md:border-white/15'} p-6 sm:p-8 shadow-xl hover:border-blue-500 transition-all flex flex-col justify-between relative overflow-hidden group md:text-white`}>
+            <div className={`bg-white md:bg-black/25 rounded-3xl border-2 ${detectedOS === 'windows' ? 'border-blue-500 shadow-blue-500/10' : 'border-blue-500/30 md:border-white/15'} p-6 sm:p-8 shadow-xl hover:border-blue-500 transition-all flex flex-col justify-between relative overflow-hidden group md:text-white`}>
               <div className="absolute top-0 right-0 bg-gradient-to-l from-blue-600 to-indigo-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
                 {detectedOS === 'windows' ? '★ Recommended For Your PC' : 'Official Windows Setup'}
               </div>
@@ -246,7 +246,7 @@ export default function DownloadPage() {
 
           {/* 2. APPLE macOS CARD */}
           {(platformFilter === 'all' || platformFilter === 'desktop') && (
-            <div className={`bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-3xl border-2 ${detectedOS === 'mac' ? 'border-sky-500 shadow-sky-500/10' : 'border-slate-300 md:border-white/15'} p-6 sm:p-8 shadow-xl hover:border-slate-800 transition-all flex flex-col justify-between relative overflow-hidden group md:text-white`}>
+            <div className={`bg-white md:bg-black/25 rounded-3xl border-2 ${detectedOS === 'mac' ? 'border-sky-500 shadow-sky-500/10' : 'border-slate-300 md:border-white/15'} p-6 sm:p-8 shadow-xl hover:border-slate-800 transition-all flex flex-col justify-between relative overflow-hidden group md:text-white`}>
               <div className="absolute top-0 right-0 bg-gradient-to-l from-slate-900 to-slate-800 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm flex items-center gap-1.5">
                 <Command size={12} className="text-sky-400" />
                 <span>{detectedOS === 'mac' ? '★ Recommended For Your Mac' : 'macOS Application'}</span>
@@ -339,7 +339,7 @@ export default function DownloadPage() {
 
           {/* 3. LINUX PC / WORKSTATION CARD */}
           {(platformFilter === 'all' || platformFilter === 'desktop') && (
-            <div className={`bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-3xl border-2 ${detectedOS === 'linux' ? 'border-indigo-600 shadow-indigo-600/10' : 'border-slate-800/30 md:border-white/15'} p-6 sm:p-8 shadow-xl hover:border-slate-800 transition-all flex flex-col justify-between relative overflow-hidden group md:text-white`}>
+            <div className={`bg-white md:bg-black/25 rounded-3xl border-2 ${detectedOS === 'linux' ? 'border-indigo-600 shadow-indigo-600/10' : 'border-slate-800/30 md:border-white/15'} p-6 sm:p-8 shadow-xl hover:border-slate-800 transition-all flex flex-col justify-between relative overflow-hidden group md:text-white`}>
               <div className="absolute top-0 right-0 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm flex items-center gap-1.5">
                 <Terminal size={12} className="text-emerald-400" />
                 <span>{detectedOS === 'linux' ? '★ Recommended For Your Linux' : 'Portable Linux Build'}</span>
@@ -435,7 +435,7 @@ export default function DownloadPage() {
 
           {/* 4. ANDROID MOBILE CARD */}
           {(platformFilter === 'all' || platformFilter === 'mobile') && (
-            <div className={`bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-3xl border-2 ${detectedOS === 'android' ? 'border-emerald-500 shadow-emerald-500/10' : 'border-slate-200 md:border-white/15'} p-6 sm:p-8 shadow-xl hover:border-slate-300 transition-all flex flex-col justify-between relative overflow-hidden group md:text-white`}>
+            <div className={`bg-white md:bg-black/25 rounded-3xl border-2 ${detectedOS === 'android' ? 'border-emerald-500 shadow-emerald-500/10' : 'border-slate-200 md:border-white/15'} p-6 sm:p-8 shadow-xl hover:border-slate-300 transition-all flex flex-col justify-between relative overflow-hidden group md:text-white`}>
               <div className="absolute top-0 right-0 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
                 {detectedOS === 'android' ? '★ Recommended For Your Phone' : 'Official APK'}
               </div>
@@ -503,7 +503,7 @@ export default function DownloadPage() {
 
       {/* Step-by-Step Installation Guide */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 md:mt-24">
-        <div className="bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-3xl border border-slate-200/80 md:border-white/15 p-6 sm:p-10 shadow-sm md:text-white">
+        <div className="bg-white md:bg-black/25 rounded-3xl border border-slate-200/80 md:border-white/15 p-6 sm:p-10 shadow-sm md:text-white">
           <div className="text-center max-w-xl mx-auto mb-10">
             <h2 className="text-2xl font-black text-slate-900 md:text-white uppercase tracking-tight">How to Install</h2>
             <p className="text-xs text-slate-500 md:text-slate-400 font-bold uppercase tracking-wider mt-1">Simple installation guide for Windows, Mac, Linux & Android</p>
@@ -615,7 +615,7 @@ export default function DownloadPage() {
 
         <div className="space-y-3">
           {faqs.map((faq, idx) => (
-            <div key={idx} className="bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-2xl border border-slate-200/80 md:border-white/15 overflow-hidden shadow-xs md:text-white">
+            <div key={idx} className="bg-white md:bg-black/25 rounded-2xl border border-slate-200/80 md:border-white/15 overflow-hidden shadow-xs md:text-white">
               <button
                 onClick={() => toggleFaq(idx)}
                 className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-bold text-xs sm:text-sm text-slate-800 md:text-white hover:text-blue-600 md:hover:text-cyan-300 transition-colors"
