@@ -12,11 +12,10 @@ import { Capacitor, registerPlugin } from '@capacitor/core';
 import { App } from '@capacitor/app';
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { AdMob, BannerAdSize, BannerAdPosition } from '@capacitor-community/admob';
-import { getToken } from 'firebase/messaging';
 
 const AppBlocker = registerPlugin('AppBlocker');
 import { doc, updateDoc, collection, query, where, onSnapshot, getDocs } from 'firebase/firestore';
-import { messaging, VAPID_KEY, db } from '../firebase';
+import { getFirebaseMessaging, VAPID_KEY, db } from '../firebase';
 import SEO from '../components/SEO';
 import Footer from '../components/Footer';
 import MobileBottomNav from '../components/MobileBottomNav';
@@ -164,12 +163,15 @@ export default function DashboardLayout() {
         // No web push needed — notifications go to phone tray automatically.
         return;
       }
-      // Web only: Firebase web push
-      if (!messaging) return;
+      // Web only: Firebase web push (lazy-loaded to speed up initial boot)
       try {
+        if (typeof Notification === 'undefined') return;
         const permission = await Notification.requestPermission();
         if (permission === 'granted') {
-          const token = await getToken(messaging, { vapidKey: VAPID_KEY });
+          const msgInstance = await getFirebaseMessaging();
+          if (!msgInstance) return;
+          const { getToken } = await import('firebase/messaging');
+          const token = await getToken(msgInstance, { vapidKey: VAPID_KEY });
           if (token) {
             await updateDoc(doc(db, 'users', user.uid), { fcmToken: token });
           }
@@ -336,7 +338,7 @@ export default function DashboardLayout() {
 
       {/* Top Header Navigation (Desktop Web, Laptop & Tablet) */}
       {!(isMobileApp || isMobileScreen) && (
-        <header className="backdrop-blur-2xl border-b border-white/10 shadow-[0_2px_15px_rgba(0,0,0,0.5)] z-[200] shrink-0 sticky top-0 transition-all pt-[max(env(safe-area-inset-top,0px),0px)] bg-black/70 text-white">
+        <header className="backdrop-blur-sm border-b border-white/10 shadow-[0_2px_15px_rgba(0,0,0,0.5)] z-[200] shrink-0 sticky top-0 transition-all pt-[max(env(safe-area-inset-top,0px),0px)] bg-black/80 text-white">
           <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-500/80 to-transparent"></div>
           <div className="max-w-[1440px] mx-auto px-3 sm:px-4 md:px-8 py-2.5 sm:py-3 flex items-center justify-between">
             

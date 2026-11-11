@@ -2,8 +2,6 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, RecaptchaVerifier, signInWithPhoneNumber, browserLocalPersistence, setPersistence } from "firebase/auth";
 import { Capacitor } from "@capacitor/core";
 import { initializeFirestore, getFirestore, persistentLocalCache, persistentMultipleTabManager } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
-import { getMessaging, isSupported } from "firebase/messaging";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 
 const firebaseConfig = {
@@ -51,7 +49,10 @@ try {
 }
 
 export const db = dbInstance;
-export const storage = getStorage(app);
+export const getFirebaseStorage = async () => {
+  const { getStorage } = await import("firebase/storage");
+  return getStorage(app);
+};
 export const googleProvider = new GoogleAuthProvider();
 // Add basic profile scope (required for name/email)
 googleProvider.addScope('profile');
@@ -63,11 +64,14 @@ googleProvider.setCustomParameters({
 
 export { RecaptchaVerifier, signInWithPhoneNumber };
 
-export let messaging = null;
 export const VAPID_KEY = "BH6y12rFJXEQn3t8FqmAbbpueil73WUVRBhbrsG6ETst3G4gQAwAmonzB6-ybjIMH55L91LYSw4XEBKM7jnt8Pw";
 
-isSupported().then((supported) => {
-  if (supported) {
-    messaging = getMessaging(app);
+export const getFirebaseMessaging = async () => {
+  try {
+    const { getMessaging, isSupported } = await import("firebase/messaging");
+    const supported = await isSupported();
+    return supported ? getMessaging(app) : null;
+  } catch (e) {
+    return null;
   }
-}).catch(err => {/* console.log removed */});
+};

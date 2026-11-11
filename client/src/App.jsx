@@ -22,12 +22,12 @@ import ScrollToTop from './components/ScrollToTop';
 import InteractiveCanvasBackground from './components/InteractiveCanvasBackground';
 
 import Home from './pages/Home';
-import HomeOverview from './pages/HomeOverview';
-import AppHub from './pages/AppHub';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
 
 // Pages (Lazy Loaded)
+const HomeOverview = React.lazy(() => import('./pages/HomeOverview'));
+const AppHub = React.lazy(() => import('./pages/AppHub'));
+const Login = React.lazy(() => import('./pages/Login'));
+const Signup = React.lazy(() => import('./pages/Signup'));
 const Author = React.lazy(() => import('./pages/Author'));
 const Notifications = React.lazy(() => import('./pages/Notifications'));
 const UgeacPredictor = React.lazy(() => import('./pages/UgeacPredictor'));

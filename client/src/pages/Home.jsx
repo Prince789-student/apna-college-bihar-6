@@ -16,8 +16,6 @@ import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
 import GlobalSearch from '../components/GlobalSearch';
 import CountUp from '../components/CountUp';
-import { collegeData } from '../data/collegeData';
-import { blogPosts } from '../data/blogPosts';
 import toast from 'react-hot-toast';
 
 export default function Home() {

@@ -11,6 +11,9 @@ export default defineConfig({
   build: {
     target: 'es2015',
     emptyOutDir: true,
+    cssMinify: true,
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 1200,
     rollupOptions: {
       output: {
         entryFileNames: 'assets/[name].[hash].js',
@@ -27,7 +30,9 @@ export default defineConfig({
             if (id.includes('lucide-react')) {
               return 'icons';
             }
-            return 'dependencies';
+            if (id.includes('@capacitor')) {
+              return 'capacitor';
+            }
           }
         }
       }

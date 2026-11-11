@@ -8,12 +8,11 @@ import {
   FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye, Calendar, Heart,
   Sparkles, Edit2, CheckCircle2, Clock
 } from 'lucide-react';
-import { db, storage } from '../firebase';
+import { db, getFirebaseStorage } from '../firebase';
 import { 
   collection, getDocs, doc, updateDoc, deleteDoc, 
   addDoc, serverTimestamp, query, orderBy, onSnapshot, limit, setDoc
 } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useAuth } from '../context/AuthContext';
 import { isValidPDF } from '../utils/validation';
 import LoadingOverlay from '../components/LoadingOverlay';
@@ -855,6 +854,8 @@ export default function AdminPanel() {
     try {
       let finalUrl = externalUrl;
       if (file) {
+        const storage = await getFirebaseStorage();
+        const { ref, uploadBytes, getDownloadURL } = await import('firebase/storage');
         const fileName = `${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
         const storageRef = ref(storage, `notes/${fileName}`);
         const snapshot = await uploadBytes(storageRef, file);
@@ -937,6 +938,8 @@ export default function AdminPanel() {
           flash('Storage Upload taking too long! ⏳ Try using "Direct Image Link" instead.', 'err');
         }, 30000);
 
+        const storage = await getFirebaseStorage();
+        const { ref, uploadBytes, getDownloadURL } = await import('firebase/storage');
         const storageRef = ref(storage, `ads/${Date.now()}_${adForm.file.name.replace(/\s+/g, '_')}`);
         const snapshot = await uploadBytes(storageRef, adForm.file);
         

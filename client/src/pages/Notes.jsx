@@ -394,14 +394,14 @@ export default function Notes() {
   const branchColor = branch ? BRANCH_COLORS[branch.color] : BRANCH_COLORS.indigo;
 
   return (
-    <div className="max-w-5xl mx-auto px-3 md:px-4 pb-24 space-y-4 md:space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 relative">
-      {/* Dynamic Animated Ambient Orbs */}
-      <div className="absolute -top-10 left-1/4 w-72 h-72 bg-blue-400/10 rounded-full blur-3xl animate-float pointer-events-none" />
-      <div className="absolute top-40 right-10 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl animate-float pointer-events-none" style={{ animationDelay: '2.5s' }} />
+    <div className="max-w-5xl mx-auto px-3 md:px-4 pb-24 space-y-4 md:space-y-6 relative">
+      {/* Subtle Ambient Accent Orbs (Mobile light mode only — desktop uses BrandFilmBackground) */}
+      <div className="md:hidden absolute -top-10 left-1/4 w-72 h-72 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%)' }} />
+      <div className="md:hidden absolute top-40 right-10 w-80 h-80 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)' }} />
 
       {/* Header */}
-      <div className="bg-white/95 md:bg-slate-900/85 md:backdrop-blur-md p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] border border-slate-200/80 md:border-white/15 shadow-xl relative overflow-hidden group md:text-white">
-        <div className="absolute -top-12 -right-12 w-64 h-64 bg-gradient-to-br from-indigo-500/15 via-blue-500/10 to-transparent rounded-full blur-2xl pointer-events-none group-hover:scale-110 transition-transform duration-700"></div>
+      <div className="bg-white/95 md:bg-slate-900/85 p-4 md:p-10 rounded-2xl md:rounded-[2.5rem] border border-slate-200/80 md:border-white/15 shadow-xl relative overflow-hidden group md:text-white">
+        <div className="md:hidden absolute -top-12 -right-12 w-64 h-64 bg-gradient-to-br from-indigo-500/15 via-blue-500/10 to-transparent rounded-full pointer-events-none"></div>
         <div className="relative z-10">
           {/* Top Live Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-blue-50 to-indigo-50 md:bg-blue-500/20 border border-blue-200/80 md:border-blue-400/30 rounded-full text-blue-700 md:text-cyan-300 text-[10px] font-black uppercase tracking-wider mb-4 shadow-2xs">
