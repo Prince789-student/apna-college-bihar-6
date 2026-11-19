@@ -4,7 +4,7 @@ import {
   BookOpen, Calculator, Timer, Users,
   ArrowRight, CheckCircle, CheckCircle2, GraduationCap,
   Globe, Shield, Zap, Send, Youtube,
-  User, LogOut, Download, MessageCircle,
+  User, LogOut, Download, MessageCircle, LogIn, ChevronDown,
   ShieldCheck, Calendar, Sparkles, FileText, Library,
   Star, ChevronRight, Search, MapPin, Target,
   RefreshCw, Heart, Building2, Award, Mail,
@@ -26,7 +26,7 @@ export default function Home() {
     window.Capacitor?.isNativePlatform?.() || 
     (typeof navigator !== 'undefined' && navigator.userAgent.includes('ApnaCollegeBiharDesktop'))
   );
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const [isMobileScreen, setIsMobileScreen] = useState(() => {
@@ -65,6 +65,11 @@ export default function Home() {
   const [selectedMobileBranch, setSelectedMobileBranch] = useState('CSE');
   const [noticeMarqueeIdx, setNoticeMarqueeIdx] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showMobileProfileMenu, setShowMobileProfileMenu] = useState(false);
+
+  const joinDate = user?.metadata?.creationTime 
+    ? new Date(user.metadata.creationTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+    : 'Recently';
 
   const handleMobileSearchSubmit = (e) => {
     e.preventDefault();
@@ -329,41 +334,78 @@ export default function Home() {
           {/* ══════════════════════════════════════════════════════════════
               1. NATIVE APP TOP BAR (Header with Greeting, Profile & Actions)
              ══════════════════════════════════════════════════════════════ */}
-          <div className="flex items-center justify-between pt-1">
-            <Link to={user ? "/extras" : "/login"} className="flex items-center gap-2.5 active:scale-98 transition-transform group">
-              <div className="relative">
-                <div className="w-10 h-10 rounded-full p-[2px] bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 shadow-md shadow-blue-500/20">
-                  <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-blue-600 font-black text-sm">
-                    {userName[0]?.toUpperCase()}
+          <div className="flex items-center justify-between pt-1 relative">
+            {user ? (
+              <button 
+                type="button"
+                onClick={() => setShowMobileProfileMenu(!showMobileProfileMenu)} 
+                className="flex items-center gap-2.5 active:scale-98 transition-transform group text-left cursor-pointer"
+              >
+                <div className="relative">
+                  <div className="w-10 h-10 rounded-full p-[2px] bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 shadow-md shadow-blue-500/20">
+                    <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-blue-600 font-black text-sm">
+                      {userName[0]?.toUpperCase()}
+                    </div>
+                  </div>
+                  <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-white animate-pulse"></span>
+                </div>
+                <div className="text-left">
+                  <p className="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
+                    <span>{greetingText},</span>
+                    <span className="text-blue-600 font-bold truncate max-w-[90px]">{userName}</span>
+                  </p>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <h1 className="font-heading font-black text-xs text-slate-900 tracking-tight leading-none">
+                      Apna College <span className="text-blue-600">Bihar</span>
+                    </h1>
                   </div>
                 </div>
-                <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-white animate-pulse"></span>
-              </div>
-              <div className="text-left">
-                <p className="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
-                  <span>{greetingText},</span>
-                  <span className="text-blue-600 font-bold truncate max-w-[90px]">{userName}</span>
-                </p>
-                <div className="flex items-center gap-1.5 mt-0.5">
-                  <h1 className="font-heading font-black text-xs text-slate-900 tracking-tight leading-none">
-                    Apna College <span className="text-blue-600">Bihar</span>
-                  </h1>
+              </button>
+            ) : (
+              <Link to="/login" className="flex items-center gap-2.5 active:scale-98 transition-transform group">
+                <div className="relative">
+                  <div className="w-10 h-10 rounded-full p-[2px] bg-gradient-to-tr from-blue-500 to-indigo-600 shadow-md">
+                    <div className="w-full h-full rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-xs">
+                      <User size={18} />
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </Link>
+                <div className="text-left">
+                  <p className="text-[11px] font-semibold text-slate-500">{greetingText}</p>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <h1 className="font-heading font-black text-xs text-slate-900 tracking-tight leading-none">
+                      Apna College <span className="text-blue-600">Bihar</span>
+                    </h1>
+                  </div>
+                </div>
+              </Link>
+            )}
 
             {/* Quick Action Badges */}
             <div className="flex items-center gap-1.5">
-              {/* My Profile Button */}
-              <Link
-                to={user ? "/extras" : "/login"}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/80 active:scale-95 transition-all shadow-2xs"
-                title="My Profile"
-                aria-label="My Profile"
-              >
-                <User size={13} className="text-blue-600 shrink-0" />
-                <span className="font-heading font-black text-[11px] tracking-tight">{user ? 'My Profile' : 'Login'}</span>
-              </Link>
+              {/* My Profile / Login Button */}
+              {user ? (
+                <button
+                  type="button"
+                  onClick={() => setShowMobileProfileMenu(!showMobileProfileMenu)}
+                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/80 active:scale-95 transition-all shadow-2xs cursor-pointer"
+                  title="My Profile"
+                  aria-label="My Profile"
+                >
+                  <User size={13} className="text-blue-600 shrink-0" />
+                  <span className="font-heading font-black text-[11px] tracking-tight">My Profile</span>
+                  <ChevronDown size={11} className={`text-blue-500 transition-transform duration-200 ${showMobileProfileMenu ? 'rotate-180' : ''}`} />
+                </button>
+              ) : (
+                <Link
+                  to="/login"
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-heading font-black text-xs shadow-sm active:scale-95 transition-all"
+                  title="Login"
+                >
+                  <LogIn size={13} className="shrink-0" />
+                  <span>Login</span>
+                </Link>
+              )}
 
               <button
                 onClick={() => setShowScanner(true)}
@@ -389,6 +431,114 @@ export default function Home() {
               </Link>
             </div>
           </div>
+
+          {/* ── Laptop-Style Mobile Profile Menu Dropdown ── */}
+          {showMobileProfileMenu && user && (
+            <>
+              <div 
+                className="fixed inset-0 z-[1900] bg-slate-950/40 backdrop-blur-xs" 
+                onClick={() => setShowMobileProfileMenu(false)} 
+              />
+              <div className="absolute right-3.5 top-16 w-72 bg-white/95 backdrop-blur-2xl border border-slate-200/90 rounded-3xl shadow-2xl p-4 z-[2000] animate-in fade-in zoom-in-95 duration-200 text-slate-900 origin-top-right">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">ACB Official Account</span>
+                  <button 
+                    onClick={() => setShowMobileProfileMenu(false)} 
+                    className="w-6 h-6 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center active:scale-95 cursor-pointer"
+                    aria-label="Close"
+                  >
+                    <X size={13} />
+                  </button>
+                </div>
+
+                <div className="py-3.5 text-center border-b border-slate-100">
+                  <div className="w-14 h-14 rounded-2xl overflow-hidden mb-2.5 mx-auto border border-slate-100 shadow-md">
+                    <img src="/logo-acb.png?v=99" alt="ACB" className="w-full h-full object-cover" />
+                  </div>
+                  <p className="text-[10px] font-black uppercase tracking-wider text-blue-600 leading-none mb-1">Apna College Bihar</p>
+                  <p className="text-xs font-bold text-slate-900 truncate px-1">{user?.email}</p>
+                  <div className="flex items-center justify-center gap-1 text-[10px] text-slate-500 mt-1 font-medium">
+                    <Calendar size={11} className="text-blue-500" />
+                    <span>Joined: <strong className="text-slate-800">{joinDate}</strong></span>
+                  </div>
+                </div>
+
+                <div className="pt-2 space-y-1">
+                  {(user?.email === 'prince8694@gmail.com' || user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN') && (
+                    <Link
+                      to="/dashboard/admin"
+                      onClick={() => setShowMobileProfileMenu(false)}
+                      className="flex items-center gap-2.5 w-full p-2.5 hover:bg-blue-50 text-blue-600 rounded-xl transition-all font-bold text-xs"
+                    >
+                      <div className="p-1.5 bg-blue-50 rounded-lg text-blue-600">
+                        <Shield size={14} />
+                      </div>
+                      <span>Admin Control Panel</span>
+                    </Link>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowMobileProfileMenu(false);
+                      setShowScanner(true);
+                    }}
+                    className="flex items-center gap-2.5 w-full p-2.5 hover:bg-rose-50 text-rose-600 rounded-xl transition-all font-bold text-xs text-left cursor-pointer"
+                  >
+                    <div className="p-1.5 bg-rose-50 rounded-lg text-rose-600">
+                      <Award size={14} />
+                    </div>
+                    <span>Support Us / Donate (UPI)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      setShowMobileProfileMenu(false);
+                      const shareData = {
+                        title: 'Apna College Bihar App',
+                        text: 'Apna College Bihar - The Official Study Engine for BEU Students! Download notes, PYQs, and syllabus: ',
+                        url: 'https://www.apnacollegebihar.online'
+                      };
+                      try {
+                        if (navigator.share) {
+                          await navigator.share(shareData);
+                        } else {
+                          await navigator.clipboard.writeText(shareData.text + " " + shareData.url);
+                          toast.success("Platform link copied!");
+                        }
+                      } catch (err) {}
+                    }}
+                    className="flex items-center gap-2.5 w-full p-2.5 hover:bg-emerald-50 text-emerald-700 rounded-xl transition-all font-bold text-xs text-left cursor-pointer"
+                  >
+                    <div className="p-1.5 bg-emerald-50 rounded-lg text-emerald-600">
+                      <Send size={14} />
+                    </div>
+                    <span>Share App Link</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      setShowMobileProfileMenu(false);
+                      try {
+                        await logout();
+                        toast.success("Logged out successfully");
+                      } catch (err) {
+                        toast.error("Logout failed");
+                      }
+                    }}
+                    className="flex items-center gap-2.5 w-full p-2.5 hover:bg-red-50 text-red-600 rounded-xl transition-all font-bold text-xs text-left cursor-pointer border-t border-slate-100 pt-2 mt-1"
+                  >
+                    <div className="p-1.5 bg-red-50 rounded-lg text-red-600">
+                      <LogOut size={14} />
+                    </div>
+                    <span>Logout Session</span>
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
 
           {/* ══════════════════════════════════════════════════════════════
               2. INSTAGRAM-STYLE ANIMATED STORY REELS CAROUSEL
