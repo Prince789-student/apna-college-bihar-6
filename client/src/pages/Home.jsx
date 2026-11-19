@@ -59,6 +59,9 @@ export default function Home() {
   const [showScanner, setShowScanner] = useState(false);
   const [beuNotices, setBeuNotices] = useState([]);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const [mobileTab, setMobileTab] = useState('notes'); // 'notes' | 'pyq' | 'tools' | 'colleges'
+  const [selectedMobileBranch, setSelectedMobileBranch] = useState('CSE');
+  const [noticeMarqueeIdx, setNoticeMarqueeIdx] = useState(0);
 
   // Authentic BCECEB UGEAC Rank Piecewise Mapping (From Official 2024-2025 Data)
   const UGEAC_RANK_MAP = [
@@ -232,6 +235,14 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!beuNotices.length) return;
+    const interval = setInterval(() => {
+      setNoticeMarqueeIdx(prev => (prev + 1) % beuNotices.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [beuNotices.length]);
+
   const combinedSchema = {
     "@context": "https://schema.org",
     "@graph": [
@@ -256,8 +267,41 @@ export default function Home() {
   // ── MOBILE ANIMATED PHONE-LIKE UI (Dedicated Smartphone App-Like Experience) ──
   // ═══════════════════════════════════════════════════════════════════════════════
   if (isMobileScreen) {
+    const greetingText = (() => {
+      const hour = new Date().getHours();
+      if (hour < 12) return 'Good Morning';
+      if (hour < 17) return 'Good Afternoon';
+      return 'Good Evening';
+    })();
+
+    const userName = user?.displayName?.split(' ')[0] || user?.email?.split('@')[0] || 'Engineer';
+
+    // Interactive Story Highlights
+    const mobileStories = [
+      { id: '3rd-sem', label: '3rd Sem', badge: 'HOT', path: '/notes', icon: <Sparkles size={18} className="text-amber-300" />, ring: 'from-amber-400 via-rose-500 to-pink-500' },
+      { id: 'notes', label: 'Notes Hub', badge: '550+', path: '/notes', icon: <BookOpen size={18} className="text-cyan-300" />, ring: 'from-blue-500 via-cyan-400 to-teal-400' },
+      { id: 'pyq', label: 'PYQ Papers', badge: 'SOLVED', path: '/pyq', icon: <FileText size={18} className="text-emerald-300" />, ring: 'from-emerald-400 via-teal-500 to-cyan-500' },
+      { id: 'cgpa', label: 'CGPA Calc', badge: '10-PT', path: '/cgpa', icon: <Calculator size={18} className="text-purple-300" />, ring: 'from-purple-500 via-indigo-500 to-blue-500' },
+      { id: 'predictor', label: 'Predictor', badge: 'UGEAC', path: '/ugeac-predictor', icon: <Target size={18} className="text-rose-300" />, ring: 'from-rose-500 via-red-500 to-amber-500' },
+      { id: 'notices', label: 'BEU Live', badge: 'CIRCULARS', path: '/notifications', icon: <Bell size={18} className="text-yellow-300" />, ring: 'from-yellow-400 via-amber-500 to-orange-500' },
+      { id: 'syllabus', label: 'Syllabus', badge: 'BEU', path: '/syllabus', icon: <Library size={18} className="text-sky-300" />, ring: 'from-sky-400 via-blue-500 to-indigo-500' },
+      { id: 'groups', label: 'Communities', badge: 'JOIN', path: '/groups', icon: <Users size={18} className="text-teal-300" />, ring: 'from-teal-400 via-emerald-500 to-green-500' },
+    ];
+
+    const mobileBranches = [
+      { id: 'CSE', name: 'Computer Science', short: 'CSE' },
+      { id: 'CIVIL', name: 'Civil Engg', short: 'Civil' },
+      { id: 'ECE', name: 'Electronics', short: 'ECE' },
+      { id: 'EE', name: 'Electrical', short: 'EE' },
+      { id: 'EEE', name: 'Electrical & Electronics', short: 'EEE' },
+      { id: 'ME', name: 'Mechanical', short: 'Mech' },
+      { id: 'IT', name: 'Information Tech', short: 'IT' },
+    ];
+
+    const currentNotice = beuNotices[noticeMarqueeIdx] || (beuNotices.length > 0 ? beuNotices[0] : null);
+
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-[#070e1e] to-slate-950 text-white font-['Inter'] relative selection:bg-cyan-500/30 overflow-x-clip pb-24">
+      <div className="min-h-screen bg-[#050811] text-white font-['Inter'] relative selection:bg-cyan-500/30 overflow-x-clip pb-28">
         <SEO
           title="Apna College Bihar | #1 Academic Platform for BEU Students"
           description="Bihar's premier academic platform for Bihar Engineering University (BEU) students. Free unit-wise notes, 5+ years verified PYQ papers, official BEU syllabus, UGEAC college predictor & CGPA calculator."
@@ -266,56 +310,131 @@ export default function Home() {
           schema={combinedSchema}
         />
 
-        {/* Ambient Top Glow Orbs */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-80 bg-blue-600/20 rounded-full blur-[90px] pointer-events-none"></div>
-        <div className="absolute top-48 -right-12 w-64 h-64 bg-cyan-500/15 rounded-full blur-[80px] pointer-events-none"></div>
+        {/* Ambient Top Glow Spheres */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-600/15 rounded-full blur-[110px] pointer-events-none"></div>
+        <div className="absolute top-64 -right-16 w-80 h-80 bg-cyan-500/12 rounded-full blur-[100px] pointer-events-none"></div>
 
-        <div className="relative z-10 px-4 pt-4 sm:pt-6 space-y-6">
+        <div className="relative z-10 px-3.5 pt-3 sm:pt-5 space-y-4">
 
-          {/* 1. Mobile Live Status Header Pill */}
-          <div className="flex items-center justify-between">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-bold text-cyan-300 shadow-lg">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-              <span className="w-2 h-2 rounded-full bg-emerald-400 -ml-3"></span>
-              <span className="tracking-wide">BEU Official Academic Engine</span>
+          {/* ══════════════════════════════════════════════════════════════
+              1. NATIVE APP TOP BAR (Header with Greeting & Quick Actions)
+             ══════════════════════════════════════════════════════════════ */}
+          <div className="flex items-center justify-between pt-1">
+            <div className="flex items-center gap-2.5">
+              <div className="relative">
+                <div className="w-10 h-10 rounded-full p-[2px] bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-600 shadow-lg shadow-cyan-500/20">
+                  <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center text-cyan-300 font-black text-sm">
+                    {userName[0]?.toUpperCase()}
+                  </div>
+                </div>
+                <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-400 ring-2 ring-slate-950 animate-pulse"></span>
+              </div>
+              <div>
+                <p className="text-[11px] font-semibold text-slate-400 flex items-center gap-1">
+                  <span>{greetingText},</span>
+                  <span className="text-cyan-300 font-bold">{userName}</span>
+                </p>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <h1 className="font-heading font-black text-sm text-white tracking-tight">
+                    Apna College <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">Bihar</span>
+                  </h1>
+                </div>
+              </div>
             </div>
+
+            {/* Quick Action Badges */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setShowScanner(true)}
+                className="w-9 h-9 rounded-xl bg-white/[0.08] hover:bg-white/15 border border-white/10 flex items-center justify-center text-rose-400 active:scale-95 transition-all shadow-sm"
+                aria-label="Support via UPI"
+                title="Support Apna College Bihar"
+              >
+                <Heart size={16} className="fill-rose-400/20" />
+              </button>
+              <Link
+                to="/notifications"
+                className="w-9 h-9 rounded-xl bg-white/[0.08] hover:bg-white/15 border border-white/10 flex items-center justify-center text-slate-200 active:scale-95 transition-all relative shadow-sm"
+                aria-label="Notices"
+              >
+                <Bell size={16} />
+                {beuNotices.length > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
+                )}
+                {beuNotices.length > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-cyan-400"></span>
+                )}
+              </Link>
+            </div>
+          </div>
+
+          {/* ══════════════════════════════════════════════════════════════
+              2. APP STORIES CAROUSEL (Instagram/Fintech Style High-Reels)
+             ══════════════════════════════════════════════════════════════ */}
+          <div className="pt-1">
+            <div className="flex items-center gap-3 overflow-x-auto no-scrollbar py-1 px-0.5">
+              {mobileStories.map((story) => (
+                <Link
+                  key={story.id}
+                  to={story.path}
+                  className="flex flex-col items-center shrink-0 group active:scale-95 transition-transform"
+                >
+                  <div className={`w-[58px] h-[58px] rounded-full p-[2px] bg-gradient-to-tr ${story.ring} shadow-md group-hover:scale-105 transition-transform relative`}>
+                    <div className="w-full h-full rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center">
+                      {story.icon}
+                    </div>
+                    {story.badge && (
+                      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 px-1.5 py-0.2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 border border-white/20 text-[8px] font-black text-white uppercase tracking-tight shadow">
+                        {story.badge}
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[10px] font-bold text-slate-300 group-hover:text-cyan-300 transition-colors mt-2 text-center max-w-[62px] truncate">
+                    {story.label}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* ══════════════════════════════════════════════════════════════
+              3. LIVE BREAKING CIRCULARS MARQUEE TICKER (Real-time Beacon)
+             ══════════════════════════════════════════════════════════════ */}
+          {currentNotice && (
             <Link
               to="/notifications"
-              className="w-9 h-9 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-slate-300 active:scale-95 transition-transform relative"
-              aria-label="Notices"
+              className="p-2.5 rounded-2xl bg-gradient-to-r from-blue-950/70 via-slate-900/90 to-blue-950/70 border border-blue-500/25 flex items-center justify-between gap-2.5 active:scale-[0.98] transition-transform shadow-lg shadow-blue-950/40"
             >
-              <Bell size={16} />
-              {beuNotices.length > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-cyan-400"></span>
-              )}
+              <div className="flex items-center gap-2 overflow-hidden flex-1">
+                <span className="px-2 py-0.5 rounded-md bg-rose-500/20 border border-rose-500/30 text-rose-300 text-[9px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping"></span>
+                  LIVE BEU
+                </span>
+                <span className="text-xs font-semibold text-slate-200 truncate">
+                  {currentNotice.title || currentNotice.board || 'BEU Examination & Academic Schedules Update'}
+                </span>
+              </div>
+              <ChevronRight size={14} className="text-cyan-400 shrink-0" />
             </Link>
-          </div>
+          )}
 
-          {/* 2. Mobile Hero Headline */}
-          <div className="text-center space-y-2 pt-2">
-            <h1 className="font-heading text-3xl font-[1000] tracking-tight leading-tight">
-              Apna College <span className="bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-300 bg-clip-text text-transparent">Bihar</span>
-            </h1>
-            <p className="text-xs text-slate-300 max-w-sm mx-auto leading-relaxed font-medium">
-              Free B.Tech unit notes, 5+ yrs PYQ papers, BEU syllabus &amp; CGPA calculator for all 38 Government Engineering Colleges.
-            </p>
-          </div>
-
-          {/* 3. Mobile Quick Search Bar with Floating Tag Chips */}
+          {/* ══════════════════════════════════════════════════════════════
+              4. NATIVE SEARCH BAR (With Filter Chips)
+             ══════════════════════════════════════════════════════════════ */}
           <div className="space-y-2">
             <div className="relative">
-              <GlobalSearch placeholder="Search notes, PYQs, subjects..." />
+              <GlobalSearch placeholder="Search notes, PYQs, subjects, colleges..." />
             </div>
             {/* Quick Filter Tag Chips */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-[11px] font-bold text-slate-300">
-              {['#CSE', '#Civil', '#ME', '#PYQ 2024', '#Syllabus', '#CGPA Calc', '#BEU Results'].map((tag, idx) => (
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-[10.5px] font-bold text-slate-300">
+              {['#3rd Sem Notes', '#Civil PYQs', '#CSE Java', '#UHV Master', '#CGPA Calc', '#MIT Cutoff', '#BEU Syllabus'].map((tag, idx) => (
                 <button
                   key={idx}
                   onClick={() => {
                     const term = tag.replace('#', '');
                     navigate(`/search/${encodeURIComponent(term)}`);
                   }}
-                  className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 hover:border-cyan-400/40 hover:text-white shrink-0 active:scale-95 transition-all"
+                  className="px-2.5 py-1 rounded-xl bg-white/[0.05] hover:bg-white/[0.12] border border-white/10 hover:border-cyan-400/40 hover:text-white shrink-0 active:scale-95 transition-all text-center"
                 >
                   {tag}
                 </button>
@@ -323,34 +442,279 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 4. Mobile Primary Action Buttons */}
-          <div className="grid grid-cols-2 gap-2.5">
-            <Link
-              to="/notes"
-              className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-500/25 active:scale-95 transition-all text-center"
-            >
-              <BookOpen size={16} />
-              <span>Explore Notes &amp; PYQs</span>
-            </Link>
-            <Link
-              to="/download"
-              className="p-3.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/15 text-white font-bold text-xs flex items-center justify-center gap-2 active:scale-95 transition-all text-center"
-            >
-              <Download size={16} className="text-emerald-400" />
-              <span>Download App</span>
-            </Link>
+          {/* ══════════════════════════════════════════════════════════════
+              5. FEATURED HERO BENTO: 3RD SEMESTER COMPLETE VAULT
+             ══════════════════════════════════════════════════════════════ */}
+          <div className="relative rounded-3xl p-4 bg-gradient-to-br from-blue-900/40 via-indigo-950/60 to-slate-900/80 border border-cyan-400/30 shadow-2xl overflow-hidden group">
+            {/* Decorative Corner Glow */}
+            <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-cyan-400/20 to-transparent rounded-full blur-2xl pointer-events-none"></div>
+
+            <div className="relative z-10 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-amber-500 to-rose-500 text-white font-black text-[9px] uppercase tracking-wider shadow">
+                  🔥 3rd Semester Updated 2026
+                </span>
+                <span className="text-[10px] font-mono text-cyan-300 font-bold bg-white/10 px-2 py-0.5 rounded-md">
+                  All 6 Branches Live
+                </span>
+              </div>
+
+              <div>
+                <h2 className="font-heading text-lg font-[1000] text-white tracking-tight leading-tight">
+                  3rd Semester Master Pack
+                </h2>
+                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                  Civil, CSE, ECE, EE, EEE &amp; Mech — All Unit 1–6 Notes + 16-Page UHV Master Notes &amp; Chapter-Wise PYQs!
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <Link
+                  to="/notes"
+                  className="p-3 rounded-2xl bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-500 hover:opacity-95 text-white font-black text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-cyan-500/25 active:scale-95 transition-all text-center"
+                >
+                  <BookOpen size={15} />
+                  <span>Explore Notes</span>
+                </Link>
+                <Link
+                  to="/pyq"
+                  className="p-3 rounded-2xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/15 text-white font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all text-center"
+                >
+                  <FileText size={15} className="text-amber-400" />
+                  <span>Solved PYQs</span>
+                </Link>
+              </div>
+            </div>
           </div>
 
-          {/* 5. Mobile 8-Tools Animated Grid (App Style 2-Column Touch Layout) */}
-          <div className="space-y-3 pt-2">
+          {/* ══════════════════════════════════════════════════════════════
+              6. INTERACTIVE HUB SWITCHER (Dynamic Segmented Navigation)
+             ══════════════════════════════════════════════════════════════ */}
+          <div className="space-y-3 pt-1">
+            {/* Segmented Tab Pill Controller */}
+            <div className="grid grid-cols-4 p-1 rounded-2xl bg-white/[0.05] border border-white/10 backdrop-blur-md">
+              {[
+                { id: 'notes', label: 'Notes', icon: BookOpen },
+                { id: 'pyq', label: 'PYQs', icon: FileText },
+                { id: 'tools', label: 'Tools', icon: Zap },
+                { id: 'colleges', label: 'Colleges', icon: Building2 },
+              ].map((tab) => {
+                const Icon = tab.icon;
+                const active = mobileTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setMobileTab(tab.id)}
+                    className={`flex items-center justify-center gap-1 py-2.5 rounded-xl text-xs font-black transition-all duration-200 active:scale-95 ${
+                      active
+                        ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md shadow-blue-600/30'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    <Icon size={13} />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* TAB CONTENT 1: NOTES HUB (Quick Branch + Sem Picker) */}
+            {mobileTab === 'notes' && (
+              <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 space-y-3 animate-fadeIn">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1">
+                    <BookOpen size={13} className="text-cyan-400" /> Select Branch
+                  </span>
+                  <Link to="/notes" className="text-[10px] font-black text-cyan-400 hover:underline">
+                    View Full Directory →
+                  </Link>
+                </div>
+
+                {/* Branch Picker Chips */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                  {mobileBranches.map((br) => (
+                    <button
+                      key={br.id}
+                      onClick={() => setSelectedMobileBranch(br.id)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all shrink-0 active:scale-95 ${
+                        selectedMobileBranch === br.id
+                          ? 'bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30'
+                          : 'bg-white/5 border border-white/10 text-slate-300 hover:text-white'
+                      }`}
+                    >
+                      {br.short}
+                    </button>
+                  ))}
+                </div>
+
+                {/* 1-Tap Semester Launcher */}
+                <div className="space-y-1.5 pt-1">
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                    Choose Semester for {selectedMobileBranch}:
+                  </span>
+                  <div className="grid grid-cols-4 gap-2">
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
+                      <Link
+                        key={sem}
+                        to={`/notes/${selectedMobileBranch.toLowerCase()}/${sem}`}
+                        className={`p-2.5 rounded-xl border text-center transition-all active:scale-95 flex flex-col items-center justify-center ${
+                          sem === 3
+                            ? 'bg-cyan-500/15 border-cyan-400/50 text-white shadow-md shadow-cyan-500/10'
+                            : 'bg-white/[0.04] border-white/10 text-slate-200 hover:bg-white/[0.08]'
+                        }`}
+                      >
+                        <span className="font-heading font-black text-xs">Sem {sem}</span>
+                        {sem === 3 ? (
+                          <span className="text-[8px] font-bold text-cyan-300 uppercase">Live ★</span>
+                        ) : (
+                          <span className="text-[8px] text-slate-400">Notes</span>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB CONTENT 2: PYQ PAPERS */}
+            {mobileTab === 'pyq' && (
+              <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 space-y-3 animate-fadeIn">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1">
+                    <FileText size={13} className="text-amber-400" /> Exam Question Papers
+                  </span>
+                  <Link to="/pyq" className="text-[10px] font-black text-cyan-400 hover:underline">
+                    All Papers →
+                  </Link>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    to="/pyq"
+                    className="p-3 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/30 text-left active:scale-95 transition-all"
+                  >
+                    <span className="text-[9px] font-black text-amber-300 uppercase">Latest Added</span>
+                    <h4 className="font-heading font-black text-xs text-white mt-0.5">2024 Exam Papers</h4>
+                    <p className="text-[10px] text-slate-400 mt-0.5">All branches solved</p>
+                  </Link>
+                  <Link
+                    to="/pyq"
+                    className="p-3 rounded-xl bg-white/[0.05] border border-white/10 text-left active:scale-95 transition-all"
+                  >
+                    <span className="text-[9px] font-black text-cyan-300 uppercase">Chapter-Wise</span>
+                    <h4 className="font-heading font-black text-xs text-white mt-0.5">Topic PYQs</h4>
+                    <p className="text-[10px] text-slate-400 mt-0.5">Unit-wise questions</p>
+                  </Link>
+                  <Link
+                    to="/pyq"
+                    className="p-3 rounded-xl bg-white/[0.05] border border-white/10 text-left active:scale-95 transition-all"
+                  >
+                    <span className="text-[9px] font-black text-emerald-300 uppercase">University</span>
+                    <h4 className="font-heading font-black text-xs text-white mt-0.5">2021–2023 Archive</h4>
+                    <p className="text-[10px] text-slate-400 mt-0.5">Regular &amp; carry papers</p>
+                  </Link>
+                  <Link
+                    to="/pyq"
+                    className="p-3 rounded-xl bg-white/[0.05] border border-white/10 text-left active:scale-95 transition-all"
+                  >
+                    <span className="text-[9px] font-black text-indigo-300 uppercase">1st Year Common</span>
+                    <h4 className="font-heading font-black text-xs text-white mt-0.5">Basic Physics &amp; Math</h4>
+                    <p className="text-[10px] text-slate-400 mt-0.5">Common group A &amp; B</p>
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {/* TAB CONTENT 3: ACADEMIC TOOLS */}
+            {mobileTab === 'tools' && (
+              <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2.5 animate-fadeIn">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1">
+                    <Zap size={13} className="text-yellow-400" /> Utilities Suite
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    to="/cgpa"
+                    className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-left active:scale-95 transition-all"
+                  >
+                    <Calculator size={16} className="text-emerald-400 mb-1" />
+                    <h4 className="font-heading font-black text-xs text-white">CGPA Calculator</h4>
+                    <p className="text-[10px] text-slate-300">BEU 10-point scale</p>
+                  </Link>
+                  <Link
+                    to="/ugeac-predictor"
+                    className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/30 text-left active:scale-95 transition-all"
+                  >
+                    <Target size={16} className="text-purple-400 mb-1" />
+                    <h4 className="font-heading font-black text-xs text-white">UGEAC Predictor</h4>
+                    <p className="text-[10px] text-slate-300">38 Bihar GEC cutoffs</p>
+                  </Link>
+                  <Link
+                    to="/attendance"
+                    className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-left active:scale-95 transition-all"
+                  >
+                    <ShieldCheck size={16} className="text-rose-400 mb-1" />
+                    <h4 className="font-heading font-black text-xs text-white">Attendance Guard</h4>
+                    <p className="text-[10px] text-slate-300">75% safe rule</p>
+                  </Link>
+                  <Link
+                    to="/syllabus"
+                    className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/30 text-left active:scale-95 transition-all"
+                  >
+                    <Library size={16} className="text-blue-400 mb-1" />
+                    <h4 className="font-heading font-black text-xs text-white">BEU Syllabus</h4>
+                    <p className="text-[10px] text-slate-300">AICTE credit pattern</p>
+                  </Link>
+                </div>
+              </div>
+            )}
+
+            {/* TAB CONTENT 4: COLLEGES DIRECTORY */}
+            {mobileTab === 'colleges' && (
+              <div className="p-3.5 rounded-2xl bg-white/[0.04] border border-white/10 space-y-2.5 animate-fadeIn">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1">
+                    <Building2 size={13} className="text-cyan-400" /> Bihar 38 GEC
+                  </span>
+                  <Link to="/colleges" className="text-[10px] font-black text-cyan-400 hover:underline">
+                    View All 38 →
+                  </Link>
+                </div>
+                <div className="space-y-1.5">
+                  {popularColleges.slice(0, 4).map((col, idx) => (
+                    <Link
+                      key={idx}
+                      to={`/college/${col.slug}`}
+                      className="p-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 flex items-center justify-between text-xs active:scale-98 transition-all"
+                    >
+                      <div>
+                        <h4 className="font-heading font-bold text-white text-xs">{col.name}</h4>
+                        <p className="text-[10px] text-slate-400">{col.location} • Estd {col.estd}</p>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-md bg-cyan-500/15 text-cyan-300 text-[10px] font-mono font-bold">
+                        {col.cutoff}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* ══════════════════════════════════════════════════════════════
+              7. NATIVE 8-TOOLS APP DOCK GRID (2-Column Tactile Layout)
+             ══════════════════════════════════════════════════════════════ */}
+          <div className="space-y-2.5 pt-2">
             <div className="flex items-center justify-between px-1">
               <div className="flex items-center gap-1.5">
                 <Sparkles size={14} className="text-cyan-400" />
-                <h2 className="text-xs font-black uppercase tracking-wider text-slate-200">
-                  Academic Tools Suite
-                </h2>
+                <h3 className="text-xs font-black uppercase tracking-wider text-slate-200">
+                  Full Academic Toolkit
+                </h3>
               </div>
-              <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest">8 Tools</span>
+              <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest">8 App Modules</span>
             </div>
 
             <div className="grid grid-cols-2 gap-2.5">
@@ -358,11 +722,11 @@ export default function Home() {
                 <Link
                   key={idx}
                   to={tool.path}
-                  className="p-3.5 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/15 active:scale-95 transition-all duration-150 flex flex-col justify-between shadow-lg relative overflow-hidden group"
+                  className="p-3.5 rounded-2xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 active:scale-[0.97] transition-all duration-150 flex flex-col justify-between shadow-lg relative overflow-hidden group"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <div className="w-9 h-9 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 text-cyan-300 border border-cyan-400/25 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
                         {tool.icon}
                       </div>
                       <span className="px-1.5 py-0.5 rounded-md bg-white/10 text-cyan-300 text-[9px] font-black uppercase tracking-tight">
@@ -370,16 +734,16 @@ export default function Home() {
                       </span>
                     </div>
                     <div>
-                      <h3 className="font-heading font-extrabold text-xs text-white group-hover:text-cyan-300 transition-colors line-clamp-1">
+                      <h4 className="font-heading font-extrabold text-xs text-white group-hover:text-cyan-300 transition-colors line-clamp-1">
                         {tool.name}
-                      </h3>
-                      <p className="text-[10px] text-slate-300 leading-snug line-clamp-2 mt-0.5">
+                      </h4>
+                      <p className="text-[10px] text-slate-400 leading-snug line-clamp-2 mt-0.5 font-medium">
                         {tool.desc}
                       </p>
                     </div>
                   </div>
-                  <div className="mt-2.5 pt-2 border-t border-white/10 flex items-center justify-between text-[10px] font-bold text-cyan-400">
-                    <span>Open Tool</span>
+                  <div className="mt-2.5 pt-2 border-t border-white/5 flex items-center justify-between text-[10px] font-bold text-cyan-400">
+                    <span>Open Module</span>
                     <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
                   </div>
                 </Link>
@@ -387,156 +751,80 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 6. Mobile Live BEU Circulars / Notifications Card */}
-          {beuNotices.length > 0 && (
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-950/60 to-slate-900/60 border border-blue-500/30 shadow-xl space-y-2.5">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></div>
-                  <span className="text-[11px] font-black uppercase tracking-wider text-cyan-300">
-                    Live BEU Patna Circulars
-                  </span>
-                </div>
-                <Link to="/notifications" className="text-[10px] font-bold text-slate-400 hover:text-white flex items-center gap-1">
-                  View All <ChevronRight size={12} />
-                </Link>
-              </div>
-              <div className="space-y-2">
-                {beuNotices.slice(0, 3).map((notice, idx) => (
-                  <a
-                    key={notice.id || idx}
-                    href={notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`)}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="p-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-between gap-2 text-xs text-slate-200 active:scale-98 transition-all"
-                  >
-                    <span className="line-clamp-1 font-medium text-[11px]">{notice.title || notice.board}</span>
-                    <ArrowUpRight size={13} className="shrink-0 text-cyan-400" />
-                  </a>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 7. Mobile Community Stats Bento Strip */}
-          <div className="p-4 rounded-2xl bg-white/[0.05] border border-white/15 shadow-xl">
-            <div className="grid grid-cols-2 gap-3 text-center">
-              <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
-                <span className="text-xl font-[1000] text-white block">
+          {/* ══════════════════════════════════════════════════════════════
+              8. VERIFIED PLATFORM MILESTONES (Bento Strip)
+             ══════════════════════════════════════════════════════════════ */}
+          <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/10 shadow-lg">
+            <div className="grid grid-cols-4 gap-2 text-center">
+              <div className="p-2 rounded-xl bg-white/[0.04]">
+                <span className="text-base font-[1000] text-white block">
                   <CountUp end={stats.notes} suffix="+" duration={1200} />
                 </span>
-                <span className="text-[10px] text-slate-300 font-bold uppercase tracking-wider">Curated Notes</span>
+                <span className="text-[9px] text-slate-400 font-bold uppercase tracking-tight">Notes</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
-                <span className="text-xl font-[1000] text-white block">
+              <div className="p-2 rounded-xl bg-white/[0.04]">
+                <span className="text-base font-[1000] text-white block">
                   <CountUp end={stats.pyqs} suffix="+" duration={1200} />
                 </span>
-                <span className="text-[10px] text-slate-300 font-bold uppercase tracking-wider">Verified PYQs</span>
+                <span className="text-[9px] text-slate-400 font-bold uppercase tracking-tight">PYQs</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
-                <span className="text-xl font-[1000] text-white block">
-                  <CountUp end={stats.users} suffix="+" duration={1200} />
-                </span>
-                <span className="text-[10px] text-slate-300 font-bold uppercase tracking-wider">Active Scholars</span>
-              </div>
-              <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
-                <span className="text-xl font-[1000] text-white block">
+              <div className="p-2 rounded-xl bg-white/[0.04]">
+                <span className="text-base font-[1000] text-white block">
                   <CountUp end={38} suffix="+" duration={1200} />
                 </span>
-                <span className="text-[10px] text-slate-300 font-bold uppercase tracking-wider">Govt Colleges</span>
+                <span className="text-[9px] text-slate-400 font-bold uppercase tracking-tight">Colleges</span>
+              </div>
+              <div className="p-2 rounded-xl bg-white/[0.04]">
+                <span className="text-base font-[1000] text-white block">
+                  <CountUp end={stats.users} suffix="+" duration={1200} />
+                </span>
+                <span className="text-[9px] text-slate-400 font-bold uppercase tracking-tight">Scholars</span>
               </div>
             </div>
           </div>
 
-          {/* 8. Mobile UGEAC College Predictor Banner */}
-          <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-900/40 via-indigo-900/40 to-cyan-900/40 border border-cyan-400/30 shadow-xl flex items-center justify-between gap-3">
-            <div>
-              <div className="flex items-center gap-1.5 text-cyan-300 text-[10px] font-black uppercase tracking-wider mb-1">
-                <Target size={13} /> BCECEB Cutoffs 2024–25
-              </div>
-              <h3 className="font-heading font-black text-sm text-white">
-                UGEAC College Predictor
-              </h3>
-              <p className="text-[11px] text-slate-300 mt-0.5">
-                Check MIT, BCE, GCE admission chances
-              </p>
+          {/* ══════════════════════════════════════════════════════════════
+              9. COMMUNITY SUPPORTERS WALL & DONATION CTA
+             ══════════════════════════════════════════════════════════════ */}
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-950/60 to-indigo-950/60 border border-blue-500/20 text-center space-y-2.5">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/10 text-rose-300 text-[10px] font-black uppercase tracking-wider">
+              <Heart size={12} className="fill-rose-400" /> Student Powered Platform
             </div>
-            <Link
-              to="/ugeac-predictor"
-              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-black text-xs shrink-0 shadow-md active:scale-95"
-            >
-              Predict
-            </Link>
-          </div>
-
-          {/* 9. Top 38 Colleges Quick List */}
-          <div className="space-y-2.5">
-            <div className="flex items-center justify-between px-1">
-              <h3 className="text-xs font-black uppercase tracking-wider text-slate-200">
-                Top Government Engineering Colleges
-              </h3>
-              <Link to="/colleges" className="text-[10px] font-bold text-cyan-400">View All</Link>
-            </div>
-            <div className="space-y-2">
-              {popularColleges.slice(0, 4).map((col, idx) => (
-                <Link
-                  key={idx}
-                  to={`/college/${col.slug}`}
-                  className="p-3 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 flex items-center justify-between text-xs active:scale-98 transition-all"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-300 font-black text-[11px] flex items-center justify-center shrink-0">
-                      {col.code}
-                    </span>
-                    <div>
-                      <p className="font-bold text-white leading-tight">{col.name}</p>
-                      <p className="text-[10px] text-slate-400">{col.location} • Estd. {col.estd}</p>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-bold text-cyan-400">{col.cutoff}</span>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* 10. Student-Powered Wall of Fame */}
-          <div className="p-4 rounded-2xl bg-white/[0.05] border border-white/10 text-center space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-cyan-300 text-[10px] font-black uppercase">
-              <Heart size={12} className="fill-cyan-400 text-cyan-400" /> Student Powered
-            </div>
-            <h3 className="font-heading font-extrabold text-sm text-white">Platform Wall of Fame</h3>
-            <p className="text-[11px] text-slate-300 max-w-xs mx-auto">
-              Apna College Bihar is 100% free with zero paywalls. Thank you to everyone helping keep our servers running!
+            <p className="text-xs text-slate-300 max-w-xs mx-auto">
+              Apna College Bihar is 100% free with zero ads. Help us cover cloud database costs!
             </p>
             {topDonors.length > 0 && (
-              <div className="grid grid-cols-2 gap-2 text-center pt-1">
-                {topDonors.slice(0, 4).map((d, i) => (
-                  <div key={i} className="p-2 rounded-xl bg-white/5 border border-white/10">
-                    <p className="text-xs font-bold text-white truncate">{d.name}</p>
-                    <p className="text-[10px] text-emerald-400 font-bold">₹{d.amount}</p>
+              <div className="flex items-center justify-center gap-2 overflow-x-auto py-1">
+                {topDonors.slice(0, 3).map((d, i) => (
+                  <div key={i} className="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 text-[10px] font-semibold text-slate-200">
+                    {d.name}: <span className="text-emerald-400 font-bold">₹{d.amount}</span>
                   </div>
                 ))}
               </div>
             )}
-            <button
-              onClick={() => setShowScanner(true)}
-              className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-xs inline-flex items-center gap-1.5 shadow-md active:scale-95"
-            >
-              <Heart size={13} className="fill-white" /> Support via UPI
-            </button>
+            <div>
+              <button
+                onClick={() => setShowScanner(true)}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black text-xs inline-flex items-center gap-1.5 shadow-md active:scale-95 transition-all"
+              >
+                <Heart size={13} className="fill-white" /> Support via UPI
+              </button>
+            </div>
           </div>
 
-          {/* 11. FAQ Accordion */}
-          <div className="space-y-2 pt-2">
-            <h3 className="text-xs font-black uppercase tracking-wider text-slate-200 px-1">
+          {/* ══════════════════════════════════════════════════════════════
+              10. FREQUENTLY ASKED QUESTIONS (FAQ Accordion)
+             ══════════════════════════════════════════════════════════════ */}
+          <div className="space-y-2 pt-1">
+            <h3 className="text-xs font-black uppercase tracking-wider text-slate-300 px-1">
               Frequently Asked Questions
             </h3>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               {faqs.map((faq, i) => (
-                <div key={i} className="rounded-xl overflow-hidden bg-white/[0.05] border border-white/10">
+                <div key={i} className="rounded-xl overflow-hidden bg-white/[0.04] border border-white/10">
                   <button
                     onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                    className="w-full flex items-center justify-between p-3.5 text-left text-xs font-bold text-white"
+                    className="w-full flex items-center justify-between p-3.5 text-left text-xs font-bold text-white active:bg-white/5"
                   >
                     <span className="pr-2">{faq.q}</span>
                     <span className="text-cyan-400 shrink-0">
@@ -544,7 +832,7 @@ export default function Home() {
                     </span>
                   </button>
                   {openFaqIndex === i && (
-                    <div className="px-3.5 pb-3.5 text-[11px] text-slate-300 leading-relaxed font-medium border-t border-white/10 pt-2.5">
+                    <div className="px-3.5 pb-3.5 text-[11px] text-slate-300 leading-relaxed font-medium border-t border-white/10 pt-2.5 animate-fadeIn">
                       {faq.a}
                     </div>
                   )}
@@ -557,24 +845,24 @@ export default function Home() {
 
         {/* ── Mobile Scanner Modal ── */}
         {showScanner && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md" onClick={() => setShowScanner(false)}>
-            <div className="bg-slate-900 border border-white/20 text-white rounded-2xl shadow-2xl max-w-[360px] w-full p-5 text-center animate-fadeIn" onClick={e => e.stopPropagation()}>
-              <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md" onClick={() => setShowScanner(false)}>
+            <div className="bg-slate-900 border border-white/20 text-white rounded-3xl shadow-2xl max-w-[340px] w-full p-5 text-center animate-fadeIn" onClick={e => e.stopPropagation()}>
+              <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
                 <div className="flex items-center gap-2">
-                  <Heart size={16} className="text-cyan-400 fill-cyan-400" />
-                  <h3 className="font-heading font-bold text-sm">Support Apna College Bihar</h3>
+                  <Heart size={16} className="text-rose-400 fill-rose-400" />
+                  <h3 className="font-heading font-black text-sm">Support Apna College Bihar</h3>
                 </div>
-                <button onClick={() => setShowScanner(false)} className="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center text-slate-300" aria-label="Close Modal">
+                <button onClick={() => setShowScanner(false)} className="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-slate-300 active:scale-95" aria-label="Close Modal">
                   <X size={15} />
                 </button>
               </div>
 
-              <p className="text-[11px] text-slate-300 mb-4 leading-relaxed">
-                Help us cover cloud hosting expenses. Mention your <strong>Name &amp; College</strong> in payment remark!
+              <p className="text-[11px] text-slate-300 mb-3 leading-relaxed">
+                Help us cover server expenses. Mention your <strong>Name &amp; College</strong> in payment remark!
               </p>
 
-              <div className="w-44 h-44 bg-white rounded-xl p-2 mx-auto mb-4 border border-white/20 shadow-md">
-                <img src="/scanner-qr.jpg" alt="UPI QR" className="w-full h-full object-contain rounded-lg" />
+              <div className="w-48 h-48 bg-white rounded-2xl p-2 mx-auto mb-3 border border-white/20 shadow-md">
+                <img src="/scanner-qr.jpg" alt="UPI QR" className="w-full h-full object-contain rounded-xl" />
               </div>
 
               <div
@@ -582,10 +870,10 @@ export default function Home() {
                   navigator.clipboard.writeText('apnacollegebihar@slc');
                   toast.success('UPI ID copied to clipboard!');
                 }}
-                className="p-3 rounded-xl bg-white/5 border border-white/15 flex items-center justify-between cursor-pointer active:scale-95 transition-transform"
+                className="p-2.5 rounded-xl bg-white/5 border border-white/15 flex items-center justify-between cursor-pointer active:scale-95 transition-transform"
               >
                 <div className="text-left">
-                  <p className="text-[10px] text-slate-400 font-semibold">UPI ID (Tap to Copy)</p>
+                  <p className="text-[9px] text-slate-400 font-bold uppercase">UPI ID (Tap to Copy)</p>
                   <p className="text-xs font-mono font-bold text-cyan-400">apnacollegebihar@slc</p>
                 </div>
                 <ExternalLink size={14} className="text-cyan-400" />
@@ -596,6 +884,7 @@ export default function Home() {
       </div>
     );
   }
+
 
   // ═══════════════════════════════════════════════════════════════════════════════
   // ── DESKTOP VIEW (100% Crisp, Transparent, Unblurred Background Brand Film) ──
