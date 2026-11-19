@@ -6,24 +6,105 @@ import { Send, Youtube, Heart, MessageCircle } from 'lucide-react';
 export default function Footer() {
   const isNative = Capacitor.isNativePlatform();
 
-  if (isNative) {
+  const [isMobileScreen, setIsMobileScreen] = React.useState(() => {
+    if (typeof window === 'undefined') return false;
+    return Boolean(
+      isNative ||
+      window.innerWidth < 768 ||
+      /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '')
+    );
+  });
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobileScreen(
+        Boolean(
+          isNative ||
+          window.innerWidth < 768 ||
+          /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '')
+        )
+      );
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isNative]);
+
+  // Mobile App / Mobile Web Screen Compact Footer
+  if (isMobileScreen) {
     return (
-      <footer className="shrink-0 bg-transparent text-slate-400 py-8 px-6 mt-4 w-full">
-        <div className="flex flex-wrap justify-center gap-4 px-4 mb-6 text-xs font-semibold">
-          <Link to="/contact" className="hover:text-cyan-400 transition-colors">Contact</Link>
-          <Link to="/privacy-policy" className="hover:text-cyan-400 transition-colors">Privacy</Link>
-          <Link to="/terms" className="hover:text-cyan-400 transition-colors">Terms</Link>
-          <Link to="/dmca" className="hover:text-cyan-400 transition-colors">DMCA</Link>
-          <Link to="/disclaimer" className="hover:text-cyan-400 transition-colors">Disclaimer</Link>
-        </div>
-        <div className="text-center flex flex-col items-center justify-center gap-2 text-xs">
-          <p className="text-slate-400">&copy; {new Date().getFullYear()} Apna College Bihar. All rights reserved.</p>
-          <p className="text-slate-400 font-medium">Made with <span className="text-red-500">❤️</span> for BEU Students</p>
+      <footer className="shrink-0 bg-white/80 backdrop-blur-md border-t border-slate-200/90 text-slate-600 pt-7 pb-28 px-4 mt-6 w-full select-none">
+        <div className="max-w-md mx-auto space-y-4 text-center">
+          {/* Logo & Subtitle */}
+          <div className="flex items-center justify-center gap-2.5">
+            <div className="w-8 h-8 rounded-xl overflow-hidden border border-slate-200 shadow-2xs">
+              <img src="/logo-acb.png?v=99" alt="ACB Logo" className="w-full h-full object-cover" />
+            </div>
+            <div className="text-left">
+              <span className="font-heading font-black text-xs tracking-tight text-slate-900 block leading-none">
+                Apna College <span className="text-blue-600">Bihar</span>
+              </span>
+              <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider block mt-0.5">
+                #1 Study Hub for BEU Students
+              </span>
+            </div>
+          </div>
+
+          {/* Quick Links */}
+          <div className="flex flex-wrap justify-center gap-1.5 text-[11px] font-semibold text-slate-600">
+            <Link to="/notes" className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-600 transition-colors">Notes</Link>
+            <Link to="/pyq" className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-600 transition-colors">PYQs</Link>
+            <Link to="/syllabus" className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-600 transition-colors">Syllabus</Link>
+            <Link to="/mentorship" className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-600 transition-colors">Mentorship</Link>
+            <Link to="/contact" className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-600 transition-colors">Contact</Link>
+            <Link to="/privacy-policy" className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-600 transition-colors">Privacy</Link>
+            <Link to="/terms" className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-600 transition-colors">Terms</Link>
+            <Link to="/dmca" className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-600 transition-colors">DMCA</Link>
+          </div>
+
+          {/* Social Channels */}
+          <div className="flex items-center justify-center gap-2.5 pt-1">
+            <a
+              href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-xl flex items-center justify-center text-emerald-600 bg-emerald-50 border border-emerald-200/80 active:scale-95 transition-all shadow-2xs"
+              aria-label="WhatsApp Channel"
+            >
+              <MessageCircle size={15} />
+            </a>
+            <a
+              href="https://t.me/apnacollegebihar"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-xl flex items-center justify-center text-sky-600 bg-sky-50 border border-sky-200/80 active:scale-95 transition-all shadow-2xs"
+              aria-label="Telegram Channel"
+            >
+              <Send size={15} />
+            </a>
+            <a
+              href="https://youtube.com/@apnacollegebihar"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 rounded-xl flex items-center justify-center text-rose-600 bg-rose-50 border border-rose-200/80 active:scale-95 transition-all shadow-2xs"
+              aria-label="YouTube Channel"
+            >
+              <Youtube size={15} />
+            </a>
+          </div>
+
+          {/* Copyright */}
+          <div className="text-[10px] text-slate-500 pt-2 border-t border-slate-200/70 space-y-0.5">
+            <p>&copy; {new Date().getFullYear()} Apna College Bihar. All rights reserved.</p>
+            <p className="font-medium text-slate-500 flex items-center justify-center gap-1">
+              Made with <Heart size={11} className="text-rose-500 fill-rose-500 inline" /> in Bihar for BEU Students
+            </p>
+          </div>
         </div>
       </footer>
     );
   }
 
+  // Desktop Web Footer
   return (
     <footer className="relative bg-transparent pt-12 sm:pt-16 pb-10 px-4 sm:px-6 md:px-12 mt-auto border-t border-white/10 text-slate-200 z-10">
       <div className="container mx-auto max-w-6xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-10 lg:gap-8">

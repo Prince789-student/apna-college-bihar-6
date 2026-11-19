@@ -40,6 +40,7 @@ export default function DashboardLayout() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const { timerActive, lockMode } = useStudy();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileProfileOpen, setMobileProfileOpen] = useState(false);
   
   const [activeFeatureIndex, setActiveFeatureIndex] = useState(null);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -659,7 +660,139 @@ export default function DashboardLayout() {
       </aside>
       
       {/* Native App-Style Mobile Bottom Navigation Bar */}
-      <MobileBottomNav onOpenMenu={() => setMobileMenuOpen(true)} />
+      <MobileBottomNav 
+        onOpenMenu={() => setMobileMenuOpen(true)} 
+        onOpenProfile={() => setMobileProfileOpen(true)}
+      />
+
+      {/* ── Native Mobile Profile Bottom Sheet / Modal ── */}
+      {mobileProfileOpen && (
+        <div 
+          className="fixed inset-0 z-[350] bg-slate-950/60 backdrop-blur-sm flex items-end justify-center md:hidden animate-fadeIn"
+          onClick={() => setMobileProfileOpen(false)}
+        >
+          <div 
+            className="w-full max-w-md bg-white rounded-t-3xl border-t border-slate-200/90 shadow-2xl p-5 pb-8 space-y-4 max-h-[85vh] overflow-y-auto custom-scrollbar animate-slideUp text-slate-900"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Sheet Handle */}
+            <div className="w-12 h-1.5 bg-slate-300 rounded-full mx-auto -mt-1 mb-2"></div>
+
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <span className="text-xs font-black uppercase tracking-widest text-slate-400">My Account Profile</span>
+              <button 
+                onClick={() => setMobileProfileOpen(false)}
+                className="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center active:scale-95"
+                aria-label="Close Profile"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* User Profile Header */}
+            <div className="flex items-center gap-3.5 p-3 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/70">
+              <div className="w-14 h-14 rounded-2xl p-0.5 bg-gradient-to-tr from-blue-600 to-cyan-400 shadow-md shrink-0">
+                <div className="w-full h-full rounded-[14px] bg-white flex items-center justify-center font-black text-blue-600 text-xl font-heading">
+                  {user?.displayName?.[0]?.toUpperCase() || user?.email?.[0]?.toUpperCase() || 'E'}
+                </div>
+              </div>
+              <div className="min-w-0 flex-1">
+                <h3 className="font-heading font-black text-sm text-slate-900 truncate">
+                  {user?.displayName || 'Engineering Student'}
+                </h3>
+                <p className="text-xs font-semibold text-slate-500 truncate">{user?.email}</p>
+                <div className="flex items-center gap-1.5 mt-1 text-[10px] font-bold text-blue-600">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span>Active Session • Joined {joinDate}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Actions List */}
+            <div className="space-y-1.5 pt-1">
+              {(user?.email === 'prince8694@gmail.com' || user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN') && (
+                <Link
+                  to="/dashboard/admin"
+                  onClick={() => setMobileProfileOpen(false)}
+                  className="flex items-center justify-between p-3 rounded-xl bg-blue-50 hover:bg-blue-100/70 border border-blue-200/80 text-blue-700 font-bold text-xs active:scale-[0.98] transition-all"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Shield size={16} className="text-blue-600" />
+                    <span>Admin Control Panel</span>
+                  </div>
+                  <ChevronDown size={14} className="-rotate-90 text-blue-400" />
+                </Link>
+              )}
+
+              <Link
+                to="/extras"
+                onClick={() => setMobileProfileOpen(false)}
+                className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-slate-800 font-bold text-xs active:scale-[0.98] transition-all"
+              >
+                <div className="flex items-center gap-2.5">
+                  <FileText size={16} className="text-indigo-600" />
+                  <span>Personal Study Manager & Folders</span>
+                </div>
+                <ChevronDown size={14} className="-rotate-90 text-slate-400" />
+              </Link>
+
+              <Link
+                to="/mentorship"
+                onClick={() => setMobileProfileOpen(false)}
+                className="flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-slate-800 font-bold text-xs active:scale-[0.98] transition-all"
+              >
+                <div className="flex items-center gap-2.5">
+                  <GraduationCap size={16} className="text-emerald-600" />
+                  <span>Free Senior Mentorship</span>
+                </div>
+                <ChevronDown size={14} className="-rotate-90 text-slate-400" />
+              </Link>
+
+              <button
+                onClick={() => {
+                  setMobileProfileOpen(false);
+                  setMobileMenuOpen(true);
+                }}
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-slate-800 font-bold text-xs active:scale-[0.98] transition-all"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Layers size={16} className="text-cyan-600" />
+                  <span>All Academic Tools & Menu</span>
+                </div>
+                <ChevronDown size={14} className="-rotate-90 text-slate-400" />
+              </button>
+
+              <button
+                onClick={() => {
+                  setMobileProfileOpen(false);
+                  setShowSupportModal(true);
+                }}
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-rose-50 hover:bg-rose-100/70 border border-rose-200/70 text-rose-700 font-bold text-xs active:scale-[0.98] transition-all"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Heart size={16} className="text-rose-600 fill-rose-500/20" />
+                  <span>Support Us / Donate (UPI)</span>
+                </div>
+                <ChevronDown size={14} className="-rotate-90 text-rose-400" />
+              </button>
+            </div>
+
+            {/* Logout Button */}
+            <div className="pt-2">
+              <button
+                onClick={async () => {
+                  setMobileProfileOpen(false);
+                  await logout();
+                }}
+                className="w-full flex items-center justify-center gap-2 p-3.5 bg-red-50 hover:bg-red-100 text-red-600 border border-red-200/80 rounded-2xl font-bold text-xs active:scale-[0.98] transition-all cursor-pointer"
+              >
+                <LogOut size={16} />
+                <span>Log Out of Account</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       
       {/* Verification Modal */}
       {isPhoneModalOpen && isOnline && <div className="fixed inset-0 z-[400] flex items-center justify-center p-6 bg-slate-50/80 backdrop-blur-xl"><div className="w-full max-w-md bg-white border border-slate-200 rounded-2xl p-8 text-center space-y-6 shadow-2xl relative overflow-hidden"><div className="inline-flex p-4 bg-blue-600/20 text-blue-500 rounded-2xl"><Shield size={32} /></div><h2 className="text-2xl font-bold text-slate-900 tracking-tight">Security Update</h2><p className="text-slate-500 text-sm">Please link your active mobile number to secure your college portal access.</p><form onSubmit={handlePhoneSubmit} className="space-y-4"><div className="flex gap-2"><div className="bg-slate-100 px-4 py-3 rounded-xl text-xs font-bold flex items-center">+91</div><input type="tel" maxLength={10} value={phone} onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} placeholder="10-digit mobile number" className="flex-1 bg-slate-100 rounded-xl p-3 text-sm font-semibold outline-none" /></div><button type="submit" className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-all shadow-md">Save & Continue</button></form></div></div>}
