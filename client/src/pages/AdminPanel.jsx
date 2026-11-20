@@ -1068,12 +1068,12 @@ if (!isAdmin) return (
           </div>
         </div>
         <div className="flex flex-wrap bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 overflow-x-auto">
-           {['overview', 'mentorship', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu_notices', 'beu_whatsapp', 'donors', 'shortlinks'].map(t => {
+           {['overview', 'mentorship', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu_notices', 'beu_whatsapp', 'donors', 'shortlinks', 'beu_app'].map(t => {
              const isActive = tab === t || (t === 'beu_notices' && tab === 'beu');
              return (
                <button key={t} onClick={()=>setTab(t)}
                  className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isActive ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-900/20' : 'text-slate-500 hover:text-slate-700'}`}>
-                 {t === 'mentorship' ? '🎓 Mentorship' : t === 'beu_notices' ? '🔔 BEU Notices' : t === 'beu_whatsapp' ? '📢 BEU WhatsApp' : t}
+                 {t === 'mentorship' ? '🎓 Mentorship' : t === 'beu_notices' ? '🔔 BEU Notices' : t === 'beu_whatsapp' ? '📢 BEU WhatsApp' : t === 'beu_app' ? '📱 BEU Vision APK' : t}
                </button>
              );
            })}
@@ -2605,6 +2605,122 @@ if (!isAdmin) return (
                 <div className="text-center py-12 text-slate-400 text-xs font-bold uppercase tracking-widest">Koi donor add nahi kiya gaya hai</div>
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── BEU VISION APP APK MANAGEMENT (ADMIN ONLY - NOT SHOWN TO STUDENTS) ── */}
+      {tab === 'beu_app' && (
+        <div className="space-y-6 animate-in fade-in duration-500">
+          {/* Header Banner */}
+          <div className="bg-gradient-to-r from-blue-900 via-indigo-950 to-slate-900 p-6 md:p-8 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 blur-[90px] rounded-full pointer-events-none"></div>
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-black uppercase tracking-widest mb-3">
+                  <Shield size={12} className="text-emerald-400" />
+                  Admin Only • Private Release Archive
+                </div>
+                <h2 className="text-2xl md:text-3xl font-[1000] tracking-tight flex items-center gap-3">
+                  <Smartphone className="w-8 h-8 text-blue-400" />
+                  BEU Vision Official App APK
+                </h2>
+                <p className="text-xs text-blue-200/80 font-medium max-w-xl mt-1">
+                  Ye APK file sirf yahan Admin Panel ke andar authorized administrators ke liye available hai. Regular students ke kisi bhi portal/tab me ye APK link bilkul visible nahi hai.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <a 
+                  href="/admin-assets/beuvision-app-release.apk" 
+                  download="BEU_Vision_Official.apk"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl text-xs font-[1000] uppercase tracking-wider shadow-xl shadow-blue-900/40 transition-all transform active:scale-95"
+                >
+                  <Download size={16} />
+                  Download Release APK
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Details & Specs Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div className="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-2">
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Build Information</span>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-black">
+                  v1.0
+                </div>
+                <div>
+                  <h4 className="text-sm font-[1000] text-slate-800">BEU Vision Mobile</h4>
+                  <p className="text-[11px] font-semibold text-emerald-600 flex items-center gap-1">
+                    <CheckCircle2 size={12} /> Production Signed Build
+                  </p>
+                </div>
+              </div>
+              <p className="text-[11px] text-slate-500 font-medium pt-2 border-t border-slate-100">
+                Package: <code className="bg-slate-100 px-1.5 py-0.5 rounded text-indigo-600 font-mono text-[10px]">com.beuvision.app</code>
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-2">
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Compatibility</span>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-black">
+                  <Smartphone size={20} />
+                </div>
+                <div>
+                  <h4 className="text-sm font-[1000] text-slate-800">Android 8.0 to 15+</h4>
+                  <p className="text-[11px] font-semibold text-slate-500">
+                    ARM64, x86_64, Universal
+                  </p>
+                </div>
+              </div>
+              <p className="text-[11px] text-slate-500 font-medium pt-2 border-t border-slate-100">
+                Optimized for all Android devices with In-App PDF rendering &amp; Razorpay SDK.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-[2rem] border border-slate-200/80 shadow-sm space-y-2">
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Security &amp; Isolation</span>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-black">
+                  <Shield size={20} />
+                </div>
+                <div>
+                  <h4 className="text-sm font-[1000] text-slate-800">Admin-Only Scope</h4>
+                  <p className="text-[11px] font-semibold text-emerald-600">
+                    Hidden from Student View
+                  </p>
+                </div>
+              </div>
+              <p className="text-[11px] text-slate-500 font-medium pt-2 border-t border-slate-100">
+                Ye asset <code className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700 font-mono text-[10px]">/admin-assets/</code> me protected hai.
+              </p>
+            </div>
+          </div>
+
+          {/* Quick Copy Link & Instructions Card */}
+          <div className="bg-slate-50 p-6 md:p-8 rounded-[2rem] border border-slate-200/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h4 className="text-sm font-black uppercase tracking-wide text-slate-800 flex items-center gap-2">
+                <span>Direct Admin Download Link:</span>
+              </h4>
+              <p className="text-xs font-mono text-slate-600 mt-1 select-all bg-white px-3 py-1.5 rounded-xl border border-slate-200 inline-block">
+                /admin-assets/beuvision-app-release.apk
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                const url = window.location.origin + '/admin-assets/beuvision-app-release.apk';
+                navigator.clipboard.writeText(url);
+                flash('Direct APK Link Copied to Clipboard! 📋');
+              }}
+              className="px-5 py-2.5 bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-2 self-start md:self-auto cursor-pointer"
+            >
+              <FileText size={14} />
+              Copy APK Link
+            </button>
           </div>
         </div>
       )}
