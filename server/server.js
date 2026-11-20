@@ -309,20 +309,18 @@ app.get('/api/public/home-stats', asyncHandler(async (req, res) => {
             if (homeDataCache) return res.json({ success: true, ...homeDataCache, cached: true });
             return res.json({
                 success: true,
-                stats: { notes: 1387, pyqs: 240, users: 272, colleges: 38, groups: 0 },
+                stats: { notes: 244, pyqs: 13, users: 272, colleges: 38, groups: 0 },
                 donors: [],
                 notices: localNoticesList.slice(0, 15)
             });
         }
         const db = adminSdk.firestore();
 
-        const [metaSnap, donorsSnap, noticesSnap, usersCountSnap, notesCountSnap, pyqsCountSnap, groupsCountSnap] = await Promise.all([
+        const [metaSnap, donorsSnap, noticesSnap, usersCountSnap, groupsCountSnap] = await Promise.all([
             db.collection('documents').doc('unique_counts_metadata').get().catch(() => null),
             db.collection('donors').orderBy('amount', 'desc').limit(4).get().catch(() => ({ docs: [] })),
             db.collection('beu_notifications').limit(15).get().catch(() => ({ docs: [] })),
             db.collection('users').count().get().catch(() => null),
-            db.collection('documents').where('category', '==', 'NOTES').count().get().catch(() => null),
-            db.collection('documents').where('category', '==', 'PYQ').count().get().catch(() => null),
             db.collection('groups').count().get().catch(() => null)
         ]);
 
@@ -330,15 +328,37 @@ app.get('/api/public/home-stats', asyncHandler(async (req, res) => {
         const donors = donorsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
         const fsNotices = noticesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
         const notices = localNoticesList.length > 0 ? localNoticesList.slice(0, 15) : fsNotices;
-        const rawUsersCount = (usersCountSnap && usersCountSnap.data) ? usersCountSnap.data().count : 272;
-        const rawNotesCount = (notesCountSnap && notesCountSnap.data) ? notesCountSnap.data().count : 1387;
-        const rawPyqsCount = (pyqsCountSnap && pyqsCountSnap.data) ? pyqsCountSnap.data().count : 240;
+        const rawUsersCount = (usersCountSnap && usersCountSnap.data) ? usersCountSnap.data().count : (metaData.totalUsersCount || 272);
         const groupsCount = (groupsCountSnap && groupsCountSnap.data) ? groupsCountSnap.data().count : 0;
+
+        let uniqueNotesCount = metaData.uniqueNotesCount;
+        let uniquePyqsCount = metaData.uniquePyqsCount;
+
+        // Fallback compute deduplicated unique counts across branches if not present
+        if (!uniqueNotesCount || !uniquePyqsCount) {
+            try {
+                const docsSnap = await db.collection('documents').where('type', '==', 'file').select('category', 'fileUrl').get();
+                const notesSet = new Set();
+                const pyqSet = new Set();
+                docsSnap.forEach(d => {
+                    const data = d.data();
+                    if (data.fileUrl) {
+                        if (data.category === 'NOTES') notesSet.add(data.fileUrl.trim());
+                        else if (data.category === 'PYQ') pyqSet.add(data.fileUrl.trim());
+                    }
+                });
+                uniqueNotesCount = notesSet.size || 244;
+                uniquePyqsCount = pyqSet.size || 13;
+            } catch (_) {
+                uniqueNotesCount = 244;
+                uniquePyqsCount = 13;
+            }
+        }
 
         homeDataCache = {
             stats: {
-                notes: rawNotesCount,
-                pyqs: rawPyqsCount,
+                notes: uniqueNotesCount,
+                pyqs: uniquePyqsCount,
                 users: rawUsersCount,
                 colleges: 38,
                 groups: groupsCount
@@ -365,7 +385,7 @@ app.get('/api/public/home-stats', asyncHandler(async (req, res) => {
         } catch (_) {}
         res.json({
             success: true,
-            stats: { notes: 1387, pyqs: 240, users: 272, colleges: 38, groups: 0 },
+            stats: { notes: 244, pyqs: 13, users: 272, colleges: 38, groups: 0 },
             donors: [],
             notices: fallbackNotices
         });

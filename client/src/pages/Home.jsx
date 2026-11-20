@@ -52,8 +52,8 @@ export default function Home() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Authentic platform stats (real dynamic stats)
-  const [stats, setStats] = useState({ users: 272, notes: 1387, pyqs: 240, colleges: 38, groups: 0 });
+  // Authentic platform stats (deduplicated unique files across branches)
+  const [stats, setStats] = useState({ users: 272, notes: 244, pyqs: 13, colleges: 38, groups: 0 });
   const [activeConsoleTab, setActiveConsoleTab] = useState('tools'); // 'tools' | 'predictor' | 'colleges' | 'radar' | 'guide'
   const [topDonors, setTopDonors] = useState([]);
   const [showScanner, setShowScanner] = useState(false);
