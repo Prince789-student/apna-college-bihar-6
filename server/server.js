@@ -70,56 +70,20 @@ app.get('/api/app-version', (req, res) => {
 app.get('/api/download-apk', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    const v64Path = path.join(__dirname, 'public', 'apna-college-bihar-v64.apk');
-    const v63Path = path.join(__dirname, 'public', 'apna-college-bihar-v63.apk');
-    const v62Path = path.join(__dirname, 'public', 'apna-college-bihar-v62.apk');
-    const v61Path = path.join(__dirname, 'public', 'apna-college-bihar-v61.apk');
-    const v60Path = path.join(__dirname, 'public', 'apna-college-bihar-v60.apk');
-    const v59Path = path.join(__dirname, 'public', 'apna-college-bihar-v59.apk');
-    const stablePath = path.join(__dirname, 'public', 'apna-college-bihar.apk');
-    const apkPath = fs.existsSync(v64Path) ? v64Path : (fs.existsSync(v63Path) ? v63Path : (fs.existsSync(v62Path) ? v62Path : (fs.existsSync(v61Path) ? v61Path : (fs.existsSync(v60Path) ? v60Path : (fs.existsSync(stablePath) ? stablePath : null)))));
-    
-    if (apkPath) {
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-        res.setHeader('Pragma', 'no-cache');
-        res.setHeader('Expires', '0');
-        res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-        res.setHeader('Content-Disposition', 'attachment; filename="apna-college-bihar-v64.apk"');
-        return res.sendFile(apkPath);
-    } else {
-        res.status(404).send("APK file not found on server.");
-    }
+    // BANDWIDTH OPTIMIZATION: Redirect to high-capacity CDN / Vercel to save server bandwidth
+    return res.redirect(302, 'https://www.apnacollegebihar.online/apna-college-bihar-v64.apk');
 });
 
 // WINDOWS DESKTOP APP DOWNLOAD ROUTE
 app.get('/api/download-windows', (req, res) => {
-    const zipPath = path.join(__dirname, 'public', 'Apna-College-Bihar-Windows.zip');
-    
-    if (fs.existsSync(zipPath)) {
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-        res.setHeader('Pragma', 'no-cache');
-        res.setHeader('Expires', '0');
-        res.setHeader('Content-Type', 'application/zip');
-        res.setHeader('Content-Disposition', 'attachment; filename="Apna-College-Bihar-Windows.zip"');
-        return res.sendFile(zipPath);
-    } else {
-        res.status(404).send("Windows application package not found on server.");
-    }
+    // BANDWIDTH OPTIMIZATION: Redirect to high-capacity CDN / Vercel to save server bandwidth
+    return res.redirect(302, 'https://www.apnacollegebihar.online/Apna-College-Bihar-Windows.zip');
 });
 
 // Route for specific APK file names to prevent SPA interception
 app.get('/:filename.apk', (req, res, next) => {
     const filename = req.params.filename;
-    const apkPath = path.join(__dirname, 'public', `${filename}.apk`);
-    if (fs.existsSync(apkPath)) {
-        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-        res.setHeader('Pragma', 'no-cache');
-        res.setHeader('Expires', '0');
-        res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-        res.setHeader('Content-Disposition', `attachment; filename="${filename}.apk"`);
-        return res.sendFile(apkPath);
-    }
-    next();
+    return res.redirect(302, `https://www.apnacollegebihar.online/${filename}.apk`);
 });
 
 // GOOGLE ADSENSE & SEARCH ENGINE CRAWLER ROUTES (HIGHEST PRIORITY)
