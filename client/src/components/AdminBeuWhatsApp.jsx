@@ -7,7 +7,7 @@ import {
 
 const API_BASE = window.location.hostname === 'localhost' 
   ? 'http://localhost:5000' 
-  : 'https://apna-college-bihar-6.onrender.com';
+  : 'https://apna-college-bihar-6-i1fb.onrender.com';
 
 const DEFAULT_CHANNEL_URL = 'https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a';
 
