@@ -796,6 +796,7 @@ function App() {
             {isNative && <Route path="/" element={<AppHub />} />}
             <Route element={<DashboardLayout />}>
               {!isNative && <Route path="/" element={<Home />} />}
+              <Route path="/overview" element={<HomeOverview />} />
               <Route path="/download" element={<DownloadPage />} />
               <Route path="/apps" element={<Navigate to="/download" replace />} />
               <Route path="/download-app" element={<Navigate to="/download" replace />} />

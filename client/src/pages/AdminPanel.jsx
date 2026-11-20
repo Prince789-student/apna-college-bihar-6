@@ -1200,6 +1200,68 @@ export default function AdminPanel() {
       {/* ── OVERVIEW TAB ── */}
       {tab==='overview' && (
         <div className="space-y-6">
+          {/* BEU Vision Mobile APK Direct Download Card for Admin & Mobile Testing */}
+          <div className="bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 rounded-[2rem] md:rounded-[2.5rem] p-6 sm:p-8 border border-blue-500/30 text-white shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-emerald-500 text-slate-950 text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm flex items-center gap-1.5">
+              <CheckCircle2 size={12} className="text-slate-950" />
+              Official Build • Ready to Test
+            </div>
+
+            <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+              <div className="space-y-3 flex-1">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/30 shrink-0">
+                    <Smartphone size={28} />
+                  </div>
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-[1000] text-white tracking-tight flex items-center gap-2">
+                      BEU Vision Mobile APK
+                    </h2>
+                    <p className="text-xs text-blue-300 font-bold uppercase tracking-wider mt-0.5">
+                      Production Release · B.Tech 1st - 8th Sem · File: beuvision.apk
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-xs text-slate-300 font-medium leading-relaxed max-w-2xl">
+                  Mobile se download aur test karne ke liye direct link. Isme naya Course section (₹49 &amp; ₹99 pocket rates), 1-8 Semester syllabus, PYQ, Notes, aur attendance tracker sab active hain.
+                </p>
+
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <a
+                    href="/admin-assets/beuvision.apk"
+                    download="beuvision.apk"
+                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-[1000] rounded-2xl text-xs uppercase tracking-wider shadow-xl shadow-emerald-950/40 transition-all transform active:scale-95"
+                  >
+                    <Download size={16} />
+                    Download BEU Vision APK (80.4 MB)
+                  </a>
+
+                  <button
+                    onClick={() => {
+                      const url = window.location.origin + '/admin-assets/beuvision.apk';
+                      navigator.clipboard.writeText(url);
+                      flash('APK Download Link Copied to Clipboard! 📋');
+                    }}
+                    className="px-5 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl text-xs font-bold text-white transition-all flex items-center gap-2 active:scale-95 cursor-pointer"
+                  >
+                    <FileText size={14} />
+                    Copy Link
+                  </button>
+                </div>
+              </div>
+
+              <div className="bg-white/5 border border-white/10 p-4 rounded-2xl shrink-0 flex items-center gap-4 w-full sm:w-auto">
+                <div className="text-left space-y-1">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-blue-300">File Details</p>
+                  <p className="text-xs font-mono text-white">Size: ~80.4 MB</p>
+                  <p className="text-xs font-mono text-emerald-400">Courses: Active (₹49/₹99)</p>
+                  <p className="text-[10px] text-slate-400">Android 8.0 - 15+ compatible</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { label: 'Scholars', val: users.filter(x => x.role !== 'ADMIN' && x.role !== 'SUPER_ADMIN').length || users.length, icon: Users },

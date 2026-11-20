@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Calculator, Timer, Users, ArrowRight, CheckCircle, GraduationCap, Globe, Zap, Flame, Calendar, Sparkles, FileText, Library, Send, Clock, ChevronRight } from 'lucide-react';
+import { BookOpen, Calculator, Timer, Users, ArrowRight, CheckCircle, GraduationCap, Globe, Zap, Flame, Calendar, Sparkles, FileText, Library, Send, Clock, ChevronRight, Smartphone, Download } from 'lucide-react';
 import { collection, getCountFromServer } from 'firebase/firestore';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
@@ -60,6 +60,34 @@ export default function HomeOverview() {
           <p className="text-blue-100 text-sm md:text-base max-w-xl font-medium">
             Ready to conquer today's goals? Access your classes, notes, and study tools below to stay ahead in your semester.
           </p>
+        </div>
+      </div>
+
+      {/* BEU Vision Mobile APK Direct Download Card */}
+      <div className="bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 rounded-[2rem] p-6 text-white border border-blue-500/30 shadow-xl relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-md">
+              <Smartphone size={24} />
+            </div>
+            <div>
+              <h3 className="text-base font-black text-white tracking-tight flex items-center gap-2">
+                BEU Vision Mobile App
+                <span className="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-black px-2 py-0.5 rounded-full uppercase">Official Build</span>
+              </h3>
+              <p className="text-xs text-blue-200/80 font-medium mt-0.5">
+                Download APK on your phone · B.Tech 1-8 Sem, Syllabus &amp; Courses (₹49/₹99)
+              </p>
+            </div>
+          </div>
+          <a
+            href="/admin-assets/beuvision.apk"
+            download="beuvision.apk"
+            className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-emerald-950/30 active:scale-95 transition-all whitespace-nowrap"
+          >
+            <Download size={16} />
+            <span>Download APK (80.4 MB)</span>
+          </a>
         </div>
       </div>
 
