@@ -777,12 +777,14 @@ app.listen(PORT, '0.0.0.0', () => {
         console.error('Failed to initialize scrapers:', err.message);
     }
     
-    // Render Keep-Alive
-    const APP_URL = process.env.APP_URL;
-    if (APP_URL) {
-        setInterval(() => {
-            const https = require('https');
-            https.get(`${APP_URL}/_health`, (res) => {}).on('error', (err) => {});
-        }, 14 * 60 * 1000);
-    }
+    // Render Keep-Alive - ping self every 8 minutes to prevent Render free instance from sleeping
+    const selfUrl = process.env.RENDER_EXTERNAL_URL || 'https://apna-college-bihar-6-i1fb.onrender.com';
+    setInterval(() => {
+        const https = require('https');
+        https.get(`${selfUrl}/_health`, (res) => {
+            console.log(`[Keep-Alive]: Self ping status: ${res.statusCode}`);
+        }).on('error', (err) => {
+            console.warn('[Keep-Alive Warning]:', err.message);
+        });
+    }, 8 * 60 * 1000);
 });
