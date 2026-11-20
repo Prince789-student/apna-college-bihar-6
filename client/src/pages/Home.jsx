@@ -17,7 +17,6 @@ import SEO from '../components/SEO';
 import GlobalSearch from '../components/GlobalSearch';
 import CountUp from '../components/CountUp';
 import toast from 'react-hot-toast';
-import ThreeCanvasHero from '../components/ThreeCanvasHero';
 
 export default function Home() {
   const isNative = typeof window !== 'undefined' && Boolean(
@@ -53,8 +52,8 @@ export default function Home() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Authentic platform stats
-  const [stats, setStats] = useState({ users: 166, notes: 296, pyqs: 340, groups: 24 });
+  // Authentic platform stats (real dynamic stats)
+  const [stats, setStats] = useState({ users: 272, notes: 1387, pyqs: 240, colleges: 38, groups: 0 });
   const [activeConsoleTab, setActiveConsoleTab] = useState('tools'); // 'tools' | 'predictor' | 'colleges' | 'radar' | 'guide'
   const [topDonors, setTopDonors] = useState([]);
   const [showScanner, setShowScanner] = useState(false);
@@ -222,17 +221,18 @@ export default function Home() {
       })
       .catch(() => {});
 
-    // Fetch community stats (enforcing genuine 166 users, 296 notes, 340 pyqs)
+    // Fetch community stats (real dynamic live data)
     fetch(`${apiBase}/api/public/home-stats`)
       .then(res => res.json())
       .then(json => {
         if (json.success && json.stats && isMounted) {
-          setStats({
-            notes: 296,
-            pyqs: 340,
-            users: 166,
-            groups: 24
-          });
+          setStats(prev => ({
+            notes: Number(json.stats.notes) || prev.notes,
+            pyqs: Number(json.stats.pyqs) || prev.pyqs,
+            users: Number(json.stats.users) || prev.users,
+            colleges: Number(json.stats.colleges) || 38,
+            groups: Number(json.stats.groups) || 0
+          }));
         }
       })
       .catch(() => {});
@@ -632,25 +632,6 @@ export default function Home() {
                 </button>
               ))}
             </div>
-          </div>
-
-          {/* ══════════════════════════════════════════════════════════════
-              3D INTERACTIVE BIHAR ENGINEERING CORE (Three.js WebGL)
-             ══════════════════════════════════════════════════════════════ */}
-          <div className="rounded-3xl p-3 bg-white border border-slate-200/90 shadow-xs relative overflow-hidden group">
-            <div className="flex items-center justify-between px-2 pt-1 pb-1">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse"></span>
-                <span className="font-heading font-black text-xs text-slate-900 uppercase tracking-tight">
-                  3D Bihar Engineering Universe
-                </span>
-              </div>
-              <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-200/70">
-                38 Colleges Core
-              </span>
-            </div>
-
-            <ThreeCanvasHero isMobile={true} />
           </div>
 
           {/* ══════════════════════════════════════════════════════════════
@@ -1333,36 +1314,6 @@ export default function Home() {
         </section>
 
         {/* ═══════════════════════════════════════════ */}
-        {/* ── 3D INTERACTIVE ACADEMIC CORE (Three.js) ── */}
-        {/* ═══════════════════════════════════════════ */}
-        <section className="py-4 sm:py-6 px-4 sm:px-6 md:px-12 relative z-10">
-          <div className="container mx-auto max-w-5xl">
-            <div className="rounded-3xl p-5 md:p-7 bg-slate-950/45 backdrop-blur-2xl border border-white/15 shadow-2xl relative overflow-hidden group">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-white/10 mb-2 gap-3">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
-                    <h3 className="font-heading font-black text-lg md:text-xl text-white tracking-tight">
-                      Bihar Engineering University 3D Constellation
-                    </h3>
-                  </div>
-                  <p className="text-xs text-slate-300 font-medium mt-1">
-                    Real-time WebGL 3D neural model representing 38 Government Engineering Colleges orbiting the BEU academic core.
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="px-3 py-1 rounded-xl bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 text-xs font-bold font-mono">
-                    Three.js WebGL Core
-                  </span>
-                </div>
-              </div>
-
-              <ThreeCanvasHero isMobile={false} />
-            </div>
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════ */}
         {/* ── 2. REAL-TIME STATS BENTO HUD ── */}
         {/* ═══════════════════════════════════════════ */}
         <section className="py-4 sm:py-6 px-3.5 sm:px-6 md:px-12 relative z-10">
@@ -1372,7 +1323,7 @@ export default function Home() {
                 { label: 'Curated Notes', val: stats.notes, suffix: '+', icon: <BookOpen size={20} className="sm:w-[22px] sm:h-[22px]" /> },
                 { label: 'Verified PYQs', val: stats.pyqs, suffix: '+', icon: <FileText size={20} className="sm:w-[22px] sm:h-[22px]" /> },
                 { label: 'Active Students', val: stats.users, suffix: '+', icon: <Users size={20} className="sm:w-[22px] sm:h-[22px]" /> },
-                { label: 'Govt Colleges', val: 38, suffix: '+', icon: <Building2 size={20} className="sm:w-[22px] sm:h-[22px]" /> },
+                { label: 'Govt Colleges', val: stats.colleges || 38, suffix: '', icon: <Building2 size={20} className="sm:w-[22px] sm:h-[22px]" /> },
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center gap-3 text-white transition-all hover:translate-y-[-2px]">
                   <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-cyan-500/15 border border-cyan-400/25 text-cyan-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] flex items-center justify-center shrink-0">

@@ -309,18 +309,20 @@ app.get('/api/public/home-stats', asyncHandler(async (req, res) => {
             if (homeDataCache) return res.json({ success: true, ...homeDataCache, cached: true });
             return res.json({
                 success: true,
-                stats: { notes: 296, pyqs: 340, users: 166, groups: 24 },
+                stats: { notes: 1387, pyqs: 240, users: 272, colleges: 38, groups: 0 },
                 donors: [],
                 notices: localNoticesList.slice(0, 15)
             });
         }
         const db = adminSdk.firestore();
 
-        const [metaSnap, donorsSnap, noticesSnap, usersCountSnap, groupsCountSnap] = await Promise.all([
+        const [metaSnap, donorsSnap, noticesSnap, usersCountSnap, notesCountSnap, pyqsCountSnap, groupsCountSnap] = await Promise.all([
             db.collection('documents').doc('unique_counts_metadata').get().catch(() => null),
             db.collection('donors').orderBy('amount', 'desc').limit(4).get().catch(() => ({ docs: [] })),
             db.collection('beu_notifications').limit(15).get().catch(() => ({ docs: [] })),
             db.collection('users').count().get().catch(() => null),
+            db.collection('documents').where('category', '==', 'NOTES').count().get().catch(() => null),
+            db.collection('documents').where('category', '==', 'PYQ').count().get().catch(() => null),
             db.collection('groups').count().get().catch(() => null)
         ]);
 
@@ -328,15 +330,18 @@ app.get('/api/public/home-stats', asyncHandler(async (req, res) => {
         const donors = donorsSnap.docs.map(d => ({ id: d.id, ...d.data() }));
         const fsNotices = noticesSnap.docs.map(d => ({ id: d.id, ...d.data() }));
         const notices = localNoticesList.length > 0 ? localNoticesList.slice(0, 15) : fsNotices;
-        const rawUsersCount = (usersCountSnap && usersCountSnap.data) ? usersCountSnap.data().count : 166;
-        const groupsCount = (groupsCountSnap && groupsCountSnap.data) ? groupsCountSnap.data().count : 24;
+        const rawUsersCount = (usersCountSnap && usersCountSnap.data) ? usersCountSnap.data().count : 272;
+        const rawNotesCount = (notesCountSnap && notesCountSnap.data) ? notesCountSnap.data().count : 1387;
+        const rawPyqsCount = (pyqsCountSnap && pyqsCountSnap.data) ? pyqsCountSnap.data().count : 240;
+        const groupsCount = (groupsCountSnap && groupsCountSnap.data) ? groupsCountSnap.data().count : 0;
 
         homeDataCache = {
             stats: {
-                notes: 296,
-                pyqs: 340,
-                users: 166,
-                groups: groupsCount || 24
+                notes: rawNotesCount,
+                pyqs: rawPyqsCount,
+                users: rawUsersCount,
+                colleges: 38,
+                groups: groupsCount
             },
             donors,
             notices
@@ -360,7 +365,7 @@ app.get('/api/public/home-stats', asyncHandler(async (req, res) => {
         } catch (_) {}
         res.json({
             success: true,
-            stats: { notes: 296, pyqs: 340, users: 166, groups: 24 },
+            stats: { notes: 1387, pyqs: 240, users: 272, colleges: 38, groups: 0 },
             donors: [],
             notices: fallbackNotices
         });
