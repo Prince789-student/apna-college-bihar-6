@@ -1231,7 +1231,9 @@ export default function AdminPanel() {
                   <a
                     href="/admin-assets/beuvision.apk"
                     download="beuvision.apk"
-                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-[1000] rounded-2xl text-xs uppercase tracking-wider shadow-xl shadow-emerald-950/40 transition-all transform active:scale-95"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-[1000] rounded-2xl text-xs uppercase tracking-wider shadow-xl shadow-emerald-950/40 transition-all transform active:scale-95 cursor-pointer"
                   >
                     <Download size={16} />
                     Download BEU Vision APK (80.4 MB)
@@ -2675,7 +2677,9 @@ export default function AdminPanel() {
                 <a 
                   href="/admin-assets/beuvision.apk" 
                   download="beuvision.apk"
-                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl text-xs font-[1000] uppercase tracking-wider shadow-xl shadow-blue-900/40 transition-all transform active:scale-95"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl text-xs font-[1000] uppercase tracking-wider shadow-xl shadow-blue-900/40 transition-all transform active:scale-95 cursor-pointer"
                 >
                   <Download size={16} />
                   Download Official BEU Vision APK (80.4 MB)

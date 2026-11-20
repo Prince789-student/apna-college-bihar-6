@@ -86,6 +86,19 @@ app.get('/:filename.apk', (req, res, next) => {
     return res.redirect(302, `https://www.apnacollegebihar.online/${filename}.apk`);
 });
 
+// Route for admin-assets APK file downloads
+app.get('/admin-assets/:filename.apk', (req, res) => {
+    const filename = req.params.filename;
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Content-Type', 'application/vnd.android.package-archive');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}.apk"`);
+    const filePath = path.join(__dirname, 'public', 'admin-assets', `${filename}.apk`);
+    if (fs.existsSync(filePath)) {
+        return res.sendFile(filePath);
+    }
+    return res.redirect(302, `https://www.apnacollegebihar.online/admin-assets/${filename}.apk`);
+});
+
 // GOOGLE ADSENSE & SEARCH ENGINE CRAWLER ROUTES (HIGHEST PRIORITY)
 app.get('/ads.txt', (req, res) => {
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
