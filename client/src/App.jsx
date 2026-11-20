@@ -174,7 +174,15 @@ function GlobalProfilePrompt() {
 
   if (loading || !user || !canShow) return null;
 
-  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin' || user?.email === 'prince86944@gmail.com';
+  const userEmail = (user?.email || '').trim().toLowerCase();
+  const userRole = (user?.role || '').trim().toUpperCase();
+  const isAdmin = 
+    userEmail === 'prince86944@gmail.com' || 
+    userEmail === 'prince8694@gmail.com' || 
+    userRole === 'SUPER_ADMIN' || 
+    userRole === 'ADMIN' || 
+    user?.role === 'admin' || 
+    user?.role === 'super_admin';
 
   const hasPhone = Boolean(user?.phone && typeof user.phone === 'string' && user.phone.replace(/\D/g, '').length === 10 && user.phone !== 'NOT LINKED');
   const hasCollege = Boolean(user?.collegeName && typeof user.collegeName === 'string' && user.collegeName.trim() !== '' && user.collegeName !== 'N/A');

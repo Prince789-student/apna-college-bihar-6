@@ -95,8 +95,19 @@ export default function AdminPanel() {
   }, [beuNotifications, beuSearch, beuNoticeFilter]);
 
   // Access Control
-  const isSuper = user?.email === 'prince86944@gmail.com' || user?.role === ROLES.SUPER_ADMIN || user?.role === 'SUPER_ADMIN';
-  const isAdmin = isSuper || user?.role === ROLES.ADMIN || user?.role === 'ADMIN'; 
+  const userEmail = (user?.email || '').trim().toLowerCase();
+  const userRole = (user?.role || '').trim().toUpperCase();
+  const isSuper = 
+    userEmail === 'prince86944@gmail.com' || 
+    userEmail === 'prince8694@gmail.com' || 
+    userRole === 'SUPER_ADMIN' || 
+    user?.role === ROLES?.SUPER_ADMIN || 
+    user?.role === 'super_admin';
+  const isAdmin = 
+    isSuper || 
+    userRole === 'ADMIN' || 
+    user?.role === ROLES?.ADMIN || 
+    user?.role === 'admin'; 
 
   const flash = (text, type = 'ok') => {
     setMsg({ text, type });
@@ -1046,33 +1057,67 @@ export default function AdminPanel() {
   );
 
   
-if (!isAdmin) return (
-    <div className="text-center py-20 text-slate-500 font-bold uppercase tracking-widest">
-      Unauthorized Access
-    </div>
-  );
+  if (!user) {
+    return (
+      <div className="max-w-md mx-auto my-16 p-6 sm:p-8 bg-white border border-slate-200 rounded-[2rem] text-center shadow-2xl space-y-4">
+        <SEO title="Admin Login | Apna College Bihar" />
+        <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto shadow-inner">
+          <Shield size={28} />
+        </div>
+        <h2 className="text-xl font-[1000] text-slate-900 uppercase tracking-tight">Admin Authentication Required</h2>
+        <p className="text-xs text-slate-500 font-semibold leading-relaxed">Please login with your authorized administrator credentials to manage the portal.</p>
+        <a 
+          href="/login" 
+          className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-[1000] uppercase tracking-wider shadow-lg shadow-indigo-600/30 transition-all active:scale-95"
+        >
+          Login as Administrator
+        </a>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="max-w-md mx-auto my-16 p-6 sm:p-8 bg-white border border-red-200 rounded-[2rem] text-center shadow-2xl space-y-4">
+        <SEO title="Unauthorized Access | Apna College Bihar" />
+        <div className="w-14 h-14 rounded-2xl bg-red-50 text-red-600 flex items-center justify-center mx-auto shadow-inner">
+          <Ban size={28} />
+        </div>
+        <h2 className="text-xl font-[1000] text-slate-900 uppercase tracking-tight">Unauthorized Access</h2>
+        <p className="text-xs text-slate-500 font-semibold leading-relaxed">
+          Logged in as <strong className="text-slate-800">{user.email || 'User'}</strong>.<br />This account does not have administrator privileges.
+        </p>
+        <a 
+          href="/" 
+          className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-[1000] uppercase tracking-wider transition-all active:scale-95"
+        >
+          Return to Homepage
+        </a>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-0 pb-12 space-y-6 animate-in fade-in duration-700">
+    <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-0 pb-12 space-y-5 sm:space-y-6 animate-in fade-in duration-700">
       <LoadingOverlay visible={loadingOverlayVisible} />
       
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-[#f8fafc] p-5 md:p-6 border border-slate-200/80 rounded-[2rem] shadow-2xl relative overflow-hidden">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6 bg-[#f8fafc] p-4 sm:p-5 md:p-6 border border-slate-200/80 rounded-2xl sm:rounded-[2rem] shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-red-600/5 rounded-full blur-[100px] pointer-events-none"></div>
-        <div className="flex items-center gap-4 relative z-10">
-          <div className="p-3 bg-indigo-600/20 text-indigo-400 rounded-2xl group hover:scale-110 transition-transform cursor-pointer">
-             <Shield size={24} />
+        <div className="flex items-center gap-3 sm:gap-4 relative z-10">
+          <div className="p-2.5 sm:p-3 bg-indigo-600/20 text-indigo-400 rounded-2xl group hover:scale-110 transition-transform cursor-pointer shrink-0">
+             <Shield size={22} className="sm:w-6 sm:h-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.8]">{isSuper?'SUPER OPS':'ADMIN OPS'}</h1>
-            <p className="text-[9px] text-slate-500 font-black uppercase tracking-[0.3em] mt-2">Governance Hub</p>
+            <h1 className="text-xl sm:text-2xl font-[1000] text-slate-900 tracking-tighter uppercase leading-[0.8]">{isSuper?'SUPER OPS':'ADMIN OPS'}</h1>
+            <p className="text-[9px] text-slate-500 font-black uppercase tracking-[0.3em] mt-1.5 sm:mt-2">Governance Hub</p>
           </div>
         </div>
-        <div className="flex flex-wrap bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200/50 overflow-x-auto">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 px-1 bg-slate-100/70 rounded-2xl border border-slate-200/70 whitespace-nowrap scroll-smooth max-w-full">
            {['overview', 'mentorship', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu_notices', 'beu_whatsapp', 'donors', 'shortlinks', 'beu_app'].map(t => {
              const isActive = tab === t || (t === 'beu_notices' && tab === 'beu');
              return (
                <button key={t} onClick={()=>setTab(t)}
-                 className={`px-6 py-2 rounded-xl text-[9px] font-[1000] uppercase tracking-widest transition-all ${isActive ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-900/20' : 'text-slate-500 hover:text-slate-700'}`}>
+                 className={`px-4 sm:px-5 py-2 shrink-0 rounded-xl text-[9px] sm:text-[10px] font-[1000] uppercase tracking-wider transition-all cursor-pointer ${isActive ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/25 scale-[1.02]' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'}`}>
                  {t === 'mentorship' ? '🎓 Mentorship' : t === 'beu_notices' ? '🔔 BEU Notices' : t === 'beu_whatsapp' ? '📢 BEU WhatsApp' : t === 'beu_app' ? '📱 BEU Vision APK' : t}
                </button>
              );

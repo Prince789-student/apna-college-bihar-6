@@ -232,7 +232,7 @@ export default function AppHub() {
                       </div>
                     </div>
                     
-                    {(user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN') && (
+                    {(user?.email === 'prince86944@gmail.com' || user?.email === 'prince8694@gmail.com' || user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN' || user?.role === 'admin' || user?.role === 'super_admin') && (
                     <Link 
                       to="/dashboard/admin" 
                       className="w-full py-2.5 bg-blue-600/10 hover:bg-blue-600 border border-blue-500/20 text-blue-600 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 mb-1.5 shadow-sm"

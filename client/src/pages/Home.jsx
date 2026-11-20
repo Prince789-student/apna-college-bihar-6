@@ -17,6 +17,7 @@ import SEO from '../components/SEO';
 import GlobalSearch from '../components/GlobalSearch';
 import CountUp from '../components/CountUp';
 import toast from 'react-hot-toast';
+import ThreeCanvasHero from '../components/ThreeCanvasHero';
 
 export default function Home() {
   const isNative = typeof window !== 'undefined' && Boolean(
@@ -464,7 +465,7 @@ export default function Home() {
                 </div>
 
                 <div className="pt-2 space-y-1">
-                  {(user?.email === 'prince8694@gmail.com' || user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN') && (
+                  {(user?.email === 'prince8694@gmail.com' || user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN' || user?.role === 'admin' || user?.role === 'super_admin') && (
                     <Link
                       to="/dashboard/admin"
                       onClick={() => setShowMobileProfileMenu(false)}
@@ -631,6 +632,25 @@ export default function Home() {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* ══════════════════════════════════════════════════════════════
+              3D INTERACTIVE BIHAR ENGINEERING CORE (Three.js WebGL)
+             ══════════════════════════════════════════════════════════════ */}
+          <div className="rounded-3xl p-3 bg-white border border-slate-200/90 shadow-xs relative overflow-hidden group">
+            <div className="flex items-center justify-between px-2 pt-1 pb-1">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse"></span>
+                <span className="font-heading font-black text-xs text-slate-900 uppercase tracking-tight">
+                  3D Bihar Engineering Universe
+                </span>
+              </div>
+              <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-200/70">
+                38 Colleges Core
+              </span>
+            </div>
+
+            <ThreeCanvasHero isMobile={true} />
           </div>
 
           {/* ══════════════════════════════════════════════════════════════
@@ -1309,6 +1329,36 @@ export default function Home() {
               <GlobalSearch placeholder="Search notes, PYQs, syllabus, colleges, or subjects..." />
             </div>
 
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════ */}
+        {/* ── 3D INTERACTIVE ACADEMIC CORE (Three.js) ── */}
+        {/* ═══════════════════════════════════════════ */}
+        <section className="py-4 sm:py-6 px-4 sm:px-6 md:px-12 relative z-10">
+          <div className="container mx-auto max-w-5xl">
+            <div className="rounded-3xl p-5 md:p-7 bg-slate-950/45 backdrop-blur-2xl border border-white/15 shadow-2xl relative overflow-hidden group">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-white/10 mb-2 gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+                    <h3 className="font-heading font-black text-lg md:text-xl text-white tracking-tight">
+                      Bihar Engineering University 3D Constellation
+                    </h3>
+                  </div>
+                  <p className="text-xs text-slate-300 font-medium mt-1">
+                    Real-time WebGL 3D neural model representing 38 Government Engineering Colleges orbiting the BEU academic core.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="px-3 py-1 rounded-xl bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 text-xs font-bold font-mono">
+                    Three.js WebGL Core
+                  </span>
+                </div>
+              </div>
+
+              <ThreeCanvasHero isMobile={false} />
+            </div>
           </div>
         </section>
 

@@ -16,7 +16,15 @@ const ProtectedRoute = () => {
     return <Navigate to="/login" replace />;
   }
 
-  const isAdmin = user?.role === 'admin' || user?.role === 'super_admin' || user?.role === 'SUPER_ADMIN' || user?.email === 'prince86944@gmail.com';
+  const userEmail = (user?.email || '').trim().toLowerCase();
+  const userRole = (user?.role || '').trim().toUpperCase();
+  const isAdmin = 
+    userEmail === 'prince86944@gmail.com' || 
+    userEmail === 'prince8694@gmail.com' || 
+    userRole === 'SUPER_ADMIN' || 
+    userRole === 'ADMIN' || 
+    user?.role === 'admin' || 
+    user?.role === 'super_admin';
   const isPhoneSkipped = sessionStorage.getItem('phone_check_skipped') === 'true';
   const needsPhone = !isAdmin && !isPhoneSkipped && (!user?.phone || user?.phone?.trim() === "" || user?.phone === "NOT LINKED");
 

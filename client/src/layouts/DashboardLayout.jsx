@@ -47,6 +47,16 @@ export default function DashboardLayout() {
   const [showSupportModal, setShowSupportModal] = useState(false);
   const isHomePage = location.pathname === '/';
 
+  const userEmail = (user?.email || '').trim().toLowerCase();
+  const userRole = (user?.role || '').trim().toUpperCase();
+  const isAdminUser = 
+    userEmail === 'prince86944@gmail.com' || 
+    userEmail === 'prince8694@gmail.com' || 
+    userRole === 'SUPER_ADMIN' || 
+    userRole === 'ADMIN' || 
+    user?.role === 'admin' || 
+    user?.role === 'super_admin';
+
   const [isMobileScreen, setIsMobileScreen] = useState(() => {
     if (typeof window === 'undefined') return false;
     return Boolean(
@@ -468,9 +478,10 @@ export default function DashboardLayout() {
                           </div>
                           
                           <div className="p-2 space-y-1">
-                            {(user?.email === 'prince8694@gmail.com' || user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN') && (
+                            {isAdminUser && (
                               <Link 
                                 to="/dashboard/admin"
+                                onClick={() => setShowProfileMenu(false)}
                                 className="flex items-center gap-3 w-full p-2.5 hover:bg-blue-50 text-blue-600 rounded-xl transition-all group"
                               >
                                 <div className="p-2 bg-blue-50 group-hover:bg-blue-100 rounded-lg transition-colors">
@@ -604,6 +615,24 @@ export default function DashboardLayout() {
         </div>
 
         <div className="flex-1 overflow-y-auto py-4 px-3 space-y-6 custom-scrollbar">
+          {isAdminUser && (
+            <div className="px-1 pb-1">
+              <Link
+                to="/dashboard/admin"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-3 p-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl shadow-lg shadow-blue-500/25 active:scale-95 transition-all"
+              >
+                <div className="p-2 bg-white/20 rounded-xl text-cyan-200">
+                  <Shield size={18} />
+                </div>
+                <div className="text-left">
+                  <span className="text-xs font-black block uppercase tracking-wide">Admin Control Panel</span>
+                  <span className="text-[10px] text-blue-100 font-medium">Access Governance &amp; Controls</span>
+                </div>
+              </Link>
+            </div>
+          )}
+
           {featureCategories.map((cat) => (
              <div key={cat.title}>
                <p className="px-4 text-xs font-bold text-slate-400 mb-3 flex items-center gap-2">
@@ -710,7 +739,7 @@ export default function DashboardLayout() {
 
             {/* Quick Actions List */}
             <div className="space-y-1.5 pt-1">
-              {(user?.email === 'prince8694@gmail.com' || user?.email === 'prince86944@gmail.com' || user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN') && (
+              {isAdminUser && (
                 <Link
                   to="/dashboard/admin"
                   onClick={() => setMobileProfileOpen(false)}
