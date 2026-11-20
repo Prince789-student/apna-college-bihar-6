@@ -74,6 +74,20 @@ const NotFound = React.lazy(() => import('./pages/NotFound'));
 const ShortLinkResolver = React.lazy(() => import('./pages/ShortLinkResolver'));
 const DownloadPage = React.lazy(() => import('./pages/DownloadPage'));
 
+// Auto-handle Vite dynamic import chunk errors after new deployments
+if (typeof window !== 'undefined') {
+  window.addEventListener('vite:preloadError', (event) => {
+    event.preventDefault();
+    console.warn('[Vite] Chunk preload error detected, auto-reloading to fetch fresh assets...');
+    const lastAttempt = sessionStorage.getItem('chunk_reload_attempted');
+    const now = Date.now();
+    if (!lastAttempt || now - parseInt(lastAttempt, 10) > 10000) {
+      sessionStorage.setItem('chunk_reload_attempted', now.toString());
+      window.location.reload();
+    }
+  });
+}
+
 class AppErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -86,10 +100,14 @@ class AppErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     console.error('AppErrorBoundary caught error:', error, errorInfo);
-    const isChunkError = /Loading chunk|Failed to fetch dynamically imported module/i.test(error?.message || '');
-    if (isChunkError && !sessionStorage.getItem('chunk_reload_attempted')) {
-      sessionStorage.setItem('chunk_reload_attempted', 'true');
-      window.location.reload();
+    const isChunkError = /Loading chunk|Failed to fetch dynamically imported module|error loading dynamically imported module|Importing a module script failed/i.test(error?.message || '');
+    if (isChunkError) {
+      const lastAttempt = sessionStorage.getItem('chunk_reload_attempted');
+      const now = Date.now();
+      if (!lastAttempt || now - parseInt(lastAttempt, 10) > 10000) {
+        sessionStorage.setItem('chunk_reload_attempted', now.toString());
+        window.location.reload();
+      }
     }
   }
 
@@ -105,7 +123,16 @@ class AppErrorBoundary extends React.Component {
             A new update of Apna College Bihar was deployed. Click below to load the latest version.
           </p>
           <button 
-            onClick={() => { sessionStorage.removeItem('chunk_reload_attempted'); window.location.reload(); }}
+            onClick={() => { 
+              sessionStorage.removeItem('chunk_reload_attempted');
+              if ('caches' in window) {
+                caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+              }
+              if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+              }
+              window.location.reload(); 
+            }}
             className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer"
           >
             Refresh Now

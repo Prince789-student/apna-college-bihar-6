@@ -1,4 +1,5 @@
 {
+  "buildCommand": "npm --prefix client run build",
   "headers": [
     {
       "source": "/(.*cutoff.*)",
@@ -615,7 +616,7 @@
       "destination": "https://apna-college-bihar-6-i1fb.onrender.com/p/:path*"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!assets/|brand-film/|film/|admin-assets/|data/|.*\\.[a-zA-Z0-9]+$).*)",
       "destination": "/index"
     }
   ],

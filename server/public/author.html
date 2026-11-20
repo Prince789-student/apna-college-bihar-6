@@ -28,17 +28,38 @@
    <link rel="apple-touch-icon" sizes="152x152" href="/logo-acb.png" />
 
    <script>
-      // ── Service Worker Registration ─────────────────────────────
+      // Clean up legacy service workers and stale caches to prevent chunk mismatch loops
       if ('serviceWorker' in navigator) {
          const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
          if (isNative) {
             document.documentElement.classList.add('native-app');
          } else {
-            window.addEventListener('load', () => {
-               navigator.serviceWorker.register('/sw.js').catch(err => console.warn('[SW] Registration failed:', err));
-            });
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+               for (var i = 0; i < registrations.length; i++) {
+                  registrations[i].unregister();
+               }
+            }).catch(function(err) {});
          }
       }
+      if ('caches' in window) {
+         caches.keys().then(function(keys) {
+            for (var i = 0; i < keys.length; i++) {
+               caches.delete(keys[i]);
+            }
+         }).catch(function(err) {});
+      }
+
+      // Failsafe: Ensure initial loading overlay is dismissed even on slow network or module error
+      setTimeout(function() {
+         var loader = document.getElementById('app-init-loader');
+         if (loader) {
+            loader.style.opacity = '0';
+            loader.style.pointerEvents = 'none';
+            setTimeout(function() {
+               try { loader.remove(); } catch(e) {}
+            }, 300);
+         }
+      }, 3500);
 
       window.addEventListener('beforeinstallprompt', (e) => {
          e.preventDefault();
@@ -168,7 +189,7 @@
          width: 0 !important;
       }
    </style>
-  <script type="module" crossorigin src="/assets/index.912d48fc.js"></script>
+  <script type="module" crossorigin src="/assets/index.7e7407ba.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/vendor.89b75146.js">
   <link rel="modulepreload" crossorigin href="/assets/capacitor.5c152815.js">
   <link rel="modulepreload" crossorigin href="/assets/firebase.87212c48.js">
