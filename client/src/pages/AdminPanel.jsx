@@ -6,7 +6,7 @@ import {
   Search, RefreshCw, BarChart3, 
   ChevronRight, ChevronLeft, Phone, Smartphone, AlertCircle, Loader2,
   FileDigit, BookOpen, Download, UserMinus, UserPlus, Eye, Calendar, Heart,
-  Sparkles, Edit2, CheckCircle2, Clock
+  Sparkles, Edit2, CheckCircle2, Clock, Share2, MessageCircle
 } from 'lucide-react';
 import { db, getFirebaseStorage } from '../firebase';
 import { 
@@ -1224,7 +1224,7 @@ export default function AdminPanel() {
                 </div>
 
                 <p className="text-xs text-slate-300 font-medium leading-relaxed max-w-2xl">
-                  Mobile se download aur test karne ke liye direct link. Isme naya Course section (₹49 &amp; ₹99 pocket rates), 1-8 Semester syllabus, PYQ, Notes, aur attendance tracker sab active hain.
+                  Official BEU Vision Android APK (Latest Production Release). Isme naya Course section (Booster Batches with folder/unit materials), Notes Bundle Packs (₹25, ₹50, ₹70, ₹99), Razorpay live checkout gateway, in-app secure PDF viewer aur 1-8th Semester syllabus active hain.
                 </p>
 
                 <div className="flex flex-wrap items-center gap-3 pt-2">
@@ -1236,8 +1236,41 @@ export default function AdminPanel() {
                     className="inline-flex items-center gap-2 px-6 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-[1000] rounded-2xl text-xs uppercase tracking-wider shadow-xl shadow-emerald-950/40 transition-all transform active:scale-95 cursor-pointer"
                   >
                     <Download size={16} />
-                    Download BEU Vision APK (80.4 MB)
+                    Download Latest APK
                   </a>
+
+                  <a
+                    href={`https://api.whatsapp.com/send?text=${encodeURIComponent('🚀 *BEU Vision - Official Android App*\n\nBihar Engineering University (BEU) ke students ke liye complete study companion:\n✅ B.Tech 1st - 8th Semester Syllabus\n✅ High-scoring Handwritten Notes (₹25 - ₹99 Combo Packs)\n✅ Booster Batches & In-App Notes Viewer\n✅ 5+ Years Verified PYQ Solutions\n✅ Attendance Tracker & SGPA Calculator\n\n📥 *Download Direct APK:*\n' + window.location.origin + '/admin-assets/beuvision.apk')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-5 py-3.5 bg-emerald-600 hover:bg-emerald-500 border border-emerald-400/30 rounded-2xl text-xs font-bold text-white transition-all flex items-center gap-2 active:scale-95 cursor-pointer shadow-lg shadow-emerald-950/30"
+                  >
+                    <MessageCircle size={15} />
+                    WhatsApp Share
+                  </a>
+
+                  <button
+                    onClick={async () => {
+                      const url = window.location.origin + '/admin-assets/beuvision.apk';
+                      const shareData = {
+                        title: 'BEU Vision Android App',
+                        text: '🚀 Download BEU Vision Android App for B.Tech Semester Notes, Booster Courses & PYQs:\n' + url,
+                        url: url
+                      };
+                      if (navigator.share) {
+                        try {
+                          await navigator.share(shareData);
+                        } catch (e) {}
+                      } else {
+                        const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareData.text)}`;
+                        window.open(waUrl, '_blank');
+                      }
+                    }}
+                    className="px-5 py-3.5 bg-indigo-600 hover:bg-indigo-500 border border-indigo-400/30 rounded-2xl text-xs font-bold text-white transition-all flex items-center gap-2 active:scale-95 cursor-pointer shadow-lg shadow-indigo-950/30"
+                  >
+                    <Share2 size={15} />
+                    Share APK
+                  </button>
 
                   <button
                     onClick={() => {
