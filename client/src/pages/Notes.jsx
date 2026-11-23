@@ -57,6 +57,9 @@ const BRANCH_COLORS = {
   violet: { bg: 'bg-violet-50', border: 'border-violet-200', text: 'text-violet-700', active: 'bg-violet-600 text-white border-violet-600', badge: 'bg-violet-100 text-violet-600' },
   orange: { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700', active: 'bg-orange-600 text-white border-orange-600', badge: 'bg-orange-100 text-orange-600' },
   emerald:{ bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', active: 'bg-emerald-600 text-white border-emerald-600', badge: 'bg-emerald-100 text-emerald-600' },
+  lime:   { bg: 'bg-lime-50',   border: 'border-lime-200',   text: 'text-lime-700',   active: 'bg-lime-600 text-white border-lime-600',     badge: 'bg-lime-100 text-lime-600' },
+  amber:  { bg: 'bg-amber-50',  border: 'border-amber-200',  text: 'text-amber-700',  active: 'bg-amber-600 text-white border-amber-600',   badge: 'bg-amber-100 text-amber-600' },
+  red:    { bg: 'bg-red-50',    border: 'border-red-200',    text: 'text-red-700',    active: 'bg-red-600 text-white border-red-600',       badge: 'bg-red-100 text-red-600' },
   yellow: { bg: 'bg-yellow-50', border: 'border-yellow-200', text: 'text-yellow-700', active: 'bg-yellow-500 text-white border-yellow-500', badge: 'bg-yellow-100 text-yellow-600' },
   pink:   { bg: 'bg-pink-50', border: 'border-pink-200', text: 'text-pink-700', active: 'bg-pink-600 text-white border-pink-600', badge: 'bg-pink-100 text-pink-600' },
 };
@@ -393,7 +396,7 @@ export default function Notes() {
     }
   }, [step]);
 
-  const branchColor = branch ? BRANCH_COLORS[branch.color] : BRANCH_COLORS.indigo;
+  const branchColor = (branch && BRANCH_COLORS[branch.color]) || BRANCH_COLORS.indigo;
 
   return (
     <div className="max-w-5xl mx-auto px-3 md:px-4 pb-24 space-y-4 md:space-y-6 relative">

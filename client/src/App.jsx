@@ -123,14 +123,18 @@ class AppErrorBoundary extends React.Component {
             A new update of Apna College Bihar was deployed. Click below to load the latest version.
           </p>
           <button 
-            onClick={() => { 
+            onClick={async () => { 
               sessionStorage.removeItem('chunk_reload_attempted');
-              if ('caches' in window) {
-                caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
-              }
-              if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
-              }
+              try {
+                if ('caches' in window) {
+                  const keys = await caches.keys();
+                  await Promise.all(keys.map(k => caches.delete(k)));
+                }
+                if ('serviceWorker' in navigator) {
+                  const regs = await navigator.serviceWorker.getRegistrations();
+                  await Promise.all(regs.map(r => r.unregister()));
+                }
+              } catch {}
               window.location.reload(); 
             }}
             className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all shadow-md active:scale-95 cursor-pointer"
