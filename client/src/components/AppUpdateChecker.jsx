@@ -7,6 +7,7 @@ import { db } from '../firebase';
 
 const CURRENT_APP_VERSION_CODE = 1;
 const CURRENT_APP_VERSION_NAME = "1.0";
+const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.apnacollegebihar.online";
 const DOWNLOAD_URL = "https://www.apnacollegebihar.online/api/download-apk";
 
 export default function AppUpdateChecker() {
@@ -18,6 +19,7 @@ export default function AppUpdateChecker() {
   const [updateRequired, setUpdateRequired] = useState(false);
   const [installedVersion, setInstalledVersion] = useState("1.0");
   const [latestVersion, setLatestVersion] = useState(CURRENT_APP_VERSION_NAME);
+  const [updateUrl, setUpdateUrl] = useState(PLAY_STORE_URL);
   const [downloading, setDownloading] = useState(false);
 
   // MUST ONLY run inside the native Android mobile app container
@@ -32,11 +34,12 @@ export default function AppUpdateChecker() {
 
     let isMounted = true;
 
-    const evaluateVersion = async (targetCode, targetName) => {
+    const evaluateVersion = async (targetCode, targetName, targetUrl) => {
       if (!isMounted) return;
       const targetVName = targetName || CURRENT_APP_VERSION_NAME;
       const targetVCode = targetCode || CURRENT_APP_VERSION_CODE;
       setLatestVersion(targetVName);
+      if (targetUrl) setUpdateUrl(targetUrl);
 
       let currentCode = 1; // Default to current v1.0 release
       try {
@@ -75,7 +78,8 @@ export default function AppUpdateChecker() {
           const data = snap.data();
           const targetCode = data.latestVersionCode || CURRENT_APP_VERSION_CODE;
           const targetName = data.latestVersionName || CURRENT_APP_VERSION_NAME;
-          evaluateVersion(targetCode, targetName);
+          const targetUrl = data.playStoreUrl || PLAY_STORE_URL;
+          evaluateVersion(targetCode, targetName, targetUrl);
         } else {
           evaluateVersion(CURRENT_APP_VERSION_CODE, CURRENT_APP_VERSION_NAME);
         }
@@ -130,34 +134,33 @@ export default function AppUpdateChecker() {
 
   const handleDownload = async () => {
     setDownloading(true);
+    const targetLink = updateUrl || PLAY_STORE_URL;
+    const isPlayStore = targetLink.includes('play.google.com') || targetLink.startsWith('market://');
 
-    // 1. Trigger native Android Downloader plugin (DownloadManager notification bar)
-    try {
-      const plugin = Capacitor.Plugins?.AndroidDownloader;
-      if (plugin && typeof plugin.downloadFile === 'function') {
-        await plugin.downloadFile({
-          url: DOWNLOAD_URL,
-          filename: `apna-college-bihar-v${latestVersion.replace('.0', '')}.apk`,
-          title: `Apna College Bihar v${latestVersion} Update`
-        });
-      }
-    } catch (e) {
-      console.warn("Native downloader fallback:", e);
-    }
-
-    // 2. Also trigger direct browser / webview download
-    try {
-      window.open(DOWNLOAD_URL, '_system');
-    } catch (e) {
-      window.location.href = DOWNLOAD_URL;
-    }
-
-    // 3. Keep fallback redirect active
-    setTimeout(() => {
+    if (!isPlayStore) {
       try {
-        window.location.href = DOWNLOAD_URL;
-      } catch (e) {}
-    }, 600);
+        const plugin = Capacitor.Plugins?.AndroidDownloader;
+        if (plugin && typeof plugin.downloadFile === 'function') {
+          await plugin.downloadFile({
+            url: targetLink || DOWNLOAD_URL,
+            filename: `apna-college-bihar-v${latestVersion.replace('.0', '')}.apk`,
+            title: `Apna College Bihar v${latestVersion} Update`
+          });
+        }
+      } catch (e) {
+        console.warn("Native downloader fallback:", e);
+      }
+    }
+
+    try {
+      window.open(targetLink, '_system');
+    } catch (e) {
+      window.location.href = targetLink;
+    }
+
+    setTimeout(() => {
+      setDownloading(false);
+    }, 1500);
   };
 
   return (
@@ -213,13 +216,15 @@ export default function AppUpdateChecker() {
           ) : (
             <>
               <Download size={16} />
-              <span>Download &amp; Update Now</span>
+              <span>{updateUrl?.includes('play.google.com') ? 'Update Now on Play Store' : 'Download & Update Now'}</span>
             </>
           )}
         </button>
 
         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-4">
-          Click karte hi direct APK download shuru hoga
+          {updateUrl?.includes('play.google.com')
+            ? 'Click karte hi Play Store update page khulega'
+            : 'Click karte hi direct APK download shuru hoga'}
         </p>
       </div>
     </div>
