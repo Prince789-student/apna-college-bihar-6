@@ -5,11 +5,16 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { Capacitor } from '@capacitor/core';
 import SEO from '../components/SEO';
 
-const API_BASE = typeof window !== 'undefined' && window.location.hostname === 'localhost'
-  ? 'http://localhost:5000'
-  : 'https://apna-college-bihar-6-i1fb.onrender.com';
+const PROD_API_BASE = 'https://apna-college-bihar-6-i1fb.onrender.com';
+const isLocalDev = typeof window !== 'undefined'
+  && !Capacitor.isNativePlatform()
+  && window.location.hostname === 'localhost'
+  && Boolean(window.location.port);
+
+const API_BASE = isLocalDev ? 'http://localhost:5000' : PROD_API_BASE;
 
 const EXAM_TYPES = [
   { id: 'NEW', label: 'New / Regular' },
@@ -44,16 +49,24 @@ export default function BeuResult() {
     try {
       let coursesList = null;
 
-      try {
-        const res = await fetch(`${API_BASE}/api/beu/result-exams`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.success && Array.isArray(data.courses) && data.courses.length > 0) {
-            coursesList = data.courses;
+      const endpoints = Array.from(new Set([
+        `${API_BASE}/api/beu/result-exams`,
+        `${PROD_API_BASE}/api/beu/result-exams`
+      ]));
+
+      for (const url of endpoints) {
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success && Array.isArray(data.courses) && data.courses.length > 0) {
+              coursesList = data.courses;
+              break;
+            }
           }
+        } catch {
+          // Try next endpoint
         }
-      } catch {
-        // Primary backend unavailable; try direct BEU endpoint below
       }
 
       if (!coursesList) {
