@@ -5,8 +5,8 @@ import { Download, Sparkles, RefreshCw } from 'lucide-react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 
-const CURRENT_APP_VERSION_CODE = 64;
-const CURRENT_APP_VERSION_NAME = "64.0";
+const CURRENT_APP_VERSION_CODE = 1;
+const CURRENT_APP_VERSION_NAME = "1.0";
 const DOWNLOAD_URL = "https://www.apnacollegebihar.online/api/download-apk";
 
 export default function AppUpdateChecker() {
@@ -16,7 +16,7 @@ export default function AppUpdateChecker() {
   }
 
   const [updateRequired, setUpdateRequired] = useState(false);
-  const [installedVersion, setInstalledVersion] = useState("63.0");
+  const [installedVersion, setInstalledVersion] = useState("1.0");
   const [latestVersion, setLatestVersion] = useState(CURRENT_APP_VERSION_NAME);
   const [downloading, setDownloading] = useState(false);
 
@@ -38,17 +38,23 @@ export default function AppUpdateChecker() {
       const targetVCode = targetCode || CURRENT_APP_VERSION_CODE;
       setLatestVersion(targetVName);
 
-      let currentCode = 62; // Assume older installed build by default
+      let currentCode = 1; // Default to current v1.0 release
       try {
         const info = await CapacitorApp.getInfo();
         if (info && info.build) {
-          currentCode = parseInt(info.build, 10) || 62;
+          currentCode = parseInt(info.build, 10) || 1;
         }
         if (info && info.version) {
           setInstalledVersion(info.version);
         }
       } catch (e) {
         console.warn("Could not read local app info:", e);
+      }
+
+      // Ignore legacy v64 Firestore version codes when running the new v1.0 Play Store track
+      if (targetVCode >= 60 && currentCode < 60) {
+        setUpdateRequired(false);
+        return;
       }
 
       // If installed APK version is older than target version code, force popup

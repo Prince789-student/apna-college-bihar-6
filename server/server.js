@@ -56,14 +56,14 @@ app.get('/api/app-version', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.setHeader('Content-Type', 'application/json');
     res.json({
-        latestVersionCode: 64,
-        latestVersionName: "64.0",
-        minRequiredVersionCode: 64,
-        forceUpdate: true,
+        latestVersionCode: 1,
+        latestVersionName: "1.0",
+        minRequiredVersionCode: 1,
+        forceUpdate: false,
         apkUrl: "https://www.apnacollegebihar.online/api/download-apk",
-        directApkUrl: "https://www.apnacollegebihar.online/apna-college-bihar-v64.apk",
+        directApkUrl: "https://www.apnacollegebihar.online/apna-college-bihar-v1.apk",
         title: "Update Available! 🚀",
-        message: "Naya version (v64.0) aa gaya hai! BEU official notices aur naye features paane ke liye abhi update karein."
+        message: "Naya version (v1.0) aa gaya hai! BEU official notices aur naye features paane ke liye abhi update karein."
     });
 });
 
@@ -71,7 +71,7 @@ app.get('/api/download-apk', (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     // BANDWIDTH OPTIMIZATION: Redirect to high-capacity CDN / Vercel to save server bandwidth
-    return res.redirect(302, 'https://www.apnacollegebihar.online/apna-college-bihar-v64.apk');
+    return res.redirect(302, 'https://www.apnacollegebihar.online/apna-college-bihar-v1.apk');
 });
 
 // WINDOWS DESKTOP APP DOWNLOAD ROUTE
