@@ -208,7 +208,6 @@ export default function AppHub() {
             <img src="/logo-acb.png?v=99" alt="ACB Logo" className="w-10 h-10 rounded-xl border border-slate-200 shadow-sm object-cover" />
             <div>
               <h2 className="text-xs font-black text-blue-600 uppercase tracking-[0.2em] leading-tight">APNA COLLEGE BIHAR</h2>
-              <p className="text-[7px] text-slate-400 font-black uppercase tracking-[0.3em] mt-0.5">Official Study Engine</p>
             </div>
           </div>
           <div className="relative">

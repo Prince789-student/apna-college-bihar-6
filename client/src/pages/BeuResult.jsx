@@ -42,11 +42,40 @@ export default function BeuResult() {
     setLoadingExams(true);
     setLoadError('');
     try {
-      const res = await fetch(`${API_BASE}/api/beu/result-exams`);
-      const data = await res.json();
-      if (data.success && Array.isArray(data.courses) && data.courses.length > 0) {
-        setCourses(data.courses);
-        const btech = data.courses.find(c => /b\.?tech/i.test(c.courseName)) || data.courses[0];
+      let coursesList = null;
+
+      try {
+        const res = await fetch(`${API_BASE}/api/beu/result-exams`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && Array.isArray(data.courses) && data.courses.length > 0) {
+            coursesList = data.courses;
+          }
+        }
+      } catch {
+        // Primary backend unavailable; try direct BEU endpoint below
+      }
+
+      if (!coursesList) {
+        const directRes = await fetch('https://beu-bih.ac.in/backend/v1/result/sem-get');
+        if (directRes.ok) {
+          const directData = await directRes.json();
+          const rawCourses = Array.isArray(directData)
+            ? directData
+            : Array.isArray(directData?.data)
+              ? directData.data
+              : Array.isArray(directData?.courses)
+                ? directData.courses
+                : null;
+          if (rawCourses && rawCourses.length > 0) {
+            coursesList = rawCourses;
+          }
+        }
+      }
+
+      if (coursesList && coursesList.length > 0) {
+        setCourses(coursesList);
+        const btech = coursesList.find(c => /b\.?tech/i.test(c.courseName)) || coursesList[0];
         setSelectedCourseId(String(btech.courseid));
       } else {
         setLoadError('BEU result exam list is currently unavailable.');

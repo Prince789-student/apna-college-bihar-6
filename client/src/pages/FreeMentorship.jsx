@@ -921,6 +921,21 @@ export default function FreeMentorship() {
                   )}
                 </button>
               </form>
+
+              {/* Registered Mentorship CTA */}
+              <div className="pt-4 border-t border-slate-100 md:border-white/10 text-center space-y-2.5">
+                <p className="text-xs text-slate-500 md:text-slate-300 font-semibold">
+                  Abhi tak mentorship mein registered nahi hain?
+                </p>
+                <a
+                  href="https://forms.gle/gwM5fMAontYJgd7i9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3.5 px-4 bg-emerald-50 hover:bg-emerald-100 md:bg-emerald-500/15 md:hover:bg-emerald-500/25 border border-emerald-200 md:border-emerald-400/30 text-emerald-700 md:text-emerald-300 rounded-2xl font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+                >
+                  Registered Mentorship (Apply Now) <ArrowRight size={16} />
+                </a>
+              </div>
             </div>
           ) : (
             /* ── TAB 2: MENTOR LOGIN FORM ── */
@@ -992,13 +1007,29 @@ export default function FreeMentorship() {
                   )}
                 </button>
               </form>
+
+              {/* Registered Mentorship CTA */}
+              <div className="pt-4 border-t border-slate-100 md:border-white/10 text-center space-y-2.5">
+                <p className="text-xs text-slate-500 md:text-slate-300 font-semibold">
+                  Abhi tak mentorship mein registered nahi hain?
+                </p>
+                <a
+                  href="https://forms.gle/gwM5fMAontYJgd7i9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3.5 px-4 bg-emerald-50 hover:bg-emerald-100 md:bg-emerald-500/15 md:hover:bg-emerald-500/25 border border-emerald-200 md:border-emerald-400/30 text-emerald-700 md:text-emerald-300 rounded-2xl font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+                >
+                  Registered Mentorship (Apply Now) <ArrowRight size={16} />
+                </a>
+              </div>
             </div>
           )}
 
         </div>
 
         {/* ── 1000+ WORD COMPREHENSIVE BEU MENTORSHIP GUIDE & AD-SENSE HIGH VALUE CONTENT ── */}
-        <div className="bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-[2.5rem] border border-slate-200 md:border-white/15 shadow-sm p-6 sm:p-12 space-y-12 text-slate-800 md:text-slate-200">
+        <style>{`.app-light-mode .mentorship-seo-guide { display: none !important; }`}</style>
+        <div className="mentorship-seo-guide bg-white md:bg-slate-900/85 md:backdrop-blur-md rounded-[2.5rem] border border-slate-200 md:border-white/15 shadow-sm p-6 sm:p-12 space-y-12 text-slate-800 md:text-slate-200">
           
           {/* Main Title & Overview */}
           <div className="border-b border-slate-100 md:border-white/10 pb-8 space-y-3">

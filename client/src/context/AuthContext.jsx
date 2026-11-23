@@ -270,9 +270,15 @@ export function AuthProvider({ children }) {
     const isNative = Capacitor.isNativePlatform();
     
     if (isNative) {
-      // Native Android app — use native Google Sign-In bottom sheet
+      // Native Android app — try Credential Manager first, then legacy Google Sign-In Intent
       try {
-        const result = await FirebaseAuthentication.signInWithGoogle();
+        let result;
+        try {
+          result = await FirebaseAuthentication.signInWithGoogle();
+        } catch (primaryErr) {
+          console.warn("Primary Native Google Login failed, retrying with legacy Google Sign-In:", primaryErr);
+          result = await FirebaseAuthentication.signInWithGoogle({ useCredentialManager: false });
+        }
         if (result?.credential?.idToken) {
           const credential = GoogleAuthProvider.credential(result.credential.idToken);
           const res = await signInWithCredential(auth, credential);
@@ -282,7 +288,8 @@ export function AuthProvider({ children }) {
         throw new Error('Native Google Login failed — no idToken');
       } catch (err) {
         console.error("Native Google Login Error:", err);
-        throw new Error("Native Google Sign-In failed or was cancelled.");
+        const detail = err?.message ? ` (${err.message})` : '';
+        throw new Error(`Native Google Sign-In failed or was cancelled.${detail}`);
       }
     }
 
