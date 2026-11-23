@@ -717,4 +717,9 @@
   }
 }
 
+/* Hide SEO / Blog / FAQ essay walls in App Mode (?standalone=true / native APK), keep on Website View */
+.app-light-mode #main-scroll-container .prose:not(.allow-in-app) {
+  display: none !important;
+}
+
 

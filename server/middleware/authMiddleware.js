@@ -1,7 +1,18 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 const securityConfig = require('../config/securityConfig');
 
 const admin = require('../firebaseAdmin');
+
+function safeCompareSecret(provided, expected) {
+    if (!provided || !expected || typeof provided !== 'string' || typeof expected !== 'string') {
+        return false;
+    }
+    const bufA = Buffer.from(provided, 'utf8');
+    const bufB = Buffer.from(expected, 'utf8');
+    if (bufA.length !== bufB.length) return false;
+    return crypto.timingSafeEqual(bufA, bufB);
+}
 
 const protect = async (req, res, next) => {
     let token = req.headers.authorization;
@@ -47,10 +58,15 @@ const protect = async (req, res, next) => {
         }
     }
 
-    // 3. Fallback for Founder/Super Admin Header verification
+    // 3. Fallback for Founder/Super Admin Header verification (Requires valid ADMIN_SECRET)
     const adminKey = req.headers['x-admin-secret'] || req.headers['x-founder-auth'];
+    const expectedAdminSecret = process.env.ADMIN_SECRET;
     const clientEmail = (req.headers['x-user-email'] || '').toLowerCase();
-    if (clientEmail === 'prince8694@gmail.com' || clientEmail === 'prince86944@gmail.com') {
+    if (
+        expectedAdminSecret &&
+        safeCompareSecret(adminKey, expectedAdminSecret) &&
+        (clientEmail === 'prince8694@gmail.com' || clientEmail === 'prince86944@gmail.com')
+    ) {
         req.user = {
             id: 'fWPBB87EScT2P7yJeHLFy4X5btJ2',
             uid: 'fWPBB87EScT2P7yJeHLFy4X5btJ2',

@@ -9,6 +9,8 @@ import { db } from '../firebase';
 import { collection, onSnapshot, query, where, doc, deleteDoc, updateDoc, getDocs } from 'firebase/firestore';
 import { getCachedData, setCachedData, invalidateCache, CACHE_KEYS } from '../utils/dataCache';
 import { useParams, useNavigate } from 'react-router-dom';
+import BranchShortcutGrid from '../components/BranchShortcutGrid';
+import { getSavedBranch } from '../constants/branches';
 import { useAuth } from '../context/AuthContext';
 import PremiumAds from '../components/PremiumAds';
 import DonateModal from '../components/DonateModal';
@@ -367,57 +369,7 @@ export default function PYQ() {
 
       {/* Step: Branch Selection */}
       {!search.trim() && step === 'branch' && (
-        <div className="space-y-10">
-          <div>
-            <div className="flex items-center gap-2 mb-4 px-1">
-              <span className="text-slate-400 md:text-slate-300 text-xs font-black uppercase tracking-[0.25em]">Core Branches</span>
-              <div className="h-px flex-1 bg-slate-200 md:bg-white/10"></div>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 md:gap-4">
-              {BRANCHES.filter(b => b.type === 'core').map(b => {
-                const c = BRANCH_COLORS[b.color] || BRANCH_COLORS.amber;
-                return (
-                  <button key={b.id} onClick={() => handleBranchSelect(b)}
-                    className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} md:bg-slate-900/60 md:backdrop-blur-md md:border-white/15 md:hover:border-cyan-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all text-left shadow-sm hover:shadow-md cursor-pointer`}>
-                    <span className="text-xl md:text-2xl">{b.emoji}</span>
-                    <div>
-                      <p className={`text-sm md:text-base font-[900] tracking-tight ${c.text} md:text-white`}>{b.short}</p>
-                      <p className="text-[8px] md:text-[9px] font-bold text-slate-500 md:text-slate-300 mt-0.5 leading-tight">{b.label}</p>
-                    </div>
-                    <div className={`mt-auto flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${c.text} md:text-cyan-400`}>
-                      Select <ArrowRight size={10} />
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div>
-            <div className="flex items-center gap-2 mb-4 px-1">
-              <span className="text-slate-400 md:text-slate-300 text-xs font-black uppercase tracking-[0.25em]">Specialization Branches</span>
-              <div className="h-px flex-1 bg-slate-200 md:bg-white/10"></div>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 md:gap-4">
-              {BRANCHES.filter(b => b.type === 'spec').map(b => {
-                const c = BRANCH_COLORS[b.color] || BRANCH_COLORS.amber;
-                return (
-                  <button key={b.id} onClick={() => handleBranchSelect(b)}
-                    className={`flex flex-col items-start gap-2 md:gap-3 p-3.5 md:p-5 rounded-2xl md:rounded-[1.75rem] border-2 ${c.bg} ${c.border} md:bg-slate-900/60 md:backdrop-blur-md md:border-white/15 md:hover:border-cyan-400/50 hover:scale-[1.02] active:scale-[0.98] transition-all text-left shadow-sm hover:shadow-md cursor-pointer`}>
-                    <span className="text-xl md:text-2xl">{b.emoji}</span>
-                    <div>
-                      <p className={`text-sm md:text-base font-[900] tracking-tight ${c.text} md:text-white`}>{b.short}</p>
-                      <p className="text-[8px] md:text-[9px] font-bold text-slate-500 md:text-slate-300 mt-0.5 leading-tight">{b.label}</p>
-                    </div>
-                    <div className={`mt-auto flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest ${c.text} md:text-cyan-400`}>
-                      Select <ArrowRight size={10} />
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+        <BranchShortcutGrid onSelect={(b) => handleBranchSelect(b)} />
       )}
 
       {/* Step: Semester Selection */}

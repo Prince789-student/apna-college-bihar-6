@@ -8,7 +8,7 @@ import {
   ShieldCheck, Calendar, Sparkles, FileText, Library,
   Star, ChevronRight, Search, MapPin, Target,
   RefreshCw, Heart, Building2, Award, Mail,
-  Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight, X, Radio, Bell, Smartphone, Monitor
+  Plus, Minus, ExternalLink, Clock, Database, Briefcase, Layers, ArrowUpRight, X, Radio, Bell, Smartphone, Monitor, Menu
 } from 'lucide-react';
 import { collection, onSnapshot, query, orderBy, limit, doc } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -66,6 +66,7 @@ export default function Home() {
   const [noticeMarqueeIdx, setNoticeMarqueeIdx] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [showMobileProfileMenu, setShowMobileProfileMenu] = useState(false);
+  const [showMobileAllMenu, setShowMobileAllMenu] = useState(false);
 
   const joinDate = user?.metadata?.creationTime 
     ? new Date(user.metadata.creationTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -336,68 +337,25 @@ export default function Home() {
               1. NATIVE APP TOP BAR (Header with Greeting, Profile & Actions)
              ══════════════════════════════════════════════════════════════ */}
           <div className="flex items-center justify-between pt-1 relative">
-            {user ? (
-              <button 
-                type="button"
-                onClick={() => setShowMobileProfileMenu(!showMobileProfileMenu)} 
-                className="flex items-center gap-2.5 active:scale-98 transition-transform group text-left cursor-pointer"
-              >
-                <div className="relative">
-                  <div className="w-10 h-10 rounded-full p-[2px] bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 shadow-md shadow-blue-500/20">
-                    <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-blue-600 font-black text-sm">
-                      {userName[0]?.toUpperCase()}
-                    </div>
-                  </div>
-                  <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-white animate-pulse"></span>
-                </div>
-                <div className="text-left">
-                  <p className="text-[11px] font-semibold text-slate-500 flex items-center gap-1">
-                    <span>{greetingText},</span>
-                    <span className="text-blue-600 font-bold truncate max-w-[90px]">{userName}</span>
-                  </p>
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <h1 className="font-heading font-black text-xs text-slate-900 tracking-tight leading-none">
-                      Apna College <span className="text-blue-600">Bihar</span>
-                    </h1>
-                  </div>
-                </div>
-              </button>
-            ) : (
-              <Link to="/login" className="flex items-center gap-2.5 active:scale-98 transition-transform group">
-                <div className="relative">
-                  <div className="w-10 h-10 rounded-full p-[2px] bg-gradient-to-tr from-blue-500 to-indigo-600 shadow-md">
-                    <div className="w-full h-full rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-xs">
-                      <User size={18} />
-                    </div>
-                  </div>
-                </div>
-                <div className="text-left">
-                  <p className="text-[11px] font-semibold text-slate-500">{greetingText}</p>
-                  <div className="flex items-center gap-1.5 mt-0.5">
-                    <h1 className="font-heading font-black text-xs text-slate-900 tracking-tight leading-none">
-                      Apna College <span className="text-blue-600">Bihar</span>
-                    </h1>
-                  </div>
-                </div>
-              </Link>
-            )}
+            <Link to="/" className="flex items-center gap-2.5 active:scale-98 transition-transform group">
+              <img
+                src="/logo-acb.png?v=99"
+                alt="Apna College Bihar Logo"
+                className="w-10 h-10 rounded-2xl object-cover border border-slate-200 shadow-sm shrink-0"
+              />
+              <div className="text-left">
+                <h1 className="font-heading font-black text-sm text-slate-900 tracking-tight leading-none">
+                  Apna College <span className="text-blue-600">Bihar</span>
+                </h1>
+                <p className="text-[10px] font-bold text-slate-500 mt-0.5 tracking-wide">
+                  BEU Study Hub
+                </p>
+              </div>
+            </Link>
 
             {/* Quick Action Badges */}
             <div className="flex items-center gap-1.5">
-              {/* My Profile / Login Button */}
-              {user ? (
-                <button
-                  type="button"
-                  onClick={() => setShowMobileProfileMenu(!showMobileProfileMenu)}
-                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/80 active:scale-95 transition-all shadow-2xs cursor-pointer"
-                  title="My Profile"
-                  aria-label="My Profile"
-                >
-                  <User size={13} className="text-blue-600 shrink-0" />
-                  <span className="font-heading font-black text-[11px] tracking-tight">My Profile</span>
-                  <ChevronDown size={11} className={`text-blue-500 transition-transform duration-200 ${showMobileProfileMenu ? 'rotate-180' : ''}`} />
-                </button>
-              ) : (
+              {!user && (
                 <Link
                   to="/login"
                   className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-heading font-black text-xs shadow-sm active:scale-95 transition-all"
@@ -430,8 +388,78 @@ export default function Home() {
                   <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-blue-600"></span>
                 )}
               </Link>
+
+              <button
+                type="button"
+                onClick={() => setShowMobileAllMenu(true)}
+                className="w-9 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 text-white flex items-center justify-center active:scale-95 transition-all shadow-sm cursor-pointer"
+                aria-label="All App Features"
+                title="All App Features"
+              >
+                <Menu size={17} />
+              </button>
             </div>
           </div>
+
+          {/* ── Hamburger All-Features Drawer ── */}
+          {showMobileAllMenu && (
+            <div className="fixed inset-0 z-[2000] bg-slate-950/60 backdrop-blur-xs flex justify-end" onClick={() => setShowMobileAllMenu(false)}>
+              <div
+                className="w-[82%] max-w-xs h-full bg-white text-slate-900 shadow-2xl p-5 flex flex-col overflow-y-auto animate-in slide-in-from-right duration-200"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                  <div className="flex items-center gap-2.5">
+                    <img src="/logo-acb.png?v=99" alt="ACB Logo" className="w-9 h-9 rounded-xl object-cover border border-slate-200" />
+                    <div>
+                      <p className="font-heading font-black text-sm text-slate-900 leading-none">Apna College Bihar</p>
+                      <p className="text-[10px] font-bold text-slate-500 mt-0.5">All Features &amp; Tools</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowMobileAllMenu(false)}
+                    className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600"
+                    aria-label="Close Menu"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+
+                <div className="py-4 space-y-1.5 flex-1">
+                  {[
+                    { name: 'App Hub (All Tools)', path: '/hub?standalone=true', icon: <Sparkles size={16} className="text-indigo-600" /> },
+                    { name: 'Notes', path: '/notes', icon: <BookOpen size={16} className="text-indigo-600" /> },
+                    { name: 'PYQ Papers', path: '/pyq', icon: <FileText size={16} className="text-violet-600" /> },
+                    { name: 'BEU Syllabus', path: '/syllabus', icon: <Library size={16} className="text-rose-600" /> },
+                    { name: 'BEU Result', path: '/beu-result', icon: <GraduationCap size={16} className="text-blue-600" /> },
+                    { name: 'CGPA / SGPA Calculator', path: '/cgpa', icon: <Calculator size={16} className="text-cyan-600" /> },
+                    { name: 'Attendance Tracker', path: '/attendance', icon: <CheckCircle2 size={16} className="text-emerald-600" /> },
+                    { name: 'Timetable', path: '/timetable', icon: <Calendar size={16} className="text-amber-600" /> },
+                    { name: 'Study Timer', path: '/study', icon: <Timer size={16} className="text-orange-500" /> },
+                    { name: 'Lecture Finder', path: '/lecture-finder', icon: <Youtube size={16} className="text-red-600" /> },
+                    { name: 'UGEAC Predictor', path: '/ugeac-predictor', icon: <Target size={16} className="text-amber-600" /> },
+                    { name: '38+ Govt Colleges', path: '/colleges', icon: <Building2 size={16} className="text-sky-600" /> },
+                    { name: 'Senior Mentorship', path: '/mentorship', icon: <Users size={16} className="text-teal-600" /> },
+                    { name: 'BEU Notices', path: '/notifications', icon: <Bell size={16} className="text-rose-600" /> },
+                    { name: 'Download Android App (v1.0)', path: '/download', icon: <Download size={16} className="text-emerald-600" /> },
+                    { name: 'Developer (Prince Kumar)', path: '/author', icon: <User size={16} className="text-slate-700" /> },
+                    { name: 'Contact Us', path: '/contact', icon: <Mail size={16} className="text-slate-600" /> },
+                  ].map((item) => (
+                    <Link
+                      key={item.name}
+                      to={item.path}
+                      onClick={() => setShowMobileAllMenu(false)}
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 active:bg-slate-100 text-xs font-bold text-slate-800 transition-colors"
+                    >
+                      {item.icon}
+                      <span>{item.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* ── Laptop-Style Mobile Profile Menu Dropdown ── */}
           {showMobileProfileMenu && user && (
@@ -542,28 +570,112 @@ export default function Home() {
           )}
 
           {/* ══════════════════════════════════════════════════════════════
-              2. INSTAGRAM-STYLE ANIMATED STORY REELS CAROUSEL
+              2. CLEAN ANIMATED HERO CARD + INSTANT SEARCH
              ══════════════════════════════════════════════════════════════ */}
-          <div className="overflow-x-auto no-scrollbar -mx-3.5 px-3.5 pt-1">
-            <div className="flex items-center gap-3 w-max py-1">
-              {mobileStories.map((story) => (
+          <div className="rounded-3xl bg-slate-900 text-white p-5 shadow-xl relative overflow-hidden animate-in fade-in slide-in-from-bottom-3 duration-500">
+            <div className="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-emerald-500/20 blur-2xl pointer-events-none" />
+            <div className="relative z-10 space-y-3.5">
+              <div className="flex items-center justify-between gap-2">
+                <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-[10px] font-black uppercase tracking-wider">
+                  100% Free • BEU Study Hub
+                </span>
+              </div>
+
+              <div>
+                <h2 className="font-heading font-black text-xl tracking-tight leading-snug">
+                  Notes, PYQs, Syllabus &amp; Results in One Place
+                </h2>
+                <p className="text-xs text-slate-300 mt-1 font-medium">
+                  Fast, organized academic tools for all Bihar Engineering University students.
+                </p>
+              </div>
+
+              <a
+                href="/apna-college-bihar-v1.apk"
+                download="apna-college-bihar-v1.apk"
+                className="w-full py-3 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg active:scale-[0.98] transition-all"
+              >
+                <Download size={16} />
+                <span>Download Android APK (v1.0)</span>
+              </a>
+
+              <form onSubmit={handleMobileSearchSubmit} className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search Notes, PYQs, Subjects..."
+                  className="w-full h-11 pl-10 pr-10 rounded-2xl bg-white text-slate-900 placeholder:text-slate-400 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-400 shadow-sm"
+                />
+                <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
+                    aria-label="Clear Search"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </form>
+            </div>
+          </div>
+
+          {/* ══════════════════════════════════════════════════════════════
+              3. LIVE BEU NOTICE TICKER
+             ══════════════════════════════════════════════════════════════ */}
+          <Link
+            to="/notifications"
+            className="rounded-2xl p-3 bg-white border border-slate-200/90 shadow-2xs flex items-center gap-2.5 active:scale-[0.99] transition-all animate-in fade-in slide-in-from-bottom-4 duration-500"
+          >
+            <span className="flex items-center gap-1 shrink-0 px-2 py-1 rounded-lg bg-rose-600 text-white text-[9px] font-black uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+              LIVE
+            </span>
+            <p className="truncate text-xs font-semibold text-slate-800 flex-1 min-w-0">
+              {currentNotice
+                ? (currentNotice.title || currentNotice.board)
+                : "BEU Official Notices & Exam Circulars"}
+            </p>
+            <ChevronRight size={15} className="shrink-0 text-slate-400" />
+          </Link>
+
+          {/* ══════════════════════════════════════════════════════════════
+              4. EASY-TO-TAP 3x3 QUICK ACTION BENTO GRID
+             ══════════════════════════════════════════════════════════════ */}
+          <div className="space-y-2.5 animate-in fade-in slide-in-from-bottom-5 duration-500">
+            <div className="flex items-center justify-between px-1">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.18em] text-slate-500">
+                Quick Access
+              </h3>
+              <Link to="/hub?standalone=true" className="text-[11px] font-bold text-blue-600 flex items-center gap-0.5">
+                All Tools <ChevronRight size={13} />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2.5">
+              {[
+                { name: 'Notes', path: '/notes', icon: <BookOpen size={24} />, color: 'bg-indigo-600 text-white' },
+                { name: 'PYQs', path: '/pyq', icon: <FileText size={24} />, color: 'bg-violet-600 text-white' },
+                { name: 'Syllabus', path: '/syllabus', icon: <Library size={24} />, color: 'bg-rose-600 text-white' },
+                { name: 'BEU Result', path: '/beu-result', icon: <GraduationCap size={24} />, color: 'bg-blue-600 text-white' },
+                { name: 'CGPA Calc', path: '/cgpa', icon: <Calculator size={24} />, color: 'bg-cyan-600 text-white' },
+                { name: 'UGEAC', path: '/ugeac-predictor', icon: <Target size={24} />, color: 'bg-amber-600 text-white' },
+                { name: 'Attendance', path: '/attendance', icon: <CheckCircle2 size={24} />, color: 'bg-emerald-600 text-white' },
+                { name: 'Study Timer', path: '/study', icon: <Timer size={24} />, color: 'bg-orange-500 text-white' },
+                { name: 'Lectures', path: '/lecture-finder', icon: <Youtube size={24} />, color: 'bg-red-600 text-white' },
+              ].map((item) => (
                 <Link
-                  key={story.id}
-                  to={story.path}
-                  className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform group"
+                  key={item.name}
+                  to={item.path}
+                  className="min-h-[104px] bg-white border border-slate-200/80 hover:border-blue-300 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 shadow-2xs active:scale-95 transition-all"
                 >
-                  <div className={`p-[2px] rounded-full bg-gradient-to-tr ${story.ring} shadow-xs group-hover:scale-105 transition-transform`}>
-                    <div className="w-14 h-14 rounded-full bg-white flex items-center justify-center p-0.5 border-2 border-white shadow-inner">
-                      <div className="w-full h-full rounded-full bg-slate-50 flex items-center justify-center relative">
-                        {story.icon}
-                        <span className="absolute -bottom-1 -right-0.5 px-1 py-[1px] rounded bg-slate-900 text-white text-[8px] font-black uppercase tracking-tighter shadow-xs">
-                          {story.badge}
-                        </span>
-                      </div>
-                    </div>
+                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-xs ${item.color}`}>
+                    {item.icon}
                   </div>
-                  <span className="text-[10px] font-heading font-extrabold text-slate-700 tracking-tight max-w-[64px] truncate text-center">
-                    {story.label}
+                  <span className="text-[11px] font-black text-slate-800 text-center leading-tight">
+                    {item.name}
                   </span>
                 </Link>
               ))}
@@ -571,610 +683,75 @@ export default function Home() {
           </div>
 
           {/* ══════════════════════════════════════════════════════════════
-              3. LIVE BEU CIRCULARS BREAKING MARQUEE TICKER (Light Theme)
+              5. 1-TAP BRANCH EXPLORER
              ══════════════════════════════════════════════════════════════ */}
-          <div className="rounded-2xl p-2.5 bg-gradient-to-r from-blue-50 via-indigo-50/60 to-cyan-50 border border-blue-200/80 shadow-xs flex items-center gap-2 relative overflow-hidden">
-            <div className="flex items-center gap-1 shrink-0 px-2 py-1 rounded-lg bg-rose-500 text-white text-[9px] font-black uppercase tracking-wider shadow-xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
-              <span>LIVE</span>
-            </div>
-            <Link
-              to="/notifications"
-              className="min-w-0 flex-1 flex items-center justify-between gap-2 text-xs font-semibold text-slate-800 hover:text-blue-600 transition-colors"
-            >
-              <p className="truncate text-[11px] font-medium leading-tight text-slate-700">
-                {currentNotice
-                  ? (currentNotice.title || currentNotice.board)
-                  : "BEU 3rd Semester Exam Form & Updates • 537+ Verified Unit Notes Live!"}
-              </p>
-              <ChevronRight size={13} className="shrink-0 text-blue-600" />
-            </Link>
-          </div>
-
-          {/* ══════════════════════════════════════════════════════════════
-              4. SEARCH BAR WITH TRENDING TAGS (Light Theme)
-             ══════════════════════════════════════════════════════════════ */}
-          <div className="space-y-2">
-            <form onSubmit={handleMobileSearchSubmit} className="relative">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search 3rd Sem Notes, PYQs, Subjects..."
-                className="w-full h-11 pl-10 pr-10 rounded-2xl bg-white border border-slate-200 text-slate-900 placeholder:text-slate-400 text-xs font-semibold focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-xs transition-all"
-              />
-              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
-                >
-                  <X size={14} />
-                </button>
-              )}
-            </form>
-
-            {/* Quick Trending Filters */}
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar -mx-1 px-1 py-0.5">
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 shrink-0">Trending:</span>
-              {['3rd Sem CSE', 'Civil Unit 1', 'UHV', 'PYQ 2024', 'Syllabus'].map((tag) => (
-                <button
-                  key={tag}
-                  type="button"
-                  onClick={() => {
-                    setSearchQuery(tag);
-                    navigate(`/notes?search=${encodeURIComponent(tag)}`);
-                  }}
-                  className="px-2.5 py-1 rounded-xl bg-white hover:bg-blue-50 hover:text-blue-600 border border-slate-200/80 text-[10px] font-bold text-slate-600 shrink-0 active:scale-95 transition-all shadow-2xs"
-                >
-                  #{tag}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* ══════════════════════════════════════════════════════════════
-              5. FEATURED BENTO: 🔥 3RD SEMESTER MASTER PACK (Light Theme)
-             ══════════════════════════════════════════════════════════════ */}
-          <div className="rounded-3xl p-4.5 bg-gradient-to-br from-blue-600 via-indigo-600 to-blue-700 text-white shadow-lg shadow-blue-600/20 relative overflow-hidden border border-blue-400/30">
-            <div className="absolute top-0 right-0 w-44 h-44 bg-cyan-400/20 rounded-full blur-2xl pointer-events-none"></div>
-
-            <div className="relative z-10 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-black uppercase tracking-wider text-cyan-200 border border-white/25">
-                  🔥 Just Released • 2026 Batch
-                </span>
-                <span className="text-[11px] font-bold text-blue-100 flex items-center gap-1">
-                  <CheckCircle2 size={13} className="text-cyan-300" /> 537 Verified Notes
-                </span>
-              </div>
-
-              <div>
-                <h2 className="font-heading font-black text-lg text-white tracking-tight leading-tight">
-                  3rd Semester Master Pack
-                </h2>
-                <p className="text-xs text-blue-100 mt-1 font-medium leading-relaxed">
-                  Civil, CSE, ECE, EE, EEE, Mechanical &amp; IT ke unit-wise notes, handwritten PDFs aur 5+ years solved PYQ papers available hain.
-                </p>
-              </div>
-
-              {/* 1-Tap Quick Stream Selector */}
-              <div className="pt-1">
-                <p className="text-[10px] font-black uppercase tracking-wider text-blue-200 mb-1.5">Select Branch:</p>
-                <div className="grid grid-cols-4 gap-1.5">
-                  {[
-                    { label: 'CSE', branch: 'cse' },
-                    { label: 'Civil', branch: 'civil' },
-                    { label: 'ECE', branch: 'ece' },
-                    { label: 'EE', branch: 'ee' },
-                    { label: 'EEE', branch: 'eee' },
-                    { label: 'Mech', branch: 'me' },
-                    { label: 'IT', branch: 'it' },
-                    { label: 'All 14', branch: 'all' },
-                  ].map((b) => (
-                    <Link
-                      key={b.label}
-                      to={b.branch === 'all' ? '/notes' : `/notes/${b.branch}/3rd-sem`}
-                      className="px-2 py-1.5 rounded-xl bg-white/15 hover:bg-white/30 border border-white/20 text-center font-heading font-extrabold text-[11px] text-white active:scale-95 transition-all"
-                    >
-                      {b.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-1 flex items-center gap-2">
-                <Link
-                  to="/notes"
-                  className="flex-1 py-2.5 px-3 rounded-xl bg-white text-blue-700 font-heading font-black text-xs text-center shadow-md active:scale-98 transition-all flex items-center justify-center gap-1.5"
-                >
-                  <BookOpen size={14} /> Open 3rd Sem Hub
-                </Link>
-                <Link
-                  to="/pyq"
-                  className="py-2.5 px-3 rounded-xl bg-blue-900/60 hover:bg-blue-900/80 border border-white/20 text-white font-heading font-black text-xs text-center active:scale-98 transition-all flex items-center justify-center gap-1"
-                >
-                  <FileText size={14} /> PYQs
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* ══════════════════════════════════════════════════════════════
-              6. 🎓 EDUCATION BALA: BEU ACADEMIC & ADMISSION MASTER GUIDE
-                 (Interactive Animated Guide Requested by User)
-             ══════════════════════════════════════════════════════════════ */}
-          <div className="rounded-3xl p-4 bg-white border border-slate-200/90 shadow-sm space-y-3.5">
+          <div className="rounded-3xl bg-white border border-slate-200/90 p-4 shadow-2xs space-y-3 animate-in fade-in slide-in-from-bottom-6 duration-500">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-200/80 flex items-center justify-center text-blue-600 shadow-2xs">
-                  <GraduationCap size={17} />
-                </div>
-                <div>
-                  <h3 className="font-heading font-black text-xs text-slate-900 uppercase tracking-tight">
-                    BEU Academic &amp; Admission Guide
-                  </h3>
-                  <p className="text-[10px] text-slate-500 font-medium">Authoritative 2026 handbook for Bihar engineers</p>
-                </div>
-              </div>
-              <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-bold text-[9px] uppercase border border-blue-200/80">
-                Official
-              </span>
-            </div>
-
-            {/* Guide Interactive 4-Phase Tabs */}
-            <div className="grid grid-cols-4 gap-1 p-1 bg-slate-100 rounded-2xl border border-slate-200/60">
-              {[
-                { id: 'admission', label: 'Admission', icon: '🏛️' },
-                { id: 'counselling', label: 'Counselling', icon: '🧭' },
-                { id: 'beu', label: 'BEU Exam', icon: '📚' },
-                { id: 'career', label: 'Career', icon: '💼' },
-              ].map((tab) => {
-                const isActive = activeGuideTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveGuideTab(tab.id)}
-                    className={`py-2 px-1 rounded-xl text-center font-heading font-extrabold text-[10.5px] transition-all flex flex-col items-center gap-0.5 ${
-                      isActive
-                        ? 'bg-white text-blue-600 shadow-sm border border-slate-200/80'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    <span>{tab.icon}</span>
-                    <span className="truncate">{tab.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Guide Active Content Panel */}
-            <div className="p-3.5 rounded-2xl bg-gradient-to-br from-slate-50 to-blue-50/30 border border-slate-200/70 text-xs space-y-2.5 animate-fadeIn">
-              {activeGuideTab === 'admission' && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-blue-600">Phase 01 • B.Tech Eligibility</span>
-                    <span className="text-[10px] font-bold text-slate-500">BCECEB Merit</span>
-                  </div>
-                  <h4 className="font-heading font-black text-sm text-slate-900">
-                    Admission via JEE (Main) Paper-1
-                  </h4>
-                  <p className="text-slate-600 text-[11px] leading-relaxed font-medium">
-                    Bihar me 38 Government Engineering Colleges (GECs) me admission strictly <strong className="text-slate-900 font-bold">UGEAC counselling</strong> ke through hota hai. 12th PCM me general category ke liye 45% aur reserved ke liye 40% aggregate required hai.
-                  </p>
-                  <div className="grid grid-cols-2 gap-1.5 pt-1 text-[10px]">
-                    <div className="p-2 rounded-xl bg-white border border-slate-200/80 flex items-center gap-1.5 font-bold text-slate-800">
-                      <CheckCircle2 size={12} className="text-emerald-500 shrink-0" /> No State Entrance Exam
-                    </div>
-                    <div className="p-2 rounded-xl bg-white border border-slate-200/80 flex items-center gap-1.5 font-bold text-slate-800">
-                      <CheckCircle2 size={12} className="text-emerald-500 shrink-0" /> MNSSBY 4 Lakh Loan
-                    </div>
-                  </div>
-                  <Link
-                    to="/blog/complete-guide-to-ugeac-counselling-process"
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:text-blue-700 pt-1"
-                  >
-                    Read Complete Admission Guide <ArrowRight size={12} />
-                  </Link>
-                </div>
-              )}
-
-              {activeGuideTab === 'counselling' && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-blue-600">Phase 02 • Choice Filling</span>
-                    <span className="text-[10px] font-bold text-slate-500">UGEAC 2026</span>
-                  </div>
-                  <h4 className="font-heading font-black text-sm text-slate-900">
-                    College Priority &amp; Cutoff Blueprints
-                  </h4>
-                  <p className="text-slate-600 text-[11px] leading-relaxed font-medium">
-                    Top choice filling preference order: <strong className="text-slate-900">MIT Muzaffarpur &gt; BCE Bhagalpur &gt; GCE Gaya &gt; NCE Chandi &gt; MCE Motihari</strong>. Round 1 aur Round 2 cutoffs ke according lock karein.
-                  </p>
-                  <div className="grid grid-cols-2 gap-1.5 pt-1 text-[10px]">
-                    <div className="p-2 rounded-xl bg-white border border-slate-200/80 flex items-center gap-1.5 font-bold text-slate-800">
-                      <CheckCircle2 size={12} className="text-emerald-500 shrink-0" /> 38 GEC Cutoffs Inside
-                    </div>
-                    <div className="p-2 rounded-xl bg-white border border-slate-200/80 flex items-center gap-1.5 font-bold text-slate-800">
-                      <CheckCircle2 size={12} className="text-emerald-500 shrink-0" /> Real-time Predictor
-                    </div>
-                  </div>
-                  <Link
-                    to="/ugeac-predictor"
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:text-blue-700 pt-1"
-                  >
-                    Launch College &amp; Rank Predictor <ArrowRight size={12} />
-                  </Link>
-                </div>
-              )}
-
-              {activeGuideTab === 'beu' && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-blue-600">Phase 03 • University Rules</span>
-                    <span className="text-[10px] font-bold text-slate-500">10-Point CGPA</span>
-                  </div>
-                  <h4 className="font-heading font-black text-sm text-slate-900">
-                    BEU Semester Grading &amp; 75% Attendance
-                  </h4>
-                  <p className="text-slate-600 text-[11px] leading-relaxed font-medium">
-                    BEU 10-point relative grading scale follow karta hai. 70 me se 25 marks external aur 30 me se internal practical pass hone ke liye mandatory hai. <strong className="text-slate-900">75% attendance</strong> exam form fill karne ke liye compulsory hai.
-                  </p>
-                  <div className="grid grid-cols-2 gap-1.5 pt-1 text-[10px]">
-                    <div className="p-2 rounded-xl bg-white border border-slate-200/80 flex items-center gap-1.5 font-bold text-slate-800">
-                      <CheckCircle2 size={12} className="text-emerald-500 shrink-0" /> 10-Point Calculator
-                    </div>
-                    <div className="p-2 rounded-xl bg-white border border-slate-200/80 flex items-center gap-1.5 font-bold text-slate-800">
-                      <CheckCircle2 size={12} className="text-emerald-500 shrink-0" /> Carry-over Guidelines
-                    </div>
-                  </div>
-                  <Link
-                    to="/cgpa"
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:text-blue-700 pt-1"
-                  >
-                    Open BEU CGPA Calculator <ArrowRight size={12} />
-                  </Link>
-                </div>
-              )}
-
-              {activeGuideTab === 'career' && (
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-blue-600">Phase 04 • Career Roadmap</span>
-                    <span className="text-[10px] font-bold text-slate-500">Internship &amp; Jobs</span>
-                  </div>
-                  <h4 className="font-heading font-black text-sm text-slate-900">
-                    AICTE Mandatory Internships &amp; Tech Clubs
-                  </h4>
-                  <p className="text-slate-600 text-[11px] leading-relaxed font-medium">
-                    2nd aur 3rd year me AICTE Internship Portal se verified credits earn karein. Coding clubs, hackathons (SIH), aur open source contributions ke zariye Tier-3 colleges se high package off-campus crack karein.
-                  </p>
-                  <div className="grid grid-cols-2 gap-1.5 pt-1 text-[10px]">
-                    <div className="p-2 rounded-xl bg-white border border-slate-200/80 flex items-center gap-1.5 font-bold text-slate-800">
-                      <CheckCircle2 size={12} className="text-emerald-500 shrink-0" /> Free Senior Mentorship
-                    </div>
-                    <div className="p-2 rounded-xl bg-white border border-slate-200/80 flex items-center gap-1.5 font-bold text-slate-800">
-                      <CheckCircle2 size={12} className="text-emerald-500 shrink-0" /> Hackathon Hub
-                    </div>
-                  </div>
-                  <Link
-                    to="/mentorship"
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:text-blue-700 pt-1"
-                  >
-                    Connect with Senior Mentors <ArrowRight size={12} />
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* ══════════════════════════════════════════════════════════════
-              7. INTERACTIVE SEGMENTED HUB SWITCHER (Light Theme)
-             ══════════════════════════════════════════════════════════════ */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between px-1">
-              <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">
-                Explore ACB Hub
+              <h3 className="text-xs font-black text-slate-900 uppercase tracking-wider">
+                Browse by Branch
               </h3>
-              <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Interactive Switcher</span>
+              <Link to="/syllabus" className="text-[11px] font-bold text-blue-600">
+                View All →
+              </Link>
             </div>
-
-            {/* 4-Tab Switcher */}
-            <div className="grid grid-cols-4 gap-1 p-1 rounded-2xl bg-slate-200/70 border border-slate-300/60 shadow-xs">
+            <div className="grid grid-cols-3 gap-2">
               {[
-                { id: 'notes', label: 'Notes', icon: <BookOpen size={13} /> },
-                { id: 'pyqs', label: 'PYQs', icon: <FileText size={13} /> },
-                { id: 'tools', label: 'Tools', icon: <Sparkles size={13} /> },
-                { id: 'colleges', label: 'Colleges', icon: <Building2 size={13} /> },
-              ].map((tab) => {
-                const isActive = activeHubTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveHubTab(tab.id)}
-                    className={`flex items-center justify-center gap-1 py-2 px-1 rounded-xl text-xs font-heading font-extrabold transition-all ${
-                      isActive
-                        ? 'bg-white text-blue-600 shadow-sm border border-slate-200/80'
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    {tab.icon}
-                    <span>{tab.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Hub Content: NOTES */}
-            {activeHubTab === 'notes' && (
-              <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-sm space-y-3 animate-fadeIn">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Step 1: Choose Branch</span>
-                  <Link to="/notes" className="text-[10px] font-bold text-blue-600 hover:underline">View All 14 Branches &rarr;</Link>
-                </div>
-
-                <div className="grid grid-cols-4 gap-1.5">
-                  {mobileBranches.map((br) => {
-                    const isSelected = selectedMobileBranch === br.id;
-                    return (
-                      <button
-                        key={br.id}
-                        onClick={() => setSelectedMobileBranch(br.id)}
-                        className={`p-2 rounded-xl text-center font-heading font-black text-xs transition-all ${
-                          isSelected
-                            ? 'bg-blue-600 text-white shadow-sm shadow-blue-600/30'
-                            : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200/70'
-                        }`}
-                      >
-                        {br.short}
-                      </button>
-                    );
-                  })}
-                  <Link
-                    to="/notes"
-                    className="p-2 rounded-xl text-center font-heading font-bold text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200/70 flex items-center justify-center"
-                  >
-                    More+
-                  </Link>
-                </div>
-
-                <div className="pt-2 border-t border-slate-100">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Step 2: Choose Semester</span>
-                    <span className="text-[10px] font-mono font-bold text-emerald-600">Sem 3 Verified ★</span>
-                  </div>
-                  <div className="grid grid-cols-4 gap-1.5">
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map((sem) => (
-                      <Link
-                        key={sem}
-                        to={`/notes/${selectedMobileBranch.toLowerCase()}/${sem}${sem === 1 ? 'st' : sem === 2 ? 'nd' : sem === 3 ? 'rd' : 'th'}-sem`}
-                        className={`p-2 rounded-xl text-center text-xs font-bold transition-all relative ${
-                          sem === 3
-                            ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-black shadow-sm'
-                            : 'bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 border border-slate-200/70'
-                        }`}
-                      >
-                        Sem {sem}
-                        {sem === 3 && (
-                          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-amber-400 ring-1 ring-white"></span>
-                        )}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Hub Content: PYQS */}
-            {activeHubTab === 'pyqs' && (
-              <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-sm space-y-2.5 animate-fadeIn">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">BEU Previous Year Papers</span>
-                  <Link to="/pyq" className="text-[10px] font-bold text-blue-600 hover:underline">Explore All &rarr;</Link>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { year: '2024 Exam Papers', desc: 'Solved Odd & Even Semester Papers', path: '/pyq' },
-                    { year: '2023 Exam Papers', desc: 'Complete BEU Subject Sets', path: '/pyq' },
-                    { year: '2022 Exam Papers', desc: 'Mid-Sem & End-Sem Archive', path: '/pyq' },
-                    { year: '2021 Exam Papers', desc: 'Foundation Core Papers', path: '/pyq' },
-                  ].map((p, i) => (
-                    <Link
-                      key={i}
-                      to={p.path}
-                      className="p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200/80 block text-left group transition-all"
-                    >
-                      <h4 className="font-heading font-extrabold text-xs text-slate-900 group-hover:text-blue-600">{p.year}</h4>
-                      <p className="text-[10px] text-slate-500 mt-0.5">{p.desc}</p>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Hub Content: TOOLS */}
-            {activeHubTab === 'tools' && (
-              <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-sm space-y-2 animate-fadeIn">
-                <div className="grid grid-cols-2 gap-2">
-                  {[
-                    { name: 'CGPA Calculator', desc: '10-pt BEU scale', path: '/cgpa', icon: <Calculator size={14} className="text-cyan-600" /> },
-                    { name: 'UGEAC Predictor', desc: '38 GEC rank cutoffs', path: '/ugeac-predictor', icon: <Target size={14} className="text-rose-600" /> },
-                    { name: 'Attendance Manager', desc: '75% safe tracker', path: '/attendance', icon: <Clock size={14} className="text-emerald-600" /> },
-                    { name: 'BEU Timetable', desc: 'Class schedules', path: '/timetable', icon: <Calendar size={14} className="text-purple-600" /> },
-                  ].map((t, idx) => (
-                    <Link
-                      key={idx}
-                      to={t.path}
-                      className="p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200/80 flex items-center gap-2 transition-all group"
-                    >
-                      <div className="p-2 rounded-lg bg-white shadow-2xs border border-slate-200/70">{t.icon}</div>
-                      <div>
-                        <h4 className="font-heading font-bold text-xs text-slate-900 group-hover:text-blue-600">{t.name}</h4>
-                        <p className="text-[9px] text-slate-500">{t.desc}</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Hub Content: COLLEGES */}
-            {activeHubTab === 'colleges' && (
-              <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 shadow-sm space-y-2 animate-fadeIn">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">38 GECs Directory</span>
-                  <Link to="/colleges" className="text-[10px] font-bold text-blue-600 hover:underline">Full List &rarr;</Link>
-                </div>
-                <div className="space-y-1.5">
-                  {[
-                    { name: 'MIT Muzaffarpur', cutoff: 'Top 1 UGEAC', location: 'Muzaffarpur', estd: '1954' },
-                    { name: 'BCE Bhagalpur', cutoff: 'Top 2 UGEAC', location: 'Bhagalpur', estd: '1960' },
-                    { name: 'GCE Gaya', cutoff: 'Top 3 UGEAC', location: 'Gaya', estd: '2008' },
-                    { name: 'NCE Chandi', cutoff: 'Top 4 UGEAC', location: 'Nalanda', estd: '2008' },
-                  ].map((col, idx) => (
-                    <Link
-                      key={idx}
-                      to="/colleges"
-                      className="p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200/80 flex items-center justify-between text-xs active:scale-98 transition-all"
-                    >
-                      <div>
-                        <h4 className="font-heading font-bold text-slate-900 text-xs">{col.name}</h4>
-                        <p className="text-[10px] text-slate-500">{col.location} • Estd {col.estd}</p>
-                      </div>
-                      <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-mono font-bold border border-blue-200/80">
-                        {col.cutoff}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* ══════════════════════════════════════════════════════════════
-              8. NATIVE 8-TOOLS APP DOCK GRID (Light Theme 2-Column Grid)
-             ══════════════════════════════════════════════════════════════ */}
-          <div className="space-y-2.5 pt-1">
-            <div className="flex items-center justify-between px-1">
-              <div className="flex items-center gap-1.5">
-                <Sparkles size={14} className="text-blue-600" />
-                <h3 className="text-xs font-black uppercase tracking-wider text-slate-700">
-                  Full Academic Toolkit
-                </h3>
-              </div>
-              <span className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">8 App Modules</span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2.5">
-              {academicTools.map((tool, idx) => (
+                { label: 'CSE', to: '/notes/cse' },
+                { label: 'Civil', to: '/notes/civil' },
+                { label: 'Mechanical', to: '/notes/me' },
+                { label: 'Electrical', to: '/notes/ee' },
+                { label: 'ECE', to: '/notes/ece' },
+                { label: 'EEE', to: '/notes/eee' },
+              ].map((b) => (
                 <Link
-                  key={idx}
-                  to={tool.path}
-                  className="p-3.5 rounded-2xl bg-white hover:bg-slate-50 border border-slate-200/90 active:scale-[0.97] transition-all duration-150 flex flex-col justify-between shadow-2xs relative overflow-hidden group"
+                  key={b.label}
+                  to={b.to}
+                  className="py-2.5 px-2 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200/70 hover:border-blue-300 text-center text-xs font-black text-slate-800 active:scale-95 transition-all"
                 >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 border border-blue-200/70 flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
-                        {tool.icon}
-                      </div>
-                      <span className="px-1.5 py-0.5 rounded-md bg-slate-100 text-blue-700 text-[9px] font-black uppercase tracking-tight border border-slate-200/60">
-                        {tool.badge}
-                      </span>
-                    </div>
-                    <div>
-                      <h4 className="font-heading font-extrabold text-xs text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1">
-                        {tool.name}
-                      </h4>
-                      <p className="text-[10px] text-slate-500 leading-snug line-clamp-2 mt-0.5 font-medium">
-                        {tool.desc}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="pt-2 flex items-center justify-between text-[10px] font-bold text-blue-600 border-t border-slate-100 mt-2">
-                    <span>Open Module</span>
-                    <ArrowRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
-                  </div>
+                  {b.label}
                 </Link>
               ))}
             </div>
           </div>
 
           {/* ══════════════════════════════════════════════════════════════
-              9. VERIFIED MILESTONE STATS BENTO (Light Theme)
+              6. WHATSAPP COMMUNITY
              ══════════════════════════════════════════════════════════════ */}
-          <div className="grid grid-cols-3 gap-2 pt-1">
-            <div className="p-3 rounded-2xl bg-white border border-slate-200/90 text-center shadow-2xs">
-              <span className="font-heading font-black text-base text-blue-600 block leading-tight">38 GECs</span>
-              <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 block mt-0.5">Covered</span>
-            </div>
-            <div className="p-3 rounded-2xl bg-white border border-slate-200/90 text-center shadow-2xs">
-              <span className="font-heading font-black text-base text-emerald-600 block leading-tight">537+</span>
-              <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 block mt-0.5">Sem 3 Notes</span>
-            </div>
-            <div className="p-3 rounded-2xl bg-white border border-slate-200/90 text-center shadow-2xs">
-              <span className="font-heading font-black text-base text-purple-600 block leading-tight">100%</span>
-              <span className="text-[9px] font-bold uppercase tracking-wider text-slate-500 block mt-0.5">Free Access</span>
-            </div>
-          </div>
-
-          {/* ══════════════════════════════════════════════════════════════
-              10. COMMUNITY & SUPPORT STRIP (Light Theme)
-             ══════════════════════════════════════════════════════════════ */}
-          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-50 via-indigo-50 to-cyan-50 border border-blue-200/80 shadow-xs space-y-2.5">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-heading font-black text-xs text-slate-900">Join Official BEU Communities</h4>
-                <p className="text-[10px] text-slate-600 font-medium">Daily notes alerts &amp; discussion groups</p>
+          <div className="grid grid-cols-1 gap-2.5 animate-in fade-in slide-in-from-bottom-7 duration-500">
+            <a
+              href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-2xl p-3.5 bg-white border border-emerald-200 flex items-center justify-between gap-3 active:scale-[0.99] transition-all shadow-2xs"
+            >
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shrink-0">
+                  <MessageCircle size={18} />
+                </div>
+                <div className="min-w-0">
+                  <h4 className="text-xs font-black text-slate-900 truncate">Join Apna College Bihar on WhatsApp</h4>
+                  <p className="text-[10px] text-emerald-700 font-semibold truncate">BEU Updates &amp; Free Notes, PYQ &amp; Exam Alerts</p>
+                </div>
               </div>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[9px] font-black uppercase">
-                Active
+              <span className="px-3 py-1.5 rounded-xl bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider shrink-0">
+                Join
               </span>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2">
-              <a
-                href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-heading font-black text-xs text-center flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-xs"
-              >
-                <MessageCircle size={14} /> WhatsApp Channel
-              </a>
-              <a
-                href="https://t.me/apnacollegebihar"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="py-2.5 px-3 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-heading font-black text-xs text-center flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-xs"
-              >
-                <Send size={14} /> Telegram Group
-              </a>
-            </div>
-
-            <div className="pt-1">
-              <button
-                type="button"
-                onClick={() => setShowScanner(true)}
-                className="w-full py-2.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200/80 font-heading font-black text-xs text-center flex items-center justify-center gap-1.5 active:scale-95 transition-all"
-              >
-                <Heart size={13} className="fill-rose-500 text-rose-500" /> Support ACB via UPI Scanner
-              </button>
-            </div>
+            </a>
           </div>
 
           {/* ══════════════════════════════════════════════════════════════
-              11. FREQUENTLY ASKED QUESTIONS (FAQ Accordion - Light Theme)
+              7. CONCISE FAQ ACCORDION
              ══════════════════════════════════════════════════════════════ */}
           <div className="space-y-2 pt-1">
-            <h3 className="text-xs font-black uppercase tracking-wider text-slate-700 px-1">
+            <h3 className="text-xs font-black uppercase tracking-wider text-slate-500 px-1">
               Frequently Asked Questions
             </h3>
             <div className="space-y-1.5">
-              {faqs.map((faq, i) => (
-                <div key={i} className="rounded-xl overflow-hidden bg-white border border-slate-200/90 shadow-2xs">
+              {faqs.slice(0, 4).map((faq, i) => (
+                <div key={i} className="rounded-2xl overflow-hidden bg-white border border-slate-200/90 shadow-2xs">
                   <button
                     onClick={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-                    className="w-full flex items-center justify-between p-3.5 text-left text-xs font-bold text-slate-900 active:bg-slate-50 transition-colors"
+                    className="w-full flex items-center justify-between p-3.5 text-left text-xs font-bold text-slate-900 active:bg-slate-50 transition-colors min-h-[44px]"
                   >
                     <span className="pr-2">{faq.q}</span>
                     <span className="text-blue-600 shrink-0">

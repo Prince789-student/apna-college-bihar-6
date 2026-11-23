@@ -72,38 +72,75 @@ const generateToken = (id, role, name, email) => {
 router.use(authIpLimiter);
 router.use(accountExponentialBackoff.checkLockout);
 
+// Server-side in-memory OTP store (prevents leaking offline-crackable OTP hashes to clients)
+const emailOtpStore = new Map();
+const OTP_TTL_MS = 10 * 60 * 1000; // 10 minutes
+const MAX_OTP_ATTEMPTS = 5;
+
+function computeKeyedOtpDigest(email, otp) {
+    return crypto
+        .createHmac('sha256', securityConfig.jwt.secret)
+        .update(`${email}:${otp}`)
+        .digest('hex');
+}
+
 // @route   POST /api/auth/send-email-otp
-// Generates OTP and sends it hash back to frontend for verification
+// Generates OTP, stores keyed HMAC server-side, and sends OTP via email
 router.post('/send-email-otp', validate({ body: sendEmailOtpSchema }), asyncHandler(async (req, res) => {
     const { email } = req.body;
     const normalizedEmail = email.toLowerCase().trim();
 
     const otp = crypto.randomInt(100000, 999999).toString();
+    const expiresAt = Date.now() + OTP_TTL_MS;
+    const digest = computeKeyedOtpDigest(normalizedEmail, otp);
+
+    emailOtpStore.set(normalizedEmail, {
+        digest,
+        expiresAt,
+        attempts: 0
+    });
 
     // Send real email if configured
     await sendOTPEmail(normalizedEmail, otp);
 
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(otp, salt);
-
     res.status(200).json({
         success: true,
         message: 'Verification OTP dispatched to email.',
-        hash,
         email: normalizedEmail
     });
 }));
 
 // @route   POST /api/auth/verify-email-otp
 router.post('/verify-email-otp', validate({ body: verifyEmailOtpSchema }), asyncHandler(async (req, res) => {
-    const { otp, hash, email } = req.body;
-    const isValid = await bcrypt.compare(otp.toString(), hash);
+    const { otp, email } = req.body;
+    const normalizedEmail = (email || '').toLowerCase().trim();
+    const record = emailOtpStore.get(normalizedEmail);
+
+    if (!record || Date.now() > record.expiresAt) {
+        emailOtpStore.delete(normalizedEmail);
+        if (normalizedEmail) accountExponentialBackoff.recordFailure(normalizedEmail);
+        return res.status(400).json({ success: false, message: 'Invalid or expired OTP.' });
+    }
+
+    record.attempts += 1;
+    if (record.attempts > MAX_OTP_ATTEMPTS) {
+        emailOtpStore.delete(normalizedEmail);
+        if (normalizedEmail) accountExponentialBackoff.recordFailure(normalizedEmail);
+        return res.status(429).json({ success: false, message: 'Too many failed OTP attempts. Please request a new OTP.' });
+    }
+
+    const candidateDigest = computeKeyedOtpDigest(normalizedEmail, otp.toString().trim());
+    const isValid = crypto.timingSafeEqual(
+        Buffer.from(candidateDigest, 'hex'),
+        Buffer.from(record.digest, 'hex')
+    );
 
     if (isValid) {
-        if (email) accountExponentialBackoff.recordSuccess(email);
+        emailOtpStore.delete(normalizedEmail);
+        if (normalizedEmail) accountExponentialBackoff.recordSuccess(normalizedEmail);
         return res.status(200).json({ success: true, message: 'OTP verified successfully.' });
     } else {
-        if (email) accountExponentialBackoff.recordFailure(email);
+        if (normalizedEmail) accountExponentialBackoff.recordFailure(normalizedEmail);
         return res.status(400).json({ success: false, message: 'Invalid or expired OTP.' });
     }
 }));

@@ -10,13 +10,18 @@ export default function MobileBottomNav({ onOpenMenu, onOpenProfile }) {
   const isSuper = user?.email === 'prince86944@gmail.com' || user?.email === 'prince8694@gmail.com' || user?.role === ROLES?.SUPER_ADMIN || user?.role === 'SUPER_ADMIN';
   const isAdmin = isSuper || user?.role === ROLES?.ADMIN || user?.role === 'ADMIN';
 
+  const isStandalone = typeof window !== 'undefined' && Boolean(
+    new URLSearchParams(window.location.search).get('standalone') === 'true' ||
+    sessionStorage.getItem('standalone') === 'true'
+  );
+
   // Navigation Items
   const navItems = [
     {
       name: 'Home',
-      path: '/',
+      path: isStandalone ? '/hub' : '/',
       icon: Home,
-      isActive: location.pathname === '/'
+      isActive: location.pathname === '/' || location.pathname === '/hub'
     },
     {
       name: 'Notes',

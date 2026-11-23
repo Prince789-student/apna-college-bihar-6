@@ -18,6 +18,7 @@ import { isValidPDF } from '../utils/validation';
 import LoadingOverlay from '../components/LoadingOverlay';
 import AdminMentorship from '../components/AdminMentorship';
 import AdminBeuWhatsApp from '../components/AdminBeuWhatsApp';
+import AdminSyllabusManager from '../components/AdminSyllabusManager';
 
 export default function AdminPanel() {
   const { user, ROLES, loading: authLoading } = useAuth();
@@ -1113,12 +1114,12 @@ export default function AdminPanel() {
           </div>
         </div>
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 px-1 bg-slate-100/70 rounded-2xl border border-slate-200/70 whitespace-nowrap scroll-smooth max-w-full">
-           {['overview', 'mentorship', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu_notices', 'beu_whatsapp', 'donors', 'shortlinks', 'beu_app'].map(t => {
+           {['overview', 'mentorship', 'syllabus', 'users', 'groups', 'notes', 'broadcasts', 'ads', 'resources', 'beu_notices', 'beu_whatsapp', 'donors', 'shortlinks', 'beu_app'].map(t => {
              const isActive = tab === t || (t === 'beu_notices' && tab === 'beu');
              return (
                <button key={t} onClick={()=>setTab(t)}
                  className={`px-4 sm:px-5 py-2 shrink-0 rounded-xl text-[9px] sm:text-[10px] font-[1000] uppercase tracking-wider transition-all cursor-pointer ${isActive ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-900/25 scale-[1.02]' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'}`}>
-                 {t === 'mentorship' ? '🎓 Mentorship' : t === 'beu_notices' ? '🔔 BEU Notices' : t === 'beu_whatsapp' ? '📢 BEU WhatsApp' : t === 'beu_app' ? '📱 BEU Vision APK' : t}
+                 {t === 'mentorship' ? '🎓 Mentorship' : t === 'syllabus' ? '📚 Syllabus' : t === 'beu_notices' ? '🔔 BEU Notices' : t === 'beu_whatsapp' ? '📢 BEU WhatsApp' : t === 'beu_app' ? '📱 BEU Vision APK' : t}
                </button>
              );
            })}
@@ -1134,6 +1135,11 @@ export default function AdminPanel() {
       {/* ── MENTORSHIP TAB ── */}
       {tab === 'mentorship' && (
         <AdminMentorship flash={flash} />
+      )}
+
+      {/* ── SYLLABUS MANAGER TAB ── */}
+      {tab === 'syllabus' && (
+        <AdminSyllabusManager flash={flash} />
       )}
 
 

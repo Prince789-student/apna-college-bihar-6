@@ -39,15 +39,24 @@ public class BootReceiver extends BroadcastReceiver {
                 }
                 android.content.SharedPreferences dPrefs = deviceContext.getSharedPreferences("DeviceProtectedStorage", Context.MODE_PRIVATE);
                 String valActive = dPrefs.getString("isBlockerActive", "false");
-                
-                // Fallback to CapacitorStorage if not found in DeviceProtectedStorage (for compatibility with existing sessions)
-                if ("false".equals(valActive)) {
-                    android.content.SharedPreferences prefs = context.getSharedPreferences("CapacitorStorage", Context.MODE_PRIVATE);
-                    valActive = prefs.getString("isBlockerActive", "false");
+                long endTime = dPrefs.getLong("countdownEndTime", 0L);
+
+                // Fallback to CapacitorStorage (using exact _cap_ prefix)
+                if (!"true".equalsIgnoreCase(valActive.trim())) {
+                    try {
+                        android.content.SharedPreferences prefs = context.getSharedPreferences("CapacitorStorage", Context.MODE_PRIVATE);
+                        valActive = prefs.getString("_cap_isBlockerActive", prefs.getString("isBlockerActive", "false"));
+                        try {
+                            long capEnd = Long.parseLong(prefs.getString("_cap_countdownEndTime", "0").trim());
+                            if (capEnd > 0) endTime = capEnd;
+                        } catch (Exception ignored) {}
+                    } catch (Exception ignored) {}
                 }
-                if ("true".equalsIgnoreCase(valActive.trim())) {
+
+                boolean stillValid = "true".equalsIgnoreCase(valActive.trim()) && (endTime == 0L || System.currentTimeMillis() < endTime);
+                if (stillValid) {
                     Log.d(TAG, "Blocker was active before reboot! Relaunching app and service.");
-                    
+
                     // 1. Start the blocker service directly so it acts immediately
                     Intent serviceIntent = new Intent(context, UsageStatsBlockerService.class);
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

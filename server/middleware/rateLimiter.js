@@ -41,8 +41,9 @@ const authenticatedLimiter = rateLimit({
     max: securityConfig.rateLimits.authenticated.maxRequests,
     standardHeaders: true,
     legacyHeaders: false,
+    validate: { keyGeneratorIpFallback: false },
     keyGenerator: (req) => {
-        return req.user?.id || req.ip;
+        return req.user?.id || req.ip || 'anonymous';
     },
     message: {
         success: false,

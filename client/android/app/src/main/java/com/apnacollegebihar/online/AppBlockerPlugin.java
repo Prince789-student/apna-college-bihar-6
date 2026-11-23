@@ -132,6 +132,18 @@ public class AppBlockerPlugin extends Plugin {
         editor.putString(KEY_COUNTDOWN_END, String.valueOf(endTime));
         editor.apply();
 
+        // Persist in DeviceProtectedStorage so BootReceiver & DeviceAdmin survive device reboot
+        try {
+            Context deviceContext = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N
+                    ? getContext().createDeviceProtectedStorageContext()
+                    : getContext();
+            SharedPreferences.Editor dEditor = deviceContext
+                    .getSharedPreferences("DeviceProtectedStorage", Context.MODE_PRIVATE).edit();
+            dEditor.putString("isBlockerActive", "true");
+            dEditor.putLong("countdownEndTime", endTime);
+            dEditor.apply();
+        } catch (Exception ignored) {}
+
         Log.d(TAG, "startCountdown: endTime=" + endTime + ", minutes=" + minutes);
 
         JSObject ret = new JSObject();
@@ -145,6 +157,17 @@ public class AppBlockerPlugin extends Plugin {
         editor.putString(KEY_IS_ACTIVE, "false");
         editor.putString(KEY_COUNTDOWN_END, "0");
         editor.apply();
+
+        try {
+            Context deviceContext = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N
+                    ? getContext().createDeviceProtectedStorageContext()
+                    : getContext();
+            SharedPreferences.Editor dEditor = deviceContext
+                    .getSharedPreferences("DeviceProtectedStorage", Context.MODE_PRIVATE).edit();
+            dEditor.putString("isBlockerActive", "false");
+            dEditor.putLong("countdownEndTime", 0L);
+            dEditor.apply();
+        } catch (Exception ignored) {}
 
         Intent serviceIntent = new Intent(getContext(), UsageStatsBlockerService.class);
         getContext().stopService(serviceIntent);

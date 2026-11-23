@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { 
-  Send, BookOpen, GraduationCap, Timer, 
-  Users, Calculator, Globe, UserCheck, 
-  Calendar, LogIn, LogOut, MessageCircle, Youtube, User, Trash2, ShieldCheck, Smartphone, ExternalLink, Briefcase, Award, GraduationCap as Cap2, Landmark, FileText, Library, Link2, ArrowRight
+import {
+  BookOpen, GraduationCap, Timer, Users, Calculator, UserCheck,
+  Calendar, LogIn, LogOut, MessageCircle, Youtube, User, Trash2, ShieldCheck,
+  ExternalLink, Briefcase, Award, Landmark, FileText, Library, Link2,
+  ArrowRight, Compass, Target, Globe, Sparkles
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
-import GlobalSearch from '../components/GlobalSearch';
 import Footer from '../components/Footer';
 import { collection, query, limit, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -45,7 +45,6 @@ export default function AppHub() {
       });
     };
 
-    // 1. Fetch from server backend API
     fetch(`${apiBase}/api/beu/notices`)
       .then(res => res.json())
       .then(data => {
@@ -56,12 +55,11 @@ export default function AppHub() {
       })
       .catch(() => {});
 
-    // 2. Also listen / fallback to Firestore
     const qNotices = query(collection(db, 'beu_notifications'), limit(50));
     const unsubNotices = onSnapshot(qNotices, (snap) => {
       if (!isMounted) return;
       if (!snap.empty) {
-        const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         setBeuNotices(sortNotices(data).slice(0, 3));
       }
     }, () => {});
@@ -78,7 +76,7 @@ export default function AppHub() {
       setShowProfileMenu(false);
       navigate('/');
     } catch (err) {
-      console.error("Logout failed:", err);
+      console.error('Logout failed:', err);
     }
   };
 
@@ -94,7 +92,7 @@ export default function AppHub() {
     }
   };
 
-  const joinDate = user?.metadata?.creationTime 
+  const joinDate = user?.metadata?.creationTime
     ? new Date(user.metadata.creationTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
     : 'Recently';
 
@@ -129,59 +127,56 @@ export default function AppHub() {
 
   const categories = [
     {
-      title: "🎓 BEU",
+      title: 'BEU Academic',
       items: [
-        { name: 'Attendance', icon: <UserCheck size={24} />, path: '/attendance?standalone=true', color: 'text-emerald-600' },
-        { name: 'BEU Result', icon: <Globe size={24} />, path: '/beu-result?standalone=true', color: 'text-blue-600' },
-        { name: 'Free Mentorship', icon: <GraduationCap size={24} />, path: '/mentorship?standalone=true', color: 'text-emerald-600' },
-        { name: 'Timetable', icon: <Calendar size={24} />, path: '/timetable?standalone=true', color: 'text-amber-600' },
-        { name: 'Notes', icon: <BookOpen size={24} />, path: '/notes?standalone=true', color: 'text-indigo-600' },
-        { name: 'PYQ', icon: <FileText size={24} />, path: '/pyq?standalone=true', color: 'text-purple-600' },
-        { name: 'SGPA/CGPA', icon: <GraduationCap size={24} />, path: '/cgpa?standalone=true', color: 'text-cyan-600' },
-        { name: 'Syllabus', icon: <Library size={24} />, path: '/syllabus?standalone=true', color: 'text-pink-600' },
-        { name: 'Lecture Finder', icon: <Youtube size={24} />, path: '/lecture-finder?standalone=true', color: 'text-red-600' },
+        { name: 'Attendance', icon: <UserCheck size={34} strokeWidth={2.3} />, path: '/attendance?standalone=true', tileBg: 'bg-emerald-500 text-white shadow-sm shadow-emerald-500/25' },
+        { name: 'BEU Result', icon: <GraduationCap size={34} strokeWidth={2.3} />, path: '/beu-result?standalone=true', tileBg: 'bg-blue-600 text-white shadow-sm shadow-blue-600/25' },
+        { name: 'Mentorship', icon: <Sparkles size={34} strokeWidth={2.3} />, path: '/mentorship?standalone=true', tileBg: 'bg-teal-600 text-white shadow-sm shadow-teal-600/25' },
+        { name: 'Timetable', icon: <Calendar size={34} strokeWidth={2.3} />, path: '/timetable?standalone=true', tileBg: 'bg-amber-500 text-white shadow-sm shadow-amber-500/25' },
+        { name: 'Notes', icon: <BookOpen size={34} strokeWidth={2.3} />, path: '/notes?standalone=true', tileBg: 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/25' },
+        { name: 'PYQ', icon: <FileText size={34} strokeWidth={2.3} />, path: '/pyq?standalone=true', tileBg: 'bg-violet-600 text-white shadow-sm shadow-violet-600/25' },
+        { name: 'SGPA / CGPA', icon: <Calculator size={34} strokeWidth={2.3} />, path: '/cgpa?standalone=true', tileBg: 'bg-cyan-600 text-white shadow-sm shadow-cyan-600/25' },
+        { name: 'Syllabus', icon: <Library size={34} strokeWidth={2.3} />, path: '/syllabus?standalone=true', tileBg: 'bg-rose-600 text-white shadow-sm shadow-rose-600/25' },
+        { name: 'Lectures', icon: <Youtube size={34} strokeWidth={2.3} />, path: '/lecture-finder?standalone=true', tileBg: 'bg-red-600 text-white shadow-sm shadow-red-600/25' },
       ]
     },
     {
-      title: "📚 STUDY",
+      title: 'Study Tools',
       items: [
-        { name: 'Engineering Blog', icon: <FileText size={24} />, path: '/blog', color: 'text-blue-600' },
-        { name: 'Study Timer', icon: <Timer size={24} />, path: '/study?standalone=true', color: 'text-rose-600' },
-        { name: 'Study Network', icon: <Users size={24} />, path: '/groups?standalone=true', color: 'text-orange-600' },
-        { name: 'Scientific Calc', icon: <Calculator size={24} />, path: '/calculator?standalone=true', color: 'text-emerald-600' },
-        { name: 'Study Resource', icon: <Link2 size={24} />, path: '/study-resources?standalone=true', color: 'text-cyan-600' },
+        { name: 'Study Timer', icon: <Timer size={34} strokeWidth={2.3} />, path: '/study?standalone=true', tileBg: 'bg-rose-600 text-white shadow-sm shadow-rose-600/25' },
+        { name: 'Study Network', icon: <Users size={34} strokeWidth={2.3} />, path: '/groups?standalone=true', tileBg: 'bg-orange-500 text-white shadow-sm shadow-orange-500/25' },
+        { name: 'Calculator', icon: <Calculator size={34} strokeWidth={2.3} />, path: '/calculator?standalone=true', tileBg: 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/25' },
+        { name: 'Resources', icon: <Link2 size={34} strokeWidth={2.3} />, path: '/study-resources?standalone=true', tileBg: 'bg-sky-600 text-white shadow-sm shadow-sky-600/25' },
       ]
     },
     {
-      title: "🧭 COUNSELLING",
+      title: 'UGEAC Counselling',
       items: [
-        { name: 'College Predictor', icon: <Send size={24} />, path: '/ugeac-predictor?standalone=true&tab=finder', color: 'text-amber-600' },
-        { name: 'Rank Predictor', icon: <Calculator size={24} />, path: '/ugeac-predictor?standalone=true&tab=predictor', color: 'text-indigo-600' },
-        { name: 'Counselling Guide', icon: <BookOpen size={24} />, path: '/ugeac-predictor?standalone=true&tab=guide', color: 'text-emerald-600' },
+        { name: 'College Predictor', icon: <Compass size={34} strokeWidth={2.3} />, path: '/ugeac-predictor?standalone=true&tab=finder', tileBg: 'bg-amber-600 text-white shadow-sm shadow-amber-600/25' },
+        { name: 'Rank Predictor', icon: <Target size={34} strokeWidth={2.3} />, path: '/ugeac-predictor?standalone=true&tab=predictor', tileBg: 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/25' },
+        { name: 'Guide', icon: <BookOpen size={34} strokeWidth={2.3} />, path: '/ugeac-predictor?standalone=true&tab=guide', tileBg: 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/25' },
       ]
     },
     {
-      title: "🌐 IMPORTANT WEBSITES",
+      title: 'Official Portals',
       items: [
-        { name: 'AICTE Internship', icon: <Briefcase size={24} />, path: 'https://internship.aicte-india.org/', external: true, color: 'text-slate-600' },
-        { name: 'SWAYAM', icon: <Globe size={24} />, path: 'https://swayam.gov.in/', external: true, color: 'text-orange-600' },
-        { name: 'NPTEL', icon: <Award size={24} />, path: 'https://nptel.ac.in/', external: true, color: 'text-blue-600' },
-        { name: 'NSP', icon: <Landmark size={24} />, path: 'https://scholarships.gov.in/', external: true, color: 'text-emerald-600' },
-        { name: 'PMS Bihar', icon: <Landmark size={24} />, path: 'https://pmsonline.bih.nic.in/', external: true, color: 'text-purple-600' },
-        { name: 'BSSC', icon: <ExternalLink size={24} />, path: 'https://bssc.bihar.gov.in/', external: true, color: 'text-cyan-600' },
+        { name: 'AICTE', icon: <Briefcase size={34} strokeWidth={2.3} />, path: 'https://internship.aicte-india.org/', external: true, tileBg: 'bg-slate-800 text-white shadow-sm shadow-slate-800/25' },
+        { name: 'SWAYAM', icon: <Globe size={34} strokeWidth={2.3} />, path: 'https://swayam.gov.in/', external: true, tileBg: 'bg-orange-600 text-white shadow-sm shadow-orange-600/25' },
+        { name: 'NPTEL', icon: <Award size={34} strokeWidth={2.3} />, path: 'https://nptel.ac.in/', external: true, tileBg: 'bg-blue-700 text-white shadow-sm shadow-blue-700/25' },
+        { name: 'NSP', icon: <Landmark size={34} strokeWidth={2.3} />, path: 'https://scholarships.gov.in/', external: true, tileBg: 'bg-emerald-700 text-white shadow-sm shadow-emerald-700/25' },
+        { name: 'PMS Bihar', icon: <Landmark size={34} strokeWidth={2.3} />, path: 'https://pmsonline.bih.nic.in/', external: true, tileBg: 'bg-purple-600 text-white shadow-sm shadow-purple-600/25' },
+        { name: 'BSSC', icon: <ExternalLink size={34} strokeWidth={2.3} />, path: 'https://bssc.bihar.gov.in/', external: true, tileBg: 'bg-cyan-700 text-white shadow-sm shadow-cyan-700/25' },
       ]
     }
   ];
 
-  // Only these paths require login — all others are freely accessible
   const LOGIN_REQUIRED_PATHS = ['/study', '/groups', '/achievements'];
 
   const handleFeatureClick = (f) => {
     if (f.external) {
-      window.open(f.path, '_blank');
+      window.open(f.path, '_blank', 'noopener,noreferrer');
       return;
     }
-    // Extract base path (remove query params like ?standalone=true)
     const basePath = f.path.split('?')[0];
     const needsLogin = LOGIN_REQUIRED_PATHS.some(p => basePath.startsWith(p));
     if (needsLogin && !user) {
@@ -191,15 +186,23 @@ export default function AppHub() {
     }
   };
 
+  const isAdmin =
+    user?.email === 'prince86944@gmail.com' ||
+    user?.email === 'prince8694@gmail.com' ||
+    user?.role === 'SUPER_ADMIN' ||
+    user?.role === 'ADMIN' ||
+    user?.role === 'admin' ||
+    user?.role === 'super_admin';
+
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-['Inter'] flex flex-col items-center justify-center p-4 pt-24 pb-12 relative overflow-hidden">
-      <SEO 
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-['Inter'] flex flex-col items-center justify-center p-4 pt-24 pb-12 relative overflow-x-clip">
+      <SEO
         title="App Hub | Apna College Bihar - The Official Study Engine"
         description="Access all your college utilities - Study Timer, Notes, PYQs, UGEAC Predictor, SGPA Calculator, and more in one place."
       />
-      
+
       {/* Fixed Top Header Bar */}
-      <div className="fixed top-0 left-0 right-0 w-full bg-[#f8fafc]/95 backdrop-blur-md border-b border-slate-200 z-50 px-6 py-3.5 flex items-center justify-between shadow-sm">
+      <div className="fixed top-0 left-0 right-0 w-full bg-[#f8fafc]/95 border-b border-slate-200 z-50 px-5 py-3.5 flex items-center justify-between shadow-sm">
         <div className="flex items-center gap-3.5 max-w-2xl mx-auto w-full justify-between">
           <div className="flex items-center gap-3">
             <img src="/logo-acb.png?v=99" alt="ACB Logo" className="w-10 h-10 rounded-xl border border-slate-200 shadow-sm object-cover" />
@@ -210,20 +213,20 @@ export default function AppHub() {
           </div>
           <div className="relative">
             {!user ? (
-              <Link to="/login" className="flex items-center gap-1.5 px-3.5 py-2.5 bg-blue-600/10 border border-blue-500/20 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all active:scale-95 shadow-sm">
+              <Link to="/login" className="flex items-center gap-1.5 px-3.5 py-2.5 bg-blue-600/10 border border-blue-500/20 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white shadow-sm">
                 <LogIn size={14} /> Login
               </Link>
             ) : (
               <div>
-                <button 
-                  onClick={() => setShowProfileMenu(!showProfileMenu)} 
-                  className="flex items-center gap-1.5 px-3.5 py-2.5 bg-blue-600/10 border border-blue-500/20 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white transition-all active:scale-95 shadow-sm"
+                <button
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className="flex items-center gap-1.5 px-3.5 py-2.5 bg-blue-600/10 border border-blue-500/20 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-blue-600 hover:text-white shadow-sm"
                 >
                   <User size={14} /> My Profile
                 </button>
 
                 {showProfileMenu && (
-                  <div className="absolute right-0 top-14 w-56 bg-white border border-slate-200 rounded-2xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95">
+                  <div className="absolute right-0 top-14 w-56 bg-white border border-slate-200 rounded-2xl p-3 shadow-2xl z-50">
                     <div className="pb-2.5 mb-2.5 border-b border-slate-100">
                       <p className="text-[10px] font-bold text-slate-700 truncate">{user?.email || 'Student Member'}</p>
                       <div className="flex items-center gap-1 text-[8px] text-slate-500 mt-1">
@@ -231,19 +234,19 @@ export default function AppHub() {
                         <span>Joined: <strong className="text-slate-900">{joinDate}</strong></span>
                       </div>
                     </div>
-                    
-                    {(user?.email === 'prince86944@gmail.com' || user?.email === 'prince8694@gmail.com' || user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN' || user?.role === 'admin' || user?.role === 'super_admin') && (
-                    <Link 
-                      to="/dashboard/admin" 
-                      className="w-full py-2.5 bg-blue-600/10 hover:bg-blue-600 border border-blue-500/20 text-blue-600 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 mb-1.5 shadow-sm"
+
+                    {isAdmin && (
+                      <Link
+                        to="/dashboard/admin"
+                        className="w-full py-2.5 bg-blue-600/10 hover:bg-blue-600 border border-blue-500/20 text-blue-600 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest mb-1.5 shadow-sm"
+                      >
+                        <ShieldCheck size={14} /> Admin Panel
+                      </Link>
+                    )}
+                    <button
+                      onClick={handleLogout}
+                      className="w-full py-2.5 bg-red-500/10 hover:bg-red-500 text-red-600 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest"
                     >
-                      <ShieldCheck size={14} /> Admin Panel
-                    </Link>
-                  )}
-                  <button 
-                    onClick={handleLogout} 
-                    className="w-full py-2.5 bg-red-500/10 hover:bg-red-500 text-red-600 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95"
-                  >
                       <LogOut size={14} /> Logout
                     </button>
                   </div>
@@ -254,18 +257,18 @@ export default function AppHub() {
         </div>
       </div>
 
-      <div className="w-full max-w-2xl space-y-6 mb-6">
-        
-        {/* Single Compact Latest BEU Notice Bar (Only 1 latest notice) */}
+      <div className="w-full max-w-2xl space-y-5 mb-6">
+        {/* Single Compact Latest BEU Notice Bar */}
         {beuNotices.length > 0 && (() => {
           const notice = beuNotices[0];
-          const noticeUrl = notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI(notice.link || '')}`);
-          const dateStr = notice.date || notice.noticedate 
+          const rawNoticeUrl = notice.pdfUrl || (notice.link && notice.link.startsWith('http') ? notice.link : `https://beu-bih.ac.in/backend/${encodeURI((notice.link || '').replace(/^\/+/, ''))}`);
+          const noticeUrl = typeof rawNoticeUrl === 'string' ? rawNoticeUrl.replace(/%2F/gi, '/') : rawNoticeUrl;
+          const dateStr = notice.date || notice.noticedate
             ? (notice.date?.includes('/') ? notice.date : new Date(notice.date || notice.noticedate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }))
             : 'Recent';
 
           return (
-            <div className="bg-white border border-slate-200/90 hover:border-blue-300 rounded-2xl p-3 sm:p-3.5 shadow-sm transition-all relative overflow-hidden group">
+            <div className="bg-white border border-slate-200/90 hover:border-blue-300 rounded-2xl p-3 sm:p-3.5 shadow-sm">
               <div className="flex items-center justify-between gap-3">
                 <a
                   href={noticeUrl}
@@ -274,13 +277,12 @@ export default function AppHub() {
                   className="flex items-center gap-2.5 min-w-0 flex-1"
                 >
                   <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-red-600 text-white text-[8px] font-black uppercase tracking-wider shrink-0 shadow-xs">
-                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
                     LATEST NOTICE
                   </span>
                   <span className="text-[9px] font-bold text-slate-400 shrink-0 hidden xs:inline">
                     {dateStr}
                   </span>
-                  <h3 className="text-xs font-bold text-slate-800 group-hover:text-blue-600 transition-colors truncate">
+                  <h3 className="text-xs font-bold text-slate-800 truncate">
                     {notice.title || notice.board}
                   </h3>
                 </a>
@@ -288,16 +290,16 @@ export default function AppHub() {
                 <div className="flex items-center gap-2 shrink-0">
                   <Link
                     to="/notifications"
-                    className="flex items-center gap-1 px-2.5 py-1.5 bg-slate-100 hover:bg-blue-50 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-wider transition-colors whitespace-nowrap"
+                    className="flex items-center gap-1 px-2.5 py-1.5 bg-slate-100 hover:bg-blue-50 text-blue-600 rounded-xl text-[9px] font-black uppercase tracking-wider whitespace-nowrap"
                   >
                     <span>View All</span>
                     <ArrowRight size={11} />
                   </Link>
 
-                  {(user?.role === 'SUPER_ADMIN' || user?.role === 'ADMIN') && (
-                    <button 
-                      onClick={(e) => handleDeleteNotice(notice, e)} 
-                      className="p-1 text-slate-400 hover:text-red-500 rounded-lg transition-colors"
+                  {isAdmin && (
+                    <button
+                      onClick={(e) => handleDeleteNotice(notice, e)}
+                      className="p-1 text-slate-400 hover:text-red-500 rounded-lg"
                       title="Delete notice"
                     >
                       <Trash2 size={12} />
@@ -309,12 +311,36 @@ export default function AppHub() {
           );
         })()}
 
-        {/* Dedicated Attendance Safe Guard Card (Placed prominently above tools) */}
-        <div className="bg-white border border-slate-200/90 rounded-[2rem] p-4.5 sm:p-5 shadow-sm hover:border-emerald-300 transition-all relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-28 h-28 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none" />
-          <div className="flex items-start justify-between gap-3 relative z-10">
+        {/* Join Official WhatsApp Channel Banner */}
+        <a
+          href="https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between gap-3 bg-emerald-50/90 hover:bg-emerald-100/80 border border-emerald-200 rounded-2xl px-4 py-3 shadow-2xs transition-all active:scale-[0.99]"
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <MessageCircle size={20} />
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-xs sm:text-sm font-black text-slate-900 truncate">
+                Join Apna College Bihar on WhatsApp
+              </h3>
+              <p className="text-[10px] sm:text-[11px] text-emerald-800 font-semibold truncate">
+                BEU Updates &amp; Free Notes, PYQ &amp; Exam Alerts
+              </p>
+            </div>
+          </div>
+          <span className="px-3.5 py-2 rounded-xl bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider shrink-0 flex items-center gap-1">
+            Join <ArrowRight size={12} />
+          </span>
+        </a>
+
+        {/* Dedicated Attendance Safe Guard Card */}
+        <div className="bg-white border border-slate-200/90 rounded-[2rem] p-4 sm:p-5 shadow-sm">
+          <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-2xl flex items-center justify-center shrink-0 shadow-xs">
+              <div className="w-11 h-11 bg-emerald-50 text-emerald-600 border border-emerald-100 rounded-2xl flex items-center justify-center shrink-0">
                 <UserCheck size={22} />
               </div>
               <div>
@@ -329,44 +355,47 @@ export default function AppHub() {
                 <p className="text-[10px] sm:text-[11px] text-slate-500 font-medium mt-1">
                   {attendanceStats && attendanceStats.total > 0 ? (
                     <span>
-                      Overall: <strong className={attendanceStats.isSafe ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}>{attendanceStats.percentage}%</strong> ({attendanceStats.present}/{attendanceStats.total} lectures) • {attendanceStats.isSafe ? 'Eligible for BEU Exams ✅' : 'Shortfall Warning ⚠️'}
+                      Overall: <strong className={attendanceStats.isSafe ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}>{attendanceStats.percentage}%</strong> ({attendanceStats.present}/{attendanceStats.total} lectures)
                     </span>
                   ) : (
-                    'Track daily lecture punch-ins & calculate shortfall to avoid exam debarment'
+                    'Track daily lecture attendance to avoid exam debarment'
                   )}
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between gap-3 relative z-10">
-            <div className="flex items-center gap-1.5 text-[9px] font-bold text-slate-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" />
-              <span>Auto-synced with timetable</span>
-            </div>
+          <div className="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+            <span className="text-[9px] font-bold text-slate-400">Auto-synced with timetable</span>
             <Link
               to="/attendance?standalone=true"
-              className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black uppercase tracking-wider transition-all shadow-sm shadow-emerald-600/20 active:scale-95 flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black uppercase tracking-wider flex items-center gap-1.5"
             >
               <span>Mark Attendance</span>
               <ArrowRight size={12} />
             </Link>
           </div>
         </div>
+
+        {/* Clean Icon-First Feature Grids (No Animations, Max Icon Space, Concise Name) */}
         {categories.map((cat, idx) => (
-          <div key={idx} className="bg-white border border-slate-200 rounded-[2.5rem] shadow-sm p-6">
+          <div key={idx} className="bg-white border border-slate-200 rounded-[2rem] shadow-sm p-5">
             <h3 className="text-xs font-[1000] text-slate-800 uppercase tracking-[0.2em] mb-4 text-center">
               {cat.title}
             </h3>
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
               {cat.items.map((f, i) => (
-                <button 
-                  key={i} 
+                <button
+                  key={i}
                   onClick={() => handleFeatureClick(f)}
-                  className="aspect-[4/3] bg-slate-50 border border-slate-200/60 rounded-2xl flex flex-col items-center justify-center gap-2 active:scale-95 transition-all hover:bg-slate-100 hover:border-slate-300 shadow-sm group relative overflow-hidden"
+                  className="min-h-[116px] bg-slate-50/70 border border-slate-200/80 rounded-2xl flex flex-col items-center justify-center gap-2 py-3 px-1.5 hover:bg-white hover:border-slate-300 shadow-2xs"
                 >
-                  <div className={`${f.color} group-hover:scale-110 transition-transform relative z-10`}>{f.icon}</div>
-                  <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-wider text-slate-700 text-center px-1 leading-tight relative z-10">{f.name}</span>
+                  <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shrink-0 ${f.tileBg}`}>
+                    {f.icon}
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-800 text-center leading-snug line-clamp-2 w-full px-0.5">
+                    {f.name}
+                  </span>
                 </button>
               ))}
             </div>
@@ -374,37 +403,26 @@ export default function AppHub() {
         ))}
 
         {/* Social Channels */}
-        <div className="bg-white border border-slate-200 rounded-[2.5rem] shadow-sm p-6">
+        <div className="bg-white border border-slate-200 rounded-[2rem] shadow-sm p-5">
           <div className="flex gap-3">
-            <button 
-              onClick={() => window.open('https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a', '_blank')}
-              className="flex-1 py-3.5 bg-slate-50 border border-slate-200/60 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 hover:bg-slate-100 hover:border-slate-300 shadow-sm"
+            <button
+              onClick={() => window.open('https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a', '_blank', 'noopener,noreferrer')}
+              className="flex-1 py-3.5 bg-slate-50 border border-slate-200/70 rounded-2xl flex items-center justify-center gap-2 hover:bg-slate-100 shadow-2xs"
             >
-              <MessageCircle size={16} className="text-emerald-600" />
-              <span className="text-[9px] font-black uppercase tracking-widest text-slate-700">WhatsApp</span>
+              <MessageCircle size={18} className="text-emerald-600" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">WhatsApp</span>
             </button>
-            <button 
-              onClick={() => window.open('https://youtube.com/@apnacollegebihar', '_blank')}
-              className="flex-1 py-3.5 bg-slate-50 border border-slate-200/60 rounded-2xl flex items-center justify-center gap-2 transition-all active:scale-95 hover:bg-slate-100 hover:border-slate-300 shadow-sm"
+            <button
+              onClick={() => window.open('https://youtube.com/@apnacollegebihar', '_blank', 'noopener,noreferrer')}
+              className="flex-1 py-3.5 bg-slate-50 border border-slate-200/70 rounded-2xl flex items-center justify-center gap-2 hover:bg-slate-100 shadow-2xs"
             >
-              <Youtube size={16} className="text-red-600" />
-              <span className="text-[9px] font-black uppercase tracking-widest text-slate-700">YouTube</span>
+              <Youtube size={18} className="text-red-600" />
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">YouTube</span>
             </button>
-          </div>
-
-          <div className="mt-4 pt-3 border-t border-slate-100 text-center">
-            <a 
-              href="/?desktop=true"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-all shadow-xs"
-            >
-              <span>💻 Switch to Desktop Experience</span>
-              <ArrowRight size={13} />
-            </a>
           </div>
         </div>
       </div>
 
-      {/* Global Footer */}
       <Footer />
     </div>
   );

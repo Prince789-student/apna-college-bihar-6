@@ -1,10 +1,26 @@
 import React from 'react';
 import { Capacitor } from '@capacitor/core';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Send, Youtube, Heart, MessageCircle } from 'lucide-react';
 
 export default function Footer() {
-  const isNative = Capacitor.isNativePlatform();
+  const location = useLocation();
+  const isNative = Boolean(
+    Capacitor.isNativePlatform() ||
+    (typeof window !== 'undefined' && (
+      !!window.Capacitor?.isNative ||
+      window.location.protocol === 'file:' ||
+      (window.location.hostname === 'localhost' && !window.location.port)
+    ))
+  );
+  const isStandaloneApp = Boolean(
+    isNative ||
+    location.pathname === '/hub' ||
+    (typeof window !== 'undefined' && (
+      new URLSearchParams(window.location.search).get('standalone') === 'true' ||
+      sessionStorage.getItem('standalone') === 'true'
+    ))
+  );
 
   const [isMobileScreen, setIsMobileScreen] = React.useState(() => {
     if (typeof window === 'undefined') return false;
@@ -29,7 +45,29 @@ export default function Footer() {
     return () => window.removeEventListener('resize', handleResize);
   }, [isNative]);
 
-  // Mobile App / Mobile Web Screen Compact Footer
+  // Official Native Android App Footer (Matches v64 APK)
+  if (isStandaloneApp) {
+    return (
+      <footer className="shrink-0 bg-transparent text-slate-500 py-8 px-6 mt-4 w-full">
+        <div className="flex flex-wrap justify-center gap-4 px-4 mb-6 text-xs font-semibold">
+          <Link to="/contact" className="hover:text-blue-600 transition-colors">Contact</Link>
+          <Link to="/author" className="hover:text-blue-600 transition-colors">Developer</Link>
+          <Link to="/privacy-policy" className="hover:text-blue-600 transition-colors">Privacy</Link>
+          <Link to="/terms" className="hover:text-blue-600 transition-colors">Terms</Link>
+          <Link to="/dmca" className="hover:text-blue-600 transition-colors">DMCA</Link>
+          <Link to="/disclaimer" className="hover:text-blue-600 transition-colors">Disclaimer</Link>
+        </div>
+        <div className="text-center flex flex-col items-center justify-center gap-2 text-xs">
+          <p className="text-slate-400">&copy; {new Date().getFullYear()} Apna College Bihar. All rights reserved.</p>
+          <p className="text-slate-500 font-medium">
+            Developed by <Link to="/author" className="text-blue-600 font-bold hover:underline">Prince Kumar</Link> • 100% Free Mission for All BEU Students ❤️
+          </p>
+        </div>
+      </footer>
+    );
+  }
+
+  // Mobile Web Screen Compact Footer
   if (isMobileScreen) {
     return (
       <footer className="shrink-0 bg-white/80 backdrop-blur-md border-t border-slate-200/90 text-slate-600 pt-7 pb-28 px-4 mt-6 w-full select-none">
@@ -153,6 +191,7 @@ export default function Footer() {
            <h4 className="text-xs font-heading font-bold text-white tracking-wider uppercase">Company</h4>
            <div className="flex flex-col gap-2.5 sm:gap-3">
               <Link to="/about" className="text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 transition-colors">About Us</Link>
+              <Link to="/author" className="text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 transition-colors">Developer (Prince Kumar)</Link>
               <Link to="/blog" className="text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 transition-colors">Engineering Blog</Link>
               <Link to="/contact" className="text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 transition-colors">Contact Us</Link>
               <Link to="/directory" className="text-xs sm:text-sm font-medium text-slate-300 hover:text-cyan-400 transition-colors">Sitemap</Link>
@@ -175,7 +214,8 @@ export default function Footer() {
       <div className="container mx-auto mt-12 sm:mt-16 pt-6 sm:pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-medium text-center sm:text-left">
          <p className="text-slate-400">&copy; {new Date().getFullYear()} Apna College Bihar. All rights reserved.</p>
          <p className="text-slate-400 flex items-center gap-1 justify-center sm:justify-start">
-           Made with <Heart size={14} className="text-rose-500 fill-rose-500" /> in Bihar
+           Developed with <Heart size={14} className="text-rose-500 fill-rose-500" /> by{' '}
+           <Link to="/author" className="text-cyan-400 font-bold hover:underline">Prince Kumar</Link> — Mission: 100% Free Education for All
          </p>
       </div>
     </footer>

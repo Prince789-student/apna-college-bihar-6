@@ -3,11 +3,18 @@ import { X, CheckCircle2, Zap, MessageCircle, Sparkles, Users, ArrowRight } from
 import { Capacitor } from '@capacitor/core';
 
 export default function WhatsAppPopup() {
+  const isAppMode = Capacitor.isNativePlatform()
+    || (typeof window !== 'undefined' && (
+      window.location.search.includes('standalone=true') ||
+      sessionStorage.getItem('standalone') === 'true' ||
+      sessionStorage.getItem('acb_app_mode') === 'true' ||
+      document.body.classList.contains('app-light-mode')
+    ));
   const [isOpen, setIsOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(true);
 
   useEffect(() => {
-    if (Capacitor.isNativePlatform()) return;
+    if (isAppMode) return;
 
     const userAgent = navigator.userAgent || "";
     const isBot = userAgent.indexOf('Mediapartners-Google') !== -1 || userAgent.indexOf('Googlebot') !== -1;
@@ -36,6 +43,8 @@ export default function WhatsAppPopup() {
     setIsOpen(false);
     window.open('https://whatsapp.com/channel/0029VbC6FsH3wtb5UEDvrW0a', '_blank');
   };
+
+  if (isAppMode) return null;
 
   return (
     <>

@@ -5,12 +5,13 @@ const sendEmailOtpSchema = z.object({
     email: z.string().trim().email('Invalid email address format').max(254, 'Email is too long')
 });
 
-// Schema for verifying Email OTP (hash verification)
+// Schema for verifying Email OTP (server-side keyed verification)
 const verifyEmailOtpSchema = z.object({
+    email: z.string().trim().email('Invalid email address format').max(254, 'Email is too long'),
     otp: z.union([z.string(), z.number()]).transform(v => String(v).trim()).refine(v => /^\d{6}$/.test(v), {
         message: 'OTP must be exactly a 6-digit number'
     }),
-    hash: z.string().trim().min(20, 'Invalid OTP verification hash').max(256)
+    hash: z.string().trim().max(256).optional()
 });
 
 // Schema for user registration

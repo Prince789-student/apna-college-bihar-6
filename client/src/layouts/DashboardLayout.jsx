@@ -4,7 +4,7 @@ import {
   ChevronLeft, Shield, Timer, X, LayoutDashboard, Library, BookOpen, Calendar, 
   Clock, FileText, GraduationCap, Calculator, User, LogOut, Menu, UserCheck, 
   Flame, Send, ChevronDown, Globe, Award, Link2, ArrowRight, UserX, Youtube,
-  Layers, Download, Sparkles, Building2, Smartphone, Laptop, Copy
+  Layers, Download, Sparkles, Building2, Smartphone, Laptop, Copy, Heart
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useStudy } from '../context/StudyContext';
@@ -29,7 +29,11 @@ export default function DashboardLayout() {
     window.desktopBridge?.isDesktop || 
     (typeof navigator !== 'undefined' && navigator.userAgent.includes('ApnaCollegeBiharDesktop'))
   );
-  const isMobileApp = Capacitor.isNativePlatform();
+  const isStandaloneSession = typeof window !== 'undefined' && Boolean(
+    new URLSearchParams(window.location.search).get('standalone') === 'true' ||
+    sessionStorage.getItem('standalone') === 'true'
+  );
+  const isMobileApp = Capacitor.isNativePlatform() || isStandaloneSession;
   const isNative = isMobileApp || isDesktop;
   const location = useLocation();
   const navigate = useNavigate();
@@ -80,6 +84,20 @@ export default function DashboardLayout() {
     };
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
+  }, [isMobileApp]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('standalone') === 'true') {
+      try { sessionStorage.setItem('standalone', 'true'); } catch {}
+    }
+    if (isMobileApp) {
+      document.body.classList.add('app-light-mode');
+    } else {
+      document.body.classList.remove('app-light-mode');
+    }
+    return () => {
+      document.body.classList.remove('app-light-mode');
+    };
   }, [isMobileApp]);
 
   useEffect(() => {
@@ -335,7 +353,17 @@ export default function DashboardLayout() {
       {/* Global Native Header (for Mobile Phone only - Sub-pages only; Home page has its own app header) */}
       {(isMobileApp || isMobileScreen) && !isHomePage && (
         <header className="bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs z-[200] shrink-0 sticky top-0 px-3 sm:px-4 py-2.5 flex items-center justify-between pt-[max(env(safe-area-inset-top,0px),0.625rem)] text-slate-900">
-          <button onClick={() => navigate(-1)} className="min-w-[44px] min-h-[44px] rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors active:scale-95 flex items-center justify-center cursor-pointer" aria-label="Go Back">
+          <button
+            onClick={() => {
+              if (window.history.state && window.history.state.idx > 0) {
+                navigate(-1);
+              } else {
+                navigate(isMobileApp ? '/hub?standalone=true' : '/');
+              }
+            }}
+            className="min-w-[44px] min-h-[44px] rounded-xl bg-slate-100 text-slate-600 hover:bg-slate-200 transition-colors active:scale-95 flex items-center justify-center cursor-pointer"
+            aria-label="Go Back"
+          >
             <ChevronLeft size={20} strokeWidth={2.5} />
           </button>
           <div className="flex items-center justify-center">
@@ -585,7 +613,7 @@ export default function DashboardLayout() {
 
       {/* Main Content Area */}
       <main id="main-scroll-container" className="flex-1 overflow-y-auto custom-scrollbar relative z-10 bg-transparent flex flex-col overscroll-y-contain">
-        <div className={`w-full grow shrink-0 pb-28 md:pb-8 min-h-[80vh] ${location.pathname === '/' ? '' : 'p-3 sm:p-4 md:p-6 lg:p-8 max-w-7xl mx-auto'}`}>
+        <div className={`w-full grow shrink-0 ${isMobileApp ? 'pb-6' : 'pb-28 md:pb-8'} min-h-[80vh] ${location.pathname === '/' ? '' : 'p-3 sm:p-4 md:p-6 lg:p-8 max-w-7xl mx-auto'}`}>
           <React.Suspense fallback={
             <div className="flex flex-col items-center justify-center w-full h-[60vh]">
               <div className="w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>
@@ -688,11 +716,13 @@ export default function DashboardLayout() {
         </div>
       </aside>
       
-      {/* Native App-Style Mobile Bottom Navigation Bar */}
-      <MobileBottomNav 
-        onOpenMenu={() => setMobileMenuOpen(true)} 
-        onOpenProfile={() => setMobileProfileOpen(true)}
-      />
+      {/* Native App-Style Mobile Bottom Navigation Bar (Mobile Website only, hidden in App View) */}
+      {!isMobileApp && (
+        <MobileBottomNav 
+          onOpenMenu={() => setMobileMenuOpen(true)} 
+          onOpenProfile={() => setMobileProfileOpen(true)}
+        />
+      )}
 
       {/* ── Native Mobile Profile Bottom Sheet / Modal ── */}
       {mobileProfileOpen && (

@@ -6,6 +6,10 @@ import jsPDF from 'jspdf';
 import { Capacitor } from '@capacitor/core';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
+import { db } from '../firebase';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { BRANCHES, BRANCH_COLORS, getSavedBranch, setSavedBranch } from '../constants/branches';
+import BranchShortcutGrid from '../components/BranchShortcutGrid';
 import SEO from '../components/SEO';
 import useScrollToTop from '../hooks/useScrollToTop';
 import defaultSyllabusData from '../data/syllabusData.json';
@@ -190,19 +194,22 @@ function splitIntoTopics(text, isNewSyllabus = false) {
       if (depth > 0) depth--;
     }
 
-    // Primary delimiters: semicolon, period followed by whitespace/newline, or newline
+    // Primary delimiters: comma (outside numbers/parens), semicolon, period followed by whitespace/newline, or newline
+    const prevCh = i > 0 ? t[i - 1] : '';
+    const nextCh = i < t.length - 1 ? t[i + 1] : '';
+    const isCommaDelim = ch === ',' && !(/\d/.test(prevCh) && /\d/.test(nextCh));
     const isPeriodDelim = ch === '.' && (i === t.length - 1 || t[i + 1] === ' ' || t[i + 1] === '\n');
     const isSemicolonDelim = ch === ';';
     const isNewlineDelim = ch === '\n';
 
-    if (depth === 0 && (isPeriodDelim || isSemicolonDelim || isNewlineDelim)) {
-      if (current.trim().length > 3) rawParts.push(current.trim());
+    if (depth === 0 && (isCommaDelim || isPeriodDelim || isSemicolonDelim || isNewlineDelim)) {
+      if (current.trim().length >= 2) rawParts.push(current.trim());
       current = '';
     } else {
       current += ch;
     }
   }
-  if (current.trim().length > 3) rawParts.push(current.trim());
+  if (current.trim().length >= 2) rawParts.push(current.trim());
 
   // Restore abbreviations and protected tokens
   const restored = rawParts.map(p => {
@@ -214,27 +221,7 @@ function splitIntoTopics(text, isNewSyllabus = false) {
     return r;
   });
 
-  // Secondary pass: split overly long sentences (>130 chars) with commas between major clauses
-  const subSplit = [];
-  for (const part of restored) {
-    if (part.length > 130 && part.includes(',')) {
-      const commaChunks = part.split(/,\s+/);
-      let buffer = '';
-      for (const chunk of commaChunks) {
-        if (!buffer) {
-          buffer = chunk;
-        } else if (buffer.length < 35 || chunk.length < 20) {
-          buffer += ', ' + chunk;
-        } else {
-          subSplit.push(buffer);
-          buffer = chunk;
-        }
-      }
-      if (buffer) subSplit.push(buffer);
-    } else {
-      subSplit.push(part);
-    }
-  }
+  const subSplit = restored;
 
   // Final cleanup of topic strings
   const finalTopics = [];
@@ -267,7 +254,7 @@ function splitIntoTopics(text, isNewSyllabus = false) {
     p = p.replace(/[:\-–—,\.\s]+$/, '');
     p = p.trim();
 
-    if (p.length > 3) {
+    if (p.length >= 2) {
       p = p.charAt(0).toUpperCase() + p.slice(1);
       finalTopics.push(p);
     }
@@ -726,7 +713,7 @@ function UnitAccordion({ unit, unitIndex, subjectName, semBranchKey, branchName,
 
 // ─── Main Component ────────────────────────────────────────────────────────────
 export default function BeuSyllabus() {
-  const { branchId } = useParams();
+  const { branchId, semesterId } = useParams();
   const navigate = useNavigate();
   const syllabusContentRef = useRef(null);
   const subjectDetailRef = useRef(null);
@@ -738,11 +725,11 @@ export default function BeuSyllabus() {
     'eie','mech_new','mech_smart','robotics','civil_new','civil_ca','petrochemical',
     'chem_leather','chem_plastic','waste_management','aeronautical','biomedical'
   ];
-  const detectedSem = branchId && newBranchIds.includes(branchId.toLowerCase()) ? 'sem1_new' : '';
+  const detectedSem = '';
 
   const [syllabusData, setSyllabusData] = useState(() => {
     try {
-      const cached = localStorage.getItem('beu_syllabus_cache_v5');
+      const cached = localStorage.getItem('beu_syllabus_cache_v7');
       if (cached) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -752,27 +739,33 @@ export default function BeuSyllabus() {
   });
   const [loading, setLoading] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
-  const [selectedSem, setSelectedSem] = useState(detectedSem);
+  const [selectedSem, setSelectedSem] = useState(semesterId ? semesterId.toLowerCase() : detectedSem);
   const [selectedBranch, setSelectedBranch] = useState(branchId ? branchId.toLowerCase() : '');
   const [selectedSubjectIndex, setSelectedSubjectIndex] = useState(null);
   const [progressTicker, setProgressTicker] = useState(0);
   const [aiTopicData, setAiTopicData] = useState(null);
 
   useEffect(() => {
+    setSelectedBranch(branchId ? branchId.toLowerCase() : '');
+    setSelectedSem(semesterId ? semesterId.toLowerCase() : '');
+    setSelectedSubjectIndex(null);
+  }, [branchId, semesterId]);
+
+  useEffect(() => {
     // Clear legacy caches to ensure latest clean data
     try {
-      ['beu_syllabus_cache', 'beu_syllabus_cache_v1', 'beu_syllabus_cache_v2', 'beu_syllabus_cache_v3', 'beu_syllabus_cache_v4'].forEach(k => {
+      ['beu_syllabus_cache', 'beu_syllabus_cache_v1', 'beu_syllabus_cache_v2', 'beu_syllabus_cache_v3', 'beu_syllabus_cache_v4', 'beu_syllabus_cache_v5', 'beu_syllabus_cache_v6'].forEach(k => {
         localStorage.removeItem(k);
       });
     } catch (e) {}
 
     const baseUrl = Capacitor.isNativePlatform() ? 'https://apnacollegebihar.online' : '';
-    fetch(`${baseUrl}/data/syllabus.json?v=` + new Date().getTime())
+    fetch(`${baseUrl}/syllabus.json?v=` + new Date().getTime())
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
           setSyllabusData(data);
-          try { localStorage.setItem('beu_syllabus_cache_v5', JSON.stringify(data)); } catch (e) {}
+          try { localStorage.setItem('beu_syllabus_cache_v7', JSON.stringify(data)); } catch (e) {}
         }
         if (selectedBranch && selectedSem) {
           setTimeout(() => {
@@ -782,22 +775,50 @@ export default function BeuSyllabus() {
           }, 300);
         }
       })
-      .catch(err => {
+      .catch(() => {
         // defaultSyllabusData already in place
       });
+
+    // Live Firestore overrides from Admin Panel Syllabus Manager
+    const unsubSyllabus = onSnapshot(collection(db, 'beu_syllabus'), (snap) => {
+      if (!snap.empty) {
+        const overrides = snap.docs.map(d => d.data()).filter(x => x && x.branch && x.semester && x.content);
+        if (overrides.length > 0) {
+          setSyllabusData(prev => {
+            const merged = [...(Array.isArray(prev) ? prev : defaultSyllabusData)];
+            overrides.forEach(ov => {
+              const idx = merged.findIndex(x => x.branch === ov.branch && x.semester === ov.semester);
+              if (idx >= 0) {
+                merged[idx] = { ...merged[idx], content: ov.content, updatedAt: ov.updatedAt };
+              } else {
+                merged.push({ branch: ov.branch, semester: ov.semester, content: ov.content, updatedAt: ov.updatedAt });
+              }
+            });
+            return merged;
+          });
+        }
+      }
+    }, () => {});
+
+    return () => unsubSyllabus();
   }, []);
 
   useScrollToTop([selectedSubjectIndex, selectedSem, selectedBranch]);
 
   const semesters = [
-    { id: 'sem1_new', label: '1st Sem New (2026 Batch)' },
-    { id: 'sem1', label: '1st Semester' }, { id: 'sem2', label: '2nd Semester' },
-    { id: 'sem3', label: '3rd Semester' }, { id: 'sem4', label: '4th Semester' },
-    { id: 'sem5', label: '5th Semester' }, { id: 'sem6', label: '6th Semester' },
+    { id: 'sem1_new', label: '1st Semester' },
+    { id: 'sem2', label: '2nd Semester' },
+    { id: 'sem3', label: '3rd Semester' },
+    { id: 'sem4', label: '4th Semester' },
+    { id: 'sem5', label: '5th Semester' },
+    { id: 'sem6', label: '6th Semester' },
+    { id: 'sem7', label: '7th Semester' },
+    { id: 'sem8', label: '8th Semester' },
   ];
 
   const oldBranches = [
-    { id: 'cse', label: 'Computer Science (All Spec.)' },
+    { id: 'cse', label: 'Computer Science (CSE)' },
+    { id: 'cse_ai', label: 'CSE (AI & ML / Artificial Intel.)' },
     { id: 'cse_iot_cs', label: 'CSE (IoT & Cyber Security with Blockchain)' },
     { id: 'cse_iot', label: 'CSE (IoT)' },
     { id: 'civil', label: 'Civil Engineering' },
@@ -846,8 +867,15 @@ export default function BeuSyllabus() {
 
   const branches = selectedSem === 'sem1_new' ? newBranches : oldBranches;
 
+  const SEM1_GROUP_MAP = {
+    cse: 'group_a', cse_ai: 'group_a', cse_iot: 'group_a', cse_iot_cs: 'group_a', it: 'group_a',
+    ee: 'group_b', eee: 'group_b', ece: 'group_b',
+    mech: 'group_c', civil: 'group_c', civil_ca: 'group_c'
+  };
   const selectedBranchObj = branches.find(b => b.id === selectedBranch);
-  const syllabusBranchQuery = selectedSem === 'sem1_new' ? selectedBranchObj?.groupId : selectedBranch;
+  const syllabusBranchQuery = selectedSem === 'sem1_new'
+    ? (selectedBranchObj?.groupId || SEM1_GROUP_MAP[selectedBranch] || 'group_a')
+    : selectedBranch;
 
   let currentSyllabus = syllabusData.find(s => s.semester === selectedSem && s.branch === syllabusBranchQuery);
   if (!currentSyllabus && syllabusBranchQuery) {
@@ -1041,7 +1069,7 @@ export default function BeuSyllabus() {
       <div className="bg-indigo-600 md:bg-slate-900/85 md:backdrop-blur-md text-white rounded-b-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden border-b md:border-white/10">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
         <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center text-center">
-          <Link to="/app" className="self-start text-[10px] font-black uppercase tracking-widest bg-white/20 px-4 py-2 rounded-xl mb-8 hover:bg-white/30 transition-all">
+          <Link to="/hub?standalone=true" className="self-start text-[10px] font-black uppercase tracking-widest bg-white/20 px-4 py-2 rounded-xl mb-8 hover:bg-white/30 transition-all">
             ← Back to Hub
           </Link>
           <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 shadow-inner">
@@ -1056,27 +1084,98 @@ export default function BeuSyllabus() {
 
       <div className="max-w-4xl mx-auto px-2 md:px-4 -mt-8 md:-mt-10 relative z-20">
 
-        {/* Controls */}
-        <div className="bg-white p-6 rounded-[2rem] shadow-xl border border-slate-100 mb-6 flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-2">Select Semester</label>
-            <CustomDropdown 
-              label="Select Semester"
-              value={selectedSem}
-              options={semesters}
-              onChange={(val) => { setSelectedSem(val); setSelectedSubjectIndex(null); }}
-            />
-          </div>
-          <div className="flex-1">
-            <label className="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 px-2">Select Branch</label>
-            <CustomDropdown 
-              label="Select Branch"
-              value={selectedBranch}
-              options={branches}
-              enableSearch={selectedSem === 'sem1_new'}
-              onChange={(val) => { setSelectedBranch(val); setSelectedSubjectIndex(null); navigate(`/syllabus/${val}`); }}
-            />
-          </div>
+        {/* Step-by-Step Shortcut Flow: Branch -> 8 Semesters -> Syllabus (Matches Notes) */}
+        <div className="bg-white p-4 sm:p-6 rounded-[2rem] shadow-xl border border-slate-100 mb-6 space-y-5">
+          {!selectedBranch ? (
+            /* STEP 1: Select Branch */
+            <div>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">
+                Step 1 • Select Your Engineering Branch
+              </p>
+              <BranchShortcutGrid
+                onSelect={(b) => {
+                  const targetBranchId = b.syllabusId || b.id.toLowerCase();
+                  setSelectedBranch(targetBranchId);
+                  setSelectedSem('');
+                  setSelectedSubjectIndex(null);
+                  navigate(`/syllabus/${targetBranchId}`);
+                }}
+              />
+            </div>
+          ) : !selectedSem ? (
+            /* STEP 2: Select Semester (1 to 8 + 1st Sem New) */
+            <div>
+              <div className="flex items-center justify-between gap-3 mb-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedBranch('');
+                    setSelectedSem('');
+                    setSelectedSubjectIndex(null);
+                    navigate('/syllabus');
+                  }}
+                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold"
+                >
+                  ← All Branches
+                </button>
+                <span className="text-xs font-black text-indigo-600 uppercase tracking-wider">
+                  {BRANCHES.find(b => b.syllabusId === selectedBranch || b.id.toLowerCase() === selectedBranch)?.label || selectedBranch.toUpperCase()}
+                </span>
+              </div>
+
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 px-1">
+                Step 2 • Select Semester (1st to 8th)
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                {semesters.map((s) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedSem(s.id);
+                      setSelectedSubjectIndex(null);
+                      navigate(`/syllabus/${selectedBranch}/${s.id}`);
+                    }}
+                    className="p-4 rounded-2xl bg-slate-50 hover:bg-indigo-600 hover:text-white border border-slate-200 text-slate-800 text-center transition-all active:scale-95 group"
+                  >
+                    <span className="text-sm font-black block">{s.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            /* STEP 3: Active Branch + Semester Bar with Back to Semesters */
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedSem('');
+                    setSelectedSubjectIndex(null);
+                    navigate(`/syllabus/${selectedBranch}`);
+                  }}
+                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold"
+                >
+                  ← All Semesters
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedBranch('');
+                    setSelectedSem('');
+                    setSelectedSubjectIndex(null);
+                    navigate('/syllabus');
+                  }}
+                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold"
+                >
+                  Change Branch
+                </button>
+              </div>
+              <span className="text-xs font-black text-indigo-600 uppercase tracking-wider">
+                {selectedBranch.toUpperCase()} • {semesters.find(s => s.id === selectedSem)?.label}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Overall Progress Bar */}
@@ -1095,7 +1194,8 @@ export default function BeuSyllabus() {
           </div>
         )}
 
-        {/* Content Area */}
+        {/* Content Area (Only shown once both Branch and Semester are selected) */}
+        {selectedBranch && selectedSem && (
         <div ref={syllabusContentRef} className="bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden min-h-[400px]">
           <div className="p-4 md:p-6 bg-slate-50 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4">
             <div>
@@ -1221,7 +1321,33 @@ export default function BeuSyllabus() {
                           branchName={selectedBranch}
                           semName={selectedSem}
                           onToggle={() => setProgressTicker(p => p + 1)}
-                          onAskAi={(topicText, unitName) => setAiTopicData({ topicText, subjectName: subjects[selectedSubjectIndex].title, unitName })}
+                          onAskAi={async (topicText, unitName) => {
+                            const subjectName = subjects[selectedSubjectIndex].title;
+                            const promptText = `Explain this in detail: ${topicText} from chapter '${unitName}' in subject '${subjectName}' (BEU B.Tech Syllabus)`;
+                            if (Capacitor.isNativePlatform()) {
+                              try {
+                                await Share.share({
+                                  title: `Ask AI: ${topicText}`,
+                                  text: promptText,
+                                  dialogTitle: 'Share with AI App'
+                                });
+                                return;
+                              } catch (err) {
+                                // Fall back to AI modal if share dismissed/unavailable
+                              }
+                            } else if (typeof navigator !== 'undefined' && navigator.share) {
+                              try {
+                                await navigator.share({
+                                  title: `Ask AI: ${topicText}`,
+                                  text: promptText
+                                });
+                                return;
+                              } catch (err) {
+                                if (err?.name === 'AbortError') return;
+                              }
+                            }
+                            setAiTopicData({ topicText, subjectName, unitName });
+                          }}
                         />
                       ))}
                     </div>
@@ -1229,7 +1355,7 @@ export default function BeuSyllabus() {
                 )}
               </div>
             ) : currentSyllabus ? (
-              <div className="prose prose-sm max-w-none prose-headings:font-black prose-h2:text-indigo-700 prose-h3:text-slate-800 prose-li:text-slate-600">
+              <div className="text-sm text-slate-700 leading-relaxed space-y-3 [&_h2]:text-lg [&_h2]:font-black [&_h2]:text-indigo-700 [&_h2]:mt-5 [&_h2]:mb-2 [&_h3]:text-base [&_h3]:font-bold [&_h3]:text-slate-800 [&_h3]:mt-4 [&_h4]:text-sm [&_h4]:font-bold [&_h4]:text-slate-800 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5">
                 <ReactMarkdown>{cleanSyllabusText(currentSyllabus.content)}</ReactMarkdown>
               </div>
             ) : (!selectedSem || !selectedBranch) ? (
@@ -1255,6 +1381,7 @@ export default function BeuSyllabus() {
             )}
           </div>
         </div>
+        )}
       </div>
 
       {/* ── Educational SEO Content ── */}

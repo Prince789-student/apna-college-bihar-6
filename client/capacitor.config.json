@@ -2,6 +2,14 @@
   "appId": "com.apnacollegebihar.online",
   "appName": "ACB",
   "webDir": "dist",
+  "server": {
+    "allowNavigation": [
+      "beu-bih.ac.in",
+      "*.beu-bih.ac.in",
+      "challenges.cloudflare.com",
+      "*.cloudflare.com"
+    ]
+  },
   "plugins": {
     "FirebaseAuthentication": {
       "skipNativeAuth": false,

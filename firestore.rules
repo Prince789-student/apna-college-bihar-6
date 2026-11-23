@@ -18,7 +18,17 @@ service cloud.firestore {
     // Users Collection
     match /users/{userId} {
       allow read: if true; // Allows viewing scholar counts and profiles
-      allow write: if (isAuthenticated() && request.auth.uid == userId) || isAdmin();
+      allow create: if isAdmin() || (
+        isAuthenticated() &&
+        request.auth.uid == userId &&
+        request.resource.data.get('role', 'STUDENT') == 'STUDENT'
+      );
+      allow update: if isAdmin() || (
+        isAuthenticated() &&
+        request.auth.uid == userId &&
+        request.resource.data.get('role', 'STUDENT') == resource.data.get('role', 'STUDENT')
+      );
+      allow delete: if (isAuthenticated() && request.auth.uid == userId) || isAdmin();
     }
     match /Users/{userId} {
       allow read, write: if isAuthenticated();
@@ -75,6 +85,12 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // BEU Syllabus
+    match /beu_syllabus/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // Hackathons
     match /hackathons/{docId} {
       allow read: if true;
@@ -105,13 +121,15 @@ service cloud.firestore {
 
     // Free BEU Mentorship Direct 1-on-1 Messages, Presence & Data Sync
     match /MentorshipMessages/{docId} {
-      allow read, write: if true;
+      allow read, create, update, delete: if isAuthenticated();
     }
     match /MentorshipPresence/{docId} {
-      allow read, write: if true;
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
     }
     match /mentorship/{docId} {
-      allow read, write: if true;
+      allow read: if true;
+      allow write: if isAuthenticated() || isAdmin();
     }
 
     // Default deny for anything else

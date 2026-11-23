@@ -35,7 +35,7 @@ export default function Author() {
               Prince Kumar
             </h1>
             <p className="text-sm md:text-base font-bold text-slate-500 max-w-2xl mx-auto tracking-wide">
-              Founder, Developer & Educational Content Creator at Apna College Bihar
+              Founder &amp; Developer of Apna College Bihar &amp; BEU Vision • Government Engineering College (GEC), Sheikhpura
             </p>
           </div>
         </div>
@@ -49,7 +49,7 @@ export default function Author() {
                <h2 className="text-2xl font-[1000] uppercase tracking-tight text-slate-900">About the Creator</h2>
              </div>
              <p className="text-sm font-medium text-slate-600 leading-relaxed">
-               Prince Kumar created Apna College Bihar to solve the widespread problem of scattered academic resources for Bihar engineering students. Understanding the daily struggles of university life, Prince envisioned and built a single, trusted digital platform that consolidates essential study materials such as comprehensive notes, Previous Year Question Papers (PYQs), official BEU syllabus updates, counselling guidance, and powerful academic tools like the CGPA Calculator and UGEAC College Predictor.
+               Prince Kumar (Government Engineering College, Sheikhpura) created <strong>Apna College Bihar</strong> and built <strong>BEU Vision</strong> to solve the widespread problem of scattered academic resources for Bihar engineering students. Understanding the daily struggles of university life, Prince envisioned and built a single, trusted digital platform that consolidates essential study materials such as comprehensive notes, Previous Year Question Papers (PYQs), official BEU syllabus updates, counselling guidance, and powerful academic tools like the CGPA Calculator and UGEAC College Predictor.
              </p>
            </div>
 
@@ -57,10 +57,10 @@ export default function Author() {
            <div className="space-y-4">
              <div className="flex items-center gap-3 text-emerald-600 border-b border-slate-100 pb-4">
                <Target size={28} />
-               <h2 className="text-2xl font-[1000] uppercase tracking-tight text-slate-900">Mission Statement</h2>
+               <h2 className="text-2xl font-[1000] uppercase tracking-tight text-slate-900">Mission Statement — 100% Free Forever</h2>
              </div>
              <p className="text-sm font-medium text-slate-600 leading-relaxed">
-               Our primary mission is to empower engineering students across Bihar by ensuring they have uninterrupted access to accurate, reliable, and completely free educational resources. We believe that technology should bridge the gap between academic ambition and university success.
+               Everything here is <strong>100% free and will always remain free</strong>. The core reason behind building Apna College Bihar and BEU Vision is simple: <strong>no student should ever face any problem in their education</strong> due to lack of resources, paywalls, or scattered information. Our mission is to make quality notes, PYQs, syllabus tracking, and counselling tools completely free and accessible to every BEU student across Bihar.
              </p>
            </div>
 

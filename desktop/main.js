@@ -187,31 +187,32 @@ function applyDesktopAuth(userData) {
   if (!mainWindow || mainWindow.isDestroyed()) return;
   const { uid, email, name, role, idToken, accessToken, customToken, authData } = userData;
   console.log('[Auth] Applying auth for:', email || name, uid);
-  
+
+  // Verify the mainWindow is currently on a trusted portal origin before dispatching auth tokens
+  try {
+    const currentUrl = new URL(mainWindow.webContents.getURL());
+    const allowedHost = new URL(PORTAL_URL).hostname;
+    if (currentUrl.hostname !== allowedHost && currentUrl.hostname !== 'localhost') {
+      console.warn('[Auth] Blocked desktop auth dispatch to untrusted origin:', currentUrl.origin);
+      return;
+    }
+  } catch (_) {}
+
   const userPayload = {
     uid,
     email: email || '',
     name: name || 'Scholar',
-    role: (email === 'prince8694@gmail.com' || email === 'prince86944@gmail.com') ? 'SUPER_ADMIN' : (role || 'STUDENT')
+    role: role || 'STUDENT'
   };
 
-  const script = `
-    (async function() {
-      try {
-        const u = ${JSON.stringify(userPayload)};
-        localStorage.setItem('acb_user_cache', JSON.stringify(u));
-        ${authData ? `try { localStorage.setItem('firebase:authUser:AIzaSyBIvnhJLz_ucsxuFEnZeYSAq2L6vJ4DcKo:[DEFAULT]', decodeURIComponent("${encodeURIComponent(authData)}")); } catch (_) {}` : ''}
-        if (typeof window.__acb_login_with_credential === 'function') {
-          await window.__acb_login_with_credential(${JSON.stringify(idToken || '')}, ${JSON.stringify(accessToken || '')}, u, ${JSON.stringify(customToken || '')});
-        }
-        window.location.href = '/';
-      } catch (err) {
-        console.error('[Desktop] Failed to set auth cache:', err);
-        window.location.href = '/';
-      }
-    })();
-  `;
-  mainWindow.webContents.executeJavaScript(script);
+  // Deliver auth payload via structured IPC channel instead of raw executeJavaScript string interpolation
+  mainWindow.webContents.send('desktop-auth-payload', {
+    userPayload,
+    idToken: idToken || '',
+    accessToken: accessToken || '',
+    customToken: customToken || '',
+    authData: authData || ''
+  });
   mainWindow.show();
   mainWindow.focus();
 
@@ -557,6 +558,8 @@ function isExternalUrl(urlStr) {
     const host = urlObj.hostname.toLowerCase();
     if (
       host === 'apnacollegebihar.online' || host.endsWith('.apnacollegebihar.online') ||
+      host === 'beu-bih.ac.in' || host.endsWith('.beu-bih.ac.in') ||
+      host === 'challenges.cloudflare.com' || host.endsWith('.cloudflare.com') ||
       host === 'localhost' || host === '127.0.0.1' ||
       host.includes('google.') || host.includes('googleapis.') ||
       host.includes('gstatic.') || host.includes('googleusercontent.') ||

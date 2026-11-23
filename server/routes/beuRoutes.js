@@ -383,5 +383,37 @@ router.post('/ask-ai', publicLimiter, asyncHandler(async (req, res) => {
   });
 }));
 
+// In-memory cache for BEU official result exam list
+let cachedResultExams = { data: null, fetchedAt: 0 };
+
+/**
+ * GET /api/beu/result-exams
+ * Fetches live published exam/semester list from BEU Patna API
+ */
+router.get('/result-exams', publicLimiter, asyncHandler(async (req, res) => {
+  const axios = require('axios');
+  const now = Date.now();
+  if (cachedResultExams.data && now - cachedResultExams.fetchedAt < 10 * 60 * 1000) {
+    return res.json({ success: true, courses: cachedResultExams.data, cached: true });
+  }
+
+  try {
+    const response = await axios.get('https://beu-bih.ac.in/backend/v1/result/sem-get', {
+      timeout: 12000,
+      headers: { 'User-Agent': 'Mozilla/5.0' }
+    });
+    const courses = Array.isArray(response.data) ? response.data : [];
+    if (courses.length > 0) {
+      cachedResultExams = { data: courses, fetchedAt: now };
+    }
+    return res.json({ success: true, courses });
+  } catch (err) {
+    if (cachedResultExams.data) {
+      return res.json({ success: true, courses: cachedResultExams.data, stale: true });
+    }
+    return res.status(502).json({ success: false, message: 'Could not reach BEU result server. Please try again.' });
+  }
+}));
+
 module.exports = router;
 

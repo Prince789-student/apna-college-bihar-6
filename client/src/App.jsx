@@ -612,11 +612,16 @@ function App() {
     window.location.hostname.includes('web.app')
   );
 
-  const isNative = !isWebDomain && Boolean(
-    Capacitor.isNativePlatform() 
-    || !!window.Capacitor?.isNative 
-    || window.location.protocol === 'file:' 
-    || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' && !window.location.port))
+  const isCapacitorNative = Boolean(
+    Capacitor.isNativePlatform() || !!window.Capacitor?.isNative
+  );
+
+  const isNative = Boolean(
+    isCapacitorNative
+    || (!isWebDomain && (
+      window.location.protocol === 'file:'
+      || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' && !window.location.port))
+    ))
   );
 
   const isMobileScreen = Boolean(
@@ -652,7 +657,9 @@ function App() {
 
   // Parse standalone param and save to session storage to persist it across navigations
   const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get('standalone') === 'true') {
+  if (urlParams.get('desktop') === 'true' || urlParams.get('mode')?.includes('desktop')) {
+    sessionStorage.removeItem('standalone');
+  } else if (urlParams.get('standalone') === 'true' || window.location.pathname === '/hub') {
     sessionStorage.setItem('standalone', 'true');
   }
   const isStandalone = isNative || (sessionStorage.getItem('standalone') === 'true');
@@ -684,7 +691,7 @@ function App() {
       
       const listener = CapacitorApp.addListener('backButton', handleBackButton);
       return () => {
-        listener.then(l => l.remove());
+        listener.then(l => l.remove()).catch(() => {});
       };
     }
   }, [isNative, showExitPrompt]);
@@ -793,9 +800,9 @@ function App() {
             <Route path="/p/:shortId" element={<ShortLinkResolver />} />
 
             {/* Landing page for all visitors (web and mobile app) */}
-            {isNative && <Route path="/" element={<AppHub />} />}
+            {isStandalone && <Route path="/" element={<AppHub />} />}
             <Route element={<DashboardLayout />}>
-              {!isNative && <Route path="/" element={<Home />} />}
+              {!isStandalone && <Route path="/" element={<Home />} />}
               <Route path="/overview" element={<HomeOverview />} />
               <Route path="/download" element={<DownloadPage />} />
               <Route path="/apps" element={<Navigate to="/download" replace />} />
@@ -832,8 +839,10 @@ function App() {
               <Route path="/mentorship" element={<FreeMentorship />} />
               <Route path="/free-mentorship" element={<FreeMentorship />} />
               <Route path="/syllabus" element={<BeuSyllabus />} />
+              <Route path="/syllabus/:branchId/:semesterId" element={<BeuSyllabus />} />
               <Route path="/syllabus/:branchId" element={<BeuSyllabus />} />
               <Route path="/beu-syllabus" element={<BeuSyllabus />} />
+              <Route path="/beu-syllabus/:branchId/:semesterId" element={<BeuSyllabus />} />
               <Route path="/beu-syllabus/:branchId" element={<BeuSyllabus />} />
               <Route path="/colleges" element={<CollegeDirectory />} />
               <Route path="/college/:collegeSlug" element={<CollegeProfile />} />

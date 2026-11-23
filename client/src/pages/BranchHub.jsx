@@ -5,17 +5,14 @@ import {
   HelpCircle, ChevronRight, BarChart3, Users, Building2,
   ArrowRight, Sparkles, Layers, ShieldCheck
 } from 'lucide-react';
+import { BRANCHES } from '../constants/branches';
 import SEO from '../components/SEO';
 
-const availableBranches = [
-  { id: 'cse', label: 'Computer Science (CSE)', badge: 'Most Popular' },
-  { id: 'civil', label: 'Civil Engineering', badge: 'High Govt Scope' },
-  { id: 'me', label: 'Mechanical Engineering', badge: 'Core Core' },
-  { id: 'ee', label: 'Electrical Engineering', badge: 'PSU & Power' },
-  { id: 'ece', label: 'Electronics & Comm (ECE)', badge: 'VLSI & Telecom' },
-  { id: 'cse_ai_ml', label: 'CSE (AI & ML)', badge: 'New Tech' },
-  { id: 'cse_ds', label: 'CSE (Data Science)', badge: 'High Demand' },
-];
+const availableBranches = BRANCHES.map(b => ({
+  id: b.id.toLowerCase(),
+  label: `${b.emoji} ${b.label} (${b.short})`,
+  badge: b.type === 'core' ? 'Core Branch' : 'Specialization'
+}));
 
 const branchMetadata = {
   cse: {

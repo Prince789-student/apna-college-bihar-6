@@ -66,5 +66,39 @@ contextBridge.exposeInMainWorld('desktopBridge', {
     const handler = (_, data) => callback(data);
     ipcRenderer.on('focus-stopped', handler);
     return () => ipcRenderer.removeListener('focus-stopped', handler);
+  },
+
+  onDesktopAuthPayload: (callback) => {
+    const handler = (_, payload) => callback(payload);
+    ipcRenderer.on('desktop-auth-payload', handler);
+    return () => ipcRenderer.removeListener('desktop-auth-payload', handler);
+  }
+});
+
+// Listen for secure IPC auth payload from main process
+ipcRenderer.on('desktop-auth-payload', async (_, payload) => {
+  try {
+    if (!payload || typeof payload !== 'object') return;
+    const { userPayload, idToken, accessToken, customToken, authData } = payload;
+    if (userPayload) {
+      localStorage.setItem('acb_user_cache', JSON.stringify(userPayload));
+    }
+    if (authData) {
+      try {
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith('firebase:authUser:')) {
+            localStorage.setItem(k, authData);
+          }
+        }
+      } catch (_) {}
+    }
+    if (typeof window.__acb_login_with_credential === 'function') {
+      await window.__acb_login_with_credential(idToken || '', accessToken || '', userPayload, customToken || '');
+    }
+    window.location.href = '/';
+  } catch (err) {
+    console.error('[Desktop] Failed to apply IPC auth payload:', err);
+    window.location.href = '/';
   }
 });

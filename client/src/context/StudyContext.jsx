@@ -137,6 +137,9 @@ export function StudyProvider({ children }) {
 
           if (endTime > now) {
             const remainingSecs = Math.ceil((endTime - now) / 1000);
+            localStorage.setItem('timerActive', 'true');
+            localStorage.setItem('study_timer_mode', 'COUNTDOWN');
+            localStorage.setItem('study_timer_target_end', String(endTime));
             setTimerTime(remainingSecs);
             _setTimerActive(true);
             setTimerMode('COUNTDOWN');
