@@ -268,7 +268,7 @@ export default function BeuResult() {
                 key={t.id}
                 type="button"
                 onClick={() => setExamType(t.id)}
-                className={`py-2.5 px-2 rounded-xl text-xs font-extrabold border ${
+                className={`py-2.5 px-1 sm:px-2 rounded-xl text-[11px] sm:text-xs font-extrabold border truncate ${
                   examType === t.id
                     ? 'bg-slate-900 text-white border-slate-900 shadow-xs'
                     : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'

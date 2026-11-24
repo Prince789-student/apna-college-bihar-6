@@ -399,7 +399,7 @@ export default function Notes() {
   const branchColor = (branch && BRANCH_COLORS[branch.color]) || BRANCH_COLORS.indigo;
 
   return (
-    <div className="max-w-5xl mx-auto px-3 md:px-4 pb-24 space-y-4 md:space-y-6 relative">
+    <div className="max-w-5xl mx-auto px-3 md:px-4 pb-24 space-y-4 md:space-y-6 relative overflow-x-clip">
       {/* Subtle Ambient Accent Orbs (Mobile light mode only — desktop uses BrandFilmBackground) */}
       <div className="md:hidden absolute -top-10 left-1/4 w-72 h-72 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%)' }} />
       <div className="md:hidden absolute top-40 right-10 w-80 h-80 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)' }} />

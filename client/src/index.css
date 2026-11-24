@@ -739,3 +739,6 @@ html, body, #root { overflow-x: clip !important; max-width: 100vw !important; }
 
 .app-light-mode .app-bg-canvas { display: none !important; }
 
+
+#main-scroll-container { overflow-x: clip !important; max-width: 100% !important; }
+

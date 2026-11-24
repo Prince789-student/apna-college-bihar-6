@@ -78,7 +78,7 @@ export default function BranchShortcutGrid({ onSelect }) {
               <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center ${cfg.bg}`}>
                 <IconComp size={30} strokeWidth={2.2} />
               </div>
-              <span className="text-[11px] sm:text-xs font-black text-slate-900 tracking-tight text-center leading-tight line-clamp-1 w-full px-1">
+              <span className="text-[9.5px] sm:text-xs font-black text-slate-900 tracking-tight text-center leading-tight break-words w-full px-0.5">
                 {b.short}
               </span>
             </button>

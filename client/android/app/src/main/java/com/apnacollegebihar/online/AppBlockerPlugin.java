@@ -292,9 +292,16 @@ public class AppBlockerPlugin extends Plugin {
     @PluginMethod
     public void requestUsageStatsPermission(PluginCall call) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getContext().startActivity(intent);
+            try {
+                Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                intent.setData(android.net.Uri.parse("package:" + getContext().getPackageName()));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(intent);
+            } catch (Exception e) {
+                Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(intent);
+            }
         }
         call.resolve();
     }
@@ -356,7 +363,7 @@ public class AppBlockerPlugin extends Plugin {
                         "We need Device Administrator access to ensure strict focus mode and prevent app uninstallation during your study sessions.");
 
                 getActivity().runOnUiThread(() -> {
-                    getActivity().startActivity(intent);
+                    getActivity().startActivityForResult(intent, 1002);
                 });
             }
             call.resolve();
