@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Capacitor } from '@capacitor/core';
+import DonateModal from './DonateModal';
 import { Link, useLocation } from 'react-router-dom';
 import { Send, Youtube, Heart, MessageCircle } from 'lucide-react';
 
 export default function Footer() {
+  const [showDonate, setShowDonate] = useState(false);
   const location = useLocation();
   const isNative = Boolean(
     Capacitor.isNativePlatform() ||
@@ -57,7 +59,9 @@ export default function Footer() {
           <Link to="/dmca" className="hover:text-blue-600 transition-colors">DMCA</Link>
           <Link to="/disclaimer" className="hover:text-blue-600 transition-colors">Disclaimer</Link>
           <Link to="/delete-account" className="hover:text-blue-600 transition-colors">Delete Account</Link>
+          <button type="button" onClick={() => setShowDonate(true)} className="text-rose-600 hover:text-rose-700 font-bold transition-colors cursor-pointer">Donate Us ❤️</button>
         </div>
+        <DonateModal isOpen={showDonate} mode="SUPPORT" onClose={() => setShowDonate(false)} />
         <div className="text-center flex flex-col items-center justify-center gap-2 text-xs">
           <p className="text-slate-400">&copy; {new Date().getFullYear()} Apna College Bihar. All rights reserved.</p>
           <p className="text-slate-500 font-medium">

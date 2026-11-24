@@ -65,11 +65,11 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
             </div>
             
             <p className="text-[11px] sm:text-xs font-black text-slate-800 md:text-white leading-snug mb-1">
-              "Market mein 1 subject ka notes/xerox ₹60+ ka milta hai"
+              "Hamein apne liye nahi chahiye — aapke liye better resources aur server cost ke liye chahiye!"
             </p>
             
             <p className="text-[10px] sm:text-[11px] text-slate-600 md:text-slate-200 font-medium leading-relaxed">
-              Yahan Bihar ke sabhi <strong>38 Govt Engineering Colleges</strong> ke liye all semesters ke premium notes & PYQs <strong>100% FREE</strong> hain. 24x7 fast cloud server chalaye rakhne ke liye aapka chhota sa voluntary support <strong className="text-rose-600 md:text-rose-400 font-bold">(₹50, ₹100 ya apni marzi se)</strong> is community platform ko hamesha sabhi ke liye free aur live rakhega! ❤️
+              Yahan Bihar ke sabhi <strong>38 Govt Engineering Colleges</strong> ke liye notes, PYQs aur tools <strong>100% FREE</strong> hain. Aapka chhota sa support <strong className="text-rose-600 md:text-rose-400 font-bold">(₹50, ₹100 ya apni marzi se)</strong> sirf better study resources, storage aur 24x7 server cost ke liye lagta hai taaki yeh platform hamesha free aur fast chale! ❤️
             </p>
 
             <div className="flex items-center justify-center gap-2 mt-2 pt-1.5 border-t border-rose-200/60 md:border-white/10">

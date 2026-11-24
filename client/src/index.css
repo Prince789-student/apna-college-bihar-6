@@ -723,3 +723,19 @@
 }
 
 
+
+/* Prevent shaking/jank animations and horizontal overflow in App Mode */
+html, body { overflow-x: clip; }
+.app-light-mode .animate-in { animation: none !important; transform: none !important; }
+
+
+.app-light-mode .animate-pulse, .app-light-mode .animate-bounce, .app-light-mode .animate-ping { animation: none !important; }
+.app-light-mode [class*='blur-'] { display: none !important; }
+
+
+html, body, #root { overflow-x: clip !important; max-width: 100vw !important; }
+.app-light-mode *, .app-light-mode *::before, .app-light-mode *::after { animation: none !important; }
+
+
+.app-light-mode .app-bg-canvas { display: none !important; }
+

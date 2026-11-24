@@ -222,12 +222,18 @@ export default function InteractiveCanvasBackground() {
     };
   }, [isHomePage, isMobileScreen]);
 
-  if (isHomePage || isMobileScreen) return null;
+  const isStandaloneOrHub = typeof window !== 'undefined' && (
+    window.location.search.includes('standalone=true') ||
+    window.location.pathname.startsWith('/hub') ||
+    document.body.classList.contains('app-light-mode')
+  );
+
+  if (isHomePage || isMobileScreen || isStandaloneOrHub) return null;
 
   return (
     <canvas
       ref={canvasRef}
-      className="fixed inset-0 w-full h-full pointer-events-none z-[12]"
+      className="app-bg-canvas fixed inset-0 w-full h-full pointer-events-none z-[12]"
       style={{ opacity: 0.92, willChange: 'transform', transform: 'translateZ(0)' }}
       aria-hidden="true"
     />

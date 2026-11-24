@@ -9,6 +9,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
 import Footer from '../components/Footer';
+import DonateModal from '../components/DonateModal';
 import { collection, query, limit, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -16,6 +17,7 @@ export default function AppHub() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showDonate, setShowDonate] = useState(false);
   const [beuNotices, setBeuNotices] = useState([]);
 
   React.useEffect(() => {
@@ -243,6 +245,16 @@ export default function AppHub() {
                       </Link>
                     )}
                     <button
+                      type="button"
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        setShowDonate(true);
+                      }}
+                      className="w-full py-2.5 bg-rose-500/10 hover:bg-rose-600 border border-rose-500/20 text-rose-600 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest mb-1.5 shadow-sm cursor-pointer"
+                    >
+                      ❤️ Donate Us
+                    </button>
+                    <button
                       onClick={handleLogout}
                       className="w-full py-2.5 bg-red-500/10 hover:bg-red-500 text-red-600 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest"
                     >
@@ -250,6 +262,7 @@ export default function AppHub() {
                     </button>
                   </div>
                 )}
+                <DonateModal isOpen={showDonate} mode="SUPPORT" onClose={() => setShowDonate(false)} />
               </div>
             )}
           </div>

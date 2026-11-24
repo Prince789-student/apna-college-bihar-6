@@ -13,9 +13,11 @@ import {
 } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import DonateModal from '../components/DonateModal';
 
 export default function PersonalManager() {
   const { user } = useAuth();
+  const [showDonate, setShowDonate] = useState(false);
   const [folders, setFolders] = useState([]);
   const [notes, setNotes] = useState([]);
   const [currentFolder, setCurrentFolder] = useState(null); // null = root
@@ -292,6 +294,23 @@ export default function PersonalManager() {
            </form>
         </div>
       )}
+
+      {/* Donate Us Support Card */}
+      <div className="mt-8 bg-rose-50 border border-rose-200 rounded-2xl p-4 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-xs font-black text-slate-900">Support Apna College Bihar</p>
+          <p className="text-[11px] text-slate-600">100% Free Mission for All BEU Students</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowDonate(true)}
+          className="px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-black uppercase tracking-wider shrink-0 cursor-pointer"
+        >
+          Donate Us ❤️
+        </button>
+      </div>
+
+      <DonateModal isOpen={showDonate} mode="SUPPORT" onClose={() => setShowDonate(false)} />
 
     </div>
   );
