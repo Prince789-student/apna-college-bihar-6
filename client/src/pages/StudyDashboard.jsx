@@ -47,6 +47,7 @@ const TABS = [
 ];
 
 const AppBlocker = registerPlugin('AppBlocker');
+const ENABLE_APP_BLOCKER = false; // Toggle to true when re-enabling App Blocker
 
 export default function StudyDashboard() {
   const { user, ROLES } = useAuth();
@@ -935,11 +936,11 @@ export default function StudyDashboard() {
                       navigate('/login', { state: { from: '/study' } });
                       return;
                     }
-                    if (isNative && lockMode === 'NORMAL' && !isUsageStatsEnabled) {
+                    if (ENABLE_APP_BLOCKER && isNative && lockMode === 'NORMAL' && !isUsageStatsEnabled) {
                       alert("Please enable Usage Access permission first to use Normal Mode App Blocker.");
                       return;
                     }
-                    if (isNative && lockMode === 'STRICT' && (!isUsageStatsEnabled || !isOverlayEnabled || !isAdminEnabled)) {
+                    if (ENABLE_APP_BLOCKER && isNative && lockMode === 'STRICT' && (!isUsageStatsEnabled || !isOverlayEnabled || !isAdminEnabled)) {
                       alert("Strict Mode requires all permissions: Usage Access, Overlay, and Device Admin. Please enable them below.");
                       return;
                     }
@@ -973,6 +974,7 @@ export default function StudyDashboard() {
               )}
 
               {/* Native App Blocker / Iron Focus Panel */}
+              {ENABLE_APP_BLOCKER && (
               <div className="w-full bg-slate-50 border border-slate-200/80 rounded-[2rem] p-6 space-y-4 animate-in fade-in duration-500 font-['Inter']">
                 <div className="flex items-center gap-3">
                   <div className="p-3 bg-blue-600/10 text-blue-600 rounded-2xl">
@@ -1063,10 +1065,11 @@ export default function StudyDashboard() {
                   )}
                 </div>
               </div>
+              )}
             </div>
 
             {/* Allowed Apps Launch Pad Card */}
-            {isNative && installedApps.filter(app => (allowedPackages || '').split(',').filter(Boolean).includes(app.packageName)).length > 0 && (
+            {ENABLE_APP_BLOCKER && isNative && installedApps.filter(app => (allowedPackages || '').split(',').filter(Boolean).includes(app.packageName)).length > 0 && (
               <div className="bg-white rounded-[3rem] border border-slate-200/60 shadow-sm p-6 space-y-4 animate-in slide-in-from-bottom-4 duration-500">
                 <div className="flex items-center gap-3">
                   <div className="p-3 bg-blue-600/10 text-blue-600 rounded-2xl">
