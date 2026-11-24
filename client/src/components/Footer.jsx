@@ -56,6 +56,7 @@ export default function Footer() {
           <Link to="/terms" className="hover:text-blue-600 transition-colors">Terms</Link>
           <Link to="/dmca" className="hover:text-blue-600 transition-colors">DMCA</Link>
           <Link to="/disclaimer" className="hover:text-blue-600 transition-colors">Disclaimer</Link>
+          <Link to="/delete-account" className="hover:text-blue-600 transition-colors">Delete Account</Link>
         </div>
         <div className="text-center flex flex-col items-center justify-center gap-2 text-xs">
           <p className="text-slate-400">&copy; {new Date().getFullYear()} Apna College Bihar. All rights reserved.</p>
