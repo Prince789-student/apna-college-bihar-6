@@ -100,12 +100,12 @@ export default function BranchShortcutGrid({ onSelect }) {
             {savedBranch ? savedBranch.label : 'Select once for Syllabus, Notes & PYQ'}
           </span>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <select
             value={savedBranch?.id || ''}
             onChange={handleMyBranchDropdown}
             aria-label="Select My Branch"
-            className="px-3 py-2 rounded-xl bg-white border border-indigo-200 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+            className="flex-1 min-w-0 px-3 py-2 rounded-xl bg-white border border-indigo-200 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
           >
             <option value="">{savedBranch ? 'Change My Branch...' : 'Choose My Branch...'}</option>
             {BRANCHES.map((b) => (
@@ -118,7 +118,7 @@ export default function BranchShortcutGrid({ onSelect }) {
             <button
               type="button"
               onClick={() => handlePick(savedBranch)}
-              className="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black uppercase tracking-wider cursor-pointer transition-all active:scale-95"
+              className="shrink-0 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-black uppercase tracking-wider cursor-pointer transition-all active:scale-95"
             >
               Open
             </button>

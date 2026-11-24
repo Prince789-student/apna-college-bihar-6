@@ -396,23 +396,23 @@ export default function Attendance() {
       </div>
 
       {/* Tabs Menu */}
-      <div className="flex bg-slate-100 p-1.5 rounded-2xl border border-slate-200 w-full overflow-x-auto no-scrollbar">
+      <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1.5 rounded-2xl border border-slate-200 w-full">
         {[
-          { id: 'subjects', label: 'Subject Tracker', icon: <Award size={16} /> },
-          { id: 'daily', label: 'Daily Punch-In', icon: <Fingerprint size={16} /> },
-          { id: 'holidays', label: 'Holidays Calendar 2026', icon: <Calendar size={16} /> }
+          { id: 'subjects', label: 'Subject Tracker', icon: <Award size={15} /> },
+          { id: 'daily', label: 'Daily Punch-In', icon: <Fingerprint size={15} /> },
+          { id: 'holidays', label: 'Holidays 2026', icon: <Calendar size={15} /> }
         ].map(t => (
           <button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
-            className={`flex-1 py-3 px-4 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 whitespace-nowrap ${
+            className={`py-2.5 px-1.5 sm:px-4 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-wider transition-all flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 text-center leading-tight ${
               activeTab === t.id
                 ? 'bg-white text-slate-900 shadow-md font-[1000]'
                 : 'text-slate-500 hover:text-slate-700'
             }`}
           >
             {t.icon}
-            {t.label}
+            <span>{t.label}</span>
           </button>
         ))}
       </div>
