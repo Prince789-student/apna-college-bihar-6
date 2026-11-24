@@ -94,7 +94,11 @@ public class UsageStatsBlockerService extends Service {
                         .setMediaSession(mediaSession.getSessionToken()))
                 .build();
 
-        startForeground(1001, notification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            startForeground(1001, notification, android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE);
+        } else {
+            startForeground(1001, notification);
+        }
 
         startPolling();
 
@@ -137,7 +141,7 @@ public class UsageStatsBlockerService extends Service {
             public void run() {
                 checkForegroundApp();
             }
-        }, 0, 50); // Check 20 times per second to prevent spam tapping
+        }, 0, 250); // Check 4 times per second to avoid Android 14+ throttling
     }
 
     private void loadSettings() {
@@ -250,11 +254,17 @@ public class UsageStatsBlockerService extends Service {
             // Android 12+ restricts this, so ignore the security exception
         }
 
-        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(myPackageName);
-        if (launchIntent != null) {
-            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(launchIntent);
-        }
+        mainHandler.post(() -> {
+            try {
+                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(myPackageName);
+                if (launchIntent != null) {
+                    launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    startActivity(launchIntent);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to bring app to foreground", e);
+            }
+        });
     }
 
     private String getForegroundApp() {
