@@ -204,7 +204,11 @@ export default function BeuResult() {
             BEU Exam Result
           </h1>
           <p className="text-xs text-slate-500 font-medium mt-0.5">
-            In-App Semester Result &amp; Official Marksheet Downloader
+            In-App Semester Result Helper • Source:{' '}
+            <a href="https://beu-bih.ac.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+              beu-bih.ac.in
+            </a>{' '}
+            (Not an official BEU app)
           </p>
         </div>
         <button

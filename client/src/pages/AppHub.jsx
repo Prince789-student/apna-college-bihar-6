@@ -433,6 +433,24 @@ export default function AppHub() {
             </button>
           </div>
         </div>
+        {/* Official Sources & Non-Government Disclaimer */}
+        <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 text-[11px] text-slate-600 leading-relaxed space-y-1">
+          <p className="font-extrabold text-slate-800 uppercase tracking-wider text-[10px]">
+            Sources &amp; Disclaimer
+          </p>
+          <p>
+            Official public sources:{' '}
+            <a href="https://beu-bih.ac.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">beu-bih.ac.in</a>,{' '}
+            <a href="https://bceceboard.bihar.gov.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">bceceboard.bihar.gov.in</a>,{' '}
+            <a href="https://www.aicte-india.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">aicte-india.org</a>,{' '}
+            <a href="https://swayam.gov.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">swayam.gov.in</a>,{' '}
+            <a href="https://scholarships.gov.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">scholarships.gov.in</a>,{' '}
+            <a href="https://pmsonline.bih.nic.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">pmsonline.bih.nic.in</a>.
+          </p>
+          <p className="text-[10px] text-slate-500">
+            Apna College Bihar is an independent student app and is NOT affiliated with or an official app of BEU Patna, BCECEB, or any government entity.
+          </p>
+        </div>
       </div>
 
       <Footer />
