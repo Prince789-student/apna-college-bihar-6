@@ -53,7 +53,7 @@ export default function Blog() {
                         </div>
                         <span className="text-xs font-bold text-slate-900 md:text-white">{post.author}</span>
                       </div>
-                      <Link to={`/blog/${post.slug}`} className="w-10 h-10 rounded-full bg-slate-50 md:bg-white/10 border border-slate-200 md:border-white/20 flex items-center justify-center text-slate-400 md:text-white group-hover:bg-blue-600 md:group-hover:bg-cyan-500 group-hover:text-white group-hover:border-blue-600 transition-all">
+                      <Link to={`/blog/${post.slug}`} className="w-10 h-10 rounded-xl bg-slate-50 md:bg-white/10 border border-slate-200 md:border-white/20 flex items-center justify-center text-slate-400 md:text-white group-hover:bg-blue-600 md:group-hover:bg-cyan-500 group-hover:text-white group-hover:border-blue-600 transition-all">
                         <ArrowRight size={16} />
                       </Link>
                     </div>

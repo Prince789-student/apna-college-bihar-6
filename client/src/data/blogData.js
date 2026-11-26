@@ -9,11 +9,11 @@ export const blogPosts = [
     category: 'Bihar Engineering',
     date: 'March 28, 2024',
     author: 'Admin',
-    image: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&q=80&w=800',
+    image: '/logo-acb.png',
     content: `
 # Best Engineering Colleges in Bihar (2024-25): IIT, NIT, and GCE Compared
 
-Choosing the right college can be the most stressful decision for any student. If you are from Bihar and targeting engineering, you have multiple options—from the elite **IIT Patna** to the rising **GCEs (Government Engineering Colleges)** across all 38 districts.
+Choosing the right college can be the most stressful decision for any student. If you are from Bihar and targeting engineering, you have multiple options-from the elite **IIT Patna** to the rising **GCEs (Government Engineering Colleges)** across all 38 districts.
 
 In this guide, hum baat karenge kaunsa college aapke liye best hai based on placements, fees, and campus life.
 
@@ -58,7 +58,7 @@ Bihar government has established a GCE in almost every district. While some are 
     category: 'Platform Comparison',
     date: 'March 25, 2024',
     author: 'Admin',
-    image: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=800',
+    image: '/logo-acb.png',
     content: `
 # Apna College vs Physics Wallah vs Unacademy: Kaunsa Course Best Hai?
 
@@ -112,7 +112,7 @@ Unacademy acts as a marketplace with top educators from all over India.
     category: 'Coding / DSA',
     date: 'March 20, 2024',
     author: 'Admin',
-    image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800',
+    image: '/logo-acb.png',
     content: `
 # Best Free Coding Resources for Beginners: Bina Paise Diye Code Seekho!
 

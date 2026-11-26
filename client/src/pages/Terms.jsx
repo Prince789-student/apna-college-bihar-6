@@ -78,7 +78,7 @@ export default function Terms() {
           </div>
 
           <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-10 shadow-sm space-y-4">
-            <div className="flex items-center gap-3 text-purple-600">
+            <div className="flex items-center gap-3 text-indigo-600">
               <FileText size={24} />
               <h2 className="text-lg font-[1000] uppercase tracking-tight text-slate-900">4. License</h2>
             </div>

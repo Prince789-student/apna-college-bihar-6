@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
-import { AlertTriangle, Shield, Phone, ShieldCheck, MessageCircle } from 'lucide-react';
+import { AlertTriangle, Shield, Phone, ShieldCheck, MessageCircle, Zap } from 'lucide-react';
 import { useAuth } from './context/AuthContext';
 import { Capacitor } from '@capacitor/core';
 import { App as CapacitorApp } from '@capacitor/app';
@@ -15,11 +15,9 @@ import DashboardLayout from './layouts/DashboardLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import SmartRedirect from './components/SmartRedirect';
-import CookieBanner from './components/CookieBanner';
 import WhatsAppPopup from './components/WhatsAppPopup';
 import AppUpdateChecker from './components/AppUpdateChecker';
 import ScrollToTop from './components/ScrollToTop';
-import InteractiveCanvasBackground from './components/InteractiveCanvasBackground';
 
 import Home from './pages/Home';
 
@@ -115,8 +113,8 @@ class AppErrorBoundary extends React.Component {
     if (this.state.hasError) {
       return (
         <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center bg-white text-slate-900">
-          <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center mb-4 text-2xl shadow-sm">
-            ⚡
+          <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center mb-4 shadow-sm">
+            <Zap size={28} />
           </div>
           <h2 className="text-xl font-black text-slate-900 mb-2">Interface Updated</h2>
           <p className="text-xs text-slate-600 max-w-md mb-6 leading-relaxed">
@@ -258,7 +256,7 @@ function GlobalProfilePrompt() {
         dob: dob.trim(),
         phone: cleanPhone
       });
-      toast.success("Details save ho gayi! ✅");
+      toast.success("Details save ho gayi!");
       setStep('call');
     } catch (err) {
       toast.error("Failed to save details. Dobara try karein.");
@@ -280,9 +278,9 @@ function GlobalProfilePrompt() {
       setDismissed(true);
 
       if (wantsCallValue) {
-        toast.success("Call Request Registered! Hamari team aapse jald connect karegi 📞✨");
+        toast.success("Call Request Registered! Hamari team aapse jald connect karegi");
       } else {
-        toast.success("Profile setup complete! Welcome to Apna College Bihar 🎓");
+        toast.success("Profile setup complete! Welcome to Apna College Bihar");
       }
     } catch (err) {
       toast.error("Failed to save call preference. Try again.");
@@ -414,7 +412,7 @@ function GlobalProfilePrompt() {
                   disabled={isSubmitting}
                   className="w-full bg-blue-600 hover:bg-blue-500 text-white font-[1000] py-4 rounded-xl shadow-lg shadow-blue-600/30 transition-all active:scale-95 text-xs tracking-widest uppercase mt-4 disabled:opacity-50 cursor-pointer"
                 >
-                  {isSubmitting ? "Saving details..." : "Save & Continue ➔"}
+                  {isSubmitting ? "Saving details..." : "Save & Continue"}
                 </button>
               </form>
             </>
@@ -425,7 +423,7 @@ function GlobalProfilePrompt() {
              ══════════════════════════════════════════════════════ */}
           {step === 'call' && (
             <>
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-500 text-white flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/30 animate-bounce">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-500 text-white flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/30">
                 <Phone size={30} />
               </div>
 
@@ -458,7 +456,7 @@ function GlobalProfilePrompt() {
                     </div>
                   </div>
                   <span className="text-xs bg-white text-emerald-800 font-black px-2.5 py-1 rounded-lg shrink-0 group-hover/yes:translate-x-1 transition-transform">
-                    YES ➔
+                    YES
                   </span>
                 </button>
 
@@ -516,12 +514,12 @@ function GlobalCounsellingPopup() {
   return (
     <div className="fixed inset-0 z-[99998] bg-[#0a0f1d]/80 backdrop-blur-sm flex items-center justify-center p-4 font-['Inter'] animate-in fade-in duration-300">
       <div className="bg-white border border-slate-200/50 p-6 md:p-8 rounded-[2rem] shadow-2xl max-w-[650px] w-full relative overflow-hidden group">
-        <button onClick={handleClose} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-slate-100 rounded-full text-slate-500 hover:bg-slate-200 hover:text-slate-900 transition-colors z-20 font-black text-lg">
+        <button onClick={handleClose} className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-slate-100 rounded-xl text-slate-500 hover:bg-slate-200 hover:text-slate-900 transition-colors z-20 font-black text-lg">
           ×
         </button>
         <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/10 blur-[50px] rounded-full pointer-events-none"></div>
         <div className="relative z-10 flex flex-col items-center">
-          <h2 className="text-xl md:text-3xl font-[900] text-center text-slate-900 uppercase tracking-tighter mb-2">🎯 FREE UGEAC Counselling</h2>
+          <h2 className="text-xl md:text-3xl font-[900] text-center text-slate-900 uppercase tracking-tighter mb-2">FREE UGEAC Counselling</h2>
           <p className="text-slate-500 text-[11px] md:text-xs font-bold text-center mb-6 leading-relaxed">Register now for 100% Free Expert Guidance and secure the best Bihar Engineering College based on your JEE Rank!</p>
           
           <div className="w-full h-[65vh] max-h-[550px] rounded-[1.5rem] overflow-hidden border-2 border-indigo-50 bg-slate-50 shadow-inner relative">
@@ -777,10 +775,8 @@ function App() {
         <AppUpdateChecker />
         <GlobalCounsellingPopup />
         <GlobalProfilePrompt />
-        <CookieBanner />
         <WhatsAppPopup />
         <ScrollToTop />
-        <InteractiveCanvasBackground />
         <React.Suspense fallback={<LoadingScreen />}>
           <AppErrorBoundary>
           <Routes>

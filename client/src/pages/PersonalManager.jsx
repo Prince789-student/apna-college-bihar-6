@@ -306,7 +306,7 @@ export default function PersonalManager() {
           onClick={() => setShowDonate(true)}
           className="px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-black uppercase tracking-wider shrink-0 cursor-pointer"
         >
-          Donate Us ❤️
+          Donate Us
         </button>
       </div>
 

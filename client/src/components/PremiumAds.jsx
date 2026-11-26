@@ -38,16 +38,20 @@ export default function PremiumAds({ type = 'BANNER', onClick }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
     const q = query(collection(db, 'ads'), where('type', '==', type), where('active', '==', true), limit(1));
-    const unsub = onSnapshot(q, (snap) => {
-      if (!snap.empty) {
-        setAd(snap.docs[0].data());
-      } else {
-        setAd(null);
-      }
-      setLoading(false);
+    import('../utils/firestoreCache').then(({ cachedGetDocs }) => {
+      cachedGetDocs(`ads_${type}`, q, 6 * 60 * 60 * 1000)
+        .then((docs) => {
+          if (!mounted) return;
+          setAd(docs.length > 0 ? docs[0] : null);
+          setLoading(false);
+        })
+        .catch(() => {
+          if (mounted) setLoading(false);
+        });
     });
-    return unsub;
+    return () => { mounted = false; };
   }, [type]);
 
   const current = ad || FALLBACK_ADS[type];
@@ -146,8 +150,8 @@ export default function PremiumAds({ type = 'BANNER', onClick }) {
           <div className="p-3 bg-slate-800 border border-slate-300 rounded-xl group-hover:scale-110 transition-transform">
              {current.icon || <Info size={16} className="text-slate-500"/>}
           </div>
-          <div>
-            <p className="text-[12px] font-black text-slate-900 uppercase truncate max-w-[150px]">{current.title}</p>
+          <div className="min-w-0 flex-1">
+            <p className="text-[12px] font-black text-slate-900 uppercase leading-tight">{current.title}</p>
             <p className="text-[9px] font-bold text-slate-600 uppercase tracking-widest mt-0.5">Recommended Resource</p>
           </div>
        </div>

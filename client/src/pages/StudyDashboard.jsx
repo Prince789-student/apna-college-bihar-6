@@ -204,7 +204,7 @@ export default function StudyDashboard() {
       }
     } catch (e) {
       // console.log removed for production
-      alert("Permission error: " + JSON.stringify(e));
+      toast.error("Permission error: " + JSON.stringify(e));
     }
   };
 
@@ -317,11 +317,11 @@ export default function StudyDashboard() {
 
   const toggleApp = (pkg) => {
     if (timerActive && lockMode === 'STRICT') {
-      alert("Strict Mode Active! You cannot modify allowed apps during an active session.");
+      toast.error("Strict Mode Active! You cannot modify allowed apps during an active session.");
       return;
     }
     if (timerActive && timerMode === 'COUNTDOWN') {
-      alert("Focus Session is Locked! You cannot modify allowed apps during an active countdown session.");
+      toast.error("Focus Session is Locked! You cannot modify allowed apps during an active countdown session.");
       return;
     }
     const list = (allowedPackages || '').split(',').filter(Boolean);
@@ -811,7 +811,7 @@ export default function StudyDashboard() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-[10px] font-black text-blue-900 uppercase tracking-widest leading-none">Login to Track Sessions</p>
-            <p className="text-[9px] text-blue-500 font-bold mt-0.5">Timer visible hai — login karo sessions save karne ke liye</p>
+            <p className="text-[9px] text-blue-500 font-bold mt-0.5">Timer visible hai - login karo sessions save karne ke liye</p>
           </div>
           <Link to="/login" className="shrink-0 px-3 py-1.5 bg-blue-600 text-white text-[9px] font-black rounded-xl uppercase tracking-widest active:scale-95 transition-all">
             Login
@@ -931,17 +931,17 @@ export default function StudyDashboard() {
               {!timerActive ? (
                 <div className="flex gap-3 w-full">
                   <button onClick={() => {
-                    // Login gate — only for timer start
+                    // Login gate - only for timer start
                     if (!user) {
                       navigate('/login', { state: { from: '/study' } });
                       return;
                     }
                     if (ENABLE_APP_BLOCKER && isNative && lockMode === 'NORMAL' && !isUsageStatsEnabled) {
-                      alert("Please enable Usage Access permission first to use Normal Mode App Blocker.");
+                      toast.error("Please enable Usage Access permission first to use Normal Mode App Blocker.");
                       return;
                     }
                     if (ENABLE_APP_BLOCKER && isNative && lockMode === 'STRICT' && (!isUsageStatsEnabled || !isOverlayEnabled || !isAdminEnabled)) {
-                      alert("Strict Mode requires all permissions: Usage Access, Overlay, and Device Admin. Please enable them below.");
+                      toast.error("Strict Mode requires all permissions: Usage Access, Overlay, and Device Admin. Please enable them below.");
                       return;
                     }
                     setTimerActive(true);
@@ -1326,7 +1326,7 @@ export default function StudyDashboard() {
         {tab === 'todo' && (
           <div className="bg-white rounded-[2.5rem] border border-slate-200/60 shadow-sm overflow-hidden animate-in fade-in duration-300">
             <div className="flex items-center gap-3 px-6 pt-6 pb-4 border-b border-slate-100">
-              <div className="w-9 h-9 bg-purple-500 text-white rounded-xl flex items-center justify-center"><ClipboardList size={18} /></div>
+              <div className="w-9 h-9 bg-indigo-500 text-white rounded-xl flex items-center justify-center"><ClipboardList size={18} /></div>
               <h2 className="text-sm font-[1000] text-slate-900 uppercase tracking-tighter">Study Planner</h2>
               <span className="ml-auto text-[8px] font-black bg-slate-100 text-slate-500 px-3 py-1 rounded-full uppercase">
                 {tasks.filter(t => t.date === selectedPlannerDate && t.done).length} / {tasks.filter(t => t.date === selectedPlannerDate).length} Done
@@ -1854,7 +1854,7 @@ export default function StudyDashboard() {
 
           <h3 className="text-xl font-bold mt-8 mb-4">Track Your Academic Progress</h3>
           <p>
-            The Study Dashboard isn't just a timer; it is a complete productivity suite. You can set daily targets, organize tasks by subject, and monitor your study history via beautiful analytics charts. By consistently tracking your focus hours, you build a disciplined routine—which is the secret to scoring a high CGPA in Bihar Engineering University (BEU) end-semester examinations.
+            The Study Dashboard isn't just a timer; it is a complete productivity suite. You can set daily targets, organize tasks by subject, and monitor your study history via beautiful analytics charts. By consistently tracking your focus hours, you build a disciplined routine-which is the secret to scoring a high CGPA in Bihar Engineering University (BEU) end-semester examinations.
           </p>
         </div>
 

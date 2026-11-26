@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useNavigate, Link } from 'react-router-dom';
 import {
   BookOpen, GraduationCap, Timer, Users, Calculator, UserCheck,
@@ -10,6 +11,7 @@ import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
 import Footer from '../components/Footer';
 import DonateModal from '../components/DonateModal';
+import AppIconTile from '../components/AppIconTile';
 import { collection, query, limit, onSnapshot, doc, deleteDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -55,20 +57,20 @@ export default function AppHub() {
           setBeuNotices(sortNotices(data.notices).slice(0, 3));
         }
       })
-      .catch(() => {});
-
-    const qNotices = query(collection(db, 'beu_notifications'), limit(50));
-    const unsubNotices = onSnapshot(qNotices, (snap) => {
-      if (!isMounted) return;
-      if (!snap.empty) {
-        const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        setBeuNotices(sortNotices(data).slice(0, 3));
-      }
-    }, () => {});
+      .catch(() => {
+        // Fallback to cached Firestore only if backend API fails
+        import('../utils/firestoreCache').then(({ cachedGetDocs }) => {
+          const qNotices = query(collection(db, 'beu_notifications'), limit(50));
+          cachedGetDocs('beu_notices_50', qNotices, 30 * 60 * 1000)
+            .then((data) => {
+              if (isMounted && data.length > 0) setBeuNotices(sortNotices(data).slice(0, 3));
+            })
+            .catch(() => {});
+        });
+      });
 
     return () => {
       isMounted = false;
-      unsubNotices();
     };
   }, []);
 
@@ -88,9 +90,9 @@ export default function AppHub() {
     if (!window.confirm(`Are you sure you want to delete "${notice.title || notice.board}"?`)) return;
     try {
       await deleteDoc(doc(db, 'beu_notifications', notice.id));
-      alert('Notice deleted successfully!');
+      toast.success('Notice deleted successfully!');
     } catch (err) {
-      alert('Error deleting notice: ' + err.message);
+      toast.error('Error deleting notice: ' + err.message);
     }
   };
 
@@ -131,43 +133,43 @@ export default function AppHub() {
     {
       title: 'BEU Academic',
       items: [
-        { name: 'Attendance', icon: <UserCheck size={34} strokeWidth={2.3} />, path: '/attendance?standalone=true', tileBg: 'bg-emerald-500 text-white shadow-sm shadow-emerald-500/25' },
-        { name: 'BEU Result', icon: <GraduationCap size={34} strokeWidth={2.3} />, path: '/beu-result?standalone=true', tileBg: 'bg-blue-600 text-white shadow-sm shadow-blue-600/25' },
-        { name: 'Mentorship', icon: <Sparkles size={34} strokeWidth={2.3} />, path: '/mentorship?standalone=true', tileBg: 'bg-teal-600 text-white shadow-sm shadow-teal-600/25' },
-        { name: 'Timetable', icon: <Calendar size={34} strokeWidth={2.3} />, path: '/timetable?standalone=true', tileBg: 'bg-amber-500 text-white shadow-sm shadow-amber-500/25' },
-        { name: 'Notes', icon: <BookOpen size={34} strokeWidth={2.3} />, path: '/notes?standalone=true', tileBg: 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/25' },
-        { name: 'PYQ', icon: <FileText size={34} strokeWidth={2.3} />, path: '/pyq?standalone=true', tileBg: 'bg-violet-600 text-white shadow-sm shadow-violet-600/25' },
-        { name: 'SGPA / CGPA', icon: <Calculator size={34} strokeWidth={2.3} />, path: '/cgpa?standalone=true', tileBg: 'bg-cyan-600 text-white shadow-sm shadow-cyan-600/25' },
-        { name: 'Syllabus', icon: <Library size={34} strokeWidth={2.3} />, path: '/syllabus?standalone=true', tileBg: 'bg-rose-600 text-white shadow-sm shadow-rose-600/25' },
-        { name: 'Lectures', icon: <Youtube size={34} strokeWidth={2.3} />, path: '/lecture-finder?standalone=true', tileBg: 'bg-red-600 text-white shadow-sm shadow-red-600/25' },
+        { name: 'Attendance', image: '/app-icons/attendance.png', path: '/attendance?standalone=true', badge: '75%' },
+        { name: 'BEU Result', image: '/app-icons/beu-result.png', path: '/beu-result?standalone=true' },
+        { name: 'Mentorship', image: '/app-icons/mentorship.png', path: '/mentorship?standalone=true' },
+        { name: 'Timetable', image: '/app-icons/timetable.png', path: '/timetable?standalone=true' },
+        { name: 'Notes', image: '/app-icons/notes.png', path: '/notes?standalone=true', badge: 'PDF' },
+        { name: 'PYQ', image: '/app-icons/pyq.png', path: '/pyq?standalone=true', badge: '5YR' },
+        { name: 'SGPA / CGPA', image: '/app-icons/cgpa.png', path: '/cgpa?standalone=true', badge: '10PT' },
+        { name: 'Syllabus', image: '/app-icons/syllabus.png', path: '/syllabus?standalone=true' },
+        { name: 'Lectures', image: '/app-icons/lectures.png', path: '/lecture-finder?standalone=true' },
       ]
     },
     {
       title: 'Study Tools',
       items: [
-        { name: 'Study Timer', icon: <Timer size={34} strokeWidth={2.3} />, path: '/study?standalone=true', tileBg: 'bg-rose-600 text-white shadow-sm shadow-rose-600/25' },
-        { name: 'Study Network', icon: <Users size={34} strokeWidth={2.3} />, path: '/groups?standalone=true', tileBg: 'bg-orange-500 text-white shadow-sm shadow-orange-500/25' },
-        { name: 'Calculator', icon: <Calculator size={34} strokeWidth={2.3} />, path: '/calculator?standalone=true', tileBg: 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/25' },
-        { name: 'Resources', icon: <Link2 size={34} strokeWidth={2.3} />, path: '/study-resources?standalone=true', tileBg: 'bg-sky-600 text-white shadow-sm shadow-sky-600/25' },
+        { name: 'Study Timer', image: '/app-icons/study-timer.png', path: '/study?standalone=true' },
+        { name: 'Study Network', image: '/app-icons/study-groups.png', path: '/groups?standalone=true' },
+        { name: 'Calculator', image: '/app-icons/calculator.png', path: '/calculator?standalone=true' },
+        { name: 'Resources', image: '/app-icons/resources.png', path: '/study-resources?standalone=true' },
       ]
     },
     {
       title: 'UGEAC Counselling',
       items: [
-        { name: 'College Predictor', icon: <Compass size={34} strokeWidth={2.3} />, path: '/ugeac-predictor?standalone=true&tab=finder', tileBg: 'bg-amber-600 text-white shadow-sm shadow-amber-600/25' },
-        { name: 'Rank Predictor', icon: <Target size={34} strokeWidth={2.3} />, path: '/ugeac-predictor?standalone=true&tab=predictor', tileBg: 'bg-indigo-600 text-white shadow-sm shadow-indigo-600/25' },
-        { name: 'Guide', icon: <BookOpen size={34} strokeWidth={2.3} />, path: '/ugeac-predictor?standalone=true&tab=guide', tileBg: 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/25' },
+        { name: 'College Predictor', image: '/app-icons/college-predictor.png', path: '/ugeac-predictor?standalone=true&tab=finder' },
+        { name: 'Rank Predictor', image: '/app-icons/rank-predictor.png', path: '/ugeac-predictor?standalone=true&tab=predictor' },
+        { name: 'Guide', image: '/app-icons/guide.png', path: '/ugeac-predictor?standalone=true&tab=guide' },
       ]
     },
     {
       title: 'Official Portals',
       items: [
-        { name: 'AICTE', icon: <Briefcase size={34} strokeWidth={2.3} />, path: 'https://internship.aicte-india.org/', external: true, tileBg: 'bg-slate-800 text-white shadow-sm shadow-slate-800/25' },
-        { name: 'SWAYAM', icon: <Globe size={34} strokeWidth={2.3} />, path: 'https://swayam.gov.in/', external: true, tileBg: 'bg-orange-600 text-white shadow-sm shadow-orange-600/25' },
-        { name: 'NPTEL', icon: <Award size={34} strokeWidth={2.3} />, path: 'https://nptel.ac.in/', external: true, tileBg: 'bg-blue-700 text-white shadow-sm shadow-blue-700/25' },
-        { name: 'NSP', icon: <Landmark size={34} strokeWidth={2.3} />, path: 'https://scholarships.gov.in/', external: true, tileBg: 'bg-emerald-700 text-white shadow-sm shadow-emerald-700/25' },
-        { name: 'PMS Bihar', icon: <Landmark size={34} strokeWidth={2.3} />, path: 'https://pmsonline.bih.nic.in/', external: true, tileBg: 'bg-purple-600 text-white shadow-sm shadow-purple-600/25' },
-        { name: 'BSSC', icon: <ExternalLink size={34} strokeWidth={2.3} />, path: 'https://bssc.bihar.gov.in/', external: true, tileBg: 'bg-cyan-700 text-white shadow-sm shadow-cyan-700/25' },
+        { name: 'AICTE', image: '/app-icons/aicte.png', path: 'https://internship.aicte-india.org/', external: true },
+        { name: 'SWAYAM', image: '/app-icons/swayam.png', path: 'https://swayam.gov.in/', external: true },
+        { name: 'NPTEL', image: '/app-icons/nptel.png', path: 'https://nptel.ac.in/', external: true },
+        { name: 'NSP', image: '/app-icons/nsp.png', path: 'https://scholarships.gov.in/', external: true },
+        { name: 'PMS Bihar', image: '/app-icons/pms-bihar.png', path: 'https://pmsonline.bih.nic.in/', external: true },
+        { name: 'BSSC', image: '/app-icons/bssc.png', path: 'https://bssc.bihar.gov.in/', external: true },
       ]
     }
   ];
@@ -197,7 +199,7 @@ export default function AppHub() {
     user?.role === 'super_admin';
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-['Inter'] flex flex-col items-center justify-center p-4 pt-24 pb-12 relative overflow-x-clip">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-['Inter'] flex flex-col items-center justify-start p-3 sm:p-4 pt-20 pb-12 relative overflow-x-clip">
       <SEO
         title="App Hub | Apna College Bihar - The Official Study Engine"
         description="Access all your college utilities - Study Timer, Notes, PYQs, UGEAC Predictor, SGPA Calculator, and more in one place."
@@ -252,7 +254,7 @@ export default function AppHub() {
                       }}
                       className="w-full py-2.5 bg-rose-500/10 hover:bg-rose-600 border border-rose-500/20 text-rose-600 hover:text-white rounded-xl flex items-center justify-center gap-2 text-[10px] font-black uppercase tracking-widest mb-1.5 shadow-sm cursor-pointer"
                     >
-                      ❤️ Donate Us
+                      Donate Us
                     </button>
                     <button
                       onClick={handleLogout}
@@ -400,11 +402,9 @@ export default function AppHub() {
                 <button
                   key={i}
                   onClick={() => handleFeatureClick(f)}
-                  className="min-h-[116px] bg-slate-50/70 border border-slate-200/80 rounded-2xl flex flex-col items-center justify-center gap-2 py-3 px-1.5 hover:bg-white hover:border-slate-300 shadow-2xs"
+                  className="min-h-[116px] bg-slate-50/70 border border-slate-200/80 rounded-2xl flex flex-col items-center justify-center gap-2 py-3 px-1.5 hover:bg-white hover:border-slate-300 shadow-2xs group active:scale-95 transition-all cursor-pointer"
                 >
-                  <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center shrink-0 ${f.tileBg}`}>
-                    {f.icon}
-                  </div>
+                  <AppIconTile image={f.image} alt={f.name} badge={f.badge} size="lg" />
                   <span className="text-[11px] font-bold text-slate-800 text-center leading-snug line-clamp-2 w-full px-0.5">
                     {f.name}
                   </span>
@@ -432,24 +432,6 @@ export default function AppHub() {
               <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">YouTube</span>
             </button>
           </div>
-        </div>
-        {/* Official Sources & Non-Government Disclaimer */}
-        <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 text-[11px] text-slate-600 leading-relaxed space-y-1">
-          <p className="font-extrabold text-slate-800 uppercase tracking-wider text-[10px]">
-            Sources &amp; Disclaimer
-          </p>
-          <p>
-            Official public sources:{' '}
-            <a href="https://beu-bih.ac.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">beu-bih.ac.in</a>,{' '}
-            <a href="https://bceceboard.bihar.gov.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">bceceboard.bihar.gov.in</a>,{' '}
-            <a href="https://www.aicte-india.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">aicte-india.org</a>,{' '}
-            <a href="https://swayam.gov.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">swayam.gov.in</a>,{' '}
-            <a href="https://scholarships.gov.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">scholarships.gov.in</a>,{' '}
-            <a href="https://pmsonline.bih.nic.in" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">pmsonline.bih.nic.in</a>.
-          </p>
-          <p className="text-[10px] text-slate-500">
-            Apna College Bihar is an independent student app and is NOT affiliated with or an official app of BEU Patna, BCECEB, or any government entity.
-          </p>
         </div>
       </div>
 

@@ -383,13 +383,13 @@ function initBeuBroadcaster() {
     syncBeuAndBroadcast().catch(err => console.error('[BEU Broadcaster Startup Error]:', err.message));
   }, 6000);
 
-  // Run every 2 minutes: '*/2 * * * *' for 24/7 background sync
-  cron.schedule('*/2 * * * *', () => {
-    console.log('[BEU Cron] Continuous 2-min 24/7 background check for new BEU notices...');
+  // Run every 2 hours: '0 */2 * * *' to keep Firestore reads & server CPU minimal
+  cron.schedule('0 */2 * * *', () => {
+    console.log('[BEU Cron] Scheduled 2-hour background check for new BEU notices...');
     syncBeuAndBroadcast();
   });
 
-  console.log('✅ BEU Auto-Broadcaster Scheduled (Every 2 mins - 24/7 Server Background Sync)');
+  console.log('✅ BEU Auto-Broadcaster Scheduled (Every 2 hours - Low-Cost Background Sync)');
 }
 
 module.exports = {

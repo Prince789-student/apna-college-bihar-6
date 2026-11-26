@@ -1,5 +1,5 @@
 // ═════════════════════════════════════════════════════════════
-// Apna College Bihar — Smart Data Cache for Minimal Reads & Offline Mode
+// Apna College Bihar - Smart Data Cache for Minimal Reads & Offline Mode
 // ═════════════════════════════════════════════════════════════
 
 export const CACHE_KEYS = {

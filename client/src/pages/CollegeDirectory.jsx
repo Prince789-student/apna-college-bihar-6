@@ -85,7 +85,7 @@ export default function CollegeDirectory() {
                 <Link to={`/college/${slug}`} key={slug} className="group bg-white rounded-[2rem] border border-slate-200 hover:border-blue-500/50 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
                   <div className="h-48 overflow-hidden relative">
                     <img 
-                      src={college.gallery?.[0] || 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'} 
+                      src={college.gallery?.[0] || '/logo-acb.png'} 
                       alt={college.shortName} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />

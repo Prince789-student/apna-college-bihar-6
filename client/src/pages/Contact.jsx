@@ -54,7 +54,7 @@ export default function Contact() {
       {/* Hero Section */}
       <div className="max-w-4xl mx-auto px-6 pt-12 space-y-16 animate-in fade-in duration-500">
         <div className="text-center space-y-6">
-          <div className="inline-flex p-4 bg-orange-600/10 border border-orange-500/20 text-orange-600 rounded-3xl shadow-sm mb-2 animate-bounce">
+          <div className="inline-flex p-4 bg-orange-600/10 border border-orange-500/20 text-orange-600 rounded-3xl shadow-sm mb-2">
             <MessageCircle size={40} />
           </div>
           <div className="space-y-2">

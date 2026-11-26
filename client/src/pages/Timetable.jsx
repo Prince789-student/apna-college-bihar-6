@@ -203,7 +203,7 @@ export default function Timetable() {
 
       setSaved(true);
       if (addedCount > 0) {
-        toast.success(`✅ Saved! ${addedCount} new subjects synced to Attendance.`);
+        toast.success(`Saved! ${addedCount} new subjects synced to Attendance.`);
       } else {
         toast.success('✅ Timetable saved & synced!');
       }

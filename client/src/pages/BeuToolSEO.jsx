@@ -18,7 +18,7 @@ const toolConfig = {
     title: 'BEU Timetable 2025',
     description: 'View and manage your Bihar Engineering University (BEU) class timetable, exam schedule, and semester-wise time table for all branches.',
     keywords: 'BEU Timetable 2025, Bihar Engineering Timetable, BEU Exam Schedule, BEU Class Schedule',
-    color: 'from-violet-600 to-purple-600',
+    color: 'from-sky-600 to-cyan-600',
     component: Timetable,
   },
   cgpa: {

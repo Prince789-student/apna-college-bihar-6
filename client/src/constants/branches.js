@@ -32,7 +32,7 @@ export const SEMESTERS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 export const BRANCH_COLORS = {
   indigo: { bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700', active: 'bg-indigo-600 text-white border-indigo-600', badge: 'bg-indigo-100 text-indigo-600' },
-  violet: { bg: 'bg-violet-50', border: 'border-violet-200', text: 'text-violet-700', active: 'bg-violet-600 text-white border-violet-600', badge: 'bg-violet-100 text-violet-600' },
+  violet: { bg: 'bg-sky-50', border: 'border-sky-200', text: 'text-sky-700', active: 'bg-sky-600 text-white border-sky-600', badge: 'bg-sky-100 text-sky-600' },
   orange: { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700', active: 'bg-orange-600 text-white border-orange-600', badge: 'bg-orange-100 text-orange-600' },
   emerald:{ bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', active: 'bg-emerald-600 text-white border-emerald-600', badge: 'bg-emerald-100 text-emerald-600' },
   yellow: { bg: 'bg-yellow-50', border: 'border-yellow-200', text: 'text-yellow-700', active: 'bg-yellow-500 text-white border-yellow-500', badge: 'bg-yellow-100 text-yellow-600' },

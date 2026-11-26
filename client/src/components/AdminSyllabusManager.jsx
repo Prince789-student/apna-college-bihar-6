@@ -96,7 +96,7 @@ export default function AdminSyllabusManager({ flash }) {
       });
       setIsOverridden(true);
       await loadOverrideIndex();
-      flash(`Saved ${branch.toUpperCase()} ${semester.toUpperCase()} syllabus live! Students will see it immediately. ✅`, 'ok');
+      flash(`Saved ${branch.toUpperCase()} ${semester.toUpperCase()} syllabus live! Students will see it immediately.`, 'ok');
     } catch (err) {
       flash('Save failed: ' + err.message, 'err');
     } finally {
@@ -138,7 +138,7 @@ export default function AdminSyllabusManager({ flash }) {
           <div>
             <h2 className="text-lg font-black uppercase text-slate-900 tracking-tight">Live Syllabus Manager</h2>
             <p className="text-[11px] font-bold text-slate-500 mt-0.5">
-              Edit, add, or update any Branch &amp; Semester syllabus directly — reflects live in Website &amp; Android App
+              Edit, add, or update any Branch &amp; Semester syllabus directly - reflects live in Website &amp; Android App
             </p>
           </div>
         </div>

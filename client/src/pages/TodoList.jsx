@@ -67,7 +67,7 @@ export default function TodoList() {
         <ClipboardList size={24} className="text-blue-500" />
         <div>
           <h1 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Aaj ka Plan</h1>
-          <p className="text-[11px] text-slate-500">Today's To-Do List — {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
+          <p className="text-[11px] text-slate-500">Today's To-Do List - {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
         </div>
       </div>
 
@@ -81,7 +81,7 @@ export default function TodoList() {
           <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
             <div className="h-full bg-blue-500 rounded-full transition-all duration-700" style={{ width: `${progress}%` }}></div>
           </div>
-          {progress === 100 && <p className="text-center text-emerald-400 text-xs font-black">🎉 Sab complete! Bahut badhiya!</p>}
+          {progress === 100 && <p className="text-center text-emerald-400 text-xs font-black">Sab complete! Bahut badhiya!</p>}
         </div>
       )}
 
@@ -110,7 +110,7 @@ export default function TodoList() {
         {tasks.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-3xl border border-dashed border-slate-300">
             <ClipboardList size={32} className="mx-auto text-slate-700 mb-4" />
-            <p className="text-slate-500 font-bold">Koi task nahi — Upar add karo!</p>
+            <p className="text-slate-500 font-bold">Koi task nahi - Upar add karo!</p>
           </div>
         ) : (
           tasks.map(task => (

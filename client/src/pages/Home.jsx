@@ -16,6 +16,7 @@ import { useAuth } from '../context/AuthContext';
 import SEO from '../components/SEO';
 import GlobalSearch from '../components/GlobalSearch';
 import CountUp from '../components/CountUp';
+import AppIconTile from '../components/AppIconTile';
 import toast from 'react-hot-toast';
 
 export default function Home() {
@@ -139,7 +140,7 @@ export default function Home() {
   const officialCollegeCutoffs = [
     { code: 'MIT', college: 'MIT Muzaffarpur', branch: 'Information Technology', closing: 215, color: 'bg-blue-500/20 text-cyan-300 border-blue-400/30' },
     { code: 'BCE', college: 'BCE Bhagalpur', branch: 'Computer Science & Engg', closing: 109, color: 'bg-indigo-500/20 text-indigo-300 border-indigo-400/30' },
-    { code: 'BCEB', college: 'BCE Bakhtiyarpur', branch: 'Computer Science (AI)', closing: 333, color: 'bg-purple-500/20 text-purple-300 border-purple-400/30' },
+    { code: 'BCEB', college: 'BCE Bakhtiyarpur', branch: 'Computer Science (AI)', closing: 333, color: 'bg-indigo-500/20 text-indigo-300 border-indigo-400/30' },
     { code: 'GCE', college: 'GCE Gaya', branch: 'Computer Science & Engg', closing: 525, color: 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30' },
     { code: 'DCE', college: 'DCE Darbhanga', branch: 'Computer Science & Engg', closing: 617, color: 'bg-amber-500/20 text-amber-300 border-amber-400/30' },
     { code: 'MIT', college: 'MIT Muzaffarpur', branch: 'Civil Engineering', closing: 1081, color: 'bg-teal-500/20 text-teal-300 border-teal-400/30' },
@@ -205,12 +206,20 @@ export default function Home() {
     let isMounted = true;
     const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
 
-    // Fetch official notices
-    const unsubNotices = onSnapshot(query(collection(db, 'beu_notifications'), limit(15)), (snap) => {
-      if (!snap.empty && isMounted) {
-        setBeuNotices(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      }
-    }, () => {});
+    // Fetch official notices (cached 30 min in localStorage to minimize Firestore reads)
+    import('../utils/firestoreCache').then(({ cachedGetDocs }) => {
+      cachedGetDocs('beu_notices_15', query(collection(db, 'beu_notifications'), limit(15)), 30 * 60 * 1000)
+        .then((docs) => {
+          if (docs.length > 0 && isMounted) setBeuNotices(docs);
+        })
+        .catch(() => {});
+
+      cachedGetDocs('top_donors_4', query(collection(db, 'donors'), orderBy('amount', 'desc'), limit(4)), 6 * 60 * 60 * 1000)
+        .then((docs) => {
+          if (docs.length > 0 && isMounted) setTopDonors(docs);
+        })
+        .catch(() => {});
+    });
 
     // Fetch live notices fallback
     fetch(`${apiBase}/api/beu/notices`)
@@ -238,17 +247,8 @@ export default function Home() {
       })
       .catch(() => {});
 
-    // Live donors
-    const unsubDonors = onSnapshot(query(collection(db, 'donors'), orderBy('amount', 'desc'), limit(4)), (snap) => {
-      if (!snap.empty && isMounted) {
-        setTopDonors(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      }
-    }, () => {});
-
     return () => {
       isMounted = false;
-      unsubNotices();
-      unsubDonors();
     };
   }, []);
 
@@ -298,7 +298,7 @@ export default function Home() {
       { id: '3rd-sem', label: '3rd Sem', badge: 'HOT', path: '/notes', icon: <Sparkles size={18} className="text-amber-500" />, ring: 'from-amber-400 via-rose-500 to-pink-500' },
       { id: 'notes', label: 'Notes Hub', badge: '550+', path: '/notes', icon: <BookOpen size={18} className="text-blue-600" />, ring: 'from-blue-500 via-cyan-400 to-teal-400' },
       { id: 'pyq', label: 'PYQ Papers', badge: 'SOLVED', path: '/pyq', icon: <FileText size={18} className="text-emerald-600" />, ring: 'from-emerald-400 via-teal-500 to-cyan-500' },
-      { id: 'cgpa', label: 'CGPA Calc', badge: '10-PT', path: '/cgpa', icon: <Calculator size={18} className="text-purple-600" />, ring: 'from-purple-500 via-indigo-500 to-blue-500' },
+      { id: 'cgpa', label: 'CGPA Calc', badge: '10-PT', path: '/cgpa', icon: <Calculator size={18} className="text-indigo-600" />, ring: 'from-blue-500 via-indigo-500 to-blue-500' },
       { id: 'predictor', label: 'Predictor', badge: 'UGEAC', path: '/ugeac-predictor', icon: <Target size={18} className="text-rose-600" />, ring: 'from-rose-500 via-red-500 to-amber-500' },
       { id: 'notices', label: 'BEU Live', badge: 'CIRCULARS', path: '/notifications', icon: <Bell size={18} className="text-amber-600" />, ring: 'from-yellow-400 via-amber-500 to-orange-500' },
       { id: 'syllabus', label: 'Syllabus', badge: 'BEU', path: '/syllabus', icon: <Library size={18} className="text-sky-600" />, ring: 'from-sky-400 via-blue-500 to-indigo-500' },
@@ -430,7 +430,7 @@ export default function Home() {
                   {[
                     { name: 'App Hub (All Tools)', path: '/hub?standalone=true', icon: <Sparkles size={16} className="text-indigo-600" /> },
                     { name: 'Notes', path: '/notes', icon: <BookOpen size={16} className="text-indigo-600" /> },
-                    { name: 'PYQ Papers', path: '/pyq', icon: <FileText size={16} className="text-violet-600" /> },
+                    { name: 'PYQ Papers', path: '/pyq', icon: <FileText size={16} className="text-sky-600" /> },
                     { name: 'BEU Syllabus', path: '/syllabus', icon: <Library size={16} className="text-rose-600" /> },
                     { name: 'BEU Result', path: '/beu-result', icon: <GraduationCap size={16} className="text-blue-600" /> },
                     { name: 'CGPA / SGPA Calculator', path: '/cgpa', icon: <Calculator size={16} className="text-cyan-600" /> },
@@ -591,12 +591,13 @@ export default function Home() {
               </div>
 
               <a
-                href="/apna-college-bihar-v1.apk"
-                download="apna-college-bihar-v1.apk"
+                href="https://play.google.com/store/apps/details?id=com.apnacollegebihar.online&pcampaignid=web_share"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-full py-3 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg active:scale-[0.98] transition-all"
               >
                 <Download size={16} />
-                <span>Download Android APK (v1.0)</span>
+                <span>Get App on Google Play</span>
               </a>
 
               <form onSubmit={handleMobileSearchSubmit} className="relative">
@@ -642,43 +643,50 @@ export default function Home() {
           </Link>
 
           {/* ══════════════════════════════════════════════════════════════
-              4. EASY-TO-TAP 3x3 QUICK ACTION BENTO GRID
+              4. REAL APP HOME ICON LAUNCHER (ALL APP FEATURES)
              ══════════════════════════════════════════════════════════════ */}
-          <div className="space-y-2.5 animate-in fade-in slide-in-from-bottom-5 duration-500">
+          <div className="space-y-3 animate-in fade-in slide-in-from-bottom-5 duration-500">
             <div className="flex items-center justify-between px-1">
               <h3 className="text-[11px] font-black uppercase tracking-[0.18em] text-slate-500">
-                Quick Access
+                All App Tools
               </h3>
               <Link to="/hub?standalone=true" className="text-[11px] font-bold text-blue-600 flex items-center gap-0.5">
-                All Tools <ChevronRight size={13} />
+                App Hub <ChevronRight size={13} />
               </Link>
             </div>
 
-            <div className="grid grid-cols-3 gap-2.5">
-              {[
-                { name: 'Notes', path: '/notes', icon: <BookOpen size={24} />, color: 'bg-indigo-600 text-white' },
-                { name: 'PYQs', path: '/pyq', icon: <FileText size={24} />, color: 'bg-violet-600 text-white' },
-                { name: 'Syllabus', path: '/syllabus', icon: <Library size={24} />, color: 'bg-rose-600 text-white' },
-                { name: 'BEU Result', path: '/beu-result', icon: <GraduationCap size={24} />, color: 'bg-blue-600 text-white' },
-                { name: 'CGPA Calc', path: '/cgpa', icon: <Calculator size={24} />, color: 'bg-cyan-600 text-white' },
-                { name: 'UGEAC', path: '/ugeac-predictor', icon: <Target size={24} />, color: 'bg-amber-600 text-white' },
-                { name: 'Attendance', path: '/attendance', icon: <CheckCircle2 size={24} />, color: 'bg-emerald-600 text-white' },
-                { name: 'Study Timer', path: '/study', icon: <Timer size={24} />, color: 'bg-orange-500 text-white' },
-                { name: 'Lectures', path: '/lecture-finder', icon: <Youtube size={24} />, color: 'bg-red-600 text-white' },
-              ].map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className="min-h-[104px] bg-white border border-slate-200/80 hover:border-blue-300 rounded-2xl p-3 flex flex-col items-center justify-center gap-2 shadow-2xs active:scale-95 transition-all"
-                >
-                  <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-xs ${item.color}`}>
-                    {item.icon}
-                  </div>
-                  <span className="text-[11px] font-black text-slate-800 text-center leading-tight">
-                    {item.name}
-                  </span>
-                </Link>
-              ))}
+            <div className="rounded-3xl bg-white border border-slate-200/90 p-3.5 shadow-2xs">
+              <div className="grid grid-cols-4 gap-y-4 gap-x-2">
+                {[
+                  { name: 'Notes', path: '/notes', image: '/app-icons/notes.png', badge: 'PDF' },
+                  { name: 'PYQs', path: '/pyq', image: '/app-icons/pyq.png', badge: '5YR' },
+                  { name: 'Syllabus', path: '/syllabus', image: '/app-icons/syllabus.png' },
+                  { name: 'BEU Result', path: '/beu-result', image: '/app-icons/beu-result.png' },
+                  { name: 'CGPA Calc', path: '/cgpa', image: '/app-icons/cgpa.png', badge: '10PT' },
+                  { name: 'Attendance', path: '/attendance', image: '/app-icons/attendance.png', badge: '75%' },
+                  { name: 'Timetable', path: '/timetable', image: '/app-icons/timetable.png' },
+                  { name: 'Lectures', path: '/lecture-finder', image: '/app-icons/lectures.png' },
+                  { name: 'Study Timer', path: '/study', image: '/app-icons/study-timer.png' },
+                  { name: 'UGEAC', path: '/ugeac-predictor', image: '/app-icons/rank-predictor.png' },
+                  { name: 'Colleges', path: '/colleges', image: '/app-icons/colleges.png' },
+                  { name: 'Mentorship', path: '/mentorship', image: '/app-icons/mentorship.png' },
+                  { name: 'BEU Notices', path: '/notifications', image: '/app-icons/notices.png' },
+                  { name: 'Study Groups', path: '/groups', image: '/app-icons/study-groups.png' },
+                  { name: 'Calculator', path: '/calculator', image: '/app-icons/calculator.png' },
+                  { name: 'Resources', path: '/study-resources', image: '/app-icons/resources.png' },
+                ].map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.path}
+                    className="flex flex-col items-center justify-start gap-1.5 active:scale-92 transition-transform group"
+                  >
+                    <AppIconTile image={item.image} alt={item.name} badge={item.badge} />
+                    <span className="text-[10.5px] font-bold text-slate-800 text-center leading-tight line-clamp-1">
+                      {item.name}
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -806,7 +814,7 @@ export default function Home() {
               <div
                 onClick={() => {
                   navigator.clipboard.writeText("apnacollegebihar@slc");
-                  toast.success("UPI ID Copied! ✅");
+                  toast.success("UPI ID Copied!");
                 }}
                 className="p-2.5 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-between cursor-pointer active:scale-98 transition-all"
               >
@@ -866,13 +874,15 @@ export default function Home() {
                 <BookOpen size={16} />
                 <span>Explore Notes &amp; PYQs</span>
               </Link>
-              <Link
-                to="/download"
+              <a
+                href="https://play.google.com/store/apps/details?id=com.apnacollegebihar.online&pcampaignid=web_share"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="px-5 py-3 rounded-xl bg-black/30 hover:bg-white/10 border border-white/20 hover:border-cyan-400/60 text-white flex items-center gap-2 text-xs sm:text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-all"
               >
                 <Download size={16} className="text-cyan-400" />
-                <span>Download Official App (v64)</span>
-              </Link>
+                <span>Get App on Google Play</span>
+              </a>
               <Link
                 to="/ugeac-predictor?tab=finder"
                 className="px-5 py-3 rounded-xl bg-black/30 hover:bg-white/10 border border-cyan-400/40 hover:border-cyan-400 text-cyan-300 flex items-center gap-2 text-xs sm:text-sm font-heading font-black shadow-xl hover:scale-105 active:scale-95 transition-all"
@@ -897,10 +907,10 @@ export default function Home() {
           <div className="container mx-auto max-w-6xl">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 border-y border-white/10 py-4">
               {[
-                { label: 'Curated Notes', val: stats.notes, suffix: '+', icon: <BookOpen size={20} className="sm:w-[22px] sm:h-[22px]" /> },
-                { label: 'Verified PYQs', val: stats.pyqs, suffix: '+', icon: <FileText size={20} className="sm:w-[22px] sm:h-[22px]" /> },
-                { label: 'Active Students', val: stats.users, suffix: '+', icon: <Users size={20} className="sm:w-[22px] sm:h-[22px]" /> },
-                { label: 'Govt Colleges', val: stats.colleges || 38, suffix: '', icon: <Building2 size={20} className="sm:w-[22px] sm:h-[22px]" /> },
+                { label: 'BEU Semesters', val: 8, suffix: ' Sem', icon: <BookOpen size={20} className="sm:w-[22px] sm:h-[22px]" /> },
+                { label: 'Syllabus Subjects', val: 525, suffix: '+', icon: <FileText size={20} className="sm:w-[22px] sm:h-[22px]" /> },
+                { label: 'Govt Colleges', val: 38, suffix: '', icon: <Building2 size={20} className="sm:w-[22px] sm:h-[22px]" /> },
+                { label: 'Student Access', val: 100, suffix: '% Free', icon: <Users size={20} className="sm:w-[22px] sm:h-[22px]" /> },
               ].map((item, idx) => (
                 <div key={idx} className="flex items-center gap-3 text-white transition-all hover:translate-y-[-2px]">
                   <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-cyan-500/15 border border-cyan-400/25 text-cyan-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] flex items-center justify-center shrink-0">
@@ -1110,7 +1120,7 @@ export default function Home() {
                           All 38 Bihar Govt Engineering Colleges
                         </h3>
                         <p className="text-xs text-slate-200 leading-relaxed font-medium mb-4">
-                          Explore category quota predictions (General UR, BC, EBC, SC, ST, EWS &amp; RCG) across every campus — MIT Muzaffarpur, BCE Bhagalpur, Bakhtiyarpur, Gaya, Darbhanga, and 33 more.
+                          Explore category quota predictions (General UR, BC, EBC, SC, ST, EWS &amp; RCG) across every campus - MIT Muzaffarpur, BCE Bhagalpur, Bakhtiyarpur, Gaya, Darbhanga, and 33 more.
                         </p>
                         <div className="bg-black/20 border-white/10 text-slate-300 p-3 rounded-xl border text-xs space-y-1">
                           <p>• <strong>Authentic Data:</strong> Direct from BCECEB allotment seat charts.</p>

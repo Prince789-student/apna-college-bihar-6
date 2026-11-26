@@ -140,7 +140,7 @@ export default function SearchSEO() {
               <div key={res.id} className="bg-white p-5 rounded-3xl border border-slate-200/60 shadow-lg hover:shadow-xl hover:border-blue-300 transition-all group flex flex-col justify-between h-full">
                 <div>
                   <div className="flex items-center gap-3 mb-4">
-                    <div className={`p-3 rounded-xl ${res.category === 'PYQ' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'}`}>
+                    <div className={`p-3 rounded-xl ${res.category === 'PYQ' ? 'bg-indigo-100 text-indigo-600' : 'bg-blue-100 text-blue-600'}`}>
                       {res.category === 'PYQ' ? <FileText size={20} /> : <BookOpen size={20} />}
                     </div>
                     <div>
@@ -179,7 +179,7 @@ export default function SearchSEO() {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link to="/notes" className="px-6 py-3 bg-blue-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-700 transition-colors shadow-lg">Browse Notes</Link>
-              <Link to="/pyq" className="px-6 py-3 bg-purple-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-purple-700 transition-colors shadow-lg">Browse PYQ Bank</Link>
+              <Link to="/pyq" className="px-6 py-3 bg-indigo-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-700 transition-colors shadow-lg">Browse PYQ Bank</Link>
             </div>
           </div>
         )}

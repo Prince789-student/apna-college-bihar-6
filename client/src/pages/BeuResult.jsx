@@ -458,6 +458,18 @@ export default function BeuResult() {
           </div>
         </div>
       )}
+      {/* BEU Grading & Result Guide */}
+      <section className="mt-5 bg-white rounded-3xl border border-slate-200/90 p-5 space-y-3 shadow-2xs">
+        <h2 className="text-sm font-black text-slate-900 uppercase tracking-tight">
+          BEU Semester Result, Passing Criteria &amp; SGPA Guide
+        </h2>
+        <p className="text-xs text-slate-600 leading-relaxed">
+          Bihar Engineering University (BEU) Patna evaluates B.Tech students on a 10-point relative grading system (A+ = 10, A = 9, B = 8, C = 7, D = 6, P = 5, F = 0). Each theory paper carries 70 marks for End Semester Exam (ESE) and 30 marks for Internal Assessment (IA), requiring a minimum passing grade in both components.
+        </p>
+        <p className="text-xs text-slate-600 leading-relaxed">
+          After checking your marksheet above, you can calculate your exact semester SGPA or cumulative CGPA using our official credit-weighted <a href="/cgpa" className="text-blue-600 font-bold underline">BEU CGPA Calculator</a>.
+        </p>
+      </section>
     </div>
   );
 }

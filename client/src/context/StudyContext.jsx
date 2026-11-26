@@ -337,7 +337,7 @@ export function StudyProvider({ children }) {
           duration: timeToSave,
           dateStr: todayStr,
           today: true,
-          status: 'Completed ✅',
+          status: 'Completed',
           durationText: formatDuration(timeToSave) + ' (Built-in /study Hub)',
           byTimer: true,
           source: 'Focus Hub (/study)',
@@ -441,7 +441,7 @@ export function StudyProvider({ children }) {
       toast.success('Study session saved successfully! 🎓', { duration: 3000 });
     } catch (e) { 
       console.error("Global Save Error:", e);
-      // Network error during save — queue it locally
+      // Network error during save - queue it locally
       queueOfflineSession(sessionData);
       toast('📱 Session saved locally.', {
         duration: 4000,

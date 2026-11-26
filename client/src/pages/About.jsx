@@ -25,7 +25,7 @@ export default function About() {
     {
       icon: <Timer size={24} className="text-indigo-600" />,
       title: "Focus Zone & Study Protocol",
-      desc: "Built-in Pomodoro timers, stopwatch tracking, daily study goals, and streak counters to eliminate distractions and supercharge academic productivity."
+      desc: "Built-in Pomodoro timers, stopwatch tracking, daily study goals, and streak counters to eliminate distractions and improve daily study consistency."
     },
     {
       icon: <Users size={24} className="text-orange-600" />,
@@ -59,7 +59,7 @@ export default function About() {
       {/* Hero Section */}
       <div className="max-w-4xl mx-auto px-6 pt-12 space-y-16 animate-in fade-in duration-500">
         <div className="text-center space-y-6">
-          <div className="inline-flex p-4 bg-blue-600/10 border border-blue-500/20 text-blue-600 rounded-3xl shadow-sm mb-2 animate-bounce">
+          <div className="inline-flex p-4 bg-blue-600/10 border border-blue-500/20 text-blue-600 rounded-3xl shadow-sm mb-2">
             <GraduationCap size={40} />
           </div>
           <div className="space-y-2">
@@ -172,7 +172,7 @@ export default function About() {
 
           <h3 className="text-xl font-bold mt-8 mb-4">A Commitment to Transparency and Trust</h3>
           <p>
-            Trust is the cornerstone of our platform. When you download a PYQ or use our CGPA Calculator, you are using tools built with complete transparency. We strictly adhere to academic integrity—we do not promote plagiarism. Instead, we provide the foundational knowledge required for self-study. Furthermore, our dedicated admin panel rigorously reviews all community-uploaded resources before they are made public, ensuring that no student is misled by inaccurate information or outdated syllabi.
+            Trust is the cornerstone of our platform. When you download a PYQ or use our CGPA Calculator, you are using tools built with complete transparency. We strictly adhere to academic integrity-we do not promote plagiarism. Instead, we provide the foundational knowledge required for self-study. Furthermore, our dedicated admin panel rigorously reviews all community-uploaded resources before they are made public, ensuring that no student is misled by inaccurate information or outdated syllabi.
           </p>
           
           <h3 className="text-xl font-bold mt-8 mb-4">Beyond Just Academics: The Future of Bihar Engineering</h3>

@@ -7,8 +7,10 @@ import { db } from '../firebase';
 
 const CURRENT_APP_VERSION_CODE = 1;
 const CURRENT_APP_VERSION_NAME = "1.0";
-const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.apnacollegebihar.online";
+const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.apnacollegebihar.online&pcampaignid=web_share";
 const DOWNLOAD_URL = "https://www.apnacollegebihar.online/api/download-apk";
+
+import { cachedGetDoc } from '../utils/firestoreCache';
 
 export default function AppUpdateChecker() {
   // STRICT GUARANTEE: Never, ever execute or show on public web browsers
@@ -68,14 +70,12 @@ export default function AppUpdateChecker() {
       }
     };
 
-    // 1. Real-time Firestore Listener (Instant, Zero Server Lag)
-    let unsubFirestore = () => {};
-    try {
-      const versionDocRef = doc(db, 'app_config', 'version');
-      unsubFirestore = onSnapshot(versionDocRef, (snap) => {
+    // 1. Cached Firestore Version Check (12h TTL to keep Firestore reads near zero)
+    const versionDocRef = doc(db, 'app_config', 'version');
+    cachedGetDoc('app_version', versionDocRef, 12 * 60 * 60 * 1000)
+      .then((data) => {
         if (!isMounted) return;
-        if (snap.exists()) {
-          const data = snap.data();
+        if (data) {
           const targetCode = data.latestVersionCode || CURRENT_APP_VERSION_CODE;
           const targetName = data.latestVersionName || CURRENT_APP_VERSION_NAME;
           const targetUrl = data.playStoreUrl || PLAY_STORE_URL;
@@ -83,14 +83,12 @@ export default function AppUpdateChecker() {
         } else {
           evaluateVersion(CURRENT_APP_VERSION_CODE, CURRENT_APP_VERSION_NAME);
         }
-      }, (err) => {
-        console.warn("Firestore version snapshot error:", err);
-        evaluateVersion(CURRENT_APP_VERSION_CODE, CURRENT_APP_VERSION_NAME);
+      })
+      .catch((err) => {
+        console.warn("Firestore version check failed:", err);
+        if (isMounted) evaluateVersion(CURRENT_APP_VERSION_CODE, CURRENT_APP_VERSION_NAME);
       });
-    } catch (e) {
-      console.warn("Firestore version check failed:", e);
-      evaluateVersion(CURRENT_APP_VERSION_CODE, CURRENT_APP_VERSION_NAME);
-    }
+    const unsubFirestore = () => {};
 
     // 2. HTTP Fallback with strict 2500ms timeout
     const checkHttpEndpoints = async () => {
@@ -171,7 +169,7 @@ export default function AppUpdateChecker() {
         <div className="absolute -bottom-20 -left-20 w-44 h-44 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none" />
 
         {/* Animated Icon */}
-        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center mx-auto mb-5 shadow-lg shadow-blue-500/30 animate-bounce">
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white flex items-center justify-center mx-auto mb-5 shadow-lg shadow-blue-500/30">
           <Download size={32} />
         </div>
 

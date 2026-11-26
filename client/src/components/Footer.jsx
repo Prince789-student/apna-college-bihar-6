@@ -220,7 +220,7 @@ export default function Footer() {
          <p className="text-slate-400">&copy; {new Date().getFullYear()} Apna College Bihar. All rights reserved.</p>
          <p className="text-slate-400 flex items-center gap-1 justify-center sm:justify-start">
            Developed with <Heart size={14} className="text-rose-500 fill-rose-500" /> by{' '}
-           <Link to="/author" className="text-cyan-400 font-bold hover:underline">Prince Kumar</Link> — Mission: 100% Free Education for All
+           <Link to="/author" className="text-cyan-400 font-bold hover:underline">Prince Kumar</Link> - Mission: 100% Free Education for All
          </p>
       </div>
     </footer>

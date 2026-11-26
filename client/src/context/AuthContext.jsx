@@ -67,13 +67,13 @@ export function AuthProvider({ children }) {
       if (cachedRaw) {
         const cachedData = JSON.parse(cachedRaw);
         if (cachedData.uid === u.uid) {
-          // Instantly set user from cache — no network needed
+          // Instantly set user from cache - no network needed
           setUser({ ...u, ...cachedData });
           hasCacheForUser = true;
         }
       }
     } catch (cacheErr) {
-      // Cache read failed — not critical, continue
+      // Cache read failed - not critical, continue
     }
 
     // Step 1.5: If NO cache, immediately set a basic user so the UI doesn't wait for Firestore (which can take 10s on slow networks)
@@ -262,7 +262,7 @@ export function AuthProvider({ children }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
-  // 3. Google Login — Smart strategy:
+  // 3. Google Login - Smart strategy:
   //    Native Android App   → FirebaseAuthentication plugin (native bottom sheet)
   //    Electron Desktop App → signInWithRedirect (Google blocks popup in Electron)
   //    Web Browser          → signInWithPopup first, fallback to redirect if blocked
@@ -270,7 +270,7 @@ export function AuthProvider({ children }) {
     const isNative = Capacitor.isNativePlatform();
     
     if (isNative) {
-      // Native Android app — try Credential Manager first, then legacy Google Sign-In Intent
+      // Native Android app - try Credential Manager first, then legacy Google Sign-In Intent
       try {
         let result;
         try {
@@ -285,7 +285,7 @@ export function AuthProvider({ children }) {
           await syncProfile(res.user);
           return res.user;
         }
-        throw new Error('Native Google Login failed — no idToken');
+        throw new Error('Native Google Login failed - no idToken');
       } catch (err) {
         console.error("Native Google Login Error:", err);
         const detail = err?.message ? ` (${err.message})` : '';
@@ -293,7 +293,7 @@ export function AuthProvider({ children }) {
       }
     }
 
-    // Electron Desktop App — Use secure Desktop Bridge loopback login (browser-assisted)
+    // Electron Desktop App - Use secure Desktop Bridge loopback login (browser-assisted)
     // with popup fallback so user is never blocked or left stranded in Chrome
     const isElectron = typeof window !== 'undefined' && window.desktopBridge?.isDesktop;
     if (isElectron) {
@@ -315,7 +315,7 @@ export function AuthProvider({ children }) {
       }
     }
 
-    // Web browser — try popup first (best UX, stays in app)
+    // Web browser - try popup first (best UX, stays in app)
     try {
       const res = await signInWithPopup(auth, googleProvider);
       await syncProfile(res.user);
@@ -360,7 +360,7 @@ export function AuthProvider({ children }) {
     localStorage.setItem(USER_CACHE_KEY, JSON.stringify({ ...updatedUser, uid: user.uid }));
   }
 
-  // 6. Logout — clears localStorage cache too
+  // 6. Logout - clears localStorage cache too
   async function logout() {
     try {
       localStorage.removeItem(USER_CACHE_KEY);
@@ -459,7 +459,7 @@ export function AuthProvider({ children }) {
               }
             } catch (_) {}
           }
-          // User is genuinely signed out — clear cache
+          // User is genuinely signed out - clear cache
           localStorage.removeItem(USER_CACHE_KEY);
           setUser(null);
         }
@@ -474,7 +474,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   // Handle Redirect Results (for mobile/tablet web login)
-  // This runs on EVERY page load — if user came back from Google login, this handles it
+  // This runs on EVERY page load - if user came back from Google login, this handles it
   useEffect(() => {
     if (window.__PRERENDER_INJECTED && !window.Capacitor?.isNativePlatform?.()) {
       setLoading(false);
@@ -497,8 +497,8 @@ export function AuthProvider({ children }) {
       } catch (error) {
         console.error("[AUTH] Redirect result error:", error.code, error.message);
         // Common errors:
-        // auth/account-exists-with-different-credential — user has another login method
-        // auth/web-storage-unsupported — browser blocks storage
+        // auth/account-exists-with-different-credential - user has another login method
+        // auth/web-storage-unsupported - browser blocks storage
       } finally {
         setLoading(false);
       }

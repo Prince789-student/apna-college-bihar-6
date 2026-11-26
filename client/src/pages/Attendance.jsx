@@ -96,7 +96,7 @@ export default function Attendance() {
     if (percent <= 80) return { marks: 1, label: '+1 Mark', color: 'text-yellow-600', bg: 'bg-yellow-50 border-yellow-200' };
     if (percent <= 85) return { marks: 2, label: '+2 Marks', color: 'text-orange-500', bg: 'bg-orange-50 border-orange-200' };
     if (percent <= 90) return { marks: 3, label: '+3 Marks', color: 'text-blue-600', bg: 'bg-blue-50 border-blue-200' };
-    if (percent <= 95) return { marks: 4, label: '+4 Marks', color: 'text-purple-600', bg: 'bg-purple-50 border-purple-200' };
+    if (percent <= 95) return { marks: 4, label: '+4 Marks', color: 'text-indigo-600', bg: 'bg-indigo-50 border-indigo-200' };
     return { marks: 5, label: '+5 Marks', color: 'text-emerald-600', bg: 'bg-emerald-50 border-emerald-200' };
   };
 
@@ -144,7 +144,7 @@ export default function Attendance() {
           // Show notification toast for today's classes
           if (classes.length > 0) {
             setTimeout(() => {
-              toast(`📚 Today: ${classes.map(c => c.subject).join(', ')}`, {
+              toast(`Today: ${classes.map(c => c.subject).join(', ')}`, {
                 duration: 5000,
                 style: { background: '#1e293b', color: '#f8fafc', fontWeight: '800', fontSize: '12px' },
                 icon: '🗓️',
@@ -417,16 +417,16 @@ export default function Attendance() {
         ))}
       </div>
 
-      {/* Today's Schedule Banner — always shows */}
+      {/* Today's Schedule Banner - always shows */}
       {activeTab === 'subjects' && (
         todayClasses.length > 0 ? (
-          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-5 md:p-6 rounded-[2rem] flex flex-col sm:flex-row sm:items-center gap-4 shadow-lg shadow-indigo-500/20">
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-5 md:p-6 rounded-[2rem] flex flex-col sm:flex-row sm:items-center gap-4 shadow-lg shadow-blue-500/20">
             <div className="p-3 bg-white/20 rounded-2xl shrink-0">
               <Calendar size={22} className="text-white" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[9px] font-black text-indigo-200 uppercase tracking-widest mb-2">
-                📌 Today — {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' })}
+              <p className="text-[9px] font-black text-blue-100 uppercase tracking-widest mb-2">
+                Today · {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'short' })}
               </p>
               <div className="flex flex-wrap gap-2">
                 {todayClasses.map((cls, idx) => (
@@ -438,10 +438,10 @@ export default function Attendance() {
             </div>
             <div className="flex flex-col items-end gap-2">
               <div className="text-white text-right">
-                <p className="text-[8px] font-black uppercase tracking-widest text-indigo-300">Today's Classes</p>
+                <p className="text-[8px] font-black uppercase tracking-widest text-blue-200">Today's Classes</p>
                 <p className="text-2xl font-black">{todayClasses.length}</p>
               </div>
-              {Notification && Notification.permission !== 'granted' && (
+              {typeof Notification !== 'undefined' && Notification.permission !== 'granted' && (
                 <button
                   onClick={requestNotificationPermission}
                   className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 hover:bg-white/30 border border-white/20 text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
@@ -765,7 +765,7 @@ export default function Attendance() {
                 <p className="text-[7px] font-black uppercase tracking-widest mb-0.5">Sundays</p>
                 <p className="text-sm font-black leading-none">52 Days</p>
               </div>
-              <div className="px-4 py-2 bg-purple-50 border border-purple-200/50 text-purple-700 rounded-2xl text-center min-w-[90px]">
+              <div className="px-4 py-2 bg-indigo-50 border border-indigo-200/50 text-indigo-700 rounded-2xl text-center min-w-[90px]">
                 <p className="text-[7px] font-black uppercase tracking-widest mb-0.5">Total Leaves</p>
                 <p className="text-sm font-black leading-none">~120-125d</p>
               </div>

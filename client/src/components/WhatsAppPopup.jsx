@@ -208,7 +208,7 @@ export default function WhatsAppPopup() {
                 <div className="space-y-2.5">
                   {[
                     { bold: 'Notes & PYQs', text: 'BEU Previous Years Solutions & PDF', badge: 'BEU 2026' },
-                    { bold: 'Exam Notifications', text: 'Form Fillup, Results & College Routine', badge: 'FAST ⚡' },
+                    { bold: 'Exam Notifications', text: 'Form Fillup, Results & College Routine', badge: 'FAST' },
                     { bold: 'Free Guidance', text: 'Engineering Semesters & Lab VIVA Help', badge: 'TOP' },
                     { bold: 'Career & Internships', text: 'Govt Scholarships & Placement Drives', badge: 'NEW' }
                   ].map((item, i) => (

@@ -1073,7 +1073,7 @@ export default function FreeMentorship() {
                 </div>
                 <h4 className="text-base font-black text-slate-900 md:text-white uppercase tracking-tight">1-on-1 Personalized Senior Matching</h4>
                 <p className="text-xs text-slate-600 md:text-slate-300 leading-relaxed font-medium">
-                  Unlike generic advisory forums, our algorithm pairs each enrolled student with a verified senior mentor from their specific branch (CSE, Civil, Mechanical, EEE, ECE) or alumni network. This guarantees that subject-specific nuances—such as lab manual drafting, university numerical derivations, and faculty evaluation preferences—are addressed with pinpoint contextual accuracy.
+                  Unlike generic advisory forums, our algorithm pairs each enrolled student with a verified senior mentor from their specific branch (CSE, Civil, Mechanical, EEE, ECE) or alumni network. This guarantees that subject-specific nuances-such as lab manual drafting, university numerical derivations, and faculty evaluation preferences-are addressed with pinpoint contextual accuracy.
                 </p>
               </div>
 
@@ -1098,7 +1098,7 @@ export default function FreeMentorship() {
               </div>
 
               <div className="p-6 rounded-3xl bg-slate-50 md:bg-black/30 border border-slate-200/80 md:border-white/10 space-y-3">
-                <div className="w-10 h-10 rounded-2xl bg-purple-100 md:bg-purple-500/20 text-purple-700 md:text-purple-300 flex items-center justify-center font-black text-base">
+                <div className="w-10 h-10 rounded-2xl bg-indigo-100 md:bg-indigo-500/20 text-indigo-700 md:text-indigo-300 flex items-center justify-center font-black text-base">
                   04
                 </div>
                 <h4 className="text-base font-black text-slate-900 md:text-white uppercase tracking-tight">Career, Internship & Placement Guidance</h4>
@@ -1403,7 +1403,7 @@ export default function FreeMentorship() {
                 </div>
 
                 {/* ── MENTOR STUDY GROUPS HUB SECTION ── */}
-                <div className="bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 text-white p-6 rounded-3xl border border-indigo-800/40 shadow-xl space-y-4">
+                <div className="bg-gradient-to-br from-indigo-950 via-slate-900 to-cyan-950 text-white p-6 rounded-3xl border border-indigo-800/40 shadow-xl space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="space-y-1">
                       <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-black uppercase tracking-wider border border-indigo-400/30">
@@ -1427,7 +1427,7 @@ export default function FreeMentorship() {
                         setNewGroupDesc(`Official study, discussion & guidance group for senior mentor ${activeMentor.name} and assigned BEU mentees.`);
                         setShowCreateGroupModal(true);
                       }}
-                      className="px-5 py-3.5 bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/30 transition-all active:scale-95 shrink-0 self-start sm:self-auto cursor-pointer"
+                      className="px-5 py-3.5 bg-gradient-to-r from-blue-500 via-indigo-600 to-cyan-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/30 transition-all active:scale-95 shrink-0 self-start sm:self-auto cursor-pointer"
                     >
                       <Plus size={16} /> ➕ Create Group With Mentees
                     </button>
@@ -1748,7 +1748,7 @@ export default function FreeMentorship() {
                         className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover border-2 border-blue-500 shadow-lg"
                       />
                     ) : (
-                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white font-[1000] text-2xl sm:text-3xl flex items-center justify-center border-2 border-blue-400 shadow-lg shrink-0 uppercase">
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-cyan-700 text-white font-[1000] text-2xl sm:text-3xl flex items-center justify-center border-2 border-blue-400 shadow-lg shrink-0 uppercase">
                         {activeStudent.mentor.name.split(' ').map(w => w[0]).join('').slice(0, 2) || 'BM'}
                       </div>
                     )}
@@ -1808,7 +1808,7 @@ export default function FreeMentorship() {
                   <button
                     type="button"
                     onClick={() => document.getElementById('mentor-live-chat')?.scrollIntoView({ behavior: 'smooth' })}
-                    className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 active:scale-[0.98]"
+                    className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 active:scale-[0.98]"
                   >
                     <MessageCircle size={16} /> 💬 Live Chat with {activeStudent.mentor.name}
                   </button>
@@ -2052,7 +2052,7 @@ export default function FreeMentorship() {
                 </div>
 
                 <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-purple-500/20 border border-purple-400/30 text-purple-300 flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 flex items-center justify-center shrink-0">
                     <TrendingUp size={18} />
                   </div>
                   <div>
@@ -2073,7 +2073,7 @@ export default function FreeMentorship() {
               </div>
 
               {/* Main Launch Button & Mentee Notice */}
-              <div className="p-5 rounded-2xl bg-gradient-to-r from-blue-600/30 via-indigo-600/25 to-purple-600/30 border border-blue-400/30 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
+              <div className="p-5 rounded-2xl bg-gradient-to-r from-blue-600/30 via-indigo-600/25 to-cyan-600/30 border border-blue-400/30 flex flex-col sm:flex-row items-center justify-between gap-4 relative z-10">
                 <div className="space-y-1 text-center sm:text-left">
                   <h4 className="text-sm font-black text-white flex items-center justify-center sm:justify-start gap-2">
                     <span>🚀 Launch Focus Study Zone (/study)</span>
@@ -2095,7 +2095,7 @@ export default function FreeMentorship() {
                     href="/study"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto px-6 py-4 bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-xl shadow-blue-500/30 border border-blue-400/30 transition-all active:scale-95"
+                    className="w-full sm:w-auto px-6 py-4 bg-gradient-to-r from-blue-500 via-indigo-600 to-cyan-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-2xl font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-xl shadow-blue-500/30 border border-blue-400/30 transition-all active:scale-95"
                   >
                     <span>Open Built-in Study Tab</span>
                     <ExternalLink size={16} />
@@ -2229,9 +2229,9 @@ export default function FreeMentorship() {
                             {logs.length}
                           </span>
                         </div>
-                        <div className="p-3.5 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-2xl border border-purple-100 text-center">
-                          <span className="block text-[10px] font-black uppercase text-purple-600">Study Status</span>
-                          <span className={`text-xs sm:text-sm font-black mt-1 block ${logs.length > 0 ? 'text-purple-700' : 'text-slate-400'}`}>
+                        <div className="p-3.5 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border border-indigo-100 text-center">
+                          <span className="block text-[10px] font-black uppercase text-indigo-600">Study Status</span>
+                          <span className={`text-xs sm:text-sm font-black mt-1 block ${logs.length > 0 ? 'text-indigo-700' : 'text-slate-400'}`}>
                             {logs.length > 0 ? 'Active 🔥' : 'No Logs Yet ⏳'}
                           </span>
                         </div>
@@ -2298,7 +2298,7 @@ export default function FreeMentorship() {
                                 <div className="flex items-center gap-2 flex-wrap">
                                   <span className="text-xs font-black text-slate-900">{log.subject}</span>
                                   {log.source && (
-                                    <span className="px-2 py-0.5 rounded-md bg-purple-100 text-purple-700 font-black text-[9px] uppercase tracking-wider border border-purple-200 inline-flex items-center gap-1">
+                                    <span className="px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-700 font-black text-[9px] uppercase tracking-wider border border-indigo-200 inline-flex items-center gap-1">
                                       <Sparkles size={10} /> {log.source}
                                     </span>
                                   )}

@@ -182,14 +182,14 @@ export default function DashboardLayout() {
     setPhoneModalOpen(false);
 
     // Setup push notifications:
-    // - On NATIVE app (Android): skip web push — native app uses DailyNotificationPlugin
+    // - On NATIVE app (Android): skip web push - native app uses DailyNotificationPlugin
     //   which sends notifications directly to the phone tray via Android AlarmManager.
     // - On WEB (browser): use Firebase Web Push (Chrome notifications).
     const setupNotifications = async () => {
       if (!user || !isOnline) return;
       if (isNative) {
         // Native Android: notifications handled by DailyNotificationPlugin.java
-        // No web push needed — notifications go to phone tray automatically.
+        // No web push needed - notifications go to phone tray automatically.
         return;
       }
       // Web only: Firebase web push (lazy-loaded to speed up initial boot)
@@ -466,7 +466,7 @@ export default function DashboardLayout() {
                   className="hidden md:flex h-9 items-center gap-1.5 px-3 rounded-xl font-heading font-bold text-xs transition-all shadow-xs active:scale-95 shrink-0 bg-blue-500/20 hover:bg-blue-500/30 text-cyan-300 border border-blue-400/30"
                   title="Download Official Windows, Mac, Linux & Android Apps"
                 >
-                  <Download size={14} className="text-cyan-400 animate-bounce" />
+                  <Download size={14} className="text-cyan-400" />
                   <span>Download App</span>
                 </Link>
               )}
@@ -540,7 +540,7 @@ export default function DashboardLayout() {
                                 const shareData = {
                                   title: 'Apna College Bihar App - No More Distractions!',
                                   text: '📱 Padhai ke waqt Instagram/Reels se distract hote ho? Apna College Bihar App try karo! Isme "Strict Study Blocker" hai!\n\nSteps:\n1. App Download karke Dashboard me jao.\n2. Niche "Focus Mode" on karo.\n3. Timer set karo aur padhai shuru! (Baki saare apps block ho jayenge)\n\nSaare Notes aur PYQs bhi yahi milenge!\nDownload now: ',
-                                  url: 'https://www.apnacollegebihar.online/apna-college-bihar-v1.apk'
+                                  url: 'https://play.google.com/store/apps/details?id=com.apnacollegebihar.online&pcampaignid=web_share'
                                 };
                                 try {
                                   if (navigator.share) {
@@ -612,8 +612,8 @@ export default function DashboardLayout() {
       )}
 
       {/* Main Content Area */}
-      <main id="main-scroll-container" className="flex-1 overflow-y-auto custom-scrollbar relative z-10 bg-transparent flex flex-col overscroll-y-contain">
-        <div className={`w-full grow shrink-0 ${isMobileApp ? 'pb-6' : 'pb-28 md:pb-8'} min-h-[80vh] ${location.pathname === '/' ? '' : 'p-3 sm:p-4 md:p-6 lg:p-8 max-w-7xl mx-auto'}`}>
+      <main id="main-scroll-container" className="flex-1 overflow-y-auto custom-scrollbar relative z-10 bg-transparent flex flex-col overscroll-y-contain scroll-pt-4">
+        <div className={`w-full grow shrink-0 ${isMobileApp ? 'pb-8' : 'pb-28 md:pb-8'} min-h-[80vh] ${location.pathname === '/' ? '' : 'px-3 pt-3 sm:p-4 md:p-6 lg:p-8 max-w-7xl mx-auto'}`}>
           <React.Suspense fallback={
             <div className="flex flex-col items-center justify-center w-full h-[60vh]">
               <div className="w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin"></div>

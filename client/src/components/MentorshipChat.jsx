@@ -251,7 +251,7 @@ export default function MentorshipChat({
         className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 bg-slate-50/60"
       >
         {/* Welcome Banner */}
-        <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 border border-indigo-100 text-center space-y-1.5 shadow-2xs">
+        <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-50 via-indigo-50 to-cyan-50 border border-indigo-100 text-center space-y-1.5 shadow-2xs">
           <span className="text-[10px] font-black uppercase tracking-widest text-indigo-700 bg-white px-2.5 py-0.5 rounded-full border border-indigo-200 shadow-2xs inline-flex items-center gap-1">
             <Sparkles size={11} className="text-amber-500" /> Official BEU Mentorship 1-on-1 Chat
           </span>

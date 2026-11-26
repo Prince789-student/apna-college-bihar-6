@@ -16,7 +16,7 @@ import SEO from '../components/SEO';
 
 // ─── BEU Grading ─────────────────────────────────────────
 function getGrade(pct) {
-  if (pct < 0)  return { grade: '—', point: 0, color: 'text-slate-500' };
+  if (pct < 0)  return { grade: '-', point: 0, color: 'text-slate-500' };
   if (pct >= 90) return { grade: 'A+', point: 10, color: 'text-emerald-400' };
   if (pct >= 80) return { grade: 'A',  point: 9,  color: 'text-blue-400' };
   if (pct >= 70) return { grade: 'B',  point: 8,  color: 'text-cyan-400' };
@@ -49,7 +49,7 @@ function calcSubject(sub) {
 
     let grade, point, color;
     if (!hasMarks) {
-      grade = '—'; point = 0; color = 'text-slate-500';
+      grade = '-'; point = 0; color = 'text-slate-500';
     } else if (endSemFail || totalFail) {
       grade = 'F'; point = 0; color = 'text-red-500';
     } else {
@@ -66,7 +66,7 @@ function calcSubject(sub) {
     const pct   = hasMarks ? (total / 20) * 100 : -1;
     const fail  = hasMarks && pct < 35;
     let grade, point, color;
-    if (!hasMarks)       { grade = '—'; point = 0; color = 'text-slate-500'; }
+    if (!hasMarks)       { grade = '-'; point = 0; color = 'text-slate-500'; }
     else if (fail)       { grade = 'F'; point = 0; color = 'text-red-500'; }
     else                 { ({ grade, point, color } = getGrade(pct)); }
     return { total, maxTotal: 20, pct: hasMarks ? pct : null, grade, point, color, endSemFail: false };
@@ -233,7 +233,7 @@ export default function BeuCgpa() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="col-span-2 bg-white p-6 rounded-[2rem] border border-slate-200/50 flex items-center gap-5">
             <div className="w-20 h-20 bg-blue-500/10 rounded-2xl border border-blue-500/20 flex flex-col items-center justify-center shrink-0">
-              <p className={`text-3xl font-black leading-none ${cgpaColor}`}>{cgpa || '—'}</p>
+              <p className={`text-3xl font-black leading-none ${cgpaColor}`}>{cgpa || '-'}</p>
               <p className="text-[8px] text-slate-500 font-bold uppercase tracking-widest mt-1">CGPA</p>
             </div>
             <div>
@@ -306,7 +306,7 @@ export default function BeuCgpa() {
                         <div className="p-2.5 bg-slate-100 rounded-xl md:bg-transparent md:p-0">
                           {sub.type === 'theory'
                             ? <BookOpen size={16} className="text-blue-500 md:w-[13px] md:h-[13px]"/>
-                            : <FlaskConical size={16} className="text-purple-500 md:w-[13px] md:h-[13px]"/>}
+                            : <FlaskConical size={16} className="text-indigo-500 md:w-[13px] md:h-[13px]"/>}
                         </div>
                         <div className="flex-1">
                           <p className="text-sm md:text-xs font-black text-slate-900 leading-tight uppercase">{sub.name}</p>
@@ -325,20 +325,20 @@ export default function BeuCgpa() {
                     <div className="w-full md:col-span-3 flex md:contents items-center justify-between border-t border-slate-100 pt-3 md:border-0 md:pt-0">
                         <div className="md:hidden">
                            <p className="text-[8px] font-black uppercase text-slate-400">Marks Secured</p>
-                           <p className="text-xs font-black text-slate-900">{calc.pct !== null ? `${calc.total}/${calc.maxTotal}` : '—'}</p>
+                           <p className="text-xs font-black text-slate-900">{calc.pct !== null ? `${calc.total}/${calc.maxTotal}` : '-'}</p>
                         </div>
                         
                         <div className="md:col-span-2 text-center text-xs font-black text-slate-900 hidden md:block">
-                          {calc.pct !== null ? `${calc.total}/${calc.maxTotal}` : <span className="text-slate-600">—</span>}
+                          {calc.pct !== null ? `${calc.total}/${calc.maxTotal}` : <span className="text-slate-600">-</span>}
                         </div>
 
                         <div className="md:hidden text-right">
                            <p className="text-[8px] font-black uppercase text-slate-400">Percentage</p>
-                           <p className="text-xs font-black text-slate-900">{calc.pct !== null ? `${calc.pct.toFixed(0)}%` : '—'}</p>
+                           <p className="text-xs font-black text-slate-900">{calc.pct !== null ? `${calc.pct.toFixed(0)}%` : '-'}</p>
                         </div>
 
                         <div className="md:col-span-1 text-center text-xs font-black text-slate-900 hidden md:block">
-                          {calc.pct !== null ? `${calc.pct.toFixed(0)}%` : <span className="text-slate-600">—</span>}
+                          {calc.pct !== null ? `${calc.pct.toFixed(0)}%` : <span className="text-slate-600">-</span>}
                         </div>
                     </div>
 
@@ -349,7 +349,7 @@ export default function BeuCgpa() {
 
                     {/* GP (Desktop Only) */}
                     <div className="hidden md:block md:col-span-1 text-center text-xs font-black text-slate-700">
-                      {calc.pct !== null ? calc.point : '—'}
+                      {calc.pct !== null ? calc.point : '-'}
                     </div>
 
                     {/* Actions */}
@@ -413,7 +413,7 @@ export default function BeuCgpa() {
       {backlogs.length > 0 && (
         <div className="bg-red-900/10 border border-red-500/20 p-6 rounded-[2rem] space-y-3">
           <p className="text-[10px] font-black uppercase tracking-widest text-red-400 flex items-center gap-2">
-            <AlertTriangle size={13}/> Backlogs — Ye Subjects Clear Karo!
+            <AlertTriangle size={13}/> Backlogs - Ye Subjects Clear Karo!
           </p>
           <div className="space-y-2">
             {backlogs.map(sub => (
@@ -424,8 +424,8 @@ export default function BeuCgpa() {
                     <p className="text-xs font-black text-red-300">{sub.name}</p>
                     <p className="text-[9px] text-red-600">
                       {sub.calc.endSemFail
-                        ? `End Sem: ${sub.marks?.endSem ?? 0}/70 — Min 25 chahiye tha!`
-                        : `${sub.calc.pct?.toFixed(0)}% — Min 35% chahiye tha!`
+                        ? `End Sem: ${sub.marks?.endSem ?? 0}/70 - Min 25 chahiye tha!`
+                        : `${sub.calc.pct?.toFixed(0)}% - Min 35% chahiye tha!`
                       }
                     </p>
                   </div>
@@ -482,7 +482,7 @@ export default function BeuCgpa() {
             <div>
               <p className="text-[9px] font-black uppercase tracking-widest text-slate-500 mb-2">Type</p>
               <div className="grid grid-cols-2 gap-3">
-                {[{val:'theory',label:'📘 Theory',sub:'Max 100 marks'},{val:'practical',label:'🧪 Practical',sub:'Max 20 marks'}].map(t => (
+                {[{val:'theory',label:'Theory',sub:'Max 100 marks'},{val:'practical',label:'Practical',sub:'Max 20 marks'}].map(t => (
                   <button key={t.val} onClick={() => setForm({...form, type: t.val})}
                     className={`p-4 rounded-2xl border text-center transition-all ${form.type === t.val ? 'bg-blue-600 border-blue-500 text-slate-900' : 'border-slate-300 text-slate-500 hover:border-slate-500'}`}>
                     <p className="font-black text-sm">{t.label}</p>
@@ -570,7 +570,7 @@ export default function BeuCgpa() {
                   </>
                 ) : (
                   <>
-                    <p className="text-[9px] font-black uppercase tracking-widest text-purple-400">Internal Assessment (20 marks)</p>
+                    <p className="text-[9px] font-black uppercase tracking-widest text-indigo-400">Internal Assessment (20 marks)</p>
                     {[
                       {key:'practAtt',   label:'Attendance',   max:5},
                       {key:'performance',label:'Performance',   max:5},
@@ -584,7 +584,7 @@ export default function BeuCgpa() {
                         <input type="number" min={0} max={max} placeholder={`0 – ${max}`}
                           value={marksForm[key] ?? ''} onFocus={e=>e.target.select()}
                           onChange={e => setMarksForm({...marksForm, [key]: Math.min(max, Math.max(0, Number(e.target.value)))})}
-                          className="w-full bg-slate-50 border border-slate-300/50 rounded-2xl p-3 text-slate-900 font-black outline-none focus:border-purple-500 transition-all"
+                          className="w-full bg-slate-50 border border-slate-300/50 rounded-2xl p-3 text-slate-900 font-black outline-none focus:border-indigo-500 transition-all"
                         />
                       </div>
                     ))}
@@ -602,8 +602,8 @@ export default function BeuCgpa() {
                     <div className={`mt-2 text-center text-xs font-black py-2 rounded-lg ${liveCalc.grade === 'F' ? 'bg-red-900/30 text-red-400' : 'bg-emerald-900/30 text-emerald-400'}`}>
                       {liveCalc.grade === 'F'
                         ? liveCalc.endSemFail
-                          ? '❌ FAIL — End Sem < 25 marks!'
-                          : '❌ FAIL — Total < 35%!'
+                          ? '❌ FAIL - End Sem < 25 marks!'
+                          : '❌ FAIL - Total < 35%!'
                         : '✅ PASS'}
                     </div>
                   </div>

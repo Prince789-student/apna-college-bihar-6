@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════
-// BEU FREE MENTORSHIP DATA — ENROLLED STUDENTS & MENTORS
+// BEU FREE MENTORSHIP DATA - ENROLLED STUDENTS & MENTORS
 // Synced from Official Google Form: "Free Mentorship for 1st Year Students (BEU - Batch 2026-2030)"
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -1550,7 +1550,7 @@ export function verifyMentorLogin(loginIdentifier, passwordInput) {
   const pass = passwordInput.trim();
   const mentors = getMentorsList();
 
-  // Find in registered mentors list — by username/phone, email, name or id
+  // Find in registered mentors list - by username/phone, email, name or id
   const mentor = mentors.find(m => {
     const rawPhone = (m.phone || '').trim().toLowerCase();
     const rawPhoneClean = rawPhone.replace(/[\s\/-]/g, '');

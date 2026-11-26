@@ -437,7 +437,7 @@ export default function DownloadPage() {
           {(platformFilter === 'all' || platformFilter === 'mobile') && (
             <div className={`bg-white md:bg-black/25 rounded-3xl border-2 ${detectedOS === 'android' ? 'border-emerald-500 shadow-emerald-500/10' : 'border-slate-200 md:border-white/15'} p-6 sm:p-8 shadow-xl hover:border-slate-300 transition-all flex flex-col justify-between relative overflow-hidden group md:text-white`}>
               <div className="absolute top-0 right-0 bg-emerald-600 text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-2xl shadow-sm">
-                {detectedOS === 'android' ? '★ Recommended For Your Phone' : 'Official APK'}
+                {detectedOS === 'android' ? 'Recommended For Your Phone' : 'Google Play Store'}
               </div>
 
               <div>
@@ -478,17 +478,18 @@ export default function DownloadPage() {
 
               <div>
                 <div className="flex items-center justify-between text-xs text-slate-500 font-bold mb-3 px-1">
-                  <span>File Size: ~21 MB</span>
-                  <span>Format: Android .APK Package</span>
+                  <span>Verified Play Store Release</span>
+                  <span>Android 7.0+</span>
                 </div>
 
                 <a
-                  href="/apna-college-bihar-v1.apk"
-                  download="apna-college-bihar-v1.apk"
+                  href="https://play.google.com/store/apps/details?id=com.apnacollegebihar.online&pcampaignid=web_share"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2.5 shadow-lg shadow-emerald-600/20 active:scale-95 transition-all text-center"
                 >
                   <Download size={18} />
-                  <span>Download Android APK (v1.0)</span>
+                  <span>Get it on Google Play</span>
                 </a>
 
                 <p className="text-[11px] text-slate-400 font-medium text-center mt-3">

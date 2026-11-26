@@ -54,7 +54,7 @@ const SEMESTERS = [1,2,3,4,5,6,7,8];
 
 const BRANCH_COLORS = {
   indigo: { bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700', active: 'bg-indigo-600 text-white border-indigo-600', badge: 'bg-indigo-100 text-indigo-600' },
-  violet: { bg: 'bg-violet-50', border: 'border-violet-200', text: 'text-violet-700', active: 'bg-violet-600 text-white border-violet-600', badge: 'bg-violet-100 text-violet-600' },
+  violet: { bg: 'bg-sky-50', border: 'border-sky-200', text: 'text-sky-700', active: 'bg-sky-600 text-white border-sky-600', badge: 'bg-sky-100 text-sky-600' },
   orange: { bg: 'bg-orange-50', border: 'border-orange-200', text: 'text-orange-700', active: 'bg-orange-600 text-white border-orange-600', badge: 'bg-orange-100 text-orange-600' },
   emerald:{ bg: 'bg-emerald-50', border: 'border-emerald-200', text: 'text-emerald-700', active: 'bg-emerald-600 text-white border-emerald-600', badge: 'bg-emerald-100 text-emerald-600' },
   lime:   { bg: 'bg-lime-50',   border: 'border-lime-200',   text: 'text-lime-700',   active: 'bg-lime-600 text-white border-lime-600',     badge: 'bg-lime-100 text-lime-600' },
@@ -167,8 +167,18 @@ export default function Notes() {
       const rawDocs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       const freshDocs = filterValidNotes(rawDocs);
       if (freshDocs.length > 0) {
-        setDocs(freshDocs);
-        setCachedData(CACHE_KEYS.NOTES, freshDocs);
+        // Merge Firestore docs with bundled notesDefaultData so default subjects never lose files
+        const defaultList = Array.isArray(notesDefaultData) ? filterValidNotes(notesDefaultData) : [];
+        const mergedMap = new Map();
+        for (const item of defaultList) {
+          mergedMap.set(item.id, item);
+        }
+        for (const item of freshDocs) {
+          mergedMap.set(item.id, item);
+        }
+        const mergedDocs = Array.from(mergedMap.values());
+        setDocs(mergedDocs);
+        setCachedData(CACHE_KEYS.NOTES, mergedDocs);
       } else if (Array.isArray(notesDefaultData) && notesDefaultData.length > 0) {
         setDocs(notesDefaultData);
         setCachedData(CACHE_KEYS.NOTES, notesDefaultData);
@@ -400,7 +410,7 @@ export default function Notes() {
 
   return (
     <div className="max-w-5xl mx-auto px-3 md:px-4 pb-24 space-y-4 md:space-y-6 relative overflow-x-clip">
-      {/* Subtle Ambient Accent Orbs (Mobile light mode only — desktop uses BrandFilmBackground) */}
+      {/* Subtle Ambient Accent Orbs (Mobile light mode only - desktop uses BrandFilmBackground) */}
       <div className="md:hidden absolute -top-10 left-1/4 w-72 h-72 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%)' }} />
       <div className="md:hidden absolute top-40 right-10 w-80 h-80 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)' }} />
 
@@ -446,8 +456,8 @@ export default function Notes() {
 
           {/* Breadcrumb */}
           <div className="flex items-center gap-1 md:gap-1.5 flex-wrap mb-3 md:mb-5">
-            <button onClick={goHome} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'branch' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 md:hover:bg-white/10'}`}>📚 Notes</button>
-            {branch && <><ChevronRight size={12} className="text-slate-300 md:text-slate-500" /><button onClick={goToBranch} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'sem' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 md:hover:bg-white/10'}`}>{branch.emoji} {branch.short}</button></>}
+            <button onClick={goHome} className={`inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'branch' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 md:hover:bg-white/10'}`}><BookOpen size={12} /> Notes</button>
+            {branch && <><ChevronRight size={12} className="text-slate-300 md:text-slate-500" /><button onClick={goToBranch} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'sem' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 md:hover:bg-white/10'}`}>{branch.short}</button></>}
             {sem && <><ChevronRight size={12} className="text-slate-300 md:text-slate-500" /><button onClick={goToSem} className={`text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg transition-all ${step === 'subject' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 md:hover:bg-white/10'}`}>Sem {sem}</button></>}
             {folder && <><ChevronRight size={12} className="text-slate-300 md:text-slate-500" />{navHistory.map((h, i) => (<React.Fragment key={h.id}><button onClick={() => { setNavHistory(nh => nh.slice(0, i)); setFolder(h); }} className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 md:hover:bg-white/10">{h.title}</button><ChevronRight size={12} className="text-slate-300 md:text-slate-500" /></React.Fragment>))}<span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg bg-indigo-600 text-white">{folder.title}</span></>}
           </div>
@@ -514,7 +524,7 @@ export default function Notes() {
         <div>
           <div className="flex items-center gap-3 mb-4">
             <button onClick={goHome} className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition-all"><ArrowLeft size={16} className="text-slate-600" /></button>
-            <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{branch.emoji} {branch.label} — Select Semester</p>
+            <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{branch.label} · Select Semester</p>
           </div>
           <div className="grid grid-cols-4 md:grid-cols-8 gap-2.5 md:gap-3">
             {SEMESTERS.map(s => (
@@ -533,15 +543,19 @@ export default function Notes() {
         <div>
           <div className="flex items-center gap-3 mb-4">
             <button onClick={goToBranch} className="p-2 rounded-xl bg-slate-100 md:bg-white/10 hover:bg-slate-200 transition-all cursor-pointer"><ArrowLeft size={16} className="text-slate-600 md:text-white" /></button>
-            <p className="text-[11px] font-black text-slate-400 md:text-slate-300 uppercase tracking-[0.2em]">{branch.emoji} {branch.short} · Semester {sem} — Select Subject</p>
+            <p className="text-[11px] font-black text-slate-400 md:text-slate-300 uppercase tracking-[0.2em]">{branch.short} · Semester {sem} · Select Subject</p>
           </div>
           {loading ? (
             <div className="py-16 text-center"><p className="text-slate-400 font-black uppercase tracking-widest animate-pulse text-sm">Loading subjects...</p></div>
           ) : subjectFolders.length === 0 && looseFiles.length === 0 ? (
-            <div className="py-16 text-center bg-white md:bg-slate-900/60 md:backdrop-blur-md rounded-[2rem] border border-dashed border-slate-200 md:border-white/15">
-              <div className="text-4xl mb-3">📂</div>
-              <p className="text-slate-800 md:text-white font-black text-base uppercase tracking-tight">Coming Soon!</p>
-              <p className="text-slate-400 md:text-slate-300 text-xs font-bold mt-1">Wait bruh! Jald hi notes upload honge. Stay tuned!</p>
+            <div className="py-12 px-6 text-center bg-white md:bg-slate-900/60 md:backdrop-blur-md rounded-[2rem] border border-slate-200 md:border-white/15">
+              <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-500"><FolderOpen size={24} /></div>
+              <p className="text-slate-800 md:text-white font-black text-base uppercase tracking-tight">Subjects Being Curated</p>
+              <p className="text-slate-500 md:text-slate-300 text-xs font-medium mt-1 max-w-md mx-auto">Verified unit-wise PDFs for this semester are being organized. Meanwhile, explore the official BEU syllabus or previous year question papers.</p>
+              <div className="mt-4 flex items-center justify-center gap-2.5 flex-wrap">
+                <button onClick={() => navigate('/syllabus')} className="px-4 py-2 rounded-xl bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700 transition-colors">View Syllabus</button>
+                <button onClick={() => navigate('/pyq')} className="px-4 py-2 rounded-xl bg-slate-100 text-slate-800 text-xs font-bold hover:bg-slate-200 transition-colors">Browse PYQs</button>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
@@ -583,19 +597,19 @@ export default function Notes() {
         <div>
           <div className="flex items-center gap-3 mb-4">
             <button onClick={goBack} className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition-all"><ArrowLeft size={16} className="text-slate-600" /></button>
-            <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{folder.title} — Notes Files</p>
+            <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{folder.title} · Notes Files</p>
           </div>
           {loading ? (
             <div className="py-16 text-center"><p className="text-slate-400 font-black uppercase tracking-widest animate-pulse text-sm">Loading files...</p></div>
           ) : folderFiles.length === 0 ? (
-            <div className="py-16 text-center bg-white rounded-[2rem] border border-dashed border-slate-200">
-              <div className="text-4xl mb-3">📄</div>
-              <p className="text-slate-800 font-black text-base uppercase tracking-tight">No files yet</p>
-              <p className="text-slate-400 text-xs font-bold mt-1">Is subject mein abhi koi notes upload nahi hua hai</p>
+            <div className="py-12 px-6 text-center bg-white rounded-[2rem] border border-slate-200">
+              <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-500"><FileDigit size={24} /></div>
+              <p className="text-slate-800 font-black text-base uppercase tracking-tight">No Files in This Folder Yet</p>
+              <p className="text-slate-500 text-xs font-medium mt-1 max-w-md mx-auto">Use the search bar above or check the official BEU syllabus and previous year papers for this subject.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
-              {folderFiles.map((d, idx) => (
+              {folderFiles.map((d) => (
                 <React.Fragment key={d.id}>
                   {d.type === 'folder' ? (
                     <button onClick={() => selectFolder(d)}
@@ -610,13 +624,34 @@ export default function Notes() {
                   ) : (
                     <FileCard d={d} onAction={handleAction} accentColor="indigo" user={user} onEdit={handleEditNote} onDelete={handleDeleteNote} />
                   )}
-                  {idx % 4 === 3 && <div className="col-span-1"><PremiumAds type="INLINE" onClick={() => setDonateModal({isOpen: true, mode: 'SUPPORT'})} /></div>}
                 </React.Fragment>
               ))}
             </div>
           )}
         </div>
       )}
+
+      {/* Educational Study Guide for BEU Students */}
+      <section className="bg-white rounded-2xl md:rounded-[2rem] border border-slate-200/80 p-5 md:p-7 space-y-3 shadow-2xs">
+        <h2 className="text-sm md:text-base font-black text-slate-900 uppercase tracking-tight">How to Use BEU Unit-Wise Notes Effectively</h2>
+        <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
+          Bihar Engineering University (BEU) semester examinations follow a 70-mark End Semester Examination (ESE) and 30-mark Internal Assessment (IA) pattern. Each subject is structured into 5 to 6 core modules covering theoretical derivations, numerical problem-solving, and practical engineering applications.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
+            <h3 className="text-xs font-black text-slate-900 uppercase">1. Match With Syllabus</h3>
+            <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">Verify unit topics against the latest BEU Session 2024 onwards syllabus before starting exam revision.</p>
+          </div>
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
+            <h3 className="text-xs font-black text-slate-900 uppercase">2. Solve 5-Year PYQs</h3>
+            <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">Pair each unit PDF with previous year university question papers to identify recurring numerical and long-answer questions.</p>
+          </div>
+          <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/70">
+            <h3 className="text-xs font-black text-slate-900 uppercase">3. Maintain 75% Attendance</h3>
+            <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">Track daily theory and lab classes to stay eligible for end-semester examinations across all 38 Bihar government engineering colleges.</p>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
       <div className="bg-slate-50 p-4 md:p-6 rounded-2xl md:rounded-[2.5rem] border border-slate-200/50 flex items-center gap-3">

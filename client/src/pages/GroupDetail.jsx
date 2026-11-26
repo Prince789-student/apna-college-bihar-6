@@ -1,4 +1,5 @@
 import SEO from '../components/SEO';
+import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../firebase';
@@ -146,7 +147,7 @@ export default function GroupDetail() {
       );
     }
 
-    const colors = ['#f97316', '#3b82f6', '#8b5cf6', '#10b981', '#ec4899', '#f59e0b'];
+    const colors = ['#f97316', '#3b82f6', '#0ea5e9', '#10b981', '#ec4899', '#f59e0b'];
     const entries = Object.entries(breakdown).sort((a, b) => b[1] - a[1]);
     const circ = 2 * Math.PI * 30; // r=30
     let accumulatedPercent = 0;
@@ -252,7 +253,7 @@ export default function GroupDetail() {
   const sendNudge = async (targetMember = null) => {
     const target = targetMember || selectedMember;
     if (!target || !user) return;
-    try { await addDoc(collection(db, 'nudges'), { toUserId: target.id, fromUserName: user.name || 'Scholar', timestamp: serverTimestamp(), groupId: groupId }); alert(`Nudge sent!`); } catch (e) { console.error(e); }
+    try { await addDoc(collection(db, 'nudges'), { toUserId: target.id, fromUserName: user.name || 'Scholar', timestamp: serverTimestamp(), groupId: groupId }); toast.error(`Nudge sent!`); } catch (e) { console.error(e); }
     if (!targetMember) setSelectedMember(null);
   };
 
@@ -354,7 +355,7 @@ export default function GroupDetail() {
                     onClick={() => {
                       const joinLink = `${window.location.origin}/groups?join=${group.code}`;
                       navigator.clipboard.writeText(joinLink);
-                      alert('Invite link copied to clipboard!');
+                      toast.success('Invite link copied to clipboard!');
                     }} 
                     className="flex items-center gap-2 bg-emerald-600/10 hover:bg-emerald-600 hover:text-white text-emerald-600 px-3 py-1.5 rounded-xl border border-emerald-500/20 transition-all font-black text-[10px] uppercase tracking-widest"
                   >
@@ -663,7 +664,7 @@ export default function GroupDetail() {
                     <div className="flex items-center gap-4 bg-slate-50 border border-slate-100 rounded-3xl p-4 justify-center md:justify-start">
                       {(() => {
                         const { breakdown, total } = getSubjectBreakdown(selectedDate);
-                        const colors = ['#f97316', '#3b82f6', '#8b5cf6', '#10b981', '#ec4899', '#f59e0b'];
+                        const colors = ['#f97316', '#3b82f6', '#0ea5e9', '#10b981', '#ec4899', '#f59e0b'];
                         return (
                           <>
                             {renderDonutChart(breakdown, total)}

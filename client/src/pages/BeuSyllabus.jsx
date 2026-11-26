@@ -227,8 +227,8 @@ function splitIntoTopics(text, isNewSyllabus = false) {
   const finalTopics = [];
   for (let p of subSplit) {
     p = p.trim();
-    p = p.replace(/^[:\-–—,\.\s]+/, '');
-    p = p.replace(/[:\-–—,\.\s]+$/, '');
+    p = p.replace(/^[:\-–\u2014,\.\s]+/, '');
+    p = p.replace(/[:\-–\u2014,\.\s]+$/, '');
     
     // Discard pure hours like "(4 Hours)" or "6 hrs" or pure punctuation
     if (/^\(?\d+\s*(?:hrs?|hours?)\)?$/i.test(p)) continue;
@@ -241,17 +241,17 @@ function splitIntoTopics(text, isNewSyllabus = false) {
     const isKnapsack = /^0\/1\s*Knapsack/i.test(p);
     if (!isKnapsack) {
       // Strip ALL leading numbering variations:
-      p = p.replace(/^(?:LE[-–\s]*\d+\.?|L[-–\s]*\d+\.?|\d+\.\d+(?:\.\d+)?|\d+\.|\([a-z0-9]+\)|[a-z0-9]\))\s*[:\-–—]?\s*/i, '');
+      p = p.replace(/^(?:LE[-–\s]*\d+\.?|L[-–\s]*\d+\.?|\d+\.\d+(?:\.\d+)?|\d+\.|\([a-z0-9]+\)|[a-z0-9]\))\s*[:\-–-]?\s*/i, '');
       // Strip standalone leading numbers (e.g. "1 ", "4 ") but NOT technical numbers ("32-bit", "3D", "0/1", etc.)
       if (!/^(?:2D|3D|0\/1|8085|8086|32-bit|64-bit|4-stroke|2-stroke|2-port|4-bit|8-bit|16-bit|3-phase|1-phase|2-phase)\b/i.test(p)) {
-        p = p.replace(/^\d+\s+[:\-–—]?\s*/, '');
+        p = p.replace(/^\d+\s+[:\-–-]?\s*/, '');
       }
     }
     
     // Strip leading conjunctions
     p = p.replace(/^(?:and|or|as well as)\s+/i, '');
-    p = p.replace(/^[:\-–—,\.\s]+/, '');
-    p = p.replace(/[:\-–—,\.\s]+$/, '');
+    p = p.replace(/^[:\-–\u2014,\.\s]+/, '');
+    p = p.replace(/[:\-–\u2014,\.\s]+$/, '');
     p = p.trim();
 
     if (p.length >= 2) {
@@ -314,13 +314,13 @@ function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
         continue;
       }
 
-      // Check for Unit header or Practical Experiments
-      const isExplicitUnit = /^#{3,4}\s*(?:📌)?\s*Unit[-–\s_—]*\d/i.test(trimmed) || 
+      // Check for Unit header or Practical Experiments / Guidelines
+      const isExplicitUnit = /^#{3,4}\s*(?:📌)?\s*Unit[-–\s_\u2014]*\d/i.test(trimmed) || 
                              /^UNIT\s+\d/i.test(trimmed) || 
-                             /^Module\s+\d/i.test(trimmed) || 
-                             /^#{3,4}\s*Module\s+\d/i.test(trimmed) ||
+                             /^Module\s+(?:\d|[IVX]+)/i.test(trimmed) || 
+                             /^#{3,4}\s*Module\s+(?:\d|[IVX]+)/i.test(trimmed) ||
                              /^\*\*(?:Unit|Module)\s+\d+[:.]?/i.test(trimmed) ||
-                             /^#{3,4}\s*(?:📌)?\s*(?:Practical Experiments|PRACTICAL EXPERIMENTS|List of Experiments)/i.test(trimmed);
+                             /^#{3,4}\s*(?:📌)?\s*(?:Practical Experiments|PRACTICAL EXPERIMENTS|List of Experiments|List of programs|Lab Experiments|Internship Guidelines|Project Guidelines|Guidelines)/i.test(trimmed);
 
       if (isExplicitUnit) {
         parsingReferences = false;
@@ -397,7 +397,7 @@ function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
     }
   }
 
-  // Topic splitting pass
+  // Topic splitting + bare unit-name fallback pass
   for (const subject of subjects) {
     if (subject.title) subject.title = cleanTitleStr(subject.title);
     for (const unit of subject.units) {
@@ -413,6 +413,21 @@ function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
         }
       }
       unit.topics = newTopics;
+
+      // Fallback: if unit.title is still bare ("Unit - 2" / "Unit-2.0"), derive name from first topic
+      if (/^(?:Unit|Module)\s*[-–\u2014]?\s*\d+(?:\.\d+)?\.?$/i.test(unit.title.trim()) && unit.topics.length > 0) {
+        const firstText = unit.topics.find(t => !t.isHeading && !/^\d+\s*(?:hrs?|hours?)$/i.test(t.text.trim()))?.text || '';
+        const cleanedFirst = firstText.replace(/^\(?\d+\s*(?:hrs?|hours?)\)?[:\-–\s]*/i, '').trim();
+        if (cleanedFirst) {
+          const colonIdx = cleanedFirst.search(/[:-]/);
+          const candidate = (colonIdx > 2 && colonIdx <= 65)
+            ? cleanedFirst.slice(0, colonIdx).trim()
+            : (cleanedFirst.length <= 55 ? cleanedFirst : cleanedFirst.slice(0, 55).replace(/\s+\S*$/, '').trim());
+          if (candidate.length >= 3) {
+            unit.title = `${unit.title.replace(/\.$/, '')}: ${candidate}`;
+          }
+        }
+      }
     }
   }
 
@@ -420,8 +435,8 @@ function parseSyllabusIntoSubjects(rawText, isNewSyllabus = false) {
   return subjects
     .filter(s => s.units.length > 0)
     .sort((a, b) => {
-      const aIsLab = /LAB/i.test(a.title) || /P$/i.test(a.courseCode);
-      const bIsLab = /LAB/i.test(b.title) || /P$/i.test(b.courseCode);
+      const aIsLab = /LAB|PRACTICAL|WORKSHOP|INTERNSHIP|SEMINAR|\bPROJECT\b(?!\s+MANAGEMENT)/i.test(a.title) || /P$/i.test(a.courseCode);
+      const bIsLab = /LAB|PRACTICAL|WORKSHOP|INTERNSHIP|SEMINAR|\bPROJECT\b(?!\s+MANAGEMENT)/i.test(b.title) || /P$/i.test(b.courseCode);
       if (aIsLab && !bIsLab) return 1;
       if (!aIsLab && bIsLab) return -1;
       return 0;
@@ -503,9 +518,9 @@ function AiPromptModal({ topicText, subjectName, unitName, onClose }) {
     {
       name: 'Poe AI',
       url: `https://poe.com/`,
-      icon: '🔮',
+      icon: 'AI',
       desc: 'Poe Multi-AI',
-      bg: 'bg-purple-50 hover:bg-purple-100 text-purple-900 border-purple-200'
+      bg: 'bg-slate-100 hover:bg-slate-200 text-slate-900 border-slate-300'
     }
   ];
 
@@ -516,10 +531,10 @@ function AiPromptModal({ topicText, subjectName, unitName, onClose }) {
         onClick={e => e.stopPropagation()}
       >
         {/* Top Header */}
-        <div className="p-4 sm:p-5 bg-gradient-to-r from-indigo-600 via-indigo-700 to-purple-700 text-white flex items-center justify-between relative">
+        <div className="p-4 sm:p-5 bg-slate-900 text-white flex items-center justify-between relative">
           <div className="flex items-center gap-2.5 min-w-0 pr-6">
-            <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-lg flex-shrink-0">
-              ✨
+            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center flex-shrink-0">
+              <Sparkles size={18} className="text-white" />
             </div>
             <div className="min-w-0">
               <h3 className="text-sm font-black uppercase tracking-wider text-white">Ask AI Assistant</h3>
@@ -729,7 +744,7 @@ export default function BeuSyllabus() {
 
   const [syllabusData, setSyllabusData] = useState(() => {
     try {
-      const cached = localStorage.getItem('beu_syllabus_cache_v7');
+      const cached = localStorage.getItem('beu_syllabus_cache_v9');
       if (cached) {
         const parsed = JSON.parse(cached);
         if (Array.isArray(parsed) && parsed.length > 0) return parsed;
@@ -754,7 +769,7 @@ export default function BeuSyllabus() {
   useEffect(() => {
     // Clear legacy caches to ensure latest clean data
     try {
-      ['beu_syllabus_cache', 'beu_syllabus_cache_v1', 'beu_syllabus_cache_v2', 'beu_syllabus_cache_v3', 'beu_syllabus_cache_v4', 'beu_syllabus_cache_v5', 'beu_syllabus_cache_v6'].forEach(k => {
+      ['beu_syllabus_cache', 'beu_syllabus_cache_v1', 'beu_syllabus_cache_v2', 'beu_syllabus_cache_v3', 'beu_syllabus_cache_v4', 'beu_syllabus_cache_v5', 'beu_syllabus_cache_v6', 'beu_syllabus_cache_v7', 'beu_syllabus_cache_v8'].forEach(k => {
         localStorage.removeItem(k);
       });
     } catch (e) {}
@@ -765,42 +780,14 @@ export default function BeuSyllabus() {
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
           setSyllabusData(data);
-          try { localStorage.setItem('beu_syllabus_cache_v7', JSON.stringify(data)); } catch (e) {}
-        }
-        if (selectedBranch && selectedSem) {
-          setTimeout(() => {
-            if (syllabusContentRef.current) {
-              syllabusContentRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-          }, 300);
+          try { localStorage.setItem('beu_syllabus_cache_v9', JSON.stringify(data)); } catch (e) {}
         }
       })
       .catch(() => {
         // defaultSyllabusData already in place
       });
 
-    // Live Firestore overrides from Admin Panel Syllabus Manager
-    const unsubSyllabus = onSnapshot(collection(db, 'beu_syllabus'), (snap) => {
-      if (!snap.empty) {
-        const overrides = snap.docs.map(d => d.data()).filter(x => x && x.branch && x.semester && x.content);
-        if (overrides.length > 0) {
-          setSyllabusData(prev => {
-            const merged = [...(Array.isArray(prev) ? prev : defaultSyllabusData)];
-            overrides.forEach(ov => {
-              const idx = merged.findIndex(x => x.branch === ov.branch && x.semester === ov.semester);
-              if (idx >= 0) {
-                merged[idx] = { ...merged[idx], content: ov.content, updatedAt: ov.updatedAt };
-              } else {
-                merged.push({ branch: ov.branch, semester: ov.semester, content: ov.content, updatedAt: ov.updatedAt });
-              }
-            });
-            return merged;
-          });
-        }
-      }
-    }, () => {});
-
-    return () => unsubSyllabus();
+    // Syllabus data is served from bundled syllabusData.json + /syllabus.json with localStorage cache (0 Firestore reads)
   }, []);
 
   useScrollToTop([selectedSubjectIndex, selectedSem, selectedBranch]);
@@ -892,7 +879,7 @@ export default function BeuSyllabus() {
   const theorySubjects = [];
   const labSubjects = [];
   subjects.forEach((subj, index) => {
-    const isLab = /LAB/i.test(subj.title) || /P$/i.test(subj.courseCode);
+    const isLab = /LAB|PRACTICAL|WORKSHOP|INTERNSHIP|SEMINAR|\bPROJECT\b(?!\s+MANAGEMENT)/i.test(subj.title) || /P$/i.test(subj.courseCode);
     if (isLab) {
       labSubjects.push({ subject: subj, originalIndex: index });
     } else {
@@ -1058,31 +1045,34 @@ export default function BeuSyllabus() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 md:bg-transparent font-['Inter'] pb-24">
+    <div className="min-h-screen bg-slate-50 md:bg-transparent font-['Inter'] pb-24 overflow-x-clip">
       <SEO 
-        title={`BEU ${selectedBranch.toUpperCase()} Sem ${selectedSem.replace('sem', '')} Syllabus ✅ | Apna College Bihar`}
+        title={`BEU ${selectedBranch.toUpperCase()} Sem ${selectedSem.replace('sem', '')} Syllabus | Apna College Bihar`}
         description={`Check official Bihar Engineering University (BEU) syllabus for ${selectedBranch.toUpperCase()} Semester ${selectedSem.replace('sem', '')}. Track your syllabus progress online.`}
         keywords={`BEU Syllabus, ${selectedBranch} Syllabus, Semester ${selectedSem.replace('sem', '')} Syllabus, Bihar Engineering Syllabus, B.Tech Syllabus BEU`}
       />
       
       {/* Header */}
-      <div className="bg-indigo-600 md:bg-slate-900/85 md:backdrop-blur-md text-white rounded-b-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden border-b md:border-white/10">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="max-w-4xl mx-auto relative z-10 flex flex-col items-center text-center">
-          <Link to="/hub?standalone=true" className="self-start text-[10px] font-black uppercase tracking-widest bg-white/20 px-4 py-2 rounded-xl mb-8 hover:bg-white/30 transition-all">
-            ← Back to Hub
-          </Link>
-          <div className="w-16 h-16 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-6 shadow-inner">
-            <BookOpen size={32} className="text-white" />
+      <div className="bg-indigo-600 md:bg-slate-900/85 md:backdrop-blur-md text-white rounded-2xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-10 shadow-lg relative overflow-hidden border border-indigo-500/30 md:border-white/10">
+        <div className="max-w-4xl mx-auto relative z-10 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-11 h-11 md:w-14 md:h-14 bg-white/20 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0">
+              <BookOpen size={22} className="text-white" />
+            </div>
+            <div className="min-w-0">
+              <h1 className="text-lg sm:text-2xl md:text-4xl font-[1000] tracking-tight uppercase leading-none">BEU Syllabus</h1>
+              <p className="text-indigo-100 text-[10px] md:text-xs font-bold uppercase tracking-wider mt-1 truncate">
+                Topic-wise Syllabus · YouTube · Progress
+              </p>
+            </div>
           </div>
-          <h1 className="text-3xl md:text-5xl font-[1000] tracking-tighter uppercase mb-4">BEU Syllabus</h1>
-          <p className="text-indigo-100 text-[11px] md:text-sm font-bold uppercase tracking-widest max-w-lg">
-            Topic-wise interactive syllabus • Watch on YouTube • Track Progress
-          </p>
+          <Link to="/hub?standalone=true" className="shrink-0 text-[10px] font-black uppercase tracking-wider bg-white/20 px-3 py-2 rounded-xl hover:bg-white/30 transition-all">
+            ← Hub
+          </Link>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-2 md:px-4 -mt-8 md:-mt-10 relative z-20">
+      <div className={`max-w-4xl mx-auto mt-3 md:mt-5 relative z-20 ${selectedBranch && !selectedSem ? 'min-h-[62vh] flex flex-col justify-center' : ''}`}>
 
         {/* Step-by-Step Shortcut Flow: Branch -> 8 Semesters -> Syllabus (Matches Notes) */}
         <div className="bg-white p-4 sm:p-6 rounded-[2rem] shadow-xl border border-slate-100 mb-6 space-y-5">
@@ -1295,7 +1285,7 @@ export default function BeuSyllabus() {
                   </div>
                 )}
 
-                {/* Selected Subject Detail — shown below all buttons */}
+                {/* Selected Subject Detail - shown below all buttons */}
                 {selectedSubjectIndex !== null && subjects[selectedSubjectIndex] && (
                   <div ref={subjectDetailRef} className="mt-4 rounded-2xl border border-slate-200 overflow-hidden shadow-md animate-in fade-in slide-in-from-top-4 duration-300">
                     {/* Header */}

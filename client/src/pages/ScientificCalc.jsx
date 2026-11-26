@@ -1,4 +1,5 @@
 import SEO from '../components/SEO';
+import toast from 'react-hot-toast';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Clock } from 'lucide-react';
 
@@ -243,7 +244,7 @@ export default function ScientificCalc() {
       }
       setMRes(res ? res.flat() : null);
     } catch(e) { 
-      alert(e.message); 
+      toast.error(e.message); 
       setMRes(null); 
     }
   };

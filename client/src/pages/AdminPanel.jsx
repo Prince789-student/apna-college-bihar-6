@@ -1,4 +1,5 @@
 import SEO from '../components/SEO';
+import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { 
   Shield, Users, FileText, Bell, 
@@ -545,7 +546,7 @@ export default function AdminPanel() {
     if (input === null) return;
     const cleanPhone = input.replace(/\D/g, '').trim();
     if (input.trim() !== '' && cleanPhone.length < 10) {
-      alert("Kripya valid 10-digit phone number daalein!");
+      toast.error("Kripya valid 10-digit phone number daalein!");
       return;
     }
     const targetUid = userObj.id || userObj.uid;
@@ -568,7 +569,7 @@ export default function AdminPanel() {
       setUsers(prev => prev.map(u => (u.id === targetUid || u.uid === targetUid) ? { ...u, phone: cleanPhone } : u));
       flash(`Phone number successfully update ho gaya! 📱✅`, 'ok');
     } catch (err) {
-      alert("Phone update failed: " + err.message);
+      toast.error("Phone update failed: " + err.message);
     }
   };
 
@@ -612,7 +613,7 @@ export default function AdminPanel() {
       setUsers(prev => prev.map(u => (u.id === targetUid || u.uid === targetUid) ? { ...u, ...patchData } : u));
       flash(`Academic details update ho gayi! 🎓✅`, 'ok');
     } catch (err) {
-      alert("Academics update failed: " + err.message);
+      toast.error("Academics update failed: " + err.message);
     }
   };
 
@@ -694,7 +695,7 @@ export default function AdminPanel() {
     if (docToDelete?.type === 'folder') {
       const children = docs.filter(d => d.parentId === id);
       if (children.length > 0) {
-        alert(`Cannot delete folder! It contains ${children.length} file(s). Delete or move the files inside first.`);
+        toast.error(`Cannot delete folder! It contains ${children.length} file(s). Delete or move the files inside first.`);
         return;
       }
       if(!window.confirm(`Delete empty folder '${docToDelete.title}' permanently?`)) return;
@@ -1892,7 +1893,7 @@ export default function AdminPanel() {
                      <input value={docForm.externalUrl || ''} onChange={e=>setDocForm({...docForm, externalUrl:e.target.value, file:null})} placeholder="Paste Drive/URL Link here..." className="w-full bg-[#f8fafc] p-3 rounded-xl text-[11px] font-bold text-blue-400 outline-none border border-slate-200" />
                   </div>
 
-                  <div className="text-center font-black text-slate-700 text-[10px]">— OR —</div>
+                  <div className="text-center font-black text-slate-700 text-[10px]">- OR -</div>
 
                   <div className="p-4 bg-slate-100/50 rounded-2xl border border-slate-300/20">
                     <p className="text-[9px] font-black text-slate-500 uppercase mb-3">Option 2: Internal Cloud Sync (Needs Billing)</p>
@@ -2423,7 +2424,7 @@ export default function AdminPanel() {
                 <div key={n.id} className="flex flex-col sm:flex-row sm:items-center justify-between px-6 md:px-8 py-4 hover:bg-slate-50/70 transition-colors gap-3 group">
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase border ${n.isCollegeNotice ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-blue-50 text-blue-700 border-blue-200'}`}>
+                      <span className={`text-[8px] font-black px-2 py-0.5 rounded-full uppercase border ${n.isCollegeNotice ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-blue-50 text-blue-700 border-blue-200'}`}>
                         🏛️ {n.shortName || (n.isCollegeNotice ? 'COLLEGE' : 'BEU PATNA')}
                       </span>
                       {n.district && (
@@ -2491,7 +2492,7 @@ export default function AdminPanel() {
         <div className="space-y-6 animate-in fade-in zoom-in duration-500">
           
           {/* Monthly Donation Summary Header Banner */}
-          <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-blue-900 p-6 md:p-8 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden">
+          <div className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 p-6 md:p-8 rounded-[2.5rem] text-white shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-rose-500/10 blur-[80px] rounded-full pointer-events-none"></div>
             <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div>

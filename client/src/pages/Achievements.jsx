@@ -8,11 +8,11 @@ import { Trophy, Flame, Clock, Star, Zap, Award, Shield } from 'lucide-react';
 const ALL_BADGES = [
   { id: 'streak_3',   icon: '🔥', name: '3-Day Streak',   desc: 'Lagatar 3 din padha!',       color: 'from-orange-500 to-red-600' },
   { id: 'streak_7',   icon: '🌟', name: '7-Day Streak',   desc: 'Ek hafte ki mehnat!',         color: 'from-yellow-500 to-amber-600' },
-  { id: 'streak_30',  icon: '👑', name: '30-Day Streak',  desc: 'Ek mahina lagatar! Legend!',  color: 'from-purple-500 to-indigo-700' },
+  { id: 'streak_30',  icon: '👑', name: '30-Day Streak',  desc: 'Ek mahina lagatar! Legend!',  color: 'from-blue-500 to-indigo-700' },
   { id: 'first_hour', icon: '⏱', name: 'First Hour',     desc: 'Pehla 1 ghanta complete!',    color: 'from-blue-500 to-cyan-600' },
   { id: 'ten_hours',  icon: '⚡', name: '10 Hours Club',  desc: 'Total 10 ghante padhe!',      color: 'from-emerald-500 to-teal-600' },
   { id: 'sessions_5', icon: '📚', name: '5 Sessions',     desc: '5 study sessions complete!',  color: 'from-pink-500 to-rose-600' },
-  { id: 'sessions_20',icon: '🎯', name: '20 Sessions',    desc: '20 sessions master!',         color: 'from-violet-500 to-purple-700' },
+  { id: 'sessions_20',icon: '🎯', name: '20 Sessions',    desc: '20 sessions master!',         color: 'from-sky-500 to-cyan-700' },
   { id: 'goals_hit',  icon: '🏆', name: 'Goal Crusher',  desc: 'Daily goal hit ki!',          color: 'from-amber-400 to-yellow-600' },
 ];
 
@@ -68,7 +68,7 @@ export default function Achievements() {
           { icon: <Flame size={20} className="text-orange-500" />, label: 'Current Streak', value: `${userData?.streak || 0} days` },
           { icon: <Clock size={20} className="text-blue-500" />, label: 'Total Study Time', value: `${formatHrs(userData?.totalStudyTime)} hr` },
           { icon: <Zap size={20} className="text-yellow-500" />, label: 'Total Sessions', value: sessionCount },
-          { icon: <Award size={20} className="text-purple-500" />, label: 'Badges Earned', value: `${earned.length}/${ALL_BADGES.length}` },
+          { icon: <Award size={20} className="text-indigo-500" />, label: 'Badges Earned', value: `${earned.length}/${ALL_BADGES.length}` },
         ].map(({ icon, label, value }) => (
           <div key={label} className="bg-white p-5 rounded-2xl border border-slate-200/50 text-center space-y-2">
             <div className="flex justify-center">{icon}</div>
@@ -113,7 +113,7 @@ export default function Achievements() {
       {earned.length === 0 && (
         <div className="text-center py-12 bg-white rounded-3xl border border-dashed border-slate-300">
           <Trophy size={40} className="mx-auto text-slate-700 mb-4" />
-          <p className="text-slate-500 font-bold">Koi badge nahi abhi — Padhai shuru karo!</p>
+          <p className="text-slate-500 font-bold">Koi badge nahi abhi - Padhai shuru karo!</p>
           <p className="text-slate-600 text-xs mt-2">Study session complete karo aur badges unlock karo</p>
         </div>
       )}

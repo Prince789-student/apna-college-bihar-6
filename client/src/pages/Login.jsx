@@ -31,7 +31,7 @@ export default function Login() {
       setError('');
       await googleLogin();
       // NOTE: On mobile/tablet, googleLogin() calls signInWithRedirect()
-      // which redirects the page to Google — code below won't run on mobile.
+      // which redirects the page to Google - code below won't run on mobile.
       // On desktop (popup), it returns the user directly.
       toast.success('Welcome back to the Hub!');
       
@@ -43,7 +43,7 @@ export default function Login() {
         navigate('/');
       }
     } catch (err) {
-      // auth/popup-blocked is handled inside googleLogin() — won't reach here
+      // auth/popup-blocked is handled inside googleLogin() - won't reach here
       if (err.code !== 'auth/popup-blocked') {
         setError(err.message || 'Google login failed. Please try again.');
         toast.error('Login failed. Please try again.');

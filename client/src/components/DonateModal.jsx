@@ -12,7 +12,7 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
 
   const handleCopy = () => {
     navigator.clipboard.writeText(upiId);
-    toast.success('UPI ID Copied to clipboard! ✅');
+    toast.success('UPI ID Copied to clipboard!');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -61,15 +61,15 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
           {/* Community Appeal Box */}
           <div className="w-full bg-gradient-to-b from-rose-50/90 via-blue-50/70 to-amber-50/60 md:from-slate-800/90 md:via-slate-800/80 md:to-slate-850 border border-rose-200/80 md:border-white/15 rounded-2xl p-2.5 sm:p-3 text-center mb-2.5 shadow-xs">
             <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-600 text-white text-[9px] font-black uppercase tracking-wider mb-1.5 shadow-xs">
-              ❤️ Student Support Initiative
+              Student Support Initiative
             </div>
             
             <p className="text-[11px] sm:text-xs font-black text-slate-800 md:text-white leading-snug mb-1">
-              "Hamein apne liye nahi chahiye — aapke liye better resources aur server cost ke liye chahiye!"
+              "Hamein apne liye nahi chahiye - aapke liye better resources aur server cost ke liye chahiye!"
             </p>
             
             <p className="text-[10px] sm:text-[11px] text-slate-600 md:text-slate-200 font-medium leading-relaxed">
-              Yahan Bihar ke sabhi <strong>38 Govt Engineering Colleges</strong> ke liye notes, PYQs aur tools <strong>100% FREE</strong> hain. Aapka chhota sa support <strong className="text-rose-600 md:text-rose-400 font-bold">(₹50, ₹100 ya apni marzi se)</strong> sirf better study resources, storage aur 24x7 server cost ke liye lagta hai taaki yeh platform hamesha free aur fast chale! ❤️
+              Yahan Bihar ke sabhi <strong>38 Govt Engineering Colleges</strong> ke liye notes, PYQs aur tools <strong>100% FREE</strong> hain. Aapka chhota sa support <strong className="text-rose-600 md:text-rose-400 font-bold">(₹50, ₹100 ya apni marzi se)</strong> sirf better study resources, storage aur 24x7 server cost ke liye lagta hai taaki yeh platform hamesha free aur fast chale!
             </p>
 
             <div className="flex items-center justify-center gap-2 mt-2 pt-1.5 border-t border-rose-200/60 md:border-white/10">
@@ -128,7 +128,7 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
           </div>
 
           <p className="text-[9px] text-slate-500 md:text-slate-400 font-semibold uppercase tracking-wider text-center mt-1.5">
-            💡 UPI Remark mein apna <strong className="text-slate-800 md:text-slate-200">Name & College</strong> likhein — Wall of Fame me aayenge!
+            UPI Remark mein apna <strong className="text-slate-800 md:text-slate-200">Name & College</strong> likhein - Wall of Fame me aayenge!
           </p>
         </div>
 
@@ -139,7 +139,7 @@ export default function DonateModal({ isOpen, onClose, mode = 'SUPPORT', onConti
               onClick={handleProceed}
               className="w-full py-2.5 sm:py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-md shadow-blue-600/20 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
             >
-              <span>❤️ Download File & Continue</span>
+              <span>Download File & Continue</span>
             </button>
           ) : (
             <button 

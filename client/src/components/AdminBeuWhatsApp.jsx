@@ -112,7 +112,7 @@ export default function AdminBeuWhatsApp({ flash, onSwitchToNotices }) {
     fetchNotices(true);
     fetchBotStatus();
     fetchBroadcastSettings();
-    // Polling: 30s for notices (local cache — no Firestore reads), 15s for bot status
+    // Polling: 30s for notices (local cache - no Firestore reads), 15s for bot status
     const noticeInterval = setInterval(() => fetchNotices(false), 30000);
     const botInterval = setInterval(fetchBotStatus, 15000);
     return () => {
@@ -470,7 +470,7 @@ export default function AdminBeuWhatsApp({ flash, onSwitchToNotices }) {
             <div className="bg-slate-50 p-6 rounded-3xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center min-h-[260px]">
               {botStatus === 'CONNECTED' ? (
                 <div className="space-y-3 py-6">
-                  <div className="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto shadow-lg animate-bounce">
+                  <div className="w-16 h-16 bg-emerald-500 text-white rounded-full flex items-center justify-center mx-auto shadow-lg">
                     <Check size={32} />
                   </div>
                   <h4 className="text-base font-black text-slate-900 uppercase">

@@ -46,7 +46,7 @@ const featureConfig = {
     title: 'Personal Study Manager & Planner for BEU Students',
     description: 'Manage your study schedule, set targets, track personal goals and organize your engineering semester plan.',
     keywords: 'Study Planner Students, Personal Manager Engineering, BEU Study Schedule, Semester Planner Bihar Engineering',
-    color: 'from-violet-600 to-purple-600',
+    color: 'from-sky-600 to-cyan-600',
     icon: '📋',
     component: PersonalManager,
   },

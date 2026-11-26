@@ -20,11 +20,20 @@ export default function StudyResources() {
   const [flashMsg, setFlashMsg] = useState(null);
 
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, 'studyResources'), (snap) => {
-      setResources(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-      setLoading(false);
+    let mounted = true;
+    import('../utils/firestoreCache').then(({ cachedGetDocs }) => {
+      cachedGetDocs('study_resources', collection(db, 'studyResources'), 60 * 60 * 1000)
+        .then((docs) => {
+          if (mounted) {
+            setResources(docs);
+            setLoading(false);
+          }
+        })
+        .catch(() => {
+          if (mounted) setLoading(false);
+        });
     });
-    return unsub;
+    return () => { mounted = false; };
   }, []);
 
   const flash = (text, type = 'ok') => {
@@ -58,7 +67,7 @@ export default function StudyResources() {
       
       setFormData({ title: '', url: '', description: '' });
       setShowModal(false);
-      flash('Resource bhej diya gaya hai! Admin verification ke baad ye live ho jayega. ✅');
+      flash('Resource bhej diya gaya hai! Admin verification ke baad ye live ho jayega.');
     } catch (err) {
       console.error(err);
       flash('Submission failed: ' + err.message, 'err');
@@ -331,7 +340,7 @@ export default function StudyResources() {
 
         <h3 className="text-xl font-bold mt-8 mb-4">Safe, Verified, and Categorized</h3>
         <p>
-          We understand that the internet is flooded with unverified information. That is why every link submitted to the Apna College Bihar Study Resources directory undergoes a strict verification process by our admin team before becoming "Active". This guarantees that you only spend time on high-quality, virus-free, and highly educational websites and tutorials. Let's revolutionize engineering education in Bihar together!
+          We understand that the internet is flooded with unverified information. That is why every link submitted to the Apna College Bihar Study Resources directory undergoes a strict verification process by our admin team before becoming "Active". This guarantees that you only spend time on high-quality, virus-free, and highly educational websites and tutorials. Help fellow engineering students in Bihar find reliable study material.
         </p>
       </div>
     </div>

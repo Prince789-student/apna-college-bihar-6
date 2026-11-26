@@ -1080,7 +1080,7 @@ Team Apna College Bihar
                         />
                       </div>
 
-                      {/* 2. Phone Number (Mobile / WhatsApp) — Dedicated Field */}
+                      {/* 2. Phone Number (Mobile / WhatsApp) - Dedicated Field */}
                       <div className="space-y-1">
                         <div className="flex items-center justify-between text-[10px] font-black text-slate-500 uppercase tracking-wider">
                           <span className="flex items-center gap-1"><Phone size={10} className="text-emerald-600" /> Phone Number (Mobile / WhatsApp):</span>

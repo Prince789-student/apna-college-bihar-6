@@ -57,7 +57,7 @@ export default function Author() {
            <div className="space-y-4">
              <div className="flex items-center gap-3 text-emerald-600 border-b border-slate-100 pb-4">
                <Target size={28} />
-               <h2 className="text-2xl font-[1000] uppercase tracking-tight text-slate-900">Mission Statement — 100% Free Forever</h2>
+               <h2 className="text-2xl font-[1000] uppercase tracking-tight text-slate-900">Mission Statement - 100% Free Forever</h2>
              </div>
              <p className="text-sm font-medium text-slate-600 leading-relaxed">
                Everything here is <strong>100% free and will always remain free</strong>. The core reason behind building Apna College Bihar and BEU Vision is simple: <strong>no student should ever face any problem in their education</strong> due to lack of resources, paywalls, or scattered information. Our mission is to make quality notes, PYQs, syllabus tracking, and counselling tools completely free and accessible to every BEU student across Bihar.
@@ -89,7 +89,7 @@ export default function Author() {
 
            {/* 5. Editorial Policy */}
            <div className="space-y-4">
-             <div className="flex items-center gap-3 text-purple-600 border-b border-slate-100 pb-4">
+             <div className="flex items-center gap-3 text-indigo-600 border-b border-slate-100 pb-4">
                <Shield size={28} />
                <h2 className="text-2xl font-[1000] uppercase tracking-tight text-slate-900">Editorial Policy</h2>
              </div>

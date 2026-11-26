@@ -31,10 +31,9 @@ export default function GlobalSearch() {
             }
           } catch (e) {}
         }
-        const snap = await getDocs(collection(db, 'documents'));
-        const docs = snap.docs
-          .map(d => ({ id: d.id, ...d.data() }))
-          .filter(d => d.type !== 'folder'); // We only want files
+        const { cachedGetDocs } = await import('../utils/firestoreCache');
+        const rawDocs = await cachedGetDocs('documents_all', collection(db, 'documents'), 6 * 60 * 60 * 1000);
+        const docs = rawDocs.filter(d => d.type !== 'folder'); // We only want files
         setDocuments(docs);
         setHasFetched(true);
         try {
@@ -108,7 +107,7 @@ export default function GlobalSearch() {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={handleFocus}
           placeholder="Search Notes, PYQs, Subjects..."
-          className="w-full bg-white/90 backdrop-blur border border-slate-200 focus:border-blue-500 rounded-full py-2.5 pl-12 pr-4 text-sm font-semibold text-slate-800 outline-none shadow-sm transition-all placeholder:text-slate-400 focus:ring-4 focus:ring-blue-500/10"
+          className="w-full bg-white/90 backdrop-blur border border-slate-200 focus:border-blue-500 rounded-xl py-2.5 pl-12 pr-4 text-sm font-semibold text-slate-800 outline-none shadow-sm transition-all placeholder:text-slate-400 focus:ring-4 focus:ring-blue-500/10"
         />
         {loading && (
           <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 text-blue-500 animate-spin" size={16} />
@@ -126,7 +125,7 @@ export default function GlobalSearch() {
                   onClick={() => handleResultClick(res)}
                   className="w-full flex items-start gap-3 p-3 hover:bg-slate-50 rounded-xl transition-colors text-left group"
                 >
-                  <div className={`p-2 rounded-lg shrink-0 ${res.category === 'PYQ' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'}`}>
+                  <div className={`p-2 rounded-lg shrink-0 ${res.category === 'PYQ' ? 'bg-indigo-100 text-indigo-600' : 'bg-blue-100 text-blue-600'}`}>
                     {res.category === 'PYQ' ? <FileText size={16} /> : <BookOpen size={16} />}
                   </div>
                   <div className="min-w-0 flex-1">

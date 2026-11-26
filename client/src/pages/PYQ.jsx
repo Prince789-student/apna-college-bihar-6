@@ -57,7 +57,7 @@ const BRANCH_COLORS = {
   lime:   { bg: 'bg-lime-50',   border: 'border-lime-200',   text: 'text-lime-700',   badge: 'bg-lime-100 text-lime-600'    },
   emerald:{ bg: 'bg-emerald-50',border: 'border-emerald-200',text: 'text-emerald-700',badge: 'bg-emerald-100 text-emerald-600'},
   indigo: { bg: 'bg-indigo-50', border: 'border-indigo-200', text: 'text-indigo-700', badge: 'bg-indigo-100 text-indigo-600' },
-  violet: { bg: 'bg-violet-50', border: 'border-violet-200', text: 'text-violet-700', badge: 'bg-violet-100 text-violet-600' },
+  violet: { bg: 'bg-sky-50', border: 'border-sky-200', text: 'text-sky-700', badge: 'bg-sky-100 text-sky-600' },
   yellow: { bg: 'bg-yellow-50', border: 'border-yellow-200', text: 'text-yellow-700', badge: 'bg-yellow-100 text-yellow-600'},
   pink:   { bg: 'bg-pink-50',   border: 'border-pink-200',   text: 'text-pink-700',   badge: 'bg-pink-100 text-pink-600'   },
 };
@@ -380,7 +380,7 @@ export default function PYQ() {
         <div>
           <div className="flex items-center gap-3 mb-4">
             <button onClick={goHome} className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition-all"><ArrowLeft size={16} className="text-slate-600" /></button>
-            <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{branch.emoji} {branch.label} — Select Semester</p>
+            <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{branch.emoji} {branch.label} - Select Semester</p>
           </div>
           <div className="grid grid-cols-4 md:grid-cols-8 gap-2.5 md:gap-3">
             {SEMESTERS.map(s => (
@@ -399,15 +399,19 @@ export default function PYQ() {
         <div>
           <div className="flex items-center gap-3 mb-4">
             <button onClick={goToBranch} className="p-2 rounded-xl bg-slate-100 md:bg-white/10 hover:bg-slate-200 transition-all cursor-pointer"><ArrowLeft size={16} className="text-slate-600 md:text-white" /></button>
-            <p className="text-[11px] font-black text-slate-400 md:text-slate-300 uppercase tracking-[0.2em]">{branch.emoji} {branch.short} · Semester {sem} — Select Subject</p>
+            <p className="text-[11px] font-black text-slate-400 md:text-slate-300 uppercase tracking-[0.2em]">{branch.short} · Semester {sem} · Select Subject</p>
           </div>
           {loading ? (
             <div className="py-16 text-center"><p className="text-slate-400 font-black uppercase tracking-widest animate-pulse text-sm">Loading subjects...</p></div>
           ) : subjectFolders.length === 0 ? (
-            <div className="py-16 text-center bg-white md:bg-slate-900/60 md:backdrop-blur-md rounded-[2rem] border border-dashed border-slate-200 md:border-white/15">
-              <div className="text-4xl mb-3">📂</div>
-              <p className="text-slate-800 md:text-white font-black text-base uppercase tracking-tight">Coming Soon!</p>
-              <p className="text-slate-400 md:text-slate-300 text-xs font-bold mt-1">Wait bruh! Jald hi PYQs upload honge. Stay tuned!</p>
+            <div className="py-12 px-6 text-center bg-white md:bg-slate-900/60 md:backdrop-blur-md rounded-[2rem] border border-slate-200 md:border-white/15">
+              <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-500"><FolderOpen size={24} /></div>
+              <p className="text-slate-800 md:text-white font-black text-base uppercase tracking-tight">Question Papers Being Curated</p>
+              <p className="text-slate-500 md:text-slate-300 text-xs font-medium mt-1 max-w-md mx-auto">Previous year papers for this semester are being verified and added. Meanwhile, check unit-wise study notes and official syllabus.</p>
+              <div className="mt-4 flex items-center justify-center gap-2.5 flex-wrap">
+                <button onClick={() => navigate('/notes')} className="px-4 py-2 rounded-xl bg-amber-600 text-white text-xs font-bold hover:bg-amber-700 transition-colors">Browse Notes</button>
+                <button onClick={() => navigate('/syllabus')} className="px-4 py-2 rounded-xl bg-slate-100 text-slate-800 text-xs font-bold hover:bg-slate-200 transition-colors">View Syllabus</button>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
@@ -437,19 +441,19 @@ export default function PYQ() {
         <div>
           <div className="flex items-center gap-3 mb-4">
             <button onClick={goBack} className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 transition-all"><ArrowLeft size={16} className="text-slate-600" /></button>
-            <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{folder.title} — Previous Year Papers</p>
+            <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">{folder.title} · Previous Year Papers</p>
           </div>
           {loading ? (
             <div className="py-16 text-center"><p className="text-slate-400 font-black uppercase tracking-widest animate-pulse text-sm">Loading papers...</p></div>
           ) : folderFiles.length === 0 ? (
-            <div className="py-16 text-center bg-white rounded-[2rem] border border-dashed border-slate-200">
-              <div className="text-4xl mb-3">📄</div>
-              <p className="text-slate-800 font-black text-base uppercase tracking-tight">No PYQs yet</p>
-              <p className="text-slate-400 text-xs font-bold mt-1">Is subject mein abhi koi PYQ upload nahi hua</p>
+            <div className="py-12 px-6 text-center bg-white rounded-[2rem] border border-slate-200">
+              <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-500"><FileText size={24} /></div>
+              <p className="text-slate-800 font-black text-base uppercase tracking-tight">No Question Papers in This Folder Yet</p>
+              <p className="text-slate-500 text-xs font-medium mt-1 max-w-md mx-auto">Use the search bar above or explore unit-wise notes and official BEU syllabus for this subject.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-5">
-              {folderFiles.map((d, idx) => (
+              {folderFiles.map((d) => (
                 <React.Fragment key={d.id}>
                   {d.type === 'folder' ? (
                     <button onClick={() => selectFolder(d)}
@@ -464,13 +468,20 @@ export default function PYQ() {
                   ) : (
                     <PYQFileCard key={d.id} d={d} onAction={handleAction} user={user} onEdit={handleEditPYQ} onDelete={handleDeletePYQ} />
                   )}
-                  {idx % 4 === 3 && <div className="col-span-1"><PremiumAds type="INLINE" onClick={() => setDonateModal({isOpen: true, mode: 'SUPPORT'})} /></div>}
                 </React.Fragment>
               ))}
             </div>
           )}
         </div>
       )}
+
+      {/* BEU PYQ Exam Pattern Guide */}
+      <section className="bg-white rounded-2xl md:rounded-[2rem] border border-slate-200/80 p-5 md:p-7 space-y-3 shadow-2xs">
+        <h2 className="text-sm md:text-base font-black text-slate-900 uppercase tracking-tight">BEU Semester Exam Pattern &amp; PYQ Strategy</h2>
+        <p className="text-xs md:text-sm text-slate-600 leading-relaxed">
+          In Bihar Engineering University (BEU) Patna End Semester Examinations, Question 1 is compulsory (objective/short-answer covering all modules), followed by 8 long-answer questions out of which students attempt 4 (14 marks each, totaling 70 marks). Solving the last 5 years of PYQs typically covers 60% to 75% of recurring concepts and numerical patterns.
+        </p>
+      </section>
 
       {/* Footer */}
       <div className="bg-slate-50 md:bg-black/20 p-4 md:p-6 rounded-2xl md:rounded-[2.5rem] border border-slate-200/50 md:border-white/10 flex items-center gap-3">
@@ -494,7 +505,7 @@ export default function PYQ() {
         <div className="bg-amber-50 md:bg-cyan-950/30 border-l-4 border-amber-500 md:border-cyan-400 p-6 rounded-r-2xl my-8 md:border md:border-l-4 md:border-white/10 md:border-l-cyan-400">
           <h3 className="text-xl font-bold text-amber-900 md:text-cyan-300 mt-0 mb-3 drop-shadow-sm">Why are PYQs the Ultimate Strategy for {branch ? `${branch.short} ` : ''}Exams?</h3>
           <p className="text-amber-800 md:text-slate-100 mb-0 leading-relaxed font-medium">
-            Unlike internal assessments, the End Semester Exams (worth 70 Marks) conducted by BEU follow a highly structured and traditional testing pattern. Historically, a significant percentage of questions—sometimes ranging from 30% to 40%—are either directly repeated from previous years or follow the exact same derivations and numerical models with minor value changes. Solving {sem ? `Semester ${sem} ` : ''}PYQs systematically is the smartest, most efficient way to guarantee that you easily clear the passing threshold (25 marks) and drastically push your CGPA upwards towards 8.5 and beyond.
+            Unlike internal assessments, the End Semester Exams (worth 70 Marks) conducted by BEU follow a highly structured and traditional testing pattern. Historically, a significant percentage of questions-sometimes ranging from 30% to 40%-are either directly repeated from previous years or follow the exact same derivations and numerical models with minor value changes. Solving {sem ? `Semester ${sem} ` : ''}PYQs systematically is the smartest, most efficient way to guarantee that you easily clear the passing threshold (25 marks) and drastically push your CGPA upwards towards 8.5 and beyond.
           </p>
         </div>
 

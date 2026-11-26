@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════
-//  Apna College Bihar — Offline Session & Task Queue
+//  Apna College Bihar - Offline Session & Task Queue
 //  Purpose: When user is offline, study sessions and daily
 //  targets are saved in localStorage and automatically
 //  synced to Firestore when internet connection is restored.

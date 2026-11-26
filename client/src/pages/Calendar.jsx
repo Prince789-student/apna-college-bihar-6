@@ -91,20 +91,48 @@ export default function Calendar() {
            </h3>
            <div className="space-y-4">
               <div className="p-4 bg-slate-50 rounded-2xl flex items-center justify-between border border-slate-100">
-                <span className="text-[10px] font-black uppercase text-slate-900">UGEAC Counselling 2025</span>
-                <span className="text-[8px] font-bold px-3 py-1 bg-blue-600 text-white rounded-full">Coming Soon</span>
+                <span className="text-[10px] font-black uppercase text-slate-900">UGEAC Counselling 2026</span>
+                <span className="text-[8px] font-bold px-3 py-1 bg-blue-600 text-white rounded-lg">Aug 2026</span>
               </div>
               <div className="p-4 bg-slate-50 rounded-2xl flex items-center justify-between border border-slate-100">
-                <span className="text-[10px] font-black uppercase text-slate-900">BEU Sem 2nd Exam</span>
-                <span className="text-[8px] font-bold px-3 py-1 bg-orange-600 text-white rounded-full">July 2026</span>
+                <span className="text-[10px] font-black uppercase text-slate-900">BEU Sem Exam Cycle</span>
+                <span className="text-[8px] font-bold px-3 py-1 bg-orange-600 text-white rounded-lg">Nov 2026</span>
               </div>
            </div>
         </div>
         
         <div className="bg-slate-900 p-8 rounded-[3rem] shadow-2xl flex flex-col justify-center">
            <h3 className="text-xl font-black text-white uppercase tracking-tighter mb-2">Sync with Device</h3>
-           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6">Add academic events to your personal calendar</p>
-           <button className="w-full py-4 bg-white text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all">Download .ICS File</button>
+           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">Add academic events to your personal calendar</p>
+           <button
+             type="button"
+             onClick={() => {
+               const ics = [
+                 'BEGIN:VCALENDAR',
+                 'VERSION:2.0',
+                 'PRODID:-//Apna College Bihar//BEU Academic Calendar//EN',
+                 'BEGIN:VEVENT',
+                 'UID:beu-sem-exam-2026@apnacollegebihar.online',
+                 'DTSTAMP:20261126T120000Z',
+                 'DTSTART;VALUE=DATE:20261130',
+                 'DTEND;VALUE=DATE:20261215',
+                 'SUMMARY:BEU End Semester Examination',
+                 'DESCRIPTION:Bihar Engineering University Semester Exams',
+                 'END:VEVENT',
+                 'END:VCALENDAR'
+               ].join('\r\n');
+               const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+               const url = URL.createObjectURL(blob);
+               const a = document.createElement('a');
+               a.href = url;
+               a.download = 'beu-academic-calendar.ics';
+               a.click();
+               URL.revokeObjectURL(url);
+             }}
+             className="w-full py-4 bg-white hover:bg-slate-100 text-slate-900 rounded-2xl font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all cursor-pointer"
+           >
+             Download .ICS File
+           </button>
         </div>
       </div>
     </div>

@@ -39,7 +39,7 @@ export default function HomeOverview() {
     { title: 'PYQ Papers', desc: 'Previous year question papers', path: '/pyq', icon: FileText, color: 'text-rose-500', bg: 'bg-rose-500/10' },
     { title: 'Timetable', desc: 'Live class tracking', path: '/timetable', icon: Calendar, color: 'text-amber-500', bg: 'bg-amber-500/10' },
     { title: 'Study Timer', desc: 'Focus & track sessions', path: '/study', icon: Timer, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-    { title: 'UGEAC Predictor', desc: 'College allotment tool', path: '/ugeac-predictor', icon: Send, color: 'text-purple-500', bg: 'bg-purple-500/10' }
+    { title: 'UGEAC Predictor', desc: 'College allotment tool', path: '/ugeac-predictor', icon: Send, color: 'text-indigo-500', bg: 'bg-indigo-500/10' }
   ];
 
   return (
@@ -55,7 +55,7 @@ export default function HomeOverview() {
             <span className="text-xs font-black uppercase tracking-widest text-blue-200">Overview Panel</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-[1000] tracking-tight mb-2">
-            {greeting}, {user?.name !== 'Scholar' && user?.name ? user.name.split(' ')[0] : 'Scholar'}! 👋
+            {greeting}, {user?.name !== 'Scholar' && user?.name ? user.name.split(' ')[0] : 'Scholar'}!
           </h1>
           <p className="text-blue-100 text-sm md:text-base max-w-xl font-medium">
             Ready to conquer today's goals? Access your classes, notes, and study tools below to stay ahead in your semester.
@@ -88,8 +88,8 @@ export default function HomeOverview() {
           <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Study Resources</p>
         </div>
         <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow">
-          <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center mb-3">
-            <Flame size={20} className="text-purple-600" />
+          <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center mb-3">
+            <Flame size={20} className="text-indigo-600" />
           </div>
           <p className="text-2xl font-[1000] text-slate-900">10k+</p>
           <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Study Hours</p>

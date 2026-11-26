@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { collection, onSnapshot, query, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Calendar, ArrowUpRight, Search, FileText, Trash2, Pencil } from 'lucide-react';
@@ -49,34 +50,23 @@ export default function Notifications() {
         }
       })
       .catch(err => {
-        console.warn('Backend notices fetch fallback to Firestore:', err);
-      });
-
-    // 2. Also subscribe / fallback to Firestore
-    const qNotices = query(collection(db, 'beu_notifications'));
-    const unsub = onSnapshot(qNotices, (snap) => {
-      if (!isMounted) return;
-      if (!snap.empty) {
-        const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setNotices(prev => {
-          if (prev.length > 0) {
-            const map = new Map();
-            prev.forEach(n => map.set(String(n.id), n));
-            data.forEach(n => map.set(String(n.id), { ...map.get(String(n.id)), ...n }));
-            return sortNotices(Array.from(map.values()));
-          }
-          return sortNotices(data);
+        console.warn('Backend notices fetch fallback to cached Firestore:', err);
+        import('../utils/firestoreCache').then(({ cachedGetDocs }) => {
+          const qNotices = query(collection(db, 'beu_notifications'));
+          cachedGetDocs('beu_notices_all', qNotices, 15 * 60 * 1000)
+            .then((data) => {
+              if (!isMounted) return;
+              if (data.length > 0) setNotices(sortNotices(data));
+              setLoading(false);
+            })
+            .catch(() => {
+              if (isMounted) setLoading(false);
+            });
         });
-      }
-      setLoading(false);
-    }, (error) => {
-      console.warn('Firestore notices error:', error);
-      if (isMounted) setLoading(false);
-    });
+      });
 
     return () => {
       isMounted = false;
-      unsub();
     };
   }, []);
 
@@ -93,9 +83,9 @@ export default function Notifications() {
         board: newTitle,
         pdfUrl: newUrl
       });
-      alert('Notice updated successfully!');
+      toast.success('Notice updated successfully!');
     } catch (err) {
-      alert('Error updating notice: ' + err.message);
+      toast.error('Error updating notice: ' + err.message);
     }
   };
 
@@ -105,9 +95,9 @@ export default function Notifications() {
     if (!window.confirm(`Are you sure you want to delete "${notice.title || notice.board}"?`)) return;
     try {
       await deleteDoc(doc(db, 'beu_notifications', notice.id));
-      alert('Notice deleted successfully!');
+      toast.success('Notice deleted successfully!');
     } catch (err) {
-      alert('Error deleting notice: ' + err.message);
+      toast.error('Error deleting notice: ' + err.message);
     }
   };
 
@@ -173,7 +163,7 @@ export default function Notifications() {
                   </div>
                   <div className="flex-1">
                     <div className="flex flex-wrap items-center gap-2 mb-2">
-                      <span className={`px-2.5 py-0.5 text-[9px] font-black uppercase tracking-wider rounded-md border ${notice.isCollegeNotice ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-blue-50 text-blue-700 border-blue-200'}`}>
+                      <span className={`px-2.5 py-0.5 text-[9px] font-black uppercase tracking-wider rounded-md border ${notice.isCollegeNotice ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-blue-50 text-blue-700 border-blue-200'}`}>
                         🏛️ {notice.shortName || (notice.isCollegeNotice ? 'COLLEGE NOTICE' : 'BEU PATNA')}
                       </span>
                       {notice.district && (

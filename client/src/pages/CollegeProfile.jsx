@@ -627,8 +627,8 @@ export default function CollegeProfile() {
                       <p className="text-[10px] font-black uppercase tracking-widest text-blue-600 mb-2">Average Package</p>
                       <p className="text-3xl font-[1000] text-slate-900">{college.placement.averagePackage}</p>
                     </div>
-                    <div className="bg-purple-50 border border-purple-100 p-6 rounded-3xl text-center">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-purple-600 mb-2">Placement Rate</p>
+                    <div className="bg-indigo-50 border border-indigo-100 p-6 rounded-3xl text-center">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-indigo-600 mb-2">Placement Rate</p>
                       <p className="text-3xl font-[1000] text-slate-900">{college.placement.percentage}</p>
                     </div>
                   </div>
@@ -667,7 +667,7 @@ export default function CollegeProfile() {
                         </div>
                       </li>
                       <li className="flex items-start gap-4">
-                        <BookOpen className="text-purple-500 shrink-0 mt-0.5" size={20} />
+                        <BookOpen className="text-indigo-500 shrink-0 mt-0.5" size={20} />
                         <div>
                           <p className="text-xs font-black uppercase tracking-widest text-slate-900">Mess Facility</p>
                           <p className="text-sm text-slate-600 font-medium mt-1">{college.hostelDetails?.mess || "Available (Veg & Non-Veg)"}</p>
