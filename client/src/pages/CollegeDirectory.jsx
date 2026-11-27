@@ -87,6 +87,7 @@ export default function CollegeDirectory() {
                     <img 
                       src={college.gallery?.[0] || '/logo-acb.png'} 
                       alt={college.shortName} 
+                      onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/logo-acb.png'; }}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent"></div>

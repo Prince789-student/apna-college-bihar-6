@@ -131,7 +131,6 @@ export default function DashboardLayout() {
     {
       title: 'BEU Academic',
       items: [
-        { name: 'BEU Result', path: '/beu-result', icon: <Globe size={16} /> },
         { name: 'Notes Hub', path: '/notes', icon: <BookOpen size={16} /> },
         { name: 'PYQ Papers', path: '/pyq', icon: <FileText size={16} /> },
         { name: 'BEU Syllabus', path: '/syllabus', icon: <Library size={16} /> },
@@ -236,7 +235,7 @@ export default function DashboardLayout() {
   };
 
   useEffect(() => {
-    if (isNative) {
+    if (Capacitor.isNativePlatform()) {
       if (timerActive) {
         AppBlocker.lockApp().catch(console.error);
       } else {
@@ -254,7 +253,7 @@ export default function DashboardLayout() {
         appStateListener.then(listener => listener.remove());
       };
     }
-  }, [timerActive, lockMode, isNative]);
+  }, [timerActive, lockMode]);
 
   useEffect(() => {
     if (isNative) {
@@ -301,7 +300,6 @@ export default function DashboardLayout() {
     if (pathname.includes('/attendance')) return 'BEU Attendance Tracker';
     if (pathname.includes('/extras')) return 'Personal Manager';
     if (pathname.includes('/calendar')) return 'Calendar';
-    if (pathname.includes('/beu-result')) return 'BEU Result';
     if (pathname.includes('/admin')) return 'Admin Panel';
     return 'ACB Hub';
   };

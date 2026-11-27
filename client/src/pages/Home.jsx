@@ -167,7 +167,6 @@ export default function Home() {
     { name: 'BEU Syllabus', desc: 'Official 1st to 8th sem curriculum & credits', path: '/syllabus', icon: <Library className="text-cyan-400" size={20} />, badge: 'Updated' },
     { name: 'SGPA / CGPA Calc', desc: 'Official BEU 10-point credit grading system', path: '/cgpa', icon: <Calculator className="text-cyan-400" size={20} />, badge: 'Accurate' },
     { name: 'Lecture Finder', desc: 'Syllabus-mapped YouTube video lectures', path: '/lecture-finder', icon: <Youtube className="text-cyan-400" size={20} />, badge: 'Lectures' },
-    { name: 'BEU Result Check', desc: 'Fast semester result roll number portal', path: '/beu-result', icon: <Globe className="text-cyan-400" size={20} />, badge: 'Results' },
     { name: 'Class Timetable', desc: 'Digital weekly schedule for your branch', path: '/timetable', icon: <Calendar className="text-cyan-400" size={20} />, badge: 'Routine' },
     { name: 'Attendance Safe', desc: '75% mandatory attendance tracker', path: '/attendance', icon: <ShieldCheck className="text-cyan-400" size={20} />, badge: '75% Rule' },
   ];
@@ -432,7 +431,6 @@ export default function Home() {
                     { name: 'Notes', path: '/notes', icon: <BookOpen size={16} className="text-indigo-600" /> },
                     { name: 'PYQ Papers', path: '/pyq', icon: <FileText size={16} className="text-sky-600" /> },
                     { name: 'BEU Syllabus', path: '/syllabus', icon: <Library size={16} className="text-rose-600" /> },
-                    { name: 'BEU Result', path: '/beu-result', icon: <GraduationCap size={16} className="text-blue-600" /> },
                     { name: 'CGPA / SGPA Calculator', path: '/cgpa', icon: <Calculator size={16} className="text-cyan-600" /> },
                     { name: 'Attendance Tracker', path: '/attendance', icon: <CheckCircle2 size={16} className="text-emerald-600" /> },
                     { name: 'Timetable', path: '/timetable', icon: <Calendar size={16} className="text-amber-600" /> },
@@ -661,7 +659,6 @@ export default function Home() {
                   { name: 'Notes', path: '/notes', image: '/app-icons/notes.png', badge: 'PDF' },
                   { name: 'PYQs', path: '/pyq', image: '/app-icons/pyq.png', badge: '5YR' },
                   { name: 'Syllabus', path: '/syllabus', image: '/app-icons/syllabus.png' },
-                  { name: 'BEU Result', path: '/beu-result', image: '/app-icons/beu-result.png' },
                   { name: 'CGPA Calc', path: '/cgpa', image: '/app-icons/cgpa.png', badge: '10PT' },
                   { name: 'Attendance', path: '/attendance', image: '/app-icons/attendance.png', badge: '75%' },
                   { name: 'Timetable', path: '/timetable', image: '/app-icons/timetable.png' },
@@ -953,7 +950,7 @@ export default function Home() {
                 {/* Tab Navigation Pill Bar (Clean, Spacious & Responsive) */}
                 <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-black/40 border border-white/15 overflow-x-auto custom-scrollbar">
                   {[
-                    { id: 'tools', label: '🛠️ Academic Tools', badge: '8 Tools' },
+                    { id: 'tools', label: '🛠️ Academic Tools', badge: `${academicTools.length} Tools` },
                     { id: 'predictor', label: '🎯 UGEAC Predictor', badge: 'Cutoffs 2024–25' },
                     { id: 'colleges', label: '🏛️ Top 38 Colleges', badge: 'Profiles' },
                     { id: 'radar', label: '📡 Live BEU Radar', badge: beuNotices.length > 0 ? 'Live' : null },

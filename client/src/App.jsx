@@ -42,7 +42,6 @@ const Group = React.lazy(() => import('./pages/Group'));
 const GroupDetail = React.lazy(() => import('./pages/GroupDetail'));
 const Timetable = React.lazy(() => import('./pages/Timetable'));
 const Attendance = React.lazy(() => import('./pages/Attendance'));
-const BeuResult = React.lazy(() => import('./pages/BeuResult'));
 const FreeMentorship = React.lazy(() => import('./pages/FreeMentorship'));
 const Extras = React.lazy(() => import('./pages/PersonalManager')); // Mapping Extras to PersonalManager
 const Calendar = React.lazy(() => import('./pages/Calendar'));
@@ -835,7 +834,6 @@ function App() {
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/cgpa" element={<BeuCgpa />} />
               <Route path="/ugeac-predictor" element={<UgeacPredictor />} />
-              <Route path="/beu-result" element={<BeuResult />} />
               <Route path="/mentorship" element={<FreeMentorship />} />
               <Route path="/free-mentorship" element={<FreeMentorship />} />
               <Route path="/syllabus" element={<BeuSyllabus />} />

@@ -20,7 +20,6 @@ const academicTools = [
   { name: 'UGEAC College Predictor', path: '/ugeac-predictor', desc: 'Forecast Bihar colleges by JEE rank', icon: '🎯' },
   { name: 'BEU Attendance Tracker', path: '/attendance', desc: '75% attendance rule & shortfall helper', icon: '⏱️' },
   { name: 'Class Timetable', path: '/timetable', desc: 'Semester-wise branch routine', icon: '🗓️' },
-  { name: 'BEU Result Portal', path: '/beu-result', desc: 'Check marksheet & semester results', icon: '🎓' },
   { name: 'YouTube Lecture Finder', path: '/lecture-finder', desc: 'Curated playlists for university syllabus', icon: '▶️' },
   { name: 'Scientific Calculator', path: '/calculator', desc: 'Engineering math, matrices & trig', icon: '🔢' },
   { name: 'Free Study Resources', path: '/study-resources', desc: 'Engineering reference books & links', icon: '📖' },

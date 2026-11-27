@@ -15,7 +15,6 @@ const staticRoutes = [
   '/syllabus',
   '/lecture-finder',
   '/cgpa',
-  '/beu-result',
   '/attendance',
   '/timetable',
   '/calculator',

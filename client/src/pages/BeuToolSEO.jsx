@@ -4,7 +4,6 @@ import SEO from '../components/SEO';
 import Attendance from './Attendance';
 import Timetable from './Timetable';
 import BeuCgpa from './BeuCgpa';
-import BeuResult from './BeuResult';
 
 const toolConfig = {
   attendance: {
@@ -27,13 +26,6 @@ const toolConfig = {
     keywords: 'BEU CGPA Calculator, BEU SGPA Calculator, Bihar Engineering CGPA, SGPA to CGPA converter BEU',
     color: 'from-blue-600 to-indigo-600',
     component: BeuCgpa,
-  },
-  result: {
-    title: 'BEU Result 2025',
-    description: 'Check Bihar Engineering University (BEU) semester exam results 2025. View marksheet, grade points, and subject-wise results.',
-    keywords: 'BEU Result 2025, Bihar Engineering University Result, BEU Exam Result, BEU Marksheet Download',
-    color: 'from-orange-600 to-red-600',
-    component: BeuResult,
   },
 };
 
@@ -67,17 +59,6 @@ const keywordTitleMap = {
   'bihar-engineering-cgpa': 'Bihar Engineering CGPA Tracker',
   'cse-cgpa-calculator-beu': 'CSE CGPA Calculator – BEU',
   'civil-cgpa-calculator-beu': 'Civil Engineering CGPA Calculator BEU',
-  // Result
-  'beu-result-2025': 'BEU Result 2025 – Check Your Semester Result',
-  'bihar-engineering-result': 'Bihar Engineering University Exam Result',
-  'beu-exam-result': 'BEU Exam Result – All Semesters',
-  'beu-result-marksheet': 'BEU Marksheet Download 2025',
-  'beu-result-sem1': 'BEU 1st Semester Result 2025',
-  'beu-result-sem2': 'BEU 2nd Semester Result 2025',
-  'beu-result-sem3': 'BEU 3rd Semester Result 2025',
-  'beu-result-sem4': 'BEU 4th Semester Result 2025',
-  'beu-result-sem5': 'BEU 5th Semester Result 2025',
-  'beu-result-sem6': 'BEU 6th Semester Result 2025',
 };
 
 export default function BeuToolSEO() {

@@ -134,7 +134,6 @@ export default function AppHub() {
       title: 'BEU Academic',
       items: [
         { name: 'Attendance', image: '/app-icons/attendance.png', path: '/attendance?standalone=true', badge: '75%' },
-        { name: 'BEU Result', image: '/app-icons/beu-result.png', path: '/beu-result?standalone=true' },
         { name: 'Mentorship', image: '/app-icons/mentorship.png', path: '/mentorship?standalone=true' },
         { name: 'Timetable', image: '/app-icons/timetable.png', path: '/timetable?standalone=true' },
         { name: 'Notes', image: '/app-icons/notes.png', path: '/notes?standalone=true', badge: 'PDF' },
@@ -199,7 +198,7 @@ export default function AppHub() {
     user?.role === 'super_admin';
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-['Inter'] flex flex-col items-center justify-start p-3 sm:p-4 pt-20 pb-12 relative overflow-x-clip">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-['Inter'] flex flex-col items-center justify-start p-3 sm:p-4 pt-24 sm:pt-28 pb-12 relative overflow-x-clip">
       <SEO
         title="App Hub | Apna College Bihar - The Official Study Engine"
         description="Access all your college utilities - Study Timer, Notes, PYQs, UGEAC Predictor, SGPA Calculator, and more in one place."
