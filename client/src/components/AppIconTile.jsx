@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 /**
  * Clean real-photo app icon tile (no AI neon gradients).
  */
 export default function AppIconTile({ image, alt = '', icon, gradient = 'bg-white', shadow = 'shadow-slate-900/10', badge, size = 'md' }) {
+  const [imgFailed, setImgFailed] = useState(false);
   const sizeClasses = size === 'lg'
     ? 'w-14 h-14 sm:w-16 sm:h-16 rounded-[18px] sm:rounded-[20px]'
     : 'w-14 h-14 rounded-[18px]';
 
-  if (image) {
+  if (image && !imgFailed) {
     return (
       <div
         className={`relative ${sizeClasses} bg-white ${shadow} shadow-sm flex items-center justify-center shrink-0 overflow-hidden border border-slate-200/90 group-hover:scale-105 transition-transform duration-200`}
@@ -17,6 +18,7 @@ export default function AppIconTile({ image, alt = '', icon, gradient = 'bg-whit
           src={image}
           alt={alt}
           loading="lazy"
+          onError={() => setImgFailed(true)}
           className="w-full h-full object-contain p-1"
         />
         {badge && (

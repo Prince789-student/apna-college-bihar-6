@@ -119,6 +119,9 @@ desktop/cache/
 !server/public/ads.txt
 !server/public/llms.txt
 *.png
+!client/public/**/*.png
+!server/public/**/*.png
+whatsapp_*.png
 *.bat
 syllabus ist sem/
 server/.cache/
